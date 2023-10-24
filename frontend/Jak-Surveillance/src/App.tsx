@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { useRegisterSW } from 'virtual:pwa-register/react';
-import Login from './views/Login';
-import StartView from './views/StartView';
+import Login from './views/Login.tsx';
+import StartView from './views/StartView.tsx';
 
 const intervalMS = 60 * 60 * 1000;
 
