@@ -1,6 +1,6 @@
 import React from 'react';
-import {Route, BrowserRouter as Router, Routes} from 'react-router-dom';
-import {useRegisterSW} from 'virtual:pwa-register/react';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { useRegisterSW } from 'virtual:pwa-register/react';
 import Login from './views/Login.tsx';
 import StartView from './views/StartView.tsx';
 
@@ -8,7 +8,7 @@ const intervalMS = 60 * 60 * 1000;
 
 const App = () => {
 	// Define a function to handle the login action
-	const handleLogin = (userType: string, userData: any) => {
+	const handleLogin = (userType: string, userData: unknown) => {
 		// Add your login logic here, e.g., make an API call to authenticate the user
 		console.log(`User logged in as a ${userType}`);
 		console.log(userData); // You can access user data here
@@ -16,10 +16,14 @@ const App = () => {
 
 	useRegisterSW({
 		onRegistered(r) {
-			r &&
+			if (r) {
+				console.log('Service worker registered successfully');
 				setInterval(() => {
 					r.update();
 				}, intervalMS);
+			} else {
+				console.log('Service worker registration failed');
+			}
 		},
 	});
 
