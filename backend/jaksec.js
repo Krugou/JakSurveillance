@@ -5,70 +5,70 @@ const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.post('/login', (req, res) => {
-	let staff = false;
-	let user = req.body.j_username;
-	let pwd = req.body.j_password || 'aa';
+const ldapconfig = {
+	url: 'ldap://sedi.metropolia.fi:389',
+	baseDN: 'ou=people,dc=metropolia,dc=fi',
+};
 
-	let ldapconfig = {
-		url: 'ldap://sedi.metropolia.fi:389',
-		baseDN: 'ou=people,dc=metropolia, dc=fi',
-	};
+function ldap_authenticate(unixid = '', passwd = '') {
+	return new Promise((resolve, reject) => {
+		const client = ldap.createClient({
+			url: ldapconfig.url,
+		});
 
-	let client = ldap.createClient({
-		url: ldapconfig.url,
-	});
-	client.on('connect', function () {
-		console.log('Successfully connected to LDAP server');
-	});
+		client.bind(`cn=${unixid},${ldapconfig.baseDN}`, passwd, (err) => {
+			if (err) {
+				reject(err);
+			} else {
+				const opts = {
+					filter: `(uid=${unixid})`,
+					scope: 'sub',
+				};
 
-	client.on('error', function (err) {
-		console.error('Unable to connect to LDAP server: ', err);
-	});
-	client.bind('cn=' + user + ',' + ldapconfig.baseDN, pwd, function (err) {
-		if (err) {
-			res.send('ldapbind not set');
-		} else {
-			let opts = {
-				filter: 'uid=' + user,
-				scope: 'sub',
-				attributes: ['dn', 'sn', 'cn', 'givenname', 'mail', 'ownrole'],
-			};
-
-			client.search(ldapconfig.baseDN, opts, function (err, search) {
-				if (err) {
-					res.send('ldapsearch not set');
-				} else {
-					search.on('searchEntry', function (entry) {
-						let result = entry.object;
-						if (result) {
-							if (result.ownrole.includes('metropolia.staff')) {
-								staff = true;
-								req.session.level = '2';
-								req.session.uname = user;
-								req.session.fname = result.givenname;
-								req.session.lname = result.sn;
-								// Add your database query here
-							} else {
-								// Handle student data here
+				client.search(ldapconfig.baseDN, opts, (err, res) => {
+					if (err) {
+						reject(err);
+					} else {
+						res.on('searchEntry', (entry) => {
+							if (entry.object) {
+								resolve(true);
 							}
-						} else {
-							res.send('no result');
-						}
-					});
-					search.on('error', function (err) {
-						res.send('ldapsearch not set');
-					});
-				}
-			});
+						});
+						res.on('error', (err) => {
+							reject(err);
+						});
+						res.on('end', (result) => {
+							if (result.status !== 0) {
+								reject(`non-zero status from LDAP search: ${result.status}`);
+							}
+						});
+					}
+				});
+			}
+		});
+	});
+}
+
+// Usage
+app.use(express.json());
+
+app.post('/login', async (req, res) => {
+	const {j_username: user, j_password: pwd} = req.body;
+	try {
+		const isAuthenticated = await ldap_authenticate(user, pwd);
+		if (isAuthenticated) {
+			// Handle successful authentication
+			res.json({message: 'Authenticated'});
+		} else {
+			// Handle failed authentication
+			res.status(401).json({message: 'Authentication failed'});
 		}
-	});
-
-	client.on('error', function (err) {
-		res.send('ldapconnect not set');
-	});
+	} catch (err) {
+		// Handle error
+		res.status(500).json({message: 'Server error'});
+	}
 });
-
-app.listen(3000, () => {
-	console.log('Server is running on port 3000');
-});
+ldap_authenticate('testuser', 'testpassword')
+	.then(() => console.log('LDAP connection test successful'))
+	.catch((err) => console.error('LDAP connection test failed:', err));
+app.listen(3000, () => console.log('Server started on port 3000'));
