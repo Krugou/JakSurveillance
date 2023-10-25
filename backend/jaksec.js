@@ -18,7 +18,13 @@ app.post('/login', (req, res) => {
 	let client = ldap.createClient({
 		url: ldapconfig.url,
 	});
+	client.on('connect', function () {
+		console.log('Successfully connected to LDAP server');
+	});
 
+	client.on('error', function (err) {
+		console.error('Unable to connect to LDAP server: ', err);
+	});
 	client.bind('cn=' + user + ',' + ldapconfig.baseDN, pwd, function (err) {
 		if (err) {
 			console.log('Error in bind: ', err);
