@@ -27,7 +27,6 @@ app.post('/login', (req, res) => {
 	});
 	client.bind('cn=' + user + ',' + ldapconfig.baseDN, pwd, function (err) {
 		if (err) {
-			console.log('Error in bind: ', err);
 			res.send('ldapbind not set');
 		} else {
 			let opts = {
@@ -38,7 +37,6 @@ app.post('/login', (req, res) => {
 
 			client.search(ldapconfig.baseDN, opts, function (err, search) {
 				if (err) {
-					console.log('Error in search: ', err);
 					res.send('ldapsearch not set');
 				} else {
 					search.on('searchEntry', function (entry) {
@@ -46,21 +44,28 @@ app.post('/login', (req, res) => {
 						if (result) {
 							if (result.ownrole.includes('metropolia.staff')) {
 								staff = true;
-							}
-							if (staff) {
-								// Handle staff login
-								// Add your database logic here
+								req.session.level = '2';
+								req.session.uname = user;
+								req.session.fname = result.givenname;
+								req.session.lname = result.sn;
+								// Add your database query here
 							} else {
-								// Handle normal user login
-								// Add your database logic here
+								// Handle student data here
 							}
 						} else {
 							res.send('no result');
 						}
 					});
+					search.on('error', function (err) {
+						res.send('ldapsearch not set');
+					});
 				}
 			});
 		}
+	});
+
+	client.on('error', function (err) {
+		res.send('ldapconnect not set');
 	});
 });
 
