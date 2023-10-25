@@ -1,6 +1,7 @@
 import bodyParser from 'body-parser';
 import express from 'express';
 import ldap from 'ldapjs';
+import session from 'express-session';
 const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -9,7 +10,13 @@ const ldapconfig = {
 	url: 'ldap://sedi.metropolia.fi:389',
 	baseDN: 'ou=people,dc=metropolia,dc=fi',
 };
-
+app.use(
+	session({
+		secret: 'your-secret-value',
+		resave: false,
+		saveUninitialized: false,
+	})
+);
 function ldap_authenticate(unixid = '', passwd = '') {
 	return new Promise((resolve, reject) => {
 		const client = ldap.createClient({
@@ -53,11 +60,15 @@ function ldap_authenticate(unixid = '', passwd = '') {
 app.use(express.json());
 
 app.post('/login', async (req, res) => {
-	const {j_username: user, j_password: pwd} = req.body;
+	const {j_username: user, j_password: pwd = 'aa'} = req.body;
 	try {
 		const isAuthenticated = await ldap_authenticate(user, pwd);
 		if (isAuthenticated) {
 			// Handle successful authentication
+			req.session.level = '2';
+			req.session.uname = user;
+			// You would need to fetch the user's first name, last name, and email from the LDAP server
+			// and set them in the session here
 			res.json({message: 'Authenticated'});
 		} else {
 			// Handle failed authentication
