@@ -24,4 +24,5 @@ http.listen(port, () => {
 			port +
 			'/index.html '
 	);
-});
+} );
+
