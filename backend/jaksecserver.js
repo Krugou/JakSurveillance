@@ -1,28 +1,19 @@
-'use strict';
-/* simple chat app */
-
-import express from 'express';
-import {createServer} from 'http';
-const app = express();
-const http = createServer(app);
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
+var http_1 = require("http");
+var app = (0, express_1.default)();
+var http = (0, http_1.createServer)(app);
 // server's adjustable settings
-const port = 3001;
-const startTime = new Date();
-
-console.log(
-	' Backend chat/frontend server start time: ' + startTime.toLocaleString()
-);
-app.use(express.static('JakSec'));
-app.get('*', (req, res) => {
-	res.sendFile('index.html', {root: 'JakSec'});
+var port = 3001;
+var startTime = new Date();
+console.log(' Backend chat/frontend server start time: ' + startTime.toLocaleString());
+app.use(express_1.default.static('JakSec'));
+app.get('*', function (req, res) {
+    res.sendFile('index.html', { root: 'JakSec' });
 });
-
-http.listen(port, () => {
-	console.log(
-		'JakSec backend frontend server Started at: http://localhost:' +
-			port +
-			'/index.html '
-	);
-} );
-
+http.listen(port, function () {
+    console.log('JakSec backend frontend server Started at: http://localhost:' +
+        port +
+        '/index.html ');
+});
