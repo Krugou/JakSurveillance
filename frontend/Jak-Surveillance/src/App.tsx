@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { useRegisterSW } from 'virtual:pwa-register/react';
+import { postLogin } from './hooks/apihooks.ts';
 import Login from './views/Login.tsx';
 import StartView from './views/StartView.tsx';
 
@@ -9,21 +10,9 @@ const intervalMS = 60 * 60 * 1000;
 const App = () => {
 	// Define a function to handle the login action
 	const handleLogin = async (userType: string, username: string, password: string) => {
-		console.log(userType, username);
-
-		const response = await fetch('https://streams.metropolia.fi/2.0/api/', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ username: username, password: password }),
-		});
-
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
-
-		const data = await response.json();
+		console.log(userType, username, password);
+		const inputs = { username, password };
+		const data = await postLogin(inputs);
 		console.log(data);
 	};
 
