@@ -8,6 +8,11 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 router.post('/', (req: Request, res: Response) => {
+  const { username, password } = req.body;
+
+  // Now, you can access the 'username' and 'password' from the request body
+  console.log(`Received username: ${username}, password: ${password}`);
+
   res.send('Hello, TypeScript with Express!');
 });
 
