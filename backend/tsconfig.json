@@ -7,9 +7,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["node"]
+    "types": [
+      "node"
+    ],
+    "outDir": "./dist"
   },
-  "include": [
-    "src"
-, "jaksecfileserver.ts"  ]
+  "include": ["src/**/*.ts"]
 }
