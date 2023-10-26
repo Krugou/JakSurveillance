@@ -8,10 +8,23 @@ const intervalMS = 60 * 60 * 1000;
 
 const App = () => {
 	// Define a function to handle the login action
-	const handleLogin = (userType: string, userData: unknown) => {
-		// Add your login logic here, e.g., make an API call to authenticate the user
-		console.log(`User logged in as a ${userType}`);
-		console.log(userData); // You can access user data here
+	const handleLogin = async (userType: string, username: string, password: string) => {
+		console.log(userType, username);
+
+		const response = await fetch('https://streams.metropolia.fi/2.0/api/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ username: username, password: password }),
+		});
+
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+
+		const data = await response.json();
+		console.log(data);
 	};
 
 	useRegisterSW({
@@ -39,7 +52,7 @@ const App = () => {
 					element={
 						<Login
 							userType='Student'
-							onLogin={(userData) => handleLogin('Student', userData)}
+							onLogin={(username, password) => handleLogin('Student', username, password)}
 						/>
 					}
 				/>
@@ -48,7 +61,7 @@ const App = () => {
 					element={
 						<Login
 							userType='Teacher'
-							onLogin={(userData) => handleLogin('Teacher', userData)}
+							onLogin={(username, password) => handleLogin('Teacher', username, password)}
 						/>
 					}
 				/>
