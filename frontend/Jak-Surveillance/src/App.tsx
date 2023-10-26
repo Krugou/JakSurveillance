@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { useRegisterSW } from 'virtual:pwa-register/react';
-import { postLogin } from './hooks/apihooks.ts';
+import postLogin from './hooks/ApiHooks.ts';
 import Login from './views/Login.tsx';
 import StartView from './views/StartView.tsx';
 
