@@ -27,4 +27,4 @@ const postLogin = async (inputs: LoginInputs) => {
     return await doFetch(loginUrl, options);
 };
 
-export default { postLogin };
+export default postLogin ;
