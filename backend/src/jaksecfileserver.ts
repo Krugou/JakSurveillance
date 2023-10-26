@@ -12,7 +12,7 @@ console.log(
 	' Backend chat/frontend server start time: ' + startTime.toLocaleString()
 );
 app.use(express.static('JakSec'));
-app.get('*', (req: Request, res: Response) => {
+app.get('*', (_req: Request, res: Response) => {
 	res.sendFile('index.html', { root: 'JakSec' });
 });
 
