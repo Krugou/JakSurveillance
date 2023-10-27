@@ -20,7 +20,7 @@ const MainView: React.FC = () => {
                 Manage Students
             </button>
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold m-4 py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                onClick={() => navigate('/teacher/createcourse')}
+                onClick={() => navigate('/teacher/courses/createcourse')}
             >
                 Create Course
             </button>
