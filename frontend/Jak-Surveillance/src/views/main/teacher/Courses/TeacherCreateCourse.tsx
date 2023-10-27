@@ -85,11 +85,13 @@ const TeacherCreateCourse: React.FC = () => {
                 >
                     Add Custom Topic
                 </button>
-                <input
-                    type="file"
-                    onChange={handleFileChange}
-                    className="mb-4"
-                />
+                <label className="w-full flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white">
+                    <svg className="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M10 4a2 2 0 00-2 2v4a2 2 0 104 0V6a2 2 0 00-2-2zm0 12a6 6 0 100-12 6 6 0 000 12z" />
+                    </svg>
+                    <span className="mt-2 text-base leading-normal">Select a file</span>
+                    <input type='file' className="hidden" onChange={handleFileChange} />
+                </label>
                 <button
                     type="submit"
                     className="w-full p-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
