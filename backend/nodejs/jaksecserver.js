@@ -1,6 +1,7 @@
 'use strict';
 import userRoutes from './routes/userRoutes.js';
 import { config } from 'dotenv';
+import cors from 'cors';
 config();
 console.log('dot env metropolia:' + process.env.APIKEYMETROPOLIA);
 import express from 'express';
@@ -10,6 +11,7 @@ const http = createServer(app);
 // server's adjustable settings
 const port = 3002;
 const startTime = new Date();
+app.use(cors());
 app.use('/users', userRoutes);
 console.log(' Backend server start time: ' + startTime.toLocaleString());
 http.listen(port, () => {
