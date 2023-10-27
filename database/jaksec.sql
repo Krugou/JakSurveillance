@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS `courses` (
   `name` varchar(100) NOT NULL,
   `start_date` date NOT NULL,
   `created_at` date NOT NULL,
+  `end_date` date NOT NULL,
   PRIMARY KEY (`courseid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
