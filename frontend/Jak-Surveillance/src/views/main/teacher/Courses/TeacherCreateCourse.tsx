@@ -85,6 +85,11 @@ const TeacherCreateCourse: React.FC = () => {
                 >
                     Add Custom Topic
                 </button>
+                <input
+                    type="file"
+                    onChange={handleFileChange}
+                    className="mb-4"
+                />
                 <button
                     type="submit"
                     className="w-full p-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
