@@ -2,8 +2,10 @@ import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import postLogin from './hooks/ApiHooks.ts';
-import Login from './views/Login.tsx';
-import StartView from './views/StartView.tsx';
+import Footer from './views/Footer.tsx';
+import Header from './views/Header.tsx';
+import Login from './views/main/Login.tsx';
+import StartView from './views/main/StartView.tsx';
 
 const intervalMS = 60 * 60 * 1000;
 
@@ -31,6 +33,7 @@ const App = () => {
 
 	return (
 		<Router basename={import.meta.env.BASE_URL}>
+			<Header title='Attendance App' />
 			<Routes>
 				<Route
 					path='/'
@@ -55,6 +58,7 @@ const App = () => {
 					}
 				/>
 			</Routes>
+			<Footer />
 		</Router>
 	);
 };
