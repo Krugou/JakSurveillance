@@ -1,5 +1,9 @@
 'use strict';
 import userRoutes from './routes/userRoutes.js';
+import { config } from 'dotenv';
+config();
+
+console.log('dot env metropolia:' + process.env.APIKEYMETROPOLIA);
 
 import express from 'express';
 import { createServer } from 'http';
