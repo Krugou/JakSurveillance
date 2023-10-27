@@ -36,17 +36,19 @@ const App = () => {
 	return (
 		<Router basename={import.meta.env.BASE_URL}>
 			<Header title='Attendance App' />
-			<Routes>
-				<Route path='/' element={<StartView />} />
-				<Route path='/student/*' element={<Routes>
-					<Route path='login' element={<Login userType='Student' onLogin={(username, password) => handleLogin('Student', username, password)} />} />
-					<Route path='mainview' element={<StudentMainView />} />
-				</Routes>} />
-				<Route path='/teacher/*' element={<Routes>
-					<Route path='login' element={<Login userType='Teacher' onLogin={(username, password) => handleLogin('Teacher', username, password)} />} />
-					<Route path='mainview' element={<TeacherMainView />} />
-				</Routes>} />
-			</Routes>
+			<main>
+				<Routes>
+					<Route path='/' element={<StartView />} />
+					<Route path='/student/*' element={<Routes>
+						<Route path='login' element={<Login userType='Student' onLogin={(username, password) => handleLogin('Student', username, password)} />} />
+						<Route path='mainview' element={<StudentMainView />} />
+					</Routes>} />
+					<Route path='/teacher/*' element={<Routes>
+						<Route path='login' element={<Login userType='Teacher' onLogin={(username, password) => handleLogin('Teacher', username, password)} />} />
+						<Route path='mainview' element={<TeacherMainView />} />
+					</Routes>} />
+				</Routes>
+			</main>
 			<Footer />
 		</Router>
 	);
