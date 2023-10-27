@@ -8,9 +8,11 @@ import Login from './views/main/Login.tsx';
 import StartView from './views/main/StartView.tsx';
 import StudentMainView from './views/main/student/StudentMainView.tsx';
 import TeacherCourseDetail from './views/main/teacher/Courses/TeacherCourseDetail.tsx';
+import TeacherCourseModify from './views/main/teacher/Courses/TeacherCourseModify.tsx';
 import TeacherCourses from './views/main/teacher/Courses/TeacherCourses.tsx';
 import TeacherCreateCourse from './views/main/teacher/Courses/TeacherCreateCourse.tsx';
 import TeacherStudentDetail from './views/main/teacher/Students/TeacherStudentDetail.tsx';
+import TeacherStudentModify from './views/main/teacher/Students/TeacherStudentModify.tsx';
 import TeacherStudentsView from './views/main/teacher/Students/TeacherStudentsView.tsx';
 import TeacherMainView from './views/main/teacher/TeacherMainView.tsx';
 
@@ -55,10 +57,12 @@ const App = () => {
 							<Route path='/' element={<TeacherCourses />} />
 							<Route path='createcourse' element={<TeacherCreateCourse />} />
 							<Route path=':id' element={<TeacherCourseDetail />} />
+							<Route path=':id/modify' element={<TeacherCourseModify />} />
 						</Routes>} />
 						<Route path='students/*' element={<Routes>
 							<Route path='/' element={<TeacherStudentsView />} />
 							<Route path=':id' element={<TeacherStudentDetail />} />
+							<Route path=':id/modify' element={<TeacherStudentModify />} />
 						</Routes>} />
 					</Routes>} />
 				</Routes>
