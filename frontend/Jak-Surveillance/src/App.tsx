@@ -7,6 +7,7 @@ import Header from './views/Header.tsx';
 import Login from './views/main/Login.tsx';
 import StartView from './views/main/StartView.tsx';
 import StudentMainView from './views/main/student/StudentMainView.tsx';
+import TeacherCreateCourse from './views/main/teacher/TeacherCreateCourse.tsx';
 import TeacherMainView from './views/main/teacher/TeacherMainView.tsx';
 
 const intervalMS = 60 * 60 * 1000;
@@ -46,6 +47,7 @@ const App = () => {
 					<Route path='/teacher/*' element={<Routes>
 						<Route path='login' element={<Login userType='Teacher' onLogin={(username, password) => handleLogin('Teacher', username, password)} />} />
 						<Route path='mainview' element={<TeacherMainView />} />
+						<Route path='createcourse' element={<TeacherCreateCourse />} />
 					</Routes>} />
 				</Routes>
 			</main>
