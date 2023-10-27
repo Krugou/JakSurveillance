@@ -48,6 +48,8 @@ const App = () => {
 						<Route path='login' element={<Login userType='Teacher' onLogin={(username, password) => handleLogin('Teacher', username, password)} />} />
 						<Route path='mainview' element={<TeacherMainView />} />
 						<Route path='createcourse' element={<TeacherCreateCourse />} />
+						<Route path='courses' element={<TeacherCourses />} />
+						<Route path='courses/:id' element={<TeacherCourseDetail />} />
 					</Routes>} />
 				</Routes>
 			</main>
