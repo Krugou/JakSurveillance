@@ -15,6 +15,7 @@ const port = 3002;
 
 const startTime = new Date();
 
+app.use(express.json());
 app.use(cors());
 app.use('/users', userRoutes);
 

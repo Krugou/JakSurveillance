@@ -11,6 +11,7 @@ const http = createServer(app);
 // server's adjustable settings
 const port = 3002;
 const startTime = new Date();
+app.use(express.json());
 app.use(cors());
 app.use('/users', userRoutes);
 console.log(' Backend server start time: ' + startTime.toLocaleString());

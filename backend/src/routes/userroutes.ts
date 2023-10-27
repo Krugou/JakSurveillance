@@ -1,5 +1,7 @@
 import express from 'express';
 
+const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
+
 const router: Router = express.Router();
 
 // Define your route handlers with TypeScript types
@@ -10,6 +12,7 @@ router.get('/', (req: Request, res: Response) => {
 router.post('/', (req: Request, res: Response) => {
   res.send('Hello, TypeScript with Express!');
   console.log(req.body);
+
   // Now, you can access the 'username' and 'password' from the request body
   //console.log(`Received username: ${username}, password: ${password}`);
 });

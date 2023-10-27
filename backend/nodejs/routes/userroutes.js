@@ -1,4 +1,5 @@
 import express from 'express';
+const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
 const router = express.Router();
 // Define your route handlers with TypeScript types
 router.get('/', (req, res) => {
