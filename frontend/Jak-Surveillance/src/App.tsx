@@ -7,11 +7,12 @@ import Header from './views/Header.tsx';
 import Login from './views/main/Login.tsx';
 import StartView from './views/main/StartView.tsx';
 import StudentMainView from './views/main/student/StudentMainView.tsx';
-import TeacherCourseDetail from './views/main/teacher/TeacherCourseDetail.tsx';
-
-import TeacherCreateCourse from './views/main/teacher/TeacherCreateCourse.tsx';
+import TeacherCourseDetail from './views/main/teacher/Courses/TeacherCourseDetail.tsx';
+import TeacherCourses from './views/main/teacher/Courses/TeacherCourses.tsx';
+import TeacherCreateCourse from './views/main/teacher/Courses/TeacherCreateCourse.tsx';
+import TeacherStudentDetail from './views/main/teacher/Students/TeacherStudentDetail.tsx';
+import TeacherStudentsView from './views/main/teacher/Students/TeacherStudentsView.tsx';
 import TeacherMainView from './views/main/teacher/TeacherMainView.tsx';
-import TeacherCourses from './views/main/teacher/TeacherCourses.tsx';
 
 const intervalMS = 60 * 60 * 1000;
 
@@ -50,9 +51,15 @@ const App = () => {
 					<Route path='/teacher/*' element={<Routes>
 						<Route path='login' element={<Login userType='Teacher' onLogin={(username, password) => handleLogin('Teacher', username, password)} />} />
 						<Route path='mainview' element={<TeacherMainView />} />
-						<Route path='createcourse' element={<TeacherCreateCourse />} />
-						<Route path='courses' element={<TeacherCourses />} />
-						<Route path='courses/:id' element={<TeacherCourseDetail />} />
+						<Route path='courses' element={<Routes>
+							<Route path='/' element={<TeacherCourses />} />
+							<Route path='createcourse' element={<TeacherCreateCourse />} />
+							<Route path=':id' element={<TeacherCourseDetail />} />
+						</Routes>} />
+						<Route path='students' element={<Routes>
+							<Route path='/' element={<TeacherStudentsView />} />
+							<Route path=':id' element={<TeacherStudentDetail />} />
+						</Routes>} />
 					</Routes>} />
 				</Routes>
 			</main>
