@@ -2,11 +2,32 @@ import React, { useState } from 'react';
 
 const TeacherCreateCourse: React.FC = () => {
     const [courseName, setCourseName] = useState('');
+    const [file, setFile] = useState<File | null>(null);
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setFile(event.target.files ? event.target.files[0] : null);
+    };
+
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         // Here you can handle the course creation logic
         console.log(`Course Created: ${courseName}`);
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('courseName', courseName);
+
+            const response = await fetch('http://your-backend-url.com/upload', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                console.log('File uploaded successfully');
+            } else {
+                console.error('File upload failed');
+            }
+        }
     };
 
     return (
@@ -19,6 +40,11 @@ const TeacherCreateCourse: React.FC = () => {
                     value={courseName}
                     onChange={(e) => setCourseName(e.target.value)}
                     className="mb-4 p-2 w-full"
+                />
+                <input
+                    type="file"
+                    onChange={handleFileChange}
+                    className="mb-4"
                 />
                 <button
                     type="submit"
