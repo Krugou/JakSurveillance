@@ -44,19 +44,19 @@ const App = () => {
 			<main>
 				<Routes>
 					<Route path='/' element={<StartView />} />
-					<Route path='/student/*' element={<Routes>
+					<Route path='student/*' element={<Routes>
 						<Route path='login' element={<Login userType='Student' onLogin={(username, password) => handleLogin('Student', username, password)} />} />
 						<Route path='mainview' element={<StudentMainView />} />
 					</Routes>} />
-					<Route path='/teacher/*' element={<Routes>
+					<Route path='teacher/*' element={<Routes>
 						<Route path='login' element={<Login userType='Teacher' onLogin={(username, password) => handleLogin('Teacher', username, password)} />} />
 						<Route path='mainview' element={<TeacherMainView />} />
-						<Route path='courses' element={<Routes>
+						<Route path='courses/*' element={<Routes>
 							<Route path='/' element={<TeacherCourses />} />
 							<Route path='createcourse' element={<TeacherCreateCourse />} />
 							<Route path=':id' element={<TeacherCourseDetail />} />
 						</Routes>} />
-						<Route path='students' element={<Routes>
+						<Route path='students/*' element={<Routes>
 							<Route path='/' element={<TeacherStudentsView />} />
 							<Route path=':id' element={<TeacherStudentDetail />} />
 						</Routes>} />
