@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 interface LoginProps {
   userType: 'Student' | 'Teacher';
   onLogin: (username: string, password: string) => void;
@@ -12,9 +13,9 @@ const Login: React.FC<LoginProps> = ({ userType, onLogin }) => {
     event.preventDefault();
     onLogin(username, password);
   };
-
+  const navigate = useNavigate();
   return (
-    <div className='flex justify-center items-center h-screen'>
+    <div className='flex justify-center items-center h-1/2'>
       <div className='w-1/2'>
         <h1 className='text-2xl font-bold mb-4 text-center'>
           {userType} Login
@@ -54,12 +55,20 @@ const Login: React.FC<LoginProps> = ({ userType, onLogin }) => {
             />
           </div>
           <div className='flex items-center justify-between'>
-            <button
+            {/* <button
               className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
               type='submit'
             >
               Sign In
+            </button> */}
+            <button
+              className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+              type='button'
+              onClick={() => navigate(`/${userType}/mainview`)}
+            >
+              Sign In
             </button>
+
           </div>
         </form>
       </div>
