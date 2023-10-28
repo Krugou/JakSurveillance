@@ -86,6 +86,8 @@ const TeacherCreateCourse: React.FC = () => {
                     value={courseName}
                     onChange={(e) => setCourseName(e.target.value)}
                     className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    title="Enter the course name here example: Mediapalvelut-projekti"
+
                 />
                 <input
                     type="text"
@@ -93,6 +95,8 @@ const TeacherCreateCourse: React.FC = () => {
                     value={courseCode}
                     onChange={(e) => setCourseCode(e.target.value)}
                     className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    title="Enter the course code here example: TX00CG61-3009"
+
                 />
                 <input
                     type="text"
@@ -100,6 +104,7 @@ const TeacherCreateCourse: React.FC = () => {
                     value={studentGroup}
                     onChange={(e) => setStudentGroup(e.target.value)}
                     className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    title="Enter the student group here example: tvt21-m"
                 />
                 <select
                     multiple
@@ -119,6 +124,7 @@ const TeacherCreateCourse: React.FC = () => {
                         value={topic}
                         onChange={(e) => handleCustomTopicChange(index, e.target.value)}
                         className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        title='add custom topics here example: "exam"'
                     />
                 ))}
                 <button
