@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, Router } from 'express';
 import fetch from 'node-fetch'; // Import node-fetch for making HTTP requests if running older version of nodejs
 
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
