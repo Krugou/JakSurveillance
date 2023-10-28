@@ -1,12 +1,10 @@
 import React from 'react';
 
-interface StudentProfileProps {
-    name: string;
-    email: string;
-    attendance: number;
-}
+const name = "John Doe";
+const email = "john.doe@example.com";
+const attendance = 90;
 
-const StudentProfile: React.FC<StudentProfileProps> = ({ name, email, attendance }) => {
+const StudentProfile: React.FC = () => {
     return (
         <div className="flex flex-col items-center justify-center h-1/2">
             <h1 className="text-4xl font-bold mb-8">Student Profile</h1>

@@ -3,8 +3,8 @@ import fetch from 'node-fetch'; // Import node-fetch for making HTTP requests if
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
 const router = express.Router();
 // Define your route handlers with TypeScript types
-router.get('/', (req, res) => {
-    res.send('Hello, TypeScript with Express!');
+router.get('/', (_req, res) => {
+    res.send('Hello, TypeScript with Express! this is users route calling');
 });
 router.post('/', async (req, res) => {
     // Get username and password from the request body

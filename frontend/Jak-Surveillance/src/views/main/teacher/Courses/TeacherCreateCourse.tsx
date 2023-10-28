@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import apiHooks from '../../../../hooks/ApiHooks';
 // this is view for teacher to create the course
 const TeacherCreateCourse: React.FC = () => {
     const [courseName, setCourseName] = useState('');
@@ -26,35 +27,31 @@ const TeacherCreateCourse: React.FC = () => {
         setCustomTopics(newTopics);
     };
 
+    const [shouldCheckDetails, setShouldCheckDetails] = useState(true);
+
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
-        // Check if the course code exists
-        const courseCodeResponse = await fetch('http://your-backend-url.com/check-course-code', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ codes: courseCode }),
-        });
+        // If the checkbox is checked, verify the course details
+        if (shouldCheckDetails) {
+            console.log('Checking course details...');
+            const response = await apiHooks.checkIfCourseExists({
+                codes: courseCode,
+                studentGroups: studentGroup,
+            });
 
-        if (!courseCodeResponse.ok) {
-            console.error('Course code does not exist');
-            return;
-        }
+            console.log('Received response:', response);
 
-        // Check if the student group exists
-        const studentGroupResponse = await fetch('http://your-backend-url.com/check-student-group', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ studentGroup: studentGroup }),
-        });
+            // If the course details do not exist, show an error message and return
+            if (!response.exists) {
+                console.error('Course details do not exist');
+                return;
+            }
 
-        if (!studentGroupResponse.ok) {
-            console.error('Student group does not exist');
-            return;
+            console.log('Course details exist');
         }
 
         // If both checks pass, create the course
-        console.log(`Course Created: ${courseName}`);
         if (file) {
             const formData = new FormData();
             formData.append('file', file);
@@ -62,14 +59,19 @@ const TeacherCreateCourse: React.FC = () => {
             formData.append('courseCode', courseCode);
             formData.append('studentGroup', studentGroup);
 
-            const response = await fetch('http://your-backend-url.com/upload', {
-                method: 'POST',
-                body: formData,
+            // Use the createCourse function here
+            const response = await apiHooks.createCourse({
+                courseName,
+                courseCode,
+                studentGroup,
+                file,
             });
 
             if (response.ok) {
+                console.log('Course created successfully');
                 console.log('File uploaded successfully');
             } else {
+                console.error('Course creation failed');
                 console.error('File upload failed');
             }
         }
@@ -140,6 +142,14 @@ const TeacherCreateCourse: React.FC = () => {
                     </svg>
                     <span className="mt-2 text-base leading-normal">Select a file</span>
                     <input type='file' className="hidden" onChange={handleFileChange} />
+                </label>
+                <label>
+                    <span>Check Course Details</span>
+                    <input
+                        type="checkbox"
+                        checked={shouldCheckDetails}
+                        onChange={() => setShouldCheckDetails(prev => !prev)}
+                    />
                 </label>
                 <button
                     type="submit"

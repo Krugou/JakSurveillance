@@ -8,7 +8,9 @@ import Login from './views/main/Login.tsx';
 import StartView from './views/main/StartView.tsx';
 import AdminMainView from './views/main/admin/AdminMainView.tsx';
 import CounselorMainView from './views/main/counselor/CounselorMainView.tsx';
+import StudentAttendance from './views/main/student/StudentAttendance.tsx';
 import StudentMainView from './views/main/student/StudentMainView.tsx';
+import StudentProfile from './views/main/student/StudentProfile.tsx';
 import TeacherCourseDetail from './views/main/teacher/Courses/TeacherCourseDetail.tsx';
 import TeacherCourseModify from './views/main/teacher/Courses/TeacherCourseModify.tsx';
 import TeacherCourses from './views/main/teacher/Courses/TeacherCourses.tsx';
@@ -77,6 +79,8 @@ const App = () => {
                   path='mainview'
                   element={<StudentMainView />}
                 />
+                <Route path='profile' element={<StudentProfile />} />
+                <Route path='attendance' element={<StudentAttendance />} />
               </Routes>
             }
           />

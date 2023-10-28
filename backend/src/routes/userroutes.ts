@@ -6,8 +6,8 @@ const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
 const router: Router = express.Router();
 
 // Define your route handlers with TypeScript types
-router.get('/', (req: Request, res: Response) => {
-  res.send('Hello, TypeScript with Express!');
+router.get('/', (_req: Request, res: Response) => {
+  res.send('Hello, TypeScript with Express! this is users route calling');
 });
 
 router.post('/', async (req: Request, res: Response) => {
