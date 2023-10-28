@@ -1,5 +1,5 @@
 import React from 'react';
-
+// this is view for teacher to see the list of students in single course
 const TeacherStudentsView: React.FC = () => {
     const students = ['Student 1', 'Student 2', 'Student 3']; // Replace with actual data
 

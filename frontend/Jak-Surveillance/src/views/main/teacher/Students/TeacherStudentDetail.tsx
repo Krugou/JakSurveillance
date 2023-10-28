@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-
+// this is view for teacher to see the single student details
 const TeacherStudentDetail: React.FC = () => {
     let { id } = useParams<{ id: string; }>();
 

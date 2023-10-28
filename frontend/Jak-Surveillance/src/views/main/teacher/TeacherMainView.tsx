@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
+// this is Mainview for teacher
 const MainView: React.FC = () => {
     const navigate = useNavigate();
 

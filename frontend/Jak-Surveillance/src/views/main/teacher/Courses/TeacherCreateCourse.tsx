@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+// this is view for teacher to create the course
 const TeacherCreateCourse: React.FC = () => {
     const [courseName, setCourseName] = useState('');
     const [file, setFile] = useState<File | null>(null);

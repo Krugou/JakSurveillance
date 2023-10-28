@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-
+// this is view for teacher to see the own course details
 const TeacherCourseDetail: React.FC = () => {
     const { id } = useParams<{ id: string; }>();
 
@@ -18,6 +18,7 @@ const TeacherCourseDetail: React.FC = () => {
                     {course.description}
                 </p>
             </div>
+            
         </div>
     );
 };
