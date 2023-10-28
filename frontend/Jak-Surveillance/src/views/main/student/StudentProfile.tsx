@@ -8,7 +8,7 @@ interface StudentProfileProps {
 
 const StudentProfile: React.FC<StudentProfileProps> = ({ name, email, attendance }) => {
     return (
-        <div className="flex flex-col items-center justify-center h-screen">
+        <div className="flex flex-col items-center justify-center h-1/2">
             <h1 className="text-4xl font-bold mb-8">Student Profile</h1>
             <div className="text-xl mb-4">
                 <p><strong>Name:</strong> {name}</p>

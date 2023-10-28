@@ -48,7 +48,7 @@ const TeacherCreateCourse: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+        <div className="flex flex-col items-center justify-center min-h-1/2 bg-gray-100">
             <h1 className="text-4xl font-bold mb-8 text-blue-600">Create Course</h1>
             <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto bg-white p-6 rounded shadow-md">
                 <input

@@ -5,7 +5,7 @@ const MainView: React.FC = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen">
+        <div className="flex flex-col items-center justify-center h-1/2">
             <h1 className="text-4xl font-bold mb-8">Teacher Dashboard</h1>
             <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold m-4 py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4"
