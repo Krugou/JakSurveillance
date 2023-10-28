@@ -6,6 +6,8 @@ import Footer from './views/Footer.tsx';
 import Header from './views/Header.tsx';
 import Login from './views/main/Login.tsx';
 import StartView from './views/main/StartView.tsx';
+import AdminMainView from './views/main/admin/AdminMainView.tsx';
+import CounselorMainView from './views/main/counselor/CounselorMainView.tsx';
 import StudentMainView from './views/main/student/StudentMainView.tsx';
 import TeacherCourseDetail from './views/main/teacher/Courses/TeacherCourseDetail.tsx';
 import TeacherCourseModify from './views/main/teacher/Courses/TeacherCourseModify.tsx';
@@ -52,7 +54,10 @@ const App = () => {
       <Header title='Attendance App' />
       <main>
         <Routes>
-          <Route path='/' element={<StartView />} />
+          <Route
+            path='/'
+            element={<StartView />}
+          />
           <Route
             path='student/*'
             element={
@@ -68,10 +73,59 @@ const App = () => {
                     />
                   }
                 />
-                <Route path='mainview' element={<StudentMainView />} />
+                <Route
+                  path='mainview'
+                  element={<StudentMainView />}
+                />
               </Routes>
             }
           />
+          <Route
+            path='admin/*'
+            element={
+              <Routes>
+                {' '}
+                <Route
+                  path='login'
+                  element={
+                    <Login
+                      userType='Admin'
+                      onLogin={(username, password) =>
+                        handleLogin('Admin', username, password)
+                      }
+                    />
+                  }
+                />
+                <Route
+                  path='mainview'
+                  element={<AdminMainView />}
+                />{' '}
+              </Routes>
+            }
+          />
+          <Route
+            path='counselor/*'
+            element={
+              <Routes>
+                <Route
+                  path='login'
+                  element={
+                    <Login
+                      userType='Counselor'
+                      onLogin={(username, password) =>
+                        handleLogin('Counselor', username, password)
+                      }
+                    />
+                  }
+                />
+                <Route
+                  path='mainview'
+                  element={<CounselorMainView />}
+                />
+              </Routes>
+            }
+          />
+
           <Route
             path='teacher/*'
             element={
@@ -87,17 +141,26 @@ const App = () => {
                     />
                   }
                 />
-                <Route path='mainview' element={<TeacherMainView />} />
+                <Route
+                  path='mainview'
+                  element={<TeacherMainView />}
+                />
                 <Route
                   path='courses/*'
                   element={
                     <Routes>
-                      <Route path='/' element={<TeacherCourses />} />
+                      <Route
+                        path='/'
+                        element={<TeacherCourses />}
+                      />
                       <Route
                         path='createcourse'
                         element={<TeacherCreateCourse />}
                       />
-                      <Route path=':id' element={<TeacherCourseDetail />} />
+                      <Route
+                        path=':id'
+                        element={<TeacherCourseDetail />}
+                      />
                       <Route
                         path=':id/modify'
                         element={<TeacherCourseModify />}
@@ -109,8 +172,14 @@ const App = () => {
                   path='students/*'
                   element={
                     <Routes>
-                      <Route path='/' element={<TeacherStudentsView />} />
-                      <Route path=':id' element={<TeacherStudentDetail />} />
+                      <Route
+                        path='/'
+                        element={<TeacherStudentsView />}
+                      />
+                      <Route
+                        path=':id'
+                        element={<TeacherStudentDetail />}
+                      />
                       <Route
                         path=':id/modify'
                         element={<TeacherStudentModify />}

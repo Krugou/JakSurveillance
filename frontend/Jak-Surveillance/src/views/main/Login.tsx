@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 interface LoginProps {
-  userType: 'Student' | 'Teacher';
+  userType: 'Student' | 'Teacher' | 'Admin' | 'Counselor';
   onLogin: (username: string, password: string) => void;
 }
 
