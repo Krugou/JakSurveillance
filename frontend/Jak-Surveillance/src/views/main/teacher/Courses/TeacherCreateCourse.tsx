@@ -5,7 +5,8 @@ const TeacherCreateCourse: React.FC = () => {
     const [file, setFile] = useState<File | null>(null);
     const [courseTopics, setCourseTopics] = useState<string[]>([]);
     const [customTopics, setCustomTopics] = useState<string[]>(['']);
-
+    const [courseCode, setCourseCode] = useState('');
+    const [studentGroup, setStudentGroup] = useState('');
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFile(event.target.files ? event.target.files[0] : null);
     };
@@ -27,12 +28,39 @@ const TeacherCreateCourse: React.FC = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        // Here you can handle the course creation logic
+
+        // Check if the course code exists
+        const courseCodeResponse = await fetch('http://your-backend-url.com/check-course-code', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ codes: courseCode }),
+        });
+
+        if (!courseCodeResponse.ok) {
+            console.error('Course code does not exist');
+            return;
+        }
+
+        // Check if the student group exists
+        const studentGroupResponse = await fetch('http://your-backend-url.com/check-student-group', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ studentGroup: studentGroup }),
+        });
+
+        if (!studentGroupResponse.ok) {
+            console.error('Student group does not exist');
+            return;
+        }
+
+        // If both checks pass, create the course
         console.log(`Course Created: ${courseName}`);
         if (file) {
             const formData = new FormData();
             formData.append('file', file);
             formData.append('courseName', courseName);
+            formData.append('courseCode', courseCode);
+            formData.append('studentGroup', studentGroup);
 
             const response = await fetch('http://your-backend-url.com/upload', {
                 method: 'POST',
@@ -47,6 +75,7 @@ const TeacherCreateCourse: React.FC = () => {
         }
     };
 
+
     return (
         <div className="flex flex-col items-center justify-center min-h-1/2 bg-gray-100">
             <h1 className="text-4xl font-bold mb-8 text-blue-600">Create Course</h1>
@@ -56,6 +85,20 @@ const TeacherCreateCourse: React.FC = () => {
                     placeholder="Course Name"
                     value={courseName}
                     onChange={(e) => setCourseName(e.target.value)}
+                    className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+                <input
+                    type="text"
+                    placeholder="Course Code"
+                    value={courseCode}
+                    onChange={(e) => setCourseCode(e.target.value)}
+                    className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+                <input
+                    type="text"
+                    placeholder="Student Group"
+                    value={studentGroup}
+                    onChange={(e) => setStudentGroup(e.target.value)}
                     className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
                 <select
