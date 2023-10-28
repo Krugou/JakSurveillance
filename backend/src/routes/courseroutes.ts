@@ -1,6 +1,6 @@
-import ExcelJS from 'exceljs';
 import express, { Request, Response, Router } from 'express';
 import multer from 'multer';
+import XLSX from 'xlsx';
 
 const upload = multer();
 const router: Router = express.Router();
@@ -15,16 +15,13 @@ router.post('/create', upload.single('file'), async (req, res) => {
     const { courseName, courseCode, studentGroup } = req.body;
     console.log('Request body:', req.body); // Debugging line
 
-    // Create a new workbook
-    const workbook = new ExcelJS.Workbook();
-
     // Read the Excel file from the buffer
-    await workbook.xlsx.load(req.file.buffer);
-    console.log(req.file.buffer); // Debugging line
+    const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
     console.log('Loaded workbook'); // Debugging line
-    console.log(workbook.worksheets.map(ws => ws.name));
+
     // Get the first worksheet
-    const worksheet = workbook.getWorksheet('Sheet0');
+    const worksheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[worksheetName];
 
     if (!worksheet) {
         console.error('Worksheet not found');
@@ -34,16 +31,7 @@ router.post('/create', upload.single('file'), async (req, res) => {
     console.log('Got worksheet'); // Debugging line
 
     // Convert the worksheet to JSON
-    const jsonData = worksheet.getRows(2, worksheet.rowCount).map(row => {
-        let rowValue = {};
-        row.eachCell((cell, colNumber) => {
-            const headerCell = worksheet.getRow(1).getCell(colNumber);
-            if (headerCell && cell) {
-                rowValue[headerCell.value] = cell.value;
-            }
-        });
-        return rowValue;
-    });
+    const jsonData = XLSX.utils.sheet_to_json(worksheet);
     console.log('Converted worksheet to JSON'); // Debugging line
 
     console.log('Course Name:', courseName);
