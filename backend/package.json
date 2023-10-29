@@ -1,7 +1,8 @@
 {
   "type": "module",
   "scripts": {
-    "sW": "concurrently \"tsc --watch\" \"nodemon nodejs/jaksecfileserver.js\" \"nodemon nodejs/jaksecserver.js\""
+    "sW": "concurrently \"tsc --watch\" \"nodemon nodejs/jaksecfileserver.js\" \"nodemon nodejs/jaksecserver.js\"",
+    "notscsW": "concurrently  \"nodemon nodejs/jaksecfileserver.js\" \"nodemon nodejs/jaksecserver.js\""
   },
   "dependencies": {
     "body-parser": "^1.20.2",
