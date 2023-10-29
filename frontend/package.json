@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 8080 --open --host",
+    "dev2": "vite --port 8080",
     "devBrutal": "vite --port 8080 --open -d --force --host",
     "devDebug": "vite --port 8080 --open -d --host",
     "build": "tsc && vite build --outDir ../backend/jaksec --minify --emptyOutDir --base /",
