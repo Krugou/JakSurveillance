@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { useRegisterSW } from 'virtual:pwa-register/react';
-import postLogin from './hooks/ApiHooks.ts';
+import apiHooks from './hooks/ApiHooks.ts';
 import Footer from './views/Footer.tsx';
 import Header from './views/Header.tsx';
 import Login from './views/main/Login.tsx';
@@ -34,7 +34,7 @@ const App = () => {
     console.log(userType, username, password);
     const inputs = { username, password };
     console.log('asdasdasdasd');
-    const data = await postLogin(inputs);
+    const data = await apiHooks.postLogin(inputs);
 
     console.log(data);
   };
@@ -57,10 +57,7 @@ const App = () => {
       <Header title='Attendance App' />
       <main>
         <Routes>
-          <Route
-            path='/'
-            element={<StartView />}
-          />
+          <Route path='/' element={<StartView />} />
           <Route
             path='student/*'
             element={
@@ -76,11 +73,8 @@ const App = () => {
                     />
                   }
                 />
-                <Route
-                  path='mainview'
-                  element={<StudentMainView />}
-                />
-                  <Route path='courses' element={<StudentLessons />} />
+                <Route path='mainview' element={<StudentMainView />} />
+                <Route path='courses' element={<StudentLessons />} />
                 <Route path='profile' element={<StudentProfile />} />
                 <Route path='attendance' element={<StudentAttendance />} />
               </Routes>
@@ -102,10 +96,7 @@ const App = () => {
                     />
                   }
                 />
-                <Route
-                  path='mainview'
-                  element={<AdminMainView />}
-                />{' '}
+                <Route path='mainview' element={<AdminMainView />} />{' '}
               </Routes>
             }
           />
@@ -124,10 +115,7 @@ const App = () => {
                     />
                   }
                 />
-                <Route
-                  path='mainview'
-                  element={<CounselorMainView />}
-                />
+                <Route path='mainview' element={<CounselorMainView />} />
               </Routes>
             }
           />
@@ -147,26 +135,17 @@ const App = () => {
                     />
                   }
                 />
-                <Route
-                  path='mainview'
-                  element={<TeacherMainView />}
-                />
+                <Route path='mainview' element={<TeacherMainView />} />
                 <Route
                   path='courses/*'
                   element={
                     <Routes>
-                      <Route
-                        path='/'
-                        element={<TeacherCourses />}
-                      />
+                      <Route path='/' element={<TeacherCourses />} />
                       <Route
                         path='createcourse'
                         element={<TeacherCreateCourse />}
                       />
-                      <Route
-                        path=':id'
-                        element={<TeacherCourseDetail />}
-                      />
+                      <Route path=':id' element={<TeacherCourseDetail />} />
                       <Route
                         path=':id/modify'
                         element={<TeacherCourseModify />}
@@ -178,14 +157,8 @@ const App = () => {
                   path='students/*'
                   element={
                     <Routes>
-                      <Route
-                        path='/'
-                        element={<TeacherStudentsView />}
-                      />
-                      <Route
-                        path=':id'
-                        element={<TeacherStudentDetail />}
-                      />
+                      <Route path='/' element={<TeacherStudentsView />} />
+                      <Route path=':id' element={<TeacherStudentDetail />} />
                       <Route
                         path=':id/modify'
                         element={<TeacherStudentModify />}

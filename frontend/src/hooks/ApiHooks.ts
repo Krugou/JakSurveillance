@@ -3,7 +3,6 @@
 //const baseUrl = 'https://jaksec.northeurope.cloudapp.azure.com/backend/';
 const baseUrl = 'http://localhost:3002/';
 
-
 const doFetch = async (url: string, options: RequestInit) => {
   const response = await fetch(url, options);
   const data = await response.json();
@@ -77,7 +76,6 @@ const checkIfCourseExists = async (inputs: CourseCheckInputs) => {
   const url = `${baseUrl}courses/check`;
   return await doFetch(url, options);
 };
-
 
 const apiHooks = {
   postLogin,

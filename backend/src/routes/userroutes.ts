@@ -14,6 +14,7 @@ router.post('/', async (req: Request, res: Response) => {
   // Get username and password from the request body
   const { username, password } = req.body;
 
+  /*
   if (username === 'admin' && password === 'admin') {
     res.json({
       "staff": true,
@@ -47,29 +48,30 @@ router.post('/', async (req: Request, res: Response) => {
       "email": "student@metropolia.fi"
     });
   } else {
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
-    };
+    */
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username, password }),
+  };
 
-    try {
-      const response = await fetch(loginUrl, options);
+  try {
+    const response = await fetch(loginUrl, options);
 
-      if (!response.ok) {
-        res.status(response.status).json({ error: 'Login failed' });
-        return;
-      }
-
-      const responseData = await response.json();
-      res.json(responseData);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+    if (!response.ok) {
+      res.status(response.status).json({ error: 'Login failed' });
+      return;
     }
+
+    const responseData = await response.json();
+    res.json(responseData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
+  //}
 });
 
 export default router;
