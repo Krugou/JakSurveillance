@@ -106,6 +106,13 @@ CREATE TABLE IF NOT EXISTS `roles` (
   PRIMARY KEY (`roleid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- Inserting data into jaksec.roles
+INSERT INTO roles (roleid, name) VALUES
+(0, 'student'),
+(1, 'counselor'),
+(2, 'teacher'),
+(3, 'admin');
+
 -- Dumping data for table jaksec.roles: ~0 rows (suunnilleen)
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
@@ -181,6 +188,9 @@ CREATE TABLE IF NOT EXISTS `users` (
   CONSTRAINT `users_ibfk_2` FOREIGN KEY (`roleid`) REFERENCES `roles` (`roleid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- Inserting data into jaksec.users
+INSERT INTO `users` (`userid`, `username`, `email`, `staff`, `first_name`, `last_name`, `created_at`, `studentnumber`, `studentgroupid`, `roleid`) 
+VALUES (1, 'MrAnderson', 'mr.anderson@example.com', 1, 'Mr', 'Anderson', NOW(), NULL, NULL, 3);
 -- Dumping data for table jaksec.users: ~0 rows (suunnilleen)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
