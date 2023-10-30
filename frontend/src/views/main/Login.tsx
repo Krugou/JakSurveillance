@@ -13,7 +13,7 @@ const Login: React.FC<LoginProps> = ({ userType, onLogin }) => {
     event.preventDefault();
     onLogin(username, password);
   };
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   return (
     <div className='flex justify-center items-center h-1/2'>
       <div className='md:w-1/2 w-2/3'>
@@ -64,8 +64,8 @@ const Login: React.FC<LoginProps> = ({ userType, onLogin }) => {
             <button
               className='bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
               type='button'
-               onClick={() => navigate(`/${userType.toLowerCase()}/mainview`)}
-              // onClick={handleSubmit}
+              //  onClick={() => navigate(`/${userType.toLowerCase()}/mainview`)}
+              onClick={handleSubmit}
             >
               Sign In
             </button>

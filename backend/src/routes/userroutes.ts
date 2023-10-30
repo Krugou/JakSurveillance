@@ -1,6 +1,6 @@
 import express, { Request, Response, Router } from 'express';
 import fetch from 'node-fetch'; // Import node-fetch for making HTTP requests if running older version of nodejs
-
+import usermodel from '../models/usermodel.js';
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
 
 const router: Router = express.Router();
@@ -49,6 +49,7 @@ router.post('/', async (req: Request, res: Response) => {
     });
   } else {
     */
+
   const options = {
     method: 'POST',
     headers: {
@@ -56,6 +57,21 @@ router.post('/', async (req: Request, res: Response) => {
     },
     body: JSON.stringify({ username, password }),
   };
+
+  // TRY TO FIND USER FROM DATABASE FIRST
+
+  try {
+    console.log('awdawdwa');
+    const userInfo = await usermodel.getAllUserInfo(username);
+
+    if (userInfo) {
+      console.log('User information:', userInfo);
+    } else {
+      console.log('User not found.');
+    }
+  } catch (error) {
+    console.error('Database error:', error.message);
+  }
 
   try {
     const response = await fetch(loginUrl, options);
@@ -69,13 +85,12 @@ router.post('/', async (req: Request, res: Response) => {
 
     res.json(responseData);
 
-    // if logged in user is metropolia staff
+    // if logged in user is not metropolia staff
     if (responseData.staff === false) {
-      res
-        .status(403)
-        .json({
-          error: 'User has not been added to any courses, contact your teacher',
-        });
+      res.status(403).json({
+        error: 'User has not been added to any courses, contact your teacher',
+      });
+      return;
     }
   } catch (error) {
     console.error(error);
