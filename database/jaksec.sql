@@ -181,6 +181,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `studentnumber` int(11) DEFAULT NULL,
   `studentgroupid` int(11) DEFAULT NULL,
   `roleid` int(11) NOT NULL,
+  `GDPR` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`userid`),
   KEY `studentgroupid` (`studentgroupid`),
   KEY `roleid` (`roleid`),
@@ -189,8 +190,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Inserting data into jaksec.users
-INSERT INTO `users` (`userid`, `username`, `email`, `staff`, `first_name`, `last_name`, `created_at`, `studentnumber`, `studentgroupid`, `roleid`) 
-VALUES (1, 'MrAnderson', 'mr.anderson@example.com', 1, 'Mr', 'Anderson', NOW(), NULL, NULL, 3);
+INSERT INTO `users` (`userid`, `username`, `email`, `staff`, `first_name`, `last_name`, `created_at`, `studentnumber`, `studentgroupid`, `roleid`, `GDPR`) 
+VALUES (1, 'MrAnderson', 'mr.anderson@example.com', 1, 'Mr', 'Anderson', NOW(), NULL, NULL, 3, 1);
 -- Dumping data for table jaksec.users: ~0 rows (suunnilleen)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
