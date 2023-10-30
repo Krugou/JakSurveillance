@@ -21,7 +21,7 @@ USE `jaksec`;
 CREATE TABLE IF NOT EXISTS `attendance` (
   `status` int(11) NOT NULL,
   `date` date NOT NULL,
-  `attendanceid` int(11) NOT NULL,
+  `attendanceid` int(11) NOT NULL AUTO_INCREMENT,
   `usercourseid` int(11) NOT NULL,
   `classid` int(11) NOT NULL,
   PRIMARY KEY (`attendanceid`),
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `attendance` (
 
 -- Dumping structure for taulu jaksec.class
 CREATE TABLE IF NOT EXISTS `class` (
-  `classid` int(11) NOT NULL,
+  `classid` int(11) NOT NULL AUTO_INCREMENT,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
   `topicid` int(11) NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `class` (
 
 -- Dumping structure for taulu jaksec.courseinstructors
 CREATE TABLE IF NOT EXISTS `courseinstructors` (
-  `courseid` int(11) NOT NULL,
+  `courseid` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) NOT NULL,
   KEY `courseid` (`courseid`),
   KEY `userid` (`userid`),
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `courseinstructors` (
 
 -- Dumping structure for taulu jaksec.courses
 CREATE TABLE IF NOT EXISTS `courses` (
-  `courseid` int(11) NOT NULL,
+  `courseid` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `start_date` date NOT NULL,
   `created_at` timestamp NOT NULL,
@@ -101,17 +101,17 @@ CREATE TABLE IF NOT EXISTS `coursetopics` (
 
 -- Dumping structure for taulu jaksec.roles
 CREATE TABLE IF NOT EXISTS `roles` (
-  `roleid` int(11) NOT NULL,
+  `roleid` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
   PRIMARY KEY (`roleid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Inserting data into jaksec.roles
-INSERT INTO roles (roleid, name) VALUES
-(0, 'student'),
-(1, 'counselor'),
-(2, 'teacher'),
-(3, 'admin');
+INSERT INTO roles ( name) VALUES
+('student'),
+('counselor'),
+('teacher'),
+('admin');
 
 -- Dumping data for table jaksec.roles: ~0 rows (suunnilleen)
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
@@ -119,7 +119,7 @@ INSERT INTO roles (roleid, name) VALUES
 
 -- Dumping structure for taulu jaksec.studentgroups
 CREATE TABLE IF NOT EXISTS `studentgroups` (
-  `studentgroupid` int(11) NOT NULL,
+  `studentgroupid` int(11) NOT NULL AUTO_INCREMENT,
   `group_name` varchar(20) NOT NULL,
   PRIMARY KEY (`studentgroupid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -130,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `studentgroups` (
 
 -- Dumping structure for taulu jaksec.topics
 CREATE TABLE IF NOT EXISTS `topics` (
-  `topicid` int(11) NOT NULL,
+  `topicid` int(11) NOT NULL AUTO_INCREMENT,
   `topicname` varchar(64) NOT NULL,
   PRIMARY KEY (`topicid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `topics` (
 
 -- Dumping structure for taulu jaksec.usercourses
 CREATE TABLE IF NOT EXISTS `usercourses` (
-  `usercourseid` int(11) NOT NULL,
+  `usercourseid` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) NOT NULL,
   `courseid` int(11) NOT NULL,
   PRIMARY KEY (`usercourseid`),
@@ -171,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `usercourse_topics` (
 
 -- Dumping structure for taulu jaksec.users
 CREATE TABLE IF NOT EXISTS `users` (
-  `userid` int(11) NOT NULL,
+  `userid` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(20) NOT NULL,
   `email` varchar(100) NOT NULL,
   `staff` int(11) NOT NULL,
@@ -180,7 +180,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `created_at` timestamp NOT NULL,
   `studentnumber` int(11) DEFAULT NULL,
   `studentgroupid` int(11) DEFAULT NULL,
-  `roleid` int(11) NOT NULL,
+  `roleid` int(11) NOT NULL DEFAULT '1',
   `GDPR` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`userid`),
   KEY `studentgroupid` (`studentgroupid`),
@@ -190,8 +190,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Inserting data into jaksec.users
-INSERT INTO `users` (`userid`, `username`, `email`, `staff`, `first_name`, `last_name`, `created_at`, `studentnumber`, `studentgroupid`, `roleid`, `GDPR`) 
-VALUES (1, 'MrAnderson', 'mr.anderson@example.com', 1, 'Mr', 'Anderson', NOW(), NULL, NULL, 3, 1);
+INSERT INTO `users` (`username`, `email`, `staff`, `first_name`, `last_name`, `created_at`, `studentnumber`, `studentgroupid`, `roleid`, `GDPR`) 
+VALUES ('MrAnderson', 'mr.anderson@example.com', 1, 'Mr', 'Anderson', NOW(), NULL, NULL, 3, 1);
 -- Dumping data for table jaksec.users: ~0 rows (suunnilleen)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
