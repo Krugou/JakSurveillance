@@ -200,3 +200,11 @@ VALUES ('MrAnderson', 'mr.anderson@example.com', 1, 'Mr', 'Anderson', NOW(), NUL
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+
+-- Test users
+INSERT INTO `users` (`username`, `email`, `staff`, `first_name`, `last_name`, `created_at`, `roleid`, `GDPR`) 
+VALUES 
+('admin', 'admin@metropolia.fi', 1, 'Admin', 'Admin', NOW(), 4, 1),
+('teacher', 'teacher@metropolia.fi', 1, 'Teacher', 'Teacher', NOW(), 3, 1),
+('counselor', 'counselor@metropolia.fi', 1, 'Counselor', 'Counselor', NOW(), 2, 1),
+('student', 'student@metropolia.fi', 0, 'Student', 'Student', NOW(),1, 1);
