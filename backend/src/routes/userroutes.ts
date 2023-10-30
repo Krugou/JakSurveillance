@@ -66,7 +66,17 @@ router.post('/', async (req: Request, res: Response) => {
     }
 
     const responseData = await response.json();
+
     res.json(responseData);
+
+    // if logged in user is metropolia staff
+    if (responseData.staff === false) {
+      res
+        .status(403)
+        .json({
+          error: 'User has not been added to any courses, contact your teacher',
+        });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
