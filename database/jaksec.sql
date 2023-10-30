@@ -21,7 +21,7 @@ USE `jaksec`;
 CREATE TABLE IF NOT EXISTS `attendance` (
   `status` int(11) NOT NULL,
   `date` date NOT NULL,
-  `attendanceid` int(11) NOT NULL AUTO_INCREMENT,
+  `attendanceid` int(11) NOT NULL,
   `usercourseid` int(11) NOT NULL,
   `classid` int(11) NOT NULL,
   PRIMARY KEY (`attendanceid`),
@@ -37,13 +37,16 @@ CREATE TABLE IF NOT EXISTS `attendance` (
 
 -- Dumping structure for taulu jaksec.class
 CREATE TABLE IF NOT EXISTS `class` (
-  `classid` int(11) NOT NULL AUTO_INCREMENT,
-  `class_started` date NOT NULL,
-  `class_ended` date NOT NULL,
+  `classid` int(11) NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
   `topicid` int(11) NOT NULL,
+  `usercourseid` int(11) NOT NULL,
   PRIMARY KEY (`classid`),
   KEY `topicid` (`topicid`),
-  CONSTRAINT `class_ibfk_1` FOREIGN KEY (`topicid`) REFERENCES `topics` (`topicid`)
+  KEY `usercourseid` (`usercourseid`),
+  CONSTRAINT `class_ibfk_1` FOREIGN KEY (`topicid`) REFERENCES `topics` (`topicid`),
+  CONSTRAINT `class_ibfk_2` FOREIGN KEY (`usercourseid`) REFERENCES `usercourses` (`usercourseid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Dumping data for table jaksec.class: ~0 rows (suunnilleen)
@@ -66,12 +69,16 @@ CREATE TABLE IF NOT EXISTS `courseinstructors` (
 
 -- Dumping structure for taulu jaksec.courses
 CREATE TABLE IF NOT EXISTS `courses` (
-  `courseid` int(11) NOT NULL AUTO_INCREMENT,
+  `courseid` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `start_date` date NOT NULL,
-  `created_at` date NOT NULL,
+  `created_at` timestamp NOT NULL,
   `end_date` date NOT NULL,
-  PRIMARY KEY (`courseid`)
+  `code` varchar(20) NOT NULL,
+  `studentgroupid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`courseid`),
+  KEY `studentgroupid` (`studentgroupid`),
+  CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`studentgroupid`) REFERENCES `studentgroups` (`studentgroupid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Dumping data for table jaksec.courses: ~0 rows (suunnilleen)
@@ -92,9 +99,31 @@ CREATE TABLE IF NOT EXISTS `coursetopics` (
 /*!40000 ALTER TABLE `coursetopics` DISABLE KEYS */;
 /*!40000 ALTER TABLE `coursetopics` ENABLE KEYS */;
 
+-- Dumping structure for taulu jaksec.roles
+CREATE TABLE IF NOT EXISTS `roles` (
+  `roleid` int(11) NOT NULL,
+  `name` varchar(20) NOT NULL,
+  PRIMARY KEY (`roleid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Dumping data for table jaksec.roles: ~0 rows (suunnilleen)
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+
+-- Dumping structure for taulu jaksec.studentgroups
+CREATE TABLE IF NOT EXISTS `studentgroups` (
+  `studentgroupid` int(11) NOT NULL,
+  `group_name` varchar(20) NOT NULL,
+  PRIMARY KEY (`studentgroupid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Dumping data for table jaksec.studentgroups: ~0 rows (suunnilleen)
+/*!40000 ALTER TABLE `studentgroups` DISABLE KEYS */;
+/*!40000 ALTER TABLE `studentgroups` ENABLE KEYS */;
+
 -- Dumping structure for taulu jaksec.topics
 CREATE TABLE IF NOT EXISTS `topics` (
-  `topicid` int(11) NOT NULL AUTO_INCREMENT,
+  `topicid` int(11) NOT NULL,
   `topicname` varchar(64) NOT NULL,
   PRIMARY KEY (`topicid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -105,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `topics` (
 
 -- Dumping structure for taulu jaksec.usercourses
 CREATE TABLE IF NOT EXISTS `usercourses` (
-  `usercourseid` int(11) NOT NULL AUTO_INCREMENT,
+  `usercourseid` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
   `courseid` int(11) NOT NULL,
   PRIMARY KEY (`usercourseid`),
@@ -135,15 +164,21 @@ CREATE TABLE IF NOT EXISTS `usercourse_topics` (
 
 -- Dumping structure for taulu jaksec.users
 CREATE TABLE IF NOT EXISTS `users` (
-  `userid` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
   `username` varchar(20) NOT NULL,
   `email` varchar(100) NOT NULL,
   `staff` int(11) NOT NULL,
   `first_name` varchar(30) NOT NULL,
   `last_name` varchar(30) NOT NULL,
-  `created_at` date NOT NULL,
+  `created_at` timestamp NOT NULL,
   `studentnumber` int(11) DEFAULT NULL,
-  PRIMARY KEY (`userid`)
+  `studentgroupid` int(11) DEFAULT NULL,
+  `roleid` int(11) NOT NULL,
+  PRIMARY KEY (`userid`),
+  KEY `studentgroupid` (`studentgroupid`),
+  KEY `roleid` (`roleid`),
+  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`studentgroupid`) REFERENCES `studentgroups` (`studentgroupid`),
+  CONSTRAINT `users_ibfk_2` FOREIGN KEY (`roleid`) REFERENCES `roles` (`roleid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Dumping data for table jaksec.users: ~0 rows (suunnilleen)
