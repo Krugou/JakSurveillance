@@ -191,7 +191,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- Inserting data into jaksec.users
 INSERT INTO `users` (`username`, `email`, `staff`, `first_name`, `last_name`, `created_at`, `studentnumber`, `studentgroupid`, `roleid`, `GDPR`) 
-VALUES ('MrAnderson', 'mr.anderson@example.com', 1, 'Mr', 'Anderson', NOW(), NULL, NULL, 3, 1);
+VALUES ('MrAnderson', 'mr.anderson@example.com', 1, 'Mr', 'Anderson', NOW(), NULL, NULL, 4, 1);
 -- Dumping data for table jaksec.users: ~0 rows (suunnilleen)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
