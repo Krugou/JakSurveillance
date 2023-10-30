@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `class` (
 
 -- Dumping structure for taulu jaksec.courseinstructors
 CREATE TABLE IF NOT EXISTS `courseinstructors` (
-  `courseid` int(11) NOT NULL AUTO_INCREMENT,
+  `courseid` int(11) NOT NULL 
   `userid` int(11) NOT NULL,
   KEY `courseid` (`courseid`),
   KEY `userid` (`userid`),
