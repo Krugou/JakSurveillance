@@ -5,6 +5,7 @@ export default {
 		extend: {
 			colors: {
 				metropoliaMainOrange: '#ff5000',
+				metropoliaSecondaryOrange: '#e54b00',
 				metropoliaMainGrey: '#53565a',
 				metropoliaSupportWhite: '#ffffff',
 				metropoliaSupportBlack: '#000000',

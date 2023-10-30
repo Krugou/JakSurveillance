@@ -16,13 +16,13 @@ const Login: React.FC<LoginProps> = ({ userType, onLogin }) => {
   const navigate = useNavigate();
   return (
     <div className='flex justify-center items-center h-1/2'>
-      <div className='w-1/2'>
-        <h1 className='text-2xl font-bold mb-4 text-center'>
+      <div className='md:w-1/2 w-2/3'>
+        <h1 className='sm:text-2xl text-xl font-bold mb-4 mt-4 sm:mt-0 text-center'>
           {userType} Login
         </h1>
         <form
           onSubmit={handleSubmit}
-          className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mx-auto'
+          className='bg-white md:w-3/4 xl:w-1/2 w-full shadow-md rounded px-8 pt-6 pb-8 mb-4 mx-auto'
         >
           <div className='mb-4'>
             <label
@@ -62,7 +62,7 @@ const Login: React.FC<LoginProps> = ({ userType, onLogin }) => {
               Sign In
             </button> */}
             <button
-              className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+              className='bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
               type='button'
                onClick={() => navigate(`/${userType.toLowerCase()}/mainview`)}
               // onClick={handleSubmit}
