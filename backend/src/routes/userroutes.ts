@@ -69,7 +69,7 @@ router.post('/', async (req: Request, res: Response) => {
   // TRY TO FIND USER FROM DATABASE FIRST
 
   try {
-    console.log('awdawdwa');
+    console.log("🚀 ~ file: userroutes.ts:74 ~ router.post ~ userInfo:")
     const userInfo = await usermodel.getAllUserInfo(username);
 
     if (userInfo) {
