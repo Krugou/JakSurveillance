@@ -47,6 +47,14 @@ router.post('/', async (req: Request, res: Response) => {
       "lastname": "Student",
       "email": "student@metropolia.fi"
     });
+  } else if(username === 'mranderson'&& password === 'student') {
+    res.json({
+      "staff": false,
+      "user": "MrAnderson",
+      "firstname": "Mr",
+      "lastname": "Anderson",
+      "email": "mr.anderson@example.com"
+    });
   } else {
     */
 
