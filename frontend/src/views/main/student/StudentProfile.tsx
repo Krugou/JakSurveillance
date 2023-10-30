@@ -4,14 +4,32 @@ const name = "John Doe";
 const email = "john.doe@example.com";
 const attendance = 90;
 
+const getAttendanceColorClass = (attendance: number): string => {
+    if (attendance >= 90) {
+        return 'bg-metropoliaTrendGreen';
+    } else if (attendance >= 50) {
+        return 'bg-metropoliaMainOrange';
+    } else {
+        return 'bg-metropoliaSupportRed';
+    }
+};
+
 const StudentProfile: React.FC = () => {
+    const attendanceColorClass = getAttendanceColorClass(attendance);
+
     return (
-        <div className="flex flex-col items-center justify-center h-1/2">
-            <h1 className="text-4xl font-bold mb-8">Student Profile</h1>
-            <div className="text-xl mb-4">
-                <p><strong>Name:</strong> {name}</p>
-                <p><strong>Email:</strong> {email}</p>
-                <p><strong>Attendance:</strong> {attendance}%</p>
+        <div className="flex flex-col items-center justify-center h-1/2 p-10 bg-gray-100">
+            <h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">Student Profile</h1>
+            <div className="text-md sm:text-xl mb-4">
+                <p className="mb-5">
+                    <strong>Name:</strong> <span className="bg-metropoliaMainOrange p-1 rounded text-white">{name}</span>
+                </p>
+                <p className="mb-5">
+                    <strong>Email:</strong> <span className="bg-metropoliaMainOrange p-1 rounded text-white">{email}</span>
+                </p>
+                <p>
+                    <strong>Attendance:</strong> <span className={`text-white rounded p-1 ${attendanceColorClass}`}>{attendance}%</span>
+                </p>
             </div>
         </div>
     );
