@@ -22,10 +22,10 @@ const StudentProfile: React.FC = () => {
             <h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">Student Profile</h1>
             <div className="text-md sm:text-xl mb-4">
                 <p className="mb-5">
-                    <strong>Name:</strong> <span className="bg-metropoliaMainOrange p-1 rounded text-white">{name}</span>
+                    <strong>Name:</strong> <span className="profileStat">{name}</span>
                 </p>
                 <p className="mb-5">
-                    <strong>Email:</strong> <span className="bg-metropoliaMainOrange p-1 rounded text-white">{email}</span>
+                    <strong>Email:</strong> <span className="profileStat">{email}</span>
                 </p>
                 <p>
                     <strong>Attendance:</strong> <span className={`text-white rounded p-1 ${attendanceColorClass}`}>{attendance}%</span>

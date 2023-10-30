@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components{
+    .profileStat {
+        @apply bg-metropoliaMainOrange p-1.5 rounded text-white;
+    }
+}

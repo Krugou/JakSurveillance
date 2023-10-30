@@ -12,14 +12,15 @@ const courses: Course[] = [
     // add more courses as needed
 ];
 
+
 const StudentAttendance: React.FC = () => {
     return (
-        <div className="flex flex-col items-center justify-center h-1/2">
-            <h1 className="text-4xl font-bold mb-8">Student Attendance</h1>
+        <div className="flex flex-col items-center justify-center h-1/2 p-8 bg-gray-100">
+            <h1 className="text-xl sm:text-4xl font-bold mb-8">Student Attendance</h1>
             {courses.map((course) => (
-                <div key={course.id} className="text-xl mb-4">
-                    <p><strong>Course Name:</strong> {course.name}</p>
-                    <p><strong>Attendance:</strong> {course.attendance}%</p>
+                <div key={course.id} className="text-md sm:text-xl mb-4">
+                    <p className="mb-5"><strong>Course Name:</strong> <span className="profileStat">{course.name}</span></p>
+                    <p className="mb-4"><strong>Attendance:</strong> <span className="profileStat">{course.attendance}%</span></p>
                 </div>
             ))}
         </div>
