@@ -4,7 +4,7 @@ const doFetch = async (url: string, options: RequestInit = {}): Promise<any> => 
     if (!url) {
         throw new Error('URL is required');
     }
-
+    console.log('Fetching', url);
     let response: Response;
     try {
         response = await fetch(url, options);

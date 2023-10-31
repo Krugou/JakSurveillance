@@ -2,19 +2,21 @@ import { config } from 'dotenv';
 import express, { Request, Response, Router } from 'express';
 import multer from 'multer';
 import XLSX from 'xlsx';
+import openData from '../utils/opendata.js';
 config();
 const upload = multer();
 const router: Router = express.Router();
-import openData from '../utils/opendata.js';
 
 router.get('/', (_req: Request, res: Response) => {
     res.send('Hello, TypeScript with Express! this is courses route calling');
 });
 router.post('/check', express.json(), async (req: Request, res: Response) => {
-    const { code, studentGroup } = req.body;
+    const { codes} = req.body;
+
 
     try {
-        const data = await openData.CheckOpenDataReservations(code, studentGroup);
+        const data = await openData.checkOpenDataRealization(codes);
+        console.log("🚀 ~ file: courseroutes.ts:19 ~ router.post ~ data:", data);
 
         // Check if message is "No results"
         if ((data as any).message === 'No results') {
@@ -62,7 +64,7 @@ router.post('/create', upload.single('file'), async (req, res) => {
     console.log('Student Group:', studentGroup);
     console.table(jsonData);
 
-    res.status(200).send('File uploaded and data logged successfully');
+    res.status(200).send({ message: 'File uploaded and data logged successfully' });
 });
 
 export default router;

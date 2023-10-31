@@ -7,17 +7,17 @@ const CheckOpenDataReservations = async (code?: string, studentGroup?: string) =
 
     const url = 'https://opendata.metropolia.fi/r1/reservations/search';
     const body = JSON.stringify({
-        ...(code ? { codes: code } : {}),
-        ...(studentGroup ? { studentGroups: studentGroup } : {}),
+        ...(code ? { codes: [code] } : {}),
+        ...(studentGroup ? { studentGroups: [studentGroup] } : {}),
     });
 
     const options = {
         method: 'POST',
         headers: {
-            Authorization: 'Basic ' + Buffer.from(process.env.APIKEYMETROPOLIA || '').toString('base64'),
+            Authorization: 'Basic ' + btoa(process.env.APIKEYMETROPOLIA || ''),
             'Content-Type': 'application/json',
         },
-        body,
+        body: body,
     };
 
     const response = await doFetch(url, options as any
@@ -32,7 +32,33 @@ const CheckOpenDataReservations = async (code?: string, studentGroup?: string) =
 
     return data;
 };
+const checkOpenDataRealization = async (code: string) => {
+    console.log("🚀 ~ file: opendata.ts:36 ~ checkOpenDataRealization ~ code:", code);
+    const url = 'https://opendata.metropolia.fi/r1/realization/search';
+    const options = {
+        method: 'POST',
+        headers: {
+            Authorization: 'Basic ' + btoa(process.env.APIKEYMETROPOLIA || ''),
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ codes: [code] }),
+    };
+
+    const response = await doFetch(url, options as any
+
+    );
+    console.log("🚀 ~ file: opendata.ts:55 ~ checkOpenDataRealization ~ response:", response);
+
+    if (response.message === 'No results') {
+        throw new Error(`Fetch request failed with status ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    return data;
+};
 const openData = {
     CheckOpenDataReservations,
+    checkOpenDataRealization,
 };
 export default openData;
