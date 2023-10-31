@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import apiHooks from './hooks/ApiHooks.ts';
@@ -9,10 +9,12 @@ import TeacherRoutes from './routes/TeacherRoutes';
 import Footer from './views/Footer.tsx';
 import Header from './views/Header.tsx';
 import StartView from './views/main/StartView.tsx';
-
+import ErrorAlert from './components/main/ErrorAlert.tsx';
 const intervalMS = 60 * 60 * 1000;
 
 const App = () => {
+  const [alert, setAlert] = useState<string>('');
+
   // Define a function to handle the login action
   const handleLogin = async (
     userType: string,
@@ -28,6 +30,8 @@ const App = () => {
       const response = await apiHooks.postLogin(inputs);
       console.log(response, 'LOGIN RESPONSE');
     } catch (error) {
+      setAlert(error.message);
+
       console.log(error);
     }
 
@@ -51,6 +55,8 @@ const App = () => {
     <Router basename={import.meta.env.BASE_URL}>
       <Header title='Attendance App' />
       <main>
+        {alert && <ErrorAlert onClose={() => setAlert(null)} alert={alert} />}
+
         <Routes>
           <Route path='/' element={<StartView />} />
           <Route
