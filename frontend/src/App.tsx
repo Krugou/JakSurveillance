@@ -12,6 +12,8 @@ import StudentAttendance from './views/main/student/StudentAttendance.tsx';
 import StudentCourses from './views/main/student/StudentCourses.tsx';
 import StudentMainView from './views/main/student/StudentMainView.tsx';
 import StudentProfile from './views/main/student/StudentProfile.tsx';
+import TeacherAttendanceRoom from "./views/main/teacher/Attendance/TeacherAttendanceRoom";
+import TeacherCreateAttendance from "./views/main/teacher/Attendance/TeacherCreateAttendance";
 import TeacherCourseDetail from './views/main/teacher/Courses/TeacherCourseDetail.tsx';
 import TeacherCourseModify from './views/main/teacher/Courses/TeacherCourseModify.tsx';
 import TeacherCourses from './views/main/teacher/Courses/TeacherCourses.tsx';
@@ -20,8 +22,6 @@ import TeacherStudentDetail from './views/main/teacher/Students/TeacherStudentDe
 import TeacherStudentModify from './views/main/teacher/Students/TeacherStudentModify.tsx';
 import TeacherStudentsView from './views/main/teacher/Students/TeacherStudentsView.tsx';
 import TeacherMainView from './views/main/teacher/TeacherMainView.tsx';
-import TeacherCreateAttendance from "./views/main/teacher/Attendance/TeacherCreateAttendance";
-import TeacherAttendanceRoom from "./views/main/teacher/Attendance/TeacherAttendanceRoom";
 
 const intervalMS = 60 * 60 * 1000;
 
@@ -32,13 +32,14 @@ const App = () => {
     username: string,
     password: string
   ) => {
-    alert('login');
+    // alert('login');
     console.log(userType, username, password);
     const inputs = { username, password };
     console.log('asdasdasdasd');
-    const data = await apiHooks.postLogin(inputs);
+    const { mutate } = apiHooks.usePostLogin();
+    mutate(inputs);
+    console.log("🚀 ~ file: App.tsx:41 ~ App ~ inputs:", inputs);
 
-    console.log(data);
   };
 
   useRegisterSW({
@@ -168,21 +169,21 @@ const App = () => {
                     </Routes>
                   }
                 />
-                  <Route
-                      path='attendance/*'
-                      element={
-                          <Routes>
-                              <Route
-                                  path='createattendance'
-                                  element={<TeacherCreateAttendance />}
-                              />
-                              <Route
-                                  path='attendance'
-                                  element={<TeacherAttendanceRoom />}
-                              />
-                          </Routes>
-                      }
-                  />
+                <Route
+                  path='attendance/*'
+                  element={
+                    <Routes>
+                      <Route
+                        path='createattendance'
+                        element={<TeacherCreateAttendance />}
+                      />
+                      <Route
+                        path='attendance'
+                        element={<TeacherAttendanceRoom />}
+                      />
+                    </Routes>
+                  }
+                />
               </Routes>
             }
           />
