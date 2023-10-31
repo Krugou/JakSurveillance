@@ -7,8 +7,8 @@ const CheckOpenDataReservations = async (code?: string, studentGroup?: string) =
 
     const url = 'https://opendata.metropolia.fi/r1/reservations/search';
     const body = JSON.stringify({
-        ...(code ? { codes: [code] } : {}),
-        ...(studentGroup ? { studentGroups: [studentGroup] } : {}),
+        ...(code ? { realization: [code] } : {}),
+        ...(studentGroup ? { studentGroup: [studentGroup] } : {}),
     });
 
     const options = {
