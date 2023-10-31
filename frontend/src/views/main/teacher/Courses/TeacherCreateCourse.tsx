@@ -20,7 +20,10 @@ const TeacherCreateCourse: React.FC = () => {
     const addCustomTopic = () => {
         setCustomTopics(prevTopics => [...prevTopics, '']);
     };
-
+    interface CheckCourseData {
+        exists: boolean;
+        // include other properties as needed
+    }
     const handleCustomTopicChange = (index: number, value: string) => {
         const newTopics = [...customTopics];
         newTopics[index] = value;
@@ -29,21 +32,25 @@ const TeacherCreateCourse: React.FC = () => {
 
     const [shouldCheckDetails, setShouldCheckDetails] = useState(true);
 
+    // Call the hooks at the top level of your component
+    const checkCourse = apiHooks.useCheckIfCourseExists<CheckCourseData>();
+    const createCourseMutation = apiHooks.useCreateCourse();
+
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
         // If the checkbox is checked, verify the course details
         if (shouldCheckDetails) {
             console.log('Checking course details...');
-            const response = await apiHooks.checkIfCourseExists({
+            checkCourse.mutate({
                 codes: courseCode,
                 studentGroups: studentGroup,
             });
 
-            console.log('Received response:', response);
+            console.log('Received response:', checkCourse);
 
             // If the course details do not exist, show an error message and return
-            if (!response.exists) {
+            if (!checkCourse.data?.exists) {
                 console.error('Course details do not exist');
                 return;
             }
@@ -60,14 +67,14 @@ const TeacherCreateCourse: React.FC = () => {
             formData.append('studentGroup', studentGroup);
 
             // Use the createCourse function here
-            const response = await apiHooks.createCourse({
+            createCourseMutation.mutate({
                 courseName,
                 courseCode,
                 studentGroup,
                 file,
             });
 
-            if (response.ok) {
+            if (createCourseMutation.isSuccess) {
                 console.log('Course created successfully');
                 console.log('File uploaded successfully');
             } else {
