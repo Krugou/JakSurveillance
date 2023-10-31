@@ -1,27 +1,15 @@
 import React from 'react';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router } from 'react-router-dom';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import apiHooks from './hooks/ApiHooks.ts';
+import AdminRoutes from './routes/AdminRoutes';
+import CounselorRoutes from './routes/CounselorRoutes';
+import StudentRoutes from './routes/StudentRoutes';
+import TeacherRoutes from './routes/TeacherRoutes';
 import Footer from './views/Footer.tsx';
 import Header from './views/Header.tsx';
-import Login from './views/main/Login.tsx';
 import StartView from './views/main/StartView.tsx';
-import AdminMainView from './views/main/admin/AdminMainView.tsx';
-import CounselorMainView from './views/main/counselor/CounselorMainView.tsx';
-import StudentAttendance from './views/main/student/StudentAttendance.tsx';
-import StudentCourses from './views/main/student/StudentCourses.tsx';
-import StudentMainView from './views/main/student/StudentMainView.tsx';
-import StudentProfile from './views/main/student/StudentProfile.tsx';
-import TeacherAttendanceRoom from "./views/main/teacher/Attendance/TeacherAttendanceRoom";
-import TeacherCreateAttendance from "./views/main/teacher/Attendance/TeacherCreateAttendance";
-import TeacherCourseDetail from './views/main/teacher/Courses/TeacherCourseDetail.tsx';
-import TeacherCourseModify from './views/main/teacher/Courses/TeacherCourseModify.tsx';
-import TeacherCourses from './views/main/teacher/Courses/TeacherCourses.tsx';
-import TeacherCreateCourse from './views/main/teacher/Courses/TeacherCreateCourse.tsx';
-import TeacherStudentDetail from './views/main/teacher/Students/TeacherStudentDetail.tsx';
-import TeacherStudentModify from './views/main/teacher/Students/TeacherStudentModify.tsx';
-import TeacherStudentsView from './views/main/teacher/Students/TeacherStudentsView.tsx';
-import TeacherMainView from './views/main/teacher/TeacherMainView.tsx';
+
 
 const intervalMS = 60 * 60 * 1000;
 
@@ -59,135 +47,11 @@ const App = () => {
     <Router basename={import.meta.env.BASE_URL}>
       <Header title='Attendance App' />
       <main>
-        <Routes>
-          <Route path='/' element={<StartView />} />
-          <Route
-            path='student/*'
-            element={
-              <Routes>
-                <Route
-                  path='login'
-                  element={
-                    <Login
-                      userType='Student'
-                      onLogin={async (username, password) =>
-                        await handleLogin('Student', username, password)
-                      }
-                    />
-                  }
-                />
-                <Route path='mainview' element={<StudentMainView />} />
-                <Route path='courses' element={<StudentCourses />} />
-                <Route path='profile' element={<StudentProfile />} />
-                <Route path='attendance' element={<StudentAttendance />} />
-              </Routes>
-            }
-          />
-          <Route
-            path='admin/*'
-            element={
-              <Routes>
-                {' '}
-                <Route
-                  path='login'
-                  element={
-                    <Login
-                      userType='Admin'
-                      onLogin={(username, password) =>
-                        handleLogin('Admin', username, password)
-                      }
-                    />
-                  }
-                />
-                <Route path='mainview' element={<AdminMainView />} />{' '}
-              </Routes>
-            }
-          />
-          <Route
-            path='counselor/*'
-            element={
-              <Routes>
-                <Route
-                  path='login'
-                  element={
-                    <Login
-                      userType='Counselor'
-                      onLogin={(username, password) =>
-                        handleLogin('Counselor', username, password)
-                      }
-                    />
-                  }
-                />
-                <Route path='mainview' element={<CounselorMainView />} />
-              </Routes>
-            }
-          />
-
-          <Route
-            path='teacher/*'
-            element={
-              <Routes>
-                <Route
-                  path='login'
-                  element={
-                    <Login
-                      userType='Teacher'
-                      onLogin={(username, password) =>
-                        handleLogin('Teacher', username, password)
-                      }
-                    />
-                  }
-                />
-                <Route path='mainview' element={<TeacherMainView />} />
-                <Route
-                  path='courses/*'
-                  element={
-                    <Routes>
-                      <Route path='/' element={<TeacherCourses />} />
-                      <Route
-                        path='createcourse'
-                        element={<TeacherCreateCourse />}
-                      />
-                      <Route path=':id' element={<TeacherCourseDetail />} />
-                      <Route
-                        path=':id/modify'
-                        element={<TeacherCourseModify />}
-                      />
-                    </Routes>
-                  }
-                />
-                <Route
-                  path='students/*'
-                  element={
-                    <Routes>
-                      <Route path='/' element={<TeacherStudentsView />} />
-                      <Route path=':id' element={<TeacherStudentDetail />} />
-                      <Route
-                        path=':id/modify'
-                        element={<TeacherStudentModify />}
-                      />
-                    </Routes>
-                  }
-                />
-                <Route
-                  path='attendance/*'
-                  element={
-                    <Routes>
-                      <Route
-                        path='createattendance'
-                        element={<TeacherCreateAttendance />}
-                      />
-                      <Route
-                        path='attendance'
-                        element={<TeacherAttendanceRoom />}
-                      />
-                    </Routes>
-                  }
-                />
-              </Routes>
-            }
-          />
-        </Routes>
+        <Route path='/' element={<StartView />} />
+        <Route path='student/*' element={<StudentRoutes handleLogin={handleLogin} />} />
+        <Route path='admin/*' element={<AdminRoutes handleLogin={handleLogin} />} />
+        <Route path='counselor/*' element={<CounselorRoutes handleLogin={handleLogin} />} />
+        <Route path='teacher/*' element={<TeacherRoutes handleLogin={handleLogin} />} />
       </main>
       <Footer />
     </Router>
