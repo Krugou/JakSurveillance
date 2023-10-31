@@ -20,6 +20,8 @@ import TeacherStudentDetail from './views/main/teacher/Students/TeacherStudentDe
 import TeacherStudentModify from './views/main/teacher/Students/TeacherStudentModify.tsx';
 import TeacherStudentsView from './views/main/teacher/Students/TeacherStudentsView.tsx';
 import TeacherMainView from './views/main/teacher/TeacherMainView.tsx';
+import TeacherCreateAttendance from "./views/main/teacher/Attendance/TeacherCreateAttendance";
+import TeacherAttendanceRoom from "./views/main/teacher/Attendance/TeacherAttendanceRoom";
 
 const intervalMS = 60 * 60 * 1000;
 
@@ -166,6 +168,21 @@ const App = () => {
                     </Routes>
                   }
                 />
+                  <Route
+                      path='attendance/*'
+                      element={
+                          <Routes>
+                              <Route
+                                  path='createattendance'
+                                  element={<TeacherCreateAttendance />}
+                              />
+                              <Route
+                                  path='attendance'
+                                  element={<TeacherAttendanceRoom />}
+                              />
+                          </Routes>
+                      }
+                  />
               </Routes>
             }
           />

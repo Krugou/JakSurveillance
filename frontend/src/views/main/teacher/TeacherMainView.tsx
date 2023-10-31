@@ -9,6 +9,7 @@ const MainView: React.FC = () => {
             <MainViewButton path='/teacher/attendance' text='View Attendance' />
             <MainViewButton path='/teacher/students' text='Manage Students' />
             <MainViewButton path='/teacher/courses/createcourse' text='Create Course' />
+            <MainViewButton path='/teacher/attendance/createattendance' text='Create new attendance' />
         </div>
     );
 };
