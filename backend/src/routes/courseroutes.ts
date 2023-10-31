@@ -1,57 +1,28 @@
 import { config } from 'dotenv';
 import express, { Request, Response, Router } from 'express';
 import multer from 'multer';
-import fetch from 'node-fetch';
 import XLSX from 'xlsx';
 config();
 const upload = multer();
 const router: Router = express.Router();
+import openData from '../utils/opendata.js';
 
 router.get('/', (_req: Request, res: Response) => {
     res.send('Hello, TypeScript with Express! this is courses route calling');
 });
-router.post('/check', express.json(), async (req, res) => {
+router.post('/check', express.json(), async (req: Request, res: Response) => {
     const { code, studentGroup } = req.body;
-    console.log('Request body:', req.body); // Debugging line
+
     try {
-        const response = await fetch(
-            'https://opendata.metropolia.fi/r1/realization/search',
-            {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Basic ' + btoa(process.env.APIKEYMETROPOLIA || ''),
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    codes: code,
-                    studentGroups: studentGroup,
-                }),
-            }
-        );
-
-        console.log('Fetch response status:', response.status); // Debugging line
-
-        if (!response.ok) {
-            throw new Error(`Fetch request failed with status ${response.status}`);
-        }
-
-        let data;
-        try {
-            data = await response.json();
-        } catch (error) {
-            throw new Error('Failed to parse response as JSON');
-        }
-
-        console.log('Parsed response data:', data); // Debugging line
+        const data = await openData.CheckOpenDataReservations(code, studentGroup);
 
         // Check if message is "No results"
         if ((data as any).message === 'No results') {
             res.status(404).send('No results');
             return;
         }
-        res.status(200).json(data as Record<string, unknown>); // send the data as the response
 
-        res.status(200).json(data); // send the data as the response
+        res.status(200).json(data as Record<string, unknown>); // send the data as the response
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Internal server error');
