@@ -3,11 +3,8 @@ import { Route, Routes } from 'react-router-dom';
 import Login from '../views/main/Login.tsx';
 import CounselorMainView from '../views/main/counselor/CounselorMainView.tsx';
 
-interface CounselorRoutesProps {
-    handleLogin: (userType: string) => Promise<void>;
-}
 
-const CounselorRoutes: React.FC<CounselorRoutesProps> = () => {
+const CounselorRoutes= () => {
     return (
         <Routes>
             <Route

@@ -6,11 +6,9 @@ import StudentCourses from '../views/main/student/StudentCourses.tsx';
 import StudentMainView from '../views/main/student/StudentMainView.tsx';
 import StudentProfile from '../views/main/student/StudentProfile.tsx';
 
-interface StudentRoutesProps {
-    handleLogin: (userType: string) => Promise<void>;
-}
 
-const StudentRoutes: React.FC<StudentRoutesProps> = () => {
+
+const StudentRoutes= () => {
     return (
         <Routes>
             <Route

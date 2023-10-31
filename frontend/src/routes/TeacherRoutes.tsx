@@ -6,11 +6,9 @@ import TeacherAttendanceRoutes from './teacher/TeacherAttendanceRoutes';
 import TeacherCoursesRoutes from './teacher/TeacherCoursesRoutes';
 import TeacherStudentsRoutes from './teacher/TeacherStudentsRoutes';
 
-interface TeacherRoutesProps {
-    handleLogin: (userType: string) => Promise<void>;
-}
 
-const TeacherRoutes: React.FC<TeacherRoutesProps> = () => {
+
+const TeacherRoutes = () => {
     return (
         <Routes>
             <Route
