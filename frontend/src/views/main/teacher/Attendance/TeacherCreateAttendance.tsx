@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import mainViewButton from "../../../../components/main/buttons/MainViewButton";
 import MainViewButton from "../../../../components/main/buttons/MainViewButton";
 
 const CreateAttendance: React.FC = () => {
