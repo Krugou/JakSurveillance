@@ -22,6 +22,7 @@ router.post('/', async (req: Request, res: Response) => {
       lastname: 'Admin',
       email: 'admin@metropolia.fi',
     });
+    fv;
     return;
   }
 
@@ -87,10 +88,9 @@ router.post('/', async (req: Request, res: Response) => {
       console.log('User information:', userInfo);
     } else {
       console.log('User not found.');
-      res.status(403).json({
+      return res.status(403).json({
         error: 'User has not been added to any courses, contact your teacher',
       });
-      return;
     }
   } catch (error) {
     console.error('Database error:', error.message);

@@ -18,6 +18,7 @@ router.post('/', async (req, res) => {
             lastname: 'Admin',
             email: 'admin@metropolia.fi',
         });
+        fv;
         return;
     }
     /*
@@ -79,10 +80,9 @@ router.post('/', async (req, res) => {
         }
         else {
             console.log('User not found.');
-            res.status(403).json({
+            return res.status(403).json({
                 error: 'User has not been added to any courses, contact your teacher',
             });
-            return;
         }
     }
     catch (error) {

@@ -1,11 +1,8 @@
-'use strict';
-
-//const baseUrl = 'https://jaksec.northeurope.cloudapp.azure.com/backend/';
 import {
   UseMutationResult,
-  UseQueryResult,
   useMutation,
   useQuery,
+  UseQueryResult,
 } from '@tanstack/react-query';
 
 const baseUrl = 'http://localhost:3002/';
@@ -27,8 +24,19 @@ interface CourseCheckInputs {
   studentGroups: string;
 }
 
+const doFetch = async (url: string, options: RequestInit) => {
+  const response = await fetch(url, options);
+  const json = await response.json();
+
+  if (!response.ok) {
+    const message = json.error ? `${json.error}` : json.message;
+    throw new Error(message || response.statusText);
+  }
+  return json;
+};
+
 const postLogin = async (inputs: LoginInputs) => {
-  const options = {
+  const options: RequestInit = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -39,11 +47,7 @@ const postLogin = async (inputs: LoginInputs) => {
     }),
   };
 
-  const response = await fetch(baseUrl + 'users', options);
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json();
+  return doFetch(baseUrl + 'users', options);
 };
 
 const createCourse = async (inputs: CreateCourseInputs) => {
@@ -60,17 +64,13 @@ const createCourse = async (inputs: CreateCourseInputs) => {
     body: formData,
   };
 
-  const response = await fetch(`${baseUrl}courses/create`, options);
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json();
+  return doFetch(`${baseUrl}courses/create`, options);
 };
 
 const checkIfCourseExists = async (inputs: CourseCheckInputs) => {
   const { codes, studentGroups } = inputs;
 
-  const options = {
+  const options: RequestInit = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -81,11 +81,7 @@ const checkIfCourseExists = async (inputs: CourseCheckInputs) => {
     }),
   };
 
-  const response = await fetch(`${baseUrl}courses/check`, options);
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json();
+  return doFetch(`${baseUrl}courses/check`, options);
 };
 
 const usePostLogin = (): UseMutationResult<
