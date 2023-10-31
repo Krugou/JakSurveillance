@@ -5,14 +5,13 @@ const baseUrl = 'http://localhost:3002/';
 
 const doFetch = async (url: string, options: RequestInit) => {
   const response = await fetch(url, options);
-  const data = await response.json();
+  const json = await response.json();
 
   if (!response.ok) {
-    const message = data.error ? `${data.error}` : data.message;
+    const message = json.error ? `${json.error}` : json.message;
     throw new Error(message || response.statusText);
   }
-
-  return data;
+  return json;
 };
 interface LoginInputs {
   username: string;
