@@ -564,6 +564,7 @@ const CreateAttendance: React.FC = () => {
             setDate(date);
             const hours = date.getHours();
             setSelectedLocation(hours < 12 ? 'AP' : 'IP');
+            setCalendarOpen(false);
         }
     };
     return (
@@ -592,8 +593,8 @@ const CreateAttendance: React.FC = () => {
                     <option value="3">Topic 3</option>
                 </select>
             </div>
-            <h2>Select desired date</h2>
-            <Calendar onChange={handleDateChangeCalendar} tileClassName={tileClassName} />
+            <h2 className='m-4 p-4'>Select desired date</h2>
+
             <div className="text-md sm:text-xl mb-4">
                 <div className="relative">
                     <input
@@ -605,7 +606,7 @@ const CreateAttendance: React.FC = () => {
                     />
                     {calendarOpen && (
                         <div className="absolute top-12 left-0 z-10">
-                            <Calendar onChange={handleDateChange} value={date} />
+                            <Calendar onChange={handleDateChangeCalendar} tileClassName={tileClassName} />
                         </div>
                     )}
                 </div>
