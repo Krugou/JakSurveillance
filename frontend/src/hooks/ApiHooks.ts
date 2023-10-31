@@ -1,42 +1,25 @@
-import {
-  UseMutationResult,
-  useMutation,
-  useQuery,
-  UseQueryResult,
-} from '@tanstack/react-query';
+'use strict';
 
+//const baseUrl = 'https://jaksec.northeurope.cloudapp.azure.com/backend/';
 const baseUrl = 'http://localhost:3002/';
 
+const doFetch = async (url: string, options: RequestInit) => {
+  const response = await fetch(url, options);
+  const data = await response.json();
+
+  if (!response.ok) {
+    const message = data.error ? `${data.error}` : data.message;
+    throw new Error(message || response.statusText);
+  }
+
+  return data;
+};
 interface LoginInputs {
   username: string;
   password: string;
 }
-
-interface CreateCourseInputs {
-  courseName: string;
-  courseCode: string;
-  studentGroup: string;
-  file: File;
-}
-
-interface CourseCheckInputs {
-  codes: string;
-  studentGroups: string;
-}
-
-const doFetch = async (url: string, options: RequestInit) => {
-  const response = await fetch(url, options);
-  const json = await response.json();
-
-  if (!response.ok) {
-    const message = json.error ? `${json.error}` : json.message;
-    throw new Error(message || response.statusText);
-  }
-  return json;
-};
-
 const postLogin = async (inputs: LoginInputs) => {
-  const options: RequestInit = {
+  const options = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -47,8 +30,14 @@ const postLogin = async (inputs: LoginInputs) => {
     }),
   };
 
-  return doFetch(baseUrl + 'users', options);
+  return await doFetch(baseUrl + 'users', options);
 };
+interface CreateCourseInputs {
+  courseName: string;
+  courseCode: string;
+  studentGroup: string;
+  file: File;
+}
 
 const createCourse = async (inputs: CreateCourseInputs) => {
   const { courseName, courseCode, studentGroup, file } = inputs;
@@ -64,13 +53,17 @@ const createCourse = async (inputs: CreateCourseInputs) => {
     body: formData,
   };
 
-  return doFetch(`${baseUrl}courses/create`, options);
+  const url = `${baseUrl}courses/create`; // append the endpoint to the baseUrl
+  return doFetch(url, options);
 };
-
+interface CourseCheckInputs {
+  codes: string;
+  studentGroups: string;
+}
 const checkIfCourseExists = async (inputs: CourseCheckInputs) => {
   const { codes, studentGroups } = inputs;
 
-  const options: RequestInit = {
+  const options = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -80,47 +73,13 @@ const checkIfCourseExists = async (inputs: CourseCheckInputs) => {
       studentGroups: studentGroups,
     }),
   };
-
-  return doFetch(`${baseUrl}courses/check`, options);
+  const url = `${baseUrl}courses/check`;
+  return await doFetch(url, options);
 };
-
-const usePostLogin = (): UseMutationResult<
-  unknown,
-  Error,
-  LoginInputs,
-  unknown
-> => {
-  return useMutation({
-    mutationFn: postLogin,
-  });
-};
-const useCreateCourse = (): UseMutationResult<
-  unknown,
-  Error,
-  CreateCourseInputs,
-  unknown
-> => {
-  return useMutation({
-    mutationFn: createCourse,
-  });
-};
-
-export function useCheckIfCourseExists<T = unknown>(): UseMutationResult<
-  T,
-  Error,
-  CourseCheckInputs,
-  unknown
-> {
-  return useMutation<T, Error, CourseCheckInputs, unknown>({
-    mutationFn: checkIfCourseExists,
-  });
-}
 
 const apiHooks = {
-  usePostLogin,
   postLogin,
-  useCreateCourse,
-  useCheckIfCourseExists,
+  createCourse,
+  checkIfCourseExists,
 };
-
 export default apiHooks;
