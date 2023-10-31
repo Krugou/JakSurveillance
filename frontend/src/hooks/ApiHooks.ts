@@ -57,10 +57,10 @@ const createCourse = async (inputs: CreateCourseInputs) => {
 };
 interface CourseCheckInputs {
   codes: string;
-  studentGroups: string;
+
 }
 const checkIfCourseExists = async (inputs: CourseCheckInputs) => {
-  const { codes, studentGroups } = inputs;
+  const { codes } = inputs;
 
   const options = {
     method: 'POST',
@@ -69,7 +69,7 @@ const checkIfCourseExists = async (inputs: CourseCheckInputs) => {
     },
     body: JSON.stringify({
       codes: codes,
-      studentGroups: studentGroups,
+
     }),
   };
   const url = `${baseUrl}courses/check`;

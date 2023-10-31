@@ -37,7 +37,6 @@ const TeacherCreateCourse: React.FC = () => {
             console.log('Checking course details...');
             const response = await apiHooks.checkIfCourseExists({
                 codes: courseCode,
-                studentGroups: studentGroup,
             });
 
             console.log('Received response:', response);

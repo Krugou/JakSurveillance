@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import AdminRoutes from './routes/AdminRoutes';
@@ -12,7 +12,7 @@ import StartView from './views/main/StartView.tsx';
 const intervalMS = 60 * 60 * 1000;
 
 const App = () => {
-  
+
 
   useRegisterSW({
     onRegistered(r) {
@@ -31,7 +31,7 @@ const App = () => {
     <Router basename={import.meta.env.BASE_URL}>
       <Header title='Attendance App' />
       <main>
-        
+
 
         <Routes>
           <Route path='/' element={<StartView />} />
