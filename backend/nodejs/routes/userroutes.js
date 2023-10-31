@@ -10,6 +10,16 @@ router.get('/', (_req, res) => {
 router.post('/', async (req, res) => {
     // Get username and password from the request body
     const { username, password } = req.body;
+    if (username === process.env.devaccount && password === process.env.devpass) {
+        res.json({
+            staff: true,
+            user: 'admin',
+            firstname: 'Admin',
+            lastname: 'Admin',
+            email: 'admin@metropolia.fi',
+        });
+        return;
+    }
     /*
     if (username === 'admin' && password === 'admin') {
       res.json({
@@ -69,6 +79,10 @@ router.post('/', async (req, res) => {
         }
         else {
             console.log('User not found.');
+            res.status(403).json({
+                error: 'User has not been added to any courses, contact your teacher',
+            });
+            return;
         }
     }
     catch (error) {
@@ -84,11 +98,7 @@ router.post('/', async (req, res) => {
         const responseData = await response.json();
         res.json(responseData);
         // if logged in user is not metropolia staff
-        if (responseData.staff === false) {
-            res.status(403).json({
-                error: 'User has not been added to any courses, contact your teacher',
-            });
-            return;
+        if (responseData.staff) {
         }
     }
     catch (error) {

@@ -1,7 +1,12 @@
 'use strict';
 
 //const baseUrl = 'https://jaksec.northeurope.cloudapp.azure.com/backend/';
-import { UseMutationResult, UseQueryResult, useMutation, useQuery } from '@tanstack/react-query';
+import {
+  UseMutationResult,
+  UseQueryResult,
+  useMutation,
+  useQuery,
+} from '@tanstack/react-query';
 
 const baseUrl = 'http://localhost:3002/';
 
@@ -83,20 +88,33 @@ const checkIfCourseExists = async (inputs: CourseCheckInputs) => {
   return response.json();
 };
 
-const usePostLogin = (): UseMutationResult<unknown, Error, LoginInputs, unknown> => {
+const usePostLogin = (): UseMutationResult<
+  unknown,
+  Error,
+  LoginInputs,
+  unknown
+> => {
   return useMutation({
     mutationFn: postLogin,
   });
 };
-const useCreateCourse = (): UseMutationResult<unknown, Error, CreateCourseInputs, unknown> => {
+const useCreateCourse = (): UseMutationResult<
+  unknown,
+  Error,
+  CreateCourseInputs,
+  unknown
+> => {
   return useMutation({
     mutationFn: createCourse,
   });
 };
 
-
-
-export function useCheckIfCourseExists<T = unknown>(): UseMutationResult<T, Error, CourseCheckInputs, unknown> {
+export function useCheckIfCourseExists<T = unknown>(): UseMutationResult<
+  T,
+  Error,
+  CourseCheckInputs,
+  unknown
+> {
   return useMutation<T, Error, CourseCheckInputs, unknown>({
     mutationFn: checkIfCourseExists,
   });
@@ -104,6 +122,7 @@ export function useCheckIfCourseExists<T = unknown>(): UseMutationResult<T, Erro
 
 const apiHooks = {
   usePostLogin,
+  postLogin,
   useCreateCourse,
   useCheckIfCourseExists,
 };

@@ -23,8 +23,14 @@ const App = () => {
     console.log(userType, username, password);
     const inputs = { username, password };
     console.log('asdasdasdasd');
-    const { mutate } = apiHooks.usePostLogin();
-    mutate(inputs);
+
+    try {
+      const response = await apiHooks.postLogin(inputs);
+      console.log(response, 'LOGIN RESPONSE');
+    } catch (error) {
+      console.log(error);
+    }
+
     console.log('🚀 ~ file: App.tsx:41 ~ App ~ inputs:', inputs);
   };
 
