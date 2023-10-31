@@ -62,7 +62,7 @@ router.post('/', async (req, res) => {
     };
     // TRY TO FIND USER FROM DATABASE FIRST
     try {
-        console.log("🚀 ~ file: userroutes.ts:72 ~ router.post ~ userInfo");
+        console.log('🚀 ~ file: userroutes.ts:72 ~ router.post ~ userInfo');
         const userInfo = await usermodel.getAllUserInfo(username);
         if (userInfo) {
             console.log('User information:', userInfo);
@@ -74,6 +74,7 @@ router.post('/', async (req, res) => {
     catch (error) {
         console.error('Database error:', error.message);
     }
+    // TRY TO FIND USER IN METROPOLIA DATABASE
     try {
         const response = await fetch(loginUrl, options);
         if (!response.ok) {
