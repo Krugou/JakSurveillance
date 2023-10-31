@@ -130,3 +130,8 @@ backend/jaksec/
 backend/nodejs/
 frontend/package-lock.json
 package-lock.json
+backend/nodejs/utils/opendata.js
+backend/nodejs/routes/userroutes.js
+backend/nodejs/routes/courseroutes.js
+backend/nodejs/models/usermodel.js
+backend/nodejs/database/db.js
