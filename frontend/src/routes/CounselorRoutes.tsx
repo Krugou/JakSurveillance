@@ -1,13 +1,13 @@
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Login from '../views/main/Login.tsx';
 import CounselorMainView from '../views/main/counselor/CounselorMainView.tsx';
-import React from 'react';
 
 interface CounselorRoutesProps {
-    handleLogin: (userType: string, username: string, password: string) => Promise<void>;
+    handleLogin: (userType: string) => Promise<void>;
 }
 
-const CounselorRoutes: React.FC<CounselorRoutesProps> = ({ handleLogin }) => {
+const CounselorRoutes: React.FC<CounselorRoutesProps> = () => {
     return (
         <Routes>
             <Route
@@ -15,9 +15,6 @@ const CounselorRoutes: React.FC<CounselorRoutesProps> = ({ handleLogin }) => {
                 element={
                     <Login
                         userType='Counselor'
-                        onLogin={(username, password) =>
-                            handleLogin('Counselor', username, password)
-                        }
                     />
                 }
             />

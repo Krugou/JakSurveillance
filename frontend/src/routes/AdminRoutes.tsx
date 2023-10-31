@@ -1,13 +1,13 @@
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Login from '../views/main/Login.tsx';
 import AdminMainView from '../views/main/admin/AdminMainView.tsx';
-import React from 'react';
 
 interface AdminRoutesProps {
-    handleLogin: (userType: string, username: string, password: string) => Promise<void>;
+    handleLogin: (userType: string) => Promise<void>;
 }
 
-const AdminRoutes: React.FC<AdminRoutesProps> = ({ handleLogin }) => {
+const AdminRoutes: React.FC<AdminRoutesProps> = () => {
     return (
         <Routes>
             <Route
@@ -15,9 +15,6 @@ const AdminRoutes: React.FC<AdminRoutesProps> = ({ handleLogin }) => {
                 element={
                     <Login
                         userType='Admin'
-                        onLogin={(username, password) =>
-                            handleLogin('Admin', username, password)
-                        }
                     />
                 }
             />

@@ -7,10 +7,10 @@ import StudentMainView from '../views/main/student/StudentMainView.tsx';
 import StudentProfile from '../views/main/student/StudentProfile.tsx';
 
 interface StudentRoutesProps {
-    handleLogin: (userType: string, username: string, password: string) => Promise<void>;
+    handleLogin: (userType: string) => Promise<void>;
 }
 
-const StudentRoutes: React.FC<StudentRoutesProps> = ({ handleLogin }) => {
+const StudentRoutes: React.FC<StudentRoutesProps> = () => {
     return (
         <Routes>
             <Route
@@ -18,9 +18,7 @@ const StudentRoutes: React.FC<StudentRoutesProps> = ({ handleLogin }) => {
                 element={
                     <Login
                         userType='Student'
-                        onLogin={async (username, password) =>
-                            await handleLogin('Student', username, password)
-                        }
+
                     />
                 }
             />

@@ -1,21 +1,43 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ErrorAlert from '../../components/main/ErrorAlert.tsx';
+import apiHooks from '../../hooks/ApiHooks.ts';
+
 interface LoginProps {
   userType: 'Student' | 'Teacher' | 'Admin' | 'Counselor';
-  onLogin: (username: string, password: string) => void;
+
 }
 
-const Login: React.FC<LoginProps> = ({ userType, onLogin }) => {
+const Login: React.FC<LoginProps> = ({ userType }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
-  const handleSubmit = (event: React.FormEvent) => {
+  const [alert, setAlert] = useState<string>('');
+  const navigate = useNavigate();
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    onLogin(username, password);
+
+    console.log(userType, username, password);
+    const inputs = { username, password };
+
+    try {
+      const response = await apiHooks.postLogin(inputs);
+      // this navigates to the mainview of the user type
+      if (response) {
+        navigate(`/${userType.toLowerCase()}/mainview`);
+      }
+      console.log(response, 'LOGIN RESPONSE');
+    } catch (error) {
+      setAlert(error.message);
+      console.log(error);
+    }
+
+    console.log('🚀 ~ file: App.tsx:41 ~ App ~ inputs:', inputs);
   };
+
   //const navigate = useNavigate();
   return (
     <div className='flex justify-center items-center h-1/2'>
+      {alert && <ErrorAlert onClose={() => setAlert(null)} alert={alert} />}
       <div className='md:w-1/2 w-2/3'>
         <h1 className='sm:text-2xl text-xl font-bold mb-4 mt-4 sm:mt-0 text-center'>
           {userType} Login
