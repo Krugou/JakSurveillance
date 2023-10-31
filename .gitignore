@@ -127,3 +127,4 @@ dist
 .pnp.*
 backend/package-lock.json
 backend/jaksec/
+frontend/package-lock.json
