@@ -128,3 +128,4 @@ dist
 backend/package-lock.json
 backend/jaksec/
 frontend/package-lock.json
+package-lock.json
