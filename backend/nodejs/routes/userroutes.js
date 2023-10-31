@@ -43,6 +43,14 @@ router.post('/', async (req, res) => {
         "lastname": "Student",
         "email": "student@metropolia.fi"
       });
+    } else if(username === 'mranderson'&& password === 'student') {
+      res.json({
+        "staff": false,
+        "user": "MrAnderson",
+        "firstname": "Mr",
+        "lastname": "Anderson",
+        "email": "mr.anderson@example.com"
+      });
     } else {
       */
     const options = {
@@ -54,7 +62,7 @@ router.post('/', async (req, res) => {
     };
     // TRY TO FIND USER FROM DATABASE FIRST
     try {
-        console.log('awdawdwa');
+        console.log("🚀 ~ file: userroutes.ts:72 ~ router.post ~ userInfo");
         const userInfo = await usermodel.getAllUserInfo(username);
         if (userInfo) {
             console.log('User information:', userInfo);

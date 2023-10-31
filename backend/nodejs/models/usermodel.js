@@ -1,40 +1,35 @@
 import pool from '../database/db.js'; // Adjust the path to your pool file
-// Create a class for the user model
-class UserModel {
-    pool;
-    // Constructor to initialize the database pool
-    constructor(pool) {
-        this.pool = pool;
-    }
+// Create a User Model object literal
+const UserModel = {
+    pool: pool,
     // A method to retrieve user information based on a username
-    async getAllUserInfo(username) {
+    getAllUserInfo: async (username) => {
         try {
-            // Execute a SELECT query to fetch user information
-            const [rows] = await this.pool.execute('SELECT * FROM users WHERE Username = ?', [username]);
-            // Check if the query returned any rows
+            const [rows] = await UserModel.pool.execute('SELECT * FROM users WHERE Username = ?', [username]);
             if (rows.length > 0) {
-                console.log(rows);
-                /*
-                // Construct a UserInfo object from the query result
-                const userInfo: UserInfo = {
-                  Userid: rows[0].Userid as number,
-                  Useremail: rows[0].Useremail as string,
-                  Userrole: rows[0].Userrole as string,
-                  Username: rows[0].Username as string,
-                };
-                return userInfo; // Return the user information
-                */
                 return rows.pop();
             }
             else {
-                return null; // Return null if the user is not found
+                return null;
             }
         }
         catch (error) {
-            throw new Error('Database error'); // Throw an error if there's a database error
+            throw new Error('Database error');
         }
-    }
-}
+    },
+    // For example, a method to update user information
+    updateUserInfo: async (userId, newEmail) => {
+        try {
+            // Execute an UPDATE query to change user's email
+            const [result] = await UserModel.pool.execute('UPDATE users SET Useremail = ? WHERE Userid = ?', [newEmail, userId]);
+            // Check if the query was successful
+            return result.affectedRows > 0;
+        }
+        catch (error) {
+            throw new Error('Database error');
+        }
+    },
+};
 // Define the structure of the UserInfo object
 /*
 interface UserInfo {
@@ -44,4 +39,4 @@ interface UserInfo {
   Username: string;
 }
 */
-export default new UserModel(pool); // Export an instance of the UserModel
+export default UserModel;
