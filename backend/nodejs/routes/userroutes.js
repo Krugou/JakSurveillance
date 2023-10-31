@@ -91,11 +91,17 @@ router.post('/', async (req, res) => {
     // TRY TO FIND USER IN METROPOLIA DATABASE
     try {
         const response = await fetch(loginUrl, options);
-        if (!response.ok) {
-            res.status(response.status).json({ error: 'Login failed' });
-            return;
-        }
         const responseData = await response.json();
+        if (responseData.message === 'invalid username or password') {
+            return res.status(403).json({
+                error: 'Login failed',
+            });
+        }
+        if (!response.ok) {
+            return res.status(500).json({
+                error: 'Failed to connect to Metropolia servers',
+            });
+        }
         res.json(responseData);
         // if logged in user is not metropolia staff
         if (responseData.staff) {
