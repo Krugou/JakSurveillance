@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import Html5QrcodePlugin from '../../../components/Html5QrcodePlugin';
 import { io } from 'socket.io-client';
 const socket = io('http://localhost:3002/');
 
 const StudentQrScanner: React.FC = () => {
-    const onNewScanResult = useCallback((decodedText: string, decodedResult: any) => {
+    const onNewScanResult = useCallback((decodedText: string) => {
         // Handle the scan result here
         console.log(decodedText);
 
