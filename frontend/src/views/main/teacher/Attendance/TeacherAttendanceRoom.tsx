@@ -1,5 +1,5 @@
 import React from 'react';
-
+import QRCode from "react-qr-code";
 const AttendanceRoom: React.FC = () => {
     const attendees = ["oppilas 1", "Oppilas 2", "Oppilas 3", "Oppilas 4", "Oppilas 5"]; // Replaced with real data
 
@@ -8,9 +8,15 @@ const AttendanceRoom: React.FC = () => {
             <h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">Attendance</h1>
             <div className="flex w-1/3 gap-10">
                 <div className="flex flex-col w-2/3">
-                <div className="bg-gray-200 h-full">
-                    QR CODE
-                </div>
+                
+                    <div className="h-auto mx-auto max-w-10 w-full">
+                        <QRCode
+                            size={256}
+                            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                            value={'See this works. ja ja jaa'}
+                            viewBox={`0 0 256 256`}
+                        />
+                    </div>
                     <p>Date</p>
                 </div>
             <div className="text-md sm:text-xl mb-4">
