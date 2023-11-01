@@ -13,7 +13,7 @@ const generateScores = async () => {
 		owner,
 		repo,
 	});
-
+	console.log(contributors);
 	const scores = {};
 
 	for (const contributor of contributors.data) {
