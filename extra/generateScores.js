@@ -17,6 +17,8 @@ const generateScores = async () => {
 	const scores = {};
 
 	for (const contributor of contributors.data) {
+		console.log('Processing contributor:', contributor.author.login);
+
 		const login = contributor.author.login;
 		const commits = contributor.total;
 		const additions = contributor.weeks.reduce(
@@ -29,6 +31,10 @@ const generateScores = async () => {
 		);
 		const totalChanges = additions - deletions;
 
+		console.log(
+			`Scores for ${login}: commits - ${commits}, additions - ${additions}, deletions - ${deletions}, total changes - ${totalChanges}`
+		);
+
 		scores[login] = {
 			commits: commits,
 			additions: additions,
@@ -37,7 +43,12 @@ const generateScores = async () => {
 		};
 	}
 
-	fs.writeFileSync('scores.json', JSON.stringify(scores, null, 2));
+	try {
+		fs.writeFileSync('scores.json', JSON.stringify(scores, null, 2));
+		console.log('Successfully wrote to scores.json');
+	} catch (error) {
+		console.error('Error writing to scores.json:', error);
+	}
 };
 
 generateScores().catch(console.error);
