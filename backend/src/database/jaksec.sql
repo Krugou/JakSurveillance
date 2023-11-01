@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `studentgroups` (
 
 -- Dumping structure for taulu jaksec.topicgroups
 CREATE TABLE IF NOT EXISTS `topicgroups` (
-  `topicgroupid` int(11) NOT NULL,
+  `topicgroupid` int(11) NOT NULL AUTO_INCREMENT,
   `topicgroupname` varchar(100) NOT NULL,
   PRIMARY KEY (`topicgroupid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
