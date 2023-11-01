@@ -78,15 +78,15 @@ const TeacherCreateCourse: React.FC = () => {
 
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-1/2 bg-gray-100">
-            <h1 className="text-4xl font-bold mb-8 text-blue-600">Create Course</h1>
+        <div className="flex flex-col p-5 items-center justify-center min-h-1/2 bg-gray-100">
+            <h1 className="text-4xl font-bold mb-8">Create Course</h1>
             <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto bg-white p-6 rounded shadow-md">
                 <input
                     type="text"
                     placeholder="Course Name"
                     value={courseName}
                     onChange={(e) => setCourseName(e.target.value)}
-                    className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
                     title="Enter the course name here example: Mediapalvelut-projekti"
 
                 />
@@ -95,7 +95,7 @@ const TeacherCreateCourse: React.FC = () => {
                     placeholder="Course Code"
                     value={courseCode}
                     onChange={(e) => setCourseCode(e.target.value)}
-                    className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
                     title="Enter the course code here example: TX00CG61-3009"
 
                 />
@@ -104,14 +104,14 @@ const TeacherCreateCourse: React.FC = () => {
                     placeholder="Student Group"
                     value={studentGroup}
                     onChange={(e) => setStudentGroup(e.target.value)}
-                    className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
                     title="Enter the student group here example: tvt21-m"
                 />
                 <select
                     multiple
                     value={courseTopics}
                     onChange={handleTopicChange}
-                    className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
                 >
                     <option value="math">Math</option>
                     <option value="physics">Physics</option>
@@ -124,18 +124,18 @@ const TeacherCreateCourse: React.FC = () => {
                         placeholder="Custom Topic"
                         value={topic}
                         onChange={(e) => handleCustomTopicChange(index, e.target.value)}
-                        className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
                         title='add custom topics here example: "exam"'
                     />
                 ))}
                 <button
                     type="button"
                     onClick={addCustomTopic}
-                    className="mb-3 w-full p-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    className="mb-3 w-full p-2 bg-metropoliaMainOrange text-white rounded hover:bg-metropoliaSecondaryOrange"
                 >
                     Add Custom Topic
                 </button>
-                <label className="w-full flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white">
+                <label className="w-full mb-2 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white">
                     <svg className="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                         <path d="M10 4a2 2 0 00-2 2v4a2 2 0 104 0V6a2 2 0 00-2-2zm0 12a6 6 0 100-12 6 6 0 000 12z" />
                     </svg>
@@ -152,7 +152,7 @@ const TeacherCreateCourse: React.FC = () => {
                 </label>
                 <button
                     type="submit"
-                    className="w-full p-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    className="w-full p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
                 >
                     Create Course
                 </button>
