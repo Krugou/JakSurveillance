@@ -135,6 +135,13 @@ CREATE TABLE IF NOT EXISTS `topics` (
   PRIMARY KEY (`topicid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE IF NOT EXISTS `topicgroup` (
+  `topicgroupid` int(11) NOT NULL AUTO_INCREMENT,
+  `topicgroupname` varchar(64) NOT NULL,
+  `topicid` int(11) NOT NULL,
+  PRIMARY KEY (`topicgroupid`),
+  FOREIGN KEY (`topicid`) REFERENCES `topics`(`topicid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- Dumping data for table jaksec.topics: ~0 rows (suunnilleen)
 /*!40000 ALTER TABLE `topics` DISABLE KEYS */;
 /*!40000 ALTER TABLE `topics` ENABLE KEYS */;
