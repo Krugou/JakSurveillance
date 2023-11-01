@@ -93,14 +93,27 @@ router.post('/', async (req: Request, res: Response) => {
       });
     }
   } catch (error) {
-    console.error('Database error:', error.message);
+    if (error instanceof Error) {
+      console.error('Database error:', error.message);
+    } else {
+      // Handle the case where error is not an Error object
+    }
   }
-
+  interface ResponseData {
+    message: string;
+    staff: boolean;
+    user: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    
+    // Add other properties as needed
+  }
   // TRY TO FIND USER IN METROPOLIA DATABASE
   try {
     const response = await fetch(loginUrl, options);
 
-    const responseData = await response.json();
+    const responseData = await response.json() as ResponseData;;
 
     if (responseData.message === 'invalid username or password') {
       return res.status(403).json({
