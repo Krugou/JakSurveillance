@@ -1,0 +1,14 @@
+{
+  "name": "github-contributor-scores",
+  "type":"module",
+  "version": "1.0.0",
+  "description": "A script to generate scores for GitHub repository contributors",
+  "main": "generateScores.js",
+  "scripts": {
+    "start": "node generateScores.js"
+  },
+  "dependencies": {
+    "@octokit/rest": "^18.10.0",
+    "dotenv": "^16.3.1"
+  }
+}

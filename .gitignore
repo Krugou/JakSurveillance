@@ -114,3 +114,4 @@ dist-ssr
 *.sln
 *.sw?
 .vscode/launch.json
+extra/scores.json
