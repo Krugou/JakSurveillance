@@ -14,6 +14,7 @@ router.post('/', async (req: Request, res: Response) => {
   // Get username and password from the request body
   const { username, password } = req.body;
 
+  // if the user is admin return the admin account
   if (username === process.env.devaccount && password === process.env.devpass) {
     res.json({
       staff: true,
@@ -22,7 +23,6 @@ router.post('/', async (req: Request, res: Response) => {
       lastname: 'Admin',
       email: 'admin@metropolia.fi',
     });
-    fv;
     return;
   }
 
@@ -114,8 +114,23 @@ router.post('/', async (req: Request, res: Response) => {
     }
     res.json(responseData);
 
-    // if logged in user is not metropolia staff
+    // if logged in user is metropolia staff
     if (responseData.staff) {
+      try {
+        const userData = {
+          username: responseData.user,
+          staff: 1,
+          first_name: responseData.firstname,
+          last_name: responseData.lastname,
+          email: responseData.email,
+        };
+
+        const addUserResponse = await usermodel.addUser(userData);
+        console.log(addUserResponse);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
     }
   } catch (error) {
     console.error(error);
