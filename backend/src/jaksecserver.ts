@@ -44,7 +44,7 @@ const updateHash = () => {
   timestamps.push({ start, end, hash });
   const timestampslength = (howMuchLeeWay / speedOfHashChange);
 
-  if (timestamps.length > timestampslength {
+  if (timestamps.length > timestampslength) {
     timestamps.shift();
   }
 
