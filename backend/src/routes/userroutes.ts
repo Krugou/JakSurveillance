@@ -45,9 +45,9 @@ router.post('/', async (req: Request, res: Response) => {
 
   try {
     const response = await fetch(loginUrl, options);
-    const responseData = (await response.json()) as ResponseData;
+    const metropoliaData = (await response.json()) as ResponseData;
 
-    if (responseData.message === 'invalid username or password') {
+    if (metropoliaData.message === 'invalid username or password') {
       return res.status(403).json({
         error: 'Login failed',
       });
@@ -65,7 +65,7 @@ router.post('/', async (req: Request, res: Response) => {
 
       if (userInfo) {
         console.log('User information:', userInfo);
-      } else if (!userInfo && responseData.staff === false) {
+      } else if (!userInfo && metropoliaData.staff === false) {
         console.log('User not found.');
         return res.status(403).json({
           error: 'User has not been added to any courses, contact your teacher',
@@ -80,14 +80,14 @@ router.post('/', async (req: Request, res: Response) => {
     }
 
     // If the logged-in user is Metropolia staff and they don't exist in the DB yet, add them to the DB
-    if (responseData.staff === true && !userInfo) {
+    if (metropoliaData.staff === true && !userInfo) {
       try {
         const userData = {
-          username: responseData.user,
+          username: metropoliaData.user,
           staff: 1,
-          first_name: responseData.firstname,
-          last_name: responseData.lastname,
-          email: responseData.email,
+          first_name: metropoliaData.firstname,
+          last_name: metropoliaData.lastname,
+          email: metropoliaData.email,
         };
 
         const addUserResponse = await usermodel.addUser(userData);
@@ -98,7 +98,7 @@ router.post('/', async (req: Request, res: Response) => {
       }
     }
 
-    res.json(responseData);
+    res.json(metropoliaData);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
