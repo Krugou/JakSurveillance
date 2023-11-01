@@ -32,7 +32,7 @@ let timestamps: { start: number; end: number; hash: string; }[] = [];
 // this defines how often the hash changes or how fast student need to be in class while doing attendance
 const speedOfHashChange = 5000; // milliseconds
 // this defines how fast the student has to be in class to get attendance
-const howMuchLeeWay = 30000; // milliseconds
+const howMuchLeeWay = speedOfHashChange * 4; // milliseconds
 const updateHash = () => {
   const start = Date.now();
   hash = crypto.randomBytes(20).toString('hex');
