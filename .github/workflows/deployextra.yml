@@ -35,7 +35,9 @@ jobs:
         run: npm i
         working-directory: extra
       - name: get scores for github repository stats
-        run: npm run start
+        run: |
+          echo "Secret length: ${#MY_SECRET}"
+          npm run start
         env:
           MY_SECRET: ${{ secrets.GITHUBTOKEN }}
         working-directory: extra
