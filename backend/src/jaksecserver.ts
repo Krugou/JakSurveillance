@@ -14,10 +14,8 @@ const app = express();
 const http = createServer(app);
 const io = new Server(http, {
   cors: {
-    origin: "http://localhost:8080", // replace with your client's origin
-    methods: ["GET", "POST"],
-    credentials: true
-  }
+    origin: '*',
+  },
 });
 // server's adjustable settings
 const port = 3002;
