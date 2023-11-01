@@ -26,8 +26,7 @@ const generateScores = async () => {
 	console.log(contributors);
 	const scores = {};
 
-	// @ts-ignore
-	for (const contributor of contributors.data) {
+	for (const contributor of contributors) {
 		console.log('Processing contributor:', contributor.author.login);
 
 		const login = contributor.author.login;
