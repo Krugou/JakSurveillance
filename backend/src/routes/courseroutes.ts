@@ -7,8 +7,16 @@ config();
 const upload = multer();
 const router: Router = express.Router();
 
-router.get('/', (_req: Request, res: Response) => {
-    res.send('Hello, TypeScript with Express! this is courses route calling');
+import Course from '../models/coursemodel.js';
+
+router.get('/', async (_req: Request, res: Response) => {
+	try {
+		const [rows] = await Course.fetchAll();
+		res.json(rows);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server error');
+	}
 });
 router.post('/check', express.json(), async (req: Request, res: Response) => {
     const { codes} = req.body;
@@ -66,5 +74,8 @@ router.post('/create', upload.single('file'), async (req, res) => {
 
     res.status(200).send({ message: 'File uploaded and data logged successfully' });
 });
+
+
+    
 
 export default router;
