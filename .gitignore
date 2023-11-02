@@ -115,3 +115,4 @@ dist-ssr
 *.sw?
 .vscode/launch.json
 extra/scores.json
+extra/links.json

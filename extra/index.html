@@ -9,19 +9,21 @@
 </head>
 
 <body>
-    <div class="container mx-auto px-4">
-        <div class="flex flex-wrap mt-8 border rounder border-black">
+    <div class="container mx-auto bg-black px-4">
+        <div class="flex flex-wrap mt-8 border  rounder border-black">
             <div class="w-full ">
                 <div class="flex flex-wrap border rounder border-black">
-                    <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 px-4 py-2 font-bold">Contributor</div>
-                    <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 px-4 py-2 font-bold">Commits</div>
-                    <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 px-4 py-2 font-bold">Score</div>
+                    <div class="w-full sm:w-1/2 text-white md:w-1/3 lg:w-1/3 px-4 py-2 font-bold">Contributor</div>
+                    <div class="w-full sm:w-1/2 text-white md:w-1/3 lg:w-1/3 px-4 py-2 font-bold">Commits</div>
+                    <div class="w-full sm:w-1/2 text-white md:w-1/3 lg:w-1/3 px-4 py-2 font-bold">Score</div>
                 </div>
             </div>
             <div id="dataContainer" class="w-full">
                 <!-- Data will be inserted here -->
             </div>
+
         </div>
+        <div id="dataContainer2" class="w-full"> </div>
     </div>
 
     <script>
@@ -37,10 +39,24 @@
                     const row = document.createElement( 'div' );
                     row.className = 'flex flex-wrap';
                     row.innerHTML = `
-                        <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 px-4 py-2">${ contributor }</div>
-                        <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 px-4 py-2">${ stats.commits }</div>
-                        <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 px-4 py-2">${ stats.totalChanges }</div>
+                        <div class="w-full sm:w-1/2 text-white md:w-1/3 lg:w-1/3 px-4 py-2">${ contributor }</div>
+                        <div class="w-full sm:w-1/2 text-white md:w-1/3 lg:w-1/3 px-4 py-2">${ stats.commits }</div>
+                        <div class="w-full sm:w-1/2 text-white md:w-1/3 lg:w-1/3 px-4 py-2">${ stats.totalChanges }</div>
                     `;
+                    dataContainer.appendChild( row );
+                }
+            } );
+        fetch( 'links.json' )
+            .then( response => response.json() )
+            .then( links => {
+                const dataContainer = document.getElementById( 'dataContainer2' );
+
+                for ( const link of links ) {
+                    const row = document.createElement( 'div' );
+                    row.className = 'flex flex-wrap bg-black hover:bg-blue-500 text-white p-4 m-4 rounded shadow-lg transition-colors duration-200';
+                    row.innerHTML = `
+                    <a href="${ link }" class="w-full  px-4 py-2 text-lg font-bold">${ link }</a>
+                `;
                     dataContainer.appendChild( row );
                 }
             } );

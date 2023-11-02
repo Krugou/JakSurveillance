@@ -1,6 +1,9 @@
 import {Octokit} from '@octokit/rest';
 import dotenv from 'dotenv';
 import fs from 'fs';
+import path, {dirname} from 'path';
+import {fileURLToPath} from 'url';
+
 dotenv.config();
 const owner = 'Krugou'; // replace with repository owner
 const repo = 'JakSurveillance'; // replace with repository name
@@ -61,4 +64,21 @@ const generateScores = async () => {
 	}
 };
 
-generateScores().catch(console.error);
+// generateScores().catch(console.error);
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// Get an array of filenames in the current directory
+const filenames = fs.readdirSync(__dirname);
+
+// Filter the filenames for .drawio and .png files
+const filteredFilenames = filenames.filter(
+	(filename) =>
+		path.extname(filename) === '.drawio' || path.extname(filename) === '.png'
+);
+
+// Write the object to the JSON file
+fs.writeFileSync(
+	path.join(__dirname, 'links.json'),
+	JSON.stringify(filteredFilenames, null, 2)
+);
