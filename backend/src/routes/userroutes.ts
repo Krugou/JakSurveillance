@@ -1,5 +1,6 @@
 import express, { Request, Response, Router } from 'express';
 import fetch from 'node-fetch'; // Import node-fetch for making HTTP requests if running older version of nodejs
+import doFetch from '../utils/fetch.js';
 import usermodel from '../models/usermodel.js';
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
 
@@ -44,17 +45,10 @@ router.post('/', async (req: Request, res: Response) => {
   }
 
   try {
-    const response = await fetch(loginUrl, options);
-    const metropoliaData = (await response.json()) as ResponseData;
-
+    const metropoliaData = await doFetch(loginUrl, options);
     if (metropoliaData.message === 'invalid username or password') {
       return res.status(403).json({
         error: 'Login failed',
-      });
-    }
-    if (!response.ok) {
-      return res.status(500).json({
-        error: 'Failed to connect to Metropolia servers',
       });
     }
 
