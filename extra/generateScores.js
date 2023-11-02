@@ -64,7 +64,7 @@ const generateScores = async () => {
 	}
 };
 
-// generateScores().catch(console.error);
+generateScores().catch(console.error);
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
