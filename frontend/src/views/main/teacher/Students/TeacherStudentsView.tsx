@@ -13,7 +13,10 @@ const TeacherStudentsView: React.FC = () => {
                         <p className="text-gray-700 text-base">
                             Some description about the student.
                         </p>
+                        <div className="flex justify-between">
                         <MainViewButton path='/teacher/students/:id' text='Student details' />
+                        <MainViewButton path='/teacher/students/:id/attendances' text='Student Attendance' />
+                        </div>
                     </div>
                 </div>
             ))}
