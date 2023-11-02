@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import MainViewButton from "../../../../components/main/buttons/MainViewButton";
 // this is view for teacher to see the own course details
 const TeacherCourseDetail: React.FC = () => {
     const { id } = useParams<{ id: string; }>();
@@ -17,6 +18,7 @@ const TeacherCourseDetail: React.FC = () => {
                 <p className="text-gray-700 text-base">
                     {course.description}
                 </p>
+                <MainViewButton path='/teacher/courses/:id' text='Course details' />
             </div>
             
         </div>

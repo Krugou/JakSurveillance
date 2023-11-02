@@ -37,7 +37,7 @@ const TeacherCourseModify: React.FC = () => {
                 />
                 <button
                     type="submit"
-                    className="w-full p-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    className="w-full p-2 text-white font-bold rounded bg-metropoliaMainOrange hover:hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-blue-600"
                 >
                     Modify Course
                 </button>
