@@ -9,17 +9,19 @@ interface Attendance {
 }
 
 interface AttendanceModel {
-	fetchAll(): Promise<[RowDataPacket[], FieldPacket[]]>;
-	findById(id: number): Promise<Attendance | null>;
-	findByStudentId(studentId: number): Promise<[RowDataPacket[], FieldPacket[]]>;
+	fetchAllAttendances(): Promise<[RowDataPacket[], FieldPacket[]]>;
+	findByAttendanceId(id: number): Promise<Attendance | null>;
+	findByAttendanceStudentId(
+		studentId: number
+	): Promise<[RowDataPacket[], FieldPacket[]]>;
 }
 
 const Attendance: AttendanceModel = {
-	fetchAll() {
+	fetchAllAttendances() {
 		return pool.promise().query<RowDataPacket[]>('SELECT * FROM attendance');
 	},
 
-	async findById(id) {
+	async findByAttendanceId(id) {
 		const [rows] = await pool
 			.promise()
 			.query<RowDataPacket[]>(
@@ -29,7 +31,7 @@ const Attendance: AttendanceModel = {
 		return (rows[0] as Attendance) || null;
 	},
 
-	findByStudentId(studentId) {
+	findByAttendanceStudentId(studentId) {
 		return pool.promise().query<RowDataPacket[]>(
 			`SELECT attendance.* 
             FROM attendance 
