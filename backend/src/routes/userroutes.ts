@@ -1,7 +1,12 @@
 import express, { Request, Response, Router } from 'express';
-import fetch from 'node-fetch'; // Import node-fetch for making HTTP requests if running older version of nodejs
 import doFetch from '../utils/fetch.js';
 import usermodel from '../models/usermodel.js';
+import passport from 'passport';
+//import { body, validationResult } from 'express-validator'; FOR VALIDATION
+import jwt from 'jsonwebtoken';
+import httpError from '../utils/errors.js';
+import { User } from '../utils/pass.js';
+
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
 
 const router: Router = express.Router();
@@ -11,7 +16,44 @@ router.get('/', (_req: Request, res: Response) => {
   res.send('Hello, TypeScript with Express! This is the users route calling');
 });
 
-router.post('/', async (req: Request, res: Response) => {
+// Define a separate function for handling passport authentication
+const authenticate = (
+  req: Request,
+  res: Response,
+  next: (err?: any) => void
+) => {
+  passport.authenticate(
+    'local',
+    { session: false },
+    (err: Error, user: User, _info: any) => {
+      // console.log('info: ', info);
+      // console.log('err1: ', err);
+      if (err || !user) {
+        next(httpError('Virhe kirjautuessa', 403));
+        return res.status(403).json({
+          message: 'Something went wrong, check your inputs',
+        });
+      }
+      req.login(user, { session: false }, (err) => {
+        if (err) {
+          // console.log('err2: ', err);
+          next(httpError('Virhe kirjautuessa', 403));
+          return res.status(403).json({
+            message: 'Something went wrong, check your inputs',
+          });
+        }
+        const token = jwt.sign(
+          user as User,
+          process.env.JWT_SECRET as string,
+          { expiresIn: '2h' } // Set the expiration time to 1 minute for testing
+        );
+        res.json({ user, token });
+      });
+    }
+  )(req, res, next);
+};
+
+router.post('/', async (req: Request, res: Response, next) => {
   // Get username and password from the request body
   const { username, password } = req.body;
 
@@ -45,7 +87,7 @@ router.post('/', async (req: Request, res: Response) => {
   }
 
   try {
-    const metropoliaData = await doFetch(loginUrl, options);
+    const metropoliaData: ResponseData = await doFetch(loginUrl, options);
     if (metropoliaData.message === 'invalid username or password') {
       return res.status(403).json({
         error: 'Login failed',
@@ -88,11 +130,18 @@ router.post('/', async (req: Request, res: Response) => {
         console.log(addUserResponse);
       } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ error: 'Internal server error' });
       }
     }
 
-    res.json(metropoliaData);
+    // IF THE USER is found in database or they're staff (meaning their account gets created with first login), implement login for them
+    if (userInfo || metropoliaData.staff) {
+      // Call the authenticate function to handle passport authentication
+      authenticate(req, res, next);
+      console.log('try to authentticate');
+    }
+
+    // res.json(metropoliaData);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });

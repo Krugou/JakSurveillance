@@ -37,10 +37,10 @@ const UserModel = {
   ): Promise<boolean> => {
     try {
       // Execute an UPDATE query to change user's email
-      const [rows] = await UserModel.pool.execute(
+      const [rows] = (await UserModel.pool.execute(
         'UPDATE users SET Useremail = ? WHERE Userid = ?',
         [newEmail, userId]
-      ) as [OkPacket, FieldPacket[]];
+      )) as [OkPacket, FieldPacket[]];
 
       return rows.affectedRows > 0;
     } catch (error) {
@@ -53,10 +53,10 @@ const UserModel = {
       const { username, email, staff, first_name, last_name } = user;
 
       // Execute an INSERT query to add a new user to the database
-      const [rows] = await UserModel.pool.execute(
+      const [rows] = (await UserModel.pool.execute(
         'INSERT INTO users (username, email, staff, first_name, last_name) VALUES (?, ?, ?, ?, ?)',
         [username, email, staff, first_name, last_name]
-      ) as [OkPacket, FieldPacket[]];
+      )) as [OkPacket, FieldPacket[]];
 
       return rows.affectedRows > 0;
     } catch (error) {
@@ -66,8 +66,6 @@ const UserModel = {
 };
 
 // Define the structure of the UserInfo object
-
-
 
 interface User {
   username: string;
