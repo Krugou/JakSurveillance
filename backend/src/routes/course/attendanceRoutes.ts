@@ -4,10 +4,19 @@ import Attendance from '../../models/attendancemodel.js'; // Adjust the path acc
 
 const router: Router = express.Router();
 
+router.get('/', async (req: Request, res: Response) => {
+	try {
+		const attendanceData = await Attendance.fetchAllAttendances();
+		res.json(attendanceData);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server error');
+	}
+});
 router.get('/:id', async (req: Request, res: Response) => {
 	try {
 		const id = Number(req.params.id);
-		const attendanceData = await Attendance.findById(id);
+		const attendanceData = await Attendance.findByAttendanceId(id);
 		if (attendanceData) {
 			res.json(attendanceData);
 		} else {
