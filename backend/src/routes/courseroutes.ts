@@ -8,7 +8,7 @@ const upload = multer();
 const router: Router = express.Router();
 
 import Course from '../models/coursemodel.js';
-
+import attendanceRoutes from './course/attendanceRoutes.js';
 router.get('/', async (_req: Request, res: Response) => {
 	try {
 		const [rows] = await Course.fetchAll();
@@ -18,6 +18,8 @@ router.get('/', async (_req: Request, res: Response) => {
 		res.status(500).send('Server error');
 	}
 });
+router.use('/attendance', attendanceRoutes);
+
 router.post('/check', express.json(), async (req: Request, res: Response) => {
     const { codes} = req.body;
 
