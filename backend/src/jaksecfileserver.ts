@@ -20,3 +20,4 @@ http.listen(port, () => {
     '/index.html start time:' + startTime.toLocaleString()
   );
 });
+export default app;
