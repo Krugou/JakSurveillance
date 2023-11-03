@@ -11,7 +11,7 @@ interface Attendance {
 interface AttendanceModel {
 	fetchAllAttendances(): Promise<[RowDataPacket[], FieldPacket[]]>;
 	findByAttendanceId(id: number): Promise<Attendance | null>;
-	findAllAttendancesUserCourseId(
+	findAllAttendancesByUserCourseId(
 		studentId: number,
 	): Promise<[RowDataPacket[], FieldPacket[]]>;
 	insertIntoAttendance(
@@ -37,7 +37,7 @@ const Attendance: AttendanceModel = {
 		return (rows[0] as Attendance) || null;
 	},
 
-	findAllAttendancesUserCourseId(usercourseId) {
+	findAllAttendancesByUserCourseId(usercourseId) {
 		return pool.promise().query<RowDataPacket[]>(
 			`SELECT attendance.* 
             FROM attendance 
