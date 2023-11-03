@@ -11,9 +11,15 @@ interface Attendance {
 interface AttendanceModel {
 	fetchAllAttendances(): Promise<[RowDataPacket[], FieldPacket[]]>;
 	findByAttendanceId(id: number): Promise<Attendance | null>;
-	findByAttendanceStudentId(
-		studentId: number
+	findAllAttendancesUserCourseId(
+		studentId: number,
 	): Promise<[RowDataPacket[], FieldPacket[]]>;
+	insertIntoAttendance(
+		start_date: string,
+		end_date: string,
+		topicid: number,
+		usercourseid: number,
+	): Promise<void>;
 }
 
 const Attendance: AttendanceModel = {
@@ -26,18 +32,26 @@ const Attendance: AttendanceModel = {
 			.promise()
 			.query<RowDataPacket[]>(
 				'SELECT * FROM attendance WHERE attendanceid = ?',
-				[id]
+				[id],
 			);
 		return (rows[0] as Attendance) || null;
 	},
 
-	findByAttendanceStudentId(studentId) {
+	findAllAttendancesUserCourseId(usercourseId) {
 		return pool.promise().query<RowDataPacket[]>(
 			`SELECT attendance.* 
             FROM attendance 
-            WHERE attendance.studentid = ?`,
-			[studentId]
+            WHERE attendance.usercourseid = ?`,
+			[usercourseId],
 		);
+	},
+	async insertIntoAttendance(status, date, usercourseid, classid) {
+		await pool
+			.promise()
+			.query(
+				'INSERT INTO attendance (status, date, usercourseid, classid) VALUES (?, ?, ?, ?)',
+				[status, date, usercourseid, classid],
+			);
 	},
 };
 
