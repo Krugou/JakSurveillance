@@ -1,7 +1,23 @@
-import {createContext, useState} from 'react';
+import React, {createContext, useState, Dispatch, SetStateAction} from 'react';
 import PropTypes from 'prop-types';
 
-export const UserContext = createContext();
+interface UserContextProps {
+	user: string;
+	setUser: Dispatch<SetStateAction<string>>;
+	update: boolean;
+	setUpdate: Dispatch<SetStateAction<boolean>>;
+}
+
+interface UserProviderProps {
+	children: React.ReactNode;
+}
+
+export const UserContext = createContext<UserContextProps>({
+	user: '',
+	setUser: () => {},
+	update: true,
+	setUpdate: () => {},
+});
 
 export const UserProvider: React.FC<UserProviderProps> = ({children}) => {
 	const [user, setUser] = useState<string>('');

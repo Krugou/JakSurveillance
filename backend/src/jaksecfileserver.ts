@@ -16,15 +16,15 @@ const port: number = 3001;
 const startTime: Date = new Date();
 
 /**
- * Use static middleware for Express to serve static files from 'JakSec' directory
+ * Use static middleware for Express to serve static files from 'jaksec' directory
  */
-app.use(express.static('JakSec'));
+app.use(express.static('jaksec'));
 
 /**
  * Setup route to serve index.html for all unmatched routes
  */
 app.get('*', (_req: Request, res: Response) => {
-	res.sendFile('index.html', {root: 'JakSec'});
+	res.sendFile('index.html', {root: 'jaksec'});
 });
 
 /**

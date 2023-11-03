@@ -17,7 +17,7 @@ const PartAttendance: Part[] = [
     // add more courses as needed
 ];
 
-const getAttendanceColorClass = (attendance: string, selectedOption: string) => {
+const getAttendanceColorClass = (_attendance:string, selectedOption: string) => {
     if (selectedOption === "Present") {
         return 'bg-metropoliaTrendGreen';
     } else {

@@ -6,11 +6,12 @@ import {UserContext} from '../../contexts/UserContext.tsx';
 interface LoginProps {
 	userType: 'Student' | 'Teacher' | 'Admin' | 'Counselor';
 }
+console.log(UserContext, 'USER CONTEXT');
 
 const Login: React.FC<LoginProps> = ({userType}) => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
-	const [alert, setAlert] = useState<string>('');
+	const [alert, setAlert] = useState<string | null>('');
 	const navigate = useNavigate();
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
@@ -26,8 +27,13 @@ const Login: React.FC<LoginProps> = ({userType}) => {
 			}
 			console.log(response, 'LOGIN RESPONSE');
 		} catch (error) {
-			setAlert(error.message);
-			console.log(error);
+			if (error instanceof Error) {
+				// Now TypeScript knows that 'error' is an instance of Error
+				console.log(error.message);
+			} else {
+				// 'error' could be anything else
+				console.log(error);
+			}
 		}
 
 		console.log('🚀 ~ file: App.tsx:41 ~ App ~ inputs:', inputs);
