@@ -27,6 +27,8 @@ export default defineConfig({
       workbox: {
         // workbox options for generateSW
         globPatterns: ['**/*.{js,css,html,png,jpg}'], // patterns to determine the files to be cached
+        skipWaiting: true, 
+        clientsClaim: true,
       },
     }),
   ],
