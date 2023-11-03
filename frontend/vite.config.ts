@@ -8,8 +8,8 @@ export default defineConfig({
     react(),
     VitePWA({
       manifest: {
-        name: 'Jak Surveillance',
-        short_name: 'JakSurveillance',
+        name: 'Jak Sec',
+        short_name: 'JakSec',
         theme_color: '#ffffff',
         icons: [
           {
