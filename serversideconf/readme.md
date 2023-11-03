@@ -23,10 +23,10 @@ This repository contains the configuration files for the server running on Azure
     RewriteCond %{HTTP:Connection} upgrade [NC]
     RewriteRule ^/?(.*) "ws://localhost:3002/$1" [P,L]
 
-    ServerName jakfilms.northeurope.cloudapp.azure.com
+    ServerName jaksec.northeurope.cloudapp.azure.com
     Include /etc/letsencrypt/options-ssl-apache.conf
-    SSLCertificateFile /etc/letsencrypt/live/jakfilms.northeurope.cloudapp.azure.com/fullchain.pem
-    SSLCertificateKeyFile /etc/letsencrypt/live/jakfilms.northeurope.cloudapp.azure.com/privkey.pem
+    SSLCertificateFile /etc/letsencrypt/live/jaksec.northeurope.cloudapp.azure.com/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/jaksec.northeurope.cloudapp.azure.com/privkey.pem
 </VirtualHost>
 
 ```
