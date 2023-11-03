@@ -15,27 +15,45 @@ interface StudentGroupModel {
 }
 
 const StudentGroup: StudentGroupModel = {
-	fetchAllStudentGroups() {
-		return pool.promise().query<RowDataPacket[]>('SELECT * FROM studentgroup');
+	async fetchAllStudentGroups() {
+		try {
+			return await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT * FROM studentgroup');
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
 
 	async findByStudentGroupId(id) {
-		const [rows] = await pool
-			.promise()
-			.query<RowDataPacket[]>(
-				'SELECT * FROM studentgroup WHERE studentgroupid = ?',
-				[id],
-			);
-		return (rows[0] as StudentGroup) || null;
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					'SELECT * FROM studentgroup WHERE studentgroupid = ?',
+					[id],
+				);
+			return (rows[0] as StudentGroup) || null;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
 
 	async insertIntoStudentGroup(studentgroupname) {
-		await pool
-			.promise()
-			.query('INSERT INTO studentgroup (studentgroupname) VALUES (?)', [
-				studentgroupname,
-			]);
+		try {
+			await pool
+				.promise()
+				.query('INSERT INTO studentgroup (studentgroupname) VALUES (?)', [
+					studentgroupname,
+				]);
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
+
 	// other methods...
 };
 

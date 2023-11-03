@@ -15,27 +15,45 @@ interface TopicGroupModel {
 }
 
 const TopicGroup: TopicGroupModel = {
-	fetchAllTopicGroups() {
-		return pool.promise().query<RowDataPacket[]>('SELECT * FROM topicgroups');
+	async fetchAllTopicGroups() {
+		try {
+			return await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT * FROM topicgroups');
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
 
 	async findByTopicGroupId(id) {
-		const [rows] = await pool
-			.promise()
-			.query<RowDataPacket[]>(
-				'SELECT * FROM topicgroups WHERE topicgroupid = ?',
-				[id],
-			);
-		return (rows[0] as TopicGroup) || null;
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					'SELECT * FROM topicgroups WHERE topicgroupid = ?',
+					[id],
+				);
+			return (rows[0] as TopicGroup) || null;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
 
 	async insertIntoTopicGroup(topicgroupname) {
-		await pool
-			.promise()
-			.query('INSERT INTO topicgroups (topicgroupname) VALUES (?)', [
-				topicgroupname,
-			]);
+		try {
+			await pool
+				.promise()
+				.query('INSERT INTO topicgroups (topicgroupname) VALUES (?)', [
+					topicgroupname,
+				]);
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
+
 	// other methods...
 };
 

@@ -38,29 +38,56 @@ interface CourseModel {
 }
 
 const Course: CourseModel = {
-	fetchAllCourses() {
-		return pool.promise().query<RowDataPacket[]>('SELECT * FROM courses');
+	async fetchAllCourses() {
+		try {
+			return await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT * FROM courses');
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
 
 	async findByCourseId(id) {
-		const [rows] = await pool
-			.promise()
-			.query<RowDataPacket[]>('SELECT * FROM courses WHERE courseid = ?', [id]);
-		return (rows[0] as Course) || null;
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT * FROM courses WHERE courseid = ?', [
+					id,
+				]);
+			return (rows[0] as Course) || null;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
 
 	async insertIntoCourse(name, start_date, end_date, code, studentgroupid) {
-		await pool
-			.promise()
-			.query(
-				'INSERT INTO courses (name, start_date, end_date, code, studentgroupid) VALUES (?, ?, ?, ?, ?)',
-				[name, start_date, end_date, code, studentgroupid],
-			);
+		try {
+			await pool
+				.promise()
+				.query(
+					'INSERT INTO courses (name, start_date, end_date, code, studentgroupid) VALUES (?, ?, ?, ?, ?)',
+					[name, start_date, end_date, code, studentgroupid],
+				);
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
 
 	async deleteByCourseId(id) {
-		await pool.promise().query('DELETE FROM courses WHERE courseid = ?', [id]);
+		try {
+			await pool
+				.promise()
+				.query('DELETE FROM courses WHERE courseid = ?', [id]);
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
+
 	async updateCourseDetails(
 		id,
 		name,
@@ -69,33 +96,53 @@ const Course: CourseModel = {
 		code,
 		studentgroupid,
 	) {
-		await pool
-			.promise()
-			.query(
-				'UPDATE courses SET name = ?, start_date = ?, end_date = ?, code = ?, studentgroupid = ? WHERE courseid = ?',
-				[name, start_date, end_date, code, studentgroupid, id],
-			);
+		try {
+			await pool
+				.promise()
+				.query(
+					'UPDATE courses SET name = ?, start_date = ?, end_date = ?, code = ?, studentgroupid = ? WHERE courseid = ?',
+					[name, start_date, end_date, code, studentgroupid, id],
+				);
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
 
 	async countCourses() {
-		const [rows] = await pool
-			.promise()
-			.query<RowDataPacket[]>('SELECT COUNT(*) as count FROM courses');
-		return rows[0].count;
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT COUNT(*) as count FROM courses');
+			return rows[0].count;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
 
 	async findByCode(code) {
-		const [rows] = await pool
-			.promise()
-			.query<RowDataPacket[]>('SELECT * FROM courses WHERE code = ?', [code]);
-		return (rows[0] as Course) || null;
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT * FROM courses WHERE code = ?', [code]);
+			return (rows[0] as Course) || null;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
 
 	async checkIfCourseExists(code) {
-		const [rows] = await pool
-			.promise()
-			.query<RowDataPacket[]>('SELECT * FROM courses WHERE code = ?', [code]);
-		return rows.length > 0;
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT * FROM courses WHERE code = ?', [code]);
+			return rows.length > 0;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
 
 	// other methods...

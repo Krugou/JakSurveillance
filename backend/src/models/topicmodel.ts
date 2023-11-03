@@ -17,52 +17,90 @@ interface TopicModel {
 	countTopics(): Promise<number>;
 	// other methods...
 }
-
 const Topic: TopicModel = {
-	fetchAllTopics() {
-		return pool.promise().query<RowDataPacket[]>('SELECT * FROM topics');
+	async fetchAllTopics() {
+		try {
+			return await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT * FROM topics');
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
 
 	async findByTopicId(id) {
-		const [rows] = await pool
-			.promise()
-			.query<RowDataPacket[]>('SELECT * FROM topics WHERE topicid = ?', [id]);
-		return (rows[0] as Topic) || null;
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT * FROM topics WHERE topicid = ?', [id]);
+			return (rows[0] as Topic) || null;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
 
 	async insertIntoTopic(topicname) {
-		await pool
-			.promise()
-			.query('INSERT INTO topics (topicname) VALUES (?)', [topicname]);
+		try {
+			await pool
+				.promise()
+				.query('INSERT INTO topics (topicname) VALUES (?)', [topicname]);
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
+
 	async checkIfTopicExists(topicname) {
-		// new method
-		const [rows] = await pool
-			.promise()
-			.query<RowDataPacket[]>('SELECT * FROM topics WHERE topicname = ?', [
-				topicname,
-			]);
-		return rows.length > 0;
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT * FROM topics WHERE topicname = ?', [
+					topicname,
+				]);
+			return rows.length > 0;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
+
 	async updateTopicName(id, topicname) {
-		await pool
-			.promise()
-			.query('UPDATE topics SET topicname = ? WHERE topicid = ?', [
-				topicname,
-				id,
-			]);
+		try {
+			await pool
+				.promise()
+				.query('UPDATE topics SET topicname = ? WHERE topicid = ?', [
+					topicname,
+					id,
+				]);
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
 
 	async deleteByTopicId(id) {
-		await pool.promise().query('DELETE FROM topics WHERE topicid = ?', [id]);
+		try {
+			await pool.promise().query('DELETE FROM topics WHERE topicid = ?', [id]);
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
 
 	async countTopics() {
-		const [rows] = await pool
-			.promise()
-			.query<RowDataPacket[]>('SELECT COUNT(*) as count FROM topics');
-		return rows[0].count;
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT COUNT(*) as count FROM topics');
+			return rows[0].count;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
+
 	// other methods...
 };
 
