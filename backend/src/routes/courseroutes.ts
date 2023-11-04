@@ -3,6 +3,7 @@ import express, {Request, Response, Router} from 'express';
 import multer from 'multer';
 import XLSX from 'xlsx';
 import openData from '../utils/opendata.js';
+import topicRoutes from './course/topicRoutes.js';
 config();
 const upload = multer();
 const router: Router = express.Router();
@@ -19,6 +20,7 @@ router.get('/', async (_req: Request, res: Response) => {
 	}
 });
 router.use('/attendance', attendanceRoutes);
+router.use('/topics', topicRoutes);
 
 router.post('/check', express.json(), async (req: Request, res: Response) => {
 	const {codes} = req.body;
@@ -41,7 +43,7 @@ router.post('/check', express.json(), async (req: Request, res: Response) => {
 });
 router.post('/create', upload.single('file'), async (req, res) => {
 	console.log('Received request'); // Debugging line
-
+	console.log(req.body); // Debugging line
 	const {
 		courseName,
 		courseCode,

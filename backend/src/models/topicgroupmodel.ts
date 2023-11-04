@@ -18,6 +18,7 @@ interface TopicGroupModel {
 	fetchAllTopicGroups(): Promise<[RowDataPacket[], FieldPacket[]]>;
 	findByTopicGroupId(id: number): Promise<TopicGroup | null>;
 	insertIntoTopicGroup(topicgroupname: string): Promise<void>;
+	fetchAllTopicGroupsWithTopics(): Promise<RowDataPacket[]>;
 	// other methods...
 }
 /**
@@ -34,6 +35,25 @@ const TopicGroup: TopicGroupModel = {
 			return await pool
 				.promise()
 				.query<RowDataPacket[]>('SELECT * FROM topicgroups');
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
+	/**
+	 * @method fetchAllTopicGroupsWithTopics
+	 * @description Fetches all topic groups and their associated topics from the database.
+	 * @returns {Promise<[RowDataPacket[], FieldPacket[]]>} A promise that resolves to an array of RowDataPacket and FieldPacket.
+	 */
+	async fetchAllTopicGroupsWithTopics() {
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					'SELECT topicgroups.topicgroupname, GROUP_CONCAT(topics.topicname) as topics FROM topicgroups LEFT JOIN topicsingroup ON topicgroups.topicgroupid = topicsingroup.topicgroupid LEFT JOIN topics ON topicsingroup.topicid = topics.topicid GROUP BY topicgroups.topicgroupid',
+				);
+
+			return rows;
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
