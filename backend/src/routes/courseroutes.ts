@@ -149,6 +149,8 @@ router.post('/create', upload.single('file'), async (req, res) => {
 			courseCode,
 			studentGroup,
 			mappedData,
+			topics,
+			topicgroup,
 		);
 		res
 			.status(200)
