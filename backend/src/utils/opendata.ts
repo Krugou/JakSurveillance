@@ -32,10 +32,10 @@ const CheckOpenDataReservations = async (
 	return data;
 };
 const checkOpenDataRealization = async (code: string) => {
-	console.log(
-		'🚀 ~ file: opendata.ts:36 ~ checkOpenDataRealization ~ code:',
-		code,
-	);
+	// console.log(
+	// 	'🚀 ~ file: opendata.ts:36 ~ checkOpenDataRealization ~ code:',
+	// 	code,
+	// );
 	const url = 'https://opendata.metropolia.fi/r1/realization/search';
 	const options = {
 		method: 'POST',
@@ -52,10 +52,10 @@ const checkOpenDataRealization = async (code: string) => {
 	}
 
 	const data = await response.json();
-	console.log(
-		'🚀 ~ file: opendata.ts:55 ~ checkOpenDataRealization ~ response:',
-		data,
-	);
+	// console.log(
+	// 	'🚀 ~ file: opendata.ts:55 ~ checkOpenDataRealization ~ response:',
+	// 	data,
+	// );
 
 	return data;
 };

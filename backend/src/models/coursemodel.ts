@@ -13,13 +13,17 @@ interface Course {
 }
 
 interface Student {
-	// Define the properties of a Student here
-	// For example:
-	username: string;
 	email: string;
 	first_name: string;
+	name: string;
 	last_name: string;
 	studentnumber: number;
+	'Arrival Group': string;
+	'Admin Groups': string;
+	Program: string;
+	'Form of Education': string;
+	Registration: string;
+	Assessment: string;
 }
 
 interface CourseModel {
@@ -85,6 +89,17 @@ const Course: CourseModel = {
 		console.log('Inserting into course');
 
 		try {
+			const [existingGroup] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					'SELECT * FROM studentgroups WHERE group_name = ?',
+					[group_name],
+				);
+
+			if (existingGroup.length > 0) {
+				throw new Error('Group already exists');
+			}
+
 			const [groupResult] = await pool
 				.promise()
 				.query<ResultSetHeader>(
@@ -102,6 +117,14 @@ const Course: CourseModel = {
 				.toISOString()
 				.slice(0, 19)
 				.replace('T', ' ');
+			const [existingCourse] = await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT * FROM courses WHERE code = ?', [code]);
+
+			if (existingCourse.length > 0) {
+				throw new Error('Course already exists');
+			}
+
 			const [courseResult] = await pool
 				.promise()
 				.query<ResultSetHeader>(
@@ -112,35 +135,44 @@ const Course: CourseModel = {
 			const courseId = courseResult.insertId;
 
 			for (const student of students) {
-				const [userResult] = await pool
+				const [existingUser] = await pool
 					.promise()
-					.query<ResultSetHeader>(
-						'INSERT INTO users (username, email,  first_name, last_name, studentnumber, studentgroupid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-						[
-							student.username,
-							student.email,
-							student.first_name,
-							student.last_name,
-							student.studentnumber,
-							studentGroupId,
-						],
-					);
-
-				const userId = userResult.insertId;
-
-				await pool
-					.promise()
-					.query('INSERT INTO usercourses (userid, courseid) VALUES (?, ?)', [
-						userId,
-						courseId,
+					.query<RowDataPacket[]>('SELECT * FROM users WHERE email = ?', [
+						student.email,
 					]);
+				if (existingUser.length === 0) {
+					const [userResult] = await pool
+						.promise()
+						.query<ResultSetHeader>(
+							'INSERT INTO users ( email, first_name, last_name, studentnumber, studentgroupid) VALUES ( ?, ?, ?, ?, ?)',
+							[
+								student.email,
+								student.first_name,
+								student.last_name,
+								student.studentnumber,
+								studentGroupId,
+							],
+						);
+
+					const userId = userResult.insertId;
+
+					await pool
+						.promise()
+						.query('INSERT INTO usercourses (userid, courseid) VALUES (?, ?)', [
+							userId,
+							courseId,
+						]);
+				} else {
+					return Promise.reject('User already exists');
+				}
 			}
+
+			return Promise.resolve();
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
 		}
 	},
-
 	async deleteByCourseId(id) {
 		try {
 			await pool
