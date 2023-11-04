@@ -94,7 +94,7 @@ const Course: CourseModel = {
 		topicgroup?: string,
 	) {
 		console.log('Inserting into course');
-		console.log(instructoremail);
+		// console.log(instructoremail);
 
 		try {
 			const [existingInstructor] = await pool
