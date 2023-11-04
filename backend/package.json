@@ -33,6 +33,7 @@
 		"@types/passport-jwt": "^3.0.12",
 		"@types/passport-local": "^1.0.37",
 		"@types/supertest": "^2.0.15",
+		"babel-jest": "^29.7.0",
 		"concurrently": "^8.2.2",
 		"jest": "^29.7.0",
 		"supertest": "^6.3.3",
@@ -40,14 +41,11 @@
 	},
 	"jest": {
 		"transform": {
-			"^.+\\.tsx?$": "ts-jest"
+			"^.+\\.js$": "babel-jest"
 		},
-		"testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+		"testRegex": "(/nodejs/tests/.*|(\\.|/)(test|spec))\\.js$",
 		"moduleFileExtensions": [
-			"ts",
-			"tsx",
 			"js",
-			"jsx",
 			"json",
 			"node"
 		]
