@@ -197,7 +197,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `userid` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(20),
   `email` varchar(100) NOT NULL,
-  `staff` int(11) NOT NULL,
+  `staff` int(11) NOT NULL DEFAULT 0,
   `first_name` varchar(30) NOT NULL,
   `last_name` varchar(30) NOT NULL,
   `created_at` timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
