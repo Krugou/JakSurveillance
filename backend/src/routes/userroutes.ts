@@ -1,7 +1,7 @@
 import express, {Request, Response, Router} from 'express';
-import doFetch from '../utils/fetch.js';
-import usermodel from '../models/usermodel.js';
 import passport from 'passport';
+import usermodel from '../models/usermodel.js';
+import fetchReal from '../utils/fetch.js';
 //import { body, validationResult } from 'express-validator'; FOR VALIDATION
 import jwt from 'jsonwebtoken';
 import httpError from '../utils/errors.js';
@@ -87,7 +87,10 @@ router.post('/', async (req: Request, res: Response, next) => {
 	}
 	//TRY TO FIND USER IN METROPOLIA DATABASE
 	try {
-		const metropoliaData: ResponseData = await doFetch(loginUrl, options);
+		const metropoliaData: ResponseData = await fetchReal.doFetch(
+			loginUrl,
+			options,
+		);
 		if (metropoliaData.message === 'invalid username or password') {
 			return res.status(403).json({
 				error: 'Login failed',

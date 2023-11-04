@@ -7,11 +7,11 @@ config();
 const upload = multer();
 const router: Router = express.Router();
 
-import Course from '../models/coursemodel.js';
+import course from '../models/coursemodel.js';
 import attendanceRoutes from './course/attendanceRoutes.js';
 router.get('/', async (_req: Request, res: Response) => {
 	try {
-		const [rows] = await Course.fetchAllCourses();
+		const [rows] = await course.fetchAllCourses();
 		res.json(rows);
 	} catch (err) {
 		console.error(err);
@@ -71,8 +71,73 @@ router.post('/create', upload.single('file'), async (req, res) => {
 	console.log('Course Name:', courseName);
 	console.log('Course Code:', courseCode);
 	console.log('Student Group:', studentGroup);
-	console.table(jsonData);
+	const finToEng = {
+		Sukunimi: 'last_name',
+		Etunimi: 'first_name',
+		Nimi: 'username',
+		Email: 'email',
+		'Op.num': 'studentnumber',
+		Saapumisyhmä: 'Arrival Group',
+		'Hall.ryhmät': 'Admin Groups',
+		Ohjelma: 'Program',
+		Koulutusmuoto: 'Form of Education',
+		Ilmoittautuminen: 'Registration',
+		Arviointi: 'Assessment',
+	};
 
+	const keys = Object.values(jsonData[0] as object);
+
+	let mappedData = [];
+	for (let j = 1; j < jsonData.length; j++) {
+		const values = Object.values(jsonData[j] as object);
+		const mappedObject = {};
+		for (let i = 0; i < keys.length; i++) {
+			const mappedObject: Record<string, unknown> = {};
+			mappedObject[keys[i]] = values[i];
+		}
+		mappedData.push(mappedObject);
+	}
+
+	mappedData = mappedData.map((item: unknown) => {
+		const mappedItem: Record<string, unknown> = {};
+		for (const key in item as object) {
+			if (finToEng[key as keyof typeof finToEng]) {
+				mappedItem[finToEng[key as keyof typeof finToEng]] = (
+					item as Record<string, unknown>
+				)[key];
+			} else {
+				mappedItem[key] = (item as Record<string, unknown>)[key];
+			}
+		}
+		return mappedItem;
+	});
+
+	console.log(mappedData);
+	const code = courseCode;
+	const data = await openData.checkOpenDataRealization(code);
+	console.log('🚀 ~ file: courseroutes.ts:118 ~ router.post ~ data:', data);
+
+	// Extract startDate and endDate from data and convert them to Date objects
+	const startDate = new Date(data.realizations[0].startDate);
+	console.log(
+		'🚀 ~ file: courseroutes.ts:122 ~ router.post ~ startDate:',
+		startDate,
+	);
+	const endDate = new Date(data.realizations[0].endDate);
+	console.log(
+		'🚀 ~ file: courseroutes.ts:124 ~ router.post ~ endDate:',
+		endDate,
+	);
+
+	// Now you can use startDate and endDate as Date objects
+	course.insertIntoCourse(
+		courseName,
+		startDate,
+		endDate,
+		courseCode,
+		studentGroup,
+		mappedData,
+	);
 	res.status(200).send({message: 'File uploaded and data logged successfully'});
 });
 

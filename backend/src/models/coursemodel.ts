@@ -1,58 +1,59 @@
-import {FieldPacket, RowDataPacket, ResultSetHeader} from 'mysql2';
+import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
 import pool from '../database/db.js';
 
 interface Course {
-	courseid: number;
+	// Define the properties of a Course here
+	// For example:
+	courseid?: number;
 	name: string;
 	start_date: Date;
-	created_at: Date;
 	end_date: Date;
 	code: string;
-	studentgroupid: number | null;
-	// other fields...
+	studentgroupid: number;
 }
+
 interface Student {
+	// Define the properties of a Student here
+	// For example:
 	username: string;
 	email: string;
-	staff: boolean;
 	first_name: string;
 	last_name: string;
 	studentnumber: number;
 }
 
-// Then in your function signature:
 interface CourseModel {
-	fetchAllCourses(): Promise<[RowDataPacket[], FieldPacket[]]>;
-	findByCourseId(id: number): Promise<Course | null>;
-	insertIntoCourse(
+	fetchAllCourses: () => Promise<RowDataPacket[]>;
+	findByCourseId: (id: number) => Promise<Course | null>;
+	insertIntoCourse: (
 		name: string,
 		start_date: Date,
 		end_date: Date,
 		code: string,
 		group_name: string,
-		students: unknown[],
-	): Promise<void>;
-	deleteByCourseId(id: number): Promise<void>;
-	updateCourseDetails(
+		students: Student[],
+	) => Promise<void>;
+	deleteByCourseId: (id: number) => Promise<void>;
+	updateCourseDetails: (
 		id: number,
 		name: string,
 		start_date: Date,
 		end_date: Date,
 		code: string,
-		studentgroupid: number | null,
-	): Promise<void>;
-	countCourses(): Promise<number>;
-	findByCode(code: string): Promise<Course | null>;
-	checkIfCourseExists(code: string): Promise<boolean>;
-	// other methods...
+		studentgroupid: number,
+	) => Promise<void>;
+	countCourses: () => Promise<number>;
+	findByCode: (code: string) => Promise<Course | null>;
+	checkIfCourseExists: (code: string) => Promise<boolean>;
+	// Add other methods here...
 }
-
 const Course: CourseModel = {
 	async fetchAllCourses() {
 		try {
-			return await pool
+			const [rows] = await pool
 				.promise()
 				.query<RowDataPacket[]>('SELECT * FROM courses');
+			return rows;
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
@@ -81,6 +82,8 @@ const Course: CourseModel = {
 		group_name: string,
 		students: Student[],
 	) {
+		console.log('Inserting into course');
+
 		try {
 			const [groupResult] = await pool
 				.promise()
@@ -90,12 +93,20 @@ const Course: CourseModel = {
 				);
 
 			const studentGroupId = groupResult.insertId;
-
+			// Convert start_date and end_date to strings in the format 'YYYY-MM-DD HH:mm:ss'
+			const startDateString = start_date
+				.toISOString()
+				.slice(0, 19)
+				.replace('T', ' ');
+			const endDateString = end_date
+				.toISOString()
+				.slice(0, 19)
+				.replace('T', ' ');
 			const [courseResult] = await pool
 				.promise()
 				.query<ResultSetHeader>(
 					'INSERT INTO courses (name, start_date, end_date, code, studentgroupid) VALUES (?, ?, ?, ?, ?)',
-					[name, start_date, end_date, code, studentGroupId],
+					[name, startDateString, endDateString, code, studentGroupId],
 				);
 
 			const courseId = courseResult.insertId;
