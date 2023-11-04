@@ -1,4 +1,4 @@
-import {FieldPacket, RowDataPacket} from 'mysql2';
+import {FieldPacket, RowDataPacket, ResultSetHeader} from 'mysql2';
 import pool from '../database/db.js';
 
 interface Course {
@@ -11,7 +11,16 @@ interface Course {
 	studentgroupid: number | null;
 	// other fields...
 }
+interface Student {
+	username: string;
+	email: string;
+	staff: boolean;
+	first_name: string;
+	last_name: string;
+	studentnumber: number;
+}
 
+// Then in your function signature:
 interface CourseModel {
 	fetchAllCourses(): Promise<[RowDataPacket[], FieldPacket[]]>;
 	findByCourseId(id: number): Promise<Course | null>;
@@ -20,7 +29,8 @@ interface CourseModel {
 		start_date: Date,
 		end_date: Date,
 		code: string,
-		studentgroupid: number | null,
+		group_name: string,
+		students: unknown[],
 	): Promise<void>;
 	deleteByCourseId(id: number): Promise<void>;
 	updateCourseDetails(
@@ -63,14 +73,57 @@ const Course: CourseModel = {
 		}
 	},
 
-	async insertIntoCourse(name, start_date, end_date, code, studentgroupid) {
+	async insertIntoCourse(
+		name: string,
+		start_date: Date,
+		end_date: Date,
+		code: string,
+		group_name: string,
+		students: Student[],
+	) {
 		try {
-			await pool
+			const [groupResult] = await pool
 				.promise()
-				.query(
-					'INSERT INTO courses (name, start_date, end_date, code, studentgroupid) VALUES (?, ?, ?, ?, ?)',
-					[name, start_date, end_date, code, studentgroupid],
+				.query<ResultSetHeader>(
+					'INSERT INTO studentgroups (group_name) VALUES (?)',
+					[group_name],
 				);
+
+			const studentGroupId = groupResult.insertId;
+
+			const [courseResult] = await pool
+				.promise()
+				.query<ResultSetHeader>(
+					'INSERT INTO courses (name, start_date, end_date, code, studentgroupid) VALUES (?, ?, ?, ?, ?)',
+					[name, start_date, end_date, code, studentGroupId],
+				);
+
+			const courseId = courseResult.insertId;
+
+			for (const student of students) {
+				const [userResult] = await pool
+					.promise()
+					.query<ResultSetHeader>(
+						'INSERT INTO users (username, email,  first_name, last_name, studentnumber, studentgroupid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+						[
+							student.username,
+							student.email,
+							student.first_name,
+							student.last_name,
+							student.studentnumber,
+							studentGroupId,
+						],
+					);
+
+				const userId = userResult.insertId;
+
+				await pool
+					.promise()
+					.query('INSERT INTO usercourses (userid, courseid) VALUES (?, ?)', [
+						userId,
+						courseId,
+					]);
+			}
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
