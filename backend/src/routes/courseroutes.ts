@@ -42,7 +42,14 @@ router.post('/check', express.json(), async (req: Request, res: Response) => {
 router.post('/create', upload.single('file'), async (req, res) => {
 	console.log('Received request'); // Debugging line
 
-	const {courseName, courseCode, studentGroup, topicgroup, topics} = req.body;
+	const {
+		courseName,
+		courseCode,
+		studentGroup,
+		topicgroup,
+		topics,
+		instructoremail,
+	} = req.body;
 
 	console.log(topicgroup);
 	console.log(topics);
@@ -149,6 +156,7 @@ router.post('/create', upload.single('file'), async (req, res) => {
 			courseCode,
 			studentGroup,
 			mappedData,
+			instructoremail,
 			topics,
 			topicgroup,
 		);

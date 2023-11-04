@@ -10,6 +10,7 @@ interface Course {
 	end_date: Date;
 	code: string;
 	studentgroupid: number;
+	instructoremail: string;
 }
 
 interface Student {
@@ -36,6 +37,7 @@ interface CourseModel {
 		code: string,
 		group_name: string,
 		students: Student[],
+		instructoremail: string,
 		topics?: string,
 		topicgroup?: string,
 	) => Promise<void>;
@@ -87,177 +89,223 @@ const Course: CourseModel = {
 		code: string,
 		group_name: string,
 		students: Student[],
+		instructoremail: string,
 		topics?: string,
 		topicgroup?: string,
 	) {
 		console.log('Inserting into course');
+		console.log(instructoremail);
 
 		try {
-			const [existingGroup] = await pool
+			const [existingInstructor] = await pool
 				.promise()
 				.query<RowDataPacket[]>(
-					'SELECT * FROM studentgroups WHERE group_name = ?',
-					[group_name],
+					'SELECT * FROM users WHERE email = ? AND staff = 1',
+					[instructoremail],
 				);
-			let studentGroupId = 0;
-			if (existingGroup.length > 0) {
-				console.error('Group already exists');
-				studentGroupId = existingGroup[0].studentgroupid;
-			} else {
-				const [groupResult] = await pool
+
+			if (existingInstructor.length === 0) {
+				return Promise.reject(
+					new Error(
+						'Instructor email not found or the user is not a staff member',
+					),
+				);
+			}
+
+			try {
+				const instructoruserid = existingInstructor[0].userid;
+				const [existingGroup] = await pool
 					.promise()
-					.query<ResultSetHeader>(
-						'INSERT INTO studentgroups (group_name) VALUES (?)',
+					.query<RowDataPacket[]>(
+						'SELECT * FROM studentgroups WHERE group_name = ?',
 						[group_name],
 					);
-
-				studentGroupId = groupResult.insertId;
-			}
-			const startDateString = start_date
-				.toISOString()
-				.slice(0, 19)
-				.replace('T', ' ');
-			const endDateString = end_date
-				.toISOString()
-				.slice(0, 19)
-				.replace('T', ' ');
-			const [existingCourse] = await pool
-				.promise()
-				.query<RowDataPacket[]>('SELECT * FROM courses WHERE code = ?', [code]);
-
-			if (existingCourse.length > 0) {
-				throw new Error('Course already exists');
-			}
-
-			const [courseResult] = await pool
-				.promise()
-				.query<ResultSetHeader>(
-					'INSERT INTO courses (name, start_date, end_date, code, studentgroupid) VALUES (?, ?, ?, ?, ?)',
-					[name, startDateString, endDateString, code, studentGroupId],
-				);
-
-			const courseId = courseResult.insertId;
-
-			for (const student of students) {
-				try {
-					const [existingUserByNumber] = await pool
+				let studentGroupId = 0;
+				if (existingGroup.length > 0) {
+					console.error('Group already exists');
+					studentGroupId = existingGroup[0].studentgroupid;
+				} else {
+					const [groupResult] = await pool
 						.promise()
-						.query<RowDataPacket[]>(
-							'SELECT * FROM users WHERE studentnumber = ?',
-							[student.studentnumber],
+						.query<ResultSetHeader>(
+							'INSERT INTO studentgroups (group_name) VALUES (?)',
+							[group_name],
 						);
 
-					if (existingUserByNumber.length > 0) {
-						console.error('User with this student number already exists');
-						continue;
-					}
+					studentGroupId = groupResult.insertId;
+				}
+				const startDateString = start_date
+					.toISOString()
+					.slice(0, 19)
+					.replace('T', ' ');
+				const endDateString = end_date
+					.toISOString()
+					.slice(0, 19)
+					.replace('T', ' ');
+				const [existingCourse] = await pool
+					.promise()
+					.query<RowDataPacket[]>('SELECT * FROM courses WHERE code = ?', [
+						code,
+					]);
 
-					const [existingUserByEmail] = await pool
-						.promise()
-						.query<RowDataPacket[]>('SELECT * FROM users WHERE email = ?', [
-							student.email,
-						]);
+				if (existingCourse.length > 0) {
+					throw new Error('Course already exists');
+				}
 
-					if (existingUserByEmail.length > 0) {
-						await pool
+				const [courseResult] = await pool
+					.promise()
+					.query<ResultSetHeader>(
+						'INSERT INTO courses (name, start_date, end_date, code, studentgroupid) VALUES (?, ?, ?, ?, ?)',
+						[name, startDateString, endDateString, code, studentGroupId],
+					);
+
+				const courseId = courseResult.insertId;
+				const [instructorResult] = await pool
+					.promise()
+					.query<ResultSetHeader>(
+						'INSERT INTO courseinstructors (userid, courseid) VALUES (?, ?)',
+						[instructoruserid, courseId],
+					);
+				if (instructorResult.affectedRows === 0) {
+					throw new Error('Failed to insert instructor into courseinstructors');
+				}
+
+				for (const student of students) {
+					try {
+						const [existingUserByNumber] = await pool
 							.promise()
-							.query('UPDATE users SET studentnumber = ? WHERE email = ?', [
-								student.studentnumber,
+							.query<RowDataPacket[]>(
+								'SELECT * FROM users WHERE studentnumber = ?',
+								[student.studentnumber],
+							);
+
+						if (existingUserByNumber.length > 0) {
+							console.error('User with this student number already exists');
+							continue;
+						}
+
+						const [existingUserByEmail] = await pool
+							.promise()
+							.query<RowDataPacket[]>('SELECT * FROM users WHERE email = ?', [
 								student.email,
 							]);
-					} else {
-						const [userResult] = await pool
-							.promise()
-							.query<ResultSetHeader>(
-								'INSERT INTO users ( email, first_name, last_name, studentnumber, studentgroupid) VALUES ( ?, ?, ?, ?, ?)',
-								[
-									student.email,
-									student.first_name,
-									student.last_name,
-									student.studentnumber,
-									studentGroupId,
-								],
-							);
 
-						const userId = userResult.insertId;
-
-						await pool
-							.promise()
-							.query(
-								'INSERT INTO usercourses (userid, courseid) VALUES (?, ?)',
-								[userId, courseId],
-							);
-					}
-				} catch (error) {
-					console.error(error);
-				}
-			}
-
-			if (topicgroup) {
-				try {
-					const [existingTopic] = await pool
-						.promise()
-						.query<RowDataPacket[]>(
-							'SELECT * FROM topicgroups WHERE topicgroupname = ?',
-							[topicgroup],
-						);
-
-					let topicGroupId = 0;
-					if (existingTopic.length > 0) {
-						topicGroupId = existingTopic[0].topicgroupid;
-					} else {
-						const [topicResult] = await pool
-							.promise()
-							.query<ResultSetHeader>(
-								'INSERT INTO topicgroups (topicgroupname) VALUES (?)',
-								[topicgroup],
-							);
-						topicGroupId = topicResult.insertId;
-					}
-					if (topics) {
-						const topicslist = JSON.parse(topics);
-						for (const topic of topicslist) {
-							const [existingCourseTopic] = await pool
+						if (existingUserByEmail.length > 0) {
+							await pool
 								.promise()
-								.query<RowDataPacket[]>(
-									'SELECT * FROM topics WHERE topicname = ?',
-									[topic],
+								.query('UPDATE users SET studentnumber = ? WHERE email = ?', [
+									student.studentnumber,
+									student.email,
+								]);
+						} else {
+							const [userResult] = await pool
+								.promise()
+								.query<ResultSetHeader>(
+									'INSERT INTO users ( email, first_name, last_name, studentnumber, studentgroupid) VALUES ( ?, ?, ?, ?, ?)',
+									[
+										student.email,
+										student.first_name,
+										student.last_name,
+										student.studentnumber,
+										studentGroupId,
+									],
 								);
 
-							if (existingCourseTopic.length === 0) {
-								console.error(`Topic ${topic} does not exist`);
-								const [topicResult] = await pool
+							const userId = userResult.insertId;
+
+							await pool
+								.promise()
+								.query(
+									'INSERT INTO usercourses (userid, courseid) VALUES (?, ?)',
+									[userId, courseId],
+								);
+						}
+					} catch (error) {
+						console.error(error);
+					}
+				}
+
+				if (topicgroup) {
+					try {
+						const [existingTopic] = await pool
+							.promise()
+							.query<RowDataPacket[]>(
+								'SELECT * FROM topicgroups WHERE topicgroupname = ?',
+								[topicgroup],
+							);
+
+						let topicGroupId = 0;
+						if (existingTopic.length > 0) {
+							topicGroupId = existingTopic[0].topicgroupid;
+						} else {
+							const [topicResult] = await pool
+								.promise()
+								.query<ResultSetHeader>(
+									'INSERT INTO topicgroups (topicgroupname) VALUES (?)',
+									[topicgroup],
+								);
+							topicGroupId = topicResult.insertId;
+						}
+						if (topics) {
+							const topicslist = JSON.parse(topics);
+							for (const topic of topicslist) {
+								const [existingCourseTopic] = await pool
 									.promise()
-									.query<ResultSetHeader>(
-										'INSERT INTO topics (topicname) VALUES (?)',
+									.query<RowDataPacket[]>(
+										'SELECT * FROM topics WHERE topicname = ?',
 										[topic],
 									);
-								const topicId = topicResult.insertId;
+								let topicId = 0;
+								if (existingCourseTopic.length === 0) {
+									console.error(`Topic ${topic} does not exist`);
+									const [topicResult] = await pool
+										.promise()
+										.query<ResultSetHeader>(
+											'INSERT INTO topics (topicname) VALUES (?)',
+											[topic],
+										);
+									topicId = topicResult.insertId;
 
-								await pool
+									await pool
+										.promise()
+										.query(
+											'INSERT INTO topicsingroup (topicgroupid, topicid) VALUES (?, ?)',
+											[topicGroupId, topicId],
+										);
+								} else {
+									// Handle the case where the topic exists
+									const topicId = existingCourseTopic[0].topicid;
+									await pool
+										.promise()
+										.query(
+											'INSERT INTO topicsingroup (topicgroupid, topicid) VALUES (?, ?)',
+											[topicGroupId, topicId],
+										);
+								}
+								const [existingCourseTopicRelation] = await pool
 									.promise()
-									.query(
-										'INSERT INTO topicsingroup (topicgroupid, topicid) VALUES (?, ?)',
-										[topicGroupId, topicId],
+									.query<RowDataPacket[]>(
+										'SELECT * FROM coursetopics WHERE courseid = ? AND topicid = ?',
+										[courseId, topicId],
 									);
-							} else {
-								// Handle the case where the topic exists
-								const topicId = existingCourseTopic[0].topicid;
-								await pool
-									.promise()
-									.query(
-										'INSERT INTO topicsingroup (topicgroupid, topicid) VALUES (?, ?)',
-										[topicGroupId, topicId],
-									);
+								if (existingCourseTopicRelation.length === 0) {
+									await pool
+										.promise()
+										.query(
+											'INSERT INTO coursetopics (courseid, topicid) VALUES (?, ?)',
+											[courseId, topicId],
+										);
+								}
 							}
 						}
+					} catch (error) {
+						console.error(error);
 					}
-				} catch (error) {
-					console.error(error);
 				}
+			} catch (error) {
+				console.error(error);
+				return Promise.reject(error);
 			}
-
-			return Promise.resolve();
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
