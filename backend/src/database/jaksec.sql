@@ -195,7 +195,7 @@ CREATE TABLE IF NOT EXISTS `usercourse_topics` (
 -- Dumping structure for taulu jaksec.users
 CREATE TABLE IF NOT EXISTS `users` (
   `userid` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(20) NOT NULL,
+  `username` varchar(20),
   `email` varchar(100) NOT NULL,
   `staff` int(11) NOT NULL,
   `first_name` varchar(30) NOT NULL,
