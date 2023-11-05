@@ -1,10 +1,10 @@
 {
 	"type": "module",
 	"scripts": {
-		"sW": "concurrently \"tsc --watch\" \"nodemon nodejs/jaksecfileserver.js\" \"nodemon nodejs/jaksecserver.js\"",
-		"notscsW": "concurrently  \"nodemon nodejs/jaksecfileserver.js\" \"nodemon nodejs/jaksecserver.js\"",
+		"sW": "concurrently \"tsc --watch\" \"nodemon --delay 1s nodejs/jaksecfileserver.js\" \"nodemon nodejs/jaksecserver.js\"",
+		"notscsW": "concurrently  \"nodemon --delay 1s nodejs/jaksecfileserver.js\" \"nodemon --delay 1s nodejs/jaksecserver.js\"",
 		"test": "jest",
-		"all": "npm i && concurrently \"tsc --watch\" \"nodemon nodejs/jaksecfileserver.js\" \"nodemon nodejs/jaksecserver.js\" \"cd ../frontend && npm run all\""
+		"all": "npm i && concurrently \"tsc --watch\" \"nodemon --delay 1s nodejs/jaksecfileserver.js\" \"nodemon --delay 1s nodejs/jaksecserver.js\" \"cd ../frontend && npm run all\""
 	},
 	"dependencies": {
 		"body-parser": "^1.20.2",
