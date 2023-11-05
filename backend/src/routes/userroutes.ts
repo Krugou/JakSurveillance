@@ -67,6 +67,42 @@ router.post('/', async (req: Request, res: Response, next) => {
 			email: 'admin@metropolia.fi',
 		});
 		return;
+	}else if (
+		username === process.env.devteacheraccount &&
+		password === process.env.devteacherpass
+	) {
+		res.json({
+			staff: true,
+			user: 'teacher',
+			firstname: 'Teacher',
+			lastname: 'Teacher',
+			email: 'teacher@metropolia.fi',
+		});
+		return;
+	} else if (
+		username === process.env.devstudentaccount &&
+		password === process.env.devstudentpass
+	) {
+		res.json({
+			staff: false,
+			user: 'student',
+			firstname: 'Student',
+			lastname: 'Student',
+			email: 'student@metropolia.fi',
+		});
+		return;
+	} else if (
+		username === process.env.devcounseloraccount &&
+		password === process.env.devcounselorpass
+	) {
+		res.json({
+			staff: true,
+			user: 'counselor',
+			firstname: 'Counselor',
+			lastname: 'Counselor',
+			email: 'counselor@metropolia.fi',
+		});
+		return;
 	}
 
 	const options = {
