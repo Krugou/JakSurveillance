@@ -170,5 +170,14 @@ router.post('/create', upload.single('file'), async (req, res) => {
 		res.status(500).send('Internal server error:' + error);
 	}
 });
+router.get('/instructor/:email', async (req: Request, res: Response) => {
+	try {
+		const courses = await course.getCoursesByInstructorEmail(req.params.email);
+		res.json(courses);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server error');
+	}
+});
 
 export default router;
