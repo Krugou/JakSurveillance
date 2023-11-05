@@ -12,9 +12,8 @@
 		"buildWatch": "tsc --watch & vite build --outDir ../backend/jaksec --emptyOutDir --minify  --base / --watch",
 		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 		"preview": "vite preview",
-		"buildWatch": "tsc --watch & vite build --outDir ../backend/jaksec --emptyOutDir --minify  --base / --watch",
 		"all": " npm i & tsc --watch & vite build --outDir ../backend/jaksec --emptyOutDir --minify  --base / --watch",
-		"alldev": "npm i & tsc --watch & vite --port 8080"
+		"alldev": "npm i & vite --port 8080"
 	},
 	"dependencies": {
 		"@tanstack/react-query": "^5.4.3",
