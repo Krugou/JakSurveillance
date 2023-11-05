@@ -53,6 +53,7 @@ interface CourseModel {
 	countCourses: () => Promise<number>;
 	findByCode: (code: string) => Promise<Course | null>;
 	checkIfCourseExists: (code: string) => Promise<boolean>;
+	getCoursesByInstructorEmail: (email: string) => Promise<Course[]>;
 	// Add other methods here...
 }
 const Course: CourseModel = {
@@ -81,7 +82,20 @@ const Course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
-
+	async getCoursesByInstructorEmail(email) {
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					'SELECT courses.* FROM courses JOIN courseinstructors ON courses.courseid = courseinstructors.courseid JOIN users ON courseinstructors.userid = users.userid WHERE users.email = ?',
+					[email],
+				);
+			return rows as Course[];
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
 	async insertIntoCourse(
 		name: string,
 		start_date: Date,
