@@ -41,12 +41,9 @@ CREATE TABLE IF NOT EXISTS `class` (
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
   `topicid` int(11) NOT NULL,
-  `coursesclassesid` int(11) NOT NULL,
   PRIMARY KEY (`classid`),
   KEY `topicid` (`topicid`),
-  KEY `coursesclassesid` (`coursesclassesid`),
-  CONSTRAINT `class_ibfk_1` FOREIGN KEY (`topicid`) REFERENCES `topics` (`topicid`),
-  CONSTRAINT `class_ibfk_2` FOREIGN KEY (`coursesclassesid`) REFERENCES `coursesclasses` (`coursesclassesid`)
+  CONSTRAINT `class_ibfk_1` FOREIGN KEY (`topicid`) REFERENCES `topics` (`topicid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS `coursesclasses` (
@@ -266,3 +263,5 @@ SET @physicsID = (SELECT `topicid` FROM `topics` WHERE `topicname` = 'Physics');
 
 -- Create the associations for the second group
 INSERT INTO `topicsingroup` (`topicgroupid`, `topicid`) VALUES (@secondGroupID, @mathID), (@secondGroupID, @physicsID);
+
+
