@@ -12,7 +12,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-
+drop database if exists jaksec;
 -- Dumping database structure for jaksec
 CREATE DATABASE IF NOT EXISTS `jaksec` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `jaksec`;
@@ -226,3 +226,34 @@ INSERT INTO `users` (`userid`, `username`, `email`, `staff`, `first_name`, `last
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+
+-- Insert the group
+INSERT INTO `topicgroups` (`topicgroupname`) VALUES ('All');
+
+-- Get the ID of the group you just inserted
+SET @groupID = LAST_INSERT_ID();
+
+-- Insert the topics
+INSERT INTO `topics` (`topicname`) VALUES ('Math'), ('Physics'), ('Programming');
+
+-- Get the IDs of the topics you just inserted
+SET @mathID = (SELECT `topicid` FROM `topics` WHERE `topicname` = 'Math');
+SET @physicsID = (SELECT `topicid` FROM `topics` WHERE `topicname` = 'Physics');
+SET @programmingID = (SELECT `topicid` FROM `topics` WHERE `topicname` = 'Programming');
+
+-- Create the associations
+INSERT INTO `topicsingroup` (`topicgroupid`, `topicid`) VALUES (@groupID, @mathID), (@groupID, @physicsID), (@groupID, @programmingID);
+
+-- Insert the second group
+INSERT INTO `topicgroups` (`topicgroupname`) VALUES ('MathPhysics');
+
+-- Get the ID of the second group you just inserted
+SET @secondGroupID = LAST_INSERT_ID();
+
+-- The topics "Math" and "Physics" are already in the `topics` table, so we just need to get their IDs
+-- We already have the IDs from the previous commands, but if you need to get them again, you can use these commands:
+SET @mathID = (SELECT `topicid` FROM `topics` WHERE `topicname` = 'Math');
+SET @physicsID = (SELECT `topicid` FROM `topics` WHERE `topicname` = 'Physics');
+
+-- Create the associations for the second group
+INSERT INTO `topicsingroup` (`topicgroupid`, `topicid`) VALUES (@secondGroupID, @mathID), (@secondGroupID, @physicsID);
