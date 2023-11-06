@@ -35,16 +35,20 @@ interface CreateCourseInputs {
 	courseName: string;
 	courseCode: string;
 	studentGroup: string;
+	topics: string;
+	topicgroup: string;
 	file: File;
 }
 
 const createCourse = async (inputs: CreateCourseInputs) => {
-	const {courseName, courseCode, studentGroup, file} = inputs;
+	const {courseName, courseCode, studentGroup, topics,topicgroup, file} = inputs;
 
 	const formData = new FormData();
 	formData.append('courseName', courseName);
 	formData.append('courseCode', courseCode);
 	formData.append('studentGroup', studentGroup);
+	formData.append('topics', topics);
+	formData.append('topicgroup', topicgroup);
 	formData.append('file', file);
 
 	const options: RequestInit = {
