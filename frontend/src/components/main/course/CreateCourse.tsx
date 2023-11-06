@@ -129,6 +129,17 @@ const CreateCourse: React.FC = () => {
 								/>
 							</>
 						)}
+						<label className="flex items-center space-x-3">
+							<input
+								type="checkbox"
+								checked={shouldCheckDetails}
+								onChange={() => setShouldCheckDetails(prev => !prev)}
+								className="form-checkbox h-5 w-5 text-blue-600"
+							/>
+							<span className="text-gray-900 font-medium">
+								Check Course Details
+							</span>
+						</label>
 					</fieldset>
 				)}
 
@@ -163,17 +174,6 @@ const CreateCourse: React.FC = () => {
 					</fieldset>
 				)}
 
-				<label className="flex items-center space-x-3">
-					<input
-						type="checkbox"
-						checked={shouldCheckDetails}
-						onChange={() => setShouldCheckDetails(prev => !prev)}
-						className="form-checkbox h-5 w-5 text-blue-600"
-					/>
-					<span className="text-gray-900 font-medium">
-						Check Course Details
-					</span>
-				</label>
 				{currentStep > 1 && (
 					<button
 						type="button"
