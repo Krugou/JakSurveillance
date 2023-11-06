@@ -192,11 +192,17 @@ const Course: CourseModel = {
 								student.studentnumber,
 							]);
 
-						let userId: number;
+						let userId: number = 0;
 
 						if (existingUserByNumber.length > 0) {
-							console.error('User with this student number already exists');
-							userId = existingUserByNumber[0].id;
+							// console.error('User with this student number already exists');
+							userId = existingUserByNumber[0].userid;
+							await pool
+								.promise()
+								.query('INSERT INTO usercourses (userid, courseid) VALUES (?, ?)', [
+									userId,
+									courseId,
+								]);
 						} else {
 							const [existingUserByEmail] = await pool
 								.promise()
@@ -211,7 +217,13 @@ const Course: CourseModel = {
 										student.studentnumber,
 										student.email,
 									]);
-								userId = existingUserByEmail[0].id;
+								userId = existingUserByEmail[0].userid;
+								await pool
+									.promise()
+									.query('INSERT INTO usercourses (userid, courseid) VALUES (?, ?)', [
+										userId,
+										courseId,
+									]);
 							} else {
 								const [userResult] = await pool
 									.promise()
