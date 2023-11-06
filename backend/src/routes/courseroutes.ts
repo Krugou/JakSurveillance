@@ -190,5 +190,15 @@ router.get('/instructor/:email', async (req: Request, res: Response) => {
 		res.status(500).send('Server error');
 	}
 });
+router.get('/coursesbyid/:id', async (req: Request, res: Response) => {
+	try {
+		console.log('something is happening');
+		const courses = await course.getCoursesByCourseId(req.params.id);
+		res.json(courses);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server error');
+	}
+});
 
 export default router;
