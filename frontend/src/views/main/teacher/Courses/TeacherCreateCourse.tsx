@@ -1,52 +1,19 @@
 import React, {useEffect, useState} from 'react';
+import TopicGroupAndTopicsSelector from '../../../../components/main/teacher/course/createcourse/TopicsGroupAndTopics';
 import apiHooks from '../../../../hooks/ApiHooks';
 // this is view for teacher to create the course
 const TeacherCreateCourse: React.FC = () => {
 	const [currentStep, setCurrentStep] = useState(1);
 	const [courseName, setCourseName] = useState('');
 	const [file, setFile] = useState<File | null>(null);
-	const [courseTopics, setCourseTopics] = useState<string[]>([]);
-	const [customTopics, setCustomTopics] = useState<string[]>(['']);
 	const [courseCode, setCourseCode] = useState('');
-	const [topicData, setTopicData] = useState<any>([]);
 	const [studentGroup, setStudentGroup] = useState('');
-	const [courseTopicGroup, setCourseTopicGroup] = useState(
-		topicData[0]?.topicgroupname || '',
-	);
-
-	const [selectedGroupTopics, setSelectedGroupTopics] = useState([]);
-
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setFile(event.target.files ? event.target.files[0] : null);
 	};
 
-	const handleTopicChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		const selectedTopics = Array.from(
-			e.target.selectedOptions,
-			option => option.value,
-		);
-		setCourseTopics(selectedTopics);
-	};
-
-	const addCustomTopic = () => {
-		setCustomTopics(prevTopics => [...prevTopics, '']);
-	};
-
-	const handleCustomTopicChange = (index: number, value: string) => {
-		const newTopics = [...customTopics];
-		newTopics[index] = value;
-		setCustomTopics(newTopics);
-	};
-
 	const [shouldCheckDetails, setShouldCheckDetails] = useState(true);
-	useEffect(() => {
-		const selectedGroup = topicData.find(
-			group => group.topicgroupname === courseTopicGroup,
-		);
-		setSelectedGroupTopics(
-			selectedGroup ? selectedGroup.topics.split(',') : [],
-		);
-	}, [courseTopicGroup, topicData]);
+
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 
@@ -94,17 +61,6 @@ const TeacherCreateCourse: React.FC = () => {
 		}
 	};
 
-	useEffect(() => {
-		apiHooks.getAllTopicGroupsAndTopicsInsideThem().then(data => {
-			return setTopicData(data);
-		});
-	}, []);
-
-	useEffect(() => {
-		if (topicData.length > 0) {
-			setCourseTopicGroup(topicData[0].topicgroupname);
-		}
-	}, [topicData]);
 	return (
 		<div className="flex flex-col p-5 items-center justify-center min-h-1/2 bg-gray-100">
 			<h1 className="text-4xl font-bold mb-8">Create Course</h1>
@@ -142,54 +98,7 @@ const TeacherCreateCourse: React.FC = () => {
 					</fieldset>
 				)}
 
-				{currentStep === 2 && (
-					<fieldset>
-						<legend>Topic Details</legend>
-						<select
-							title="Select Course Topic Group"
-							value={courseTopicGroup}
-							onChange={e => setCourseTopicGroup(e.target.value)}
-							className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-						>
-							{topicData.map((group, index) => (
-								<option key={index} value={group.topicgroupname}>
-									{group.topicgroupname}
-								</option>
-							))}
-						</select>
-						<select
-							title="Select Course Topics"
-							multiple
-							value={courseTopics}
-							onChange={handleTopicChange}
-							className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-						>
-							{selectedGroupTopics.map((topic, index) => (
-								<option key={index} value={topic}>
-									{topic}
-								</option>
-							))}
-						</select>
-						{customTopics.map((topic, index) => (
-							<input
-								key={index}
-								type="text"
-								placeholder="Custom Topic"
-								value={topic}
-								onChange={e => handleCustomTopicChange(index, e.target.value)}
-								className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-								title='add custom topics here example: "exam"'
-							/>
-						))}
-						<button
-							type="button"
-							onClick={addCustomTopic}
-							className="mb-3 w-full p-2 bg-metropoliaMainOrange text-white rounded hover:bg-metropoliaSecondaryOrange"
-						>
-							Add Custom Topic
-						</button>
-					</fieldset>
-				)}
+				{currentStep === 2 && <TopicGroupAndTopicsSelector />}
 
 				{currentStep === 3 && (
 					<fieldset>
