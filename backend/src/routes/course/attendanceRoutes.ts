@@ -1,6 +1,7 @@
 // attendanceRoutes.ts
-import express, {Request, Response, Router} from 'express';
+import express, { Request, Response, Router } from 'express';
 import Attendance from '../../models/attendancemodel.js'; // Adjust the path according to your project structure
+import Class from '../../models/classmodel.js';
 
 const router: Router = express.Router();
 
@@ -48,5 +49,16 @@ router.post('/', async (req: Request, res: Response) => {
 		res.status(500).send('Server error');
 	}
 });
+router.post('/class/', async (req: Request, res: Response) => {
+	try {
+		const {topicname, coursecode, start_date, end_date} = req.body;
+		
+		await Class.insertIntoClass(topicname, coursecode, start_date,end_date);
+		res.status(201).send('Class created');
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server error');
+	}
+}
 
 export default router;

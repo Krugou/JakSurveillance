@@ -16,8 +16,8 @@ interface ClassModel {
 	insertIntoClass(
 		start_date: Date,
 		end_date: Date,
-		topicid: number,
-		usercourseid: number,
+		topicname: string,
+		coursecode: string,
 	): Promise<void>;
 	updateClassDates(id: number, start_date: Date, end_date: Date): Promise<void>;
 	deleteByClassId(id: number): Promise<void>;
@@ -48,26 +48,42 @@ const Class: ClassModel = {
 		}
 	},
 
-	async insertIntoClass(start_date, end_date, topicid, usercourseid) {
+	async insertIntoClass(
+		topicname: string,
+		coursecode: string,
+		start_date: Date,
+		end_date: Date,
+	) {
 		try {
-			await pool
+			const [topicRows] = await pool
 				.promise()
-				.query(
-					'INSERT INTO class (start_date, end_date, topicid, usercourseid) VALUES (?, ?, ?, ?)',
-					[start_date, end_date, topicid, usercourseid],
-				);
-		} catch (error) {
-			console.error(error);
-		}
-	},
+				.query<RowDataPacket[]>('SELECT topicid FROM topics WHERE topicname = ?', [
+					topicname,
+				]);
+			console.log('🚀 ~ file: classmodel.ts:63 ~ topicRows:', topicRows);
 
-	async updateClassDates(id, start_date, end_date) {
-		try {
+			const [courseRows] = await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT courseid FROM courses WHERE code = ?', [
+					coursecode,
+				]);
+			console.log('🚀 ~ file: classmodel.ts:70 ~ courseRows:', courseRows);
+
+			if (topicRows.length === 0 || courseRows.length === 0) {
+				console.error(`Topic or course does not exist`);
+				return;
+			}
+
+			const topicid = topicRows[0].topicid;
+			console.log('🚀 ~ file: classmodel.ts:78 ~ topicid:', topicid);
+			const courseid = courseRows[0].courseid;
+			console.log('🚀 ~ file: classmodel.ts:80 ~ courseid:', courseid);
+
 			await pool
 				.promise()
 				.query(
-					'UPDATE class SET start_date = ?, end_date = ? WHERE classid = ?',
-					[start_date, end_date, id],
+					'INSERT INTO class (start_date, end_date, topicid, courseid) VALUES (?, ?, ?, ?)',
+					[start_date, end_date, topicid, courseid],
 				);
 		} catch (error) {
 			console.error(error);
@@ -97,9 +113,7 @@ const Class: ClassModel = {
 		try {
 			const [rows] = await pool
 				.promise()
-				.query<RowDataPacket[]>('SELECT * FROM class WHERE topicid = ?', [
-					topicid,
-				]);
+				.query<RowDataPacket[]>('SELECT * FROM class WHERE topicid = ?', [topicid]);
 			return rows as Class[];
 		} catch (error) {
 			console.error(error);
