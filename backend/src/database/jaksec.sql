@@ -41,19 +41,15 @@ CREATE TABLE IF NOT EXISTS `class` (
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
   `topicid` int(11) NOT NULL,
+  `courseid` int(11) NOT NULL,
   PRIMARY KEY (`classid`),
   KEY `topicid` (`topicid`),
-  CONSTRAINT `class_ibfk_1` FOREIGN KEY (`topicid`) REFERENCES `topics` (`topicid`)
+  KEY `courseid` (`courseid`),
+  CONSTRAINT `class_ibfk_1` FOREIGN KEY (`topicid`) REFERENCES `topics` (`topicid`),
+  CONSTRAINT `class_ibfk_2` FOREIGN KEY (`courseid`) REFERENCES `courses` (`courseid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `coursesclasses` (
-  `classid` int(11) NOT NULL,
-  `courseid` int(11) NOT NULL,
-  KEY `classid` (`classid`),
-  KEY `courseid` (`courseid`),
-  CONSTRAINT `courses_classes_ibfk_1` FOREIGN KEY (`classid`) REFERENCES `class` (`classid`),
-  CONSTRAINT `courses_classes_ibfk_2` FOREIGN KEY (`courseid`) REFERENCES `courses` (`courseid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 -- Dumping data for table jaksec.class: ~0 rows (suunnilleen)
 /*!40000 ALTER TABLE `class` DISABLE KEYS */;
