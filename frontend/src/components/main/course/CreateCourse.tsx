@@ -9,11 +9,23 @@ const CreateCourse: React.FC = () => {
 	const [courseCode, setCourseCode] = useState('');
 	const [studentGroup, setStudentGroup] = useState('');
 	const [startDate, setStartDate] = useState('');
-
+	const [selectedFile, setSelectedFile] = useState<string>('No file selected');
+	const [uploadFile, setUploadFile] = useState<string>(
+		'Click here to upload a file',
+	);
 	const [endDate, setEndDate] = useState('');
 	const [topicsFormData, setTopicsFormData] = useState<any>([]);
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setFile(event.target.files ? event.target.files[0] : null);
+		const selectedFile = event.target.files?.[0];
+		if (selectedFile) {
+			setFile(selectedFile);
+			setUploadFile('File uploaded click again to change');
+			setSelectedFile(selectedFile.name);
+			// ... rest of the code
+		} else {
+			setUploadFile('Upload a file');
+			setSelectedFile('No file selected');
+		}
 	};
 
 	const [shouldCheckDetails, setShouldCheckDetails] = useState(true);
@@ -153,23 +165,21 @@ const CreateCourse: React.FC = () => {
 				{currentStep === 3 && (
 					<fieldset>
 						<legend>File Upload</legend>
-						<label className="w-full mb-2 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white">
-							<svg
-								className="w-8 h-8"
-								fill="currentColor"
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 20 20"
-							>
+						<label className="w-full mb-2 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white transition-colors duration-300 ease-in-out">
+							<svg className="w-8 h-8 fill-current" viewBox="0 0 20 20">
 								<path d="M10 4a2 2 0 00-2 2v4a2 2 0 104 0V6a2 2 0 00-2-2zm0 12a6 6 0 100-12 6 6 0 000 12z" />
 							</svg>
-							<span className="mt-2 text-base leading-normal">
-								Select a file
+							<span className="mt-2 text-base font-medium leading-normal">
+								{uploadFile}
 							</span>
 							<input
 								type="file"
 								className="hidden"
 								onChange={handleFileChange}
 							/>
+							<div className="w-full p-2 mt-2 bg-gray-100 text-gray-500 rounded-lg">
+								{selectedFile}
+							</div>
 						</label>
 					</fieldset>
 				)}
