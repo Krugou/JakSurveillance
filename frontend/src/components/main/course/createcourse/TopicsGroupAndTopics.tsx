@@ -2,14 +2,10 @@ import React, {useEffect, useState} from 'react';
 import apiHooks from '../../../../hooks/ApiHooks';
 
 interface Props {
-	topicsFormData: any;
 	setTopicsFormData: React.Dispatch<React.SetStateAction<any>>;
 }
 
-const TopicGroupAndTopicsSelector: React.FC<Props> = ({
-	topicsFormData,
-	setTopicsFormData,
-}) => {
+const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 	const [topicData, setTopicData] = useState<any>([]);
 	const [courseTopicGroup, setCourseTopicGroup] = useState('');
 	const [selectedGroupTopics, setSelectedGroupTopics] = useState([]);
