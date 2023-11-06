@@ -74,9 +74,7 @@ const Course: CourseModel = {
 		try {
 			const [rows] = await pool
 				.promise()
-				.query<RowDataPacket[]>('SELECT * FROM courses WHERE courseid = ?', [
-					id,
-				]);
+				.query<RowDataPacket[]>('SELECT * FROM courses WHERE courseid = ?', [id]);
 			return (rows[0] as Course) || null;
 		} catch (error) {
 			console.error(error);
@@ -129,9 +127,7 @@ const Course: CourseModel = {
 
 			if (existingInstructor.length === 0) {
 				return Promise.reject(
-					new Error(
-						'Instructor email not found or the user is not a staff member',
-					),
+					new Error('Instructor email not found or the user is not a staff member'),
 				);
 			}
 
@@ -161,15 +157,10 @@ const Course: CourseModel = {
 					.toISOString()
 					.slice(0, 19)
 					.replace('T', ' ');
-				const endDateString = end_date
-					.toISOString()
-					.slice(0, 19)
-					.replace('T', ' ');
+				const endDateString = end_date.toISOString().slice(0, 19).replace('T', ' ');
 				const [existingCourse] = await pool
 					.promise()
-					.query<RowDataPacket[]>('SELECT * FROM courses WHERE code = ?', [
-						code,
-					]);
+					.query<RowDataPacket[]>('SELECT * FROM courses WHERE code = ?', [code]);
 
 				if (existingCourse.length > 0) {
 					throw new Error('Course already exists');
@@ -197,52 +188,54 @@ const Course: CourseModel = {
 					try {
 						const [existingUserByNumber] = await pool
 							.promise()
-							.query<RowDataPacket[]>(
-								'SELECT * FROM users WHERE studentnumber = ?',
-								[student.studentnumber],
-							);
+							.query<RowDataPacket[]>('SELECT * FROM users WHERE studentnumber = ?', [
+								student.studentnumber,
+							]);
+
+						let userId: number;
 
 						if (existingUserByNumber.length > 0) {
 							console.error('User with this student number already exists');
-							continue;
-						}
-
-						const [existingUserByEmail] = await pool
-							.promise()
-							.query<RowDataPacket[]>('SELECT * FROM users WHERE email = ?', [
-								student.email,
-							]);
-
-						if (existingUserByEmail.length > 0) {
-							await pool
+							userId = existingUserByNumber[0].id;
+						} else {
+							const [existingUserByEmail] = await pool
 								.promise()
-								.query('UPDATE users SET studentnumber = ? WHERE email = ?', [
-									student.studentnumber,
+								.query<RowDataPacket[]>('SELECT * FROM users WHERE email = ?', [
 									student.email,
 								]);
-						} else {
-							const [userResult] = await pool
-								.promise()
-								.query<ResultSetHeader>(
-									'INSERT INTO users ( email, first_name, last_name, studentnumber, studentgroupid) VALUES ( ?, ?, ?, ?, ?)',
-									[
-										student.email,
-										student.first_name,
-										student.last_name,
+
+							if (existingUserByEmail.length > 0) {
+								await pool
+									.promise()
+									.query('UPDATE users SET studentnumber = ? WHERE email = ?', [
 										student.studentnumber,
-										studentGroupId,
-									],
-								);
+										student.email,
+									]);
+								userId = existingUserByEmail[0].id;
+							} else {
+								const [userResult] = await pool
+									.promise()
+									.query<ResultSetHeader>(
+										'INSERT INTO users ( email, first_name, last_name, studentnumber, studentgroupid) VALUES ( ?, ?, ?, ?, ?)',
+										[
+											student.email,
+											student.first_name,
+											student.last_name,
+											student.studentnumber,
+											studentGroupId,
+										],
+									);
 
-							const userId = userResult.insertId;
-
-							await pool
-								.promise()
-								.query(
-									'INSERT INTO usercourses (userid, courseid) VALUES (?, ?)',
-									[userId, courseId],
-								);
+								userId = userResult.insertId;
+							}
 						}
+
+						await pool
+							.promise()
+							.query('INSERT INTO usercourses (userid, courseid) VALUES (?, ?)', [
+								userId,
+								courseId,
+							]);
 					} catch (error) {
 						console.error(error);
 					}
@@ -274,19 +267,17 @@ const Course: CourseModel = {
 							for (const topic of topicslist) {
 								const [existingCourseTopic] = await pool
 									.promise()
-									.query<RowDataPacket[]>(
-										'SELECT * FROM topics WHERE topicname = ?',
-										[topic],
-									);
+									.query<RowDataPacket[]>('SELECT * FROM topics WHERE topicname = ?', [
+										topic,
+									]);
 								let topicId = 0;
 								if (existingCourseTopic.length === 0) {
 									console.error(`Topic ${topic} does not exist`);
 									const [topicResult] = await pool
 										.promise()
-										.query<ResultSetHeader>(
-											'INSERT INTO topics (topicname) VALUES (?)',
-											[topic],
-										);
+										.query<ResultSetHeader>('INSERT INTO topics (topicname) VALUES (?)', [
+											topic,
+										]);
 									topicId = topicResult.insertId;
 
 									await pool
@@ -325,10 +316,10 @@ const Course: CourseModel = {
 								if (existingCourseTopicRelation.length === 0) {
 									await pool
 										.promise()
-										.query(
-											'INSERT INTO coursetopics (courseid, topicid) VALUES (?, ?)',
-											[courseId, topicId],
-										);
+										.query('INSERT INTO coursetopics (courseid, topicid) VALUES (?, ?)', [
+											courseId,
+											topicId,
+										]);
 								}
 							}
 						}
@@ -347,9 +338,7 @@ const Course: CourseModel = {
 	},
 	async deleteByCourseId(id) {
 		try {
-			await pool
-				.promise()
-				.query('DELETE FROM courses WHERE courseid = ?', [id]);
+			await pool.promise().query('DELETE FROM courses WHERE courseid = ?', [id]);
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
