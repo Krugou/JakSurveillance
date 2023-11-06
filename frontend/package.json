@@ -16,8 +16,6 @@
 		"alldev": "npm i & vite --port 8080"
 	},
 	"dependencies": {
-		"@tanstack/react-query": "^5.4.3",
-		"@tanstack/react-router": "^0.0.1-beta.198",
 		"date-fns": "^2.30.0",
 		"html5-qrcode": "^2.3.8",
 		"localforage": "^1.10.0",
@@ -31,7 +29,6 @@
 		"sort-by": "^1.2.0"
 	},
 	"devDependencies": {
-		"@tanstack/eslint-plugin-query": "^5.0.5",
 		"@types/react": "^18.2.15",
 		"@types/react-dom": "^18.2.7",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
