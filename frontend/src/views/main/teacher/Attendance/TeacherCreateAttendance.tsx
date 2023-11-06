@@ -4,20 +4,34 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import MainViewButton from '../../../../components/main/buttons/MainViewButton';
 import data from '../../../../data/extradatafordev';
+import apihooks from '../../../../hooks/ApiHooks';
+interface Course {
+	courseid: string;
+	name: string;
+	code: string;
+	topic_names: string;
+}
 const CreateAttendance: React.FC = () => {
+	const [courses, setCourses] = useState<Course[]>([]);
 	const [date, setDate] = useState<Date | Date[]>(new Date());
 	const [calendarOpen, setCalendarOpen] = useState(false);
 	const [selectedLocation, setSelectedLocation] = useState<string>('');
-	const [selectedSession, setSelectedSession] = useState<string>('');
+	const [selectedSession, setSelectedSession] = useState<string>(
+		courses.length > 0 ? courses[0].courseid : '',
+	);
 	const [selectedParticipant, setSelectedParticipant] = useState<string>('');
+	const [selectedCourse, setSelectedCourse] = useState(null);
 	const [highlightedDates, setHighlightedDates] = useState<Date[]>([]);
-
+	const teacherEmail = 'teacher@metropolia.fi';
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	// test data
 
 	interface Reservation {
 		startDate: string;
 	}
+	useEffect(() => {
+		console.log(`Selected course: ${selectedCourse}`);
+	}, [selectedCourse]);
 	useEffect(() => {
 		const dates = data.reservations.map(
 			(reservation: Reservation) => new Date(reservation.startDate),
@@ -29,7 +43,11 @@ const CreateAttendance: React.FC = () => {
 			inputRef.current?.focus();
 		}
 	}, [calendarOpen]);
-
+	useEffect(() => {
+		apihooks.getAllCoursesByInstructorEmail(teacherEmail).then(data => {
+			setCourses(data);
+		});
+	}, []);
 	const toggleCalendar = () => {
 		setCalendarOpen(prev => !prev);
 	};
@@ -50,60 +68,78 @@ const CreateAttendance: React.FC = () => {
 		return ''; // default return value
 	};
 	const timeOfDay = ['AP', 'IP'];
-const handleDateChangeCalendar = (
-	value: Date | Date[] | null | [Date | null, Date | null],
-) => {
-	if (value) {
-		let date: Date | null = null;
-		if (Array.isArray(value)) {
-			date = value[0];
-		} else {
-			date = value;
-		}
+	const handleDateChangeCalendar = (
+		value: Date | Date[] | null | [Date | null, Date | null],
+	) => {
+		if (value) {
+			let date: Date | null = null;
+			if (Array.isArray(value)) {
+				date = value[0];
+			} else {
+				date = value;
+			}
 
-		if (date) {
-			const formattedDate = formatISO(date, {representation: 'date'});
-			const isHighlighted = highlightedDates.some(
-				dDate => formatISO(dDate, {representation: 'date'}) === formattedDate,
-			);
+			if (date) {
+				const formattedDate = formatISO(date, {representation: 'date'});
+				const isHighlighted = highlightedDates.some(
+					dDate => formatISO(dDate, {representation: 'date'}) === formattedDate,
+				);
 
-			if (isHighlighted) {
-				setDate(date);
-				const hours = date.getHours();
-				setSelectedLocation(hours < 12 ? 'AP' : 'IP');
-				setCalendarOpen(false);
+				if (isHighlighted) {
+					setDate(date);
+					const hours = date.getHours();
+					setSelectedLocation(hours < 12 ? 'AP' : 'IP');
+					setCalendarOpen(false);
+				}
 			}
 		}
-	}
-};
+	};
 	return (
 		<div className="flex flex-col items-center justify-center h-1/2 p-10 bg-gray-100">
 			<h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">
 				Fill in to open the attendance collection
 			</h1>
-			<div className="relative mt-4">
+			<div className="w-1/3">
+				<label htmlFor="course">Course:</label>
 				<select
-					aria-label="Session"
+					id="course"
+					className="block w-full mt-1"
 					value={selectedSession}
-					onChange={e => setSelectedSession(e.target.value)}
-					className="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+					onChange={e => {
+						const selectedCourseId = e.target.value;
+						console.log(
+							'🚀 ~ file: TeacherCreateAttendance.tsx:110 ~ selectedCourseId:',
+							selectedCourseId,
+						);
+						const newValue = parseInt(selectedCourseId, 10) - 1;
+						setSelectedSession(selectedCourseId);
+						setSelectedCourse(courses[newValue] || null);
+					}}
 				>
-					<option value="">Select Course</option>
-					<option value="TX00CG61-3009">TX00CG61-3009</option>
+					{courses.map(course => (
+						<option key={course.courseid} value={course.courseid}>
+							{course.name + ' | ' + course.code}
+						</option>
+					))}
 				</select>
 			</div>
 
-			<div className="relative mt-4">
+			<div className="w-1/3">
+				<label htmlFor="topic">Topic:</label>
 				<select
-					aria-label="Participant"
+					id="topic"
+					className="block w-full mt-1"
 					value={selectedParticipant}
-					onChange={e => setSelectedParticipant(e.target.value)}
-					className="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+					onChange={e => {
+						setSelectedParticipant(e.target.value);
+					}}
 				>
-					<option value="">Select Topic</option>
-					<option value="1">math</option>
-					<option value="2">physics</option>
-					<option value="3">Topic 3</option>
+					{selectedCourse &&
+						selectedCourse.topic_names.split(',').map((topic: string) => (
+							<option key={topic} value={topic}>
+								{topic}
+							</option>
+						))}
 				</select>
 			</div>
 			<h2 className="m-4 p-4">Select desired date</h2>
@@ -117,6 +153,7 @@ const handleDateChangeCalendar = (
 						className="py-2 pl-4 pr-12 rounded border focus:ring focus:ring-blue-300 focus:outline-none"
 						value={Array.isArray(date) ? 'Multiple Dates' : date.toDateString()}
 						onClick={toggleCalendar}
+						onChange={e => setDate(new Date(e.target.value))}
 					/>
 					{calendarOpen && (
 						<div className="absolute top-12 left-0 z-10">

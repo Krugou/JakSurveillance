@@ -66,10 +66,6 @@ const checkIfCourseExists = async (inputs: CourseCheckInputs) => {
 
 const getAllCoursesByInstructorEmail = async (inputs: any) => {
 	const email = inputs;
-	console.log(
-		'🚀 ~ file: ApiHooks.ts:69 ~ getAllCoursesByInstructorEmail ~ inputs:',
-		inputs,
-	);
 
 	const options = {
 		method: 'GET',
