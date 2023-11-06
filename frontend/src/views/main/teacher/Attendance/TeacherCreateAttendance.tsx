@@ -29,9 +29,7 @@ const CreateAttendance: React.FC = () => {
 	interface Reservation {
 		startDate: string;
 	}
-	useEffect(() => {
-		console.log(`Selected course: ${selectedCourse}`);
-	}, [selectedCourse]);
+
 	useEffect(() => {
 		const dates = data.reservations.map(
 			(reservation: Reservation) => new Date(reservation.startDate),
@@ -94,6 +92,12 @@ const CreateAttendance: React.FC = () => {
 			}
 		}
 	};
+	useEffect(() => {
+		if (courses.length > 0) {
+			setSelectedCourse(courses[0]);
+			setSelectedParticipant(courses[0].topic_names.split(',')[0]);
+		}
+	}, [courses]);
 	return (
 		<div className="flex flex-col items-center justify-center h-1/2 p-10 bg-gray-100">
 			<h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">
