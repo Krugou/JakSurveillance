@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import apiHooks from '../../../hooks/ApiHooks';
 import TopicGroupAndTopicsSelector from './createcourse/TopicsGroupAndTopics';
 // this is view for teacher to create the course
@@ -8,10 +8,10 @@ const CreateCourse: React.FC = () => {
 	const [file, setFile] = useState<File | null>(null);
 	const [courseCode, setCourseCode] = useState('');
 	const [studentGroup, setStudentGroup] = useState('');
+	const [startDate, setStartDate] = useState('');
 
-	const [topicsFormData, setTopicsFormData] = useState<any>({
-		group: {topicgroupname: '', topics: []},
-	});
+	const [endDate, setEndDate] = useState('');
+	const [topicsFormData, setTopicsFormData] = useState<any>([]);
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setFile(event.target.files ? event.target.files[0] : null);
 	};
@@ -38,7 +38,10 @@ const CreateCourse: React.FC = () => {
 
 			console.log('Course details exist');
 		}
-
+		console.log(
+			'🚀 ~ file: CreateCourse.tsx:42 ~ handleSubmit ~ topicsFormData.group:',
+			topicsFormData,
+		);
 		// If both checks pass, create the course
 		if (file) {
 			const formData = new FormData();
@@ -46,18 +49,18 @@ const CreateCourse: React.FC = () => {
 			formData.append('courseName', courseName);
 			formData.append('courseCode', courseCode);
 			formData.append('studentGroup', studentGroup);
-			formData.append('topics', JSON.stringify(topicsFormData.group.topics));
-			formData.append('topicgroup', JSON.stringify(topicsFormData.group));
-
+			// for  dev testing purposes
+			// formData.append('courseName', 'Mediapalvelut-projekti');
+			// formData.append('courseCode', 'TX00CG61-3009');
+			// formData.append('studentGroup', 'tvt21-m');
+			formData.append('topicGroup', topicsFormData.topicgroup);
+			formData.append('topics', topicsFormData.topics);
+			formData.append('instructorEmail', 'teacher@metropolia.fi'); // get email from userContext
+			formData.append('checkCourseDetails', shouldCheckDetails.toString());
+			formData.append('startDate', startDate);
+			formData.append('endDate', endDate);
 			// Use the createCourse function here
-			const response = await apiHooks.createCourse({
-				courseName,
-				courseCode,
-				studentGroup,
-				topics,
-				topicgroup,
-				file,
-			});
+			const response = await apiHooks.createCourse({formData});
 
 			if (response.ok) {
 				console.log('Course created successfully');
@@ -68,6 +71,9 @@ const CreateCourse: React.FC = () => {
 			}
 		}
 	};
+	useEffect(() => {
+		console.log(topicsFormData);
+	}, [topicsFormData]);
 
 	return (
 		<div className="flex flex-col p-5 items-center justify-center min-h-1/2 bg-gray-100">
@@ -87,6 +93,7 @@ const CreateCourse: React.FC = () => {
 							className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
 							title="Enter the course name here example: Mediapalvelut-projekti"
 						/>
+
 						<input
 							type="text"
 							placeholder="Course Code"
@@ -103,6 +110,25 @@ const CreateCourse: React.FC = () => {
 							className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
 							title="Enter the student group here example: tvt21-m"
 						/>
+						{!shouldCheckDetails && (
+							<>
+								<input
+									type="datetime-local"
+									value={startDate}
+									onChange={e => setStartDate(e.target.value)}
+									className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+									title="Enter the start date and time for the course"
+								/>
+
+								<input
+									type="datetime-local"
+									value={endDate}
+									onChange={e => setEndDate(e.target.value)}
+									className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+									title="Enter the end date and time for the course"
+								/>
+							</>
+						)}
 					</fieldset>
 				)}
 

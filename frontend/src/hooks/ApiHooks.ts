@@ -32,25 +32,11 @@ const postLogin = async (inputs: LoginInputs) => {
 	return await doFetch(baseUrl + 'users', options);
 };
 interface CreateCourseInputs {
-	courseName: string;
-	courseCode: string;
-	studentGroup: string;
-	topics: string;
-	topicgroup: string;
-	file: File;
+	formData: FormData;
 }
 
 const createCourse = async (inputs: CreateCourseInputs) => {
-	const {courseName, courseCode, studentGroup, topics,topicgroup, file} = inputs;
-
-	const formData = new FormData();
-	formData.append('courseName', courseName);
-	formData.append('courseCode', courseCode);
-	formData.append('studentGroup', studentGroup);
-	formData.append('topics', topics);
-	formData.append('topicgroup', topicgroup);
-	formData.append('file', file);
-
+	const {formData} = inputs;
 	const options: RequestInit = {
 		method: 'POST',
 		body: formData,

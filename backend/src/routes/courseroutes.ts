@@ -31,11 +31,15 @@ router.post('/check', express.json(), async (req: Request, res: Response) => {
 
 		// Check if message is "No results"
 		if ((data as any).message === 'No results') {
-			res.status(404).send('No results');
+			res.status(404).json({
+				exists: false,
+			});
 			return;
 		}
 
-		res.status(200).json(data as Record<string, unknown>); // send the data as the response
+		res.status(200).json({
+			exists: true,
+		}); // send the data as the response
 	} catch (error) {
 		console.error('Error:', error);
 		res.status(500).send('Internal server error');
@@ -44,16 +48,21 @@ router.post('/check', express.json(), async (req: Request, res: Response) => {
 router.post('/create', upload.single('file'), async (req, res) => {
 	console.log('Received request'); // Debugging line
 	console.log(req.body); // Debugging line
+
 	const {
 		courseName,
 		courseCode,
 		studentGroup,
-		topicgroup,
+		topicGroup,
 		topics,
-		instructoremail,
+		instructorEmail,
+		checkCourseDetails,
 	} = req.body;
+	let startDate = req.body.startDate;
+	let endDate = req.body.endDate;
 
-	console.log(topicgroup);
+	console.log(checkCourseDetails);
+	console.log(topicGroup);
 	console.log(topics);
 
 	// console.log('Request body:', req.body); // Debugging line
@@ -138,17 +147,19 @@ router.post('/create', upload.single('file'), async (req, res) => {
 	const code = courseCode;
 	const data = await openData.checkOpenDataRealization(code);
 
-	// Extract startDate and endDate from data and convert them to Date objects
-	const startDate = new Date(data.realizations[0].startDate);
-	// console.log(
-	// 	'🚀 ~ file: courseroutes.ts:122 ~ router.post ~ startDate:',
-	// 	startDate,
-	// );
-	const endDate = new Date(data.realizations[0].endDate);
-	// console.log(
-	// 	'🚀 ~ file: courseroutes.ts:126 ~ router.post ~ endDate:',
-	// 	endDate,
-	// );
+	if (checkCourseDetails === 'true') {
+		// Extract startDate and endDate from data and convert them to Date objects
+		startDate = new Date(data.realizations[0].startDate);
+		// console.log(
+		// 	'🚀 ~ file: courseroutes.ts:122 ~ router.post ~ startDate:',
+		// 	startDate,
+		// );
+		endDate = new Date(data.realizations[0].endDate);
+		// console.log(
+		// 	'🚀 ~ file: courseroutes.ts:126 ~ router.post ~ endDate:',
+		// 	endDate,
+		// );
+	}
 	// console.table(mappedData);
 	try {
 		await course.insertIntoCourse(
@@ -158,9 +169,9 @@ router.post('/create', upload.single('file'), async (req, res) => {
 			courseCode,
 			studentGroup,
 			mappedData,
-			instructoremail,
+			instructorEmail,
 			topics,
-			topicgroup,
+			topicGroup,
 		);
 		res
 			.status(200)
