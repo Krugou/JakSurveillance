@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import apiHooks from '../../../../hooks/ApiHooks';
+import apiHooks from '../../../hooks/ApiHooks';
 import TopicGroupAndTopicsSelector from './createcourse/TopicsGroupAndTopics';
 // this is view for teacher to create the course
 const CreateCourse: React.FC = () => {
