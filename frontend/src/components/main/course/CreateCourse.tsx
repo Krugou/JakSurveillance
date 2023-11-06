@@ -156,10 +156,7 @@ const CreateCourse: React.FC = () => {
 				)}
 
 				{currentStep === 2 && (
-					<TopicGroupAndTopicsSelector
-						topicsFormData={topicsFormData}
-						setTopicsFormData={setTopicsFormData}
-					/>
+					<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
 				)}
 
 				{currentStep === 3 && (
