@@ -288,20 +288,31 @@ const Course: CourseModel = {
 										);
 								} else {
 									// Handle the case where the topic exists
-									const topicId = existingCourseTopic[0].topicid;
-									await pool
+									topicId = existingCourseTopic[0].topicid;
+
+									const [existingTopicInGroup] = await pool
 										.promise()
-										.query(
-											'INSERT INTO topicsingroup (topicgroupid, topicid) VALUES (?, ?)',
+										.query<RowDataPacket[]>(
+											'SELECT * FROM topicsingroup WHERE topicgroupid = ? AND topicid = ?',
 											[topicGroupId, topicId],
 										);
+									if (existingTopicInGroup.length === 0) {
+										await pool
+											.promise()
+											.query(
+												'INSERT INTO topicsingroup (topicgroupid, topicid) VALUES (?, ?)',
+												[topicGroupId, topicId],
+											);
+									}
 								}
+
 								const [existingCourseTopicRelation] = await pool
 									.promise()
 									.query<RowDataPacket[]>(
 										'SELECT * FROM coursetopics WHERE courseid = ? AND topicid = ?',
 										[courseId, topicId],
 									);
+
 								if (existingCourseTopicRelation.length === 0) {
 									await pool
 										.promise()
