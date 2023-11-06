@@ -50,10 +50,11 @@ interface CourseModel {
 		code: string,
 		studentgroupid: number,
 	) => Promise<void>;
-	countCourses: () => Promise<number>;
 	findByCode: (code: string) => Promise<Course | null>;
 	checkIfCourseExists: (code: string) => Promise<boolean>;
-	getCoursesByInstructorEmail: (email: string) => Promise<Course[]>;
+	getCoursesByInstructorEmail(email: string): Promise<Course[]>;
+	countCourses(): Promise<number>;
+	getCoursesByCourseId(courseId: number): Promise<Course[]>;
 	// Add other methods here...
 }
 const Course: CourseModel = {
@@ -84,12 +85,20 @@ const Course: CourseModel = {
 	},
 	async getCoursesByInstructorEmail(email) {
 		try {
-			const [rows] = await pool
-				.promise()
-				.query<RowDataPacket[]>(
-					'SELECT courses.* FROM courses JOIN courseinstructors ON courses.courseid = courseinstructors.courseid JOIN users ON courseinstructors.userid = users.userid WHERE users.email = ?',
-					[email],
-				);
+			const [rows] = await pool.promise().query<RowDataPacket[]>(
+				`SELECT courses.*, studentgroups.group_name AS studentgroup_name, 
+              GROUP_CONCAT(topics.topicname) AS topic_names
+          FROM courses
+          JOIN courseinstructors ON courses.courseid = courseinstructors.courseid
+          JOIN users ON courseinstructors.userid = users.userid
+          LEFT JOIN studentgroups ON courses.studentgroupid = studentgroups.studentgroupid
+          LEFT JOIN coursetopics ON courses.courseid = coursetopics.courseid
+          LEFT JOIN topics ON coursetopics.topicid = topics.topicid
+          WHERE users.email = ?
+          GROUP BY courses.courseid`,
+				[email],
+			);
+
 			return rows as Course[];
 		} catch (error) {
 			console.error(error);
@@ -403,7 +412,27 @@ const Course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
+	async getCoursesByCourseId(courseId) {
+		try {
+			console.log('something is happening');
+			const [rows] = await pool.promise().query<RowDataPacket[]>(
+				`SELECT courses.*, studentgroups.group_name AS studentgroup_name, 
+              GROUP_CONCAT(topics.topicname) AS topic_names
+          FROM courses
+          JOIN studentgroups ON courses.studentgroupid = studentgroups.studentgroupid
+          LEFT JOIN coursetopics ON courses.courseid = coursetopics.courseid
+          LEFT JOIN topics ON coursetopics.topicid = topics.topicid
+          WHERE courses.courseid = ?
+          GROUP BY courses.courseid`,
+				[courseId],
+			);
 
+			return rows as Course[];
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
 	// other methods...
 };
 
