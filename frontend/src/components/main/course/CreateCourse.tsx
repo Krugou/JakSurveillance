@@ -97,6 +97,14 @@ const CreateCourse: React.FC = () => {
 						<legend>Course Details</legend>
 						<input
 							type="text"
+							placeholder="Course Code"
+							value={courseCode}
+							onChange={e => setCourseCode(e.target.value)}
+							className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+							title="Enter the course code here example: TX00CG61-3009"
+						/>
+						<input
+							type="text"
 							placeholder="Course Name"
 							value={courseName}
 							onChange={e => setCourseName(e.target.value)}
@@ -104,14 +112,6 @@ const CreateCourse: React.FC = () => {
 							title="Enter the course name here example: Mediapalvelut-projekti"
 						/>
 
-						<input
-							type="text"
-							placeholder="Course Code"
-							value={courseCode}
-							onChange={e => setCourseCode(e.target.value)}
-							className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-							title="Enter the course code here example: TX00CG61-3009"
-						/>
 						<input
 							type="text"
 							placeholder="Student Group"
