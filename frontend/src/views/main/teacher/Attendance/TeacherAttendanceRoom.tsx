@@ -5,8 +5,10 @@ import {io} from 'socket.io-client';
 const socket = io('http://localhost:3002/');
 const AttendanceRoom: React.FC = () => {
 	const {classid} = useParams<{classid: string}>();
+	const [servertime, setServertime] = useState('');
 
 	console.log('🚀 ~ file: TeacherAttendanceRoom.tsx:8 ~ classid:', classid);
+
 	const [hashValue, setHashValue] = useState('');
 	const attendees = [
 		'oppilas 1',
@@ -22,10 +24,15 @@ const AttendanceRoom: React.FC = () => {
 		socket.emit('getCurrentHashForQrGenerator', classid);
 		socket.on(
 			'getCurrentHashForQrGeneratorServingHashAndChangeTime',
-			(hash, changeTime) => {
+			(hash, changeTime, classid, servertime) => {
 				setHashValue(hash);
-				// console.log(hash);
-				// console.log(changeTime);
+
+				setServertime(
+					new Date(servertime).toLocaleString(undefined, {
+						dateStyle: 'full',
+						timeStyle: 'medium',
+					}),
+				);
 			},
 		);
 		socket.on('disconnect', () => {
@@ -45,7 +52,7 @@ const AttendanceRoom: React.FC = () => {
 							viewBox={`0 0 256 256`}
 						/>
 					</div>
-					<p>Date</p>
+					{servertime && <p className="text-sm">Server time: {servertime}</p>}
 				</div>
 				<div className="text-md sm:text-xl mb-4">
 					<h2 className="text-lg font-bold mb-2">List of Attendees:</h2>

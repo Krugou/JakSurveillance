@@ -1,13 +1,11 @@
 import {FieldPacket, RowDataPacket} from 'mysql2';
 import pool from '../database/db.js';
-
 interface Class {
 	classid: number;
 	start_date: Date;
 	end_date: Date;
 	topicid: number;
-	usercourseid: number;
-	// other fields...
+	courseid: number;
 }
 
 interface ClassModel {
@@ -37,13 +35,11 @@ const Class: ClassModel = {
 		}
 	},
 
-	async findByClassIdAndGetAllUserInLinkedCourse(
-		classid: number,
-	): Promise<User[]> {
+	async findByClassIdAndGetAllUserInLinkedCourse(classid: number) {
 		try {
 			const [classRows] = await pool
 				.promise()
-				.query<Class[]>('SELECT * FROM class WHERE classid = ?', [classid]);
+				.query('SELECT * FROM class WHERE classid = ?', [classid]);
 			const classData = classRows[0];
 			if (!classData) {
 				return Promise.reject(`Class with classid ${classid} not found`);
@@ -51,9 +47,7 @@ const Class: ClassModel = {
 
 			const [courseRows] = await pool
 				.promise()
-				.query<Course[]>('SELECT * FROM courses WHERE courseid = ?', [
-					classData.courseid,
-				]);
+				.query('SELECT * FROM courses WHERE courseid = ?', [classData.courseid]);
 			const courseData = courseRows[0];
 			if (!courseData) {
 				return Promise.reject(
@@ -63,7 +57,7 @@ const Class: ClassModel = {
 
 			const [userRows] = await pool
 				.promise()
-				.query<User[]>(
+				.query(
 					'SELECT u.* FROM users u JOIN usercourses uc ON u.userid = uc.userid WHERE uc.courseid = ?',
 					[courseData.courseid],
 				);

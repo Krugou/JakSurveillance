@@ -28,6 +28,7 @@ updateHash();
 setInterval(updateHash, speedOfHashChange);
 // handle new socket.io connections
 let SelectedClassid = '';
+
 const setupSocketHandlers = (io: any) => {
 	io.on('connection', (socket: any) => {
 		console.log('a user connected');
@@ -37,15 +38,18 @@ const setupSocketHandlers = (io: any) => {
 		});
 		socket.on('getCurrentHashForQrGenerator', classid => {
 			// Emit the event every `speedOfHashChange` milliseconds
+			const servertime = new Date();
 			const intervalId = setInterval(() => {
 				socket.emit(
 					'getCurrentHashForQrGeneratorServingHashAndChangeTime',
 					hash,
 					speedOfHashChange,
+					classid,
+					servertime.getTime(),
 				);
 			}, speedOfHashChange);
 			SelectedClassid = classid;
-			
+
 			// Clear the interval when the socket disconnects
 			socket.on('disconnect', () => {
 				clearInterval(intervalId);
