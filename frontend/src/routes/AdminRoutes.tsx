@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Login from '../views/main/Login.tsx';
 import AdminMainView from '../views/main/admin/AdminMainView.tsx';
+import AdminCoursesRoutes from "./admin/AdminCourseRoutes";
 
 
 const AdminRoutes = () => {
@@ -16,6 +17,7 @@ const AdminRoutes = () => {
                 }
             />
             <Route path='mainview' element={<AdminMainView />} />
+            <Route path='courses/*' element={<AdminCoursesRoutes/>} />
         </Routes>
     );
 };

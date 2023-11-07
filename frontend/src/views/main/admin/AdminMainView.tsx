@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import MainViewButton from "../../../components/main/buttons/MainViewButton";
 
 interface Course {
     id: string;
@@ -36,6 +37,7 @@ const AdminMainView: React.FC = () => {
                     />
                 </div>
             ))}
+            <MainViewButton path='/admin/courses/' text='View Courses' />
         </div>
     );
 };
