@@ -51,10 +51,16 @@ router.post('/', async (req: Request, res: Response) => {
 });
 router.post('/class/', async (req: Request, res: Response) => {
 	try {
-		const {topicname, coursecode, start_date, end_date} = req.body;
-
-		await Class.insertIntoClass(topicname, coursecode, start_date, end_date);
-		res.status(201).send('Class created');
+		const {topicname, coursecode, start_date, end_date, timeofday} = req.body;
+		console.log(req.body);
+		const classid = await Class.insertIntoClass(
+			topicname,
+			coursecode,
+			start_date,
+			end_date,
+			timeofday,
+		);
+		res.status(201).json({message: 'class created', classid});
 	} catch (err) {
 		console.error(err);
 		res.status(500).send('Server error');

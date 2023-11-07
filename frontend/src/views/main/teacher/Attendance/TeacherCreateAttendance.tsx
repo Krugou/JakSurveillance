@@ -2,7 +2,8 @@ import {formatISO} from 'date-fns';
 import React, {useEffect, useRef, useState} from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import MainViewButton from '../../../../components/main/buttons/MainViewButton';
+import {useNavigate} from 'react-router-dom';
+
 import apihooks from '../../../../hooks/ApiHooks';
 interface Course {
 	courseid: string;
@@ -11,6 +12,7 @@ interface Course {
 	topic_names: string;
 }
 const CreateAttendance: React.FC = () => {
+	const navigate = useNavigate();
 	const [courses, setCourses] = useState<Course[]>([]);
 	const [date, setDate] = useState<Date | Date[]>(new Date());
 	const [calendarOpen, setCalendarOpen] = useState(false);
@@ -30,7 +32,6 @@ const CreateAttendance: React.FC = () => {
 	}
 	useEffect(() => {
 		apihooks.getCourseReservations(selectedCourse).then(data => {
-			
 			const dates = data.reservations.map(
 				(reservation: Reservation) => new Date(reservation.startDate),
 			);
@@ -67,9 +68,8 @@ const CreateAttendance: React.FC = () => {
 		}
 		return ''; // default return value
 	};
-	useEffect(() => {
-	}, [selectedCourse]);
-	const timeOfDay = ['AP', 'IP'];
+	useEffect(() => {}, [selectedCourse]);
+	const timeOfDay = ['am', 'pm'];
 	const handleDateChangeCalendar = (
 		value: Date | Date[] | null | [Date | null, Date | null],
 	) => {
@@ -90,7 +90,7 @@ const CreateAttendance: React.FC = () => {
 				if (isHighlighted) {
 					setDate(date);
 					const hours = date.getHours();
-					setSelectedLocation(hours < 12 ? 'AP' : 'IP');
+					setSelectedLocation(hours < 12 ? 'am' : 'pm');
 					setCalendarOpen(false);
 				}
 			}
@@ -102,6 +102,40 @@ const CreateAttendance: React.FC = () => {
 			setSelectedParticipant(courses[0].topic_names.split(',')[0]);
 		}
 	}, [courses]);
+
+	const handleOpenAttendance = async () => {
+		if (Array.isArray(date)) {
+			console.error(`Cannot create attendance for multiple dates`);
+			return;
+		}
+
+		if (!selectedLocation) {
+			console.error(`Time of day not selected`);
+			return;
+		}
+
+		const start_date = new Date(date);
+		start_date.setHours(selectedLocation === 'am' ? 10 : 14, 30, 0, 0);
+
+		const end_date = new Date(date);
+		end_date.setHours(selectedLocation === 'am' ? 13 : 17, 30, 0, 0);
+
+		try {
+			const response = await apihooks.createClass(
+				selectedParticipant,
+				selectedCourse,
+				date,
+				date,
+				selectedLocation,
+			);
+			const {classid} = response;
+			navigate(`/teacher/attendance/${classid}`);
+			console.log(`Class created successfully with classid ${classid}`);
+		} catch (error) {
+			console.error(`Error creating class: ${error}`);
+		}
+	};
+
 	return (
 		<div className="flex flex-col items-center justify-center h-1/2 p-10 bg-gray-100">
 			<h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">
@@ -189,7 +223,12 @@ const CreateAttendance: React.FC = () => {
 					</select>
 				</div>
 			</div>
-			<MainViewButton path="/teacher/attendance/attendance" text="Open" />
+			<button
+				className="bg-metropoliaMainOrange hover:hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 m-4 rounded focus:outline-none focus:shadow-outline"
+				onClick={handleOpenAttendance}
+			>
+				Open
+			</button>
 		</div>
 	);
 };

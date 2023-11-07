@@ -18,6 +18,7 @@ interface ClassModel {
 		end_date: Date,
 		topicname: string,
 		coursecode: string,
+		timeofday: 'am' | 'pm',
 	): Promise<void>;
 	updateClassDates(id: number, start_date: Date, end_date: Date): Promise<void>;
 	deleteByClassId(id: number): Promise<void>;
@@ -53,6 +54,7 @@ const Class: ClassModel = {
 		coursecode: string,
 		start_date: Date,
 		end_date: Date,
+		timeofday: 'am' | 'pm',
 	) {
 		try {
 			const [topicRows] = await pool
@@ -79,12 +81,15 @@ const Class: ClassModel = {
 			const courseid = courseRows[0].courseid;
 			console.log('🚀 ~ file: classmodel.ts:80 ~ courseid:', courseid);
 
-			await pool
+			const [result] = await pool
 				.promise()
 				.query(
-					'INSERT INTO class (start_date, end_date, topicid, courseid) VALUES (?, ?, ?, ?)',
-					[start_date, end_date, topicid, courseid],
+					'INSERT INTO class (start_date, end_date, timeofday, topicid, courseid) VALUES (?, ?, ?, ?, ?)',
+					[start_date, end_date, timeofday, topicid, courseid],
 				);
+			const classid = result.insertId;
+			console.log('🚀 ~ file: classmodel.ts:88 ~ classid:', classid);
+			return classid;
 		} catch (error) {
 			console.error(error);
 		}

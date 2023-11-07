@@ -7,7 +7,7 @@ const TeacherAttendanceRoutes: React.FC = () => {
     return (
         <Routes>
             <Route path='createattendance' element={<TeacherCreateAttendance />} />
-            <Route path='attendance' element={<TeacherAttendanceRoom />} />
+            <Route path=':id' element={<TeacherAttendanceRoom />} />
         </Routes>
     );
 };

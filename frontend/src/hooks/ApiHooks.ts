@@ -97,7 +97,6 @@ const getCourseDetailByCourseId = async (courseId: string) => {
 };
 const getCourseReservations = async (inputs: CourseCheckInputs) => {
 	const {code} = inputs;
-	
 
 	const options = {
 		method: 'POST',
@@ -111,6 +110,44 @@ const getCourseReservations = async (inputs: CourseCheckInputs) => {
 	const url = `${baseUrl}courses/checkreservations/`;
 	return await doFetch(url, options);
 };
+interface Course {
+	code: string;
+}
+
+const createClass = async (
+	topicname: string,
+	course: Course,
+	start_date: Date,
+	end_date: Date,
+	timeofday: string,
+) => {
+	const inputDate = start_date;
+	const formattedStart_date = new Date(inputDate)
+		.toISOString()
+		.replace('T', ' ')
+		.replace('Z', '');
+	const inputEndDate = end_date;
+	const formattedEnd_date = new Date(inputEndDate)
+		.toISOString()
+		.replace('T', ' ')
+		.replace('Z', '');
+	const coursecode = course.code;
+	const options: RequestInit = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			topicname,
+			coursecode,
+			start_date: formattedStart_date,
+			end_date: formattedEnd_date,
+			timeofday,
+		}),
+	};
+	const url = `${baseUrl}courses/attendance/class/`;
+	return doFetch(url, options);
+};
 const apiHooks = {
 	postLogin,
 	createCourse,
@@ -119,5 +156,6 @@ const apiHooks = {
 	getAllCoursesByInstructorEmail,
 	getCourseDetailByCourseId,
 	getCourseReservations,
+	createClass,
 };
 export default apiHooks;
