@@ -95,7 +95,22 @@ const getCourseDetailByCourseId = async (courseId: string) => {
 	});
 	return response;
 };
+const getCourseReservations = async (inputs: CourseCheckInputs) => {
+	const {code} = inputs;
+	
 
+	const options = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			code: code,
+		}),
+	};
+	const url = `${baseUrl}courses/checkreservations/`;
+	return await doFetch(url, options);
+};
 const apiHooks = {
 	postLogin,
 	createCourse,
@@ -103,5 +118,6 @@ const apiHooks = {
 	getAllTopicGroupsAndTopicsInsideThem,
 	getAllCoursesByInstructorEmail,
 	getCourseDetailByCourseId,
+	getCourseReservations,
 };
 export default apiHooks;

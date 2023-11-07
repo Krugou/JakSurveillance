@@ -27,7 +27,6 @@ router.post('/check', express.json(), async (req: Request, res: Response) => {
 
 	try {
 		const data = await openData.checkOpenDataRealization(codes);
-		console.log('🚀 ~ file: courseroutes.ts:19 ~ router.post ~ data:', data);
 
 		// Check if message is "No results"
 		if ((data as any).message === 'No results') {
@@ -43,6 +42,20 @@ router.post('/check', express.json(), async (req: Request, res: Response) => {
 	} catch (error) {
 		console.error('Error:', error);
 		res.status(500).send('Internal server error');
+	}
+});
+router.post('/checkreservations/', async (req: Request, res: Response) => {
+	const {code = '', studentGroup = ''} = req.body;
+
+	try {
+		const reservations = await openData.CheckOpenDataReservations(
+			code,
+			studentGroup,
+		);
+		res.json(reservations);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server error');
 	}
 });
 router.post('/create', upload.single('file'), async (req, res) => {

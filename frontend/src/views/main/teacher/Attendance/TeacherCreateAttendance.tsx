@@ -3,7 +3,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import MainViewButton from '../../../../components/main/buttons/MainViewButton';
-import data from '../../../../data/extradatafordev';
 import apihooks from '../../../../hooks/ApiHooks';
 interface Course {
 	courseid: string;
@@ -29,13 +28,16 @@ const CreateAttendance: React.FC = () => {
 	interface Reservation {
 		startDate: string;
 	}
-
 	useEffect(() => {
-		const dates = data.reservations.map(
-			(reservation: Reservation) => new Date(reservation.startDate),
-		);
-		setHighlightedDates(dates);
-	}, []);
+		apihooks.getCourseReservations(selectedCourse).then(data => {
+			
+			const dates = data.reservations.map(
+				(reservation: Reservation) => new Date(reservation.startDate),
+			);
+			setHighlightedDates(dates);
+		});
+	}, [selectedCourse]);
+
 	useEffect(() => {
 		if (calendarOpen) {
 			inputRef.current?.focus();
@@ -65,6 +67,8 @@ const CreateAttendance: React.FC = () => {
 		}
 		return ''; // default return value
 	};
+	useEffect(() => {
+	}, [selectedCourse]);
 	const timeOfDay = ['AP', 'IP'];
 	const handleDateChangeCalendar = (
 		value: Date | Date[] | null | [Date | null, Date | null],

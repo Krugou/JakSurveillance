@@ -6,7 +6,7 @@ const CheckOpenDataReservations = async (
 	code?: string,
 	studentGroup?: string,
 ) => {
-	const url = 'https://opendata.metropolia.fi/r1/reservations/search';
+	const url = 'https://opendata.metropolia.fi/r1/reservation/search';
 	const body = JSON.stringify({
 		...(code ? {realization: [code]} : {}),
 		...(studentGroup ? {studentGroup: [studentGroup]} : {}),
@@ -23,11 +23,7 @@ const CheckOpenDataReservations = async (
 
 	const response = await fetchReal.doFetch(url, options as any);
 
-	if (!response.ok) {
-		throw new Error(`Fetch request failed with status ${response.status}`);
-	}
-
-	const data = await response.json();
+	const data = response;
 
 	return data;
 };
