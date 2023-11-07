@@ -1,6 +1,7 @@
 import React from 'react';
 import {Route, BrowserRouter as Router, Routes} from 'react-router-dom';
 import {useRegisterSW} from 'virtual:pwa-register/react';
+import {UserProvider} from './contexts/UserContext.tsx';
 import AdminRoutes from './routes/AdminRoutes';
 import CounselorRoutes from './routes/CounselorRoutes';
 import StudentRoutes from './routes/StudentRoutes';
@@ -8,7 +9,6 @@ import TeacherRoutes from './routes/TeacherRoutes';
 import Footer from './views/Footer.tsx';
 import Header from './views/Header.tsx';
 import StartView from './views/main/StartView.tsx';
-import {UserProvider} from './contexts/UserContext.tsx';
 const intervalMS = 60 * 60 * 1000;
 const App = () => {
 	useRegisterSW({

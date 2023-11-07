@@ -1,44 +1,54 @@
 import React, {useEffect, useState} from 'react';
 import QRCode from 'react-qr-code';
 import {useParams} from 'react-router-dom';
-import {io} from 'socket.io-client';
-const socket = io('http://localhost:3002/');
+import io from 'socket.io-client';
 const AttendanceRoom: React.FC = () => {
 	const {classid} = useParams<{classid: string}>();
 	const [servertime, setServertime] = useState('');
-
-	console.log('🚀 ~ file: TeacherAttendanceRoom.tsx:8 ~ classid:', classid);
+	const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
+	const [arrayOfStudents, setArrayOfStudents] = useState<any[]>([]);
 
 	const [hashValue, setHashValue] = useState('');
-	const attendees = [
-		'oppilas 1',
-		'Oppilas 2',
-		'Oppilas 3',
-		'Oppilas 4',
-		'Oppilas 5',
-	]; // Replaced with real data
-	useEffect(() => {
-		socket.on('connect', () => {
-			console.log('Connected to the server:', socket.id);
-		});
-		socket.emit('getCurrentHashForQrGenerator', classid);
-		socket.on(
-			'getCurrentHashForQrGeneratorServingHashAndChangeTime',
-			(hash, changeTime, classid, servertime) => {
-				setHashValue(hash + '/' + classid);
 
-				setServertime(
-					new Date(servertime).toLocaleString(undefined, {
-						dateStyle: 'full',
-						timeStyle: 'medium',
-					}),
-				);
-			},
-		);
-		socket.on('disconnect', () => {
-			console.log('Disconnected from the server');
-		});
-	}, []);
+	useEffect(() => {
+		if (!socket) {
+			const newSocket = io('http://localhost:3002', {
+				transports: ['websocket'],
+			});
+			setSocket(newSocket);
+			newSocket.on('connect', () => {
+				console.log('Socket connected');
+			});
+
+			newSocket.emit('getCurrentHashForQrGenerator', classid);
+			newSocket.on(
+				'getCurrentHashForQrGeneratorServingHashAndChangeTime',
+				(hash, changeTime, classid, servertime, arrayOfStudents) => {
+					setHashValue(hash + '/' + classid);
+					setArrayOfStudents(arrayOfStudents);
+
+					setServertime(
+						new Date(servertime).toLocaleString(undefined, {
+							dateStyle: 'full',
+							timeStyle: 'medium',
+						}),
+					);
+				},
+			);
+			newSocket.on('disconnect', () => {
+				console.log('Disconnected from the server');
+			});
+		}
+	}, [classid]);
+
+	useEffect(() => {
+		return () => {
+			// Disconnect the socket when the component unmounts
+			if (socket) {
+				socket.disconnect();
+			}
+		};
+	}, [socket]);
 	return (
 		<div className="flex flex-col w-full m-auto items-center justify-center h-1/2 p-10 bg-gray-100">
 			<h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">Attendance</h1>
@@ -57,8 +67,8 @@ const AttendanceRoom: React.FC = () => {
 				<div className="text-md sm:text-xl mb-4">
 					<h2 className="text-lg font-bold mb-2">List of Attendees:</h2>
 					<ol className="list-decimal pl-5">
-						{attendees.map((attendee, index) => (
-							<li key={index}>{attendee}</li>
+						{arrayOfStudents.map((student, index) => (
+							<li key={index}>{student}</li>
 						))}
 					</ol>
 				</div>
