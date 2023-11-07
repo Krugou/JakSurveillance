@@ -11,15 +11,15 @@ import UserModel from '../models/usermodel.js'; // Import the UserModel without 
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 
-// Define a local strategy for username and password login
+// Define a local strategy for email and password login
 passport.use(
-	new Strategy(async (username: string, _password, done: any) => {
+	new Strategy(async (email: string, _password, done: any) => {
 		try {
-			// Find a user in the database with the provided username
-			const user: any = await UserModel.getAllUserInfo(username);
+			// Find a user in the database with the provided email
+			const user: any = await UserModel.getAllUserInfo(email);
 
 			// Check if the user exists
-			console.log(user, 'IAWJDUOIAWDIOJAWD ');
+			console.log(email, 'IAWJDUOIAWDIOJAWD ');
 			if (user === undefined) {
 				return done(null, false, {message: 'Incorrect username.'});
 			}

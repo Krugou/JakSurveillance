@@ -132,7 +132,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 				error: 'Login failed',
 			});
 		}
-
+		req.body.username = metropoliaData.email;
 		// If the logged-in user is Metropolia staff and they don't exist in the DB yet, add them to the DB
 		if (metropoliaData.staff === true) {
 			try {
