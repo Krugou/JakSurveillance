@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import QRCode from 'react-qr-code';
 import {useParams} from 'react-router-dom';
 import io from 'socket.io-client';
+import Attendees from '../../../../components/main/course/attendance/attendees';
 const AttendanceRoom: React.FC = () => {
 	const {classid} = useParams<{classid: string}>();
 	const [servertime, setServertime] = useState('');
@@ -64,15 +65,7 @@ const AttendanceRoom: React.FC = () => {
 					</div>
 					{servertime && <p className="text-sm">Server time: {servertime}</p>}
 				</div>
-				<div className="text-md sm:text-xl mb-4">
-					<h2 className="text-lg font-bold mb-2">List of Attendees:</h2>
-					<p>Number of Attendees: {arrayOfStudents.length +1}</p>
-					<ol className="list-decimal pl-5">
-						{arrayOfStudents.map((student, index) => (
-							<li key={index}>{student}</li>
-						))}
-					</ol>
-				</div>
+				<Attendees arrayOfStudents={arrayOfStudents} />
 			</div>
 		</div>
 	);
