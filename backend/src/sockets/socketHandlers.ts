@@ -1,12 +1,12 @@
 import crypto from 'crypto';
 
 let hash = '';
-let timestamps: {start: number; end: number; hash: string}[] = [];
+const timestamps: {start: number; end: number; hash: string}[] = [];
 
 // this defines how often the hash changes or how fast student need to be in class while doing attendance
 const speedOfHashChange = 5000; // milliseconds
-// this defines how much lee way there is for network lag or something. speedOfHashChange * 4 
-const howMuchLeeWay = speedOfHashChange * 4; 
+// this defines how much lee way there is for network lag or something. speedOfHashChange * 4
+const howMuchLeeWay = speedOfHashChange * 4;
 const updateHash = () => {
 	const start = Date.now();
 	hash = crypto.randomBytes(20).toString('hex');
@@ -27,6 +27,7 @@ const updateHash = () => {
 updateHash();
 setInterval(updateHash, speedOfHashChange);
 // handle new socket.io connections
+let SelectedClassid = '';
 const setupSocketHandlers = (io: any) => {
 	io.on('connection', (socket: any) => {
 		console.log('a user connected');
@@ -34,16 +35,17 @@ const setupSocketHandlers = (io: any) => {
 		socket.on('disconnect', () => {
 			console.log('user disconnected');
 		});
-		socket.on('getCurrentHashForQrGenerator', () => {
+		socket.on('getCurrentHashForQrGenerator', classid => {
 			// Emit the event every `speedOfHashChange` milliseconds
 			const intervalId = setInterval(() => {
 				socket.emit(
 					'getCurrentHashForQrGeneratorServingHashAndChangeTime',
 					hash,
-					speedOfHashChange
+					speedOfHashChange,
 				);
 			}, speedOfHashChange);
-
+			SelectedClassid = classid;
+			
 			// Clear the interval when the socket disconnects
 			socket.on('disconnect', () => {
 				clearInterval(intervalId);
@@ -58,8 +60,7 @@ const setupSocketHandlers = (io: any) => {
 
 				// find the timestamp that matches the secureHash and unixtime
 				const timestamp = timestamps.find(
-					(t) =>
-						t.hash === secureHash && unixtime >= t.start && unixtime <= t.end
+					t => t.hash === secureHash && unixtime >= t.start && unixtime <= t.end,
 				);
 
 				if (timestamp) {
@@ -67,7 +68,7 @@ const setupSocketHandlers = (io: any) => {
 				} else {
 					io.emit('inputThatStudentHasArrivedToClassTooSlow', 'Too slow'); // send error message to all clients
 				}
-			}
+			},
 		);
 	});
 };

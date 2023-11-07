@@ -4,8 +4,9 @@ import {useParams} from 'react-router-dom';
 import {io} from 'socket.io-client';
 const socket = io('http://localhost:3002/');
 const AttendanceRoom: React.FC = () => {
-	const {id} = useParams<{id: string}>();
-	console.log('🚀 ~ file: TeacherAttendanceRoom.tsx:8 ~ classid:', id);
+	const {classid} = useParams<{classid: string}>();
+
+	console.log('🚀 ~ file: TeacherAttendanceRoom.tsx:8 ~ classid:', classid);
 	const [hashValue, setHashValue] = useState('');
 	const attendees = [
 		'oppilas 1',
@@ -18,7 +19,7 @@ const AttendanceRoom: React.FC = () => {
 		socket.on('connect', () => {
 			console.log('Connected to the server:', socket.id);
 		});
-		socket.emit('getCurrentHashForQrGenerator');
+		socket.emit('getCurrentHashForQrGenerator', classid);
 		socket.on(
 			'getCurrentHashForQrGeneratorServingHashAndChangeTime',
 			(hash, changeTime) => {
@@ -27,6 +28,9 @@ const AttendanceRoom: React.FC = () => {
 				// console.log(changeTime);
 			},
 		);
+		socket.on('disconnect', () => {
+			console.log('Disconnected from the server');
+		});
 	}, []);
 	return (
 		<div className="flex flex-col w-full m-auto items-center justify-center h-1/2 p-10 bg-gray-100">

@@ -37,12 +37,37 @@ const Class: ClassModel = {
 		}
 	},
 
-	async findByClassId(id) {
+	async findByClassIdAndGetAllUserInLinkedCourse(
+		classid: number,
+	): Promise<User[]> {
 		try {
-			const [rows] = await pool
+			const [classRows] = await pool
 				.promise()
-				.query<RowDataPacket[]>('SELECT * FROM class WHERE classid = ?', [id]);
-			return (rows[0] as Class) || null;
+				.query<Class[]>('SELECT * FROM class WHERE classid = ?', [classid]);
+			const classData = classRows[0];
+			if (!classData) {
+				return Promise.reject(`Class with classid ${classid} not found`);
+			}
+
+			const [courseRows] = await pool
+				.promise()
+				.query<Course[]>('SELECT * FROM courses WHERE courseid = ?', [
+					classData.courseid,
+				]);
+			const courseData = courseRows[0];
+			if (!courseData) {
+				return Promise.reject(
+					`Course with courseid ${classData.courseid} not found`,
+				);
+			}
+
+			const [userRows] = await pool
+				.promise()
+				.query<User[]>(
+					'SELECT u.* FROM users u JOIN usercourses uc ON u.userid = uc.userid WHERE uc.courseid = ?',
+					[courseData.courseid],
+				);
+			return userRows;
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
