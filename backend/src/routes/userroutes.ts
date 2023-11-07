@@ -133,29 +133,8 @@ router.post('/', async (req: Request, res: Response, next) => {
 			});
 		}
 
-		// TRY TO FIND USER IN JAKSEC DATABASE
-		let userInfo;
-		try {
-			userInfo = await usermodel.getAllUserInfo(username);
-
-			if (userInfo) {
-				console.log('User information:', userInfo);
-			} else if (!userInfo && metropoliaData.staff === false) {
-				console.log('User not found.');
-				return res.status(403).json({
-					error: 'User has not been added to any courses, contact your teacher',
-				});
-			}
-		} catch (error) {
-			if (error instanceof Error) {
-				console.error('Database error:', error.message);
-			} else {
-				// Handle the case where error is not an Error object
-			}
-		}
-
 		// If the logged-in user is Metropolia staff and they don't exist in the DB yet, add them to the DB
-		if (metropoliaData.staff === true && !userInfo) {
+		if (metropoliaData.staff === true) {
 			try {
 				const userData = {
 					username: metropoliaData.user,
@@ -174,11 +153,10 @@ router.post('/', async (req: Request, res: Response, next) => {
 		}
 
 		// IF THE USER is found in database or they're staff (meaning their account gets created with first login), implement login for them
-		if (userInfo || metropoliaData.staff) {
-			// Call the authenticate function to handle passport authentication
-			authenticate(req, res, next);
-			console.log('try to authentticate');
-		}
+
+		// Call the authenticate function to handle passport authentication
+		authenticate(req, res, next);
+		console.log('try to authentticate');
 
 		// res.json(metropoliaData);
 	} catch (error) {
