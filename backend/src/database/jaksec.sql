@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS `class` (
   `classid` int(11) NOT NULL AUTO_INCREMENT,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
+  `timeofday` enum('am', 'pm') NOT NULL,
   `topicid` int(11) NOT NULL,
   `courseid` int(11) NOT NULL,
   PRIMARY KEY (`classid`),
