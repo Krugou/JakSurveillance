@@ -66,6 +66,7 @@ const AttendanceRoom: React.FC = () => {
 				</div>
 				<div className="text-md sm:text-xl mb-4">
 					<h2 className="text-lg font-bold mb-2">List of Attendees:</h2>
+					<p>Number of Attendees: {arrayOfStudents.length +1}</p>
 					<ol className="list-decimal pl-5">
 						{arrayOfStudents.map((student, index) => (
 							<li key={index}>{student}</li>
