@@ -10,7 +10,6 @@ import Header from './views/Header.tsx';
 import StartView from './views/main/StartView.tsx';
 import {UserProvider} from './contexts/UserContext.tsx';
 const intervalMS = 60 * 60 * 1000;
-
 const App = () => {
 	useRegisterSW({
 		onRegistered(r) {

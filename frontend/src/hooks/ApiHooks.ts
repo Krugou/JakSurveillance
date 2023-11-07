@@ -148,6 +148,16 @@ const createClass = async (
 	const url = `${baseUrl}courses/attendance/class/`;
 	return doFetch(url, options);
 };
+const getUserInfoByToken = async (token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+
+	return doFetch(baseUrl + 'secure/', options);
+};
 const apiHooks = {
 	postLogin,
 	createCourse,
@@ -157,5 +167,6 @@ const apiHooks = {
 	getCourseDetailByCourseId,
 	getCourseReservations,
 	createClass,
+	getUserInfoByToken,
 };
 export default apiHooks;

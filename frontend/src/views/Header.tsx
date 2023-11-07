@@ -1,14 +1,16 @@
-import React, {useContext} from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, {useContext, useEffect} from 'react';
+import {useNavigate, useLocation} from 'react-router-dom';
 import logo from '../assets/images/metropolia_s_oranssi_en.png';
 import {UserContext} from '../contexts/UserContext';
-
+import apiHooks from '../hooks/ApiHooks';
 interface HeaderProps {
 	title: string;
 }
 const Header: React.FC<HeaderProps> = ({title}) => {
 	const navigate = useNavigate();
-	const {user} = useContext(UserContext);
+	const location = useLocation();
+
+	const {user, setUser} = useContext(UserContext);
 	// console.log('Header', userContext);
 	// const userType = userContext.user?.userType;
 	const userType = 'teacher';
@@ -16,6 +18,28 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 	const handleNavigate = () => {
 		navigate(`/${userType}/mainview`);
 	};
+	const getUserInfo = async () => {
+		if (location.pathname === '/logout') return;
+		const userToken = localStorage.getItem('userToken');
+		if (userToken) {
+			try {
+				const user = await apiHooks.getUserInfoByToken(userToken);
+				console.log(user, 'userinfomaan');
+				if (user) {
+					setUser(user);
+					return;
+				}
+			} catch (error) {
+				setAlert('Your session has expired, please login again.');
+				console.log('TOKEN ERROR');
+				localStorage.removeItem('userToken');
+				setUser('');
+			}
+		}
+	};
+	useEffect(() => {
+		getUserInfo();
+	}, [location]); // jos taulukko tyhjä, ajetaan vain kerran
 	return (
 		<header className="flex items-center sm:p-4 p-0 m-4 justify-between">
 			<a href="/">
@@ -27,17 +51,17 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 			</a>
 			<div className="flex items-center m-2 p-2">
 				{user && (
-					<button className="mx-2 px-2 w-full  bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange">
+					<button className="mx-2 px-2 w-full bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange">
 						{user.username}
-					</button>,
+					</button>
 				)}
 				<button
 					onClick={handleNavigate}
-					className="mx-2 px-2 w-full  bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+					className="mx-2 px-2 w-full bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
 				>
 					Main View
 				</button>
-				<h1 className="text-xs mx-2 px-2 sm:text-sm md:text-lg lg:text-xl ">
+				<h1 className="text-xs mx-2 px-2 sm:text-sm md:text-lg lg:text-xl">
 					{title}
 				</h1>
 			</div>

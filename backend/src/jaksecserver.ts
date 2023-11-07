@@ -5,6 +5,7 @@ import {Server} from 'socket.io';
 import courseRoutes from './routes/courseroutes.js';
 import userRoutes from './routes/userroutes.js';
 import setupSocketHandlers from './sockets/socketHandlers.js';
+import secureRoutes from './routes/secureRoutes.js';
 config();
 // console.log('dot env metropolia:' + process.env.APIKEYMETROPOLIA);
 
@@ -29,6 +30,12 @@ app.use(cors());
 app.use(passport.initialize());
 
 app.use('/users', userRoutes);
+app.use(
+	'/secure',
+	passport.authenticate('jwt', {session: false}),
+	secureRoutes,
+);
+
 app.use('/courses', courseRoutes);
 
 http.listen(port, () => {
@@ -37,6 +44,6 @@ http.listen(port, () => {
 			port +
 			'/index.html ' +
 			'start time: ' +
-			startTime.toLocaleString()
+			startTime.toLocaleString(),
 	);
 });

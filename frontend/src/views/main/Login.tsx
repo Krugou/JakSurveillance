@@ -23,7 +23,7 @@ const Login: React.FC<LoginProps> = ({userType}) => {
 			const response = await apiHooks.postLogin(inputs);
 			// this navigates to the mainview of the user type
 			if (response) {
-				localStorage.setItem('token', response.token); // set the token
+				localStorage.setItem('userToken', response.token); // set the token
 				setUser(response.user); // set the user info into the context
 				navigate(`/${userType.toLowerCase()}/mainview`);
 			}
