@@ -9,14 +9,15 @@ const TeacherHelpVideos: React.FC = () => {
         };
 
         return (
-            <div className="relative">
+            <div className="m-auto w-full sm:w-full md:w-3/4 xl:w-3/4 2xl:w-2/4">
                 <button
                     onClick={toggleDropdown}
-                    className={`border p-2 rounded-md ${
-                        isOpen ? 'bg-gray-100' : 'bg-white'
+                    className={`border p-2 rounded-md flex items-center hover:bg-metropoliaSecondaryOrange text-white gap-4 m-auto ${
+                        isOpen ? 'bg-metropoliaSecondaryOrange' : 'bg-metropoliaMainOrange'
                     }`}
                 >
-          <span className="mr-2">
+                    {title}
+                    <span className="mr-2">
             {isOpen ? (
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -49,11 +50,10 @@ const TeacherHelpVideos: React.FC = () => {
                 </svg>
             )}
           </span>
-                    {title}
                 </button>
                 {isOpen && (
-                    <div className="w-full h-full bg-gray-800 p-4">
-                        <video controls src={src} className="w-full h-full" />
+                    <div className="w-full h-full mt-4">
+                        <video controls src={src} className="w-full rounded h-full" />
                     </div>
                 )}
             </div>
@@ -62,8 +62,8 @@ const TeacherHelpVideos: React.FC = () => {
 
     return (
         <div className="bg-gray-100 p-5">
-            <h1 className="text-2xl font-semibold mb-4">Teacher Help Videos</h1>
-            <div className="space-y-4">
+            <h1 className="text-2xl font-semibold mb-10 text-center">Teacher Help Videos</h1>
+            <div className="space-y-6 flex flex-col">
                 <Dropdown title="How do I create a course?" src="video-url-1.mp4" />
                 <Dropdown title="How do I create an attendance?" src="video-url-2.mp4" />
             </div>
