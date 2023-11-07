@@ -173,9 +173,7 @@ router.post('/create', upload.single('file'), async (req, res) => {
 			topics,
 			topicGroup,
 		);
-		res
-			.status(200)
-			.send({message: 'File uploaded and data logged successfully'});
+		res.status(200).send({message: 'File uploaded and data logged successfully'});
 	} catch (error) {
 		console.error(error);
 		res.status(500).send('Internal server error:' + error);
@@ -192,7 +190,6 @@ router.get('/instructor/:email', async (req: Request, res: Response) => {
 });
 router.get('/coursesbyid/:id', async (req: Request, res: Response) => {
 	try {
-		console.log('something is happening');
 		const courses = await course.getCoursesByCourseId(req.params.id);
 		res.json(courses);
 	} catch (err) {

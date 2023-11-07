@@ -442,7 +442,6 @@ const Course: CourseModel = {
 	},
 	async getCoursesByCourseId(courseId) {
 		try {
-			console.log('something is happening');
 			const [rows] = await pool.promise().query<RowDataPacket[]>(
 				`SELECT courses.*, studentgroups.group_name AS studentgroup_name, 
               GROUP_CONCAT(topics.topicname) AS topic_names
