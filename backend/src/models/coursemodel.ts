@@ -103,6 +103,20 @@ const Course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Inserts a new course into the database with the given parameters.
+	 * @param {string} name - The name of the course.
+	 * @param {Date} start_date - The start date of the course.
+	 * @param {Date} end_date - The end date of the course.
+	 * @param {string} code - The code of the course.
+	 * @param {string} group_name - The name of the student group for the course.
+	 * @param {Student[]} students - An array of Student objects representing the students in the course.
+	 * @param {string} instructoremail - The email address of the instructor for the course.
+	 * @param {string} [topics] - A JSON string representing an array of topic names for the course.
+	 * @param {string} [topicgroup] - The name of the topic group for the course.
+	 * @returns {Promise<void>} - A Promise that resolves when the course has been successfully inserted.
+	 * @throws {Error} - If the instructor email is not found or the user is not a staff member, or if the course already exists.
+	 */
 	async insertIntoCourse(
 		name: string,
 		start_date: Date,
@@ -118,6 +132,7 @@ const Course: CourseModel = {
 		// console.log(instructoremail);
 
 		try {
+			// Check if the instructor exists and is a staff member
 			const [existingInstructor] = await pool
 				.promise()
 				.query<RowDataPacket[]>(
@@ -133,6 +148,7 @@ const Course: CourseModel = {
 
 			try {
 				const instructoruserid = existingInstructor[0].userid;
+				// Check if the student group exists
 				const [existingGroup] = await pool
 					.promise()
 					.query<RowDataPacket[]>(
@@ -144,6 +160,7 @@ const Course: CourseModel = {
 					console.error('Group already exists');
 					studentGroupId = existingGroup[0].studentgroupid;
 				} else {
+					// Insert the student group if it doesn't exist
 					const [groupResult] = await pool
 						.promise()
 						.query<ResultSetHeader>(
@@ -153,6 +170,7 @@ const Course: CourseModel = {
 
 					studentGroupId = groupResult.insertId;
 				}
+				// Format the dates and insert the course
 				const startDateString = start_date
 					.toISOString()
 					.slice(0, 19)
@@ -174,6 +192,7 @@ const Course: CourseModel = {
 					);
 
 				const courseId = courseResult.insertId;
+				// Insert the instructor into the course
 				const [instructorResult] = await pool
 					.promise()
 					.query<ResultSetHeader>(
@@ -183,7 +202,7 @@ const Course: CourseModel = {
 				if (instructorResult.affectedRows === 0) {
 					throw new Error('Failed to insert instructor into courseinstructors');
 				}
-
+				// Insert the students into the course
 				for (const student of students) {
 					try {
 						const [existingUserByNumber] = await pool
@@ -196,6 +215,7 @@ const Course: CourseModel = {
 
 						if (existingUserByNumber.length > 0) {
 							// console.error('User with this student number already exists');
+							// If the user already exists, insert them into the course
 							userId = existingUserByNumber[0].userid;
 							await pool
 								.promise()
@@ -211,6 +231,7 @@ const Course: CourseModel = {
 								]);
 
 							if (existingUserByEmail.length > 0) {
+								// If the user exists with a different student number, update their student number and insert them into the course
 								await pool
 									.promise()
 									.query('UPDATE users SET studentnumber = ? WHERE email = ?', [
@@ -225,6 +246,7 @@ const Course: CourseModel = {
 										courseId,
 									]);
 							} else {
+								// Insert the user if they don't exist
 								const [userResult] = await pool
 									.promise()
 									.query<ResultSetHeader>(
@@ -241,7 +263,7 @@ const Course: CourseModel = {
 								userId = userResult.insertId;
 							}
 						}
-
+						// Insert the user into the course
 						await pool
 							.promise()
 							.query('INSERT INTO usercourses (userid, courseid) VALUES (?, ?)', [
@@ -255,6 +277,7 @@ const Course: CourseModel = {
 
 				if (topicgroup) {
 					try {
+						// Check if the topic group exists
 						const [existingTopic] = await pool
 							.promise()
 							.query<RowDataPacket[]>(
@@ -266,6 +289,7 @@ const Course: CourseModel = {
 						if (existingTopic.length > 0) {
 							topicGroupId = existingTopic[0].topicgroupid;
 						} else {
+							// Insert the topic group if it doesn't exist
 							const [topicResult] = await pool
 								.promise()
 								.query<ResultSetHeader>(
@@ -285,13 +309,14 @@ const Course: CourseModel = {
 								let topicId = 0;
 								if (existingCourseTopic.length === 0) {
 									console.error(`Topic ${topic} does not exist`);
+									// Insert the topic if it doesn't exist
 									const [topicResult] = await pool
 										.promise()
 										.query<ResultSetHeader>('INSERT INTO topics (topicname) VALUES (?)', [
 											topic,
 										]);
 									topicId = topicResult.insertId;
-
+									// Insert the topic into the topic group
 									await pool
 										.promise()
 										.query(
@@ -309,6 +334,7 @@ const Course: CourseModel = {
 											[topicGroupId, topicId],
 										);
 									if (existingTopicInGroup.length === 0) {
+										// Insert the topic into the topic group if it's not already there
 										await pool
 											.promise()
 											.query(
@@ -326,6 +352,7 @@ const Course: CourseModel = {
 									);
 
 								if (existingCourseTopicRelation.length === 0) {
+									// Insert the course-topic relation if it doesn't exist
 									await pool
 										.promise()
 										.query('INSERT INTO coursetopics (courseid, topicid) VALUES (?, ?)', [
