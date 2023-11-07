@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import ErrorAlert from '../../components/main/ErrorAlert.tsx';
 import apiHooks from '../../hooks/ApiHooks.ts';
@@ -12,6 +12,7 @@ const Login: React.FC<LoginProps> = ({userType}) => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [alert, setAlert] = useState<string | null>('');
+	const {setUser, user} = useContext(UserContext);
 	const navigate = useNavigate();
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();

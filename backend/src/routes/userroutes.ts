@@ -67,7 +67,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 			email: 'admin@metropolia.fi',
 		});
 		return;
-	}else if (
+	} else if (
 		username === process.env.devteacheraccount &&
 		password === process.env.devteacherpass
 	) {
