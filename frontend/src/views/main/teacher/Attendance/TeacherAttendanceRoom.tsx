@@ -25,7 +25,7 @@ const AttendanceRoom: React.FC = () => {
 		socket.on(
 			'getCurrentHashForQrGeneratorServingHashAndChangeTime',
 			(hash, changeTime, classid, servertime) => {
-				setHashValue(hash);
+				setHashValue(hash + '/' + classid);
 
 				setServertime(
 					new Date(servertime).toLocaleString(undefined, {

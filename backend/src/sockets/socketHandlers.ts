@@ -4,7 +4,7 @@ let hash = '';
 const timestamps: {start: number; end: number; hash: string}[] = [];
 
 // this defines how often the hash changes or how fast student need to be in class while doing attendance
-const speedOfHashChange = 5000; // milliseconds
+const speedOfHashChange = 30000; // milliseconds
 // this defines how much lee way there is for network lag or something. speedOfHashChange * 4
 const howMuchLeeWay = speedOfHashChange * 4;
 const updateHash = () => {
@@ -57,10 +57,11 @@ const setupSocketHandlers = (io: any) => {
 		});
 		socket.on(
 			'inputThatStudentHasArrivedToClass',
-			(secureHash: string, studentId: any, unixtime: number) => {
+			(secureHash: string, studentId: any, unixtime: number, classid: number) => {
 				console.log('secureHash:', secureHash);
 				console.log('studentId:', studentId);
 				console.log('unixtime:', unixtime);
+				console.log('classid:', classid);
 
 				// find the timestamp that matches the secureHash and unixtime
 				const timestamp = timestamps.find(
