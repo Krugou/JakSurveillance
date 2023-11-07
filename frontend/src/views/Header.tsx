@@ -9,10 +9,10 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({title}) => {
 	const navigate = useNavigate();
 	const userContext = useContext(UserContext);
-	console.log('Header', userContext);
+	// console.log('Header', userContext);
 	// const userType = userContext.user?.userType;
 	const userType = 'teacher';
-	console.log('Header', userType);
+	// console.log('Header', userType);
 	const handleNavigate = () => {
 		navigate(`/${userType}/mainview`);
 	};

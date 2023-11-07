@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import apiHooks from '../../../hooks/ApiHooks';
 import TopicGroupAndTopicsSelector from './createcourse/TopicsGroupAndTopics';
 // this is view for teacher to create the course
@@ -83,9 +83,7 @@ const CreateCourse: React.FC = () => {
 			}
 		}
 	};
-	useEffect(() => {
-		console.log(topicsFormData);
-	}, [topicsFormData]);
+	
 
 	return (
 		<div className="flex flex-col p-5 items-center justify-center min-h-1/2 bg-gray-100">
