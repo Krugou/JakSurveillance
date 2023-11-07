@@ -37,13 +37,11 @@ const UserModel = {
 	 * @param {string} username - The username of the user.
 	 * @returns {Promise<UserInfo | null>} A promise that resolves to the user's information or null if the user is not found.
 	 */
-	getAllUserInfo: async (username: string): Promise<UserInfo | null> => {
+	getAllUserInfo: async (email: string): Promise<UserInfo | null> => {
 		try {
 			const [rows] = await UserModel.pool
 				.promise()
-				.query<RowDataPacket[]>('SELECT * FROM users WHERE Username = ?', [
-					username,
-				]);
+				.query<RowDataPacket[]>('SELECT * FROM users WHERE email = ?', [email]);
 
 			if (rows.length > 0) {
 				return rows.pop() as UserInfo;
@@ -62,10 +60,7 @@ const UserModel = {
 	 * @param {string} newEmail - The new email to set for the user.
 	 * @returns {Promise<boolean>} A promise that resolves to a boolean indicating whether the update was successful.
 	 */
-	updateUserInfo: async (
-		userId: number,
-		newEmail: string,
-	): Promise<boolean> => {
+	updateUserInfo: async (userId: number, newEmail: string): Promise<boolean> => {
 		try {
 			const [rows] = (await UserModel.pool.execute(
 				'UPDATE users SET Useremail = ? WHERE Userid = ?',
