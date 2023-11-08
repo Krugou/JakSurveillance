@@ -7,7 +7,7 @@ const Logout = () => {
 	const {setUser} = useContext(UserContext);
 
 	localStorage.removeItem('userToken');
-	setUser('');
+	setUser(null);
 
 	// Delay the navigation by 1 second
 	setTimeout(() => {

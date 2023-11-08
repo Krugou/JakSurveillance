@@ -45,10 +45,14 @@ const createCourse = async (inputs: CreateCourseInputs) => {
 	const url = `${baseUrl}courses/create`; // append the endpoint to the baseUrl
 	return doFetch(url, options);
 };
-interface CourseCheckInputs {
+interface getCourseReservations {
+	code: string;
+}
+interface checkIfCourseExists {
 	codes: string;
 }
-const checkIfCourseExists = async (inputs: CourseCheckInputs) => {
+
+const checkIfCourseExists = async (inputs: checkIfCourseExists) => {
 	const {codes} = inputs;
 
 	const options = {
@@ -64,17 +68,17 @@ const checkIfCourseExists = async (inputs: CourseCheckInputs) => {
 	return await doFetch(url, options);
 };
 
-const getAllCoursesByInstructorEmail = async (inputs: any) => {
-	const email = inputs;
-
+const getAllCoursesByInstructorEmail = async (email: string) => {
+	// Define your fetch options
 	const options = {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
 		},
 	};
-	const url = `${baseUrl}courses/instructor/${email}`;
-	return await doFetch(url, options);
+
+	// Use the email to make the API request
+	return await doFetch(`${baseUrl}courses?email=${email}`, options);
 };
 
 const getAllTopicGroupsAndTopicsInsideThem = async () => {
@@ -95,7 +99,7 @@ const getCourseDetailByCourseId = async (courseId: string) => {
 	});
 	return response;
 };
-const getCourseReservations = async (inputs: CourseCheckInputs) => {
+const getCourseReservations = async (inputs: getCourseReservations) => {
 	const {code} = inputs;
 
 	const options = {

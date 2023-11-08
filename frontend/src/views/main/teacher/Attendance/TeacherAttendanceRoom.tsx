@@ -7,7 +7,7 @@ const AttendanceRoom: React.FC = () => {
 	const {classid} = useParams<{classid: string}>();
 	const [servertime, setServertime] = useState('');
 	const [socket, setSocket] = useState<Socket | null>(null);
-	const [arrayOfStudents, setArrayOfStudents] = useState<any[]>([]);
+	const [arrayOfStudents, setArrayOfStudents] = useState<string[]>([]);
 
 	const [hashValue, setHashValue] = useState('');
 
@@ -25,6 +25,7 @@ const AttendanceRoom: React.FC = () => {
 			newSocket.on(
 				'getCurrentHashForQrGeneratorServingHashAndChangeTime',
 				(hash, changeTime, classid, servertime, arrayOfStudents) => {
+					console.log('changetime', changeTime);
 					setHashValue(hash + '/' + classid);
 					setArrayOfStudents(arrayOfStudents);
 

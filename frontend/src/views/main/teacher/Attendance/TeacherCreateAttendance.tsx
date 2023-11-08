@@ -5,12 +5,6 @@ import 'react-calendar/dist/Calendar.css';
 import {useNavigate} from 'react-router-dom';
 
 import apihooks from '../../../../hooks/ApiHooks';
-interface Course {
-	courseid: string;
-	name: string;
-	code: string;
-	topic_names: string;
-}
 const CreateAttendance: React.FC = () => {
 	const navigate = useNavigate();
 	const [courses, setCourses] = useState<Course[]>([]);
@@ -21,22 +15,29 @@ const CreateAttendance: React.FC = () => {
 		courses.length > 0 ? courses[0].courseid : '',
 	);
 	const [selectedParticipant, setSelectedParticipant] = useState<string>('');
-	const [selectedCourse, setSelectedCourse] = useState(null);
+	const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 	const [highlightedDates, setHighlightedDates] = useState<Date[]>([]);
-	const teacherEmail = 'teacher@metropolia.fi';
+
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	// test data
 
 	interface Reservation {
 		startDate: string;
 	}
+	interface Course {
+		// existing properties...
+		codes: string; // replace CodeType with the actual type of `codes`
+		email: string;
+	}
 	useEffect(() => {
-		apihooks.getCourseReservations(selectedCourse).then(data => {
-			const dates = data.reservations.map(
-				(reservation: Reservation) => new Date(reservation.startDate),
-			);
-			setHighlightedDates(dates);
-		});
+		if (selectedCourse) {
+			apihooks.getCourseReservations(selectedCourse).then(data => {
+				const dates = data.reservations.map(
+					(reservation: Reservation) => new Date(reservation.startDate),
+				);
+				setHighlightedDates(dates);
+			});
+		}
 	}, [selectedCourse]);
 
 	useEffect(() => {
@@ -45,7 +46,8 @@ const CreateAttendance: React.FC = () => {
 		}
 	}, [calendarOpen]);
 	useEffect(() => {
-		apihooks.getAllCoursesByInstructorEmail(teacherEmail).then(data => {
+		const email = 'teacher@metropolia.fi';
+		apihooks.getAllCoursesByInstructorEmail(email).then(data => {
 			setCourses(data);
 		});
 	}, []);
@@ -121,13 +123,16 @@ const CreateAttendance: React.FC = () => {
 		end_date.setHours(selectedLocation === 'am' ? 13 : 17, 30, 0, 0);
 
 		try {
-			const response = await apihooks.createClass(
-				selectedParticipant,
-				selectedCourse,
-				date,
-				date,
-				selectedLocation,
-			);
+			let response;
+			if (selectedCourse !== null) {
+				response = await apihooks.createClass(
+					selectedParticipant,
+					selectedCourse,
+					date,
+					date,
+					selectedLocation,
+				);
+			}
 			const {classid} = response;
 			navigate(`/teacher/attendance/${classid}`);
 			console.log(`Class created successfully with classid ${classid}`);
@@ -135,6 +140,13 @@ const CreateAttendance: React.FC = () => {
 			console.error(`Error creating class: ${error}`);
 		}
 	};
+	interface Course {
+		name: string;
+		code: string;
+		courseid: string | (() => string);
+		topic_names: string;
+		// include other properties of selectedCourse here
+	}
 
 	return (
 		<div className="flex flex-col items-center justify-center h-1/2 p-10 bg-gray-100">
@@ -158,11 +170,23 @@ const CreateAttendance: React.FC = () => {
 						setSelectedCourse(courses[newValue] || null);
 					}}
 				>
-					{courses.map(course => (
-						<option key={course.courseid} value={course.courseid}>
-							{course.name + ' | ' + course.code}
-						</option>
-					))}
+					{courses.map(course => {
+						// Ensure courseid is a string or number
+						const courseId =
+							typeof course.courseid === 'function'
+								? course.courseid()
+								: course.courseid;
+
+						// Ensure course has name and code properties
+						const courseName = course.name || 'No Name';
+						const courseCode = course.code || 'No Code';
+
+						return (
+							<option key={courseId} value={courseId}>
+								{courseName + ' | ' + courseCode}
+							</option>
+						);
+					})}
 				</select>
 			</div>
 
@@ -177,6 +201,7 @@ const CreateAttendance: React.FC = () => {
 					}}
 				>
 					{selectedCourse &&
+						selectedCourse.topic_names &&
 						selectedCourse.topic_names.split(',').map((topic: string) => (
 							<option key={topic} value={topic}>
 								{topic}

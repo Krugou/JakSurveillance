@@ -1,8 +1,9 @@
-import React, {useContext, useEffect} from 'react';
-import {useNavigate, useLocation} from 'react-router-dom';
+import React, {useContext, useEffect, useState} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
 import logo from '../assets/images/metropolia_s_oranssi_en.png';
-import {UserContext} from '../contexts/UserContext';
+import ErrorAlert from '../components/main/ErrorAlert';
 import NavigationButton from '../components/main/buttons/NavigationButton';
+import {UserContext} from '../contexts/UserContext';
 import apiHooks from '../hooks/ApiHooks';
 interface HeaderProps {
 	title: string;
@@ -10,7 +11,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({title}) => {
 	const navigate = useNavigate();
 	const location = useLocation();
-
+	const [alert, setAlert] = useState<string | null>('');
 	const {user, setUser} = useContext(UserContext);
 	// console.log('Header', userContext);
 	// const userType = userContext.user?.userType;
@@ -34,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 				setAlert('Your session has expired, please login again.');
 				console.log('TOKEN ERROR');
 				localStorage.removeItem('userToken');
-				setUser('');
+				setUser(null); // or setUser({ role: '', username: '' }) for an empty User object
 			}
 		}
 	};
@@ -51,6 +52,7 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 				/>
 			</a>
 			<div className="flex items-center m-2 p-2">
+				{alert && <ErrorAlert onClose={() => setAlert(null)} alert={alert} />}
 				{user && (
 					<>
 						<NavigationButton

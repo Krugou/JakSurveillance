@@ -1,8 +1,8 @@
 import React, {useContext, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import ErrorAlert from '../../components/main/ErrorAlert.tsx';
-import apiHooks from '../../hooks/ApiHooks.ts';
 import {UserContext} from '../../contexts/UserContext.tsx';
+import apiHooks from '../../hooks/ApiHooks.ts';
 interface LoginProps {
 	userType: 'Student' | 'Teacher' | 'Admin' | 'Counselor';
 }
@@ -17,7 +17,7 @@ const Login: React.FC<LoginProps> = ({userType}) => {
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 
-		console.log(userType, username, password);
+		console.log(userType, username, password, user);
 		const inputs = {username, password};
 		try {
 			const response = await apiHooks.postLogin(inputs);

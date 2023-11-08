@@ -2,18 +2,24 @@ import React, {useEffect, useState} from 'react';
 import apiHooks from '../../../../hooks/ApiHooks';
 
 interface Props {
-	setTopicsFormData: React.Dispatch<React.SetStateAction<any>>;
+	setTopicsFormData: React.Dispatch<React.SetStateAction<unknown>>;
 }
-
+interface TopicGroup {
+	topics: string;
+	// define the properties of TopicGroup here
+	topicgroupname: string;
+	// other properties...
+}
 const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
-	const [topicData, setTopicData] = useState<any>([]);
+	const [topicData, setTopicData] = useState<TopicGroup[]>([]);
 	const [courseTopicGroup, setCourseTopicGroup] = useState('');
-	const [selectedGroupTopics, setSelectedGroupTopics] = useState([]);
+	const [selectedGroupTopics, setSelectedGroupTopics] = useState<string[]>([]);
 	const [courseTopics, setCourseTopics] = useState<string[]>([]);
 	const [customTopics, setCustomTopics] = useState<string[]>(['']);
 	const [customTopicGroup, setCustomTopicGroup] = useState('');
 	const [customTopic, setCustomTopic] = useState('');
 	const [isCustomGroup, setIsCustomGroup] = useState(false);
+
 	const handleTopicChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const selectedTopics = Array.from(
 			e.target.selectedOptions,
@@ -31,7 +37,13 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 			topics = JSON.stringify(selectedTopics);
 		}
 
-		setTopicsFormData(prevFormData => ({
+		interface FormData {
+			topicgroup: string;
+			topics: string;
+			// include other properties of form data here
+		}
+
+		setTopicsFormData((prevFormData: FormData) => ({
 			...prevFormData,
 			topicgroup: topicGroup,
 			topics: topics,
@@ -41,9 +53,9 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 	// 	console.log(topicsFormData);
 	// }, [isCustomGroup, topicsFormData]);
 
-	const addCustomTopic = () => {
-		setCustomTopics(prevTopics => [...prevTopics, '']);
-	};
+	// const addCustomTopic = () => {
+	// 	setCustomTopics(prevTopics => [...prevTopics, '']);
+	// };
 
 	const handleCustomTopicChange = (index: number, value: string) => {
 		const newTopics = [...customTopics];
@@ -62,7 +74,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 
 	useEffect(() => {
 		const selectedGroup = topicData.find(
-			group => group.topicgroupname === courseTopicGroup,
+			(group: TopicGroup) => group.topicgroupname === courseTopicGroup,
 		);
 		const selectedTopics = selectedGroup ? selectedGroup.topics.split(',') : [];
 		setSelectedGroupTopics(selectedTopics);
@@ -77,7 +89,13 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 			topics = JSON.stringify(selectedTopics);
 		}
 
-		setTopicsFormData(prevFormData => ({
+		interface FormData {
+			topicgroup: string;
+			topics: string;
+			// other properties...
+		}
+
+		setTopicsFormData((prevFormData: FormData) => ({
 			...prevFormData,
 			topicgroup: topicGroup,
 			topics: topics,
@@ -107,10 +125,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 				<>
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 						<div>
-							<label
-								htmlFor="customTopicGroup"
-								className="block font-medium mb-1"
-							>
+							<label htmlFor="customTopicGroup" className="block font-medium mb-1">
 								Custom Topic Group
 							</label>
 							<input
@@ -134,9 +149,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 										type="text"
 										placeholder="Custom Topic"
 										value={topic}
-										onChange={e =>
-											handleCustomTopicChange(index, e.target.value)
-										}
+										onChange={e => handleCustomTopicChange(index, e.target.value)}
 										className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange mr-2"
 										title='add custom topics here example: "exam"'
 									/>

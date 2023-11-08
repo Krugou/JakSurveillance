@@ -14,6 +14,7 @@ const CreateCourse: React.FC = () => {
 		'Click here to upload a file',
 	);
 	const [endDate, setEndDate] = useState('');
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const [topicsFormData, setTopicsFormData] = useState<any>([]);
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const selectedFile = event.target.files?.[0];
@@ -83,130 +84,120 @@ const CreateCourse: React.FC = () => {
 			}
 		}
 	};
-	
 
 	return (
-		<div className="flex flex-col p-5 items-center justify-center min-h-1/2 bg-gray-100">
-			<h1 className="text-4xl font-bold mb-8">Create Course</h1>
-			<form
-				onSubmit={handleSubmit}
-				className="w-full max-w-md mx-auto bg-white p-6 rounded shadow-md"
-			>
-				{currentStep === 1 && (
-					<fieldset>
-						<legend>Course Details</legend>
-						<input
-							type="text"
-							placeholder="Course Code"
-							value={courseCode}
-							onChange={e => setCourseCode(e.target.value)}
-							className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-							title="Enter the course code here example: TX00CG61-3009"
-						/>
-						<input
-							type="text"
-							placeholder="Course Name"
-							value={courseName}
-							onChange={e => setCourseName(e.target.value)}
-							className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-							title="Enter the course name here example: Mediapalvelut-projekti"
-						/>
+		<form
+			onSubmit={handleSubmit}
+			className="w-full max-w-md mx-auto bg-white p-6 rounded shadow-md"
+		>
+			{currentStep === 1 && (
+				<fieldset>
+					<legend>Course Details</legend>
+					<input
+						type="text"
+						placeholder="Course Code"
+						value={courseCode}
+						onChange={e => setCourseCode(e.target.value)}
+						className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+						title="Enter the course code here example: TX00CG61-3009"
+					/>
+					<input
+						type="text"
+						placeholder="Course Name"
+						value={courseName}
+						onChange={e => setCourseName(e.target.value)}
+						className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+						title="Enter the course name here example: Mediapalvelut-projekti"
+					/>
 
-						<input
-							type="text"
-							placeholder="Student Group"
-							value={studentGroup}
-							onChange={e => setStudentGroup(e.target.value)}
-							className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-							title="Enter the student group here example: tvt21-m"
-						/>
-						{!shouldCheckDetails && (
-							<>
-								<input
-									type="datetime-local"
-									value={startDate}
-									onChange={e => setStartDate(e.target.value)}
-									className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-									title="Enter the start date and time for the course"
-								/>
-
-								<input
-									type="datetime-local"
-									value={endDate}
-									onChange={e => setEndDate(e.target.value)}
-									className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-									title="Enter the end date and time for the course"
-								/>
-							</>
-						)}
-						<label className="flex items-center space-x-3">
+					<input
+						type="text"
+						placeholder="Student Group"
+						value={studentGroup}
+						onChange={e => setStudentGroup(e.target.value)}
+						className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+						title="Enter the student group here example: tvt21-m"
+					/>
+					{!shouldCheckDetails && (
+						<>
 							<input
-								type="checkbox"
-								checked={shouldCheckDetails}
-								onChange={() => setShouldCheckDetails(prev => !prev)}
-								className="form-checkbox h-5 w-5 text-blue-600"
+								type="datetime-local"
+								value={startDate}
+								onChange={e => setStartDate(e.target.value)}
+								className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+								title="Enter the start date and time for the course"
 							/>
-							<span className="text-gray-900 font-medium">
-								Check Course Details
-							</span>
-						</label>
-					</fieldset>
-				)}
 
-				{currentStep === 2 && (
-					<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
-				)}
-
-				{currentStep === 3 && (
-					<fieldset>
-						<legend>File Upload</legend>
-						<label className="w-full mb-2 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white transition-colors duration-300 ease-in-out">
-							<svg className="w-8 h-8 fill-current" viewBox="0 0 20 20">
-								<path d="M10 4a2 2 0 00-2 2v4a2 2 0 104 0V6a2 2 0 00-2-2zm0 12a6 6 0 100-12 6 6 0 000 12z" />
-							</svg>
-							<span className="mt-2 text-base font-medium leading-normal">
-								{uploadFile}
-							</span>
 							<input
-								type="file"
-								className="hidden"
-								onChange={handleFileChange}
+								type="datetime-local"
+								value={endDate}
+								onChange={e => setEndDate(e.target.value)}
+								className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+								title="Enter the end date and time for the course"
 							/>
-							<div className="w-full p-2 mt-2 bg-gray-100 text-gray-500 rounded-lg">
-								{selectedFile}
-							</div>
-						</label>
-					</fieldset>
-				)}
+						</>
+					)}
+					<label className="flex items-center space-x-3">
+						<input
+							type="checkbox"
+							checked={shouldCheckDetails}
+							onChange={() => setShouldCheckDetails(prev => !prev)}
+							className="form-checkbox h-5 w-5 text-blue-600"
+						/>
+						<span className="text-gray-900 font-medium">Check Course Details</span>
+					</label>
+				</fieldset>
+			)}
 
-				{currentStep > 1 && (
-					<button
-						type="button"
-						onClick={() => setCurrentStep(prevStep => prevStep - 1)}
-						className="w-full p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-					>
-						Previous
-					</button>
-				)}
-				{currentStep < 3 && (
-					<button
-						type="button"
-						className="w-full p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-						onClick={() => setCurrentStep(prevStep => prevStep + 1)}
-					>
-						Next
-					</button>
-				)}
-				{currentStep === 3 && (
-					<button
-						type="submit"
-						className="w-full p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-					>
-						Create Course
-					</button>
-				)}
-			</form>
-		</div>
+			{currentStep === 2 && (
+				<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
+			)}
+
+			{currentStep === 3 && (
+				<fieldset>
+					<legend>File Upload</legend>
+					<label className="w-full mb-2 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white transition-colors duration-300 ease-in-out">
+						<svg className="w-8 h-8 fill-current" viewBox="0 0 20 20">
+							<path d="M10 4a2 2 0 00-2 2v4a2 2 0 104 0V6a2 2 0 00-2-2zm0 12a6 6 0 100-12 6 6 0 000 12z" />
+						</svg>
+						<span className="mt-2 text-base font-medium leading-normal">
+							{uploadFile}
+						</span>
+						<input type="file" className="hidden" onChange={handleFileChange} />
+						<div className="w-full p-2 mt-2 bg-gray-100 text-gray-500 rounded-lg">
+							{selectedFile}
+						</div>
+					</label>
+				</fieldset>
+			)}
+
+			{currentStep > 1 && (
+				<button
+					type="button"
+					onClick={() => setCurrentStep(prevStep => prevStep - 1)}
+					className="w-full p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+				>
+					Previous
+				</button>
+			)}
+			{currentStep < 3 && (
+				<button
+					type="button"
+					className="w-full p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+					onClick={() => setCurrentStep(prevStep => prevStep + 1)}
+				>
+					Next
+				</button>
+			)}
+			{currentStep === 3 && (
+				<button
+					type="submit"
+					className="w-full p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+				>
+					Create Course
+				</button>
+			)}
+		</form>
 	);
 };
 

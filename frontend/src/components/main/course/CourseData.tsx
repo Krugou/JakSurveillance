@@ -1,15 +1,27 @@
 import React from 'react';
 import MainViewButton from '../buttons/MainViewButton';
 
+interface Course {
+	courseid: number;
+	name: string;
+	description: string;
+	start_date: string;
+	end_date: string;
+	code: string;
+	studentgroup_name: string;
+	topic_names: string;
+	// Include other properties of course here
+}
+
 interface CourseDataProps {
-	courseData: Course[];
+	courseData: any;
 }
 
 const CourseData: React.FC<CourseDataProps> = ({courseData}) => {
 	const currentUrl = window.location.href;
 	return (
 		<>
-			{courseData.map(course => (
+			{courseData.map((course: Course) => (
 				<div key={course.courseid} className="mt-4">
 					<div className="font-bold text-lg">{course.name}</div>
 					<p className="text-gray-700 text-base">{course.description}</p>
@@ -37,7 +49,7 @@ const CourseData: React.FC<CourseDataProps> = ({courseData}) => {
 					</div>
 					{currentUrl.match(/courses\/\d+/) ? (
 						<MainViewButton
-							path={`/teacher/courses/:${course.courseid}/modify`}
+							path={`/teacher/courses/${course.courseid}/modify`} // Removed unnecessary ':' character
 							text="Modify details"
 						/>
 					) : (

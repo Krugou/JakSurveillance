@@ -78,6 +78,8 @@ const StudentQrScanner: React.FC = () => {
 			// todo change this to the correct url
 			window.location.href = 'http://localhost:8080/student/qr';
 		}
+		// Return an empty function when there's nothing to clean up
+		return () => {};
 	}, [successState, counter]);
 	return (
 		<>
