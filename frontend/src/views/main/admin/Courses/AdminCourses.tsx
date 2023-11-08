@@ -33,7 +33,7 @@ const AdminCourses: React.FC = () => {
                 <div className="p-2 border flex justify-between items-center rounded-md">
                     {selectedCourse}
                     <div>
-                    <MainViewButton text="See Details"></MainViewButton>
+                        <MainViewButton path='/admin/courses/:id' text='See details' />
                         <MainViewButton path='/admin/courses/:id/modify' text='Modify details' />
                     </div>
                 </div>
