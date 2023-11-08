@@ -6,7 +6,7 @@ import fetchReal from '../utils/fetch.js';
 import jwt from 'jsonwebtoken';
 import httpError from '../utils/errors.js';
 import {User} from '../utils/pass.js';
-
+import {generateTokenAndUser} from '../utils/pass.js';
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
 
 const router: Router = express.Router();
@@ -20,6 +20,7 @@ router.get('/', (_req: Request, res: Response) => {
 
 const updateUsername = async (email: string, newUsername: string) => {
 	try {
+		console.log('USERNAME WAS UPDATED');
 		await usermodel.updateUsernameByEmail(email, newUsername);
 	} catch (error) {
 		console.error(error);
@@ -63,50 +64,60 @@ router.post('/', async (req: Request, res: Response, next) => {
 	const {username, password} = req.body;
 
 	// if the user is admin, return the admin account
+
+	// create tokens for dev accounts and return them
 	if (username === process.env.devaccount && password === process.env.devpass) {
-		res.json({
-			staff: true,
-			user: 'admin',
-			firstname: 'Admin',
-			lastname: 'Admin',
-			email: 'admin@metropolia.fi',
-		});
+		res.json(
+			generateTokenAndUser(
+				'admin',
+				'admin',
+				'Admin',
+				'Admin',
+				'admin@metropolia.fi',
+			),
+		);
 		return;
 	} else if (
 		username === process.env.devteacheraccount &&
 		password === process.env.devteacherpass
 	) {
-		res.json({
-			staff: true,
-			user: 'teacher',
-			firstname: 'Teacher',
-			lastname: 'Teacher',
-			email: 'teacher@metropolia.fi',
-		});
+		res.json(
+			generateTokenAndUser(
+				'teacher',
+				'teacher',
+				'Teacher',
+				'Teacher',
+				'teacher@metropolia.fi',
+			),
+		);
 		return;
 	} else if (
 		username === process.env.devstudentaccount &&
 		password === process.env.devstudentpass
 	) {
-		res.json({
-			staff: false,
-			user: 'student',
-			firstname: 'Student',
-			lastname: 'Student',
-			email: 'student@metropolia.fi',
-		});
+		res.json(
+			generateTokenAndUser(
+				'student',
+				'student',
+				'Student',
+				'Student',
+				'student@metropolia.fi',
+			),
+		);
 		return;
 	} else if (
 		username === process.env.devcounseloraccount &&
 		password === process.env.devcounselorpass
 	) {
-		res.json({
-			staff: true,
-			user: 'counselor',
-			firstname: 'Counselor',
-			lastname: 'Counselor',
-			email: 'counselor@metropolia.fi',
-		});
+		res.json(
+			generateTokenAndUser(
+				'counselor',
+				'counselor',
+				'Counselor',
+				'Counselor',
+				'counselor@metropolia.fi',
+			),
+		);
 		return;
 	}
 
