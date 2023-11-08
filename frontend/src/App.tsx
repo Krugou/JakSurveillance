@@ -9,6 +9,7 @@ import TeacherRoutes from './routes/TeacherRoutes';
 import Footer from './views/Footer.tsx';
 import Header from './views/Header.tsx';
 import Logout from './views/Logout.tsx';
+import Login from './views/main/Login.tsx';
 import StartView from './views/main/StartView.tsx';
 const intervalMS = 60 * 60 * 1000;
 const App = () => {
@@ -40,6 +41,7 @@ const App = () => {
 						<Route path="admin/*" element={<AdminRoutes />} />
 						<Route path="counselor/*" element={<CounselorRoutes />} />
 						<Route path="teacher/*" element={<TeacherRoutes />} />
+						<Route path="login" element={<Login />} />
 						<Route path="logout" element={<Logout />} />
 					</Routes>
 				</main>
