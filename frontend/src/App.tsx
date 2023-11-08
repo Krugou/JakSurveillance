@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Route, BrowserRouter as Router, Routes} from 'react-router-dom';
 import {useRegisterSW} from 'virtual:pwa-register/react';
 import {UserProvider} from './contexts/UserContext.tsx';
@@ -23,6 +23,10 @@ const App = () => {
 			}
 		},
 	});
+	useEffect(() => {
+		const title = window.location.pathname.split('/').filter(Boolean).join(' - ');
+		document.title = title ? `JakSec - ${title}` : 'JakSec';
+	}, []);
 
 	return (
 		<UserProvider>
