@@ -1,19 +1,19 @@
-# name: SSH into Ubuntu Server
+name: SSH into Ubuntu Server
 
-# on:
-#   push:
-#     branches: ['main']
-#   workflow_dispatch:
+on:
+  push:
+    branches: ['main']
+  workflow_dispatch:
 
-# jobs:
-#   ssh:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Execute remote SSH commands
-#         uses: appleboy/ssh-action@master
-#         with:
-#           host: your-server-ip
-#           username: your-username
-#           key: ${{ secrets.your-private-key }}
-#           script: |
-#             echo "Hello, World!"
+jobs:
+  ssh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute remote SSH commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: jaksec.northeurope.cloudapp.azure.com
+          username: aanderson
+          key: ${{ secrets.JAKSEC }}
+          script: |
+            echo "Hello, World!"
