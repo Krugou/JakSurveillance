@@ -222,7 +222,8 @@ INSERT INTO `users` (`userid`, `username`, `email`, `staff`, `first_name`, `last
 	(2, 'admin', 'admin@metropolia.fi', 1, 'Admin', 'Admin', NOW(), NULL, NULL, 4, 1),
 	(3, 'teacher', 'teacher@metropolia.fi', 1, 'Teacher', 'Teacher', NOW(), NULL, NULL, 3, 1),
 	(4, 'counselor', 'counselor@metropolia.fi', 1, 'Counselor', 'Counselor', NOW(), NULL, NULL, 2, 1),
-	(5, 'student', 'student@metropolia.fi', 0, 'Student', 'Student', NOW(), NULL, NULL, 1, 1);
+	(5, 'student', 'student@metropolia.fi', 0, 'Student', 'Student', NOW(), NULL, NULL, 1, 1),
+  (6, 'student2', 'student2@metropolia.fi', 0, 'Student2', 'Student2', NOW(), NULL, NULL, 1, 1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
