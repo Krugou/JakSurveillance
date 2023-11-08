@@ -1,6 +1,5 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
-import Login from '../views/main/Login.tsx';
 import StudentAttendance from '../views/main/student/StudentAttendance.tsx';
 import StudentCourses from '../views/main/student/StudentCourses.tsx';
 import StudentMainView from '../views/main/student/StudentMainView.tsx';

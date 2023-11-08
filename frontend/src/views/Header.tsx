@@ -17,7 +17,9 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 	// const userType = userContext.user?.userType;
 	// console.log('Header', userType);
 	const handleNavigate = () => {
-		navigate(`/${user.role}/mainview`);
+		if (user) {
+			navigate(`/${user.role}/mainview`);
+		}
 	};
 	const getUserInfo = async () => {
 		if (location.pathname === '/logout') return;

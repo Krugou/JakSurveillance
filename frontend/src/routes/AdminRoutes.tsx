@@ -1,6 +1,5 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
-import Login from '../views/main/Login.tsx';
 import AdminMainView from '../views/main/admin/AdminMainView.tsx';
 import AdminCoursesRoutes from './admin/AdminCourseRoutes';
 import AdminUserRoutes from './admin/AdminUserRoutes';

@@ -1,11 +1,7 @@
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 
-interface StartViewButtonProps {
-	role: string;
-}
-
-const StartViewButton: React.FC<StartViewButtonProps> = ({role}) => {
+const StartViewButton: React.FC = () => {
 	const navigate = useNavigate();
 
 	return (

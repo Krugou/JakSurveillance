@@ -1,6 +1,5 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
-import Login from '../views/main/Login.tsx';
 import TeacherMainView from '../views/main/teacher/TeacherMainView.tsx';
 import TeacherAttendanceRoutes from './teacher/TeacherAttendanceRoutes';
 import TeacherCoursesRoutes from './teacher/TeacherCoursesRoutes';

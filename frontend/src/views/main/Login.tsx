@@ -3,12 +3,10 @@ import {useNavigate} from 'react-router-dom';
 import ErrorAlert from '../../components/main/ErrorAlert.tsx';
 import {UserContext} from '../../contexts/UserContext.tsx';
 import apiHooks from '../../hooks/ApiHooks.ts';
-interface LoginProps {
-	userType: 'Student' | 'Teacher' | 'Admin' | 'Counselor';
-}
+
 console.log(UserContext, 'USER CONTEXT');
 
-const Login: React.FC<LoginProps> = ({userType}) => {
+const Login: React.FC = () => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [alert, setAlert] = useState<string | null>('');
@@ -17,7 +15,7 @@ const Login: React.FC<LoginProps> = ({userType}) => {
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 
-		console.log(userType, username, password, user);
+		console.log(username, password, user);
 		const inputs = {username, password};
 		try {
 			const response = await apiHooks.postLogin(inputs);
@@ -47,7 +45,7 @@ const Login: React.FC<LoginProps> = ({userType}) => {
 			{alert && <ErrorAlert onClose={() => setAlert(null)} alert={alert} />}
 			<div className="md:w-1/2 w-2/3">
 				<h1 className="sm:text-2xl text-xl font-bold mb-4 mt-4 sm:mt-0 text-center">
-					{userType} Login
+					Login
 				</h1>
 				<form
 					onSubmit={handleSubmit}
@@ -58,7 +56,7 @@ const Login: React.FC<LoginProps> = ({userType}) => {
 							className="block text-gray-700 text-sm font-bold mb-2"
 							htmlFor="username"
 						>
-							{userType} Username
+							Username
 						</label>
 						<input
 							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -73,7 +71,7 @@ const Login: React.FC<LoginProps> = ({userType}) => {
 							className="block text-gray-700 text-sm font-bold mb-2"
 							htmlFor="password"
 						>
-							{userType} Password
+							Password
 						</label>
 						<input
 							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
