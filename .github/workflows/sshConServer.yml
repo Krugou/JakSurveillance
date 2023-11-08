@@ -19,15 +19,15 @@ jobs:
        cd JakSurveillance
        git pull
        npm i 
+       cd frontend
+       npm i
+       npm run build
+       cd ..
        cd backend
        npm i
        npm run tsc
        pm2 delete all
        pm2 start ecosystem.config.cjs
-       cd ..
-       cd frontend
-       npm i
-       npm run build
        cd ..
        npm run lint
        echo "Done!"
