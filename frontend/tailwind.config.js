@@ -16,6 +16,9 @@ export default {
 				metropoliaTrendLightBlue: '#5db1e4',
 				metropoliaTrendGreen: '#3ba88f',
 			},
+			animation: {
+				spin: 'spin 2s linear infinite',
+			},
 		},
 	},
 	plugins: [],
