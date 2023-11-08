@@ -32,6 +32,31 @@ const UserModel = {
 	pool: pool,
 
 	/**
+	 * Updates the username of a user based on their email.
+	 * @param {string} email - The email of the user to update.
+	 * @param {string} newUsername - The new username to set for the user.
+	 * @returns {Promise<boolean>} A promise that resolves to a boolean indicating whether the update was successful.
+	 */
+	updateUsernameByEmail: async (
+		email: string,
+		newUsername: string,
+	): Promise<boolean> => {
+		try {
+			const [rows] = (await UserModel.pool
+				.promise()
+				.execute('UPDATE users SET username = ? WHERE email = ?', [
+					newUsername,
+					email,
+				])) as unknown as [ResultSetHeader, FieldPacket[]];
+
+			return rows.affectedRows > 0;
+		} catch (error) {
+			console.error(error);
+			throw new Error('Database error');
+		}
+	},
+
+	/**
 	 * @method getAllUserInfo
 	 * @description A method to retrieve user information based on a username.
 	 * @param {string} username - The username of the user.
@@ -41,7 +66,9 @@ const UserModel = {
 		try {
 			const [rows] = await UserModel.pool
 				.promise()
-				.query<RowDataPacket[]>('SELECT * FROM users WHERE email = ?', [email]);
+				.query<RowDataPacket[]>(
+					`SELECT users.userid, users.username, users.email, users.first_name, users.last_name, users.created_at, users.studentnumber, roles.name AS role FROM users JOIN roles ON users.roleid = roles.roleid WHERE users.email = "${email}"`,
+				);
 
 			if (rows.length > 0) {
 				return rows.pop() as UserInfo;

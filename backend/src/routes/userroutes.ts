@@ -17,36 +17,41 @@ router.get('/', (_req: Request, res: Response) => {
 });
 
 // Define a separate function for handling passport authentication
+
+const updateUsername = async (email: string, newUsername: string) => {
+	try {
+		await usermodel.updateUsernameByEmail(email, newUsername);
+	} catch (error) {
+		console.error(error);
+	}
+};
+
 const authenticate = (
 	req: Request,
 	res: Response,
 	next: (err?: any) => void,
+	newUsername: string,
 ) => {
 	passport.authenticate(
 		'local',
 		{session: false},
 		(err: Error, user: User, _info: any) => {
-			// console.log('info: ', info);
-			// console.log('err1: ', err);
 			if (err || !user) {
-				next(httpError('Virhe kirjautuessa', 403));
-				return res.status(403).json({
-					message: 'Something went wrong, check your inputs',
-				});
+				console.error(err);
+				return next(httpError('Error during authentication', 403));
 			}
 			req.login(user, {session: false}, err => {
 				if (err) {
-					// console.log('err2: ', err);
-					next(httpError('Virhe kirjautuessa', 403));
-					return res.status(403).json({
-						message: 'Something went wrong, check your inputs',
-					});
+					console.error(err);
+					return next(httpError('Error during authentication', 403));
 				}
-				const token = jwt.sign(
-					user as User,
-					process.env.JWT_SECRET as string,
-					{expiresIn: '2h'}, // Set the expiration time to 1 minute for testing
-				);
+				if (user && !user.username) {
+					updateUsername(user.email, newUsername);
+					user.username = newUsername;
+				}
+				const token = jwt.sign(user as User, process.env.JWT_SECRET as string, {
+					expiresIn: '2h',
+				});
 				res.json({user, token});
 			});
 		},
@@ -155,7 +160,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 		// IF THE USER is found in database or they're staff (meaning their account gets created with first login), implement login for them
 
 		// Call the authenticate function to handle passport authentication
-		authenticate(req, res, next);
+		authenticate(req, res, next, username);
 		console.log('try to authentticate');
 
 		// res.json(metropoliaData);
