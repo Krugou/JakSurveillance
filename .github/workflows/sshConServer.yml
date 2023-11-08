@@ -9,6 +9,14 @@ jobs:
  ssh:
   runs-on: ubuntu-latest
   steps:
+   - name: Cache npm dependencies
+     uses: actions/cache@v2
+     with:
+      path: ~/.npm
+      key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      restore-keys: |
+       ${{ runner.os }}-node-
+
    - name: Execute remote SSH commands
      uses: appleboy/ssh-action@master
      with:
@@ -16,6 +24,7 @@ jobs:
       username: aanderson
       key: ${{ secrets.JAKSEC }}
       script: |
+       set -e
        echo "       _       _                  
              | |     | |                 
              | | __ _| | _____  ___  ___ 
@@ -25,7 +34,7 @@ jobs:
                                          
                                          "
        cd JakSurveillance
-       git pull
+       git pull || exit 1
        npm i 
        cd frontend
        npm i
@@ -35,9 +44,22 @@ jobs:
        cd backend
        npm i
        npm run tsc
-        echo "backend built successfully"
+       echo "backend built successfully"
        pm2 delete all
        pm2 start ecosystem.config.cjs
        cd ..
        npm run lint
        echo "Done!"
+
+   - name: Send notification
+     if: failure()
+     uses: actions/github-script@v5
+     with:
+      script: |
+       const issue = {
+         owner: context.repo.owner,
+         repo: context.repo.repo,
+         title: "Deployment failed",
+         body: `Deployment failed. Please check the [logs](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}) for details.`
+       };
+       github.rest.issues.create(issue);
