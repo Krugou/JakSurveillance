@@ -5,7 +5,8 @@
 		"notscsW": "concurrently  \"nodemon --delay 1s nodejs/jaksecfileserver.js\" \"nodemon --delay 1s nodejs/jaksecserver.js\"",
 		"test": "jest",
 		"all": "npm i && concurrently \"tsc --watch\" \"nodemon --delay 1s nodejs/jaksecfileserver.js\" \"nodemon --delay 1s nodejs/jaksecserver.js\" \"cd ../frontend && npm run all\"",
-		"alldev" : "npm i && concurrently \"tsc --watch\" \"nodemon --delay 1s nodejs/jaksecfileserver.js\" \"nodemon --delay 1s nodejs/jaksecserver.js\" \"cd ../frontend && npm run alldev\""
+		"alldev": "npm i && concurrently \"tsc --watch\" \"nodemon --delay 1s nodejs/jaksecfileserver.js\" \"nodemon --delay 1s nodejs/jaksecserver.js\" \"cd ../frontend && npm run alldev\"",
+		"tsc": "tsc"
 	},
 	"dependencies": {
 		"body-parser": "^1.20.2",
