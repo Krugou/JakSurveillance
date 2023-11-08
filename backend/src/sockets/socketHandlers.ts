@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import {Server, Socket} from 'socket.io';
 
 let hash = '';
 const timestamps: {start: number; end: number; hash: string}[] = [];
@@ -20,22 +21,22 @@ const updateHash = () => {
 		timestamps.shift();
 	}
 };
-
 // update the hash immediately and then every `speedOfHashChange` milliseconds
-updateHash();
-setInterval(updateHash, speedOfHashChange);
+
 // handle new socket.io connections
 let SelectedClassid = '';
-const ArrayOfStudents: any[] = [];
-const setupSocketHandlers = (io: any) => {
-	io.on('connection', (socket: any) => {
+const ArrayOfStudents: unknown[] = [];
+const setupSocketHandlers = (io: Server) => {
+	io.on('connection', (socket: Socket) => {
 		console.log('a user connected');
 		// handle disconnect
 		socket.on('disconnect', () => {
 			console.log('user disconnected');
 		});
 		socket.on('getCurrentHashForQrGenerator', classid => {
-			console.log(hash);
+			console.log('🚀 ~ file: socketHandlers.ts:37 ~ io.on ~ hash:', hash);
+			updateHash();
+			setInterval(updateHash, speedOfHashChange);
 			// Emit the event every `speedOfHashChange` milliseconds
 			const servertime = new Date();
 			const intervalId = setInterval(() => {
@@ -49,7 +50,7 @@ const setupSocketHandlers = (io: any) => {
 				);
 			}, speedOfHashChange);
 			SelectedClassid = classid;
-
+			console.log('SelectedClassid:', SelectedClassid);
 			// Clear the interval when the socket disconnects
 			socket.on('disconnect', () => {
 				clearInterval(intervalId);
@@ -57,7 +58,12 @@ const setupSocketHandlers = (io: any) => {
 		});
 		socket.on(
 			'inputThatStudentHasArrivedToClass',
-			(secureHash: string, studentId: any, unixtime: number, classid: number) => {
+			(
+				secureHash: string,
+				studentId: number,
+				unixtime: number,
+				classid: number,
+			) => {
 				console.log('secureHash:', secureHash);
 				console.log('studentId:', studentId);
 				console.log('unixtime:', unixtime);
@@ -67,26 +73,18 @@ const setupSocketHandlers = (io: any) => {
 				const timestamp = timestamps.find(
 					t => t.hash === secureHash && unixtime >= t.start && unixtime <= t.end,
 				);
-				console.log(
-					'🚀 ~ file: socketHandlers.ts:69 ~ io.on ~ timestamp:',
-					timestamp,
-				);
 
 				const socketId = socket.id;
-				console.log(
-					'🚀 ~ file: socketHandlers.ts:71 ~ io.on ~ socketId:',
-					socketId,
-				);
+
 				if (timestamp) {
 					// Emit the 'youhavebeensavedintoclass' event only to the client who sent the event
-					io.to(socketId).emit('youhavebeensavedintoclass', studentId);
+					io.to(socketId).emit('youhavebeensavedintoclass', SelectedClassid);
 					ArrayOfStudents.push(studentId);
 					console.log('Accepted:', secureHash, studentId, unixtime);
 				} else {
-					ArrayOfStudents.push(studentId);
 					io
 						.to(socketId)
-						.emit('inputThatStudentHasArrivedToClassTooSlow', studentId); // send error message to all clients
+						.emit('inputThatStudentHasArrivedToClassTooSlow', SelectedClassid); // send error message to all clients
 				}
 			},
 		);

@@ -1,11 +1,11 @@
 import {QrScanner} from '@yudiel/react-qr-scanner';
-import React, {useCallback, useContext, useEffect, useState} from 'react';
-import io from 'socket.io-client';
+import React, {useCallback,  useEffect, useState} from 'react';
+import io, { Socket } from 'socket.io-client';
 const StudentQrScanner: React.FC = () => {
 	const [successState, setSuccessState] = useState(false);
 	const [scanned, setScanned] = useState(false);
-	const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
-
+	const [socket, setSocket] = useState<Socket | null>(null);
+	const [counter, setCounter] = useState(20);
 	const onNewScanResult = useCallback(
 		(decodedText: string) => {
 			// Handle the scan result here
@@ -44,6 +44,7 @@ const StudentQrScanner: React.FC = () => {
 				});
 				newSocket.on('inputThatStudentHasArrivedToClassTooSlow', studentId2 => {
 					setSuccessState(false);
+					setShouldRender(true);
 					console.log('inputThatStudentHasArrivedToClassTooSlow', studentId2);
 				});
 			}
@@ -51,8 +52,7 @@ const StudentQrScanner: React.FC = () => {
 		[scanned],
 	);
 	const [shouldRender, setShouldRender] = useState(true);
-	const handleScanError: OnErrorFunction = (error?: Error) => {
-		setSuccessState(false);
+	const handleScanError = (error?: Error) => {
 		console.log(error?.message);
 	};
 	const onResetClick = useCallback(() => {
@@ -69,10 +69,26 @@ const StudentQrScanner: React.FC = () => {
 			}
 		};
 	}, [socket]);
+	useEffect(() => {
+		if (successState && counter > 0) {
+			const timer = setTimeout(() => setCounter(counter - 1), 1000);
+			return () => clearTimeout(timer);
+		}
+		if (counter === 0) {
+			// todo change this to the correct url
+			window.location.href = 'http://localhost:8080/student/qr';
+		}
+	}, [successState, counter]);
 	return (
 		<>
 			<div className="flex flex-col items-center justify-center h-screen">
-				<p className="text-3xl font-bold mb-4">Scan QR code to get attendance</p>
+				{successState ? (
+					<p className="text-3xl font-bold mb-4">
+						You can leave this site now redirecting in {counter} seconds
+					</p>
+				) : (
+					<p className="text-3xl font-bold mb-4">Scan QR code to get attendance</p>
+				)}
 				<div className="flex justify-center">
 					{successState && <p className="text-green-500 font-bold">Success</p>}
 					{!successState && scanned && (

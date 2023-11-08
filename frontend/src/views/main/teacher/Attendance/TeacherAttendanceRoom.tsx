@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import QRCode from 'react-qr-code';
 import {useParams} from 'react-router-dom';
-import io from 'socket.io-client';
-import Attendees from '../../../../components/main/course/attendance/attendees';
+import io, { Socket } from 'socket.io-client';
+import Attendees from '../../../../components/main/course/attendance/Attendees';
 const AttendanceRoom: React.FC = () => {
 	const {classid} = useParams<{classid: string}>();
 	const [servertime, setServertime] = useState('');
-	const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
+	const [socket, setSocket] = useState<Socket | null>(null);
 	const [arrayOfStudents, setArrayOfStudents] = useState<any[]>([]);
 
 	const [hashValue, setHashValue] = useState('');
