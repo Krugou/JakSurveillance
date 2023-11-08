@@ -13,7 +13,10 @@ const AttendanceRoom: React.FC = () => {
 
 	useEffect(() => {
 		if (!socket) {
-			const newSocket = io('http://localhost:3002', {
+			// const newSocket = io('http://localhost:3002', {
+			// 	transports: ['websocket'],
+			// });
+			const newSocket = io('api/', {
 				transports: ['websocket'],
 			});
 			setSocket(newSocket);

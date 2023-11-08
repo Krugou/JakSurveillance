@@ -1,7 +1,7 @@
 'use strict';
 
-//const baseUrl = 'https://jaksec.northeurope.cloudapp.azure.com/api/v1/';
-const baseUrl = 'http://localhost:3002/';
+const baseUrl = 'api/';
+// const baseUrl = 'http://localhost:3002/';
 
 const doFetch = async (url: string, options: RequestInit) => {
 	const response = await fetch(url, options);

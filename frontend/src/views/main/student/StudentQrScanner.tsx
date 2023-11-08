@@ -12,7 +12,10 @@ const StudentQrScanner: React.FC = () => {
 			const [secureHash, classid] = decodedText.split('/');
 			// Create a new socket connection if one does not already exist
 			if (!socket) {
-				const newSocket = io('http://localhost:3002', {
+				// const newSocket = io('http://localhost:3002', {
+				// 	transports: ['websocket'],
+				// });
+				const newSocket = io('api/', {
 					transports: ['websocket'],
 				});
 				setSocket(newSocket);
@@ -76,7 +79,7 @@ const StudentQrScanner: React.FC = () => {
 		}
 		if (counter === 0) {
 			// todo change this to the correct url
-			window.location.href = 'http://localhost:8080/student/qr';
+			window.location.href = 'student/qr';
 		}
 		// Return an empty function when there's nothing to clean up
 		return () => {};
