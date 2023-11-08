@@ -80,7 +80,7 @@ const StudentQrScanner: React.FC = () => {
 		}
 		if (counter === 0) {
 			// todo change this to the correct url
-			window.location.href = 'student/qr';
+			window.location.href = 'qr';
 		}
 		// Return an empty function when there's nothing to clean up
 		return () => {};
