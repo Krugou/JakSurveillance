@@ -16,4 +16,17 @@ jobs:
           username: aanderson
           key: ${{ secrets.JAKSEC }}
           script: |
-            ls
+            cd JakSurveillance
+            git pull
+            cd backend
+            npm i
+            npm run tsc
+            pm2 delete all
+            pm2 start ecosystem.config.js
+            cd ..
+            cd frontend
+            npm i
+            npm run build
+            cd ..
+            npm run lint
+            echo "Done!"
