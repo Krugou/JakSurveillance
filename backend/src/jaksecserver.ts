@@ -3,9 +3,9 @@ import cors from 'cors';
 import {config} from 'dotenv';
 import {Server} from 'socket.io';
 import courseRoutes from './routes/courseroutes.js';
+import secureRoutes from './routes/secureroutes.js';
 import userRoutes from './routes/userroutes.js';
 import setupSocketHandlers from './sockets/socketHandlers.js';
-import secureRoutes from './routes/secureRoutes.js';
 config();
 // console.log('dot env metropolia:' + process.env.APIKEYMETROPOLIA);
 
