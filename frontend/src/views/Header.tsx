@@ -51,7 +51,10 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 			</a>
 			<div className="flex items-center m-2 p-2">
 				{user && (
-					<button className="mx-2 px-2 w-full bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange">
+					<button
+						className="mx-2 px-2 w-full bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+						onClick={() => navigate(`/${user.role.toLowerCase()}/profile`)}
+					>
 						{user.username}
 					</button>
 				)}
