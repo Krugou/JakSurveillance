@@ -16,7 +16,8 @@ const AttendanceRoom: React.FC = () => {
 			// const newSocket = io('http://localhost:3002', {
 			// 	transports: ['websocket'],
 			// });
-			const newSocket = io('api/', {
+			const newSocket = io('/', {
+				path: '/api/socket.io',
 				transports: ['websocket'],
 			});
 			setSocket(newSocket);

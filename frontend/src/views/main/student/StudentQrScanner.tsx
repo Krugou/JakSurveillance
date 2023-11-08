@@ -1,6 +1,6 @@
 import {QrScanner} from '@yudiel/react-qr-scanner';
-import React, {useCallback,  useEffect, useState} from 'react';
-import io, { Socket } from 'socket.io-client';
+import React, {useCallback, useEffect, useState} from 'react';
+import io, {Socket} from 'socket.io-client';
 const StudentQrScanner: React.FC = () => {
 	const [successState, setSuccessState] = useState(false);
 	const [scanned, setScanned] = useState(false);
@@ -15,7 +15,8 @@ const StudentQrScanner: React.FC = () => {
 				// const newSocket = io('http://localhost:3002', {
 				// 	transports: ['websocket'],
 				// });
-				const newSocket = io('api/', {
+				const newSocket = io('/', {
+					path: '/api/socket.io',
 					transports: ['websocket'],
 				});
 				setSocket(newSocket);
