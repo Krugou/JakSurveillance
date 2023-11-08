@@ -2,6 +2,7 @@ import React, {useContext, useEffect} from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
 import logo from '../assets/images/metropolia_s_oranssi_en.png';
 import {UserContext} from '../contexts/UserContext';
+import NavigationButton from '../components/main/buttons/NavigationButton';
 import apiHooks from '../hooks/ApiHooks';
 interface HeaderProps {
 	title: string;
@@ -52,22 +53,12 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 			<div className="flex items-center m-2 p-2">
 				{user && (
 					<>
-						<button
-							className="mx-2 px-2 w-full bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-							onClick={() => navigate(`/${user.role.toLowerCase()}/profile`)}
-						>
-							{user.username}
-						</button>
-						<button
-							className="mx-2 px-2 w-full bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-							onClick={() => {
-								navigate('/logout');
-								localStorage.removeItem('userToken');
-								setUser('');
-							}}
-						>
-							Logout
-						</button>
+						<NavigationButton
+							user={user}
+							path={`/${user.role.toLowerCase()}/profile`}
+							label={user.username}
+						/>
+						<NavigationButton user={user} path="/logout" label="Logout" />
 					</>
 				)}
 				<button
