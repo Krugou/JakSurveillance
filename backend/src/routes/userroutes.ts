@@ -92,20 +92,34 @@ router.post('/', async (req: Request, res: Response, next) => {
 		);
 		return;
 	} else if (
-		username === process.env.devstudentaccount &&
-		password === process.env.devstudentpass
-	) {
-		res.json(
-			generateTokenAndUser(
-				'student',
-				'student',
-				'Student',
-				'Student',
-				'student@metropolia.fi',
-			),
-		);
-		return;
-	} else if (
+    username === process.env.devstudentaccount &&
+    password === process.env.devstudentpass
+) {
+    res.json(
+        generateTokenAndUser(
+            'student',
+            'student',
+            'Student',
+            'Student',
+            'student@metropolia.fi',
+        ),
+    );
+    return;
+} else if (
+    username === process.env.devstudent2account &&
+    password === process.env.devstudent2pass
+) {
+    res.json(
+        generateTokenAndUser(
+            'student2',
+            'student2',
+            'Student2',
+            'Student2',
+            'student2@metropolia.fi',
+        ),
+    );
+    return;
+} else if (
 		username === process.env.devcounseloraccount &&
 		password === process.env.devcounselorpass
 	) {
