@@ -9,14 +9,6 @@ jobs:
  ssh:
   runs-on: ubuntu-latest
   steps:
-   - name: Cache npm dependencies
-     uses: actions/cache@v2
-     with:
-      path: ~/.npm
-      key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-      restore-keys: |
-       ${{ runner.os }}-node-
-
    - name: Execute remote SSH commands
      uses: appleboy/ssh-action@master
      with:
