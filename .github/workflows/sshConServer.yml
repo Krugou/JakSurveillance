@@ -1,32 +1,32 @@
 name: SSH into Ubuntu Server
 
 on:
-  push:
-    branches: ['main']
-  workflow_dispatch:
+ push:
+  branches: ['main']
+ workflow_dispatch:
 
 jobs:
-  ssh:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Execute remote SSH commands
-        uses: appleboy/ssh-action@master
-        with:
-          host: jaksec.northeurope.cloudapp.azure.com
-          username: aanderson
-          key: ${{ secrets.JAKSEC }}
-          script: |
-            cd JakSurveillance
-            git pull
-            cd backend
-            npm i
-            npm run tsc
-            pm2 delete all
-            pm2 start ecosystem.config.js
-            cd ..
-            cd frontend
-            npm i
-            npm run build
-            cd ..
-            npm run lint
-            echo "Done!"
+ ssh:
+  runs-on: ubuntu-latest
+  steps:
+   - name: Execute remote SSH commands
+     uses: appleboy/ssh-action@master
+     with:
+      host: jaksec.northeurope.cloudapp.azure.com
+      username: aanderson
+      key: ${{ secrets.JAKSEC }}
+      script: |
+       cd JakSurveillance
+       git pull
+       cd backend
+       npm i
+       npm run tsc
+       pm2 delete all
+       pm2 start ecosystem.config.cjs
+       cd ..
+       cd frontend
+       npm i
+       npm run build
+       cd ..
+       npm run lint
+       echo "Done!"
