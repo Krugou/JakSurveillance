@@ -51,9 +51,9 @@ const AttendanceRoom: React.FC = () => {
 		};
 	}, [socket]);
 	return (
-		<div className="flex flex-col w-full m-auto items-center justify-center h-1/2 p-10 bg-gray-100">
+		<div className="flex flex-col w-full m-auto items-center justify-center h-full p-10 bg-gray-100">
 			<h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">Attendance</h1>
-			<div className="flex w-1/3 gap-10">
+			<div className="flex w-1/2 gap-10">
 				<div className="flex flex-col w-2/3">
 					<div className="h-auto mx-auto max-w-10 w-full">
 						<QRCode
