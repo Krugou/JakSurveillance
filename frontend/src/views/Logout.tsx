@@ -12,7 +12,7 @@ const Logout = () => {
 	// Delay the navigation by 1 second
 	setTimeout(() => {
 		navigate('/');
-	}, 1000);
+	}, 1200);
 
 	return (
 		<div className="flex justify-center items-center h-screen">
