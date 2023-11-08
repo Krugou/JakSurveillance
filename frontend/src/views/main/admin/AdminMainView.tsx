@@ -38,6 +38,7 @@ const AdminMainView: React.FC = () => {
                 </div>
             ))}
             <MainViewButton path='/admin/courses/' text='View Courses' />
+            <MainViewButton path='/admin/users/' text='View Users' />
         </div>
     );
 };
