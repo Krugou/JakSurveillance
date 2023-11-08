@@ -16,6 +16,14 @@ jobs:
       username: aanderson
       key: ${{ secrets.JAKSEC }}
       script: |
+       echo "       _       _                  
+             | |     | |                 
+             | | __ _| | _____  ___  ___ 
+         _   | |/ _\` | |/ / __|/ _ \/ __|
+        | |__| | (_| |   <\__ \  __/ (__ 
+         \____/ \__,_|_|\_\___/\___|\___|
+                                         
+                                         "
        cd JakSurveillance
        git pull
        npm i 
