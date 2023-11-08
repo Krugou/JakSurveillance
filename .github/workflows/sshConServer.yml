@@ -18,6 +18,7 @@ jobs:
       script: |
        cd JakSurveillance
        git pull
+       npm i 
        cd backend
        npm i
        npm run tsc
