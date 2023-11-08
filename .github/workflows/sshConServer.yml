@@ -16,4 +16,4 @@ jobs:
           username: aanderson
           key: ${{ secrets.JAKSEC }}
           script: |
-            echo "Hello, World!"
+            ls
