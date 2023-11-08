@@ -1,23 +1,14 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 import Login from '../views/main/Login.tsx';
 import CounselorMainView from '../views/main/counselor/CounselorMainView.tsx';
 
-
-const CounselorRoutes= () => {
-    return (
-        <Routes>
-            <Route
-                path='login'
-                element={
-                    <Login
-                        userType='Counselor'
-                    />
-                }
-            />
-            <Route path='mainview' element={<CounselorMainView />} />
-        </Routes>
-    );
+const CounselorRoutes = () => {
+	return (
+		<Routes>
+			<Route path="mainview" element={<CounselorMainView />} />
+		</Routes>
+	);
 };
 
 export default CounselorRoutes;
