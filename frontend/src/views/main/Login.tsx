@@ -25,7 +25,7 @@ const Login: React.FC<LoginProps> = ({userType}) => {
 			if (response) {
 				localStorage.setItem('userToken', response.token); // set the token
 				setUser(response.user); // set the user info into the context
-				navigate(`/${userType.toLowerCase()}/mainview`);
+				navigate(`/${response.user.role.toLowerCase()}/mainview`);
 			}
 			console.log(response, 'LOGIN RESPONSE');
 		} catch (error) {
