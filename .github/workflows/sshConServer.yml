@@ -50,16 +50,3 @@ jobs:
        cd ..
        npm run lint
        echo "Done!"
-
-   - name: Send notification
-     if: failure()
-     uses: actions/github-script@v5
-     with:
-      script: |
-       const issue = {
-         owner: context.repo.owner,
-         repo: context.repo.repo,
-         title: "Deployment failed",
-         body: `Deployment failed. Please check the [logs](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}) for details.`
-       };
-       github.rest.issues.create(issue);
