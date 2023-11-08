@@ -7,7 +7,7 @@ import passport from 'passport';
 import {Strategy} from 'passport-local';
 import passportJWT from 'passport-jwt';
 import UserModel from '../models/usermodel.js'; // Import the UserModel without '.js'
-
+import jwt from 'jsonwebtoken';
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 
