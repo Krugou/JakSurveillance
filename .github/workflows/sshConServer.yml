@@ -30,10 +30,12 @@ jobs:
        cd frontend
        npm i
        npm run build
+       echo "frontend built successfully"
        cd ..
        cd backend
        npm i
        npm run tsc
+        echo "backend built successfully"
        pm2 delete all
        pm2 start ecosystem.config.cjs
        cd ..
