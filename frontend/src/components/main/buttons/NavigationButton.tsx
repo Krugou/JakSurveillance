@@ -1,8 +1,14 @@
 // NavigationButton.tsx
-import React from 'react';
+import React, {FC} from 'react';
 import {useNavigate} from 'react-router-dom';
 
-const NavigationButton = ({user, path, label}) => {
+interface NavigationButtonProps {
+	user: {role: string; username: string} | null;
+	path: string;
+	label: string;
+}
+
+const NavigationButton: FC<NavigationButtonProps> = ({user, path, label}) => {
 	const navigate = useNavigate();
 
 	return (
