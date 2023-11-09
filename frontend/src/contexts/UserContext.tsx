@@ -3,8 +3,11 @@ import React, {Dispatch, SetStateAction, createContext, useState} from 'react';
 
 interface User {
 	role: string;
-	// add other properties as needed
 	username: string;
+	first_name: string;
+	last_name: string;
+	email: string;
+	// add other properties as needed
 }
 
 interface UserContextProps {
