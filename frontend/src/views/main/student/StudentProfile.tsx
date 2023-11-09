@@ -32,6 +32,9 @@ const StudentProfile: React.FC = () => {
 				<p className="mb-5">
 					<strong>Email:</strong> <span className="profileStat">{user.email}</span>
 				</p>
+				<p className="mb-5">
+					<strong>role:</strong> <span className="profileStat">{user.role}</span>
+				</p>
 			</div>
 		</div>
 	);
