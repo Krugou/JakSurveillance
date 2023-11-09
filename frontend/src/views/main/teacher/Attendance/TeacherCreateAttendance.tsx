@@ -155,11 +155,15 @@ const CreateAttendance: React.FC = () => {
 			<h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">
 				Fill in to open the attendance collection
 			</h1>
-			<div className="w-1/3">
-				<label htmlFor="course">Course:</label>
+			<div className="flex w-2/3 m-auto">
+			<div className="flex flex-col gap-5">
+				<label className="text-xl" htmlFor="course">Course:</label>
+				<label className="text-xl" htmlFor="topic">Topic:</label>
+			</div>
+			<div className="w-1/3 flex flex-col gap-2">
 				<select
 					id="course"
-					className="block w-full mt-1"
+					className="block w-3/4 h-8 ml-5 mt-1"
 					value={selectedSession}
 					onChange={e => {
 						const selectedCourseId = e.target.value;
@@ -197,13 +201,9 @@ const CreateAttendance: React.FC = () => {
 							);
 						})}
 				</select>
-			</div>
-
-			<div className="w-1/3">
-				<label htmlFor="topic">Topic:</label>
 				<select
 					id="topic"
-					className="block w-full mt-1"
+					className="block w-3/4 h-8 ml-5 mt-1"
 					value={selectedParticipant}
 					onChange={e => {
 						setSelectedParticipant(e.target.value);
@@ -217,6 +217,7 @@ const CreateAttendance: React.FC = () => {
 							</option>
 						))}
 				</select>
+			</div>
 			</div>
 			<h2 className="m-4 p-4">Select desired date</h2>
 
