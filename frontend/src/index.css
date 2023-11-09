@@ -16,6 +16,15 @@
         @apply bg-metropoliaMainOrange;
     }
 }
+@keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+.marquee {
+    display: inline-block;
+    animation: marquee 100s linear infinite;
+}
 .eyebrow {
     width: 50px;
     height: 5px;

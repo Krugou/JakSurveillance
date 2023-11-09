@@ -100,9 +100,48 @@ const setupSocketHandlers = (io: Server) => {
 
 				if (timestamp) {
 					// Emit the 'youhavebeensavedintoclass' event only to the client who sent the event
-					io.to(socketId).emit('youhavebeensavedintoclass', SelectedClassid);
-					ArrayOfStudents.push(studentId);
-					console.log('Accepted:', secureHash, studentId, unixtime);
+
+					fetchReal
+						.doFetch('http://localhost:3002/courses/attendance/', {
+							method: 'POST', // or 'GET'
+							headers: {
+								'Content-Type': 'application/json',
+							},
+							body: JSON.stringify({
+								status: '1',
+								date: '2023-11-09',
+								studentnumber: studentId,
+								classid: classid,
+							}),
+						})
+						.then(response => {
+							console.log('Success:', response);
+							io.to(socketId).emit('youhavebeensavedintoclass', SelectedClassid);
+							const student = CourseStudents.find(
+								student => student.studentnumber === studentId,
+							);
+
+							if (student && student.GDPR === 1) {
+								ArrayOfStudents.push(studentId);
+							} else if (student) {
+								ArrayOfStudents.push(
+									`${student.first_name} ${student.last_name.charAt(0)}.`,
+								);
+							} else {
+								console.log('Student not found');
+							}
+
+							const updatedCourseStudents = CourseStudents.filter(
+								student => student.studentnumber !== studentId,
+							);
+
+							socket.emit('updatecoursestudents', updatedCourseStudents);
+							console.log('Accepted:', secureHash, studentId, unixtime);
+						})
+						.catch(error => {
+							// Handle the error here
+							console.error(error);
+						});
 				} else {
 					io
 						.to(socketId)

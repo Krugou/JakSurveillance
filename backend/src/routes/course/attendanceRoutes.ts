@@ -42,8 +42,15 @@ router.get('/usercourse/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
 	try {
 		const {status, date, studentnumber, classid} = req.body;
-		await Attendance.insertIntoAttendance(status, date, studentnumber, classid);
-		res.status(201).send('Attendance created');
+
+		const insertedData = await Attendance.insertIntoAttendance(
+			status,
+			date,
+			studentnumber,
+			classid,
+		);
+		console.log(insertedData);
+		res.status(200).send(insertedData);
 	} catch (err) {
 		console.error(err);
 		res.status(500).send('Server error');

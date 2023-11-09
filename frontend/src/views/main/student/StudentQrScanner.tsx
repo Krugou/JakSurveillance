@@ -32,7 +32,7 @@ const StudentQrScanner: React.FC = () => {
 					console.log('scanned');
 					console.log('secureHash', secureHash);
 					console.log('classid', classid);
-					const studentId = Math.floor(Math.random() * 50) + 1; // replace with your student id
+					const studentId = Math.floor(Math.random() * 42) + 1; // replace with your student id
 					const unixtime = Date.now();
 					newSocket.emit(
 						'inputThatStudentHasArrivedToClass',

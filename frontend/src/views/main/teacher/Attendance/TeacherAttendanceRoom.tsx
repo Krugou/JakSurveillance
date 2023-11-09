@@ -3,11 +3,13 @@ import QRCode from 'react-qr-code';
 import {useParams} from 'react-router-dom';
 import io, {Socket} from 'socket.io-client';
 import Attendees from '../../../../components/main/course/attendance/Attendees';
+import CourseStudents from '../../../../components/main/course/attendance/CourseStudents';
 const AttendanceRoom: React.FC = () => {
 	const {classid} = useParams<{classid: string}>();
 	const [servertime, setServertime] = useState('');
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [arrayOfStudents, setArrayOfStudents] = useState<string[]>([]);
+	const [courseStudents, setCourseStudents] = useState<string[]>([]);
 
 	const [hashValue, setHashValue] = useState('');
 
@@ -28,6 +30,12 @@ const AttendanceRoom: React.FC = () => {
 			});
 
 			newSocket.emit('getCurrentHashForQrGenerator', classid);
+			newSocket.on('getallstudentsinclass', courseStudents => {
+				setCourseStudents(courseStudents);
+			});
+			newSocket.on('updatecoursestudents', courseStudents => {
+				setCourseStudents(courseStudents);
+			});
 			newSocket.on(
 				'getCurrentHashForQrGeneratorServingHashAndChangeTime',
 				(hash, changeTime, classid, servertime, arrayOfStudents) => {
@@ -57,7 +65,7 @@ const AttendanceRoom: React.FC = () => {
 			}
 		};
 	}, [socket]);
-	const arrayOfStudentstest = ['test1', 'test2'];
+
 	return (
 		<div className="flex flex-col w-full m-auto items-center justify-center h-full p-10 bg-gray-100">
 			<h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">Attendance</h1>
@@ -74,8 +82,8 @@ const AttendanceRoom: React.FC = () => {
 					{servertime && <p className="text-sm">Server time: {servertime}</p>}
 				</div>
 				<Attendees arrayOfStudents={arrayOfStudents} />
-				<Attendees arrayOfStudents={arrayOfStudentstest} />
 			</div>
+			<CourseStudents coursestudents={courseStudents} />
 		</div>
 	);
 };

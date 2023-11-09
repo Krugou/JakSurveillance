@@ -86,11 +86,11 @@ const Attendance: AttendanceModel = {
 			const usercourseid = usercourseResult[0].usercourseid;
 
 			// Check if attendance with usercourseid already exists
-			const [attendanceResult] = await pool
+			const [attendanceResultCheck] = await pool
 				.promise()
 				.query('SELECT * FROM attendance WHERE usercourseid = ?', [usercourseid]);
 
-			if (attendanceResult.length > 0) {
+			if (attendanceResultCheck.length > 0) {
 				// Handle the case where attendance with usercourseid already exists
 				console.error(
 					'Attendance already exists for the usercourseid:',
@@ -100,12 +100,22 @@ const Attendance: AttendanceModel = {
 			}
 
 			// Insert into attendance
-			await pool
+			const [insertResult] = await pool
 				.promise()
 				.query(
 					'INSERT INTO attendance (status, date, usercourseid, classid) VALUES (?, ?, ?, ?)',
 					[status, date, usercourseid, classid],
 				);
+
+			// Get the inserted row
+			const [attendanceResult] = await pool
+				.promise()
+				.query('SELECT * FROM attendance WHERE attendanceid = ?', [
+					insertResult.insertId,
+				]);
+
+			// Return the inserted row
+			return attendanceResult[0];
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
