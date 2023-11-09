@@ -53,60 +53,60 @@ const Login: React.FC = () => {
 		>
 			<h2 className="text-gray-900 text-2xl">Please Login to your Metropolia Account</h2>
 			{alert && <ErrorAlert onClose={() => setAlert(null)} alert={alert} />}
-				<form
-					onSubmit={handleSubmit}
-					className="bg-white md:w-2/4 xl:w-1/4 w-full sm:w-2/3 shadow-md rounded-xl px-8 pt-6 pb-8 mb-4 mx-auto"
-				>
-					<div className="mb-4">
-						<label
-							className="block text-gray-700 text-sm font-bold mb-2"
-							htmlFor="username"
-						>
-							Username
-						</label>
-						<input
-							className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-							id="username"
-							type="text"
-							value={username}
-							placeholder="Metropolia username"
-							onChange={e => setUsername(e.target.value)}
-						/>
-					</div>
-					<div className="mb-6">
-						<label
-							className="block text-gray-700 text-sm font-bold mb-2"
-							htmlFor="password"
-						>
-							Password
-						</label>
-						<input
-							className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-							id="password"
-							type="password"
-							value={password}
-							placeholder="Metropolia password"
-							onChange={e => setPassword(e.target.value)}
-						/>
-					</div>
-					<div className="flex items-center justify-between">
-						{/* <button
+			<form
+				onSubmit={handleSubmit}
+				className="bg-white md:w-2/4 xl:w-1/4 w-full sm:w-2/3 shadow-md rounded-xl px-8 pt-6 pb-8 mb-4 mx-auto"
+			>
+				<div className="mb-4">
+					<label
+						className="block text-gray-700 text-sm font-bold mb-2"
+						htmlFor="username"
+					>
+						Username
+					</label>
+					<input
+						className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+						id="username"
+						type="text"
+						value={username}
+						placeholder="Metropolia username"
+						onChange={e => setUsername(e.target.value)}
+					/>
+				</div>
+				<div className="mb-6">
+					<label
+						className="block text-gray-700 text-sm font-bold mb-2"
+						htmlFor="password"
+					>
+						Password
+					</label>
+					<input
+						className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+						id="password"
+						type="password"
+						value={password}
+						placeholder="Metropolia password"
+						onChange={e => setPassword(e.target.value)}
+					/>
+				</div>
+				<div className="flex items-center justify-between">
+					{/* <button
               className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
               type='submit'
             >
               Sign In
             </button> */}
-						<button
-							className="bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
-							type="button"
-							//  onClick={() => navigate(`/${userType.toLowerCase()}/mainview`)}
-							onClick={handleSubmit}
-						>
-							Sign In
-						</button>
-					</div>
-				</form>
-			</div>
+					<button
+						className="bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
+						type="button"
+						//  onClick={() => navigate(`/${userType.toLowerCase()}/mainview`)}
+						onClick={handleSubmit}
+					>
+						Sign In
+					</button>
+				</div>
+			</form>
+		</div>
 	);
 };
 
