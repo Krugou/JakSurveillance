@@ -1,4 +1,4 @@
-import {ResultSetHeader, RowDataPacket} from 'mysql2';
+import {ResultSetHeader,  RowDataPacket} from 'mysql2';
 import pool from '../database/db.js';
 
 interface Course {
@@ -202,79 +202,7 @@ const Course: CourseModel = {
 				if (instructorResult.affectedRows === 0) {
 					throw new Error('Failed to insert instructor into courseinstructors');
 				}
-				// Insert the students into the course
-				for (const student of students) {
-					try {
-						const [existingUserByNumber] = await pool
-							.promise()
-							.query<RowDataPacket[]>('SELECT * FROM users WHERE studentnumber = ?', [
-								student.studentnumber,
-							]);
-
-						let userId: number = 0;
-
-						if (existingUserByNumber.length > 0) {
-							// console.error('User with this student number already exists');
-							// If the user already exists, insert them into the course
-							userId = existingUserByNumber[0].userid;
-							await pool
-								.promise()
-								.query('INSERT INTO usercourses (userid, courseid) VALUES (?, ?)', [
-									userId,
-									courseId,
-								]);
-						} else {
-							const [existingUserByEmail] = await pool
-								.promise()
-								.query<RowDataPacket[]>('SELECT * FROM users WHERE email = ?', [
-									student.email,
-								]);
-
-							if (existingUserByEmail.length > 0) {
-								// If the user exists with a different student number, update their student number and insert them into the course
-								await pool
-									.promise()
-									.query('UPDATE users SET studentnumber = ? WHERE email = ?', [
-										student.studentnumber,
-										student.email,
-									]);
-								userId = existingUserByEmail[0].userid;
-								await pool
-									.promise()
-									.query('INSERT INTO usercourses (userid, courseid) VALUES (?, ?)', [
-										userId,
-										courseId,
-									]);
-							} else {
-								// Insert the user if they don't exist
-								const [userResult] = await pool
-									.promise()
-									.query<ResultSetHeader>(
-										'INSERT INTO users ( email, first_name, last_name, studentnumber, studentgroupid) VALUES ( ?, ?, ?, ?, ?)',
-										[
-											student.email,
-											student.first_name,
-											student.last_name,
-											student.studentnumber,
-											studentGroupId,
-										],
-									);
-
-								userId = userResult.insertId;
-							}
-						}
-						// Insert the user into the course
-						await pool
-							.promise()
-							.query('INSERT INTO usercourses (userid, courseid) VALUES (?, ?)', [
-								userId,
-								courseId,
-							]);
-					} catch (error) {
-						console.error(error);
-					}
-				}
-
+				let topicId = 0;
 				if (topicgroup) {
 					try {
 						// Check if the topic group exists
@@ -298,6 +226,7 @@ const Course: CourseModel = {
 								);
 							topicGroupId = topicResult.insertId;
 						}
+
 						if (topics) {
 							const topicslist = JSON.parse(topics);
 							for (const topic of topicslist) {
@@ -306,7 +235,7 @@ const Course: CourseModel = {
 									.query<RowDataPacket[]>('SELECT * FROM topics WHERE topicname = ?', [
 										topic,
 									]);
-								let topicId = 0;
+
 								if (existingCourseTopic.length === 0) {
 									console.error(`Topic ${topic} does not exist`);
 									// Insert the topic if it doesn't exist
@@ -361,6 +290,96 @@ const Course: CourseModel = {
 										]);
 								}
 							}
+						}
+					} catch (error) {
+						console.error(error);
+					}
+				}
+				// Insert the students into the course
+				for (const student of students) {
+					try {
+						const [existingUserByNumber] = await pool
+							.promise()
+							.query<RowDataPacket[]>('SELECT * FROM users WHERE studentnumber = ?', [
+								student.studentnumber,
+							]);
+
+						let userId: number = 0;
+						let usercourseid: number = 0;
+						if (existingUserByNumber.length > 0) {
+							// console.error('User with this student number already exists');
+							// If the user already exists, insert them into the course
+							userId = existingUserByNumber[0].userid;
+							const [result] = await pool
+								.promise()
+								.query('INSERT INTO usercourses (userid, courseid) VALUES (?, ?)', [
+									userId,
+									courseId,
+								]);
+
+							usercourseid = (result as ResultSetHeader).insertId;
+						} else {
+							const [existingUserByEmail] = await pool
+								.promise()
+								.query<RowDataPacket[]>('SELECT * FROM users WHERE email = ?', [
+									student.email,
+								]);
+
+							if (existingUserByEmail.length > 0) {
+								// If the user exists with a different student number, update their student number and insert them into the course
+								await pool
+									.promise()
+									.query('UPDATE users SET studentnumber = ? WHERE email = ?', [
+										student.studentnumber,
+										student.email,
+									]);
+								userId = existingUserByEmail[0].userid;
+								const [result] = await pool
+									.promise()
+									.query('INSERT INTO usercourses (userid, courseid) VALUES (?, ?)', [
+										userId,
+										courseId,
+									]);
+
+								usercourseid = (result as ResultSetHeader).insertId;
+							} else {
+								// Insert the user if they don't exist
+								const [userResult] = await pool
+									.promise()
+									.query<ResultSetHeader>(
+										'INSERT INTO users ( email, first_name, last_name, studentnumber, studentgroupid) VALUES ( ?, ?, ?, ?, ?)',
+										[
+											student.email,
+											student.first_name,
+											student.last_name,
+											student.studentnumber,
+											studentGroupId,
+										],
+									);
+
+								userId = userResult.insertId;
+							}
+						}
+						// Insert the user into the course
+						const [result] = await pool
+							.promise()
+							.query('INSERT INTO usercourses (userid, courseid) VALUES (?, ?)', [
+								userId,
+								courseId,
+							]);
+
+						usercourseid = (result as ResultSetHeader).insertId;
+						try {
+							await pool
+								.promise()
+								.query(
+									'INSERT INTO usercourse_topics (usercourseid, topicid) VALUES (?, ?)',
+									[usercourseid, topicId],
+								);
+
+							console.log('Data inserted successfully');
+						} catch (error) {
+							console.error(error);
 						}
 					} catch (error) {
 						console.error(error);
