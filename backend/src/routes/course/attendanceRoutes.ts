@@ -41,9 +41,21 @@ router.get('/usercourse/:id', async (req: Request, res: Response) => {
 
 router.post('/', async (req: Request, res: Response) => {
 	try {
-		const {status, date, usercourseid, classid} = req.body;
-		await Attendance.insertIntoAttendance(status, date, usercourseid, classid);
+		const {status, date, studentnumber, classid} = req.body;
+		await Attendance.insertIntoAttendance(status, date, studentnumber, classid);
 		res.status(201).send('Attendance created');
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server error');
+	}
+});
+router.post('/classfinished/', async (req: Request, res: Response) => {
+	try {
+		const {date, studentnumbers, classid} = req.body;
+		await Attendance.checkAndInsertAttendance(date, studentnumbers, classid);
+		res
+			.status(201)
+			.send('Attendance put as not present for rest of students not present');
 	} catch (err) {
 		console.error(err);
 		res.status(500).send('Server error');
