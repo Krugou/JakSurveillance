@@ -4,16 +4,16 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "vite --port 8080 --open --host",
-		"dev2": "vite --port 8080",
-		"devBrutal": "vite --port 8080 --open -d --force --host",
-		"devDebug": "vite --port 8080 --open -d --host",
+		"dev": "MODE=development vite --port 8080 --open --host",
+		"dev2": " MODE=development vite --port 8080",
+		"devBrutal": " MODE=development vite --port 8080 --open -d --force --host",
+		"devDebug": " MODE=development vite --port 8080 --open -d --host",
 		"build": "tsc && vite build --outDir ../backend/jaksec --minify --emptyOutDir --base /",
 		"buildWatch": "tsc --watch & vite build --outDir ../backend/jaksec --emptyOutDir --minify  --base / --watch",
 		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 		"preview": "vite preview",
 		"all": " npm i & tsc --watch & vite build --outDir ../backend/jaksec --emptyOutDir --minify  --base / --watch",
-		"alldev": "npm i & vite --port 8080"
+		"alldev": "npm i & MODE=development vite --port 8080"
 	},
 	"dependencies": {
 		"@yudiel/react-qr-scanner": "^1.2.0",
