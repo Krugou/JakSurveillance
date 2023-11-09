@@ -45,7 +45,7 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 		getUserInfo();
 	}, [location]); // jos taulukko tyhjä, ajetaan vain kerran
 
-	if (location.pathname.includes('login')) {
+	if (!user) {
 		return (
 			<header className="flex items-center sm:p-4 p-0 m-4 justify-between">
 				<a href="/">
@@ -58,6 +58,7 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 			</header>
 		);
 	}
+
 	return (
 		<header className="flex items-center sm:p-4 p-0 m-4 justify-between">
 			<a href="/">
