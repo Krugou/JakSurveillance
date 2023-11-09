@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {useLocation, useNavigate} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import logo from '../assets/images/metropolia_s_oranssi_en.png';
 import ErrorAlert from '../components/main/ErrorAlert';
 import NavigationButton from '../components/main/buttons/NavigationButton';
@@ -9,7 +9,6 @@ interface HeaderProps {
 	title: string;
 }
 const Header: React.FC<HeaderProps> = ({title}) => {
-	const navigate = useNavigate();
 	const location = useLocation();
 
 	const [alert, setAlert] = useState<string | null>('');
@@ -17,11 +16,7 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 	// console.log('Header', userContext);
 	// const userType = userContext.user?.userType;
 	// console.log('Header', userType);
-	const handleNavigate = () => {
-		if (user) {
-			navigate(`/${user.role}/mainview`);
-		}
-	};
+
 	const getUserInfo = async () => {
 		if (location.pathname === '/logout') return;
 		const userToken = localStorage.getItem('userToken');
