@@ -6,6 +6,7 @@ const StudentQrScanner: React.FC = () => {
 	const [scanned, setScanned] = useState(false);
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [counter, setCounter] = useState(20);
+	const [errorMessage, setErrorMessage] = useState('Error');
 	const onNewScanResult = useCallback(
 		(decodedText: string) => {
 			// Handle the scan result here
@@ -57,6 +58,7 @@ const StudentQrScanner: React.FC = () => {
 	);
 	const [shouldRender, setShouldRender] = useState(true);
 	const handleScanError = (error?: Error) => {
+		setErrorMessage(error?.message || 'Error');
 		console.log(error?.message);
 	};
 	const onResetClick = useCallback(() => {
@@ -106,6 +108,7 @@ const StudentQrScanner: React.FC = () => {
 				)}
 			</div>
 			<div className="flex justify-center">
+				<h1 className="text-5xl font-bold text-red-500">{errorMessage}</h1>;
 				<button
 					className="bg-blue-500 m-2 p-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 					onClick={onResetClick}
