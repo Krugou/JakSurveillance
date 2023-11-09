@@ -9,9 +9,91 @@
     .react-calendar__tile--now  {
         @apply bg-transparent;
     }
+
     .react-calendar__tile.highlight {
         @apply bg-metropoliaMainOrange;
     }
+    .rounded-shape {
+        @apply bg-metropoliaMainOrange;
+    }
+  
+}
+.eyebrow {
+    width: 50px;
+    height: 5px;
+    background-color: black;
+    position: absolute;
 }
 
+@keyframes rotate {
+  0% {
+    transform: rotate(-20deg);
+  }
+  50% {
+    transform: rotate(-30deg);
+  }
+  100% {
+    transform: rotate(-20deg);
+  }
+}
+
+@keyframes rotateOpposite {
+  0% {
+    transform: rotate(20deg);
+  }
+  50% {
+    transform: rotate(30deg);
+  }
+  100% {
+    transform: rotate(20deg);
+  }
+}
+
+.left-eyebrow {
+    left: 20%;
+    top: 20%;
+    transform: rotate(-20deg);
+    animation: rotate 2s infinite;
+}
+
+.right-eyebrow {
+    right: 20%;
+    top: 20%;
+    transform: rotate(20deg);
+    animation: rotateOpposite 2s infinite;
+}
+ .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .rounded-shape {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .eye {
+            width: 40px;
+            height: 40px;
+            background-color: #fff; /* White color */
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .left-eye {
+            left: 20%;
+            top: 30%;
+        }
+
+        .right-eye {
+            right: 20%;
+            top: 30%;
+        }
 
