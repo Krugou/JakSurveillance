@@ -67,7 +67,28 @@ const Class: ClassModel = {
 			return Promise.reject(error);
 		}
 	},
+	async getStudentsByClassId(classid: number) {
+		try {
+			const [userRows] = await pool.promise().query<RowDataPacket[]>(
+				'SELECT u.* FROM users u ' +
+					'JOIN usercourses uc ON u.userid = uc.userid ' +
+					'JOIN class c ON uc.courseid = c.courseid ' +
+					'WHERE c.classid = ? AND u.roleid = 1', // Assuming roleid 1 is for students
+				[classid],
+			);
+			const uniqueUserRows = userRows.reduce((unique, o) => {
+				if (!unique.some(obj => obj.userid === o.userid)) {
+					unique.push(o);
+				}
+				return unique;
+			}, []);
 
+			return uniqueUserRows ?? [];
+		} catch (error) {
+			console.error(error);
+			return [];
+		}
+	},
 	async insertIntoClass(
 		topicname: string,
 		coursecode: string,
