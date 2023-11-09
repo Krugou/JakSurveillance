@@ -89,17 +89,10 @@ const Login: React.FC = () => {
 						onChange={e => setPassword(e.target.value)}
 					/>
 				</div>
-				<div className="flex items-center justify-between">
-					{/* <button
-              className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
-              type='submit'
-            >
-              Sign In
-            </button> */}
+				<div className="flex w-full justify-center">
 					<button
-						className="bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
+						className="bg-metropoliaMainOrange w-1/2 hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 rounded-xl px-4 focus:outline-none focus:shadow-outline"
 						type="button"
-						//  onClick={() => navigate(`/${userType.toLowerCase()}/mainview`)}
 						onClick={handleSubmit}
 					>
 						Sign In
