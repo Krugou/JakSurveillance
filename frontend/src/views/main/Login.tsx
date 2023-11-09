@@ -42,7 +42,7 @@ const Login: React.FC = () => {
 
 	//const navigate = useNavigate();
 	return (
-		<div className="flex justify-center items-center h-1/2">
+		<div className="h-screen flex items-center justify-center bg-gray-200">
 			{alert && <ErrorAlert onClose={() => setAlert(null)} alert={alert} />}
 			<div className="md:w-1/2 w-2/3">
 				<h1 className="sm:text-2xl text-xl font-bold mb-4 mt-4 sm:mt-0 text-center">
