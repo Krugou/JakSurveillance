@@ -61,6 +61,16 @@ router.post('/classfinished/', async (req: Request, res: Response) => {
 		res.status(500).send('Server error');
 	}
 });
+router.post('/getallstudentsinclass/', async (req: Request, res: Response) => {
+	try {
+		const {classid} = req.body;
+		const allStudentsInClass = await Class.getStudentsByClassId(classid);
+		res.status(201).json(allStudentsInClass);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server error');
+	}
+});
 router.post('/class/', async (req: Request, res: Response) => {
 	try {
 		const {topicname, coursecode, start_date, end_date, timeofday} = req.body;

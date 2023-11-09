@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import {Server, Socket} from 'socket.io';
+import fetchReal from '../utils/fetch.js';
 
 let hash = '';
 const timestamps: {start: number; end: number; hash: string}[] = [];
@@ -26,6 +27,7 @@ const updateHash = () => {
 // handle new socket.io connections
 let SelectedClassid = '';
 const ArrayOfStudents: unknown[] = [];
+let CourseStudents: unknown[] = [];
 const setupSocketHandlers = (io: Server) => {
 	io.on('connection', (socket: Socket) => {
 		console.log('a user connected');
@@ -34,6 +36,26 @@ const setupSocketHandlers = (io: Server) => {
 			console.log('user disconnected');
 		});
 		socket.on('getCurrentHashForQrGenerator', classid => {
+			fetchReal
+				.doFetch(
+					'http://localhost:3002/courses/attendance/getallstudentsinclass/',
+					{
+						method: 'POST', // or 'GET'
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							classid: classid,
+						}),
+					},
+				)
+				.then(response => {
+					CourseStudents = response;
+					socket.emit('getallstudentsinclass', CourseStudents);
+				})
+				.catch(error => {
+					console.error('Error:', error);
+				});
 			console.log('🚀 ~ file: socketHandlers.ts:37 ~ io.on ~ hash:', hash);
 			updateHash();
 			setInterval(updateHash, speedOfHashChange);
