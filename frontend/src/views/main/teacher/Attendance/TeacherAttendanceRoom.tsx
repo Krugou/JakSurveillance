@@ -13,13 +13,13 @@ const AttendanceRoom: React.FC = () => {
 
 	useEffect(() => {
 		if (!socket) {
-			// const newSocket = io('http://localhost:3002', {
-			// 	transports: ['websocket'],
-			// });
-			const newSocket = io('/', {
-				path: '/api/socket.io',
+			const newSocket = io('http://localhost:3002', {
 				transports: ['websocket'],
 			});
+			// const newSocket = io('/', {
+			// 	path: '/api/socket.io',
+			// 	transports: ['websocket'],
+			// });
 			setSocket(newSocket);
 			newSocket.on('connect', () => {
 				console.log('Socket connected');
