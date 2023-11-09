@@ -61,7 +61,7 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 
 	return (
 		<header className="flex items-center sm:p-4 p-0 m-4 justify-between">
-			<a href="/">
+			<a href={`/${user.role.toLowerCase()}/mainview`}>
 				<img
 					src={logo}
 					alt="Logo"
