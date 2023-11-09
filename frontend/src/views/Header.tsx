@@ -80,12 +80,7 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 						<NavigationButton user={user} path="/logout" label="Logout" />
 					</>
 				)}
-				<button
-					onClick={handleNavigate}
-					className="mx-2 px-2 w-full bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-				>
-					Main View
-				</button>
+
 				<h1 className="text-xs mx-2 px-2 sm:text-sm md:text-lg lg:text-xl">
 					{title}
 				</h1>
