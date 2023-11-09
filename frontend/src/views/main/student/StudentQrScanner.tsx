@@ -13,11 +13,13 @@ const StudentQrScanner: React.FC = () => {
 			const [secureHash, classid] = decodedText.split('/');
 			// Create a new socket connection if one does not already exist
 			if (!socket) {
-				// const newSocket = io('http://localhost:3002', {
-				// 	transports: ['websocket'],
-				// });
-				const newSocket = io('/', {
-					path: '/api/socket.io',
+				const socketURL =
+					import.meta.env.MODE === 'development' ? 'http://localhost:3002' : '/';
+				const socketPath =
+					import.meta.env.MODE === 'development' ? '' : '/api/socket.io';
+
+				const newSocket = io(socketURL, {
+					path: socketPath,
 					transports: ['websocket'],
 				});
 				setSocket(newSocket);
