@@ -51,7 +51,7 @@ const Login: React.FC = () => {
 				backgroundPosition: 'center',
 			}}
 		>
-			<h2 className="text-gray-900 text-2xl">Please Login to your Metropolia Account</h2>
+			<h2 className="text-gray-800 font-semibold text-md sm:text-2xl">Sign in using your Metropolia Account</h2>
 			{alert && <ErrorAlert onClose={() => setAlert(null)} alert={alert} />}
 			<form
 				onSubmit={handleSubmit}
@@ -59,7 +59,7 @@ const Login: React.FC = () => {
 			>
 				<div className="mb-4">
 					<label
-						className="block text-gray-700 text-sm font-bold mb-2"
+						className="block text-gray-700 text-sm sm:text-lg font-bold mb-2"
 						htmlFor="username"
 					>
 						Username
@@ -75,7 +75,7 @@ const Login: React.FC = () => {
 				</div>
 				<div className="mb-6">
 					<label
-						className="block text-gray-700 text-sm font-bold mb-2"
+						className="block text-gray-700 text-sm sm:text-lg font-bold mb-2"
 						htmlFor="password"
 					>
 						Password
