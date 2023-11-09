@@ -4,7 +4,7 @@ const baseUrl =
 	import.meta.env.MODE === 'development'
 		? 'http://localhost:3002/'
 		: 'https://jaksec.northeurope.cloudapp.azure.com/api/';
-
+console.log(`Current mode: ${import.meta.env.MODE}`);
 const doFetch = async (url: string, options: RequestInit) => {
 	const response = await fetch(url, options);
 	const json = await response.json();
