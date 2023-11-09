@@ -12,16 +12,17 @@ const getAttendanceColorClass = (attendance: number): string => {
 	}
 };
 */
+import {useNavigate} from 'react-router-dom'; // Import useNavigate
+
 const StudentProfile: React.FC = () => {
 	const {user} = useContext(UserContext);
+	const navigate = useNavigate(); // Initialize useNavigate
 
 	// Error handling
 	if (!user) {
 		return <div>No user data available.</div>;
 	}
 
-	//const attendanceColorClass = getAttendanceColorClass(attendance);
-	console.log(user + 'user');
 	return (
 		<div className="flex flex-col items-center justify-center h-1/2 p-10 bg-gray-100 font-sans">
 			<h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">Student Profile</h1>
@@ -36,6 +37,12 @@ const StudentProfile: React.FC = () => {
 					<strong>role:</strong> <span className="profileStat">{user.role}</span>
 				</p>
 			</div>
+			<button
+				className="px-4 py-2 mt-4 bg-blue-500 text-white rounded hover:bg-blue-700"
+				onClick={() => navigate('/student/courses')} // Navigate to /student/courses when the button is clicked
+			>
+				My Courses
+			</button>
 		</div>
 	);
 };
