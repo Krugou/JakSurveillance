@@ -1,11 +1,12 @@
 import {formatISO} from 'date-fns';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import {useNavigate} from 'react-router-dom';
-
+import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
 const CreateAttendance: React.FC = () => {
+	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
 	const [courses, setCourses] = useState<Course[]>([]);
 	const [date, setDate] = useState<Date | Date[]>(new Date());
@@ -46,10 +47,11 @@ const CreateAttendance: React.FC = () => {
 		}
 	}, [calendarOpen]);
 	useEffect(() => {
-		const email = 'teacher@metropolia.fi';
-		apihooks.getAllCoursesByInstructorEmail(email).then(data => {
-			setCourses(data);
-		});
+		if (user) {
+			apihooks.getAllCoursesByInstructorEmail(user.email).then(data => {
+				setCourses(data);
+			});
+		}
 	}, []);
 	const toggleCalendar = () => {
 		setCalendarOpen(prev => !prev);
@@ -170,23 +172,30 @@ const CreateAttendance: React.FC = () => {
 						setSelectedCourse(courses[newValue] || null);
 					}}
 				>
-					{courses.map(course => {
-						// Ensure courseid is a string or number
-						const courseId =
-							typeof course.courseid === 'function'
-								? course.courseid()
-								: course.courseid;
+					{Array.isArray(courses) &&
+						courses.map(course => {
+							// Ensure courseid is a string or number
+							const courseId =
+								typeof course.courseid === 'function'
+									? course.courseid()
+									: course.courseid;
 
-						// Ensure course has name and code properties
-						const courseName = course.name || 'No Name';
-						const courseCode = course.code || 'No Code';
+							// Ensure course has name and code properties
+							const courseName = course.name || 'No Name';
+							const courseCode = course.code || 'No Code';
 
-						return (
-							<option key={courseId} value={courseId}>
-								{courseName + ' | ' + courseCode}
-							</option>
-						);
-					})}
+							// Ensure courseId, courseName, and courseCode are not empty
+							if (!courseId || !courseName || !courseCode) {
+								console.error('Invalid course data:', course);
+								return null; // Skip this course
+							}
+
+							return (
+								<option key={courseId} value={courseId}>
+									{courseName + ' | ' + courseCode}
+								</option>
+							);
+						})}
 				</select>
 			</div>
 

@@ -13,7 +13,7 @@ import attendanceRoutes from './course/attendanceRoutes.js';
 router.get('/', async (_req: Request, res: Response) => {
 	try {
 		const [rows] = await course.fetchAllCourses();
-		res.json(rows);
+		res.send(rows);
 	} catch (err) {
 		console.error(err);
 		res.status(500).send('Server error');
@@ -195,7 +195,9 @@ router.post('/create', upload.single('file'), async (req, res) => {
 router.get('/instructor/:email', async (req: Request, res: Response) => {
 	try {
 		const courses = await course.getCoursesByInstructorEmail(req.params.email);
-		res.json(courses);
+		console.log(courses);
+
+		res.send(courses);
 	} catch (err) {
 		console.error(err);
 		res.status(500).send('Server error');

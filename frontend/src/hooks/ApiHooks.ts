@@ -78,7 +78,7 @@ const getAllCoursesByInstructorEmail = async (email: string) => {
 	};
 
 	// Use the email to make the API request
-	return await doFetch(`${baseUrl}courses?email=${email}`, options);
+	return await doFetch(`${baseUrl}courses/instructor/${email}`, options);
 };
 
 const getAllTopicGroupsAndTopicsInsideThem = async () => {

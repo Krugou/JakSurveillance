@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import CourseData from '../../../../components/main/course/CourseData';
+import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
 interface Course {
 	courseid: number;
@@ -14,21 +15,24 @@ interface Course {
 }
 
 const TeacherCourses: React.FC = () => {
+	const {user} = useContext(UserContext);
 	const [courses, setCourses] = useState<Course[]>([]); // Specify the type for courses
-	const email = 'teacher@metropolia.fi';
 
 	useEffect(() => {
 		const fetchCourses = async () => {
-			const courses = await apihooks.getAllCoursesByInstructorEmail(email);
-			console.log(
-				'🚀 ~ file: TeacherCourses.tsx:14 ~ fetchCourses ~ courses:',
-				courses,
-			);
-			setCourses(courses);
+			if (user) {
+				const courses = await apihooks.getAllCoursesByInstructorEmail(user.email);
+				console.log(
+					'🚀 ~ file: TeacherCourses.tsx:25 ~ fetchCourses ~ courses:',
+					courses,
+				);
+
+				setCourses(courses);
+			}
 		};
 
 		fetchCourses();
-	}, []);
+	}, [user]);
 
 	return (
 		<div className="m-4 bg-white rounded shadow-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-2/5 mx-auto">
