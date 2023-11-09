@@ -1,22 +1,24 @@
-import React, {useContext, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import ErrorAlert from '../../components/main/ErrorAlert.tsx';
-import {UserContext} from '../../contexts/UserContext.tsx';
-import apiHooks from '../../hooks/ApiHooks.ts';
 
-console.log(UserContext, 'USER CONTEXT');
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import ErrorAlert from '../../components/main/ErrorAlert.tsx';
+import { UserContext } from '../../contexts/UserContext.tsx';
+import apiHooks from '../../hooks/ApiHooks.ts';
+import background from '../../assets/images/tausta.png';
 
 const Login: React.FC = () => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [alert, setAlert] = useState<string | null>('');
-	const {setUser, user} = useContext(UserContext);
+	const { setUser, user } = useContext(UserContext);
 	const navigate = useNavigate();
+
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 
 		console.log(username, password, user);
-		const inputs = {username, password};
+		const inputs = { username, password };
+
 		try {
 			const response = await apiHooks.postLogin(inputs);
 			// this navigates to the mainview of the user type
@@ -40,17 +42,19 @@ const Login: React.FC = () => {
 		console.log('🚀 ~ file: App.tsx:41 ~ App ~ inputs:', inputs);
 	};
 
-	//const navigate = useNavigate();
 	return (
-		<div className="h-screen flex items-center justify-center bg-gray-200">
+		<div
+			className="w-full flex items-center justify-center pt-10 pb-10 pl-3 pr-3"
+			style={{
+				backgroundImage: `url(${background})`,
+				backgroundSize: 'cover',
+				backgroundPosition: 'center',
+			}}
+		>
 			{alert && <ErrorAlert onClose={() => setAlert(null)} alert={alert} />}
-			<div className="md:w-1/2 w-2/3">
-				<h1 className="sm:text-2xl text-xl font-bold mb-4 mt-4 sm:mt-0 text-center">
-					Login
-				</h1>
 				<form
 					onSubmit={handleSubmit}
-					className="bg-white md:w-3/4 xl:w-1/2 w-full shadow-md rounded px-8 pt-6 pb-8 mb-4 mx-auto"
+					className="bg-white md:w-2/4 xl:w-1/4 w-full sm:w-2/3 shadow-md rounded px-8 pt-6 pb-8 mb-4 mx-auto"
 				>
 					<div className="mb-4">
 						<label
@@ -102,7 +106,6 @@ const Login: React.FC = () => {
 					</div>
 				</form>
 			</div>
-		</div>
 	);
 };
 
