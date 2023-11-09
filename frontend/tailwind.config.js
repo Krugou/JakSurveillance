@@ -2,6 +2,10 @@
 export default {
 	content: ['./src/**/*.{js,jsx,ts,tsx}'],
 	theme: {
+		fontFamily: {
+			sans: ['Open Sans', 'sans-serif'],
+			bold: ['Open Sans Bold', 'sans-serif'],
+		},
 		extend: {
 			colors: {
 				metropoliaMainOrange: '#ff5000',
