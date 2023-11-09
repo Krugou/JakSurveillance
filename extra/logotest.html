@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .rounded-shape {
+            width: 200px;
+            height: 200px;
+            background-color: #4CAF50; /* Green color */
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .eye {
+            width: 40px;
+            height: 40px;
+            background-color: #fff; /* White color */
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .left-eye {
+            left: 20%;
+            top: 30%;
+        }
+
+        .right-eye {
+            right: 20%;
+            top: 30%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="rounded-shape">
+        <div class="eye left-eye"></div>
+        <div class="eye right-eye"></div>
+    </div>
+
+</body>
+</html>
