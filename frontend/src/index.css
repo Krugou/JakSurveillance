@@ -15,7 +15,21 @@
     .rounded-shape {
         @apply bg-metropoliaMainOrange;
     }
-}
+    .left-eye {
+        @apply left-20 top-30;
+    }
+    .right-eye {
+        @apply right-20 top-30;
+    }
+    .eye {
+        @apply w-10 h-10 bg-white rounded-full absolute;
+    }
+    .rounded-shape {
+        @apply   rounded-3xl relative border border-solid border-black flex justify-center items-center;
+        width: 200px;
+        height: 200px;
+    }
+    }
 @keyframes marquee {
     0% { transform: translateX(100%); }
     100% { transform: translateX(-100%); }
@@ -27,9 +41,9 @@
 }
 .eyebrow {
     width: 50px;
-    height: 5px;
-    background-color: black;
+    height: 0.5rem;
     position: absolute;
+    background-color: white;
 }
 
 @keyframes rotate {
@@ -43,7 +57,28 @@
         transform: rotate(-20deg);
     }
 }
-
+@keyframes animate-border {
+    0% {
+        border-top: 5px solid black;
+    }
+    50% {
+        border-top: 50px solid black;
+    }
+    100% {
+        border-top: 5px solid black;
+    }
+}
+.mouth {
+    width: 100px;
+    height: 50px;
+    position: absolute;
+    border-top: 5px solid black;
+    border-radius: 50px / 10px;
+    top: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: animate-border 2s 5;
+}
 @keyframes rotateOpposite {
     0% {
         transform: rotate(20deg);
@@ -68,38 +103,64 @@
     transform: rotate(20deg);
     animation: rotateOpposite 2s infinite;
 }
+
 .logo {
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0;
+    animation: animate-opacity 2s ease-out, animate-move 5s ease-in-out;
 }
-
-.rounded-shape {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+@keyframes animate-opacity {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+    }
+    70% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
-
-.eye {
-    width: 40px;
-    height: 40px;
-    background-color: #fff; /* White color */
-    border-radius: 50%;
+@keyframes animate-move {
+    0% {
+        transform: translateX(0%);
+    }
+    25% {
+        transform: translateX(100%);
+    }
+    75% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
+}
+.horn {
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 40px solid #ff0000;
     position: absolute;
 }
 
-.left-eye {
-    left: 20%;
-    top: 30%;
+.left-horn {
+    top: -20px;
+    left: 20px;
+    transform: rotate(-20deg);
 }
 
-.right-eye {
-    right: 20%;
-    top: 30%;
+.right-horn {
+    transform: rotate(20deg);
+    top: -20px;
+    right: 20px;
 }
+
+
+
+
 
