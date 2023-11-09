@@ -37,7 +37,7 @@ const StartView = () => {
 
 	return (
 		<div
-			className="flex flex-col items-center justify-center logo-container border-metropoliaMainOrange border-t-4"
+			className="flex flex-col items-center justify-center logo-container border-metropoliaMainOrange border-t-4 pt-10"
 		>
 			<img
 				style={{
