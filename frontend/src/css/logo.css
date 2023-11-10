@@ -1,0 +1,69 @@
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    animation: animate-opacity 2s ease-out 
+}
+@keyframes animate-opacity {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+    }
+    70% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
+
+.oval-shape {
+    background-color: #ff5000;
+    border-radius: 50%/25%;
+    position: relative;
+    border: 1px solid black;
+    width: 300px;
+    height: 200px;
+    margin: 0 auto;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+@keyframes heightChange {
+    0%, 100% {
+        height: 30%;
+    }
+    50% {
+        height: 40%;
+    }
+}
+
+.big-brother-eye {
+    position: absolute;
+    width: 50%;
+    height: 20%;
+    background: radial-gradient(circle at center, #000 50%, #ffffff 60%, #000 70%);
+    border-radius: 30%/50%;
+    animation: heightChange 8s infinite;
+      display:flex;
+    justify-content: center;
+    align-items: center;
+}
+.eye {
+    width: 3.5rem;
+    height: 3rem;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+}
+
+
+
+
