@@ -91,13 +91,13 @@ const StudentQrScanner: React.FC = () => {
 	}, [successState, counter]);
 	return (
 		<>
-			<div className="flex flex-col items-center justify-center h-screen">
+			<div className="flex flex-col items-center justify-center w-1/2 m-auto  ">
 				{successState ? (
 					<p className="text-3xl font-bold mb-4">
 						You can leave this site now redirecting in {counter} seconds
 					</p>
 				) : (
-					<p className="text-3xl font-bold mb-4">Scan QR code to get attendance</p>
+					<p className="text-xl font-bold mb-4">Scan QR code to get attendance</p>
 				)}
 				<div className="flex justify-center">
 					{successState && <p className="text-green-500 font-bold">Success</p>}
@@ -105,12 +105,11 @@ const StudentQrScanner: React.FC = () => {
 						<p className="text-red-500 font-bold">Failure</p>
 					)}
 				</div>
+
 				{shouldRender && (
 					<QrScanner onDecode={onNewScanResult} onError={handleScanError} />
 				)}
-			</div>
-			<div className="flex justify-center">
-				<h1 className="text-5xl font-bold text-red-500">{errorMessage}</h1>;
+
 				<button
 					className="bg-blue-500 m-2 p-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 					onClick={onResetClick}
