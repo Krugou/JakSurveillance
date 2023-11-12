@@ -21,7 +21,7 @@ This repository contains the configuration files for the server running on Azure
     RewriteEngine on
     RewriteCond %{HTTP:Upgrade} WebSocket [NC]
     RewriteCond %{HTTP:Connection} upgrade [NC]
-    RewriteRule ^/?(.*) "ws://localhost:3002/$1" [P,L]
+    RewriteRule ^/api?(.*) "ws://localhost:3002/$1" [P,L]
 
     ServerName jaksec.northeurope.cloudapp.azure.com
     Include /etc/letsencrypt/options-ssl-apache.conf
