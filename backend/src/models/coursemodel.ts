@@ -57,7 +57,7 @@ interface CourseModel {
 	getCoursesByCourseId(courseId: number): Promise<Course[]>;
 	// Add other methods here...
 }
-const Course: CourseModel = {
+const course: CourseModel = {
 	async fetchAllCourses() {
 		try {
 			const [rows] = await pool
@@ -448,16 +448,12 @@ const Course: CourseModel = {
 		}
 	},
 
-	async checkIfCourseExists(code) {
-		try {
-			const [rows] = await pool
-				.promise()
-				.query<RowDataPacket[]>('SELECT * FROM courses WHERE code = ?', [code]);
-			return rows.length > 0;
-		} catch (error) {
-			console.error(error);
-			return Promise.reject(error);
-		}
+	async checkIfCourseExists(code: string) {
+		const [existingCourse] = await pool
+			.promise()
+			.query<RowDataPacket[]>('SELECT * FROM courses WHERE code = ?', [code]);
+
+		return existingCourse;
 	},
 	async getCoursesByCourseId(courseId) {
 		try {
@@ -479,13 +475,7 @@ const Course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
-	async checkIfCourseExists(code: string) {
-		const [existingCourse] = await this.pool
-			.promise()
-			.query<RowDataPacket[]>('SELECT * FROM courses WHERE code = ?', [code]);
-
-		return existingCourse;
-	},
+	
 	async insertCourse(
 		name: string,
 		startDateString: string,
@@ -505,4 +495,4 @@ const Course: CourseModel = {
 	// other methods...
 };
 
-export default Course;
+export default course;
