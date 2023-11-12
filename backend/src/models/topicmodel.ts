@@ -143,6 +143,22 @@ const Topic: TopicModel = {
 			return Promise.reject(error);
 		}
 	},
+	async checkIfTopicExists(topic: string) {
+		const [existingCourseTopic] = await this.pool
+			.promise()
+			.query<RowDataPacket[]>('SELECT * FROM topics WHERE topicname = ?', [topic]);
+
+		return existingCourseTopic;
+	},
+	async insertTopic(topic: string) {
+		const [topicResult] = await this.pool
+			.promise()
+			.query<ResultSetHeader>('INSERT INTO topics (topicname) VALUES (?)', [
+				topic,
+			]);
+
+		return topicResult;
+	},
 
 	// other methods...
 };

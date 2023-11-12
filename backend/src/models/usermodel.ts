@@ -1,4 +1,4 @@
-import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
+import { FieldPacket, ResultSetHeader, RowDataPacket } from 'mysql2';
 
 import pool from '../config/adminDBPool.js'; // Adjust the path to your pool file
 
@@ -173,6 +173,58 @@ const UserModel = {
 			console.error(error);
 			throw new Error('Database error');
 		}
+	},
+	async checkIfEmailMatchesStaff(instructoremail: string) {
+		const [existingInstructor] = await pool
+			.promise()
+			.query<RowDataPacket[]>(
+				'SELECT * FROM users WHERE email = ? AND staff = 1',
+				[instructoremail],
+			);
+
+		return existingInstructor;
+	},
+	async checkIfUserExistsByStudentNumber(studentnumber: string) {
+		const [existingUserByNumber] = await this.pool
+			.promise()
+			.query<RowDataPacket[]>('SELECT * FROM users WHERE studentnumber = ?', [
+				studentnumber,
+			]);
+
+		return existingUserByNumber;
+	},
+	async checkIfUserExistsByEmail(email: string) {
+		const [existingUserByEmail] = await this.pool
+			.promise()
+			.query<RowDataPacket[]>('SELECT * FROM users WHERE email = ?', [email]);
+
+		return existingUserByEmail;
+	},
+	async updateUserStudentNumber(studentnumber: string, email: string) {
+		const result = await this.pool
+			.promise()
+			.query('UPDATE users SET studentnumber = ? WHERE email = ?', [
+				studentnumber,
+				email,
+			]);
+
+		return result;
+	},
+	async insertStudentUser(
+		email: string,
+		first_name: string,
+		last_name: string,
+		studentnumber: string,
+		studentGroupId: number,
+	) {
+		const [userResult] = await this.pool
+			.promise()
+			.query<ResultSetHeader>(
+				'INSERT INTO users (email, first_name, last_name, studentnumber, studentgroupid) VALUES (?, ?, ?, ?, ?)',
+				[email, first_name, last_name, studentnumber, studentGroupId],
+			);
+
+		return userResult;
 	},
 };
 

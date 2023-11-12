@@ -97,6 +97,26 @@ const TopicGroup: TopicGroupModel = {
 			return Promise.reject(error);
 		}
 	},
+	async checkIfTopicGroupExists(topicgroup: string) {
+		const [existingTopic] = await this.pool
+			.promise()
+			.query<RowDataPacket[]>(
+				'SELECT * FROM topicgroups WHERE topicgroupname = ?',
+				[topicgroup],
+			);
+
+		return existingTopic;
+	},
+	async insertTopicGroup(topicgroup: string) {
+		const [topicResult] = await this.pool
+			.promise()
+			.query<ResultSetHeader>(
+				'INSERT INTO topicgroups (topicgroupname) VALUES (?)',
+				[topicgroup],
+			);
+
+		return topicResult;
+	},
 
 	// other methods...
 };

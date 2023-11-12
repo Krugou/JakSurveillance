@@ -25,7 +25,25 @@ const StudentGroup: StudentGroupModel = {
 			return Promise.reject(error);
 		}
 	},
+	async checkIfGroupNameExists(group_name: string) {
+		const [existingGroup] = await this.pool
+			.promise()
+			.query<RowDataPacket[]>('SELECT * FROM studentgroups WHERE group_name = ?', [
+				group_name,
+			]);
 
+		return existingGroup;
+	},
+	async insertStudentGroup(group_name: string) {
+  const [groupResult] = await this.pool
+    .promise()
+    .query<ResultSetHeader>(
+      'INSERT INTO studentgroups (group_name) VALUES (?)',
+      [group_name],
+    );
+
+  return groupResult;
+},
 	async findByStudentGroupId(id) {
 		try {
 			const [rows] = await pool
@@ -53,6 +71,7 @@ const StudentGroup: StudentGroupModel = {
 			return Promise.reject(error);
 		}
 	},
+	
 
 	// other methods...
 };

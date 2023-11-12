@@ -479,6 +479,29 @@ const Course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
+	async checkIfCourseExists(code: string) {
+		const [existingCourse] = await this.pool
+			.promise()
+			.query<RowDataPacket[]>('SELECT * FROM courses WHERE code = ?', [code]);
+
+		return existingCourse;
+	},
+	async insertCourse(
+		name: string,
+		startDateString: string,
+		endDateString: string,
+		code: string,
+		studentGroupId: number,
+	) {
+		const [courseResult] = await this.pool
+			.promise()
+			.query<ResultSetHeader>(
+				'INSERT INTO courses (name, start_date, end_date, code, studentgroupid) VALUES (?, ?, ?, ?, ?)',
+				[name, startDateString, endDateString, code, studentGroupId],
+			);
+
+		return courseResult;
+	},
 	// other methods...
 };
 
