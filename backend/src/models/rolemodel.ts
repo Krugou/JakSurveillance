@@ -1,5 +1,5 @@
 import {FieldPacket, RowDataPacket} from 'mysql2';
-import pool from '../database/db.js';
+import pool from '../config/adminDBPool.js';
 
 interface Role {
 	roleid: number;

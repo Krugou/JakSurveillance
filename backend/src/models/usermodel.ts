@@ -1,6 +1,6 @@
 import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
 
-import pool from '../database/db.js'; // Adjust the path to your pool file
+import pool from '../config/adminDBPool.js'; // Adjust the path to your pool file
 
 /**
  * @interface UserInfo

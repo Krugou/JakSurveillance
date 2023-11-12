@@ -1,5 +1,5 @@
 import {FieldPacket, RowDataPacket} from 'mysql2';
-import pool from '../database/db.js';
+import pool from '../config/adminDBPool.js';
 /**
  * @interface Topic
  * @description Defines the structure of a Topic object.
@@ -35,9 +35,7 @@ const Topic: TopicModel = {
 	 */
 	async fetchAllTopics() {
 		try {
-			return await pool
-				.promise()
-				.query<RowDataPacket[]>('SELECT * FROM topics');
+			return await pool.promise().query<RowDataPacket[]>('SELECT * FROM topics');
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);

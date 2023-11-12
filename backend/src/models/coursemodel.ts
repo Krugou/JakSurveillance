@@ -1,5 +1,5 @@
-import {ResultSetHeader,  RowDataPacket} from 'mysql2';
-import pool from '../database/db.js';
+import {ResultSetHeader, RowDataPacket} from 'mysql2';
+import pool from '../config/adminDBPool.js';
 
 interface Course {
 	// Define the properties of a Course here
