@@ -9,8 +9,13 @@ const AttendanceRoom: React.FC = () => {
 	const [servertime, setServertime] = useState('');
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [arrayOfStudents, setArrayOfStudents] = useState<string[]>([]);
-	const [courseStudents, setCourseStudents] = useState<string[]>([]);
+	const [courseStudents, setCourseStudents] = useState<Student[]>([]);
 
+	interface Student {
+		first_name: string;
+		last_name: string;
+		userid: number;
+	}
 	const [hashValue, setHashValue] = useState('');
 
 	useEffect(() => {
