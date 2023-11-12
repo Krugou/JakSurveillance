@@ -35,14 +35,21 @@
                 // Convert the data object to an array and sort it
                 const sortedData = Object.entries( data ).sort( ( a, b ) => b[ 1 ].totalChanges - a[ 1 ].totalChanges );
 
+                // Calculate total changes for all contributors
+                const totalChanges = sortedData.reduce( ( total, [ _, stats ] ) => total + stats.totalChanges, 0 );
+
                 for ( const [ contributor, stats ] of sortedData ) {
                     const row = document.createElement( 'div' );
                     row.className = 'flex flex-wrap';
+
+                    // Calculate percentage of total changes for this contributor
+                    const percentage = ( ( stats.totalChanges / totalChanges ) * 100 ).toFixed( 2 );
+
                     row.innerHTML = `
-                        <div class="w-full sm:w-1/2 text-white md:w-1/3 lg:w-1/3 px-4 py-2">${ contributor }</div>
-                        <div class="w-full sm:w-1/2 text-white md:w-1/3 lg:w-1/3 px-4 py-2">${ stats.commits }</div>
-                        <div class="w-full sm:w-1/2 text-white md:w-1/3 lg:w-1/3 px-4 py-2">${ stats.totalChanges }</div>
-                    `;
+                    <div class="w-full sm:w-1/2 text-white md:w-1/3 lg:w-1/3 px-4 py-2">${ contributor }</div>
+                    <div class="w-full sm:w-1/2 text-white md:w-1/3 lg:w-1/3 px-4 py-2">${ stats.commits }</div>
+                    <div class="w-full sm:w-1/2 text-white md:w-1/3 lg:w-1/3 px-4 py-2">${ stats.totalChanges } (${ percentage }%)</div>
+                `;
                     dataContainer.appendChild( row );
                 }
             } );
