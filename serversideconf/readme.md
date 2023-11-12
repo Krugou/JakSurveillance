@@ -8,7 +8,7 @@ This repository contains the configuration files for the server running on Azure
 
 ```apacheconf
 <VirtualHost *:443>
-    ServerAdmin webmaster@localhost
+    ServerAdmin webmaster@localhost.com
 
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
