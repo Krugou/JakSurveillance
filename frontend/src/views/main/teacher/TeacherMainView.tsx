@@ -5,7 +5,7 @@ import Card from "../../../components/main/cards/Card";
 const MainView: React.FC = () => {
     return (
         <div
-            className="flex flex-col bg-gray-100 p-10 items-center"
+            className="flex flex-col bg-gray-100 p-5  items-center"
             style={{
                 backgroundImage: `url(${background})`,
                 backgroundSize: 'cover',
@@ -14,7 +14,7 @@ const MainView: React.FC = () => {
         >
             <h1 className="text-4xl font-bold mb-8">Teacher Dashboard</h1>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="flex 2xl:w-2/5 xl:w-5/6 lg:w-11/12 w-full flex-wrap justify-center gap-4">
                 <Card path="/teacher/attendance" title="View Attendance" description="View your current attendance for a lesson" />
 
                 <Card path="/teacher/students" title="Manage Students" description="Manage your students details" />
