@@ -1,8 +1,7 @@
-
-import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useContext, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import ErrorAlert from '../../components/main/ErrorAlert.tsx';
-import { UserContext } from '../../contexts/UserContext.tsx';
+import {UserContext} from '../../contexts/UserContext.tsx';
 import apiHooks from '../../hooks/ApiHooks.ts';
 import background from '../../assets/images/tausta.png';
 
@@ -10,14 +9,14 @@ const Login: React.FC = () => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [alert, setAlert] = useState<string | null>('');
-	const { setUser, user } = useContext(UserContext);
+	const {setUser} = useContext(UserContext);
 	const navigate = useNavigate();
 
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 
-		console.log(username, password, user);
-		const inputs = { username, password };
+		//console.log(username, password, user);
+		const inputs = {username, password};
 
 		try {
 			const response = await apiHooks.postLogin(inputs);
@@ -39,7 +38,7 @@ const Login: React.FC = () => {
 			}
 		}
 
-		console.log('🚀 ~ file: App.tsx:41 ~ App ~ inputs:', inputs);
+		//console.log('🚀 ~ file: App.tsx:41 ~ App ~ inputs:', inputs);
 	};
 
 	return (
@@ -51,7 +50,9 @@ const Login: React.FC = () => {
 				backgroundPosition: 'center',
 			}}
 		>
-			<h2 className="text-gray-800 font-semibold text-md sm:text-2xl">Sign in using your Metropolia Account</h2>
+			<h2 className="text-gray-800 font-semibold text-md sm:text-2xl">
+				Sign in using your Metropolia Account
+			</h2>
 			{alert && <ErrorAlert onClose={() => setAlert(null)} alert={alert} />}
 			<form
 				onSubmit={handleSubmit}
