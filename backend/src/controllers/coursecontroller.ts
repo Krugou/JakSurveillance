@@ -44,7 +44,7 @@ const courseController = {
 					new Error('Instructor email not found or the user is not a staff member'),
 				);
 			}
-            const instructoruserid = existingInstructor.userid;
+			const instructoruserid = existingInstructor.userid;
 
 			try {
 				let studentGroupId = await studentGroupModel.checkIfGroupNameExists(
@@ -83,24 +83,75 @@ const courseController = {
 				if (!instructorInserted) {
 					throw new Error('Failed to insert instructor into courseinstructors');
 				}
-
 				if (topicgroup) {
-					const topicGroupId = await topicGroupModel.findOrCreateTopicGroup(
-						topicgroup,
-					);
+					try {
+						let topicGroupId = await topicGroupModel.checkIfTopicGroupExists(
+							topicgroup,
+						);
 
-					if (topics) {
-						const topicslist = JSON.parse(topics);
-						for (const topic of topicslist) {
-							const topicId = await topicModel.findOrCreateTopic(topic, topicGroupId);
-							await courseTopicModel.findOrCreateCourseTopic(courseId, topicId);
+						if (topicGroupId === null) {
+							topicGroupId = await topicGroupModel.insertTopicGroup(topicgroup);
 						}
+
+						if (topics) {
+							const topicslist = JSON.parse(topics);
+							for (const topic of topicslist) {
+								let topicId = await topicModel.checkIfTopicExists(topic);
+
+								if (topicId === null) {
+									topicId = await topicModel.insertTopic(topic);
+								}
+
+								const relationExists =
+									await courseTopicModel.checkIfCourseTopicRelationExists(
+										courseId,
+										topicId,
+									);
+
+								if (!relationExists) {
+									await courseTopicModel.insertCourseTopic(courseId, topicId);
+								}
+							}
+						}
+					} catch (error) {
+						console.error(error);
 					}
 				}
 
 				for (const student of students) {
-					const userId = await userModel.findOrCreateUser(student);
-					await userCourseModel.insertUserCourse(userId, courseId);
+					try {
+						let userId = await userModel.checkIfUserExistsByNumber(
+							student.studentnumber,
+						);
+						let usercourseid;
+
+						if (userId !== null) {
+							usercourseid = await userCourseModel.insertUserCourse(userId, courseId);
+						} else {
+							userId = await userModel.checkIfUserExistsByEmail(student.email);
+
+							if (userId !== null) {
+								await userModel.updateUserStudentNumber(
+									student.studentnumber,
+									student.email,
+								);
+								usercourseid = await userCourseModel.insertUserCourse(userId, courseId);
+							} else {
+								userId = await userModel.insertUser(student, studentGroupId);
+							}
+						}
+
+						usercourseid = await userCourseModel.insertUserCourse(userId, courseId);
+
+						try {
+							await userCourseTopicModel.insertUserCourseTopic(usercourseid, topicId);
+							console.log('Data inserted successfully');
+						} catch (error) {
+							console.error(error);
+						}
+					} catch (error) {
+						console.error(error);
+					}
 				}
 			} catch (error) {
 				console.error(error);
