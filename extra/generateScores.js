@@ -5,8 +5,8 @@ import path, {dirname} from 'path';
 import {fileURLToPath} from 'url';
 
 dotenv.config();
-const owner = 'Krugou'; // replace with repository owner
-const repo = 'JakSurveillance'; // replace with repository name
+const owner = 'Krugou'; 
+const repo = 'JakSurveillance'; 
 // console.log(process.env.GITHUBTOKEN);
 const octokit = new Octokit({auth: process.env.GITHUBTOKEN});
 const getContributorsStats = async () => {
@@ -21,7 +21,7 @@ const getContributorsStats = async () => {
 		}
 
 		console.log('Waiting for stats to be ready...');
-		await new Promise((resolve) => setTimeout(resolve, 5000)); // wait for 5 seconds before retrying
+		await new Promise(resolve => setTimeout(resolve, 5000)); // wait for 5 seconds before retrying
 	}
 };
 const generateScores = async () => {
@@ -36,16 +36,22 @@ const generateScores = async () => {
 		const commits = contributor.total;
 		const additions = contributor.weeks.reduce(
 			(total, week) => total + week.a,
-			0
+			0,
 		);
 		const deletions = contributor.weeks.reduce(
 			(total, week) => total + week.d,
-			0
+			0,
 		);
 		const totalChanges = additions - deletions;
 
+		// Find the last commit time
+		const lastCommitTime = contributor.weeks.reduce(
+			(latest, week) => (week.w > latest ? week.w : latest),
+			0,
+		);
+
 		console.log(
-			`Scores for ${login}: commits - ${commits}, additions - ${additions}, deletions - ${deletions}, total changes - ${totalChanges}`
+			`Scores for ${login}: commits - ${commits}, additions - ${additions}, deletions - ${deletions}, total changes - ${totalChanges}, last commit time - ${lastCommitTime}`,
 		);
 
 		scores[login] = {
@@ -53,6 +59,7 @@ const generateScores = async () => {
 			additions: additions,
 			deletions: deletions,
 			totalChanges: totalChanges,
+			lastCommitTime: lastCommitTime,
 		};
 	}
 
@@ -73,12 +80,12 @@ const filenames = fs.readdirSync(__dirname);
 
 // Filter the filenames for .drawio and .png files
 const filteredFilenames = filenames.filter(
-	(filename) =>
-		path.extname(filename) === '.drawio' || path.extname(filename) === '.png'
+	filename =>
+		path.extname(filename) === '.drawio' || path.extname(filename) === '.png',
 );
 
 // Write the object to the JSON file
 fs.writeFileSync(
 	path.join(__dirname, 'links.json'),
-	JSON.stringify(filteredFilenames, null, 2)
+	JSON.stringify(filteredFilenames, null, 2),
 );
