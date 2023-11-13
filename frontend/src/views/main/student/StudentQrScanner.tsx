@@ -7,6 +7,7 @@ const StudentQrScanner: React.FC = () => {
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [counter, setCounter] = useState(20);
 	const [errorMessage, setErrorMessage] = useState('Error');
+	console.log('errorMessage', errorMessage);
 	const onNewScanResult = useCallback(
 		(decodedText: string) => {
 			// Handle the scan result here
