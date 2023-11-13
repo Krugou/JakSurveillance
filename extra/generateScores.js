@@ -5,8 +5,8 @@ import path, {dirname} from 'path';
 import {fileURLToPath} from 'url';
 
 dotenv.config();
-const owner = 'Krugou'; 
-const repo = 'JakSurveillance'; 
+const owner = 'Krugou';
+const repo = 'JakSurveillance';
 // console.log(process.env.GITHUBTOKEN);
 const octokit = new Octokit({auth: process.env.GITHUBTOKEN});
 const getContributorsStats = async () => {
