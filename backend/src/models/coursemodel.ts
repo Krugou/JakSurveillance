@@ -493,6 +493,49 @@ const course: CourseModel = {
 		return courseResult;
 	},
 	// other methods...
+
+	async getStudentsCourses(email: string) {
+		try {
+			const [rows] = await pool.promise().query<RowDataPacket[]>(
+				`SELECT 
+				u.email,
+				c.courseid,
+				c.name AS course_name,
+				c.start_date AS startDate,
+				c.end_date AS endDate,
+				c.code AS code,
+				sg.group_name AS student_group,
+				GROUP_CONCAT(DISTINCT t.topicname) AS topic_names,
+				GROUP_CONCAT(DISTINCT u2.username) AS instructor_name
+		FROM 
+				users u
+		JOIN 
+				usercourses uc ON u.userid = uc.userid
+		JOIN 
+				courses c ON uc.courseid = c.courseid
+		LEFT JOIN 
+				studentgroups sg ON c.studentgroupid = sg.studentgroupid
+		LEFT JOIN 
+				coursetopics ct ON c.courseid = ct.courseid
+		LEFT JOIN 
+				topics t ON ct.topicid = t.topicid
+		LEFT JOIN 
+				courseinstructors ci ON c.courseid = ci.courseid
+		LEFT JOIN 
+				users u2 ON ci.userid = u2.userid
+		WHERE 
+				u.email = ?
+		GROUP BY 
+				c.start_date;`,
+				[email],
+			);
+			console.log(rows);
+			return rows as Course[];
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
 };
 
 export default course;

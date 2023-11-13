@@ -212,7 +212,7 @@ router.get('/coursesbyid/:id', async (req: Request, res: Response) => {
 		res.status(500).send('Server error');
 	}
 });
-router.get('/courses/info/:email', async (req: Request, res: Response) => {
+router.get('/user/all', async (req: Request, res: Response) => {
 	try {
 		// Validate that the user is logged in
 		if (!req.user) {
@@ -221,7 +221,7 @@ router.get('/courses/info/:email', async (req: Request, res: Response) => {
 		}
 
 		// Get the email from the request
-		const email = req.params.email;
+		const email = req.user.email;
 
 		// Check if the user is an admin or the user is requesting their own info
 		if (req.user.userrole !== 0 && req.user.email !== email) {
@@ -229,7 +229,7 @@ router.get('/courses/info/:email', async (req: Request, res: Response) => {
 		}
 
 		// Get the courses for the user
-		const courses = await course.getCoursesByEmail(email);
+		const courses = await course.getStudentsCourses(email);
 		res.json(courses);
 	} catch (err) {
 		console.error(err);

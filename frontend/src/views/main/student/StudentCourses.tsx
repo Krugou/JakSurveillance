@@ -4,14 +4,14 @@ import apiHooks from '../../../hooks/ApiHooks';
 
 const StudentCourses: React.FC = () => {
 	interface Course {
-		id: number;
+		courseid: number;
 		name: string;
 		startDate: string;
-		createdAt: string;
 		endDate: string;
 		code: string;
-		studentGroupId: number | null;
-		attendance: number;
+		student_group: number | null;
+		topic_names: string;
+		instructor_name: string;
 	}
 	const [error, setError] = useState<string | null>(null);
 	const {user} = useContext(UserContext);
@@ -21,7 +21,8 @@ const StudentCourses: React.FC = () => {
 			try {
 				const token: string | null = localStorage.getItem('userToken');
 				if (user && token !== null) {
-					const data = await apiHooks.getAllCourseInfoByUserEmail(user.email, token);
+					const data = await apiHooks.getAllCourseInfoByUserEmail(token);
+					console.log(data, 'DATA');
 					setCourses(data);
 				}
 			} catch (error) {
@@ -31,6 +32,7 @@ const StudentCourses: React.FC = () => {
 		fetchCourses();
 	}, [user]);
 
+	/*
 	const getAttendanceColorClass = (attendance: number) => {
 		if (attendance >= 90) {
 			return 'bg-metropoliaTrendGreen';
@@ -40,7 +42,7 @@ const StudentCourses: React.FC = () => {
 			return 'bg-metropoliaSupportRed';
 		}
 	};
-
+*/
 	if (error) {
 		return <div>Error: {error}</div>;
 	}
@@ -52,7 +54,7 @@ const StudentCourses: React.FC = () => {
 			<div className="flex flex-row">
 				{courses.map(course => (
 					<div
-						key={course.id}
+						key={course.courseid}
 						className="w-full max-w-md p-6 m-2 bg-white shadow-md rounded-lg"
 					>
 						<h2 className="text-xl font-bold mb-2 text-indigo-600">{course.name}</h2>
@@ -66,17 +68,13 @@ const StudentCourses: React.FC = () => {
 							<strong>Code:</strong> {course.code}
 						</p>
 						<p className="mb-1">
-							<strong>Student Group ID:</strong> {course.studentGroupId}
+							<strong>Instructor:</strong> {course.instructor_name}
 						</p>
 						<p className="mb-1">
-							<strong>Attendance:</strong>{' '}
-							<span
-								className={`inline-block rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 ${getAttendanceColorClass(
-									course.attendance,
-								)}`}
-							>
-								{course.attendance}%
-							</span>
+							<strong>Topics:</strong> {course.topic_names}
+						</p>
+						<p className="mb-1">
+							<strong>Student Group:</strong> {course.student_group || 'None'}
 						</p>
 					</div>
 				))}
