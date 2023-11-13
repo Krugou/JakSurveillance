@@ -1,3 +1,6 @@
+import {RowDataPacket} from 'mysql2';
+import pool from '../config/adminDBPool.js';
+
 const usercourse_topics = {
 	async checkIfUserCourseTopicExists(usercourseid: number, topicId: number) {
 		const [existingUserCourseTopic] = await pool

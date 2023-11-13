@@ -98,7 +98,7 @@ const TopicGroup: TopicGroupModel = {
 		}
 	},
 	async checkIfTopicGroupExists(topicgroup: string) {
-		const [existingTopic] = await this.pool
+		const [existingTopic] = await pool
 			.promise()
 			.query<RowDataPacket[]>(
 				'SELECT * FROM topicgroups WHERE topicgroupname = ?',
@@ -108,7 +108,7 @@ const TopicGroup: TopicGroupModel = {
 		return existingTopic;
 	},
 	async insertTopicGroup(topicgroup: string) {
-		const [topicResult] = await this.pool
+		const [topicResult] = await pool
 			.promise()
 			.query<ResultSetHeader>(
 				'INSERT INTO topicgroups (topicgroupname) VALUES (?)',

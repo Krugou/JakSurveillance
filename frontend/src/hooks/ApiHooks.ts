@@ -164,6 +164,19 @@ const getUserInfoByToken = async (token: string) => {
 
 	return doFetch(baseUrl + 'secure/', options);
 };
+
+const getAllCourseInfoByUserEmail = async (email: string, token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+	};
+
+	// Use the email to make the API request
+	return await doFetch(`${baseUrl}courses/info/${email}`, options);
+};
 const apiHooks = {
 	postLogin,
 	createCourse,
@@ -174,5 +187,6 @@ const apiHooks = {
 	getCourseReservations,
 	createClass,
 	getUserInfoByToken,
+	getAllCourseInfoByUserEmail,
 };
 export default apiHooks;
