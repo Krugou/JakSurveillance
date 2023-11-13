@@ -212,5 +212,28 @@ router.get('/coursesbyid/:id', async (req: Request, res: Response) => {
 		res.status(500).send('Server error');
 	}
 });
+router.get('/courses/info/:email', async (req: Request, res: Response) => {
+	try {
+		// Validate that the user is logged in
+		if (!req.user) {
+			res.status(403).send('User Info Unavailable');
+			return;
+		}
 
+		// Get the email from the request
+		const email = req.params.email;
+
+		// Check if the user is an admin or the user is requesting their own info
+		if (req.user.userrole !== 0 && req.user.email !== email) {
+			return res.status(403).json({error: 'Access denied'});
+		}
+
+		// Get the courses for the user
+		const courses = await course.getCoursesByEmail(email);
+		res.json(courses);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server error');
+	}
+});
 export default router;
