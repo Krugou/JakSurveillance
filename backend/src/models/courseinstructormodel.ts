@@ -1,4 +1,5 @@
-import {ResultSetHeader} from 'mysql2';
+import { ResultSetHeader } from 'mysql2';
+import pool from '../config/adminDBPool.js';
 
 const courseinstructors = {
 	async insertCourseInstructor(instructoruserid: number, courseId: number) {

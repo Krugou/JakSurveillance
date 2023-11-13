@@ -55,6 +55,13 @@ interface CourseModel {
 	getCoursesByInstructorEmail(email: string): Promise<Course[]>;
 	countCourses(): Promise<number>;
 	getCoursesByCourseId(courseId: number): Promise<Course[]>;
+	insertCourse(
+		name: string,
+		startDateString: string,
+		endDateString: string,
+		code: string,
+		studentGroupId: number,
+	): Promise<ResultSetHeader>;
 	// Add other methods here...
 }
 const course: CourseModel = {
@@ -448,13 +455,6 @@ const course: CourseModel = {
 		}
 	},
 
-	async checkIfCourseExists(code: string) {
-		const [existingCourse] = await pool
-			.promise()
-			.query<RowDataPacket[]>('SELECT * FROM courses WHERE code = ?', [code]);
-
-		return existingCourse;
-	},
 	async getCoursesByCourseId(courseId) {
 		try {
 			const [rows] = await pool.promise().query<RowDataPacket[]>(
@@ -475,7 +475,7 @@ const course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
-	
+
 	async insertCourse(
 		name: string,
 		startDateString: string,
@@ -483,7 +483,7 @@ const course: CourseModel = {
 		code: string,
 		studentGroupId: number,
 	) {
-		const [courseResult] = await this.pool
+		const [courseResult] = await pool
 			.promise()
 			.query<ResultSetHeader>(
 				'INSERT INTO courses (name, start_date, end_date, code, studentgroupid) VALUES (?, ?, ?, ?, ?)',
