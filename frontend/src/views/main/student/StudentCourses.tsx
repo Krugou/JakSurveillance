@@ -55,7 +55,7 @@ const StudentCourses: React.FC = () => {
 				{courses.map(course => {
 					const startDate = new Date(course.startDate).toLocaleDateString();
 					const endDate = new Date(course.endDate).toLocaleDateString();
-
+					const topics = course.topic_names.replace(/,/g, ', ');
 					return (
 						<div
 							key={course.courseid}
@@ -77,7 +77,7 @@ const StudentCourses: React.FC = () => {
 								<strong>Instructor:</strong> {course.instructor_name}
 							</p>
 							<p className="mb-1">
-								<strong>Topics:</strong> {course.topic_names}
+								<strong>Topics:</strong> {topics}
 							</p>
 						</div>
 					);
