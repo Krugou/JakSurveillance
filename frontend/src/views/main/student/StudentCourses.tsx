@@ -5,7 +5,7 @@ import apiHooks from '../../../hooks/ApiHooks';
 const StudentCourses: React.FC = () => {
 	interface Course {
 		courseid: number;
-		name: string;
+		course_name: string;
 		startDate: string;
 		endDate: string;
 		code: string;
@@ -57,7 +57,9 @@ const StudentCourses: React.FC = () => {
 						key={course.courseid}
 						className="w-full max-w-md p-6 m-2 bg-white shadow-md rounded-lg"
 					>
-						<h2 className="text-xl font-bold mb-2 text-indigo-600">{course.name}</h2>
+						<h2 className="text-xl font-bold mb-2 text-indigo-600">
+							{course.course_name}
+						</h2>
 						<p className="mb-1">
 							<strong>Start Date:</strong> {course.startDate}
 						</p>
