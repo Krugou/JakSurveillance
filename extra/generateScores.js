@@ -44,10 +44,15 @@ const generateScores = async () => {
 		);
 		const totalChanges = additions - deletions;
 
+		// Get the commits for this contributor
+		const commitResponse = await octokit.rest.repos.listCommits({
+			owner,
+			repo,
+			author: login,
+		});
+
 		// Find the last commit time
-		const lastCommitTime = contributor.weeks
-			.sort((a, b) => b.w - a.w) // Sort the weeks array by the 'w' property in descending order
-			.reduce((latest, week) => (week.w > latest ? week.w : latest), 0);
+		const lastCommitTime = commitResponse.data[0].commit.author.date;
 
 		console.log(
 			`Scores for ${login}: commits - ${commits}, additions - ${additions}, deletions - ${deletions}, total changes - ${totalChanges}, last commit time - ${lastCommitTime}`,
