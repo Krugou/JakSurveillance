@@ -1,4 +1,4 @@
-import { FieldPacket, ResultSetHeader, RowDataPacket } from 'mysql2';
+import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
 
 import pool from '../config/adminDBPool.js'; // Adjust the path to your pool file
 
@@ -13,6 +13,7 @@ interface UserInfo {
 	staff: number;
 	first_name: string;
 	last_name: string;
+	studentgroup?: string;
 }
 /**
  * @interface User
@@ -24,6 +25,7 @@ interface User {
 	staff: number;
 	first_name: string;
 	last_name: string;
+	studentgroup?: string;
 }
 /**
  * @description Creates a User Model object literal.
@@ -67,7 +69,7 @@ const UserModel = {
 			const [rows] = await UserModel.pool
 				.promise()
 				.query<RowDataPacket[]>(
-					`SELECT users.userid, users.username, users.email, users.first_name, users.last_name, users.created_at, users.studentnumber, roles.name AS role FROM users JOIN roles ON users.roleid = roles.roleid WHERE users.email = "${email}"`,
+					`SELECT users.userid, users.username, users.email, users.first_name, users.last_name, users.created_at, users.studentnumber, roles.name AS role, studentgroups.group_name AS studentgroup FROM users JOIN roles ON users.roleid = roles.roleid JOIN studentgroups ON users.studentgroupid = studentgroups.studentgroupid WHERE users.email = "${email}";`,
 				);
 
 			if (rows.length > 0) {

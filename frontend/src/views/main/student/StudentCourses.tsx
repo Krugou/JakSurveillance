@@ -49,8 +49,8 @@ const StudentCourses: React.FC = () => {
 	}
 	return (
 		<div className="flex flex-col items-center justify-center h-1/2 p-8 bg-gray-100">
-			<h1 className="text-2xl sm:text-5xl font-bold mb-8 text-center">
-				Student Course Attendance
+			<h1 className="text-2xl sm:text-4xl font-bold mb-8 text-center">
+				Your Courses
 			</h1>
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 				{courses.map(course => {
@@ -73,10 +73,7 @@ const StudentCourses: React.FC = () => {
 								<strong>End Date:</strong> {endDate}
 							</p>
 							<p className="mb-1">
-								<strong>Code:</strong> {course.code}
-							</p>
-							<p className="mb-1">
-								<strong>Instructor:</strong> {course.instructor_name}
+								<strong>Course Instructors:</strong> {course.instructor_name}
 							</p>
 							<button
 								className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"

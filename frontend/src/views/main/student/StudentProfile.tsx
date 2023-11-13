@@ -34,7 +34,11 @@ const StudentProfile: React.FC = () => {
 					<strong>Email:</strong> <span className="profileStat">{user.email}</span>
 				</p>
 				<p className="mb-5">
-					<strong>role:</strong> <span className="profileStat">{user.role}</span>
+					<strong>Role:</strong> <span className="profileStat">{user.role}</span>
+				</p>
+				<p className="mb-5">
+					<strong>Student Group:</strong>{' '}
+					<span className="profileStat">{user.studentgroup}</span>
 				</p>
 			</div>
 			<button
