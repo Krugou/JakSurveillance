@@ -12,6 +12,7 @@ const StudentCourses: React.FC = () => {
 		student_group: number | null;
 		topic_names: string;
 		instructor_name: string;
+		usercourseid: number;
 	}
 	const [error, setError] = useState<string | null>(null);
 	const {user} = useContext(UserContext);
@@ -77,7 +78,9 @@ const StudentCourses: React.FC = () => {
 							</p>
 							<button
 								className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-								onClick={() => navigate(`/student/attendance`)}
+								onClick={() =>
+									navigate(`/student/courses/attendance/${course.usercourseid}`)
+								}
 							>
 								View Attendance
 							</button>

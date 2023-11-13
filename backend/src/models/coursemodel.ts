@@ -505,6 +505,7 @@ const course: CourseModel = {
 				c.end_date AS endDate,
 				c.code AS code,
 				sg.group_name AS student_group,
+				usercourseid,
 				GROUP_CONCAT(DISTINCT t.topicname) AS topic_names,
 				GROUP_CONCAT(DISTINCT u2.username) AS instructor_name
 		FROM 

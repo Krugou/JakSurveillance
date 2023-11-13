@@ -96,4 +96,15 @@ router.post('/class/', async (req: Request, res: Response) => {
 	}
 });
 
+router.get('/studentsattendance', async (req: Request, res: Response) => {
+	try {
+		const id = Number(req.params.id);
+		const attendanceData = await Attendance.findAllAttendancesByUserCourseId(id);
+		res.json(attendanceData);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server error');
+	}
+});
+
 export default router;

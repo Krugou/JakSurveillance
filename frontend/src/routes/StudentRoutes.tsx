@@ -5,6 +5,7 @@ import StudentCourses from '../views/main/student/StudentCourses.tsx';
 import StudentMainView from '../views/main/student/StudentMainView.tsx';
 import StudentProfile from '../views/main/student/StudentProfile.tsx';
 import StudentQrScanner from '../views/main/student/StudentQrScanner.tsx';
+import StudentCourseAttendance from '../views/main/student/StudentCourseAttendance.tsx';
 
 const StudentRoutes = () => {
 	return (
@@ -14,6 +15,10 @@ const StudentRoutes = () => {
 			<Route path="profile" element={<StudentProfile />} />
 			<Route path="attendance" element={<StudentAttendance />} />
 			<Route path="qr" element={<StudentQrScanner />} />
+			<Route
+				path="courses/attendance/:usercourseid"
+				element={<StudentCourseAttendance />}
+			/>
 		</Routes>
 	);
 };
