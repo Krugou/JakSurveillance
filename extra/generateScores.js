@@ -45,10 +45,9 @@ const generateScores = async () => {
 		const totalChanges = additions - deletions;
 
 		// Find the last commit time
-		const lastCommitTime = contributor.weeks.reduce(
-			(latest, week) => (week.w > latest ? week.w : latest),
-			0,
-		);
+		const lastCommitTime = contributor.weeks
+			.sort((a, b) => b.w - a.w) // Sort the weeks array by the 'w' property in descending order
+			.reduce((latest, week) => (week.w > latest ? week.w : latest), 0);
 
 		console.log(
 			`Scores for ${login}: commits - ${commits}, additions - ${additions}, deletions - ${deletions}, total changes - ${totalChanges}, last commit time - ${lastCommitTime}`,
