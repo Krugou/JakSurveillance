@@ -52,34 +52,36 @@ const StudentCourses: React.FC = () => {
 				Student Course Attendance
 			</h1>
 			<div className="flex flex-row">
-				{courses.map(course => (
-					<div
-						key={course.courseid}
-						className="w-full max-w-md p-6 m-2 bg-white shadow-md rounded-lg"
-					>
-						<h2 className="text-xl font-bold mb-2 text-indigo-600">
-							{course.course_name}
-						</h2>
-						<p className="mb-1">
-							<strong>Start Date:</strong> {course.startDate}
-						</p>
-						<p className="mb-1">
-							<strong>End Date:</strong> {course.endDate}
-						</p>
-						<p className="mb-1">
-							<strong>Code:</strong> {course.code}
-						</p>
-						<p className="mb-1">
-							<strong>Instructor:</strong> {course.instructor_name}
-						</p>
-						<p className="mb-1">
-							<strong>Topics:</strong> {course.topic_names}
-						</p>
-						<p className="mb-1">
-							<strong>Student Group:</strong> {course.student_group || 'None'}
-						</p>
-					</div>
-				))}
+				{courses.map(course => {
+					const startDate = new Date(course.startDate).toLocaleDateString();
+					const endDate = new Date(course.endDate).toLocaleDateString();
+
+					return (
+						<div
+							key={course.courseid}
+							className="w-full max-w-md p-6 m-2 bg-white shadow-md rounded-lg"
+						>
+							<h2 className="text-2xl underline font-bold mb-2 text-black">
+								{course.course_name + ' ' + course.code}
+							</h2>
+							<p className="mb-1">
+								<strong>Start Date:</strong> {startDate}
+							</p>
+							<p className="mb-1">
+								<strong>End Date:</strong> {endDate}
+							</p>
+							<p className="mb-1">
+								<strong>Code:</strong> {course.code}
+							</p>
+							<p className="mb-1">
+								<strong>Instructor:</strong> {course.instructor_name}
+							</p>
+							<p className="mb-1">
+								<strong>Topics:</strong> {course.topic_names}
+							</p>
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);
