@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react';
 import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/ApiHooks';
-
+import {useNavigate} from 'react-router-dom';
 const StudentCourses: React.FC = () => {
 	interface Course {
 		courseid: number;
@@ -16,6 +16,7 @@ const StudentCourses: React.FC = () => {
 	const [error, setError] = useState<string | null>(null);
 	const {user} = useContext(UserContext);
 	const [courses, setCourses] = useState<Course[]>([]);
+	const navigate = useNavigate();
 	useEffect(() => {
 		const fetchCourses = async () => {
 			try {
@@ -51,19 +52,20 @@ const StudentCourses: React.FC = () => {
 			<h1 className="text-2xl sm:text-5xl font-bold mb-8 text-center">
 				Student Course Attendance
 			</h1>
-			<div className="flex flex-row">
+			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 				{courses.map(course => {
 					const startDate = new Date(course.startDate).toLocaleDateString();
 					const endDate = new Date(course.endDate).toLocaleDateString();
 					const topics = course.topic_names.replace(/,/g, ', ');
+
 					return (
-						<div
-							key={course.courseid}
-							className="w-full max-w-md p-6 m-2 bg-white shadow-md rounded-lg"
-						>
+						<div key={course.courseid} className="p-6 bg-white shadow-md rounded-lg">
 							<h2 className="text-2xl underline font-bold mb-2 text-black">
 								{course.course_name + ' ' + course.code}
 							</h2>
+							<p className="mb-1">
+								<strong>Topics:</strong> {topics}
+							</p>
 							<p className="mb-1">
 								<strong>Start Date:</strong> {startDate}
 							</p>
@@ -76,9 +78,12 @@ const StudentCourses: React.FC = () => {
 							<p className="mb-1">
 								<strong>Instructor:</strong> {course.instructor_name}
 							</p>
-							<p className="mb-1">
-								<strong>Topics:</strong> {topics}
-							</p>
+							<button
+								className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+								onClick={() => navigate(`/student/attendance`)}
+							>
+								View Attendance
+							</button>
 						</div>
 					);
 				})}
