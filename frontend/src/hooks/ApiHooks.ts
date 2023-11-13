@@ -165,7 +165,7 @@ const getUserInfoByToken = async (token: string) => {
 	return doFetch(baseUrl + 'secure/', options);
 };
 
-const getAllCourseInfoByUserEmail = async (email: string) => {
+const getAllCourseInfoByUserEmail = async (email: string, token: string) => {
 	const options = {
 		method: 'GET',
 		headers: {
