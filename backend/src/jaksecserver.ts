@@ -36,7 +36,11 @@ app.use(
 	secureRoutes,
 );
 
-app.use('/courses', courseRoutes);
+app.use(
+	'/courses',
+	passport.authenticate('jwt', {session: false}),
+	courseRoutes,
+);
 
 http.listen(port, () => {
 	console.log(
