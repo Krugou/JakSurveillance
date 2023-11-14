@@ -21,7 +21,6 @@ const Login: React.FC = () => {
 			username: usernameRef.current?.value || '',
 			password: passwordRef.current?.value || '',
 		};
-		console.log(inputs, 'INPUTS');
 		try {
 			const response = await apiHooks.postLogin(inputs);
 			// this navigates to the mainview of the user type
