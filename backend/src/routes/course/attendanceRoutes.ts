@@ -33,7 +33,11 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.get('/usercourse/:id', async (req: Request, res: Response) => {
 	try {
 		const id = Number(req.params.id);
-		const attendanceData = await Attendance.findAllAttendancesByUserCourseId(id);
+		const userid = req.user.userid;
+		const attendanceData = await Attendance.findAllAttendancesByUserCourseId(
+			id,
+			userid,
+		);
 		res.json(attendanceData);
 	} catch (err) {
 		console.error(err);
