@@ -462,7 +462,7 @@ const course: CourseModel = {
 					coursecode,
 				]);
 		return courseResult
-	}
+	},
 	async getCoursesByCourseId(courseId) {
 		try {
 			const [rows] = await pool.promise().query<RowDataPacket[]>(
