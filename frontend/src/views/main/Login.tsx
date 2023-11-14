@@ -1,14 +1,15 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
 import ErrorAlert from '../../components/main/ErrorAlert.tsx';
 import {UserContext} from '../../contexts/UserContext.tsx';
 import apiHooks from '../../hooks/ApiHooks.ts';
-import BackgroundContainer from "../../components/main/background/background";
+import BackgroundContainer from '../../components/main/background/background';
 
 const Login: React.FC = () => {
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
+	const usernameRef = useRef<HTMLInputElement>(null);
+	const passwordRef = useRef<HTMLInputElement>(null);
 	const [alert, setAlert] = useState<string | null>('');
+
 	const {setUser} = useContext(UserContext);
 	const navigate = useNavigate();
 
@@ -16,8 +17,11 @@ const Login: React.FC = () => {
 		event.preventDefault();
 
 		//console.log(username, password, user);
-		const inputs = {username, password};
-
+		const inputs = {
+			username: usernameRef.current?.value || '',
+			password: passwordRef.current?.value || '',
+		};
+		console.log(inputs, 'INPUTS');
 		try {
 			const response = await apiHooks.postLogin(inputs);
 			// this navigates to the mainview of the user type
@@ -62,9 +66,8 @@ const Login: React.FC = () => {
 						className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 						id="username"
 						type="text"
-						value={username}
+						ref={usernameRef}
 						placeholder="Metropolia username"
-						onChange={e => setUsername(e.target.value)}
 					/>
 				</div>
 				<div className="mb-6">
@@ -78,9 +81,8 @@ const Login: React.FC = () => {
 						className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
 						id="password"
 						type="password"
-						value={password}
+						ref={passwordRef}
 						placeholder="Metropolia password"
-						onChange={e => setPassword(e.target.value)}
 					/>
 				</div>
 				<div className="flex w-full justify-center">
