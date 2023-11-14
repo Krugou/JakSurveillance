@@ -67,12 +67,15 @@ const attendanceModel: AttendanceModel = {
 	async findAllAttendancesByUserCourseId(usercourseId) {
 		try {
 			const [rows] = await pool.promise().query<RowDataPacket[]>(
-				`SELECT attendance.* 
-                FROM attendance 
-                WHERE attendance.usercourseid = ?`,
+				`SELECT attendance.status, class.start_date, class.end_date, class.timeofday, topics.topicname
+				FROM attendance 
+				JOIN class ON attendance.classid = class.classid
+				JOIN topics ON class.topicid = topics.topicid
+				WHERE attendance.usercourseid = ?`,
 				[usercourseId],
 			);
 			console.log(rows);
+			return rows;
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);

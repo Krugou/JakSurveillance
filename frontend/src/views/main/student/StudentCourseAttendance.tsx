@@ -25,8 +25,8 @@ const StudentCourseAttendance: React.FC = () => {
 					usercourseid,
 					token,
 				);
-				const data = await response.json();
-				setAttendanceData(data);
+				console.log(response, 'RESPONSE');
+				setAttendanceData(response);
 			} catch (error) {
 				console.error('Error:', error);
 			}
@@ -45,7 +45,11 @@ const StudentCourseAttendance: React.FC = () => {
 			<ul>
 				{attendanceData.map((attendance, index) => (
 					<li key={index}>
-						{attendance.date}: {attendance.present ? 'Present' : 'Absent'}
+						<p>Status: {attendance.status}</p>
+						<p>Start Date: {new Date(attendance.start_date).toLocaleDateString()}</p>
+						<p>End Date: {new Date(attendance.end_date).toLocaleDateString()}</p>
+						<p>Time of Day: {attendance.timeofday}</p>
+						<p>Topic Name: {attendance.topicname}</p>
 					</li>
 				))}
 			</ul>
