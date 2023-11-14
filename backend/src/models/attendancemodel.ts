@@ -66,12 +66,13 @@ const attendanceModel: AttendanceModel = {
 
 	async findAllAttendancesByUserCourseId(usercourseId) {
 		try {
-			return await pool.promise().query<RowDataPacket[]>(
+			const [rows] = await pool.promise().query<RowDataPacket[]>(
 				`SELECT attendance.* 
                 FROM attendance 
                 WHERE attendance.usercourseid = ?`,
 				[usercourseId],
 			);
+			console.log(rows);
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
