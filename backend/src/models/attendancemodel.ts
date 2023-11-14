@@ -27,7 +27,7 @@ interface AttendanceModel {
 	) => Promise<void>;
 }
 
-const Attendance: AttendanceModel = {
+const attendanceModel: AttendanceModel = {
 	async fetchAllAttendances() {
 		try {
 			return await pool
@@ -167,4 +167,4 @@ const Attendance: AttendanceModel = {
 	},
 };
 
-export default Attendance;
+export default attendanceModel;

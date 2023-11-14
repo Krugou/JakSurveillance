@@ -24,7 +24,7 @@ interface TopicGroupModel {
 /**
  * @description TopicGroupModel implementation.
  */
-const TopicGroup: TopicGroupModel = {
+const topicGroupModel: TopicGroupModel = {
 	/**
 	 * @method fetchAllTopicGroups
 	 * @description Fetches all topic groups from the database.
@@ -121,4 +121,4 @@ const TopicGroup: TopicGroupModel = {
 	// other methods...
 };
 
-export default TopicGroup;
+export default topicGroupModel;

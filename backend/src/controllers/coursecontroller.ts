@@ -3,7 +3,9 @@ import courseModel from '../models/coursemodel.js';
 import courseTopicModel from '../models/coursetopicmodel.js';
 import studentGroupModel from '../models/studentgroupmodel.js';
 import topicGroupModel from '../models/topicgroupmodel.js';
+import topicinGroupModel from '../models/topicingroupmodel.js';
 import topicModel from '../models/topicmodel.js';
+import usercourse_topicsModel from '../models/usercourse_topicsmodel.js';
 import userCourseModel from '../models/usercoursemodel.js';
 import userModel from '../models/usermodel.js';
 
@@ -32,8 +34,6 @@ const courseController = {
 		topics?: string,
 		topicgroup?: string,
 	) {
-		console.log('Inserting into course');
-
 		try {
 			const existingInstructor = await userModel.checkIfEmailMatchesStaff(
 				instructoremail,
@@ -44,17 +44,23 @@ const courseController = {
 					new Error('Instructor email not found or the user is not a staff member'),
 				);
 			}
-			const instructoruserid = existingInstructor.userid;
+			const instructoruserid = existingInstructor[0].userid;
 
 			try {
-				let studentGroupId = await studentGroupModel.checkIfGroupNameExists(
+				const existingStudentGroup = await studentGroupModel.checkIfGroupNameExists(
 					group_name,
 				);
 
-				if (!studentGroupId) {
-					studentGroupId = await studentGroupModel.insertIntoStudentGroup(
+				let studentGroupId = 0;
+				if (existingStudentGroup.length > 0) {
+					console.error('Group already exists');
+					studentGroupId = existingStudentGroup[0].studentgroupid;
+				} else {
+					const newStudentGroup = await studentGroupModel.insertIntoStudentGroup(
 						group_name,
 					);
+
+					studentGroupId = newStudentGroup.insertId;
 				}
 				const startDateString = start_date
 					.toISOString()
@@ -68,38 +74,63 @@ const courseController = {
 					throw new Error('Course already exists');
 				}
 
-				const courseId = await courseModel.insertCourse(
+				const courseResult = await courseModel.insertCourse(
 					name,
 					startDateString,
 					endDateString,
 					code,
 					studentGroupId,
 				);
-				const instructorInserted = await courseInstructorModel.insertInstructor(
-					instructoruserid,
-					courseId,
-				);
+				const courseId = courseResult.insertId;
+				const instructorInserted =
+					await courseInstructorModel.insertCourseInstructor(
+						instructoruserid,
+						courseId,
+					);
 
 				if (!instructorInserted) {
 					throw new Error('Failed to insert instructor into courseinstructors');
 				}
+				let topicGroupId = 0;
+				let topicId = 0;
 				if (topicgroup) {
 					try {
-						let topicGroupId = await topicGroupModel.checkIfTopicGroupExists(
+						const ExistingTopicGroup = await topicGroupModel.checkIfTopicGroupExists(
 							topicgroup,
 						);
 
-						if (topicGroupId === null) {
-							topicGroupId = await topicGroupModel.insertTopicGroup(topicgroup);
+						if (ExistingTopicGroup.length > 0) {
+							console.error('Topic group already exists');
+							topicGroupId = ExistingTopicGroup[0].topicgroupid;
+						} else {
+							const newTopicGroup = await topicGroupModel.insertTopicGroup(topicgroup);
+
+							topicGroupId = newTopicGroup.insertId;
 						}
 
 						if (topics) {
 							const topicslist = JSON.parse(topics);
 							for (const topic of topicslist) {
-								let topicId = await topicModel.checkIfTopicExists(topic);
+								const ExistingTopic = await topicModel.checkIfTopicExists(topic);
 
-								if (topicId === null) {
-									topicId = await topicModel.insertTopic(topic);
+								if (ExistingTopic.length > 0) {
+									console.error('Topic already exists');
+									topicId = ExistingTopic[0].topicid;
+								} else {
+									const newTopic = await topicModel.insertTopic(topic);
+									topicId = newTopic.insertId;
+								}
+
+								const topicGroupTopicRelationExists =
+									await topicinGroupModel.checkIfTopicInGroupExists(
+										topicGroupId,
+										topicId,
+									);
+
+								if (topicGroupTopicRelationExists.length > 0) {
+									console.error('Topic group relation exists');
+								} else {
+									await topicinGroupModel.insertTopicInGroup(topicGroupId, topicId);
 								}
 
 								const relationExists =
@@ -108,7 +139,9 @@ const courseController = {
 										topicId,
 									);
 
-								if (!relationExists) {
+								if (relationExists.length < 0) {
+									console.error('Course topic group relation exists');
+								} else {
 									await courseTopicModel.insertCourseTopic(courseId, topicId);
 								}
 							}
@@ -120,32 +153,60 @@ const courseController = {
 
 				for (const student of students) {
 					try {
-						let userId = await userModel.checkIfUserExistsByNumber(
-							student.studentnumber,
-						);
-						let usercourseid;
+						const existingUserByNumber =
+							await userModel.checkIfUserExistsByStudentNumber(student.studentnumber);
 
-						if (userId !== null) {
-							usercourseid = await userCourseModel.insertUserCourse(userId, courseId);
+						let userId: number = 0;
+						let usercourseid: number = 0;
+						if (existingUserByNumber.length > 0) {
+							console.error('User with this student number already exists');
+							// If the user already exists, insert them into the course
+							userId = existingUserByNumber[0].userid;
+							const result = await userCourseModel.insertUserCourse(userId, courseId);
+
+							usercourseid = (result as ResultSetHeader).insertId;
 						} else {
-							userId = await userModel.checkIfUserExistsByEmail(student.email);
+							const existingUserByEmail = await userModel.checkIfUserExistsByEmail(
+								student.email,
+							);
 
-							if (userId !== null) {
+							if (existingUserByEmail.length > 0) {
+								// If the user exists with a different student number, update their student number and insert them into the course
 								await userModel.updateUserStudentNumber(
 									student.studentnumber,
 									student.email,
 								);
-								usercourseid = await userCourseModel.insertUserCourse(userId, courseId);
+								userId = existingUserByEmail[0].userid;
+								const [result] = await userCourseModel.insertUserCourse(
+									userId,
+									courseId,
+								);
+
+								usercourseid = (result as ResultSetHeader).insertId;
 							} else {
-								userId = await userModel.insertUser(student, studentGroupId);
+								// Insert the user if they don't exist
+								const userResult = await userModel.insertStudentUser(
+									student.email,
+									student.first_name,
+									student.last_name,
+									student.studentnumber,
+									studentGroupId,
+								);
+
+								userId = userResult.insertId;
 							}
 						}
+						// Insert the user into the course
+						const [result] = await userCourseModel.insertUserCourse(userId, courseId);
 
-						usercourseid = await userCourseModel.insertUserCourse(userId, courseId);
-
+						usercourseid = (result as ResultSetHeader).insertId;
 						try {
-							await userCourseTopicModel.insertUserCourseTopic(usercourseid, topicId);
-							console.log('Data inserted successfully');
+							await usercourse_topicsModel.insertUserCourseTopic(
+								usercourseid,
+								topicId,
+							);
+
+							console.log('Data inserted successfully', userId);
 						} catch (error) {
 							console.error(error);
 						}

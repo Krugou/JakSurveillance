@@ -25,7 +25,7 @@ interface ClassModel {
 	// other methods...
 }
 
-const Class: ClassModel = {
+const classModel: ClassModel = {
 	async fetchAllClasses() {
 		try {
 			return await pool.promise().query<RowDataPacket[]>('SELECT * FROM class');
@@ -168,4 +168,4 @@ const Class: ClassModel = {
 	// other methods...
 };
 
-export default Class;
+export default classModel;

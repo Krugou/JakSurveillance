@@ -14,7 +14,7 @@ interface RoleModel {
 	// other methods...
 }
 
-const Role: RoleModel = {
+const roleModel: RoleModel = {
 	async fetchAllRoles() {
 		try {
 			return await pool.promise().query<RowDataPacket[]>('SELECT * FROM roles');
@@ -50,4 +50,4 @@ const Role: RoleModel = {
 	// other methods...
 };
 
-export default Role;
+export default roleModel;

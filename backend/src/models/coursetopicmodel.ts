@@ -1,6 +1,6 @@
 import {RowDataPacket} from 'mysql2';
 import pool from '../config/adminDBPool.js';
-const coursetopics = {
+const coursetopicsModel = {
 	async checkIfCourseTopicRelationExists(courseId: number, topicId: number) {
 		const [existingCourseTopicRelation] = await pool
 			.promise()
@@ -24,4 +24,4 @@ const coursetopics = {
 	},
 };
 
-export default coursetopics;
+export default coursetopicsModel;

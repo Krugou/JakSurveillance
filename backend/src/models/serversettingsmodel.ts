@@ -2,7 +2,7 @@ import {RowDataPacket} from 'mysql2';
 import pool from '../config/adminDBPool.js';
 
 // server settings model
-const serverSettings = {
+const serverSettingsModel = {
 	async getServerSettings() {
 		try {
 			return await pool
@@ -15,4 +15,4 @@ const serverSettings = {
 	},
 };
 
-export default serverSettings;
+export default serverSettingsModel;

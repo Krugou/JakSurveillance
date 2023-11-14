@@ -1,7 +1,7 @@
 import {RowDataPacket} from 'mysql2';
 import pool from '../config/adminDBPool.js';
 
-const topicsingroup = {
+const topicsingroupModel = {
 	async checkIfTopicInGroupExists(topicGroupId: number, topicId: number) {
 		const [existingTopicInGroup] = await pool
 			.promise()
@@ -10,11 +10,17 @@ const topicsingroup = {
 				[topicGroupId, topicId],
 			);
 
+		console.log(
+			'🚀 ~ file: topicingroupmodel.ts:14 ~ checkIfTopicInGroupExists ~ existingTopicInGroup:',
+			existingTopicInGroup,
+		);
 		return existingTopicInGroup;
 	},
 
 	async insertTopicInGroup(topicGroupId: number, topicId: number) {
-		const result = await pool
+		console.log('inserting topic in group');
+		console.log(topicGroupId, topicId);
+		const [result] = await pool
 			.promise()
 			.query('INSERT INTO topicsingroup (topicgroupid, topicid) VALUES (?, ?)', [
 				topicGroupId,
@@ -25,4 +31,4 @@ const topicsingroup = {
 	},
 };
 
-export default topicsingroup;
+export default topicsingroupModel;

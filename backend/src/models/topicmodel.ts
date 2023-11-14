@@ -27,7 +27,7 @@ interface TopicModel {
 /**
  * @description TopicModel implementation.
  */
-const Topic: TopicModel = {
+const topicModel: TopicModel = {
 	/**
 	 * @method fetchAllTopics
 	 * @description Fetches all topics from the database.
@@ -74,25 +74,7 @@ const Topic: TopicModel = {
 			return Promise.reject(error);
 		}
 	},
-	/**
-	 * @method checkIfTopicExists
-	 * @description Checks if a topic exists in the database.
-	 * @param {string} topicname - The name of the topic to check.
-	 * @returns {Promise<boolean>} A promise that resolves to a boolean indicating whether the topic exists.
-	 */
-	async checkIfTopicExists(topicname) {
-		try {
-			const [rows] = await pool
-				.promise()
-				.query<RowDataPacket[]>('SELECT * FROM topics WHERE topicname = ?', [
-					topicname,
-				]);
-			return rows.length > 0;
-		} catch (error) {
-			console.error(error);
-			return Promise.reject(error);
-		}
-	},
+
 	/**
 	 * @method updateTopicName
 	 * @description Updates the name of a topic.
@@ -144,14 +126,14 @@ const Topic: TopicModel = {
 		}
 	},
 	async checkIfTopicExists(topic: string) {
-		const [existingCourseTopic] = await this.pool
+		const [existingCourseTopic] = await pool
 			.promise()
 			.query<RowDataPacket[]>('SELECT * FROM topics WHERE topicname = ?', [topic]);
 
 		return existingCourseTopic;
 	},
 	async insertTopic(topic: string) {
-		const [topicResult] = await this.pool
+		const [topicResult] = await pool
 			.promise()
 			.query<ResultSetHeader>('INSERT INTO topics (topicname) VALUES (?)', [
 				topic,
@@ -163,4 +145,4 @@ const Topic: TopicModel = {
 	// other methods...
 };
 
-export default Topic;
+export default topicModel;

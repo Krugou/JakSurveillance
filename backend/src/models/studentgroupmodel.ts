@@ -15,7 +15,7 @@ interface StudentGroupModel {
 	// other methods...
 }
 
-const StudentGroup: StudentGroupModel = {
+const studentGroupModel: StudentGroupModel = {
 	async fetchAllStudentGroups() {
 		try {
 			return await pool
@@ -41,7 +41,7 @@ const StudentGroup: StudentGroupModel = {
 			const [rows] = await pool
 				.promise()
 				.query<RowDataPacket[]>(
-					'SELECT * FROM studentgroup WHERE studentgroupid = ?',
+					'SELECT * FROM studentgroups WHERE studentgroupid = ?',
 					[id],
 				);
 			return (rows[0] as StudentGroup) || null;
@@ -53,11 +53,12 @@ const StudentGroup: StudentGroupModel = {
 
 	async insertIntoStudentGroup(studentgroupname) {
 		try {
-			await pool
+			const [rows] = await pool
 				.promise()
-				.query('INSERT INTO studentgroup (studentgroupname) VALUES (?)', [
+				.query('INSERT INTO studentgroups (group_name) VALUES (?)', [
 					studentgroupname,
 				]);
+			return rows;
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
@@ -67,4 +68,4 @@ const StudentGroup: StudentGroupModel = {
 	// other methods...
 };
 
-export default StudentGroup;
+export default studentGroupModel;

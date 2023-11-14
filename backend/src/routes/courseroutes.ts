@@ -8,6 +8,7 @@ config();
 const upload = multer();
 const router: Router = express.Router();
 
+import courseController from '../controllers/coursecontroller.js';
 import course from '../models/coursemodel.js';
 import attendanceRoutes from './course/attendanceRoutes.js';
 router.get('/', async (_req: Request, res: Response) => {
@@ -73,10 +74,6 @@ router.post('/create', upload.single('file'), async (req, res) => {
 	} = req.body;
 	let startDate = req.body.startDate;
 	let endDate = req.body.endDate;
-
-	console.log(checkCourseDetails);
-	console.log(topicGroup);
-	console.log(topics);
 
 	// console.log('Request body:', req.body); // Debugging line
 	if (!req.file) {
@@ -175,7 +172,7 @@ router.post('/create', upload.single('file'), async (req, res) => {
 	}
 	// console.table(mappedData);
 	try {
-		await course.insertIntoCourse(
+		await courseController.insertIntoCourse(
 			courseName,
 			startDate,
 			endDate,
