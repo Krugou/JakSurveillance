@@ -1,17 +1,10 @@
 import React from 'react';
-import background from '../../../assets/images/tausta2.png';
 import Card from "../../../components/main/cards/Card";
+import BackgroundContainer from "../../../components/main/background/background";
 
 const MainView: React.FC = () => {
     return (
-        <div
-            className="flex flex-col pt-10 pb-10  items-center"
-            style={{
-                backgroundImage: `url(${background})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            }}
-        >
+        <BackgroundContainer>
             <h1 className="text-4xl font-bold text-gray-700 mb-5 underline">Teacher Dashboard</h1>
 
             <div className="flex 2xl:w-2/5 xl:w-5/6 lg:w-11/12 w-full flex-wrap p-5 justify-center gap-4">
@@ -27,7 +20,7 @@ const MainView: React.FC = () => {
 
                 <Card path="/teacher/helpvideos" title="Instructions" description="See instructions for all your tasks" />
             </div>
-        </div>
+        </BackgroundContainer>
     );
 };
 

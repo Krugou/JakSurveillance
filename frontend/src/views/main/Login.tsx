@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import ErrorAlert from '../../components/main/ErrorAlert.tsx';
 import {UserContext} from '../../contexts/UserContext.tsx';
 import apiHooks from '../../hooks/ApiHooks.ts';
-import background from '../../assets/images/tausta.png';
+import BackgroundContainer from "../../components/main/background/background";
 
 const Login: React.FC = () => {
 	const [username, setUsername] = useState('');
@@ -42,14 +42,7 @@ const Login: React.FC = () => {
 	};
 
 	return (
-		<div
-			className="w-full flex flex-col gap-10 items-center justify-center pt-10 pb-10 pl-3 pr-3"
-			style={{
-				backgroundImage: `url(${background})`,
-				backgroundSize: 'cover',
-				backgroundPosition: 'center',
-			}}
-		>
+		<BackgroundContainer>
 			<h2 className="text-gray-800 font-semibold text-md sm:text-2xl">
 				Sign in using your Metropolia Account
 			</h2>
@@ -100,7 +93,7 @@ const Login: React.FC = () => {
 					</button>
 				</div>
 			</form>
-		</div>
+		</BackgroundContainer>
 	);
 };
 
