@@ -1,24 +1,38 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
-
+import apiHooks from '../../../hooks/ApiHooks';
 interface Attendance {
 	date: string;
 	present: boolean;
 }
 
 const StudentCourseAttendance: React.FC = () => {
-	const {usercourseid} = useParams<{usercourseid: string}>();
+	const {usercourseid} = useParams<{usercourseid}>();
 	const [attendanceData, setAttendanceData] = useState<Attendance[] | null>(
 		null,
 	);
 
 	useEffect(() => {
-		// Replace this with your actual fetch call
-		fetch(`/api/attendance/${usercourseid}`)
-			.then(response => response.json())
-			.then(data => setAttendanceData(data))
-			.catch(error => console.error('Error:', error));
+		const fetchData = async () => {
+			try {
+				alert(usercourseid);
+				const token: string | null = localStorage.getItem('userToken');
+				if (!token) {
+					throw new Error('No token available');
+				}
+				const response = await apiHooks.getAttendanceInfoByUsercourseid(
+					usercourseid,
+					token,
+				);
+				const data = await response.json();
+				setAttendanceData(data);
+			} catch (error) {
+				console.error('Error:', error);
+			}
+		};
+
+		fetchData();
 	}, [usercourseid]);
 
 	if (!attendanceData) {

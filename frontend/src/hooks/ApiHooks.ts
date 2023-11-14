@@ -196,6 +196,25 @@ const finishClass = async (
 	const url = `${baseUrl}courses/attendance/classfinished/`;
 	return doFetch(url, options);
 };
+const getAttendanceInfoByUsercourseid = async (
+	usercourseid: number,
+	token: string,
+) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	console.log(token);
+	// Use the email to make the API request
+	return await doFetch(
+		`${baseUrl}courses/attendance/usercourse/${usercourseid}`,
+		options,
+	);
+};
+
 const apiHooks = {
 	postLogin,
 	createCourse,
@@ -208,5 +227,6 @@ const apiHooks = {
 	getUserInfoByToken,
 	getAllCourseInfoByUserEmail,
 	finishClass,
+	getAttendanceInfoByUsercourseid,
 };
 export default apiHooks;
