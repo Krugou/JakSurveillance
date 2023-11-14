@@ -38,7 +38,7 @@ app.use(
 
 app.use(
 	'/courses',
-	passport.authenticate('jwt', {session: false}),
+	// passport.authenticate('jwt', {session: false}),
 	courseRoutes,
 );
 
