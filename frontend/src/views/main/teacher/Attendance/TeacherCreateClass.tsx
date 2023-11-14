@@ -155,7 +155,7 @@ const CreateClass: React.FC = () => {
 		<BackgroundContainer>
 			<div className="flex flex-col items-center rounded-lg justify-center h-1/2 sm:p-5 p-2 bg-gray-100">
 				<h1 className="text-lg sm:text-2xl font-bold p-2 mb-8 mt-5">
-					Fill in to open the attendance collection
+					Create class
 				</h1>
 				<div className="flex w-full justify-center m-auto">
 					<div className="flex sm:w-1/4 w-1/2 flex-col gap-5">
