@@ -4,12 +4,15 @@ import {useParams} from 'react-router-dom';
 import io, {Socket} from 'socket.io-client';
 import Attendees from '../../../../components/main/course/attendance/Attendees';
 import CourseStudents from '../../../../components/main/course/attendance/CourseStudents';
+import apiHooks from '../../../../hooks/ApiHooks';
 const AttendanceRoom: React.FC = () => {
 	const {classid} = useParams<{classid: string}>();
 	const [servertime, setServertime] = useState('');
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [arrayOfStudents, setArrayOfStudents] = useState<string[]>([]);
 	const [courseStudents, setCourseStudents] = useState<Student[]>([]);
+	const [localtime, setLocaltime] = useState('');
+	const [serverMessage, setServerMessage] = useState('');
 
 	interface Student {
 		first_name: string;
@@ -17,7 +20,11 @@ const AttendanceRoom: React.FC = () => {
 		userid: number;
 	}
 	const [hashValue, setHashValue] = useState('');
-
+	const handleClassFinished = () => {
+		const dateToday = new Date().toISOString().slice(0, 10);
+		const studentnumbers = courseStudents.map(student => student.studentnumber);
+		apiHooks.finishClass(dateToday, studentnumbers, classid);
+	};
 	useEffect(() => {
 		if (!socket) {
 			const socketURL =
@@ -36,6 +43,10 @@ const AttendanceRoom: React.FC = () => {
 
 			newSocket.emit('getCurrentHashForQrGenerator', classid);
 			newSocket.on('getallstudentsinclass', courseStudents => {
+				console.log(
+					'🚀 ~ file: TeacherAttendanceRoom.tsx:45 ~ useEffect ~ courseStudents:',
+					courseStudents,
+				);
 				setCourseStudents(courseStudents);
 			});
 			newSocket.on('updatecoursestudents', courseStudents => {
@@ -44,15 +55,18 @@ const AttendanceRoom: React.FC = () => {
 			newSocket.on(
 				'getCurrentHashForQrGeneratorServingHashAndChangeTime',
 				(hash, changeTime, classid, servertime, arrayOfStudents) => {
-					console.log('changetime', changeTime);
+					setServertime(servertime);
+					setLocaltime(Date.now().toString());
+
 					setHashValue(hash + '/' + classid);
 					setArrayOfStudents(arrayOfStudents);
-
-					setServertime(
-						new Date(servertime).toLocaleString(undefined, {
-							dateStyle: 'full',
-							timeStyle: 'medium',
-						}),
+					setServerMessage(
+						' change time: ' +
+							changeTime +
+							' classid: ' +
+							classid +
+							' server time: ' +
+							servertime,
 					);
 				},
 			);
@@ -72,23 +86,29 @@ const AttendanceRoom: React.FC = () => {
 	}, [socket]);
 
 	return (
-		<div className="flex flex-col w-full m-auto items-center justify-center h-full p-10 bg-gray-100">
-			<h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">Attendance</h1>
-			<div className="flex w-1/2 gap-10">
-				<div className="flex flex-col w-2/3">
-					<div className="h-auto mx-auto max-w-10 w-full">
-						<QRCode
-							size={256}
-							style={{height: 'auto', maxWidth: '100%', width: '100%'}}
-							value={hashValue}
-							viewBox={`0 0 256 256`}
-						/>
-					</div>
-					{servertime && <p className="text-sm">Server time: {servertime}</p>}
+		<div className="flex flex-col w-full    h-full p-10 bg-gray-100">
+			<div className="flex flex-row">
+				<QRCode
+					size={256}
+					value={hashValue}
+					viewBox={`0 0 256 256`}
+					className="w-1/2 h-auto "
+				/>
+
+				<div className="flex  gap-10">
+					<Attendees arrayOfStudents={arrayOfStudents} />
 				</div>
-				<Attendees arrayOfStudents={arrayOfStudents} />
 			</div>
+			<button
+				onClick={handleClassFinished}
+				className="bg-blue-500 p-5 m-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+			>
+				Finish class
+			</button>
 			<CourseStudents coursestudents={courseStudents} />
+			<div className="flex flex-col ">
+				<div className="h-auto mx-auto max-w-10 w-full">{serverMessage}</div>
+			</div>
 		</div>
 	);
 };

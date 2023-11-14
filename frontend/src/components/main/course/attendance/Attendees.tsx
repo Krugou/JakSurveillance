@@ -4,15 +4,12 @@ interface AttendeesProps {
 	arrayOfStudents: string[];
 }
 
-const Attendees: React.FC<AttendeesProps> = ({ arrayOfStudents }) => {
-	
-	const arrayOfStudentstest = ['test1', 'test2'];
+const Attendees: React.FC<AttendeesProps> = ({arrayOfStudents}) => {
+	const arrayOfStudentstest = ['Aaa B.', 'bbb C.', 'ccc D.', 'ddd E.'];
 	const students =
 		arrayOfStudents.length > 0 ? arrayOfStudents : arrayOfStudentstest;
 	return (
 		<div className="text-md sm:text-xl mb-4">
-			<h2 className="text-lg font-bold mb-2">List of Attendees:</h2>
-			<p>Number of Attendees: {students.length}</p>
 			<div className="flex flex-wrap justify-center">
 				{students.map((student, index) => (
 					<div
