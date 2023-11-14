@@ -69,6 +69,7 @@ const setupSocketHandlers = (io: Server) => {
 					classid,
 					servertime.getTime(),
 					ArrayOfStudents,
+					CourseStudents,
 				);
 			}, speedOfHashChange);
 			SelectedClassid = classid;
@@ -131,11 +132,10 @@ const setupSocketHandlers = (io: Server) => {
 								console.log('Student not found');
 							}
 
-							const updatedCourseStudents = CourseStudents.filter(
+							CourseStudents = CourseStudents.filter(
 								student => student.studentnumber !== studentId,
 							);
 
-							socket.emit('updatecoursestudents', updatedCourseStudents);
 							console.log('Accepted:', secureHash, studentId, unixtime);
 						})
 						.catch(error => {

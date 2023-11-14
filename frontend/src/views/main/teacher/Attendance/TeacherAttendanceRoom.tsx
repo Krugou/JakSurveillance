@@ -19,9 +19,11 @@ const AttendanceRoom: React.FC = () => {
 	}
 	const [hashValue, setHashValue] = useState('');
 	const handleClassFinished = () => {
-		const dateToday = new Date().toISOString().slice(0, 10);
+		const dateToday = new Date().toISOString().slice(0, 19).replace('T', ' ');
 		const studentnumbers = courseStudents.map(student => student.studentnumber);
+		
 		apiHooks.finishClass(dateToday, studentnumbers, classid);
+		
 	};
 	useEffect(() => {
 		if (!socket) {
@@ -52,7 +54,14 @@ const AttendanceRoom: React.FC = () => {
 			});
 			newSocket.on(
 				'getCurrentHashForQrGeneratorServingHashAndChangeTime',
-				(hash, changeTime, classid, servertime, arrayOfStudents) => {
+				(
+					hash,
+					changeTime,
+					classid,
+					servertime,
+					arrayOfStudents,
+					courseStudents,
+				) => {
 					setHashValue(hash + '/' + classid);
 					setArrayOfStudents(arrayOfStudents);
 					setServerMessage(
@@ -63,6 +72,7 @@ const AttendanceRoom: React.FC = () => {
 							' server time: ' +
 							servertime,
 					);
+					setCourseStudents(courseStudents);
 				},
 			);
 			newSocket.on('disconnect', () => {
