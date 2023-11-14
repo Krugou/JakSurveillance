@@ -12,6 +12,15 @@ const usercoursesModel = {
 
 		return existingUserCourse;
 	},
+	async getUserCourseId(studentnumber: number) {
+		const [usercourseResult] = await pool
+			.promise()
+			.query(
+				'SELECT usercourseid FROM usercourses WHERE userid IN (SELECT userid FROM users WHERE studentnumber = ?)',
+				[studentnumber],
+			);
+		return usercourseResult;
+	},
 
 	async insertUserCourse(userId: number, courseId: number) {
 		const result = await pool

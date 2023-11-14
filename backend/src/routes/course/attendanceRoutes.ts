@@ -1,8 +1,9 @@
 // attendanceRoutes.ts
 import express, {Request, Response, Router} from 'express';
+import attendanceController from '../../controllers/attendancecontroller.js';
+import classController from '../../controllers/classcontroller.js';
 import Attendance from '../../models/attendancemodel.js'; // Adjust the path according to your project structure
 import Class from '../../models/classmodel.js';
-import classController from '../../controllers/classcontroller.js';
 
 const router: Router = express.Router();
 
@@ -44,7 +45,7 @@ router.post('/', async (req: Request, res: Response) => {
 	try {
 		const {status, date, studentnumber, classid} = req.body;
 
-		const insertedData = await Attendance.insertIntoAttendance(
+		const insertedData = await attendanceController.insertIntoAttendance(
 			status,
 			date,
 			studentnumber,
@@ -60,7 +61,11 @@ router.post('/', async (req: Request, res: Response) => {
 router.post('/classfinished/', async (req: Request, res: Response) => {
 	try {
 		const {date, studentnumbers, classid} = req.body;
-		await Attendance.checkAndInsertAttendance(date, studentnumbers, classid);
+		await attendanceController.checkAndInsertStatusNotPresentAttendance(
+			date,
+			studentnumbers,
+			classid,
+		);
 		res
 			.status(201)
 			.send('Attendance put as not present for rest of students not present');

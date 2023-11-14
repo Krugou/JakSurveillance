@@ -25,6 +25,17 @@ interface AttendanceModel {
 		studentnumbers: string[],
 		classid: string,
 	) => Promise<void>;
+	getAttendance: (
+		usercourseid: number,
+		date: string,
+		classid: number,
+	) => Promise<any>;
+	insertAttendance: (
+		status: string,
+		date: string,
+		usercourseid: number,
+		classid: number,
+	) => Promise<any>;
 }
 
 const attendanceModel: AttendanceModel = {
@@ -121,49 +132,49 @@ const attendanceModel: AttendanceModel = {
 			return Promise.reject(error);
 		}
 	},
-	async checkAndInsertAttendance(date, studentnumbers, classid) {
-		try {
-			for (const studentnumber of studentnumbers) {
-				// Find usercourseid based on studentnumber
-				const [usercourseResult] = await pool
-					.promise()
-					.query(
-						'SELECT usercourseid FROM usercourses WHERE userid IN (SELECT userid FROM users WHERE studentnumber = ?)',
-						[studentnumber],
-					);
 
-				if (usercourseResult.length === 0) {
-					console.error(
-						'Usercourse not found for the studentnumber:',
-						studentnumber,
-					);
-					continue; // Skip to the next iteration
-				}
+	async getAttendanceByUserCourseIdDateClassId(
+		usercourseid: number,
+		date: string,
+		classid: number,
+	) {
+		const [attendanceResult] = await pool
+			.promise()
+			.query(
+				'SELECT * FROM attendance WHERE usercourseid = ? AND date = ? AND classid = ?',
+				[usercourseid, date, classid],
+			);
+		return attendanceResult;
+	},
 
-				const usercourseid = usercourseResult[0].usercourseid;
-
-				// Check if attendance with usercourseid, date, and classid already exists
-				const [attendanceResult] = await pool
-					.promise()
-					.query(
-						'SELECT * FROM attendance WHERE usercourseid = ? AND date = ? AND classid = ?',
-						[usercourseid, date, classid],
-					);
-
-				if (attendanceResult.length === 0) {
-					// If attendance does not exist, insert with status 0
-					await pool
-						.promise()
-						.query(
-							'INSERT INTO attendance (status, date, usercourseid, classid) VALUES (?, ?, ?, ?)',
-							[0, date, usercourseid, classid],
-						);
-				}
-			}
-		} catch (error) {
-			console.error(error);
-			return Promise.reject(error);
-		}
+	async insertAttendance(
+		status: string,
+		date: string,
+		usercourseid: number,
+		classid: number,
+	) {
+		return await pool
+			.promise()
+			.query(
+				'INSERT INTO attendance (status, date, usercourseid, classid) VALUES (?, ?, ?, ?)',
+				[status, date, usercourseid, classid],
+			);
+	},
+	async checkAttendance(usercourseid: number) {
+		const [attendanceResultCheck] = await pool
+			.promise()
+			.query('SELECT * FROM attendance WHERE usercourseid = ?', [usercourseid]);
+		return attendanceResultCheck;
+	},
+	async getAttendanceById(insertid: number) {
+		console.log(
+			'🚀 ~ file: attendancemodel.ts:170 ~ getAttendanceById ~ insertid:',
+			insertid,
+		);
+		const [attendanceResult] = await pool
+			.promise()
+			.query('SELECT * FROM attendance WHERE attendanceid = ?', [insertid]);
+		return attendanceResult;
 	},
 };
 
