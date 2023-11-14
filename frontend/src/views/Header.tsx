@@ -10,7 +10,7 @@ interface HeaderProps {
 }
 const Header: React.FC<HeaderProps> = ({title}) => {
 	const location = useLocation();
-
+	//const navigate = useNavigate();
 	const [alert, setAlert] = useState<string | null>('');
 	const {user, setUser} = useContext(UserContext);
 	// console.log('Header', userContext);
@@ -35,6 +35,13 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 				setUser(null); // or setUser({ role: '', username: '' }) for an empty User object
 			}
 		}
+		/*
+		else {
+			if (location.pathname !== '/' && location.pathname !== '/login') {
+				navigate('/login');
+			}
+		}
+		*/
 	};
 	useEffect(() => {
 		getUserInfo();

@@ -21,7 +21,6 @@ const StudentCourseAttendance: React.FC = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				alert(usercourseid);
 				const token: string | null = localStorage.getItem('userToken');
 				if (!token) {
 					throw new Error('No token available');

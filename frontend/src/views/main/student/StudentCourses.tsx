@@ -56,14 +56,21 @@ const StudentCourses: React.FC = () => {
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 				{courses.map(course => {
 					const startDate = new Date(course.startDate).toLocaleDateString();
-					const endDate = new Date(course.endDate).toLocaleDateString();
+					const endDate = new Date(course.endDate);
+					const endDateString = endDate.toLocaleDateString();
 					const topics = course.topic_names.replace(/,/g, ', ');
+					const isCourseEnded = endDate < new Date();
 
 					return (
 						<div key={course.courseid} className="p-6 bg-white shadow-md rounded-lg">
 							<h2 className="text-2xl underline font-bold mb-2 text-black">
 								{course.course_name + ' ' + course.code}
 							</h2>
+							{isCourseEnded && (
+								<h2 className="mb-1 text-2xl underline text-red-500">
+									COURSE HAS ENDED
+								</h2>
+							)}
 							<p className="mb-1">
 								<strong>Topics:</strong> {topics}
 							</p>
@@ -71,13 +78,17 @@ const StudentCourses: React.FC = () => {
 								<strong>Start Date:</strong> {startDate}
 							</p>
 							<p className="mb-1">
-								<strong>End Date:</strong> {endDate}
+								<strong>End Date:</strong> {endDateString}
 							</p>
 							<p className="mb-1">
 								<strong>Course Instructors:</strong> {course.instructor_name}
 							</p>
 							<button
-								className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+								className={`mt-4 font-bold py-2 px-4 rounded ${
+									isCourseEnded
+										? 'bg-red-500 hover:bg-red-700'
+										: 'bg-green-500 hover:bg-green-700'
+								} text-white`}
 								onClick={() =>
 									navigate(`/student/courses/attendance/${course.usercourseid}`)
 								}
