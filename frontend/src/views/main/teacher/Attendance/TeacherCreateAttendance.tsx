@@ -5,6 +5,7 @@ import 'react-calendar/dist/Calendar.css';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
+import background from "../../../../assets/images/tausta2.png";
 const CreateAttendance: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
@@ -151,19 +152,27 @@ const CreateAttendance: React.FC = () => {
 	}
 
 	return (
-		<div className="flex flex-col items-center justify-center h-1/2 p-10 bg-gray-100">
-			<h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">
+		<div
+			className="flex flex-col pt-10 pb-10 pl-3 pr-3 items-center"
+			style={{
+				backgroundImage: `url(${background})`,
+				backgroundSize: 'cover',
+				backgroundPosition: 'center',
+			}}
+		>
+		<div className="flex flex-col items-center rounded-lg justify-center h-1/2 p-5 bg-orange-200">
+			<h1 className="text-xl sm:text-2xl font-bold p-5 mb-8 mt-5">
 				Fill in to open the attendance collection
 			</h1>
-			<div className="flex w-full lg:w-4/5 xl:w-2/3 justify-center m-auto">
-			<div className="flex flex-col gap-5">
-				<label className="text-xl" htmlFor="course">Course:</label>
-				<label className="text-xl" htmlFor="topic">Topic:</label>
+			<div className="flex w-full justify-center m-auto">
+			<div className="flex w-1/4 flex-col gap-5">
+				<label className="text-xl flex justify-end" htmlFor="course">Course :</label>
+				<label className="text-xl flex justify-end" htmlFor="topic">Topic :</label>
 			</div>
-			<div className="w-full sm:w-1/2 lg:w-1/3 flex flex-col gap-3">
+			<div className="w-full sm:w-1/2 lg:w-2/3 flex flex-col gap-3">
 				<select
 					id="course"
-					className="block w-3/4 h-8 ml-5 mt-1"
+					className="block w-3/4 h-8 ml-5"
 					value={selectedSession}
 					onChange={e => {
 						const selectedCourseId = e.target.value;
@@ -219,15 +228,15 @@ const CreateAttendance: React.FC = () => {
 				</select>
 			</div>
 			</div>
-			<h2 className="m-4 p-4">Select desired date</h2>
-
-			<div className="text-md sm:text-xl mb-4">
+			<div className="w-3/4 mt-10 h-1 bg-metropoliaMainOrange rounded-md"></div>
+			<h2 className="mt-2 text-xl p-4">Select desired date</h2>
+			<div className="text-md sm:text-xl mb-5">
 				<div className="relative">
 					<input
 						ref={inputRef}
 						type="text"
 						aria-label="Date"
-						className="py-2 pl-4 pr-12 rounded-xl border focus:ring focus:ring-metropoliaSecondaryOrange focus:outline-none"
+						className="py-2 text-center pl-4 pr-4 rounded-xl border focus:ring focus:ring-metropoliaSecondaryOrange focus:outline-none"
 						value={Array.isArray(date) ? 'Multiple Dates' : date.toDateString()}
 						onClick={toggleCalendar}
 						onChange={e => setDate(new Date(e.target.value))}
@@ -242,12 +251,12 @@ const CreateAttendance: React.FC = () => {
 					)}
 				</div>
 
-				<div className="relative mt-4">
+				<div className="relative mt-5">
 					<select
 						title="Time of Day" // Add this line
 						value={selectedLocation}
 						onChange={e => setSelectedLocation(e.target.value)}
-						className="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 shadow leading-tight focus:outline-none focus:shadow-outline"
+						className="block text-center appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 shadow leading-tight focus:outline-none focus:shadow-outline"
 					>
 						<option value="">Time of day</option>
 						{timeOfDay.map(option => (
@@ -259,11 +268,12 @@ const CreateAttendance: React.FC = () => {
 				</div>
 			</div>
 			<button
-				className="bg-metropoliaMainOrange hover:hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 m-4 rounded focus:outline-none focus:shadow-outline"
+				className="bg-metropoliaMainOrange w-2/4 hover:hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 m-4 rounded focus:outline-none focus:shadow-outline"
 				onClick={handleOpenAttendance}
 			>
 				Open
 			</button>
+		</div>
 		</div>
 	);
 };
