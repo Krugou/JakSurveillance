@@ -153,12 +153,12 @@ const CreateAttendance: React.FC = () => {
 
 	return (
 		<BackgroundContainer>
-		<div className="flex flex-col items-center rounded-lg justify-center h-1/2 p-5 bg-gray-100">
-			<h1 className="text-xl sm:text-2xl font-bold p-5 mb-8 mt-5">
+		<div className="flex flex-col items-center rounded-lg justify-center h-1/2 sm:p-5 p-2 bg-gray-100">
+			<h1 className="text-lg sm:text-2xl font-bold p-2 mb-8 mt-5">
 				Fill in to open the attendance collection
 			</h1>
 			<div className="flex w-full justify-center m-auto">
-			<div className="flex w-1/4 flex-col gap-5">
+			<div className="flex sm:w-1/4 w-1/2 flex-col gap-5">
 				<label className="text-xl flex justify-end" htmlFor="course">Course :</label>
 				<label className="text-xl flex justify-end" htmlFor="topic">Topic :</label>
 			</div>
