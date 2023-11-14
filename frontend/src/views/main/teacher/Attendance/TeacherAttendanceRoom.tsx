@@ -21,9 +21,8 @@ const AttendanceRoom: React.FC = () => {
 	const handleClassFinished = () => {
 		const dateToday = new Date().toISOString().slice(0, 19).replace('T', ' ');
 		const studentnumbers = courseStudents.map(student => student.studentnumber);
-		
+
 		apiHooks.finishClass(dateToday, studentnumbers, classid);
-		
 	};
 	useEffect(() => {
 		if (!socket) {
@@ -103,6 +102,9 @@ const AttendanceRoom: React.FC = () => {
 				<div className="flex  gap-10">
 					<Attendees arrayOfStudents={arrayOfStudents} />
 				</div>
+				<h2 className="text-xl">
+					{arrayOfStudents.length + '/' + courseStudents.length}
+				</h2>
 			</div>
 			<button
 				onClick={handleClassFinished}
