@@ -5,7 +5,7 @@ import 'react-calendar/dist/Calendar.css';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
-import background from "../../../../assets/images/tausta2.png";
+import BackgroundContainer from "../../../../components/main/background/background";
 const CreateAttendance: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
@@ -152,14 +152,7 @@ const CreateAttendance: React.FC = () => {
 	}
 
 	return (
-		<div
-			className="flex flex-col pt-10 pb-10 pl-3 pr-3 items-center"
-			style={{
-				backgroundImage: `url(${background})`,
-				backgroundSize: 'cover',
-				backgroundPosition: 'center',
-			}}
-		>
+		<BackgroundContainer>
 		<div className="flex flex-col items-center rounded-lg justify-center h-1/2 p-5 bg-orange-200">
 			<h1 className="text-xl sm:text-2xl font-bold p-5 mb-8 mt-5">
 				Fill in to open the attendance collection
@@ -274,7 +267,7 @@ const CreateAttendance: React.FC = () => {
 				Open
 			</button>
 		</div>
-		</div>
+		</BackgroundContainer>
 	);
 };
 
