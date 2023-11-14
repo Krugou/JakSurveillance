@@ -109,7 +109,7 @@ const setupSocketHandlers = (io: Server) => {
 							},
 							body: JSON.stringify({
 								status: '1',
-								date: '2023-11-09',
+								date: new Date().toISOString().slice(0, 19).replace('T', ' '),
 								studentnumber: studentId,
 								classid: classid,
 							}),
@@ -120,7 +120,7 @@ const setupSocketHandlers = (io: Server) => {
 							const student = CourseStudents.find(
 								student => student.studentnumber === studentId,
 							);
-
+							// remember to change back to 0
 							if (student && student.GDPR === 1) {
 								ArrayOfStudents.push(studentId);
 							} else if (student) {

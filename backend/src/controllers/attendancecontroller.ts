@@ -1,15 +1,25 @@
 import attendanceModel from '../models/attendancemodel.js';
 import usercoursesModel from '../models/usercoursemodel.js';
 const attendanceController: AttendanceController = {
-	async insertIntoAttendance(status, date, studentnumber, classid) {
+	async insertIntoAttendance(
+		status: string,
+		date: Date,
+		studentnumber: string,
+		classid: string,
+	) {
 		try {
+			if (!status || !date || !studentnumber || !classid) {
+				throw new Error('Invalid parameters');
+			}
+
 			const usercourseResult = await usercoursesModel.getUserCourseId(
 				studentnumber,
 			);
 
-			if (usercourseResult.length === 0) {
-				console.error('Usercourse not found for the studentnumber:', studentnumber);
-				return Promise.reject('Usercourse not found');
+			if (!usercourseResult || usercourseResult.length === 0) {
+				throw new Error(
+					`Usercourse not found for the studentnumber: ${studentnumber}`,
+				);
 			}
 
 			const usercourseid = usercourseResult[0].usercourseid;
@@ -17,12 +27,10 @@ const attendanceController: AttendanceController = {
 				usercourseid,
 			);
 
-			if (attendanceResultCheck.length > 0) {
-				console.error(
-					'Attendance already exists for the usercourseid:',
-					usercourseid,
+			if (!attendanceResultCheck || attendanceResultCheck.length > 0) {
+				throw new Error(
+					`Attendance already exists for the usercourseid: ${usercourseid}`,
 				);
-				return Promise.reject('Attendance already exists');
 			}
 
 			const insertResult = await attendanceModel.insertAttendance(
@@ -31,19 +39,29 @@ const attendanceController: AttendanceController = {
 				usercourseid,
 				classid,
 			);
+			console.log(
+				'🚀 ~ file: attendancecontroller.ts:42 ~ insertResult:',
+				insertResult,
+			);
+
+			if (!insertResult || !insertResult[0] || !insertResult[0].insertId) {
+				throw new Error('Failed to insert attendance');
+			}
 
 			const attendanceResult = await attendanceModel.getAttendanceById(
-				insertResult.insertId,
+				insertResult[0].insertId,
 			);
-			console.log(
-				'🚀 ~ file: attendancecontroller.ts:37 ~ insertIntoAttendance ~ attendanceResult:',
-				attendanceResult,
-			);
+
+			if (!attendanceResult || attendanceResult.length === 0) {
+				throw new Error(`Failed to get attendance by id: ${insertResult.insertId}`);
+			}
+
+			console.log('insertIntoAttendance ~ attendanceResult:', attendanceResult);
 
 			return attendanceResult[0];
 		} catch (error) {
 			console.error(error);
-			return Promise.reject(error);
+			throw error;
 		}
 	},
 	async checkAndInsertStatusNotPresentAttendance(date, studentnumbers, classid) {

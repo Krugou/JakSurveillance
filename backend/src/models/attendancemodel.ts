@@ -25,17 +25,15 @@ interface AttendanceModel {
 		studentnumbers: string[],
 		classid: string,
 	) => Promise<void>;
-	getAttendance: (
-		usercourseid: number,
-		date: string,
-		classid: number,
-	) => Promise<any>;
+
 	insertAttendance: (
 		status: string,
 		date: string,
 		usercourseid: number,
 		classid: number,
 	) => Promise<any>;
+	checkAttendance: (usercourseid: number) => Promise<any>;
+	getAttendanceById: (insertid: number) => Promise<any>;
 }
 
 const attendanceModel: AttendanceModel = {
@@ -154,12 +152,21 @@ const attendanceModel: AttendanceModel = {
 		usercourseid: number,
 		classid: number,
 	) {
-		return await pool
-			.promise()
-			.query(
-				'INSERT INTO attendance (status, date, usercourseid, classid) VALUES (?, ?, ?, ?)',
-				[status, date, usercourseid, classid],
-			);
+		if (!status || !date || !usercourseid || !classid) {
+			throw new Error('Invalid parameters');
+		}
+
+		try {
+			return await pool
+				.promise()
+				.query(
+					'INSERT INTO attendance (status, date, usercourseid, classid) VALUES (?, ?, ?, ?)',
+					[status, date, usercourseid, classid],
+				);
+		} catch (error) {
+			console.error(error);
+			throw new Error('Failed to insert attendance');
+		}
 	},
 	async checkAttendance(usercourseid: number) {
 		const [attendanceResultCheck] = await pool
@@ -168,10 +175,6 @@ const attendanceModel: AttendanceModel = {
 		return attendanceResultCheck;
 	},
 	async getAttendanceById(insertid: number) {
-		console.log(
-			'🚀 ~ file: attendancemodel.ts:170 ~ getAttendanceById ~ insertid:',
-			insertid,
-		);
 		const [attendanceResult] = await pool
 			.promise()
 			.query('SELECT * FROM attendance WHERE attendanceid = ?', [insertid]);

@@ -45,17 +45,24 @@ router.post('/', async (req: Request, res: Response) => {
 	try {
 		const {status, date, studentnumber, classid} = req.body;
 
+		// Validate request body
+		if (!status || !date || !studentnumber || !classid) {
+			return res.status(400).send('Missing required fields');
+		}
+
 		const insertedData = await attendanceController.insertIntoAttendance(
 			status,
 			date,
 			studentnumber,
 			classid,
 		);
-		console.log(insertedData);
+		// Send response back to client
 		res.status(200).send(insertedData);
 	} catch (err) {
 		console.error(err);
-		res.status(500).send('Server error');
+
+		// Send more specific error message
+		res.status(500).send(`Server error: ${err.message}`);
 	}
 });
 router.post('/classfinished/', async (req: Request, res: Response) => {
