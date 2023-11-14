@@ -43,7 +43,7 @@ const Login: React.FC = () => {
 
 	return (
 		<BackgroundContainer>
-			<h2 className="text-gray-800 font-semibold text-md sm:text-2xl">
+			<h2 className="text-gray-800 font-semibold mb-6 text-md sm:text-2xl">
 				Sign in using your Metropolia Account
 			</h2>
 			{alert && <ErrorAlert onClose={() => setAlert(null)} alert={alert} />}

@@ -1,14 +1,17 @@
 import React from 'react';
-import MainViewButton from '../../../components/main/buttons/MainViewButton';
+import Card from "../../../components/main/cards/Card";
+import BackgroundContainer from "../../../components/main/background/background";
 const MainView: React.FC = () => {
 
     return (
-        <div className="flex flex-col items-center justify-center h-1/2">
+        <BackgroundContainer>
             <h1 className="text-4xl font-bold mb-8">Student Dashboard</h1>
-            <MainViewButton path='/student/attendance' text='View Courses' />
-            <MainViewButton path='/student/profile' text='View Profile' />
-            <MainViewButton path='/student/courses' text='View Attendance' />
+        <div className="flex flex- w-full items-center justify-center h-1/2">
+            <Card path='/student/attendance' title="View attendance" description="View your own attendance" />
+            <Card path='/student/profile' title='View Profile' description="View your own profile"/>
+            <Card path='/student/courses' title='View Courses' description="View your own courses"/>
         </div>
+        </BackgroundContainer>
     );
 };
 

@@ -20,7 +20,6 @@ const BackgroundContainer: React.FC<BackgroundContainerProps> = ({ children }) =
                 backgroundImage: `url(${backgroundUrl})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                backgroundColor: '#F0F0F0', // Set a default background color if needed
             }}
         >
             {children}

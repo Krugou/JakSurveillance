@@ -153,7 +153,7 @@ const CreateAttendance: React.FC = () => {
 
 	return (
 		<BackgroundContainer>
-		<div className="flex flex-col items-center rounded-lg justify-center h-1/2 p-5 bg-orange-200">
+		<div className="flex flex-col items-center rounded-lg justify-center h-1/2 p-5 bg-gray-100">
 			<h1 className="text-xl sm:text-2xl font-bold p-5 mb-8 mt-5">
 				Fill in to open the attendance collection
 			</h1>
@@ -221,7 +221,7 @@ const CreateAttendance: React.FC = () => {
 				</select>
 			</div>
 			</div>
-			<div className="w-3/4 mt-10 h-1 bg-metropoliaMainOrange rounded-md"></div>
+			<div className="w-4/5 mt-10 h-1 bg-metropoliaMainOrange rounded-md"></div>
 			<h2 className="mt-2 text-xl p-4">Select desired date</h2>
 			<div className="text-md sm:text-xl mb-5">
 				<div className="relative">
