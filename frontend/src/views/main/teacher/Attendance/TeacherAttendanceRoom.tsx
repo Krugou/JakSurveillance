@@ -7,11 +7,9 @@ import CourseStudents from '../../../../components/main/course/attendance/Course
 import apiHooks from '../../../../hooks/ApiHooks';
 const AttendanceRoom: React.FC = () => {
 	const {classid} = useParams<{classid: string}>();
-	const [servertime, setServertime] = useState('');
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [arrayOfStudents, setArrayOfStudents] = useState<string[]>([]);
 	const [courseStudents, setCourseStudents] = useState<Student[]>([]);
-	const [localtime, setLocaltime] = useState('');
 	const [serverMessage, setServerMessage] = useState('');
 
 	interface Student {
@@ -43,21 +41,18 @@ const AttendanceRoom: React.FC = () => {
 
 			newSocket.emit('getCurrentHashForQrGenerator', classid);
 			newSocket.on('getallstudentsinclass', courseStudents => {
-				console.log(
-					'🚀 ~ file: TeacherAttendanceRoom.tsx:45 ~ useEffect ~ courseStudents:',
-					courseStudents,
-				);
 				setCourseStudents(courseStudents);
 			});
 			newSocket.on('updatecoursestudents', courseStudents => {
+				console.log(
+					'🚀 ~ file: TeacherAttendanceRoom.tsx:54 ~ useEffect ~ courseStudents:',
+					courseStudents,
+				);
 				setCourseStudents(courseStudents);
 			});
 			newSocket.on(
 				'getCurrentHashForQrGeneratorServingHashAndChangeTime',
 				(hash, changeTime, classid, servertime, arrayOfStudents) => {
-					setServertime(servertime);
-					setLocaltime(Date.now().toString());
-
 					setHashValue(hash + '/' + classid);
 					setArrayOfStudents(arrayOfStudents);
 					setServerMessage(
