@@ -80,6 +80,7 @@ const attendanceController: AttendanceController = {
 				}
 
 				const usercourseid = usercourseResult[0].usercourseid;
+
 				const attendanceResult =
 					await attendanceModel.getAttendanceByUserCourseIdDateClassId(
 						usercourseid,
@@ -88,7 +89,13 @@ const attendanceController: AttendanceController = {
 					);
 
 				if (attendanceResult.length === 0) {
-					await attendanceModel.insertAttendance(0, date, usercourseid, classid);
+					const status = 0;
+					await attendanceModel.insertAttendance(
+						status,
+						date,
+						usercourseid,
+						classid,
+					);
 				}
 			}
 		} catch (error) {

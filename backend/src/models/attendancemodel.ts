@@ -158,7 +158,7 @@ const attendanceModel: AttendanceModel = {
 		usercourseid: number,
 		classid: number,
 	) {
-		if (!status || !date || !usercourseid || !classid) {
+		if (!date || !usercourseid || !classid) {
 			throw new Error('Invalid parameters');
 		}
 
