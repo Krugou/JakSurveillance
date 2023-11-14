@@ -9,7 +9,7 @@ const TeacherCoursesRoutes: React.FC = () => {
     return (
         <Routes>
             <Route path='/' element={<TeacherCourses />} />
-            <Route path='createcourse' element={<TeacherCreateCourse />} />
+            <Route path='create' element={<TeacherCreateCourse />} />
             <Route path=':id' element={<TeacherCourseDetail />} />
             <Route path=':id/modify' element={<TeacherCourseModify />} />
         </Routes>

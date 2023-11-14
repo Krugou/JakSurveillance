@@ -6,7 +6,7 @@ import TeacherCreateAttendance from '../../views/main/teacher/Attendance/Teacher
 const TeacherAttendanceRoutes: React.FC = () => {
     return (
         <Routes>
-            <Route path='createattendance' element={<TeacherCreateAttendance />} />
+            <Route path='create' element={<TeacherCreateAttendance />} />
             <Route path=':classid' element={<TeacherAttendanceRoom />} />
         </Routes>
     );

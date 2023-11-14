@@ -155,12 +155,12 @@ const CreateAttendance: React.FC = () => {
 			<h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">
 				Fill in to open the attendance collection
 			</h1>
-			<div className="flex w-2/3 m-auto">
+			<div className="flex w-full lg:w-4/5 xl:w-2/3 justify-center m-auto">
 			<div className="flex flex-col gap-5">
 				<label className="text-xl" htmlFor="course">Course:</label>
 				<label className="text-xl" htmlFor="topic">Topic:</label>
 			</div>
-			<div className="w-1/3 flex flex-col gap-2">
+			<div className="w-full sm:w-1/2 lg:w-1/3 flex flex-col gap-3">
 				<select
 					id="course"
 					className="block w-3/4 h-8 ml-5 mt-1"
@@ -227,7 +227,7 @@ const CreateAttendance: React.FC = () => {
 						ref={inputRef}
 						type="text"
 						aria-label="Date"
-						className="py-2 pl-4 pr-12 rounded border focus:ring focus:ring-blue-300 focus:outline-none"
+						className="py-2 pl-4 pr-12 rounded-xl border focus:ring focus:ring-metropoliaSecondaryOrange focus:outline-none"
 						value={Array.isArray(date) ? 'Multiple Dates' : date.toDateString()}
 						onClick={toggleCalendar}
 						onChange={e => setDate(new Date(e.target.value))}
@@ -247,7 +247,7 @@ const CreateAttendance: React.FC = () => {
 						title="Time of Day" // Add this line
 						value={selectedLocation}
 						onChange={e => setSelectedLocation(e.target.value)}
-						className="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+						className="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 shadow leading-tight focus:outline-none focus:shadow-outline"
 					>
 						<option value="">Time of day</option>
 						{timeOfDay.map(option => (
