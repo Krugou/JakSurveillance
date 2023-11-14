@@ -4,7 +4,12 @@ import {useParams} from 'react-router-dom';
 import apiHooks from '../../../hooks/ApiHooks';
 interface Attendance {
 	date: string;
-	present: boolean;
+	name: string;
+	start_date: string;
+	end_date: string;
+	timeofday: string;
+	topicname: string;
+	status: number;
 }
 
 const StudentCourseAttendance: React.FC = () => {
@@ -25,8 +30,8 @@ const StudentCourseAttendance: React.FC = () => {
 					usercourseid,
 					token,
 				);
-				const data = await response.json();
-				setAttendanceData(data);
+				console.log(response, 'RESPONSE');
+				setAttendanceData(response);
 			} catch (error) {
 				console.error('Error:', error);
 			}
@@ -39,16 +44,54 @@ const StudentCourseAttendance: React.FC = () => {
 		return <div>Loading...</div>;
 	}
 
+	const getAttendanceColorClass = (attendance: number) => {
+		if (attendance === 1) {
+			return 'bg-metropoliaTrendGreen';
+		} else {
+			return 'bg-metropoliaSupportRed'; // You can set a default color class here if needed
+		}
+	};
 	return (
-		<div>
-			<h1>Attendance for Course {usercourseid}</h1>
-			<ul>
-				{attendanceData.map((attendance, index) => (
-					<li key={index}>
-						{attendance.date}: {attendance.present ? 'Present' : 'Absent'}
-					</li>
-				))}
-			</ul>
+		<div className="flex flex-col items-center justify-center h-1/2 p-8 bg-gray-100">
+			<h1 className="text-xl sm:text-4xl font-bold mb-8">
+				Attendance for Course {attendanceData[0].name}
+			</h1>
+			{attendanceData.map((attendance, index) => (
+				<div
+					key={index}
+					className="relative flex align-start bg-white flex-row text-md border border-black rounded sm:text-xl m-4 p-4"
+				>
+					<p className="p-2 m-2">
+						<strong>Start Date:</strong>{' '}
+						<span className="profileStat">
+							{new Date(attendance.start_date).toLocaleDateString()}
+						</span>
+					</p>
+					<p className="p-2 m-2">
+						<strong>End Date:</strong>{' '}
+						<span className="profileStat">
+							{new Date(attendance.end_date).toLocaleDateString()}
+						</span>
+					</p>
+					<p className="p-2 m-2">
+						<strong>Time of Day:</strong>{' '}
+						<span className="profileStat">{attendance.timeofday}</span>
+					</p>
+					<p className="p-2 m-2">
+						<strong>Topic Name:</strong>{' '}
+						<span className="profileStat">{attendance.topicname}</span>
+					</p>
+
+					<p className="p-2 m-2">
+						<strong>Status:</strong>
+						<span
+							className={`profileStat ${getAttendanceColorClass(attendance.status)}`}
+						>
+							{attendance.status === 1 ? 'Present' : 'Not present'}
+						</span>
+					</p>
+				</div>
+			))}
 		</div>
 	);
 };

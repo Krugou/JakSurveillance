@@ -62,15 +62,21 @@ const attendanceModel: AttendanceModel = {
 		}
 	},
 
-	async findAllAttendancesByUserCourseId(usercourseId) {
+	async findAllAttendancesByUserCourseId(usercourseId, userid) {
 		try {
+			console.log(userid, 'USERIDDD');
 			const [rows] = await pool.promise().query<RowDataPacket[]>(
-				`SELECT attendance.* 
-                FROM attendance 
-                WHERE attendance.usercourseid = ?`,
-				[usercourseId],
+				`SELECT attendance.status, class.start_date, class.end_date, class.timeofday, topics.topicname, courses.name
+            FROM attendance 
+            JOIN class ON attendance.classid = class.classid
+            JOIN topics ON class.topicid = topics.topicid
+            JOIN courses ON class.courseid = courses.courseid
+            JOIN usercourses ON attendance.usercourseid = usercourses.usercourseid
+            WHERE attendance.usercourseid = ? AND usercourses.userid = ?;`,
+				[usercourseId, userid],
 			);
 			console.log(rows);
+			return rows;
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
