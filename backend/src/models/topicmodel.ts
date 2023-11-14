@@ -141,6 +141,14 @@ const topicModel: TopicModel = {
 
 		return topicResult;
 	},
+	async findTopicIdUsingTopicName(topic: string) {
+		const [topicResult] = await pool
+			.promise()
+			.query<RowDataPacket[]>('SELECT topicid FROM topics WHERE topicname = ?', [
+				topic,
+			]);
+		return topicResult
+	}
 
 	// other methods...
 };

@@ -1,4 +1,4 @@
-import {ResultSetHeader, RowDataPacket} from 'mysql2';
+import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import pool from '../config/adminDBPool.js';
 
 interface Course {
@@ -455,6 +455,14 @@ const course: CourseModel = {
 		}
 	},
 
+	async findCourseIdUsingCourseCode(coursecode) {
+		const [courseResult] = await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT courseid FROM courses WHERE code = ?', [
+					coursecode,
+				]);
+		return courseResult
+	}
 	async getCoursesByCourseId(courseId) {
 		try {
 			const [rows] = await pool.promise().query<RowDataPacket[]>(

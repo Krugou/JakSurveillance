@@ -89,51 +89,51 @@ const classModel: ClassModel = {
 			return [];
 		}
 	},
-	async insertIntoClass(
-		topicname: string,
-		coursecode: string,
-		start_date: Date,
-		end_date: Date,
-		timeofday: 'am' | 'pm',
-	) {
-		try {
-			const [topicRows] = await pool
-				.promise()
-				.query<RowDataPacket[]>('SELECT topicid FROM topics WHERE topicname = ?', [
-					topicname,
-				]);
-			console.log('🚀 ~ file: classmodel.ts:63 ~ topicRows:', topicRows);
+	// async insertIntoClass(
+	// 	topicname: string,
+	// 	coursecode: string,
+	// 	start_date: Date,
+	// 	end_date: Date,
+	// 	timeofday: 'am' | 'pm',
+	// ) {
+	// 	try {
+	// 		const [topicRows] = await pool
+	// 			.promise()
+	// 			.query<RowDataPacket[]>('SELECT topicid FROM topics WHERE topicname = ?', [
+	// 				topicname,
+	// 			]);
+	// 		console.log('🚀 ~ file: classmodel.ts:63 ~ topicRows:', topicRows);
 
-			const [courseRows] = await pool
-				.promise()
-				.query<RowDataPacket[]>('SELECT courseid FROM courses WHERE code = ?', [
-					coursecode,
-				]);
-			console.log('🚀 ~ file: classmodel.ts:70 ~ courseRows:', courseRows);
+	// 		const [courseRows] = await pool
+	// 			.promise()
+	// 			.query<RowDataPacket[]>('SELECT courseid FROM courses WHERE code = ?', [
+	// 				coursecode,
+	// 			]);
+	// 		console.log('🚀 ~ file: classmodel.ts:70 ~ courseRows:', courseRows);
 
-			if (topicRows.length === 0 || courseRows.length === 0) {
-				console.error(`Topic or course does not exist`);
-				return;
-			}
+	// 		if (topicRows.length === 0 || courseRows.length === 0) {
+	// 			console.error(`Topic or course does not exist`);
+	// 			return;
+	// 		}
 
-			const topicid = topicRows[0].topicid;
-			console.log('🚀 ~ file: classmodel.ts:78 ~ topicid:', topicid);
-			const courseid = courseRows[0].courseid;
-			console.log('🚀 ~ file: classmodel.ts:80 ~ courseid:', courseid);
+	// 		const topicid = topicRows[0].topicid;
+	// 		console.log('🚀 ~ file: classmodel.ts:78 ~ topicid:', topicid);
+	// 		const courseid = courseRows[0].courseid;
+	// 		console.log('🚀 ~ file: classmodel.ts:80 ~ courseid:', courseid);
 
-			const [result] = await pool
-				.promise()
-				.query(
-					'INSERT INTO class (start_date, end_date, timeofday, topicid, courseid) VALUES (?, ?, ?, ?, ?)',
-					[start_date, end_date, timeofday, topicid, courseid],
-				);
-			const classid = result.insertId;
-			console.log('🚀 ~ file: classmodel.ts:88 ~ classid:', classid);
-			return classid;
-		} catch (error) {
-			console.error(error);
-		}
-	},
+	// 		const [result] = await pool
+	// 			.promise()
+	// 			.query(
+	// 				'INSERT INTO class (start_date, end_date, timeofday, topicid, courseid) VALUES (?, ?, ?, ?, ?)',
+	// 				[start_date, end_date, timeofday, topicid, courseid],
+	// 			);
+	// 		const classid = result.insertId;
+	// 		console.log('🚀 ~ file: classmodel.ts:88 ~ classid:', classid);
+	// 		return classid;
+	// 	} catch (error) {
+	// 		console.error(error);
+	// 	}
+	// },
 
 	async deleteByClassId(id) {
 		try {
@@ -165,6 +165,15 @@ const classModel: ClassModel = {
 			return Promise.reject(error);
 		}
 	},
+	async insertIntoClass(start_date, end_date, timeofday, topicid, courseid) {
+		const [result] = await pool
+			.promise()
+			.query(
+				'INSERT INTO class (start_date, end_date, timeofday, topicid, courseid) VALUES (?, ?, ?, ?, ?)',
+				[start_date, end_date, timeofday, topicid, courseid],
+		);
+		return result;
+	}
 	// other methods...
 };
 

@@ -2,6 +2,7 @@
 import express, {Request, Response, Router} from 'express';
 import Attendance from '../../models/attendancemodel.js'; // Adjust the path according to your project structure
 import Class from '../../models/classmodel.js';
+import classController from '../../controllers/classcontroller.js';
 
 const router: Router = express.Router();
 
@@ -82,7 +83,7 @@ router.post('/class/', async (req: Request, res: Response) => {
 	try {
 		const {topicname, coursecode, start_date, end_date, timeofday} = req.body;
 		console.log(req.body);
-		const classid = await Class.insertIntoClass(
+		const classid = await classController.insertIntoClass(
 			topicname,
 			coursecode,
 			start_date,
