@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState, useEffect } from 'react';
 
 interface BackgroundContainerProps {
     children: ReactNode;
@@ -10,8 +10,13 @@ const getRandomBackgroundUrl = (): string => {
 };
 
 const BackgroundContainer: React.FC<BackgroundContainerProps> = ({ children }) => {
-    const backgroundUrl = getRandomBackgroundUrl();
-    console.log('Background URL:', backgroundUrl);
+    const [backgroundUrl, setBackgroundUrl] = useState<string>('');
+
+    useEffect(() => {
+        const url = getRandomBackgroundUrl();
+        console.log('Background URL:', url);
+        setBackgroundUrl(url);
+    }, []); // The empty dependency array ensures this effect runs only once on mount
 
     return (
         <div
