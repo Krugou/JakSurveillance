@@ -92,13 +92,13 @@ const CreateCourse: React.FC = () => {
 		>
 			{currentStep === 1 && (
 				<fieldset>
-					<legend>Course Details</legend>
+					<legend className="mb-5 ml-1 text-lg">Course Details</legend>
 					<input
 						type="text"
 						placeholder="Course Code"
 						value={courseCode}
 						onChange={e => setCourseCode(e.target.value)}
-						className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+						className="w-full mb-5 p-2 border rounded focus:outline-none rounded-3xl focus:ring-2 focus:ring-metropoliaMainOrange"
 						title="Enter the course code here example: TX00CG61-3009"
 					/>
 					<input
@@ -106,7 +106,7 @@ const CreateCourse: React.FC = () => {
 						placeholder="Course Name"
 						value={courseName}
 						onChange={e => setCourseName(e.target.value)}
-						className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+						className="w-full mb-5 p-2 border rounded-3xl focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
 						title="Enter the course name here example: Mediapalvelut-projekti"
 					/>
 
@@ -115,7 +115,7 @@ const CreateCourse: React.FC = () => {
 						placeholder="Student Group"
 						value={studentGroup}
 						onChange={e => setStudentGroup(e.target.value)}
-						className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+						className="w-full mb-3 p-2 border rounded-3xl focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
 						title="Enter the student group here example: tvt21-m"
 					/>
 					{!shouldCheckDetails && (
@@ -137,7 +137,7 @@ const CreateCourse: React.FC = () => {
 							/>
 						</>
 					)}
-					<label className="flex items-center space-x-3">
+					<label className="flex items-center mt-2 mb-3 space-x-3">
 						<input
 							type="checkbox"
 							checked={shouldCheckDetails}
@@ -192,7 +192,7 @@ const CreateCourse: React.FC = () => {
 			{currentStep === 3 && (
 				<button
 					type="submit"
-					className="w-full p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+					className="w-full p-2 mt-5 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
 				>
 					Create Course
 				</button>

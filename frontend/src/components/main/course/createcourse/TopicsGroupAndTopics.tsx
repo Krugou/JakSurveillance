@@ -110,8 +110,8 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 
 	return (
 		<fieldset>
-			<div className="flex justify-between ">
-				<h2>Topic Details</h2>
+			<div className="flex justify-between items-center">
+				<h2 className="text-xl">Topic Details</h2>
 				<button
 					type="button"
 					onClick={() => setIsCustomGroup(prev => !prev)}
@@ -123,9 +123,9 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 
 			{isCustomGroup ? (
 				<>
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-dashed border-2 bg-gray-200 p-3 border-metropoliaMainOrange">
 						<div>
-							<label htmlFor="customTopicGroup" className="block font-medium mb-1">
+							<label htmlFor="customTopicGroup" className="block font-semibold mb-1">
 								Custom Topic Group
 							</label>
 							<input
@@ -139,9 +139,10 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 							/>
 						</div>
 						<div>
-							<label htmlFor="customTopics" className="block font-medium mb-1">
+							<label htmlFor="customTopics" className="block font-semibold mb-1">
 								Custom Topics
 							</label>
+							<div className="flex flex-col gap-4 w-full">
 							{customTopics.map((topic, index) => (
 								<div key={index} className="flex items-center">
 									<input
@@ -150,7 +151,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 										placeholder="Custom Topic"
 										value={topic}
 										onChange={e => handleCustomTopicChange(index, e.target.value)}
-										className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange mr-2"
+										className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange mr-2"
 										title='add custom topics here example: "exam"'
 									/>
 									{customTopics.length > 1 && (
@@ -186,11 +187,12 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 									setCustomTopics(prevTopics => [...prevTopics, customTopic]);
 									setCustomTopic('');
 								}}
-								className="mb-3 w-full p-2 bg-metropoliaMainOrange text-white rounded hover:bg-metropoliaSecondaryOrange"
+								className="mb-3 p-2 bg-metropoliaMainOrange text-white text-sm rounded-3xl hover:bg-metropoliaSecondaryOrange"
 							>
 								Add Custom Topic
 							</button>
 						</div>
+					</div>
 					</div>
 				</>
 			) : (

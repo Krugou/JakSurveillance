@@ -5,10 +5,10 @@ import BackgroundContainer from "../../../../components/main/background/backgrou
 const TeacherCreateCourse: React.FC = () => {
 	return (
         <BackgroundContainer>
-		<div className="flex flex-col p-5 items-center justify-center min-h-1/2 bg-gray-100">
-			<h1 className="text-4xl font-bold mb-8">Create Course</h1>
+			<div className="w-full pt-10 pb-10">
+			<h1 className="text-4xl text-center font-bold mb-8">Create Course</h1>
 			<CreateCourse />
-		</div>
+			</div>
 		</BackgroundContainer>
 	);
 };
