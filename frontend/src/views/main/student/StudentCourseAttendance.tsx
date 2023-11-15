@@ -57,8 +57,8 @@ const StudentCourseAttendance: React.FC = () => {
 		new Date(attendance.start_date).toLocaleDateString().includes(searchTerm),
 	);
 	return (
-		<div className="flex flex-col items-center justify-center h-1/2 p-8 bg-gray-100">
-			<h1 className="text-xl sm:text-4xl font-bold mb-8">
+		<div className="overflow-x-auto flex flex-col border-x border-t">
+			<h1 className="text-xl sm:text-4xl font-bold mb-8 text-center">
 				Attendance for Course {attendanceData[0].name}
 			</h1>
 			<input
@@ -68,43 +68,41 @@ const StudentCourseAttendance: React.FC = () => {
 				onChange={handleSearchChange}
 				className="w-1/6 p-2 m-2 border border-black rounded"
 			/>
-			{filteredAttendanceData.map((attendance, index) => (
-				<div
-					key={index}
-					className={`relative flex align-start flex-row text-md border border-black rounded sm:text-xl m-4 p-4 ${
-						attendance.status === 0
-							? 'bg-metropoliaSupportRed'
-							: 'bg-metropoliaTrendGreen'
-					}`}
-				>
-					<p className="p-2 text-white m-2">
-						<strong>Date:</strong>{' '}
-						<span className="profileStat">
-							{new Date(attendance.start_date).toLocaleDateString()}
-						</span>
-					</p>
-					<p className="p-2 text-white m-2">
-						<strong>Duration:</strong> <span className="profileStat">unknown</span>
-					</p>
-					<p className="p-2  text-white m-2">
-						<strong>Time of Day:</strong>{' '}
-						<span className="profileStat">{attendance.timeofday}</span>
-					</p>
-					<p className="p-2 text-white m-2">
-						<strong>Topic:</strong>{' '}
-						<span className="profileStat">{attendance.topicname}</span>
-					</p>
-
-					<p className="p-2 text-white m-2">
-						<strong>Status:</strong>
-						<span
-							className={`profileStat ${getAttendanceColorClass(attendance.status)}`}
-						>
-							{attendance.status === 1 ? 'Present' : 'Absent'}
-						</span>
-					</p>
-				</div>
-			))}
+			<div className="overflow-x-auto border-x border-t m-2">
+				<table className="table-auto w-full">
+					<thead className="border-b">
+						<tr className="bg-gray-100">
+							<th className="text-left p-4 font-medium underline">Date</th>
+							<th className="text-left p-4 font-medium underline">Duration</th>
+							<th className="text-left p-4 font-medium underline">Time of Day</th>
+							<th className="text-left p-4 font-medium underline">Topic</th>
+							<th className="text-left p-4 font-medium underline">Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						{filteredAttendanceData.map((attendance, index) => (
+							<tr
+								key={index}
+								className={`border-b hover:bg-gray-50 ${
+									attendance.status === 0
+										? 'bg-metropoliaSupportRed'
+										: 'bg-metropoliaTrendGreen'
+								}`}
+							>
+								<td className="p-4">
+									{new Date(attendance.start_date).toLocaleDateString()}
+								</td>
+								<td className="p-4">unknown</td>
+								<td className="p-4">{attendance.timeofday}</td>
+								<td className="p-4">{attendance.topicname}</td>
+								<td className="p-4">
+									{attendance.status === 1 ? 'Present' : 'Absent'}
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
 		</div>
 	);
 };
