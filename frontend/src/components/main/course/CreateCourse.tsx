@@ -92,7 +92,7 @@ const CreateCourse: React.FC = () => {
 		>
 			{currentStep === 1 && (
 				<fieldset>
-					<legend className="mb-5 ml-1 text-lg">Course Details</legend>
+					<legend className="mb-5 ml-1 text-xl">Course Details</legend>
 					<input
 						type="text"
 						placeholder="Course Code"
@@ -155,7 +155,7 @@ const CreateCourse: React.FC = () => {
 
 			{currentStep === 3 && (
 				<fieldset>
-					<legend>File Upload</legend>
+					<legend className="text-xl mb-3">File Upload</legend>
 					<label className="w-full mb-2 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white transition-colors duration-300 ease-in-out">
 						<svg className="w-8 h-8 fill-current" viewBox="0 0 20 20">
 							<path d="M10 4a2 2 0 00-2 2v4a2 2 0 104 0V6a2 2 0 00-2-2zm0 12a6 6 0 100-12 6 6 0 000 12z" />

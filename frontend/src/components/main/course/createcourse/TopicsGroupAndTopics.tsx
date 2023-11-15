@@ -111,11 +111,11 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 	return (
 		<fieldset>
 			<div className="flex justify-between items-center">
-				<h2 className="text-xl">Topic Details</h2>
+				<h2 className="text-xl mb-3 ">Topic Details</h2>
 				<button
 					type="button"
 					onClick={() => setIsCustomGroup(prev => !prev)}
-					className="mb-3 w-1/2 p-2 bg-metropoliaMainOrange text-white rounded hover:bg-metropoliaSecondaryOrange"
+					className="mb-3 w-1/2 text-sm p-2 bg-metropoliaMainOrange text-white rounded-3xl hover:bg-metropoliaSecondaryOrange"
 				>
 					{isCustomGroup ? 'Select Existing Group' : 'Create Custom Group'}
 				</button>
