@@ -155,6 +155,13 @@ const CreateCourse: React.FC = () => {
 
 			{currentStep === 3 && (
 				<fieldset>
+					<legend className="text-xl mb-3">Add teachers</legend>
+					<input className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"></input>
+				</fieldset>
+			)}
+
+			{currentStep === 4 && (
+				<fieldset>
 					<legend className="text-xl mb-3">File Upload</legend>
 					<label className="w-full mb-2 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white transition-colors duration-300 ease-in-out">
 						<svg className="w-8 h-8 fill-current" viewBox="0 0 20 20">
@@ -180,7 +187,7 @@ const CreateCourse: React.FC = () => {
 					Previous
 				</button>
 			)}
-			{currentStep < 3 && (
+			{currentStep < 4 && (
 				<button
 					type="button"
 					className="w-full p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
@@ -189,7 +196,7 @@ const CreateCourse: React.FC = () => {
 					Next
 				</button>
 			)}
-			{currentStep === 3 && (
+			{currentStep === 4 && (
 				<button
 					type="submit"
 					className="w-full p-2 mt-5 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"

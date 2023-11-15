@@ -236,7 +236,7 @@ const CreateLecture: React.FC = () => {
 							onChange={e => setDate(new Date(e.target.value))}
 						/>
 						{calendarOpen && (
-							<div className="absolute top-12 left-0 z-10">
+							<div className="absolute top-12 right-0 sm:text-sm text-lg left-0 z-10">
 								<Calendar
 									onChange={handleDateChangeCalendar}
 									tileClassName={tileClassName}
