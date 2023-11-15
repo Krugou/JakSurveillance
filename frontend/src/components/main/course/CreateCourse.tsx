@@ -24,7 +24,7 @@ const CreateCourse: React.FC = () => {
 			setSelectedFile(selectedFile.name);
 			// ... rest of the code
 		} else {
-			setUploadFile('Upload a file');
+			setUploadFile('Upload a excel file');
 			setSelectedFile('No file selected');
 		}
 	};
@@ -90,7 +90,7 @@ const CreateCourse: React.FC = () => {
 			onSubmit={handleSubmit}
 			className="w-full max-w-md mx-auto bg-white p-6 rounded shadow-md"
 		>
-			{currentStep === 1 && (
+			{currentStep === 2 && (
 				<fieldset>
 					<legend className="mb-5 ml-1 text-xl">Course Details</legend>
 					<input
@@ -149,20 +149,20 @@ const CreateCourse: React.FC = () => {
 				</fieldset>
 			)}
 
-			{currentStep === 2 && (
+			{currentStep === 3 && (
 				<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
 			)}
 
-			{currentStep === 3 && (
+			{currentStep === 4 && (
 				<fieldset>
 					<legend className="text-xl mb-3">Add teachers</legend>
 					<input className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"></input>
 				</fieldset>
 			)}
 
-			{currentStep === 4 && (
+			{currentStep === 1 && (
 				<fieldset>
-					<legend className="text-xl mb-3">File Upload</legend>
+					<legend className="text-xl mb-3">Insert Course Students Data File</legend>
 					<label className="w-full mb-2 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white transition-colors duration-300 ease-in-out">
 						<svg className="w-8 h-8 fill-current" viewBox="0 0 20 20">
 							<path d="M10 4a2 2 0 00-2 2v4a2 2 0 104 0V6a2 2 0 00-2-2zm0 12a6 6 0 100-12 6 6 0 000 12z" />
