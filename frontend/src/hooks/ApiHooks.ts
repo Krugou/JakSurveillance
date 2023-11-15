@@ -120,7 +120,7 @@ interface Course {
 	code: string;
 }
 
-const createClass = async (
+const CreateLecture = async (
 	topicname: string,
 	course: Course,
 	start_date: Date,
@@ -223,7 +223,7 @@ const apiHooks = {
 	getAllCoursesByInstructorEmail,
 	getCourseDetailByCourseId,
 	getCourseReservations,
-	createClass,
+	CreateLecture,
 	getUserInfoByToken,
 	getAllCourseInfoByUserEmail,
 	finishClass,

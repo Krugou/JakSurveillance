@@ -6,7 +6,7 @@ import {useNavigate} from 'react-router-dom';
 import BackgroundContainer from '../../../../components/main/background/background';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
-const CreateClass: React.FC = () => {
+const CreateLecture: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
 	const [courses, setCourses] = useState<Course[]>([]);
@@ -128,7 +128,7 @@ const CreateClass: React.FC = () => {
 		try {
 			let response;
 			if (selectedCourse !== null) {
-				response = await apihooks.createClass(
+				response = await apihooks.CreateLecture(
 					selectedParticipant,
 					selectedCourse,
 					date,
@@ -155,7 +155,7 @@ const CreateClass: React.FC = () => {
 		<BackgroundContainer>
 			<div className="flex flex-col 2xl:w-1/4 sm:w-3/5 lg:w-2/5 md:w-3/5 w-11/12 items-center rounded-lg justify-center h-1/2 sm:p-5 p-2 bg-orange-100">
 				<h1 className="text-lg sm:text-2xl font-bold p-2 mb-8 mt-5">
-					Create class
+					Create new lecture
 				</h1>
 				<div className="flex w-full justify-center">
 					<div className="flex w-1/4 flex-col gap-5">
@@ -272,4 +272,4 @@ const CreateClass: React.FC = () => {
 	);
 };
 
-export default CreateClass;
+export default CreateLecture;
