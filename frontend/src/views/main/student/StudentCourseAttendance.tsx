@@ -66,6 +66,7 @@ const StudentCourseAttendance: React.FC = () => {
 				placeholder="Search based on date."
 				value={searchTerm}
 				onChange={handleSearchChange}
+				className="w-1/6 p-2 m-2 border border-black rounded"
 			/>
 			{filteredAttendanceData.map((attendance, index) => (
 				<div
