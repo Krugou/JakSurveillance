@@ -24,6 +24,7 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 			try {
 				const user = await apiHooks.getUserInfoByToken(userToken);
 				console.log(user, 'userinfomaan');
+
 				if (user) {
 					setUser(user);
 					return;
@@ -63,6 +64,7 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 
 	return (
 		<header className="flex items-center sm:p-4 p-0 m-4 justify-between">
+			{alert && <ErrorAlert onClose={() => setAlert(null)} alert={alert} />}
 			<a href={`/${user.role.toLowerCase()}/mainview`}>
 				<img
 					src={logo}
@@ -71,7 +73,6 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 				/>
 			</a>
 			<div className="flex items-center m-2 p-2">
-				{alert && <ErrorAlert onClose={() => setAlert(null)} alert={alert} />}
 				{user && (
 					<>
 						<NavigationButton
