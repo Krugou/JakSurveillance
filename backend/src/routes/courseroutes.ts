@@ -189,6 +189,69 @@ router.post('/create', upload.single('file'), async (req, res) => {
 		res.status(500).send('Internal server error:' + error);
 	}
 });
+router.post('/createcourse', upload.single('file'), async (req, res) => {
+	if (!req.file) {
+		console.error('No file uploaded');
+		res.status(400).send('No file uploaded');
+		return;
+	}
+	// Read the Excel file from the buffer
+	const workbook = XLSX.read(req.file.buffer, {type: 'buffer'});
+	console.log('Loaded workbook'); // Debugging line
+
+	// Get the first worksheet
+	const worksheetName = workbook.SheetNames[0];
+	const worksheet = workbook.Sheets[worksheetName];
+
+	if (!worksheet) {
+		console.error('Worksheet not found');
+		res.status(500).send('Internal server error');
+		return;
+	}
+	const jsonData = XLSX.utils.sheet_to_json(worksheet);
+	function createCourse(data) {
+		const fullCourseName = Object.keys(data[0])[0]; // get the first key
+		const [courseName, courseCode] = fullCourseName.split(' (');
+
+		const students = data.map(item => {
+			const firstName = item.__EMPTY;
+			const lastName = item[fullCourseName];
+			const fullName = item.__EMPTY_1;
+			const email = item.__EMPTY_2;
+			const studentNumber = item.__EMPTY_3;
+			const arrivalGroup = item.__EMPTY_4;
+			const adminGroups = item.__EMPTY_5;
+			const program = item.__EMPTY_6;
+			const educationForm = item.__EMPTY_7;
+			const registration = item.__EMPTY_8;
+			const evaluation = item.__EMPTY_9;
+
+			return {
+				firstName,
+				lastName,
+				fullName,
+				email,
+				studentNumber,
+				arrivalGroup,
+				adminGroups,
+				program,
+				educationForm,
+				registration,
+				evaluation,
+			};
+		});
+
+		return {
+			courseName,
+			courseCode: courseCode.replace('(', '').replace(')', ''),
+			students,
+		};
+	}
+
+	const courseDetails = createCourse(jsonData);
+	console.log(courseDetails);
+	res.send(courseDetails);
+});
 router.get('/instructor/:email', async (req: Request, res: Response) => {
 	try {
 		const courses = await course.getCoursesByInstructorEmail(req.params.email);
