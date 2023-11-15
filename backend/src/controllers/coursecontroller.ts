@@ -30,13 +30,16 @@ const courseController = {
 		code: string,
 		group_name: string,
 		students: Student[],
-		instructoremail: string,
+		instructors: string,
 		topics?: string,
 		topicgroup?: string,
 	) {
+		console.log('🚀 ~ file: coursecontroller.ts:37 ~ topics:', topics);
+		console.log('🚀 ~ file: coursecontroller.ts:37 ~ topicgroup:', topicgroup);
+		let courseId = 0;
 		try {
 			const existingInstructor = await userModel.checkIfEmailMatchesStaff(
-				instructoremail,
+				instructors[0].email,
 			);
 
 			if (!existingInstructor) {
@@ -62,11 +65,14 @@ const courseController = {
 
 					studentGroupId = newStudentGroup.insertId;
 				}
-				const startDateString = start_date
+				const startDateString = new Date(start_date)
 					.toISOString()
 					.slice(0, 19)
 					.replace('T', ' ');
-				const endDateString = end_date.toISOString().slice(0, 19).replace('T', ' ');
+				const endDateString = new Date(end_date)
+					.toISOString()
+					.slice(0, 19)
+					.replace('T', ' ');
 
 				const existingCourse = await courseModel.findByCode(code);
 
@@ -81,7 +87,7 @@ const courseController = {
 					code,
 					studentGroupId,
 				);
-				const courseId = courseResult.insertId;
+				courseId = courseResult.insertId;
 				const instructorInserted =
 					await courseInstructorModel.insertCourseInstructor(
 						instructoruserid,
@@ -222,6 +228,7 @@ const courseController = {
 			console.error(error);
 			return Promise.reject(error);
 		}
+		return courseId;
 	},
 };
 
