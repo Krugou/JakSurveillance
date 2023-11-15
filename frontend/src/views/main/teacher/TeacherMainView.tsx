@@ -24,8 +24,8 @@ const MainView: React.FC = () => {
 
 				<Card
 					path="/teacher/courses/create"
-					title="Create Course"
-					description="Create a course for your students"
+					title="Create new Course"
+					description="Create new course for your students"
 				/>
 
 				<Card
@@ -36,7 +36,7 @@ const MainView: React.FC = () => {
 
 				<Card
 					path="/teacher/attendance/createlecture"
-					title="Create new lecture"
+					title="Create new Lecture"
 					description="Open attendance gathering"
 				/>
 
