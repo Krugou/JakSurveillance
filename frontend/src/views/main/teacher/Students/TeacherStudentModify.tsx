@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import BackgroundContainer from "../../../../components/main/background/background";
 // this is view for teacher to modify the single student details
 const TeacherStudentModify: React.FC = () => {
     const { id } = useParams<{ id: string; }>();
@@ -21,7 +20,6 @@ const TeacherStudentModify: React.FC = () => {
     };
 
     return (
-        <BackgroundContainer>
         <div className="bg-gray-100 p-5">
         <div className="m-4 bg-white rounded shadow-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-2/5 mx-auto">
             <form onSubmit={handleSubmit} className="px-6 py-4">
@@ -48,7 +46,6 @@ const TeacherStudentModify: React.FC = () => {
             </form>
         </div>
         </div>
-        </BackgroundContainer>
     );
 };
 

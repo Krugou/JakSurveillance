@@ -153,7 +153,7 @@ const CreateClass: React.FC = () => {
 
 	return (
 		<BackgroundContainer>
-			<div className="flex flex-col items-center rounded-lg justify-center h-1/2 sm:p-5 p-2 bg-gray-100">
+			<div className="flex flex-col 2xl:w-1/4 sm:w-3/5 lg:w-2/5 md:w-3/5 w-11/12 items-center rounded-lg justify-center h-1/2 sm:p-5 p-2 bg-orange-100">
 				<h1 className="text-lg sm:text-2xl font-bold p-2 mb-8 mt-5">
 					Create class
 				</h1>
