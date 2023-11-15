@@ -34,17 +34,35 @@ const postLogin = async (inputs: LoginInputs) => {
 	return await doFetch(baseUrl + 'users', options);
 };
 interface CreateCourseInputs {
-	formData: FormData;
+	courseData: Array<string>;
 }
-
-const createCourse = async (inputs: CreateCourseInputs) => {
-	const {formData} = inputs;
+interface CreateCourseFile {
+	formDataFile: FormData;
+}
+const createCourse = async (courseData: CreateCourseInputs) => {
+	console.log(
+		'🚀 ~ file: ApiHooks.ts:44 ~ createCourse ~ courseData:',
+		courseData,
+	);
 	const options: RequestInit = {
 		method: 'POST',
-		body: formData,
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(courseData),
 	};
 
 	const url = `${baseUrl}courses/create`; // append the endpoint to the baseUrl
+	return doFetch(url, options);
+};
+const excelInput = async (inputs: CreateCourseFile) => {
+	const {formDataFile} = inputs;
+	const options: RequestInit = {
+		method: 'POST',
+		body: formDataFile,
+	};
+
+	const url = `${baseUrl}courses/excelinput`; // append the endpoint to the baseUrl
 	return doFetch(url, options);
 };
 interface getCourseReservations {
@@ -228,5 +246,6 @@ const apiHooks = {
 	getAllCourseInfoByUserEmail,
 	finishClass,
 	getAttendanceInfoByUsercourseid,
+	excelInput,
 };
 export default apiHooks;
