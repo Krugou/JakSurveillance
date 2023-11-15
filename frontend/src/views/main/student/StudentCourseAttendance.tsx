@@ -63,7 +63,7 @@ const StudentCourseAttendance: React.FC = () => {
 			</h1>
 			<input
 				type="text"
-				placeholder="Search based on date."
+				placeholder="Search by date"
 				value={searchTerm}
 				onChange={handleSearchChange}
 				className="w-1/6 p-2 m-2 border border-black rounded"
