@@ -59,142 +59,51 @@ router.post('/checkreservations/', async (req: Request, res: Response) => {
 		res.status(500).send('Server error');
 	}
 });
-router.post('/create', upload.single('file'), async (req, res) => {
-	console.log('Received request'); // Debugging line
-	console.log(req.body); // Debugging line
-
+router.post('/create', async (req: Request, res: Response) => {
 	const {
 		courseName,
 		courseCode,
 		studentGroup,
+		startDate,
+		endDate,
+		studentList,
+		instructors,
 		topicGroup,
 		topics,
-		instructorEmail,
-		checkCourseDetails,
 	} = req.body;
-	let startDate = req.body.startDate;
-	let endDate = req.body.endDate;
 
-	// console.log('Request body:', req.body); // Debugging line
-	if (!req.file) {
-		console.error('No file uploaded');
-		res.status(400).send('No file uploaded');
-		return;
-	}
-	// Read the Excel file from the buffer
-	const workbook = XLSX.read(req.file.buffer, {type: 'buffer'});
-	console.log('Loaded workbook'); // Debugging line
-
-	// Get the first worksheet
-	const worksheetName = workbook.SheetNames[0];
-	const worksheet = workbook.Sheets[worksheetName];
-
-	if (!worksheet) {
-		console.error('Worksheet not found');
-		res.status(500).send('Internal server error');
-		return;
-	}
-	// console.log('Got worksheet'); // Debugging line
-
-	// Convert the worksheet to JSON
-	const jsonData = XLSX.utils.sheet_to_json(worksheet);
-	// console.log('Converted worksheet to JSON'); // Debugging line
-
-	// console.log('Course Name:', courseName);
-	// console.log('Course Code:', courseCode);
-	// console.log('Student Group:', studentGroup);
-	const finToEng = {
-		Sukunimi: 'last_name',
-		Etunimi: 'first_name',
-		Nimi: 'name',
-		Email: 'email',
-		'Op.num': 'studentnumber',
-		Saapumisyhmä: 'Arrival Group',
-		'Hall.ryhmät': 'Admin Groups',
-		Ohjelma: 'Program',
-		Koulutusmuoto: 'Form of Education',
-		Ilmoittautuminen: 'Registration',
-		Arviointi: 'Assessment',
-	};
-	// console.log('Initial jsonData:', jsonData);
-
-	const keys = Object.values(jsonData[0] as object);
-	// console.log('Keys:', keys);
-
-	let mappedData = [];
-	for (let j = 1; j < jsonData.length; j++) {
-		const values = Object.values(jsonData[j] as object);
-		// console.log(`Values for row ${j}:`, values);
-
-		const mappedObject: Record<string, unknown> = {};
-		for (let i = 0; i < keys.length; i++) {
-			mappedObject[keys[i]] = values[i];
-		}
-		// console.log(`Mapped object for row ${j}:`, mappedObject);
-
-		mappedData.push(mappedObject);
-	}
-
-	// console.log('Mapped data before transformation:', mappedData);
-
-	mappedData = mappedData.map((item: unknown) => {
-		const mappedItem: Record<string, unknown> = {};
-		for (const key in item as object) {
-			if (finToEng[key as keyof typeof finToEng]) {
-				mappedItem[finToEng[key as keyof typeof finToEng]] = (
-					item as Record<string, unknown>
-				)[key];
-			} else {
-				mappedItem[key] = (item as Record<string, unknown>)[key];
-			}
-		}
-
-		return mappedItem;
-	});
-
-	// console.log('Final mapped data:', mappedData);
-
-	const code = courseCode;
-	const data = await openData.checkOpenDataRealization(code);
-
-	if (checkCourseDetails === 'true') {
-		// Extract startDate and endDate from data and convert them to Date objects
-		startDate = new Date(data.realizations[0].startDate);
-		// console.log(
-		// 	'🚀 ~ file: courseroutes.ts:122 ~ router.post ~ startDate:',
-		// 	startDate,
-		// );
-		endDate = new Date(data.realizations[0].endDate);
-		// console.log(
-		// 	'🚀 ~ file: courseroutes.ts:126 ~ router.post ~ endDate:',
-		// 	endDate,
-		// );
-	}
-	// console.table(mappedData);
 	try {
-		await courseController.insertIntoCourse(
+		const response = await courseController.insertIntoCourse(
 			courseName,
 			startDate,
 			endDate,
 			courseCode,
 			studentGroup,
-			mappedData,
-			instructorEmail,
+			studentList,
+			instructors,
 			topics,
 			topicGroup,
 		);
-		res.status(200).send({message: 'File uploaded and data logged successfully'});
+		console.log(
+			'🚀 ~ file: courseroutes.ts:90 ~ router.post ~ response:',
+			response,
+		);
+		res.status(200).send({
+			message: 'File uploaded and data logged successfully',
+			courseId: response,
+		});
 	} catch (error) {
 		console.error(error);
 		res.status(500).send('Internal server error:' + error);
 	}
 });
-router.post('/createcourse', upload.single('file'), async (req, res) => {
+router.post('/excelinput', upload.single('file'), async (req, res) => {
 	if (!req.file) {
 		console.error('No file uploaded');
 		res.status(400).send('No file uploaded');
 		return;
 	}
+	const {checkCourseDetails, instructorEmail} = req.body;
 	// Read the Excel file from the buffer
 	const workbook = XLSX.read(req.file.buffer, {type: 'buffer'});
 	console.log('Loaded workbook'); // Debugging line
@@ -209,47 +118,63 @@ router.post('/createcourse', upload.single('file'), async (req, res) => {
 		return;
 	}
 	const jsonData = XLSX.utils.sheet_to_json(worksheet);
-	function createCourse(data) {
+	const createCourse = data => {
 		const fullCourseName = Object.keys(data[0])[0]; // get the first key
 		const [courseName, courseCode] = fullCourseName.split(' (');
 
-		const students = data.map(item => {
-			const firstName = item.__EMPTY;
-			const lastName = item[fullCourseName];
-			const fullName = item.__EMPTY_1;
-			const email = item.__EMPTY_2;
-			const studentNumber = item.__EMPTY_3;
-			const arrivalGroup = item.__EMPTY_4;
-			const adminGroups = item.__EMPTY_5;
-			const program = item.__EMPTY_6;
-			const educationForm = item.__EMPTY_7;
-			const registration = item.__EMPTY_8;
-			const evaluation = item.__EMPTY_9;
+		const studentList = data
+			.filter(item => item.__EMPTY !== 'Etunimi')
+			.map(item => {
+				const first_name = item.__EMPTY;
+				const last_name = item[fullCourseName];
+				const name = item.__EMPTY_1;
+				const email = item.__EMPTY_2;
+				const studentnumber = item.__EMPTY_3;
+				const arrivalgroup = item.__EMPTY_4;
+				const admingroups = item.__EMPTY_5;
+				const program = item.__EMPTY_6;
+				const educationform = item.__EMPTY_7;
+				const registration = item.__EMPTY_8;
+				const evaluation = item.__EMPTY_9;
 
-			return {
-				firstName,
-				lastName,
-				fullName,
-				email,
-				studentNumber,
-				arrivalGroup,
-				adminGroups,
-				program,
-				educationForm,
-				registration,
-				evaluation,
-			};
-		});
+				return {
+					first_name,
+					last_name,
+					name,
+					email,
+					studentnumber,
+					arrivalgroup,
+					admingroups,
+					program,
+					educationform,
+					registration,
+					evaluation,
+				};
+			});
 
 		return {
 			courseName,
 			courseCode: courseCode.replace('(', '').replace(')', ''),
-			students,
+			studentList,
 		};
-	}
+	};
 
 	const courseDetails = createCourse(jsonData);
-	console.log(courseDetails);
+	courseDetails.instructorEmail = instructorEmail;
+	if (checkCourseDetails === 'true') {
+		const data = await openData.checkOpenDataRealization(
+			courseDetails.courseCode,
+		);
+		// Extract startDate and endDate from data and convert them to Date objects
+		courseDetails.startDate = new Date(data.realizations[0].startDate);
+		courseDetails.endDate = new Date(data.realizations[0].endDate);
+		const studentGroup = data.realizations[0].studentGroups[0];
+		courseDetails.studentGroup = studentGroup ? studentGroup.code : null;
+	} else {
+		courseDetails.studentGroup = 'please enter student group';
+		courseDetails.startDate = new Date();
+		courseDetails.endDate = new Date();
+	}
 	res.send(courseDetails);
 });
 router.get('/instructor/:email', async (req: Request, res: Response) => {
