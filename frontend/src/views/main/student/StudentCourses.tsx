@@ -59,7 +59,8 @@ const StudentCourses: React.FC = () => {
 					const endDate = new Date(course.endDate);
 					const endDateString = endDate.toLocaleDateString();
 					const topics = course.topic_names.replace(/,/g, ', ');
-					const isCourseEnded = endDate < new Date().setHours(0, 0, 0, 0);
+					const isCourseEnded =
+						endDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
 
 					return (
 						<div key={course.courseid} className="p-6 bg-white shadow-md rounded-lg">
