@@ -94,7 +94,7 @@ const StudentCourses: React.FC = () => {
 									navigate(`/student/courses/attendance/${course.usercourseid}`)
 								}
 							>
-								View Attendance
+								View your attendance
 							</button>
 						</div>
 					);
