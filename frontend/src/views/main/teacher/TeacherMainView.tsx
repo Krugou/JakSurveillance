@@ -16,7 +16,7 @@ const MainView: React.FC = () => {
 
                 <Card path="/teacher/courses/" title="View Courses" description="View all of your courses" />
 
-                <Card path="/teacher/attendance/createclass" title="Create new attendance" description="Open attendance gathering" />
+                <Card path="/teacher/attendance/createclass" title="Create new class" description="Open attendance gathering" />
 
                 <Card path="/teacher/helpvideos" title="Instructions" description="See instructions for all your tasks" />
             </div>

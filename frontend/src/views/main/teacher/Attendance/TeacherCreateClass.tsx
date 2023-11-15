@@ -157,8 +157,8 @@ const CreateClass: React.FC = () => {
 				<h1 className="text-lg sm:text-2xl font-bold p-2 mb-8 mt-5">
 					Create class
 				</h1>
-				<div className="flex w-full justify-center m-auto">
-					<div className="flex sm:w-1/4 w-1/2 flex-col gap-5">
+				<div className="flex w-full justify-center">
+					<div className="flex w-1/4 flex-col gap-5">
 						<label className="text-xl flex justify-end" htmlFor="course">
 							Course :
 						</label>
@@ -166,10 +166,10 @@ const CreateClass: React.FC = () => {
 							Topic :
 						</label>
 					</div>
-					<div className="w-full sm:w-1/2 lg:w-2/3 flex flex-col gap-3">
+					<div className="w-full sm:w-4/5 lg:w-11/12 flex flex-col gap-3">
 						<select
 							id="course"
-							className="block w-3/4 h-8 ml-5"
+							className="block h-8 ml-5 mr-3"
 							value={selectedSession}
 							onChange={e => {
 								const selectedCourseId = e.target.value;
@@ -206,7 +206,7 @@ const CreateClass: React.FC = () => {
 						</select>
 						<select
 							id="topic"
-							className="block w-3/4 h-8 ml-5 mt-1"
+							className="block h-8 mr-3 ml-5 mt-1"
 							value={selectedParticipant}
 							onChange={e => {
 								setSelectedParticipant(e.target.value);
