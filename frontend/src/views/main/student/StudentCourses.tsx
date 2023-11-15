@@ -87,8 +87,8 @@ const StudentCourses: React.FC = () => {
 							<button
 								className={`mt-4 font-bold py-2 px-4 rounded ${
 									isCourseEnded
-										? 'bg-red-500 hover:bg-red-700'
-										: 'bg-green-500 hover:bg-green-700'
+										? 'bg-metropoliaSupportRed hover:bg-red-900'
+										: 'bg-metropoliaTrendGreen hover:bg-green-700'
 								} text-white`}
 								onClick={() =>
 									navigate(`/student/courses/attendance/${course.usercourseid}`)
