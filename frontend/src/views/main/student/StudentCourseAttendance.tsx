@@ -6,7 +6,6 @@ interface Attendance {
 	date: string;
 	name: string;
 	start_date: string;
-	end_date: string;
 	timeofday: string;
 	topicname: string;
 	status: number;
@@ -61,16 +60,13 @@ const StudentCourseAttendance: React.FC = () => {
 					className="relative flex align-start bg-white flex-row text-md border border-black rounded sm:text-xl m-4 p-4"
 				>
 					<p className="p-2 m-2">
-						<strong>Start Date:</strong>{' '}
+						<strong>Date:</strong>{' '}
 						<span className="profileStat">
 							{new Date(attendance.start_date).toLocaleDateString()}
 						</span>
 					</p>
 					<p className="p-2 m-2">
-						<strong>End Date:</strong>{' '}
-						<span className="profileStat">
-							{new Date(attendance.end_date).toLocaleDateString()}
-						</span>
+						<strong>Duration:</strong> <span className="profileStat">unknown</span>
 					</p>
 					<p className="p-2 m-2">
 						<strong>Time of Day:</strong>{' '}
