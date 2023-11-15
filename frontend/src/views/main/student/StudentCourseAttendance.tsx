@@ -71,27 +71,31 @@ const StudentCourseAttendance: React.FC = () => {
 			{filteredAttendanceData.map((attendance, index) => (
 				<div
 					key={index}
-					className="relative flex align-start bg-white flex-row text-md border border-black rounded sm:text-xl m-4 p-4"
+					className={`relative flex align-start flex-row text-md border border-black rounded sm:text-xl m-4 p-4 ${
+						attendance.status === 0
+							? 'bg-metropoliaSupportRed'
+							: 'bg-metropoliaTrendGreen'
+					}`}
 				>
-					<p className="p-2 m-2">
+					<p className="p-2 text-white m-2">
 						<strong>Date:</strong>{' '}
 						<span className="profileStat">
 							{new Date(attendance.start_date).toLocaleDateString()}
 						</span>
 					</p>
-					<p className="p-2 m-2">
+					<p className="p-2 text-white m-2">
 						<strong>Duration:</strong> <span className="profileStat">unknown</span>
 					</p>
-					<p className="p-2 m-2">
+					<p className="p-2  text-white m-2">
 						<strong>Time of Day:</strong>{' '}
 						<span className="profileStat">{attendance.timeofday}</span>
 					</p>
-					<p className="p-2 m-2">
-						<strong>Topic Name:</strong>{' '}
+					<p className="p-2 text-white m-2">
+						<strong>Topic:</strong>{' '}
 						<span className="profileStat">{attendance.topicname}</span>
 					</p>
 
-					<p className="p-2 m-2">
+					<p className="p-2 text-white m-2">
 						<strong>Status:</strong>
 						<span
 							className={`profileStat ${getAttendanceColorClass(attendance.status)}`}
