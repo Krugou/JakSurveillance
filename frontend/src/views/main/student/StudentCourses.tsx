@@ -2,6 +2,8 @@ import React, {useEffect, useState, useContext} from 'react';
 import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/ApiHooks';
 import {useNavigate} from 'react-router-dom';
+import ReportIcon from '@mui/icons-material/Report';
+import Tooltip from '@mui/material/Tooltip';
 const StudentCourses: React.FC = () => {
 	interface Course {
 		courseid: number;
@@ -63,40 +65,47 @@ const StudentCourses: React.FC = () => {
 						endDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
 
 					return (
-						<div key={course.courseid} className="p-6 bg-white shadow-md rounded-lg">
-							<h2 className="text-2xl underline font-bold mb-2 text-black">
-								{course.course_name + ' ' + course.code}
-							</h2>
-							{isCourseEnded && (
-								<h2 className="mb-1 text-2xl underline text-red-500">
-									COURSE HAS ENDED
-								</h2>
-							)}
-							<p className="mb-1">
-								<strong>Topics:</strong> {topics}
-							</p>
-							<p className="mb-1">
-								<strong>Start Date:</strong> {startDate}
-							</p>
-							<p className="mb-1">
-								<strong>End Date:</strong> {endDateString}
-							</p>
-							<p className="mb-1">
-								<strong>Course Instructors:</strong> {course.instructor_name}
-							</p>
-							<button
-								className={`mt-4 font-bold py-2 px-4 rounded ${
-									isCourseEnded
-										? 'bg-metropoliaSupportRed hover:bg-red-900'
-										: 'bg-metropoliaTrendGreen hover:bg-green-700'
-								} text-white`}
-								onClick={() =>
-									navigate(`/student/courses/attendance/${course.usercourseid}`)
-								}
+						<Tooltip placement="top" title={isCourseEnded ? 'Course has ended' : ''}>
+							<div
+								key={course.courseid}
+								className={`p-6 bg-white shadow-md rounded-lg relative ${
+									isCourseEnded ? 'opacity-50' : ''
+								}`}
 							>
-								View your attendance
-							</button>
-						</div>
+								{isCourseEnded && (
+									<div className="absolute top-2 right-2">
+										<ReportIcon style={{color: 'red'}} />
+									</div>
+								)}
+								<h2 className="text-2xl underline font-bold mb-2 text-black">
+									{course.course_name + ' ' + course.code}
+								</h2>
+								<p className="mb-1">
+									<strong>Topics:</strong> {topics}
+								</p>
+								<p className="mb-1">
+									<strong>Start Date:</strong> {startDate}
+								</p>
+								<p className="mb-1">
+									<strong>End Date:</strong> {endDateString}
+								</p>
+								<p className="mb-1">
+									<strong>Course Instructors:</strong> {course.instructor_name}
+								</p>
+								<button
+									className={`mt-4 font-bold py-2 px-4 rounded ${
+										isCourseEnded
+											? 'bg-metropoliaSupportRed hover:bg-red-900'
+											: 'bg-metropoliaTrendGreen hover:bg-green-700'
+									} text-white`}
+									onClick={() =>
+										navigate(`/student/courses/attendance/${course.usercourseid}`)
+									}
+								>
+									View your attendance
+								</button>
+							</div>
+						</Tooltip>
 					);
 				})}
 			</div>
