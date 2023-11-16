@@ -114,7 +114,7 @@ const CreateCourseEasy: React.FC = () => {
 	return (
 		<form
 			onSubmit={handleSubmit}
-			className="w-full  mx-auto bg-white p-6 rounded shadow-md"
+			className="w-1/3 mx-auto bg-white p-6 rounded shadow-md"
 		>
 			{currentStep === 1 && (
 				<fieldset>
