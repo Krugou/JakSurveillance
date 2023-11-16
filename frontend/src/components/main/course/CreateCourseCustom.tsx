@@ -114,6 +114,7 @@ const CreateCourseCustom: React.FC = () => {
 					instructors={instructors}
 					handleInputChange={handleInputChange}
 					setInstructors={setInstructors}
+					instructorEmail={instructorEmail}
 				/>
 			)}
 			{currentStep === 3 && (

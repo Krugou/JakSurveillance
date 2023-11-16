@@ -1,5 +1,10 @@
 import React from 'react';
-const AddTeachers = ({instructors, handleInputChange, setInstructors}) => {
+const AddTeachers = ({
+	instructors,
+	handleInputChange,
+	setInstructors,
+	instructorEmail,
+}) => {
 	const deleteInstructor = index => {
 		const newInstructors = [...instructors];
 		newInstructors.splice(index, 1);
