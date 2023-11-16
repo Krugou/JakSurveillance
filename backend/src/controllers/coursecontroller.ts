@@ -22,6 +22,9 @@ interface Student {
 	Registration: string;
 	Assessment: string;
 }
+interface Instructor {
+	email: string;
+}
 const courseController = {
 	async insertIntoCourse(
 		name: string,
@@ -30,7 +33,7 @@ const courseController = {
 		code: string,
 		group_name: string,
 		students: Student[],
-		instructors: string,
+		instructors: Instructor[],
 		topics?: string,
 		topicgroup?: string,
 	) {
@@ -38,16 +41,19 @@ const courseController = {
 		console.log('🚀 ~ file: coursecontroller.ts:37 ~ topicgroup:', topicgroup);
 		let courseId = 0;
 		try {
-			const existingInstructor = await userModel.checkIfEmailMatchesStaff(
-				instructors[0].email,
-			);
-
-			if (!existingInstructor) {
-				return Promise.reject(
-					new Error('Instructor email not found or the user is not a staff member'),
+			const instructorUserIds = [];
+			for (const instructor of instructors) {
+				const existingInstructor = await userModel.checkIfEmailMatchesStaff(
+					instructor.email,
 				);
+				if (!existingInstructor) {
+					return Promise.reject(
+						new Error('Instructor email not found or the user is not a staff member'),
+					);
+				}
+				const instructorUserId = existingInstructor[0].userid;
+				instructorUserIds.push(instructorUserId);
 			}
-			const instructoruserid = existingInstructor[0].userid;
 
 			try {
 				const existingStudentGroup = await studentGroupModel.checkIfGroupNameExists(
@@ -88,14 +94,16 @@ const courseController = {
 					studentGroupId,
 				);
 				courseId = courseResult.insertId;
-				const instructorInserted =
-					await courseInstructorModel.insertCourseInstructor(
-						instructoruserid,
-						courseId,
-					);
+				for (const instructorUserId of instructorUserIds) {
+					const instructorInserted =
+						await courseInstructorModel.insertCourseInstructor(
+							instructorUserId,
+							courseId,
+						);
 
-				if (!instructorInserted) {
-					throw new Error('Failed to insert instructor into courseinstructors');
+					if (!instructorInserted) {
+						throw new Error('Failed to insert instructor into courseinstructors');
+					}
 				}
 				let topicGroupId = 0;
 				let topicId = 0;
