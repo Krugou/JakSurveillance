@@ -1,4 +1,5 @@
 // Define the new CourseDetails component
+import React from 'react';
 const CourseDetails = ({
 	courseCode,
 	setCourseCode,
