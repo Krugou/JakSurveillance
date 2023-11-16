@@ -41,7 +41,7 @@ const courseController = {
 		console.log('🚀 ~ file: coursecontroller.ts:37 ~ topicgroup:', topicgroup);
 		let courseId = 0;
 		try {
-			const instructorUserIds = [];
+			const instructorUserIds: number[] = [];
 			for (const instructor of instructors) {
 				const existingInstructor = await userModel.checkIfEmailMatchesStaff(
 					instructor.email,
@@ -61,7 +61,7 @@ const courseController = {
 				);
 
 				let studentGroupId = 0;
-				if (existingStudentGroup.length > 0) {
+				if (existingStudentGroup && existingStudentGroup.length > 0) {
 					console.error('Group already exists');
 					studentGroupId = existingStudentGroup[0].studentgroupid;
 				} else {
