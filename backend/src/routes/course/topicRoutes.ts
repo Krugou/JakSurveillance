@@ -4,7 +4,7 @@ import TopicGroup from '../../models/topicgroupmodel.js';
 
 const router: Router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', async (_req:Request, res:Response) => {
 	try {
 		const topicData = await TopicGroup.fetchAllTopicGroupsWithTopics();
 
