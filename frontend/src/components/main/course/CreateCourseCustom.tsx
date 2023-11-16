@@ -17,7 +17,7 @@ const CreateCourseCustom: React.FC = () => {
 
 	const [instructorEmail, setInstructorEmail] = useState('');
 	const [instructors, setInstructors] = useState([{email: ''}]);
-	setInstructorEmail('teacher@metropolia.fi');
+
 	const [studentList, setStudentList] = useState<string[]>([]);
 	const [endDate, setEndDate] = useState('');
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -67,10 +67,13 @@ const CreateCourseCustom: React.FC = () => {
 		}
 	};
 	useEffect(() => {
+		setInstructorEmail('teacher@metropolia.fi');
+	}, []);
+	useEffect(() => {
 		if (instructorEmail) {
 			setInstructors([{email: instructorEmail}]);
 		}
-	}, [instructorEmail]);
+	}, []);
 	return (
 		<form
 			onSubmit={handleSubmit}
