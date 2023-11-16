@@ -28,6 +28,8 @@ interface Student {
 }
 
 interface CourseModel {
+	findCourseIdUsingCourseCode(coursecode: string): Promise<RowDataPacket[]>;
+	getStudentsCourses(email: string): unknown;
 	fetchAllCourses: () => Promise<RowDataPacket[]>;
 	findByCourseId: (id: number) => Promise<Course | null>;
 	insertIntoCourse: (
@@ -137,7 +139,6 @@ const course: CourseModel = {
 	) {
 		console.log('Inserting into course');
 		// console.log(instructoremail);
-
 		try {
 			// Check if the instructor exists and is a staff member
 			const [existingInstructor] = await pool
@@ -501,7 +502,6 @@ const course: CourseModel = {
 		return courseResult;
 	},
 	// other methods...
-
 	async getStudentsCourses(email: string) {
 		try {
 			const [rows] = await pool.promise().query<RowDataPacket[]>(
@@ -550,6 +550,9 @@ const course: CourseModel = {
 			console.error(error);
 			return Promise.reject(error);
 		}
+	},
+	checkIfCourseExists: function (code: string): Promise<boolean> {
+		throw new Error('Function not implemented.');
 	},
 };
 
