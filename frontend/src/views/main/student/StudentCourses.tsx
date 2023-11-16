@@ -105,7 +105,7 @@ const StudentCourses: React.FC = () => {
 						// Format the topics
 						const topics = course.selected_topics
 							? // If the course has selected topics by the student, use those
-							  course.selected_topics.replace(/,/g, ', ') + ' (partial attendance)'
+							  course.selected_topics.replace(/,/g, ', ')
 							: // Otherwise use the default topics
 							  course.topic_names.replace(/,/g, ', ');
 
@@ -129,7 +129,7 @@ const StudentCourses: React.FC = () => {
 										{course.course_name + ' ' + course.code}
 									</h2>
 									<p className="mb-1">
-										<strong>Topics:</strong> {topics}
+										<strong>Your Topics:</strong> {topics}
 									</p>
 									<p className="mb-1">
 										<strong>Start Date:</strong> {startDate}
