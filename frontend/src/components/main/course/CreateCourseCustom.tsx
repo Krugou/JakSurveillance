@@ -73,7 +73,7 @@ const CreateCourseCustom: React.FC = () => {
 		if (instructorEmail) {
 			setInstructors([{email: instructorEmail}]);
 		}
-	}, []);
+	}, [instructorEmail]);
 	return (
 		<form
 			onSubmit={handleSubmit}
