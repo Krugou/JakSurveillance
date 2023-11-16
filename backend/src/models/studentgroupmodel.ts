@@ -1,4 +1,4 @@
-import {FieldPacket, RowDataPacket} from 'mysql2';
+import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
 import pool from '../config/adminDBPool.js';
 
 interface StudentGroup {
@@ -10,7 +10,7 @@ interface StudentGroup {
 interface StudentGroupModel {
 	fetchAllStudentGroups(): Promise<[RowDataPacket[], FieldPacket[]]>;
 	findByStudentGroupId(id: number): Promise<StudentGroup | null>;
-	insertIntoStudentGroup(studentgroupname: string): Promise<void>;
+	insertIntoStudentGroup(studentgroupname: string): Promise<{insertId: number}>;
 	checkIfGroupNameExists(group_name: string): Promise<RowDataPacket[] | null>;
 	// other methods...
 }
@@ -51,14 +51,16 @@ const studentGroupModel: StudentGroupModel = {
 		}
 	},
 
-	async insertIntoStudentGroup(studentgroupname) {
+	async insertIntoStudentGroup(
+		studentgroupname: string,
+	): Promise<{insertId: number}> {
 		try {
-			const [rows] = await pool
+			const [fields] = await pool
 				.promise()
 				.query('INSERT INTO studentgroups (group_name) VALUES (?)', [
 					studentgroupname,
 				]);
-			return rows;
+			return {insertId: (fields as ResultSetHeader).insertId};
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
