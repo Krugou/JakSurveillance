@@ -10,17 +10,14 @@ const CreateCourseCustom: React.FC = () => {
 	const navigate = useNavigate();
 	const [currentStep, setCurrentStep] = useState(1);
 	const [courseName, setCourseName] = useState('');
-	const [file, setFile] = useState<File | null>(null);
+
 	const [courseCode, setCourseCode] = useState('');
 	const [studentGroup, setStudentGroup] = useState('');
 	const [startDate, setStartDate] = useState('');
-	const [selectedFile, setSelectedFile] = useState<string>('No file selected');
-	const [uploadFile, setUploadFile] = useState<string>(
-		'Click here to upload a file',
-	);
+
 	const [instructorEmail, setInstructorEmail] = useState('');
 	const [instructors, setInstructors] = useState([{email: ''}]);
-
+	setInstructorEmail('teacher@metropolia.fi');
 	const [studentList, setStudentList] = useState<string[]>([]);
 	const [endDate, setEndDate] = useState('');
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,28 +30,6 @@ const CreateCourseCustom: React.FC = () => {
 		const values = [...instructors];
 		values[index].email = event.target.value;
 		setInstructors(values);
-	};
-	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const selectedFile = event.target.files?.[0];
-		if (selectedFile) {
-			setFile(selectedFile);
-			setUploadFile('File Selected Click again to change');
-			setSelectedFile(selectedFile.name);
-		} else {
-			setUploadFile('Upload a excel file');
-			setSelectedFile('No file selected');
-		}
-	};
-
-	const [shouldCheckDetails, setShouldCheckDetails] = useState(true);
-	const changeDateToBetterFormat = (date: string) => {
-		const dateObj = new Date(date);
-		return `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(
-			2,
-			'0',
-		)}-${String(dateObj.getDate()).padStart(2, '0')}T${String(
-			dateObj.getHours(),
-		).padStart(2, '0')}:${String(dateObj.getMinutes()).padStart(2, '0')}`;
 	};
 
 	const deleteInstructor = index => {
