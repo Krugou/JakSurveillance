@@ -2,6 +2,9 @@ import React from 'react';
 import {useEffect, useState, ChangeEvent} from 'react';
 import {useParams} from 'react-router-dom';
 import apiHooks from '../../../hooks/ApiHooks';
+import {FormControl, MenuItem, Select} from '@mui/material';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
+
 interface Attendance {
 	date: string;
 	name: string;
@@ -13,6 +16,8 @@ interface Attendance {
 
 const StudentCourseAttendance: React.FC = () => {
 	const {usercourseid} = useParams<{usercourseid}>();
+	const [sortOption, setSortOption] = useState('All');
+
 	const [attendanceData, setAttendanceData] = useState<Attendance[] | null>(
 		null,
 	);
@@ -46,29 +51,65 @@ const StudentCourseAttendance: React.FC = () => {
 		return <div>Loading...</div>;
 	}
 
-	const getAttendanceColorClass = (attendance: number) => {
-		if (attendance === 1) {
-			return 'bg-metropoliaTrendGreen';
-		} else {
-			return 'bg-metropoliaSupportRed'; // You can set a default color class here if needed
-		}
+	const handleChange = event => {
+		setSortOption(event.target.value);
+		// Add sorting logic here
 	};
-	const filteredAttendanceData = attendanceData.filter(attendance =>
-		new Date(attendance.start_date).toLocaleDateString().includes(searchTerm),
+
+	const uniqueTopics: string[] = Array.from(
+		new Set(
+			attendanceData.reduce((unique: string[], attendance) => {
+				return unique.includes(attendance.topicname)
+					? unique
+					: [...unique, attendance.topicname];
+			}, [] as string[]),
+		),
+	);
+
+	console.log(uniqueTopics);
+	const filteredAttendanceData = attendanceData.filter(
+		attendance =>
+			new Date(attendance.start_date).toLocaleDateString().includes(searchTerm) &&
+			(sortOption === 'All' || attendance.topicname === sortOption),
 	);
 	return (
 		<div className="overflow-x-auto flex flex-col border-x border-t">
-			<h1 className="text-xl sm:text-4xl font-bold mb-8 text-center">
+			<h1 className="text-xl sm:text-4xl font-bold mt-2 mb-8 text-center">
 				Attendance for Course {attendanceData[0].name}
 			</h1>
-			<input
-				type="text"
-				placeholder="Search by date"
-				value={searchTerm}
-				onChange={handleSearchChange}
-				className="w-1/6 p-2 m-2 border border-black rounded"
-			/>
-			<div className="overflow-x-auto border-x border-t m-2">
+			<div className="flex items-center justify-around flex-wrap">
+				<input
+					type="text"
+					placeholder="Search by date"
+					value={searchTerm}
+					onChange={handleSearchChange}
+					className="w-1/6 mt-10 p-4 m-2 border border-black rounded"
+				/>
+				<FormControl className="md:w-1/4 mt-2 md:mt-0">
+					<label>Sort Topics:</label>
+					<Select
+						className="favorite-selector"
+						value={sortOption}
+						onChange={handleChange}
+					>
+						<MenuItem value="All">
+							<div className="item-selector">
+								<AutorenewIcon className="highest-star-selector-icon" />
+								<span className="selector-text">All</span>
+							</div>
+						</MenuItem>
+						{uniqueTopics.map(topic => (
+							<MenuItem value={topic}>
+								<div className="item-selector">
+									<AutorenewIcon className="highest-star-selector-icon" />
+									<span className="selector-text">{topic}</span>
+								</div>
+							</MenuItem>
+						))}
+					</Select>
+				</FormControl>
+			</div>
+			<div className="overflow-x-auto border-x border-t m-6">
 				<table className="table-auto w-full">
 					<thead className="border-b">
 						<tr className="bg-gray-100">

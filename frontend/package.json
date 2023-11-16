@@ -16,6 +16,10 @@
 		"alldev": "npm i &  vite --port 8080"
 	},
 	"dependencies": {
+		"@emotion/react": "^11.11.1",
+		"@emotion/styled": "^11.11.0",
+		"@mui/icons-material": "^5.14.18",
+		"@mui/material": "^5.14.18",
 		"@yudiel/react-qr-scanner": "^1.2.0",
 		"date-fns": "^2.30.0",
 		"localforage": "^1.10.0",
