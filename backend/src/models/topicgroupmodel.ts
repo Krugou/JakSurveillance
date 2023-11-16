@@ -1,4 +1,4 @@
-import {FieldPacket, RowDataPacket} from 'mysql2';
+import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
 import pool from '../config/adminDBPool.js';
 /**
  * @method countTopics
@@ -19,6 +19,9 @@ interface TopicGroupModel {
 	findByTopicGroupId(id: number): Promise<TopicGroup | null>;
 	insertIntoTopicGroup(topicgroupname: string): Promise<void>;
 	fetchAllTopicGroupsWithTopics(): Promise<RowDataPacket[]>;
+	checkIfTopicGroupExists(topicgroup: string): Promise<RowDataPacket[]>;
+	insertTopicGroup(topicgroup: string): Promise<ResultSetHeader>;
+
 	// other methods...
 }
 /**
