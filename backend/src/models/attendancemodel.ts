@@ -1,4 +1,4 @@
-import {FieldPacket, RowDataPacket} from 'mysql2';
+import {FieldPacket, OkPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
 import pool from '../config/adminDBPool.js';
 
 interface Attendance {
@@ -27,13 +27,18 @@ interface AttendanceModel {
 	) => Promise<void>;
 
 	insertAttendance: (
-		status: string,
+		status: number,
 		date: string,
 		usercourseid: number,
 		classid: number,
 	) => Promise<any>;
 	checkAttendance: (usercourseid: number) => Promise<any>;
 	getAttendanceById: (insertid: number) => Promise<any>;
+	getAttendanceByUserCourseIdDateClassId: (
+		usercourseid: number,
+		date: string,
+		classid: number,
+	) => Promise<any>;
 }
 
 const attendanceModel: AttendanceModel = {
@@ -88,12 +93,12 @@ const attendanceModel: AttendanceModel = {
 	async insertIntoAttendance(status, date, studentnumber, classid) {
 		try {
 			// Find usercourseid based on studentnumber
-			const [usercourseResult] = await pool
+			const [usercourseResult] = (await pool
 				.promise()
 				.query(
 					'SELECT usercourseid FROM usercourses WHERE userid IN (SELECT userid FROM users WHERE studentnumber = ?)',
 					[studentnumber],
-				);
+				)) as RowDataPacket[];
 
 			if (usercourseResult.length === 0) {
 				// Handle the case where no usercourseid is found for the given studentnumber
@@ -104,9 +109,11 @@ const attendanceModel: AttendanceModel = {
 			const usercourseid = usercourseResult[0].usercourseid;
 
 			// Check if attendance with usercourseid already exists
-			const [attendanceResultCheck] = await pool
+			const [attendanceResultCheck] = (await pool
 				.promise()
-				.query('SELECT * FROM attendance WHERE usercourseid = ?', [usercourseid]);
+				.query('SELECT * FROM attendance WHERE usercourseid = ?', [
+					usercourseid,
+				])) as RowDataPacket[];
 
 			if (attendanceResultCheck.length > 0) {
 				// Handle the case where attendance with usercourseid already exists
@@ -118,19 +125,19 @@ const attendanceModel: AttendanceModel = {
 			}
 
 			// Insert into attendance
-			const [insertResult] = await pool
+			const [insertResult] = (await pool
 				.promise()
 				.query(
 					'INSERT INTO attendance (status, date, usercourseid, classid) VALUES (?, ?, ?, ?)',
 					[status, date, usercourseid, classid],
-				);
+				)) as ResultSetHeader[];
 
 			// Get the inserted row
-			const [attendanceResult] = await pool
+			const [attendanceResult] = (await pool
 				.promise()
 				.query('SELECT * FROM attendance WHERE attendanceid = ?', [
 					insertResult.insertId,
-				]);
+				])) as RowDataPacket[];
 
 			// Return the inserted row
 			return attendanceResult[0];
@@ -155,7 +162,7 @@ const attendanceModel: AttendanceModel = {
 	},
 
 	async insertAttendance(
-		status: string,
+		status: number,
 		date: string,
 		usercourseid: number,
 		classid: number,
