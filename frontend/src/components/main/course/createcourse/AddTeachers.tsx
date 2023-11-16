@@ -1,11 +1,13 @@
 import React from 'react';
-const AddTeachers = ({
-	instructors,
-	handleInputChange,
-	deleteInstructor,
-	addInstructor,
-	instructorEmail,
-}) => {
+const AddTeachers = ({instructors, handleInputChange, setInstructors}) => {
+	const deleteInstructor = index => {
+		const newInstructors = [...instructors];
+		newInstructors.splice(index, 1);
+		setInstructors(newInstructors);
+	};
+	const addInstructor = () => {
+		setInstructors([...instructors, {email: ''}]);
+	};
 	return (
 		<fieldset>
 			<legend className="text-xl mb-3">Add teachers</legend>

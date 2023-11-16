@@ -22,9 +22,6 @@ const CreateCourseCustom: React.FC = () => {
 	const [endDate, setEndDate] = useState('');
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const [topicsFormData, setTopicsFormData] = useState<any>([]);
-	const addInstructor = () => {
-		setInstructors([...instructors, {email: ''}]);
-	};
 
 	const handleInputChange = (index, event) => {
 		const values = [...instructors];
@@ -32,11 +29,6 @@ const CreateCourseCustom: React.FC = () => {
 		setInstructors(values);
 	};
 
-	const deleteInstructor = index => {
-		const newInstructors = [...instructors];
-		newInstructors.splice(index, 1);
-		setInstructors(newInstructors);
-	};
 	const deleteStudent = index => {
 		const newStudentList = [...studentList];
 		newStudentList.splice(index, 1);
@@ -67,13 +59,12 @@ const CreateCourseCustom: React.FC = () => {
 		}
 	};
 	useEffect(() => {
-		setInstructorEmail('teacher@metropolia.fi');
-	}, []);
-	useEffect(() => {
+		setInstructorEmail('teacher@metropolia.fi'); // get email from userContext
 		if (instructorEmail) {
 			setInstructors([{email: instructorEmail}]);
 		}
 	}, [instructorEmail]);
+
 	return (
 		<form
 			onSubmit={handleSubmit}
@@ -97,17 +88,11 @@ const CreateCourseCustom: React.FC = () => {
 				<AddTeachers
 					instructors={instructors}
 					handleInputChange={handleInputChange}
-					deleteInstructor={deleteInstructor}
-					addInstructor={addInstructor}
-					instructorEmail={instructorEmail}
+					setInstructors={setInstructors}
 				/>
 			)}
 			{currentStep === 3 && (
-				<StudentList
-					studentList={studentList}
-					setStudentList={setStudentList}
-					deleteStudent={deleteStudent}
-				/>
+				<StudentList studentList={studentList} setStudentList={setStudentList} />
 			)}
 			{currentStep === 4 && (
 				<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />

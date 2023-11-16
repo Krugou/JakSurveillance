@@ -25,9 +25,6 @@ const CreateCourseEasy: React.FC = () => {
 	const [endDate, setEndDate] = useState('');
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const [topicsFormData, setTopicsFormData] = useState<any>([]);
-	const addInstructor = () => {
-		setInstructors([...instructors, {email: ''}]);
-	};
 
 	const handleInputChange = (index, event) => {
 		const values = [...instructors];
@@ -84,16 +81,7 @@ const CreateCourseEasy: React.FC = () => {
 			}
 		}
 	};
-	const deleteInstructor = index => {
-		const newInstructors = [...instructors];
-		newInstructors.splice(index, 1);
-		setInstructors(newInstructors);
-	};
-	const deleteStudent = index => {
-		const newStudentList = [...studentList];
-		newStudentList.splice(index, 1);
-		setStudentList(newStudentList);
-	};
+
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 		const courseData = {
@@ -181,17 +169,11 @@ const CreateCourseEasy: React.FC = () => {
 				<AddTeachers
 					instructors={instructors}
 					handleInputChange={handleInputChange}
-					deleteInstructor={deleteInstructor}
-					addInstructor={addInstructor}
-					instructorEmail={instructorEmail}
+					setInstructors={setInstructors}
 				/>
 			)}
 			{currentStep === 4 && (
-				<StudentList
-					studentList={studentList}
-					setStudentList={setStudentList}
-					deleteStudent={deleteStudent}
-				/>
+				<StudentList studentList={studentList} setStudentList={setStudentList} />
 			)}
 			{currentStep === 5 && (
 				<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />

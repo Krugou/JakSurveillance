@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-const StudentList = ({studentList, setStudentList, deleteStudent}) => {
+const StudentList = ({studentList, setStudentList}) => {
 	const addStudent = () => {
 		const newStudent = {
 			first_name: 'example',
@@ -16,6 +16,11 @@ const StudentList = ({studentList, setStudentList, deleteStudent}) => {
 			registration: 'example',
 		};
 		setStudentList([...studentList, newStudent]);
+	};
+	const deleteStudent = index => {
+		const newStudentList = [...studentList];
+		newStudentList.splice(index, 1);
+		setStudentList(newStudentList);
 	};
 
 	useEffect(() => {
