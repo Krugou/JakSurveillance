@@ -1,9 +1,8 @@
-import {RowDataPacket} from 'mysql2';
-import pool from '../config/adminDBPool.js';
+import {Pool, RowDataPacket} from 'mysql2';
 
 // server settings model
 const serverSettingsModel = {
-	async getServerSettings() {
+	async getServerSettings(pool: Pool) {
 		try {
 			return await pool
 				.promise()
