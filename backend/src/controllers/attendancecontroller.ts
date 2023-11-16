@@ -1,7 +1,17 @@
 import attendanceModel from '../models/attendancemodel.js';
 import usercoursesModel from '../models/usercoursemodel.js';
 interface AttendanceController {
-	// Define the methods and properties here
+	insertIntoAttendance: (
+		status: string,
+		date: Date,
+		studentnumber: string,
+		classid: string,
+	) => Promise<any>;
+	checkAndInsertStatusNotPresentAttendance: (
+		date: Date,
+		studentnumbers: string[],
+		classid: string,
+	) => Promise<any>;
 }
 const attendanceController: AttendanceController = {
 	async insertIntoAttendance(
