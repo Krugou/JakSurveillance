@@ -1,9 +1,14 @@
 import React, {useEffect, useState} from 'react';
 
 const StudentList = ({studentList, setStudentList}) => {
-	const [hiddenColumns, setHiddenColumns] = useState<Record<string, boolean>>(
-		{},
-	);
+	const [hiddenColumns, setHiddenColumns] = useState<Record<string, boolean>>({
+		admingroups: true,
+		arrivalgroup: true,
+		educationform: true,
+		evaluation: true,
+		program: true,
+		registration: true,
+	});
 	const addStudent = event => {
 		event.preventDefault();
 		const newStudent = {
@@ -35,6 +40,16 @@ const StudentList = ({studentList, setStudentList}) => {
 
 	return (
 		<div className="overflow-hidden h-1/2">
+			<button
+				aria-label="Show All Columns"
+				className="p-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+				onClick={event => {
+					event.preventDefault();
+					setHiddenColumns({});
+				}}
+			>
+				Show All Columns
+			</button>
 			<table className="table-auto w-full">
 				<thead>
 					<tr>
@@ -45,10 +60,11 @@ const StudentList = ({studentList, setStudentList}) => {
 										<th key={index} className="px-4 py-2">
 											{key}
 											<button
-												className="ml-2"
+												aria-label="Hide Column"
+												className="ml-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark"
 												onClick={() => setHiddenColumns({...hiddenColumns, [key]: true})}
 											>
-												H
+												Hide
 											</button>
 										</th>
 									),
@@ -80,6 +96,7 @@ const StudentList = ({studentList, setStudentList}) => {
 								{studentList.length > 1 && (
 									<td className="border px-4 py-2">
 										<button
+											aria-label="Delete Student"
 											type="button"
 											className="p-2 bg-red-500 text-white font-bold rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
 											onClick={() => deleteStudent(index)}
