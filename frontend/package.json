@@ -1,7 +1,7 @@
 {
 	"name": "jak-surveillance",
 	"private": true,
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
 		"dev": " vite --port 8080 --open --host",
@@ -37,7 +37,7 @@
 		"@types/react-dom": "^18.2.7",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
-		"@vitejs/plugin-react-swc": "^3.3.2",
+		"@vitejs/plugin-react-swc": "^3.5.0",
 		"autoprefixer": "^10.4.16",
 		"eslint": "^8.45.0",
 		"eslint-plugin-react-hooks": "^4.6.0",
@@ -45,7 +45,7 @@
 		"postcss": "^8.4.31",
 		"tailwindcss": "^3.3.3",
 		"typescript": "^5.0.2",
-		"vite": "^4.4.5",
-		"vite-plugin-pwa": "^0.16.5"
+		"vite": "^5.0.0",
+		"vite-plugin-pwa": "^0.16.7"
 	}
 }
