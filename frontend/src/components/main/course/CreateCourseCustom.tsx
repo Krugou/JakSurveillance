@@ -29,10 +29,35 @@ const CreateCourseCustom: React.FC = () => {
 		setInstructors(values);
 	};
 
-	const deleteStudent = index => {
-		const newStudentList = [...studentList];
-		newStudentList.splice(index, 1);
-		setStudentList(newStudentList);
+	const validateFields = () => {
+		switch (currentStep) {
+			case 1:
+				return courseCode && courseName && studentGroup && startDate && endDate;
+			case 2:
+				return (
+					instructors &&
+					instructors.length > 0 &&
+					instructors.every(instructor => instructor.email)
+				);
+			case 3:
+				return studentList && studentList.length > 0;
+			case 4:
+				return (
+					topicsFormData &&
+					topicsFormData.topicgroup &&
+					topicsFormData.topics &&
+					topicsFormData.topics.length > 0
+				);
+			default:
+				return false;
+		}
+	};
+	const incrementStep = () => {
+		if (validateFields()) {
+			setCurrentStep(prevStep => prevStep + 1);
+		} else {
+			alert('Please fill all required fields.');
+		}
 	};
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
@@ -111,7 +136,7 @@ const CreateCourseCustom: React.FC = () => {
 				<button
 					type="button"
 					className="w-full p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-					onClick={() => setCurrentStep(prevStep => prevStep + 1)}
+					onClick={incrementStep}
 				>
 					Next
 				</button>
