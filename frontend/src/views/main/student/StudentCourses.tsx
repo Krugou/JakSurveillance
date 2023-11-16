@@ -5,6 +5,7 @@ import {useNavigate} from 'react-router-dom';
 import ReportIcon from '@mui/icons-material/Report';
 import Tooltip from '@mui/material/Tooltip';
 const StudentCourses: React.FC = () => {
+	// Interface for the course data
 	interface Course {
 		courseid: number;
 		course_name: string;
@@ -13,14 +14,25 @@ const StudentCourses: React.FC = () => {
 		code: string;
 		student_group: number | null;
 		topic_names: string;
+		selected_topics: string;
 		instructor_name: string;
 		usercourseid: number;
 	}
+
+	// State to keep track of the error
 	const [error, setError] = useState<string | null>(null);
+
+	// State to keep track of the courses
 	const {user} = useContext(UserContext);
+
+	// State to keep track of the courses
 	const [courses, setCourses] = useState<Course[]>([]);
+
+	// State to keep track of the show ended courses option
 	const [showEndedCourses, setShowEndedCourses] = useState(true);
 	const navigate = useNavigate();
+
+	// Fetch courses for the user
 	useEffect(() => {
 		const fetchCourses = async () => {
 			try {
@@ -85,13 +97,21 @@ const StudentCourses: React.FC = () => {
 						return !isCourseEnded || showEndedCourses;
 					})
 					.map(course => {
+						// Format the dates
 						const startDate = new Date(course.startDate).toLocaleDateString();
 						const endDate = new Date(course.endDate);
 						const endDateString = endDate.toLocaleDateString();
-						const topics = course.topic_names.replace(/,/g, ', ');
+
+						// Format the topics
+						const topics = course.selected_topics
+							? // If the course has selected topics by the student, use those
+							  course.selected_topics.replace(/,/g, ', ') + ' (partial attendance)'
+							: // Otherwise use the default topics
+							  course.topic_names.replace(/,/g, ', ');
+
+						// Check if the course has ended
 						const isCourseEnded =
 							endDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
-
 						return (
 							<Tooltip placement="top" title={isCourseEnded ? 'Course has ended' : ''}>
 								<div

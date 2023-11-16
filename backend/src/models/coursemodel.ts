@@ -513,9 +513,10 @@ const course: CourseModel = {
 				c.end_date AS endDate,
 				c.code AS code,
 				sg.group_name AS student_group,
-				usercourseid,
-				GROUP_CONCAT(DISTINCT t.topicname) AS topic_names,
-				GROUP_CONCAT(DISTINCT u2.email) AS instructor_name
+				uc.usercourseid,
+			 GROUP_CONCAT(DISTINCT t_selected.topicname) AS selected_topics,
+			 GROUP_CONCAT(DISTINCT t.topicname) AS topic_names,
+			 GROUP_CONCAT(DISTINCT u2.email) AS instructor_name
 		FROM 
 				users u
 		JOIN 
@@ -529,9 +530,13 @@ const course: CourseModel = {
 		LEFT JOIN 
 				topics t ON ct.topicid = t.topicid
 		LEFT JOIN 
+				usercourse_topics ut ON uc.usercourseid = ut.usercourseid
+		LEFT JOIN 
 				courseinstructors ci ON c.courseid = ci.courseid
 		LEFT JOIN 
 				users u2 ON ci.userid = u2.userid
+		LEFT JOIN
+				topics t_selected ON ut.topicid = t_selected.topicid
 		WHERE 
 				u.email = ?
 		GROUP BY 
@@ -539,6 +544,7 @@ const course: CourseModel = {
 				[email],
 			);
 			console.log(rows);
+
 			return rows as Course[];
 		} catch (error) {
 			console.error(error);
