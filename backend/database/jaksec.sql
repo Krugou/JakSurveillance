@@ -133,6 +133,9 @@ CREATE TABLE IF NOT EXISTS `studentgroups` (
 CREATE TABLE IF NOT EXISTS `topicgroups` (
   `topicgroupid` int(11) NOT NULL AUTO_INCREMENT,
   `topicgroupname` varchar(100) NOT NULL,
+  `userid` int(11) DEFAULT NULL,
+  KEY `userid` (`userid`),
+  CONSTRAINT `topicgroups_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`),
   PRIMARY KEY (`topicgroupid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
