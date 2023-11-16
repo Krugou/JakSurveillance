@@ -30,7 +30,7 @@ router.post('/check', express.json(), async (req: Request, res: Response) => {
 		const data = await openData.checkOpenDataRealization(codes);
 
 		// Check if message is "No results"
-		if ((data as any).message === 'No results') {
+		if ((data as {message?: string}).message === 'No results') {
 			res.status(404).json({
 				exists: false,
 			});
@@ -118,7 +118,53 @@ router.post('/excelinput', upload.single('file'), async (req, res) => {
 		return;
 	}
 	const jsonData = XLSX.utils.sheet_to_json(worksheet);
-	const createCourse = data => {
+	interface Item {
+		__EMPTY: string;
+		__EMPTY_1: string;
+		__EMPTY_2: string;
+		__EMPTY_3: string;
+		__EMPTY_4: string;
+		__EMPTY_5: string;
+		__EMPTY_6: string;
+		__EMPTY_7: string;
+		__EMPTY_8: string;
+		__EMPTY_9: string;
+		[key: string]: string;
+	}
+
+	interface Student {
+		first_name: string;
+		last_name: string;
+		name: string;
+		email: string;
+		studentnumber: string;
+		arrivalgroup: string;
+		admingroups: string;
+		program: string;
+		educationform: string;
+		registration: string;
+		evaluation: string;
+	}
+
+	interface CourseDetails {
+		instructorEmail: string;
+		startDate: Date;
+		endDate: Date;
+		studentGroup: string;
+		courseName: string;
+		courseCode: string;
+		studentList: Student[];
+	}
+	interface IData {
+		realizations: {
+			startDate: string;
+			endDate: string;
+			studentGroups: {
+				code: string;
+			}[];
+		}[];
+	}
+	const createCourse = (data: Item[]): CourseDetails => {
 		const fullCourseName = Object.keys(data[0])[0]; // get the first key
 		const [courseName, courseCode] = fullCourseName.split(' (');
 
@@ -156,20 +202,24 @@ router.post('/excelinput', upload.single('file'), async (req, res) => {
 			courseName,
 			courseCode: courseCode.replace('(', '').replace(')', ''),
 			studentList,
+			instructorEmail: '', // default value
+			startDate: new Date(), // default value
+			endDate: new Date(), // default value
+			studentGroup: '', // default value
 		};
 	};
 
-	const courseDetails = createCourse(jsonData);
+	const courseDetails = createCourse(jsonData as Item[]);
 	courseDetails.instructorEmail = instructorEmail;
 	if (checkCourseDetails === 'true') {
-		const data = await openData.checkOpenDataRealization(
+		const data = (await openData.checkOpenDataRealization(
 			courseDetails.courseCode,
-		);
+		)) as IData;
 		// Extract startDate and endDate from data and convert them to Date objects
 		courseDetails.startDate = new Date(data.realizations[0].startDate);
 		courseDetails.endDate = new Date(data.realizations[0].endDate);
 		const studentGroup = data.realizations[0].studentGroups[0];
-		courseDetails.studentGroup = studentGroup ? studentGroup.code : null;
+		courseDetails.studentGroup = studentGroup ? studentGroup.code : '';
 	} else {
 		courseDetails.studentGroup = 'please enter student group';
 		courseDetails.startDate = new Date();
@@ -190,13 +240,28 @@ router.get('/instructor/:email', async (req: Request, res: Response) => {
 });
 router.get('/coursesbyid/:id', async (req: Request, res: Response) => {
 	try {
-		const courses = await course.getCoursesByCourseId(req.params.id);
+		const courseId = Number(req.params.id);
+		if (isNaN(courseId)) {
+			res.status(400).send('Invalid course ID');
+			return;
+		}
+		const courses = await course.getCoursesByCourseId(courseId);
 		res.json(courses);
 	} catch (err) {
 		console.error(err);
 		res.status(500).send('Server error');
 	}
 });
+interface User {
+	email: string;
+	userrole: number;
+}
+
+declare module 'express-serve-static-core' {
+	interface Request {
+		user?: User;
+	}
+}
 router.get('/user/all', async (req: Request, res: Response) => {
 	try {
 		// Validate that the user is logged in
