@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { Server, Socket } from 'socket.io';
+import {Server, Socket} from 'socket.io';
 import fetchReal from '../utils/fetch.js';
 
 let hash = '';
@@ -12,9 +12,29 @@ interface Student {
 	// add other properties as needed
 }
 // this defines how often the hash changes or how fast student need to be in class while doing attendance
-const speedOfHashChange = 6000; // milliseconds
-// this defines how much lee way there is for network lag or something. speedOfHashChange * 4
-const howMuchLeeWay = speedOfHashChange * 4;
+let speedOfHashChange = 6000; // milliseconds
+let leewaytimes = 5;
+async function fetchDataAndUpdate() {
+	try {
+		const response = await fetchReal.doFetch('http://localhost:3002/admin/ ', {
+			method: 'GET', // or 'GET'
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		const data = response[0][0]; // Access the actual data
+		speedOfHashChange = data.speedofhash;
+		leewaytimes = data.leewayspeed;
+	} catch (error) {
+		// Handle the error here
+		console.error(error);
+	}
+}
+let howMuchLeeWay = 0;
+// Call the function
+fetchDataAndUpdate().then(() => {
+	howMuchLeeWay = speedOfHashChange * leewaytimes;
+});
 const updateHash = () => {
 	const start = Date.now();
 	hash = crypto.randomBytes(20).toString('hex');
@@ -28,8 +48,6 @@ const updateHash = () => {
 		timestamps.shift();
 	}
 };
-// update the hash immediately and then every `speedOfHashChange` milliseconds
-
 // handle new socket.io connections
 let SelectedClassid = '';
 const ArrayOfStudents: any[] = [];
@@ -123,7 +141,7 @@ const setupSocketHandlers = (io: Server) => {
 								(student: Student) => student.studentnumber === studentId.toString(),
 							);
 							// remember to change back to 0
-							if (student && student.GDPR === 1 ) {
+							if (student && student.GDPR === 1) {
 								ArrayOfStudents.push(studentId);
 							} else if (student) {
 								ArrayOfStudents.push(
