@@ -1,10 +1,16 @@
 import crypto from 'crypto';
-import {Server, Socket} from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import fetchReal from '../utils/fetch.js';
 
 let hash = '';
 const timestamps: {start: number; end: number; hash: string}[] = [];
-
+interface Student {
+	studentnumber: string;
+	GDPR: number;
+	first_name: string;
+	last_name: string;
+	// add other properties as needed
+}
 // this defines how often the hash changes or how fast student need to be in class while doing attendance
 const speedOfHashChange = 6000; // milliseconds
 // this defines how much lee way there is for network lag or something. speedOfHashChange * 4
@@ -26,8 +32,8 @@ const updateHash = () => {
 
 // handle new socket.io connections
 let SelectedClassid = '';
-const ArrayOfStudents: unknown[] = [];
-let CourseStudents: unknown[] = [];
+const ArrayOfStudents: any[] = [];
+let CourseStudents: Student[] = [];
 const setupSocketHandlers = (io: Server) => {
 	io.on('connection', (socket: Socket) => {
 		console.log('a user connected');
@@ -83,15 +89,10 @@ const setupSocketHandlers = (io: Server) => {
 			'inputThatStudentHasArrivedToClass',
 			(
 				secureHash: string,
-				studentId: number,
+				studentId: string,
 				unixtime: number,
 				classid: number,
 			) => {
-				console.log('secureHash:', secureHash);
-				console.log('studentId:', studentId);
-				console.log('unixtime:', unixtime);
-				console.log('classid:', classid);
-				console.log('Timestamps:', timestamps);
 				// find the timestamp that matches the secureHash and unixtime
 				const timestamp = timestamps.find(
 					t => t.hash === secureHash && unixtime >= t.start && unixtime <= t.end,
@@ -119,10 +120,10 @@ const setupSocketHandlers = (io: Server) => {
 							console.log('Success:', response);
 							io.to(socketId).emit('youhavebeensavedintoclass', SelectedClassid);
 							const student = CourseStudents.find(
-								student => student.studentnumber === studentId,
+								(student: Student) => student.studentnumber === studentId.toString(),
 							);
 							// remember to change back to 0
-							if (student && student.GDPR === 1) {
+							if (student && student.GDPR === 1 ) {
 								ArrayOfStudents.push(studentId);
 							} else if (student) {
 								ArrayOfStudents.push(
