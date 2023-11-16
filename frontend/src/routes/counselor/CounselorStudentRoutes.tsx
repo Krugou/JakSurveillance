@@ -1,4 +1,3 @@
-// routes/TeacherStudentsRoutes.tsx
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
 import CounselorStudentsView from '../../views/main/counselor/students/CounselorStudentsView';
