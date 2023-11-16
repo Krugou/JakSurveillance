@@ -1,5 +1,8 @@
 import attendanceModel from '../models/attendancemodel.js';
 import usercoursesModel from '../models/usercoursemodel.js';
+interface AttendanceController {
+	// Define the methods and properties here
+}
 const attendanceController: AttendanceController = {
 	async insertIntoAttendance(
 		status: string,
@@ -64,6 +67,7 @@ const attendanceController: AttendanceController = {
 			throw error;
 		}
 	},
+
 	async checkAndInsertStatusNotPresentAttendance(date, studentnumbers, classid) {
 		try {
 			for (const studentnumber of studentnumbers) {
