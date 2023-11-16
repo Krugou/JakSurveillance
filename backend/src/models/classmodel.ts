@@ -1,4 +1,10 @@
-import {FieldPacket, RowDataPacket} from 'mysql2';
+import {
+	FieldPacket,
+	OkPacket,
+	ProcedureCallPacket,
+	ResultSetHeader,
+	RowDataPacket,
+} from 'mysql2';
 import pool from '../config/adminDBPool.js';
 interface Class {
 	classid: number;
@@ -22,6 +28,20 @@ interface ClassModel {
 	deleteByClassId(id: number): Promise<void>;
 	countAllClasses(): Promise<number>;
 	findByTopicId(topicid: number): Promise<Class[]>;
+	insertIntoClass(
+		start_date: Date,
+		end_date: Date,
+		topicname: string,
+		coursecode: string,
+		timeofday: 'am' | 'pm',
+	): Promise<
+		| OkPacket
+		| RowDataPacket[]
+		| ResultSetHeader[]
+		| RowDataPacket[][]
+		| OkPacket[]
+		| ProcedureCallPacket
+	>;
 	// other methods...
 }
 
@@ -171,9 +191,9 @@ const classModel: ClassModel = {
 			.query(
 				'INSERT INTO class (start_date, end_date, timeofday, topicid, courseid) VALUES (?, ?, ?, ?, ?)',
 				[start_date, end_date, timeofday, topicid, courseid],
-		);
+			);
 		return result;
-	}
+	},
 	// other methods...
 };
 
