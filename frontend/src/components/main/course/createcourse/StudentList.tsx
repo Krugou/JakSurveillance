@@ -13,17 +13,17 @@ const StudentList = ({ studentList, setStudentList }) => {
 	const addStudent = (event) => {
 		event.preventDefault();
 		const newStudent = {
-			first_name: '',
-			last_name: '',
-			name: '',
-			email: '',
-			studentnumber: '',
-			admingroups: '',
-			arrivalgroup: '',
-			educationform: '',
-			evaluation: '',
-			program: '',
-			registration: '',
+			first_name: 'example',
+			last_name: 'example',
+			name: 'example',
+			email: 'example@gmail.com',
+			studentnumber: '2442',
+			admingroups: 'example',
+			arrivalgroup: 'example',
+			educationform: 'example',
+			evaluation: 'example',
+			program: 'example',
+			registration: 'example',
 		};
 		setStudentList([...studentList, newStudent]);
 	};
@@ -53,31 +53,36 @@ const StudentList = ({ studentList, setStudentList }) => {
 				Show All Columns
 			</button>
 			<table className="table-auto w-full">
-				<tbody className="flex flex-wrap justify-center">
+				<tbody className="flex">
 				{studentList.map((student: Record<string, string | number>, index: number) => (
-					<tr key={index} className="m-1">
+					<tr key={index}>
 						{Object.entries(student).map(([key, value], innerIndex) => (
 							!hiddenColumns[key] && (
-								<td key={innerIndex} className="border px-2 flex py-2">
-									<button
-										aria-label="Hide Column"
-										className="p-1 text-black text-sm font-bold rounded hover:bg-metropoliaSecondaryOrange hover:text-white focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark"
-										onClick={() => setHiddenColumns({ ...hiddenColumns, [key]: true })}
-									>
-										Hide
-									</button>
-									<input
-										className="border rounded py-2 px-3 text-grey-800 w-fit ml-2"
-										type="text"
-										value={value.toString()}
-										placeholder={key} // Set the key as the placeholder
-										onChange={(e) => {
-											const newStudentList = [...studentList];
-											newStudentList[index][key] = e.target.value;
-											setStudentList(newStudentList);
-										}}
-									/>
-								</td>
+								<React.Fragment key={innerIndex}>
+									<td className="border px-2 flex py-2">
+										<button
+											aria-label="Hide Column"
+											className="bg-metropoliaMainOrange p-1 text-white text-sm font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark mr-2"
+											onClick={() => setHiddenColumns({ ...hiddenColumns, [key]: true })}
+										>
+											Hide
+										</button>
+										<div className="flex flex-col items-start">
+											<span className="text-xs">{key}</span>
+											<input
+												className="border rounded py-2 px-3 text-grey-800 w-fit min-w-full"
+												type="text"
+												value={value.toString()}
+												placeholder={key} // Set the key as the placeholder
+												onChange={(e) => {
+													const newStudentList = [...studentList];
+													newStudentList[index][key] = e.target.value;
+													setStudentList(newStudentList);
+												}}
+											/>
+										</div>
+									</td>
+								</React.Fragment>
 							)
 						))}
 						{studentList.length > 1 && (
@@ -85,10 +90,10 @@ const StudentList = ({ studentList, setStudentList }) => {
 								<button
 									aria-label="Delete Student"
 									type="button"
-									className="p-1 bg-red-500 text-white text-sm font-bold rounded hover:bg-red-700 focus:outline-none"
+									className="p-2 bg-red-500 text-white font-bold rounded hover:bg-red-700 focus:outline-none"
 									onClick={() => deleteStudent(index)}
 								>
-									Delete Student
+									x
 								</button>
 							</td>
 						)}
