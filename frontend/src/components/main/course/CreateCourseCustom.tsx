@@ -93,7 +93,7 @@ const CreateCourseCustom: React.FC = () => {
 	return (
 		<form
 			onSubmit={handleSubmit}
-			className="w-4/5 lg:w-4/5 2xl:w-1/2 mx-auto bg-white p-6 rounded shadow-md"
+			className="w-12/12 md:w-11/12 lg:w-11/12 2xl:w-1/2 mx-auto bg-white p-6 rounded shadow-md"
 		>
 			{currentStep === 1 && (
 				<CourseDetails
