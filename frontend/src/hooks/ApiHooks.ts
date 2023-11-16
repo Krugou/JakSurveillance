@@ -241,6 +241,23 @@ const getAttendanceInfoByUsercourseid = async (
 		options,
 	);
 };
+const updateServerSettings = async (
+	speedofhash: number,
+	leewayspeed: number,
+) => {
+	const options = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			speedofhash,
+			leewayspeed,
+		}),
+	};
+	const url = `${baseUrl}admin`;
+	return doFetch(url, options);
+};
 
 const apiHooks = {
 	postLogin,
@@ -256,5 +273,6 @@ const apiHooks = {
 	finishClass,
 	getAttendanceInfoByUsercourseid,
 	excelInput,
+	updateServerSettings,
 };
 export default apiHooks;
