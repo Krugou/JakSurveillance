@@ -43,7 +43,7 @@ const MainView: React.FC = () => {
 				<Card
 					path="/teacher/helpvideos"
 					title="Instructions"
-					description="See instructions for all your tasks"
+					description="See instructions for all available tasks"
 				/>
 			</div>
 		</BackgroundContainer>
