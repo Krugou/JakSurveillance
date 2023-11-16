@@ -11,7 +11,7 @@
 		"outDir": "./nodejs",
 		"lib": ["es2018"],
 		"resolveJsonModule": true,
-		"noImplicitAny": true,
+		"noImplicitAny": false,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true
 	},
