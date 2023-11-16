@@ -1,4 +1,4 @@
-import {FieldPacket, RowDataPacket} from 'mysql2';
+import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
 import pool from '../config/adminDBPool.js';
 /**
  * @interface Topic
@@ -21,6 +21,10 @@ interface TopicModel {
 	updateTopicName(id: number, topicname: string): Promise<void>;
 	deleteByTopicId(id: number): Promise<void>;
 	countTopics(): Promise<number>;
+	findTopicIdUsingTopicName(topic: string): Promise<RowDataPacket[] | null>;
+	insertTopic(topic: string): Promise<ResultSetHeader>;
+	checkIfTopicExists(topic: string): Promise<boolean>;
+
 	// other methods...
 }
 
@@ -125,12 +129,12 @@ const topicModel: TopicModel = {
 			return Promise.reject(error);
 		}
 	},
-	async checkIfTopicExists(topic: string) {
+	async checkIfTopicExists(topic: string): Promise<boolean> {
 		const [existingCourseTopic] = await pool
 			.promise()
 			.query<RowDataPacket[]>('SELECT * FROM topics WHERE topicname = ?', [topic]);
 
-		return existingCourseTopic;
+		return existingCourseTopic.length > 0;
 	},
 	async insertTopic(topic: string) {
 		const [topicResult] = await pool
@@ -147,8 +151,8 @@ const topicModel: TopicModel = {
 			.query<RowDataPacket[]>('SELECT topicid FROM topics WHERE topicname = ?', [
 				topic,
 			]);
-		return topicResult
-	}
+		return topicResult;
+	},
 
 	// other methods...
 };
