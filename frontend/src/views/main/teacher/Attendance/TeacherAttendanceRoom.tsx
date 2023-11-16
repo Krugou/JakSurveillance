@@ -13,6 +13,7 @@ const AttendanceRoom: React.FC = () => {
 	const [serverMessage, setServerMessage] = useState('');
 
 	interface Student {
+		studentnumber: string;
 		first_name: string;
 		last_name: string;
 		userid: number;
@@ -21,8 +22,9 @@ const AttendanceRoom: React.FC = () => {
 	const handleClassFinished = () => {
 		const dateToday = new Date().toISOString().slice(0, 19).replace('T', ' ');
 		const studentnumbers = courseStudents.map(student => student.studentnumber);
-
-		apiHooks.finishClass(dateToday, studentnumbers, classid);
+		if (classid) {
+			apiHooks.finishClass(dateToday, studentnumbers, classid);
+		}
 	};
 	useEffect(() => {
 		if (!socket) {
