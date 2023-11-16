@@ -34,7 +34,16 @@ const postLogin = async (inputs: LoginInputs) => {
 	return await doFetch(baseUrl + 'users', options);
 };
 interface CreateCourseInputs {
-	courseData: Array<string>;
+	courseName: string;
+	courseCode: string;
+	studentGroup: string;
+	startDate: string;
+	endDate: string;
+	instructors: {email: string}[];
+	studentList: string[];
+	topicGroup: string; // Replace 'any' with the actual type if known
+	topics: string; // Replace 'any' with the actual type if known
+	instructorEmail: string;
 }
 interface CreateCourseFile {
 	formDataFile: FormData;
