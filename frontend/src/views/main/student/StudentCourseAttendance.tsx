@@ -12,6 +12,7 @@ interface Attendance {
 	start_date: string;
 	timeofday: string;
 	topicname: string;
+	teacher: string;
 	status: number;
 }
 
@@ -127,7 +128,7 @@ const StudentCourseAttendance: React.FC = () => {
 					<thead className="border-b">
 						<tr className="bg-gray-100">
 							<th className="text-left p-4 font-medium underline">Date</th>
-							<th className="text-left p-4 font-medium underline">Duration</th>
+							<th className="text-left p-4 font-medium underline">Teacher</th>
 							<th className="text-left p-4 font-medium underline">Time of Day</th>
 							<th className="text-left p-4 font-medium underline">Topic</th>
 							<th className="text-left p-4 font-medium underline">Status</th>
@@ -146,7 +147,7 @@ const StudentCourseAttendance: React.FC = () => {
 								<td className="p-4">
 									{new Date(attendance.start_date).toLocaleDateString()}
 								</td>
-								<td className="p-4">unknown</td>
+								<td className="p-4">{attendance.teacher}</td>
 								<td className="p-4">{attendance.timeofday}</td>
 								<td className="p-4">{attendance.topicname}</td>
 								<td className="p-4">
