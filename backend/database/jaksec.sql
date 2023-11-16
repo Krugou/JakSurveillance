@@ -266,3 +266,11 @@ SET @physicsID = (SELECT `topicid` FROM `topics` WHERE `topicname` = 'Physics');
 INSERT INTO `topicsingroup` (`topicgroupid`, `topicid`) VALUES (@secondGroupID, @mathID), (@secondGroupID, @physicsID);
 
 
+-- Create the serversettings table
+CREATE TABLE `serversettings` (
+  `speedofhash` INT,
+  `leewayspeed` INT
+);
+
+-- Insert the values into the serversettings table
+INSERT INTO `serversettings` (`speedofhash`, `leewayspeed`) VALUES (5000, 4);
