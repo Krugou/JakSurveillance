@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import BackgroundContainer from "../../../../components/main/background/background";
 // this is view for teacher to modify the single course details
 const TeacherCourseModify: React.FC = () => {
     const { id } = useParams<{ id: string; }>();
@@ -20,7 +21,8 @@ const TeacherCourseModify: React.FC = () => {
     };
 
     return (
-        <div className="m-4 bg-white rounded shadow-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-2/5 mx-auto">
+        <BackgroundContainer>
+        <div className="m-4 rounded shadow-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-2/5 mx-auto">
             <form onSubmit={handleSubmit} className="px-6 py-4">
                 <label className="font-bold text-xl mb-2">Course Name</label>
                 <input
@@ -43,6 +45,7 @@ const TeacherCourseModify: React.FC = () => {
                 </button>
             </form>
         </div>
+        </BackgroundContainer>
     );
 };
 
