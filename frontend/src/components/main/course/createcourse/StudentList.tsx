@@ -70,7 +70,8 @@ const StudentList = ({ studentList, setStudentList }) => {
 				{hideExtraColumns ? 'Show All Columns' : 'Hide Extra Columns'}
 			</button>
 			<table className="table-auto w-full">
-				<thead>
+				<div className="max-h-96 h-96 overflow-y-scroll">
+				<thead className="sticky top-0 bg-white z-10">
 				<tr>
 					{studentList.length > 0 &&
 						Object.keys(studentList[0]).map(
@@ -128,6 +129,7 @@ const StudentList = ({ studentList, setStudentList }) => {
 					),
 				)}
 				</tbody>
+				</div>
 			</table>
 			<button
 				className="p-1 mt-2 text-sm bg-metropoliaMainOrange text-white font-bold rounded-xl hover:bg-metropoliaSecondaryOrange focus:outline-none mb-4"
