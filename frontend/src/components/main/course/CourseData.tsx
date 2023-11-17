@@ -24,7 +24,7 @@ const CourseData: React.FC<CourseDataProps> = ({courseData}) => {
 		<>
 			{Array.isArray(courseData) &&
 				courseData.map((course: Course) => (
-					<div key={course.courseid} className="mt-4">
+					<div key={course.courseid} className="mt-4 bg-white p-5 rounded-lg mb-4">
 						<div className="font-bold text-lg">{course.name}</div>
 						<p className="text-gray-700 text-base">{course.description}</p>
 						<div className="mt-2">
@@ -44,7 +44,7 @@ const CourseData: React.FC<CourseDataProps> = ({courseData}) => {
 								<div className="text-gray-700">Student group:</div>
 								<div>{course.studentgroup_name}</div>
 							</div>
-							<div className="flex justify-between">
+							<div className="flex justify-between mb-4">
 								<div className="text-gray-700">Topics:</div>
 								<div>{course.topic_names}</div>
 							</div>

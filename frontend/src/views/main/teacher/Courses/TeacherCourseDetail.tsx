@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import CourseData from '../../../../components/main/course/CourseData';
 import apihooks from '../../../../hooks/ApiHooks';
+import BackgroundContainer from "../../../../components/main/background/background";
 
 // Define your course detail structure here
 interface CourseDetail {
@@ -37,12 +38,12 @@ const TeacherCourseDetail: React.FC = () => {
 	}, [id]);
 
 	return (
-		<div className="m-4 bg-white rounded shadow-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-2/5 mx-auto">
-			<div className="px-6 py-4">
-				<div className="font-bold text-xl mb-2">My Single Course</div>
+		<BackgroundContainer>
+			<h2 className="font-bold text-lg">My single course</h2>
+		<div className="m-4 bg-white rounded-lg shadow-lg mx-auto w-full sm:w-3/4 md:w-2/4 lg:w-2/5 2xl:w-1/5">
 				{courseData && <CourseData courseData={courseData} />}
-			</div>
 		</div>
+		</BackgroundContainer>
 	);
 };
 

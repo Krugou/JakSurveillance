@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import CourseData from '../../../../components/main/course/CourseData';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
+import BackgroundContainer from "../../../../components/main/background/background";
 interface Course {
 	courseid: number;
 	name: string;
@@ -35,12 +36,12 @@ const TeacherCourses: React.FC = () => {
 	}, [user]);
 
 	return (
-		<div className="m-4 bg-white rounded shadow-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-2/5 mx-auto">
-			<div className="px-6 py-4">
-				<div className="font-bold text-xl mb-2">My courses</div>
+		<BackgroundContainer>
+			<h2 className="font-bold text-lg">My courses</h2>
+			<div className="w-full sm:w-3/4 md:w-2/4 lg:w-2/5 2xl:w-1/5">
 				<CourseData courseData={courses} />
 			</div>
-		</div>
+		</BackgroundContainer>
 	);
 };
 
