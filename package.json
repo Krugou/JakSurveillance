@@ -2,12 +2,14 @@
 	"scripts": {
 		"lint": "eslint --ext .js,.jsx,.ts,.tsx frontend/src backend/src",
 		"lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx frontend/src backend/src",
-		"all": "cd backend && npm run all",
-		"alldev": "cd backend && npm run alldev"
+		"all": "npm i && cd backend && npm run all",
+		"alldev": "npm i && cd backend && npm run alldev",
+		"aleksi": "concurrently \"powershell -File gitpull.ps1\" \"npm run alldev\""
 	},
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "^6.9.1",
 		"eslint-plugin-react-hooks": "^4.6.0",
-		"eslint-plugin-react-refresh": "^0.4.4"
+		"eslint-plugin-react-refresh": "^0.4.4",
+		"concurrently": "^7.0.0"
 	}
 }
