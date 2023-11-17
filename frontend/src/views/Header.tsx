@@ -51,6 +51,8 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 	if (!user) {
 		return (
 			<header className="flex items-center sm:p-4 p-0 m-4 justify-between">
+				{alert && <ErrorAlert onClose={() => setAlert(null)} alert={alert} />}
+
 				<a href="/">
 					<img
 						src={logo}
