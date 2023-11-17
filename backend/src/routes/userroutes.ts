@@ -4,9 +4,9 @@ import usermodel from '../models/usermodel.js';
 import fetchReal from '../utils/fetch.js';
 //import { body, validationResult } from 'express-validator'; FOR VALIDATION
 import jwt from 'jsonwebtoken';
-import httpError from '../utils/errors.js';
 import {User} from '../utils/pass.js';
 import {generateTokenAndUser} from '../utils/pass.js';
+import UserModel from '../models/usermodel.js';
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
 
 const router: Router = express.Router();
@@ -39,12 +39,16 @@ const authenticate = (
 		(err: Error, user: User, _info: any) => {
 			if (err || !user) {
 				console.error(err);
-				return next(httpError('Error during authentication', 403));
+				return res.status(403).json({
+					message: 'User is not assigned to any courses',
+				});
 			}
 			req.login(user, {session: false}, err => {
 				if (err) {
 					console.error(err);
-					return next(httpError('Error during authentication', 403));
+					return res.status(403).json({
+						message: 'User is not assigned to any courses',
+					});
 				}
 				if (user && !user.username) {
 					updateUsername(user.email, newUsername);
@@ -159,23 +163,32 @@ router.post('/', async (req: Request, res: Response, next) => {
 		);
 		if (metropoliaData.message === 'invalid username or password') {
 			return res.status(403).json({
-				error: 'Invalid username or password',
+				message: 'Invalid username or password',
 			});
 		}
 		req.body.username = metropoliaData.email;
 		// If the logged-in user is Metropolia staff and they don't exist in the DB yet, add them to the DB
 		if (metropoliaData.staff === true) {
 			try {
+				// Check if the user exists in the database
+				const userFromDB: unknown = await UserModel.getAllUserInfo(
+					metropoliaData.email,
+				);
 				const userData = {
 					username: metropoliaData.user,
 					staff: 1,
 					first_name: metropoliaData.firstname,
 					last_name: metropoliaData.lastname,
 					email: metropoliaData.email,
+					roleid: 3, // 3 = teacher
 				};
+				//console.log(userFromDB);
+				if (userFromDB === null) {
+					// If the staff user doesn't exist, add them to the database
+					const addStaffUserResponse = await UserModel.addStaffUser(userData);
 
-				const addUserResponse = await usermodel.addUser(userData);
-				console.log(addUserResponse);
+					console.log(addStaffUserResponse);
+				}
 			} catch (error) {
 				console.error(error);
 				return res.status(500).json({error: 'Internal server error'});
@@ -185,8 +198,8 @@ router.post('/', async (req: Request, res: Response, next) => {
 		// IF THE USER is found in database or they're staff (meaning their account gets created with first login), implement login for them
 
 		// Call the authenticate function to handle passport authentication
-		authenticate(req, res, next, username);
 		console.log('try to authentticate');
+		authenticate(req, res, next, username);
 
 		// res.json(metropoliaData);
 	} catch (error) {

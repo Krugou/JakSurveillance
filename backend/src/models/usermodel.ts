@@ -14,6 +14,10 @@ interface UserInfo {
 	first_name: string;
 	last_name: string;
 	studentgroup?: string;
+	group_name?: string | null;
+	userid?: number;
+	studentnumber?: string;
+	role?: string;
 }
 /**
  * @interface User
@@ -26,6 +30,10 @@ interface User {
 	first_name: string;
 	last_name: string;
 	studentgroup?: string;
+	group_name?: string | null;
+	userid?: number;
+	studentnumber?: string;
+	roleid: number;
 }
 /**
  * @description Creates a User Model object literal.
@@ -65,24 +73,37 @@ const UserModel = {
 	 * @returns {Promise<UserInfo | null>} A promise that resolves to the user's information or null if the user is not found.
 	 */
 	getAllUserInfo: async (email: string): Promise<UserInfo | null> => {
+		let userData: UserInfo | null = null;
 		try {
-			const [rows] = await UserModel.pool
+			const [userRows] = await UserModel.pool
 				.promise()
 				.query<RowDataPacket[]>(
-					`SELECT users.userid, users.username, users.email, users.first_name, users.last_name, users.created_at, users.studentnumber, roles.name AS role, studentgroups.group_name AS studentgroup FROM users JOIN roles ON users.roleid = roles.roleid JOIN studentgroups ON users.studentgroupid = studentgroups.studentgroupid WHERE users.email = "${email}";`,
+					`SELECT users.userid, users.username, users.email, users.first_name, users.last_name, users.created_at, users.studentnumber, roles.name AS role FROM users JOIN roles ON users.roleid = roles.roleid WHERE users.email = ?;`,
+					[email],
 				);
 
-			if (rows.length > 0) {
-				return rows.pop() as UserInfo;
-			} else {
-				return null;
+			if (userRows.length > 0) {
+				userData = userRows.pop() as UserInfo;
+
+				const [groupRows] = await UserModel.pool
+					.promise()
+					.query<RowDataPacket[]>(
+						`SELECT studentgroups.group_name FROM studentgroups JOIN users ON users.studentgroupid = studentgroups.studentgroupid WHERE users.userid = ?;`,
+						[userData.userid],
+					);
+
+				if (groupRows.length > 0) {
+					userData.group_name = groupRows[0].group_name;
+				} else {
+					userData.group_name = 'not assigned';
+				}
 			}
+			return userData || null;
 		} catch (error) {
 			console.error(error);
 			throw new Error('Database error');
 		}
 	},
-
 	/**
 	 * Updates the email of a user.
 	 * @param {number} userId - The ID of the user to update.
@@ -107,16 +128,14 @@ const UserModel = {
 	 * @param {User} user - The user to add.
 	 * @returns {Promise<boolean>} A promise that resolves to a boolean indicating whether the addition was successful.
 	 */
-	addUser: async (user: User): Promise<boolean> => {
+	addStaffUser: async (user: User): Promise<unknown> => {
 		try {
-			const {username, email, staff, first_name, last_name} = user;
-
-			const [rows] = (await UserModel.pool.execute(
-				'INSERT INTO users (username, email, staff, first_name, last_name) VALUES (?, ?, ?, ?, ?)',
-				[username, email, staff, first_name, last_name],
+			const {username, email, staff, first_name, last_name, roleid} = user;
+			(await UserModel.pool.execute(
+				'INSERT INTO users (username, email, staff, first_name, last_name, roleid) VALUES (?, ?, ?, ?, ?, ?)',
+				[username, email, staff, first_name, last_name, roleid],
 			)) as unknown as [ResultSetHeader, FieldPacket[]];
-
-			return rows.affectedRows > 0;
+			return;
 		} catch (error) {
 			console.error(error);
 			throw new Error('Database error');

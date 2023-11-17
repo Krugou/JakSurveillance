@@ -33,7 +33,6 @@ const Login: React.FC = () => {
 		} catch (error) {
 			if (error instanceof Error) {
 				// Now TypeScript knows that 'error' is an instance of Error
-				console.log(error.message);
 				setAlert(error.message);
 			} else {
 				// 'error' could be anything else
