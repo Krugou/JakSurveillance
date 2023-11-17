@@ -211,6 +211,7 @@ const courseController = {
 							}
 						}
 						// Insert the user into the course
+						/*
 						const [result] = await userCourseModel.insertUserCourse(userId, courseId);
 
 						usercourseid = (result as ResultSetHeader).insertId;
@@ -224,6 +225,7 @@ const courseController = {
 						} catch (error) {
 							console.error(error);
 						}
+						*/
 					} catch (error) {
 						console.error(error);
 					}

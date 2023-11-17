@@ -39,7 +39,7 @@ passport.use(
 			secretOrKey: process.env.JWT_SECRET as string, // Assert process.env.JWT_SECRET as a string
 		},
 		(jwtPayload: any, done: Function) => {
-			console.log('JWTStrategy', jwtPayload); // Log the JWT payload
+			//console.log('JWTStrategy', jwtPayload); // Log the JWT payload
 			done(null, jwtPayload); // Pass the JWT payload as the authenticated user
 		},
 	),

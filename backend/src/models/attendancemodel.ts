@@ -69,7 +69,7 @@ const attendanceModel: AttendanceModel = {
 
 	async findAllAttendancesByUserCourseId(usercourseId, userid) {
 		try {
-			console.log(userid, 'USERIDDD');
+			//console.log(userid, 'USERIDDD');
 			const [rows] = await pool.promise().query<RowDataPacket[]>(
 				`SELECT attendance.status, class.start_date, class.timeofday, topics.topicname, courses.name, users.email AS teacher
             FROM attendance 

@@ -543,7 +543,7 @@ const course: CourseModel = {
 				c.start_date;`,
 				[email],
 			);
-			console.log(rows);
+			//console.log(rows);
 
 			return rows as Course[];
 		} catch (error) {
