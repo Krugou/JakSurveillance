@@ -173,13 +173,15 @@ const CreateCourseEasy: React.FC = () => {
 							Check Course Details from Open Data
 						</span>
 					</label>
+					<div className="flex justify-end">
 					<button
 						type="button"
-						className="w-full p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+						className="w-40 p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
 						onClick={handleExcelInput}
 					>
 						Next
 					</button>
+					</div>
 				</fieldset>
 			)}
 			{currentStep === 2 && (
