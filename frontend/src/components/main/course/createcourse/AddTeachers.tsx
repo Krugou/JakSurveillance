@@ -14,7 +14,7 @@ const AddTeachers = ({
 		setInstructors([...instructors, {email: ''}]);
 	};
 	return (
-		<fieldset>
+		<fieldset className="mb-5">
 			<legend className="text-xl mb-3">Add teachers</legend>
 			{instructors.map((instructor, index) => (
 				<div key={index} className="flex justify-between items-center mb-3">
@@ -34,7 +34,7 @@ const AddTeachers = ({
 				</div>
 			))}
 			<button
-				className="w-full p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+				className="w-48 p-1 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
 				onClick={addInstructor}
 			>
 				Add another teacher

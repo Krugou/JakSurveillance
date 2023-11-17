@@ -123,33 +123,34 @@ const CreateCourseCustom: React.FC = () => {
 			{currentStep === 4 && (
 				<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
 			)}
-
-			{currentStep > 1 && (
-				<button
-					type="button"
-					onClick={() => setCurrentStep(prevStep => prevStep - 1)}
-					className="w-full p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-				>
-					Previous
-				</button>
-			)}
-			{currentStep >= 1 && currentStep <= 3 && (
-				<button
-					type="button"
-					className="w-full p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-					onClick={incrementStep}
-				>
-					Next
-				</button>
-			)}
-			{currentStep === 4 && (
-				<button
-					type="submit"
-					className="w-full p-2 mt-5 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-				>
-					Create Course
-				</button>
-			)}
+			<div className={`flex items-center ${currentStep === 1 ? 'justify-end' : 'justify-between'}`}>
+				{currentStep > 1 && (
+					<button
+						type="button"
+						onClick={() => setCurrentStep(prevStep => prevStep - 1)}
+						className="w-40 p-2 h-fit mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+					>
+						Previous
+					</button>
+				)}
+				{currentStep >= 1 && currentStep <= 3 && (
+					<button
+						type="button"
+						className="w-40 h-fit p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+						onClick={incrementStep}
+					>
+						Next
+					</button>
+				)}
+				{currentStep === 4 && (
+					<button
+						type="submit"
+						className="w-40 h-fit p-2 mt-5 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+					>
+						Create Course
+					</button>
+				)}
+			</div>
 		</form>
 	);
 };
