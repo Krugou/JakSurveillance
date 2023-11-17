@@ -111,14 +111,16 @@ const CreateCourseEasy: React.FC = () => {
 	const validateFields = () => {
 		switch (currentStep) {
 			case 2:
+				return courseCode && courseName && studentGroup && startDate && endDate;
+			case 3:
 				return (
 					instructors &&
 					instructors.length > 0 &&
 					instructors.every(instructor => instructor.email)
 				);
-			case 3:
-				return studentList && studentList.length > 0;
 			case 4:
+				return studentList && studentList.length > 0;
+			case 5:
 				return (
 					topicsFormData &&
 					topicsFormData.topicgroup &&
