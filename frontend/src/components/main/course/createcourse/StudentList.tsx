@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
-const StudentList = ({studentList, setStudentList}) => {
+const StudentList = ({ studentList, setStudentList }) => {
 	const [hiddenColumns, setHiddenColumns] = useState<Record<string, boolean>>({
 		admingroups: true,
 		arrivalgroup: true,
@@ -9,7 +9,9 @@ const StudentList = ({studentList, setStudentList}) => {
 		program: true,
 		registration: true,
 	});
-	const addStudent = event => {
+	const [hideExtraColumns, setHideExtraColumns] = useState(true);
+
+	const addStudent = (event) => {
 		event.preventDefault();
 		const newStudent = {
 			first_name: 'example',
@@ -26,7 +28,8 @@ const StudentList = ({studentList, setStudentList}) => {
 		};
 		setStudentList([...studentList, newStudent]);
 	};
-	const deleteStudent = index => {
+
+	const deleteStudent = (index) => {
 		const newStudentList = [...studentList];
 		newStudentList.splice(index, 1);
 		setStudentList(newStudentList);
@@ -38,17 +41,33 @@ const StudentList = ({studentList, setStudentList}) => {
 		}
 	}, []); // Empty dependency array means this effect runs once on mount
 
+	const toggleExtraColumns = () => {
+		setHiddenColumns((prevHiddenColumns) =>
+			hideExtraColumns
+				? {} // Show all columns
+				: {
+					admingroups: true,
+					arrivalgroup: true,
+					educationform: true,
+					evaluation: true,
+					program: true,
+					registration: true,
+				} // Hide extra columns
+		);
+		setHideExtraColumns(!hideExtraColumns);
+	};
+
 	return (
 		<div className="overflow-hidden h-1/2">
 			<button
-				aria-label="Show All Columns"
-				className="p-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
-				onClick={event => {
+				aria-label={hideExtraColumns ? 'Show All Columns' : 'Hide Extra Columns'}
+				className="p-1 bg-metropoliaMainOrange text-sm text-white font-bold rounded-xl hover:bg-metropoliaSecondaryOrange focus:outline-none mb-4"
+				onClick={(event) => {
 					event.preventDefault();
-					setHiddenColumns({});
+					toggleExtraColumns();
 				}}
 			>
-				Show All Columns
+				{hideExtraColumns ? 'Show All Columns' : 'Hide Extra Columns'}
 			</button>
 			<table className="table-auto w-full">
 				<thead>
@@ -111,8 +130,8 @@ const StudentList = ({studentList, setStudentList}) => {
 				</tbody>
 			</table>
 			<button
-				className="p-1 mt-2 text-sm bg-metropoliaMainOrange text-white font-bold rounded-xl hover:bg-green-700 focus:outline-none mb-4"
-				onClick={event => addStudent(event)}
+				className="p-1 mt-2 text-sm bg-metropoliaMainOrange text-white font-bold rounded-xl hover:bg-metropoliaSecondaryOrange focus:outline-none mb-4"
+				onClick={(event) => addStudent(event)}
 			>
 				Add Student
 			</button>
@@ -121,3 +140,7 @@ const StudentList = ({studentList, setStudentList}) => {
 };
 
 export default StudentList;
+
+
+
+
