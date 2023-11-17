@@ -42,17 +42,17 @@ const StudentList = ({ studentList, setStudentList }) => {
 	}, []); // Empty dependency array means this effect runs once on mount
 
 	const toggleExtraColumns = () => {
-		setHiddenColumns((prevHiddenColumns) =>
+		setHiddenColumns(() =>
 			hideExtraColumns
-				? {} // Show all columns
-				: {
+				? {}
+				: ({
 					admingroups: true,
 					arrivalgroup: true,
 					educationform: true,
 					evaluation: true,
 					program: true,
 					registration: true,
-				} // Hide extra columns
+				} as Record<string, boolean>)
 		);
 		setHideExtraColumns(!hideExtraColumns);
 	};
@@ -71,47 +71,45 @@ const StudentList = ({ studentList, setStudentList }) => {
 			</button>
 			<table className="table-auto w-full">
 				<div className="max-h-96 h-96 overflow-y-scroll">
-				<thead className="sticky top-0 bg-white z-10">
-				<tr>
-					{studentList.length > 0 &&
-						Object.keys(studentList[0]).map(
-							(key, index) =>
-								!hiddenColumns[key] && (
-									<th key={index} className="px-4 py-2">
-										{key}
-										<button
-											aria-label="Hide Column"
-											className="ml-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark"
-											onClick={() => setHiddenColumns({...hiddenColumns, [key]: true})}
-										>
-											Hide
-										</button>
-									</th>
-								),
-						)}
-					{studentList.length > 1 && <th className="px-4 py-2">Actions</th>}
-				</tr>
-				</thead>
-				<tbody>
-				{studentList.map(
-					(student: Record<string, string | number>, index: number) => (
+					<thead className="sticky top-0 bg-white z-10">
+					<tr>
+						{studentList.length > 0 &&
+							Object.keys(studentList[0]).map(
+								(key, index) =>
+									!hiddenColumns[key] && (
+										<th key={index} className="px-4 py-2">
+											{key}
+											<button
+												aria-label="Hide Column"
+												className="ml-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark"
+												onClick={() => setHiddenColumns((prevHiddenColumns: Record<string, boolean>) => ({ ...prevHiddenColumns, [key]: true }))}
+											>
+												Hide
+											</button>
+										</th>
+									)
+							)}
+						{studentList.length > 1 && <th className="px-4 py-2">Actions</th>}
+					</tr>
+					</thead>
+					<tbody>
+					{studentList.map((student: Record<string, string | number>, index: number) => (
 						<tr key={index}>
-							{Object.entries(student).map(
-								([key, value], innerIndex) =>
+							{Object.entries(student).map(([key, value], innerIndex) =>
 									!hiddenColumns[key] && (
 										<td key={innerIndex} className="border px-4 py-2">
 											<input
 												className="border rounded py-2 px-3 text-grey-800 w-full"
 												type="text"
 												value={value.toString()}
-												onChange={e => {
+												onChange={(e) => {
 													const newStudentList = [...studentList];
 													newStudentList[index][key] = e.target.value;
 													setStudentList(newStudentList);
 												}}
 											/>
 										</td>
-									),
+									)
 							)}
 							{studentList.length > 1 && (
 								<td className="border px-4 py-2">
@@ -126,9 +124,8 @@ const StudentList = ({ studentList, setStudentList }) => {
 								</td>
 							)}
 						</tr>
-					),
-				)}
-				</tbody>
+					))}
+					</tbody>
 				</div>
 			</table>
 			<button
@@ -142,7 +139,6 @@ const StudentList = ({ studentList, setStudentList }) => {
 };
 
 export default StudentList;
-
 
 
 
