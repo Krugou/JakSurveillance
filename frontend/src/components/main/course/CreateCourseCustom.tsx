@@ -5,6 +5,7 @@ import AddTeachers from './createcourse/AddTeachers';
 import CourseDetails from './createcourse/CourseDetails';
 import StudentList from './createcourse/StudentList';
 import TopicGroupAndTopicsSelector from './createcourse/TopicsGroupAndTopics';
+import StepButtons from "../buttons/StepButtons";
 // this is view for teacher to create the course
 const CreateCourseCustom: React.FC = () => {
 	const navigate = useNavigate();
@@ -123,34 +124,12 @@ const CreateCourseCustom: React.FC = () => {
 			{currentStep === 4 && (
 				<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
 			)}
-			<div className={`flex items-center ${currentStep === 1 ? 'justify-end' : 'justify-between'}`}>
-				{currentStep > 1 && (
-					<button
-						type="button"
-						onClick={() => setCurrentStep(prevStep => prevStep - 1)}
-						className="w-40 p-2 h-fit mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-					>
-						Previous
-					</button>
-				)}
-				{currentStep >= 1 && currentStep <= 3 && (
-					<button
-						type="button"
-						className="w-40 h-fit p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-						onClick={incrementStep}
-					>
-						Next
-					</button>
-				)}
-				{currentStep === 4 && (
-					<button
-						type="submit"
-						className="w-40 h-fit p-2 mt-5 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-					>
-						Create Course
-					</button>
-				)}
-			</div>
+			<StepButtons
+				currentStep={currentStep}
+				onPrevClick={() => setCurrentStep(prevStep => prevStep - 1)}
+				onNextClick={incrementStep}
+				onSubmitClick={handleSubmit}
+			/>
 		</form>
 	);
 };

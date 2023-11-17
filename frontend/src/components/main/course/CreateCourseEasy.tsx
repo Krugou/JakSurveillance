@@ -5,6 +5,7 @@ import AddTeachers from './createcourse/AddTeachers';
 import CourseDetails from './createcourse/CourseDetails';
 import StudentList from './createcourse/StudentList';
 import TopicGroupAndTopicsSelector from './createcourse/TopicsGroupAndTopics';
+import StepButtons from "../buttons/StepButtons";
 // this is view for teacher to create the course
 const CreateCourseEasy: React.FC = () => {
 	const navigate = useNavigate();
@@ -106,6 +107,36 @@ const CreateCourseEasy: React.FC = () => {
 			console.error('Course creation failed');
 		}
 	};
+
+	const validateFields = () => {
+		switch (currentStep) {
+			case 2:
+				return (
+					instructors &&
+					instructors.length > 0 &&
+					instructors.every(instructor => instructor.email)
+				);
+			case 3:
+				return studentList && studentList.length > 0;
+			case 4:
+				return (
+					topicsFormData &&
+					topicsFormData.topicgroup &&
+					topicsFormData.topics &&
+					topicsFormData.topics.length > 0
+				);
+			default:
+				return false;
+		}
+	};
+	const incrementStep = () => {
+		if (validateFields()) {
+			setCurrentStep(prevStep => prevStep + 1);
+		} else {
+			alert('Please fill all required fields.');
+		}
+	};
+
 	useEffect(() => {
 		if (instructorEmail) {
 			setInstructors([{email: instructorEmail}]);
@@ -179,32 +210,13 @@ const CreateCourseEasy: React.FC = () => {
 			{currentStep === 5 && (
 				<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
 			)}
-
-			{currentStep > 1 && (
-				<button
-					type="button"
-					onClick={() => setCurrentStep(prevStep => prevStep - 1)}
-					className="w-full p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-				>
-					Previous
-				</button>
-			)}
-			{currentStep >= 2 && currentStep <= 4 && (
-				<button
-					type="button"
-					className="w-full p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-					onClick={() => setCurrentStep(prevStep => prevStep + 1)}
-				>
-					Next
-				</button>
-			)}
-			{currentStep === 5 && (
-				<button
-					type="submit"
-					className="w-full p-2 mt-5 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-				>
-					Create Course
-				</button>
+			{currentStep >= 2 && (
+				<StepButtons
+					currentStep={currentStep}
+					onPrevClick={() => setCurrentStep(prevStep => prevStep - 1)}
+					onNextClick={incrementStep}
+					onSubmitClick={handleSubmit}
+				/>
 			)}
 		</form>
 	);

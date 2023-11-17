@@ -42,7 +42,7 @@ const StudentList = ({studentList, setStudentList}) => {
 		<div className="overflow-hidden h-1/2">
 			<button
 				aria-label="Show All Columns"
-				className="p-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+				className="p-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
 				onClick={event => {
 					event.preventDefault();
 					setHiddenColumns({});
@@ -98,7 +98,7 @@ const StudentList = ({studentList, setStudentList}) => {
 									<button
 										aria-label="Delete Student"
 										type="button"
-										className="p-2 bg-red-500 text-white font-bold rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+										className="p-2 bg-red-500 text-white font-bold rounded hover:metropoliaSecondaryOrange focus:outline-none"
 										onClick={() => deleteStudent(index)}
 									>
 										x
@@ -111,7 +111,7 @@ const StudentList = ({studentList, setStudentList}) => {
 				</tbody>
 			</table>
 			<button
-				className="p-2 bg-green-500 text-white font-bold rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 mb-4"
+				className="p-1 mt-2 text-sm bg-metropoliaMainOrange text-white font-bold rounded-xl hover:bg-green-700 focus:outline-none mb-4"
 				onClick={event => addStudent(event)}
 			>
 				Add Student
