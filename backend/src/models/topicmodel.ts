@@ -17,13 +17,12 @@ interface TopicModel {
 	fetchAllTopics(): Promise<[RowDataPacket[], FieldPacket[]]>;
 	findByTopicId(id: number): Promise<Topic | null>;
 	insertIntoTopic(topicname: string): Promise<void>;
-	checkIfTopicExists(topicname: string): Promise<boolean>;
+	checkIfTopicExists(topic: string): Promise<RowDataPacket[]>;
 	updateTopicName(id: number, topicname: string): Promise<void>;
 	deleteByTopicId(id: number): Promise<void>;
 	countTopics(): Promise<number>;
 	findTopicIdUsingTopicName(topic: string): Promise<RowDataPacket[] | null>;
 	insertTopic(topic: string): Promise<ResultSetHeader>;
-	checkIfTopicExists(topic: string): Promise<boolean>;
 
 	// other methods...
 }
@@ -129,12 +128,12 @@ const topicModel: TopicModel = {
 			return Promise.reject(error);
 		}
 	},
-	async checkIfTopicExists(topic: string): Promise<boolean> {
+	async checkIfTopicExists(topic: string) {
 		const [existingCourseTopic] = await pool
 			.promise()
 			.query<RowDataPacket[]>('SELECT * FROM topics WHERE topicname = ?', [topic]);
 
-		return existingCourseTopic.length > 0;
+		return existingCourseTopic;
 	},
 	async insertTopic(topic: string) {
 		const [topicResult] = await pool
