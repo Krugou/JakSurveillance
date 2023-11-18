@@ -13,6 +13,7 @@ const AdminRoutes = () => {
 			<Route path="users/*" element={<AdminUserRoutes />} />
 			<Route path="profile" element={<AdminProfile />} />
 			<Route path="settings/*" element={<AdminSettingsRoutes />} />
+			<Route path="*" element={<AdminMainView />} />
 		</Routes>
 	);
 };

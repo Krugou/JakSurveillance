@@ -14,6 +14,7 @@ const TeacherRoutes = () => {
 			<Route path="courses/*" element={<TeacherCoursesRoutes />} />
 			<Route path="students/*" element={<TeacherStudentsRoutes />} />
 			<Route path="attendance/*" element={<TeacherAttendanceRoutes />} />
+			<Route path="*" element={<TeacherMainView />} />
 		</Routes>
 	);
 };

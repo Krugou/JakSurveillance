@@ -6,6 +6,7 @@ const CounselorRoutes = () => {
 	return (
 		<Routes>
 			<Route path="mainview" element={<CounselorMainView />} />
+			<Route path="*" element={<CounselorMainView />} />
 		</Routes>
 	);
 };

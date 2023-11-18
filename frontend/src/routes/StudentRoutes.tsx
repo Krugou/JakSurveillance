@@ -19,6 +19,7 @@ const StudentRoutes = () => {
 				path="courses/attendance/:usercourseid"
 				element={<StudentCourseAttendance />}
 			/>
+			<Route path="*" element={<StudentMainView />} />
 		</Routes>
 	);
 };
