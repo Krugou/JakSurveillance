@@ -92,16 +92,16 @@ const AttendanceRoom: React.FC = () => {
 	}, [socket]);
 
 	return (
-		<div className="flex flex-col w-full    h-full p-10 bg-gray-100">
-			<div className="flex flex-row">
-				<QRCode
-					size={256}
-					value={hashValue}
-					viewBox={`0 0 256 256`}
-					className="w-1/2 h-auto "
-				/>
+		<div className="flex flex-col w-full h-full p-10 bg-gray-100">
+			<div className="flex flex-row justify-between items-start">
+				<div className="flex flex-row w-1/2 ">
+					<QRCode
+						size={256}
+						value={hashValue}
+						viewBox={`0 0 256 256`}
+						className="w-1/2 h-auto "
+					/>
 
-				<div className="flex  gap-10">
 					<Attendees arrayOfStudents={arrayOfStudents} />
 				</div>
 				<h2 className="text-xl">
