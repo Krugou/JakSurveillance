@@ -107,7 +107,9 @@ const StudentCourses: React.FC = () => {
 							? // If the course has selected topics by the student, use those
 							  course.selected_topics.replace(/,/g, ', ')
 							: // Otherwise use the default topics
-							  course.topic_names.replace(/,/g, ', ');
+							course.topic_names
+							? course.topic_names.replace(/,/g, ', ')
+							: 'no topics';
 
 						// Check if the course has ended
 						const isCourseEnded =
