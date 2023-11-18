@@ -109,7 +109,7 @@ const StudentCourses: React.FC = () => {
 							: // Otherwise use the default topics
 							course.topic_names
 							? course.topic_names.replace(/,/g, ', ')
-							: 'no topics';
+							: 'You have no assigned topics on this course';
 
 						// Check if the course has ended
 						const isCourseEnded =
