@@ -22,6 +22,7 @@ export default {
 			},
 			animation: {
 				spin: 'spin 2s linear infinite',
+				backandforth: 'backandforth 60s linear infinite',
 			},
 
 			inset: {
@@ -35,6 +36,13 @@ export default {
 				80: '80%',
 				90: '90%',
 				100: '100%',
+			},
+
+			keyframes: {
+				backandforth: {
+					'0%, 100%': {transform: 'translateX(-10%)'},
+					'50%': {transform: 'translateX(90%)'},
+				},
 			},
 		},
 	},
