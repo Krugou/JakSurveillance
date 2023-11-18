@@ -84,6 +84,11 @@ const CreateCourseCustom: React.FC = () => {
 			console.error('Course creation failed');
 		}
 	};
+
+	const handleSubmitWrapper = async () => {
+		await handleSubmit({}as React.FormEvent)
+	};
+
 	useEffect(() => {
 		setInstructorEmail('teacher@metropolia.fi'); // get email from userContext
 		if (instructorEmail) {
@@ -93,7 +98,7 @@ const CreateCourseCustom: React.FC = () => {
 
 	return (
 		<form
-			onSubmit={handleSubmit}
+			onSubmit={(event) => handleSubmit(event)}
 			className="w-12/12 md:w-11/12 lg:w-11/12 2xl:w-1/2 mx-auto bg-white p-6 rounded shadow-md"
 		>
 			{currentStep === 1 && (
@@ -126,9 +131,9 @@ const CreateCourseCustom: React.FC = () => {
 			)}
 			<StepButtons
 				currentStep={currentStep}
-				onPrevClick={() => setCurrentStep(prevStep => prevStep - 1)}
+				onPrevClick={() => setCurrentStep((prevStep) => prevStep - 1)}
 				onNextClick={incrementStep}
-				onSubmitClick={handleSubmit}
+				onSubmitClick={handleSubmitWrapper} // Call handleSubmitWrapper without arguments
 			/>
 		</form>
 	);

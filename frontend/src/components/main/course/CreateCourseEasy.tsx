@@ -108,6 +108,10 @@ const CreateCourseEasy: React.FC = () => {
 		}
 	};
 
+	const handleSubmitWrapper = async () => {
+		await handleSubmit({} as React.FormEvent); // Call the original handleSubmit function with a dummy event
+	};
+
 	const validateFields = () => {
 		switch (currentStep) {
 			case 2:
@@ -217,9 +221,9 @@ const CreateCourseEasy: React.FC = () => {
 			{currentStep >= 2 && (
 				<StepButtons
 					currentStep={currentStep}
-					onPrevClick={() => setCurrentStep(prevStep => prevStep - 1)}
+					onPrevClick={() => setCurrentStep((prevStep) => prevStep - 1)}
 					onNextClick={incrementStep}
-					onSubmitClick={handleSubmit}
+					onSubmitClick={handleSubmitWrapper} // Use the wrapper function here
 				/>
 			)}
 		</form>
