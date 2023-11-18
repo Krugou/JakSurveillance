@@ -14,15 +14,11 @@
     }
    
     }
-@keyframes marquee {
-    0% { transform: translateX(40%); }
-    100% { transform: translateX(-40%); }
-}
 
-.marquee {
-    display: inline-block;
-    animation: marquee 100s linear infinite;
-}
+
+
+
+
 
 
 
