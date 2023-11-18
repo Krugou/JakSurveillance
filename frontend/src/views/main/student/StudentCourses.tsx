@@ -96,7 +96,7 @@ const StudentCourses: React.FC = () => {
 							endDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
 						return !isCourseEnded || showEndedCourses;
 					})
-					.map(course => {
+					.map((course, index) => {
 						// Format the dates
 						const startDate = new Date(course.startDate).toLocaleDateString();
 						const endDate = new Date(course.endDate);
@@ -114,10 +114,14 @@ const StudentCourses: React.FC = () => {
 						// Check if the course has ended
 						const isCourseEnded =
 							endDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
+
 						return (
-							<Tooltip placement="top" title={isCourseEnded ? 'Course has ended' : ''}>
+							<Tooltip
+								placement="top"
+								title={isCourseEnded ? 'Course has ended' : ''}
+								key={index}
+							>
 								<div
-									key={course.courseid}
 									className={`p-6 bg-white shadow-md rounded-lg relative ${
 										isCourseEnded ? 'opacity-50' : ''
 									}`}
