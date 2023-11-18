@@ -22,9 +22,8 @@ async function fetchDataAndUpdate() {
 				'Content-Type': 'application/json',
 			},
 		});
-		const data = response[0][0]; // Access the actual data
-		speedOfHashChange = data.speedofhash;
-		leewaytimes = data.leewayspeed;
+		speedOfHashChange = response.speedofhash;
+		leewaytimes = response.leewayspeed;
 	} catch (error) {
 		// Handle the error here
 		console.error(error);
