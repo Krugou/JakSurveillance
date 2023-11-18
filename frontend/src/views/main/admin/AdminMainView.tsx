@@ -1,5 +1,5 @@
 import React from 'react';
-import BackgroundContainer from '../../../components/main/background/background';
+import BackgroundContainer from '../../../components/main/background/BackgroundContainer';
 import Card from '../../../components/main/cards/Card';
 import MainViewTitle from '../../../components/main/titles/MainViewTitle';
 
@@ -25,6 +25,16 @@ const AdminMainView: React.FC = () => {
 					path="/admin/helpvideos"
 					title="Instructions"
 					description="See instructions for all available tasks"
+				/>
+				<Card
+					path="/admin/profile"
+					title="Profile"
+					description="Manage your profile"
+				/>
+				<Card
+					path="/admin/settings/"
+					title="Settings"
+					description="Manage your settings"
 				/>
 			</div>
 		</BackgroundContainer>

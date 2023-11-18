@@ -1,9 +1,9 @@
-import React, {useContext, useState, useRef} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import ErrorAlert from '../../components/main/ErrorAlert.tsx';
+import BackgroundContainer from '../../components/main/background/BackgroundContainer.tsx';
 import {UserContext} from '../../contexts/UserContext.tsx';
 import apiHooks from '../../hooks/ApiHooks.ts';
-import BackgroundContainer from '../../components/main/background/background';
 
 const Login: React.FC = () => {
 	const usernameRef = useRef<HTMLInputElement>(null);

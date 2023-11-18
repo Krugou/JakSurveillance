@@ -1,5 +1,5 @@
 import React from 'react';
-import BackgroundContainer from '../../../components/main/background/background';
+import BackgroundContainer from '../../../components/main/background/BackgroundContainer';
 import Card from '../../../components/main/cards/Card';
 import MainViewTitle from '../../../components/main/titles/MainViewTitle';
 const MainView: React.FC = () => {

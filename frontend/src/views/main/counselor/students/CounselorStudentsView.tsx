@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import BackgroundContainer from '../../../../components/main/background/background';
+import React, {useState} from 'react';
+import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import MainViewButton from '../../../../components/main/buttons/MainViewButton';
 const CounselorStudentsView: React.FC = () => {
 	const [students, setStudents] = useState<string[]>([]); // Replace with actual data

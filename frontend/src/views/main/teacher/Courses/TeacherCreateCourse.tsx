@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 
-import BackgroundContainer from '../../../../components/main/background/background';
+import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import MainViewButton from '../../../../components/main/buttons/MainViewButton';
 
 const TeacherCreateCourse: React.FC = () => {
