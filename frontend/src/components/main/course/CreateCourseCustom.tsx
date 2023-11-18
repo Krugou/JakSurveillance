@@ -3,9 +3,9 @@ import {useNavigate} from 'react-router-dom';
 import apiHooks from '../../../hooks/ApiHooks';
 import AddTeachers from './createcourse/AddTeachers';
 import CourseDetails from './createcourse/CourseDetails';
+import StepButtons from './createcourse/StepButtons';
 import StudentList from './createcourse/StudentList';
 import TopicGroupAndTopicsSelector from './createcourse/TopicsGroupAndTopics';
-import StepButtons from "../buttons/StepButtons";
 // this is view for teacher to create the course
 const CreateCourseCustom: React.FC = () => {
 	const navigate = useNavigate();
@@ -86,7 +86,7 @@ const CreateCourseCustom: React.FC = () => {
 	};
 
 	const handleSubmitWrapper = async () => {
-		await handleSubmit({}as React.FormEvent)
+		await handleSubmit({} as React.FormEvent);
 	};
 
 	useEffect(() => {
@@ -98,7 +98,7 @@ const CreateCourseCustom: React.FC = () => {
 
 	return (
 		<form
-			onSubmit={(event) => handleSubmit(event)}
+			onSubmit={event => handleSubmit(event)}
 			className="w-12/12 md:w-11/12 lg:w-11/12 2xl:w-1/2 mx-auto bg-white p-6 rounded shadow-md"
 		>
 			{currentStep === 1 && (
@@ -131,7 +131,7 @@ const CreateCourseCustom: React.FC = () => {
 			)}
 			<StepButtons
 				currentStep={currentStep}
-				onPrevClick={() => setCurrentStep((prevStep) => prevStep - 1)}
+				onPrevClick={() => setCurrentStep(prevStep => prevStep - 1)}
 				onNextClick={incrementStep}
 				onSubmitClick={handleSubmitWrapper} // Call handleSubmitWrapper without arguments
 			/>

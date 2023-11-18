@@ -3,9 +3,9 @@ import {useNavigate} from 'react-router-dom';
 import apiHooks from '../../../hooks/ApiHooks';
 import AddTeachers from './createcourse/AddTeachers';
 import CourseDetails from './createcourse/CourseDetails';
+import StepButtons from './createcourse/StepButtons';
 import StudentList from './createcourse/StudentList';
 import TopicGroupAndTopicsSelector from './createcourse/TopicsGroupAndTopics';
-import StepButtons from "../buttons/StepButtons";
 // this is view for teacher to create the course
 const CreateCourseEasy: React.FC = () => {
 	const navigate = useNavigate();
@@ -180,13 +180,13 @@ const CreateCourseEasy: React.FC = () => {
 						</span>
 					</label>
 					<div className="flex justify-end">
-					<button
-						type="button"
-						className="w-40 p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-						onClick={handleExcelInput}
-					>
-						Next
-					</button>
+						<button
+							type="button"
+							className="w-40 p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+							onClick={handleExcelInput}
+						>
+							Next
+						</button>
 					</div>
 				</fieldset>
 			)}
@@ -221,7 +221,7 @@ const CreateCourseEasy: React.FC = () => {
 			{currentStep >= 2 && (
 				<StepButtons
 					currentStep={currentStep}
-					onPrevClick={() => setCurrentStep((prevStep) => prevStep - 1)}
+					onPrevClick={() => setCurrentStep(prevStep => prevStep - 1)}
 					onNextClick={incrementStep}
 					onSubmitClick={handleSubmitWrapper} // Use the wrapper function here
 				/>
