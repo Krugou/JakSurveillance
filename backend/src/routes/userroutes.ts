@@ -40,14 +40,14 @@ const authenticate = (
 			if (err || !user) {
 				console.error(err);
 				return res.status(403).json({
-					message: 'User is not assigned to any courses',
+					message: 'User is not assigned to any courses, contact your teacher',
 				});
 			}
 			req.login(user, {session: false}, err => {
 				if (err) {
 					console.error(err);
 					return res.status(403).json({
-						message: 'User is not assigned to any courses',
+						message: 'User is not assigned to any courses, contact your teacher',
 					});
 				}
 				if (user && !user.username) {
