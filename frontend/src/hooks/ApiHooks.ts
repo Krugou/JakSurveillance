@@ -241,6 +241,16 @@ const getAttendanceInfoByUsercourseid = async (
 		options,
 	);
 };
+const fetchServerSettings = async () => {
+	const options = {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	};
+	const url = `${baseUrl}admin`;
+	return doFetch(url, options);
+};
 const updateServerSettings = async (
 	speedofhash: number,
 	leewayspeed: number,
@@ -260,6 +270,7 @@ const updateServerSettings = async (
 };
 
 const apiHooks = {
+	fetchServerSettings,
 	postLogin,
 	createCourse,
 	checkIfCourseExists,
