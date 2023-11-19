@@ -254,6 +254,8 @@ const fetchServerSettings = async () => {
 const updateServerSettings = async (
 	speedofhash: number,
 	leewayspeed: number,
+	timeouttime: number,
+	attendancethreshold: number,
 ) => {
 	const options = {
 		method: 'POST',
@@ -263,6 +265,8 @@ const updateServerSettings = async (
 		body: JSON.stringify({
 			speedofhash,
 			leewayspeed,
+			timeouttime,
+			attendancethreshold,
 		}),
 	};
 	const url = `${baseUrl}admin`;
