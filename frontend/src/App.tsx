@@ -1,5 +1,7 @@
 import React, {useEffect} from 'react';
 import {Route, BrowserRouter as Router, Routes} from 'react-router-dom';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {useRegisterSW} from 'virtual:pwa-register/react';
 import {UserProvider} from './contexts/UserContext.tsx';
 import AdminRoutes from './routes/AdminRoutes';
@@ -32,6 +34,7 @@ const App = () => {
 
 	return (
 		<UserProvider>
+			<ToastContainer />
 			<Router basename={import.meta.env.BASE_URL}>
 				<Header title="Attendance App" />
 				<main>
