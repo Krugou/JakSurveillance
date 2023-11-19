@@ -6,18 +6,24 @@ import {
 	TextField,
 	Typography,
 } from '@mui/material';
+import {toast} from 'react-toastify';
+
 import React, {useEffect, useState} from 'react';
 import apiHooks from '../../../hooks/ApiHooks';
 const AdminSettings = () => {
 	const [settings, setSettings] = useState(null);
 	const [speedofhash, setSpeedofhash] = useState(0);
 	const [leewayspeed, setLeewayspeed] = useState(0);
+	const [timeouttime, setTimeouttime] = useState(0);
+	const [attendancethreshold, setAttendancethreshold] = useState(0);
 
 	useEffect(() => {
 		const fetchSettings = async () => {
 			const serverSettings = await apiHooks.fetchServerSettings();
 			setSpeedofhash(serverSettings.speedofhash);
 			setLeewayspeed(serverSettings.leewayspeed);
+			setTimeouttime(serverSettings.timeouttime);
+			setAttendancethreshold(serverSettings.attendancethreshold);
 			setSettings(serverSettings);
 		};
 
@@ -25,11 +31,17 @@ const AdminSettings = () => {
 	}, []);
 
 	const handleUpdate = async () => {
-		const updatedSettings = await apiHooks.updateServerSettings(
-			speedofhash,
-			leewayspeed,
-		);
-		setSettings(updatedSettings);
+		try {
+			await apiHooks.updateServerSettings(
+				speedofhash,
+				leewayspeed,
+				timeouttime,
+				attendancethreshold,
+			);
+			toast.success('Server settings updated successfully');
+		} catch (error) {
+			toast.error('Failed to update server settings');
+		}
 	};
 
 	if (!settings) {
@@ -66,6 +78,29 @@ const AdminSettings = () => {
 						value={leewayspeed}
 						onChange={e => setLeewayspeed(Number(e.target.value))}
 						label="Hash speed multiplier for network catch-up"
+						variant="outlined"
+						fullWidth
+						className="mb-4"
+					/>
+				</Grid>
+				<Grid item xs={12} sm={6}>
+					<TextField
+						type="number"
+						value={timeouttime}
+						onChange={e => setTimeouttime(Number(e.target.value))}
+						label="Timeout Time in milliseconds"
+						variant="outlined"
+						fullWidth
+						className="mb-4"
+						inputProps={{step: 60000}}
+					/>
+				</Grid>
+				<Grid item xs={12} sm={6}>
+					<TextField
+						type="number"
+						value={attendancethreshold}
+						onChange={e => setAttendancethreshold(Number(e.target.value))}
+						label="Attendance Threshold %"
 						variant="outlined"
 						fullWidth
 						className="mb-4"

@@ -14,6 +14,7 @@ interface Student {
 // this defines how often the hash changes or how fast student need to be in class while doing attendance
 let speedOfHashChange = 6000; // milliseconds
 let leewaytimes = 5;
+let timeout = 3600000; // 1 hour
 async function fetchDataAndUpdate() {
 	try {
 		const response = await fetchReal.doFetch('http://localhost:3002/admin/ ', {
@@ -22,8 +23,14 @@ async function fetchDataAndUpdate() {
 				'Content-Type': 'application/json',
 			},
 		});
+
 		speedOfHashChange = response.speedofhash;
 		leewaytimes = response.leewayspeed;
+		timeout = response.timeouttime;
+		console.log(
+			'🚀 ~ file: socketHandlers.ts:29 ~ fetchDataAndUpdate ~ timeout:',
+			timeout,
+		);
 	} catch (error) {
 		// Handle the error here
 		console.error(error);
@@ -58,6 +65,8 @@ const setupSocketHandlers = (io: Server) => {
 		socket.on('disconnect', () => {
 			console.log('user disconnected');
 		});
+		let classStarted = false;
+		let classFinishedTimeoutId: NodeJS.Timeout;
 		socket.on('getCurrentHashForQrGenerator', classid => {
 			fetchReal
 				.doFetch(
@@ -94,6 +103,33 @@ const setupSocketHandlers = (io: Server) => {
 					ArrayOfStudents,
 					CourseStudents,
 				);
+
+				// Start the timer when the first student starts getting the hash
+				if (!classStarted) {
+					classStarted = true;
+					classFinishedTimeoutId = setTimeout(() => {
+						// Fetch "class finished" when the timer runs out
+						fetchReal
+							.doFetch('http://localhost:3002/courses/attendance/classfinished', {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json',
+								},
+								body: JSON.stringify({
+									classid: classid,
+								}),
+							})
+							.then(response => {
+								// Handle the response here
+								console.log('Class finished:', response);
+								// Emit "class finished" event
+								socket.emit('classfinished', classid);
+							})
+							.catch(error => {
+								console.error('Error:', error);
+							});
+					}, timeout);
+				}
 			}, speedOfHashChange);
 			SelectedClassid = classid;
 			console.log('SelectedClassid:', SelectedClassid);
