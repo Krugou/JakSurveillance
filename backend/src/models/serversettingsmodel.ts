@@ -16,14 +16,16 @@ const serverSettingsModel = {
 		pool: Pool,
 		speedofhash: number,
 		leewayspeed: number,
+		timeouttime: number,
+		attendancethreshold: number,
 	) {
 		try {
 			return await pool
 				.promise()
-				.query('UPDATE serversettings SET speedofhash = ?, leewayspeed = ?', [
-					speedofhash,
-					leewayspeed,
-				]);
+				.query(
+					'UPDATE serversettings SET speedofhash = ?, leewayspeed = ?, timeouttime = ?, attendancethreshold = ?',
+					[speedofhash, leewayspeed, timeouttime, attendancethreshold],
+				);
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
