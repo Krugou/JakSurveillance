@@ -17,11 +17,13 @@ const adminController: AdminController = {
 	},
 	async updateServerSettings(req: Request, res: Response) {
 		try {
-			const {speedofhash, leewayspeed} = req.body;
+			const {speedofhash, leewayspeed, timeouttime, attendancethreshold} = req.body;
 			await ServerSettingsModel.updateServerSettings(
 				pool,
 				speedofhash,
 				leewayspeed,
+				timeouttime,
+				attendancethreshold,
 			);
 			res.status(200).send({message: 'Server settings updated successfully'});
 		} catch (error) {
