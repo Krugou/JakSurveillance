@@ -269,8 +269,12 @@ INSERT INTO `topicsingroup` (`topicgroupid`, `topicid`) VALUES (@secondGroupID, 
 -- Create the serversettings table
 CREATE TABLE `serversettings` (
   `speedofhash` INT,
-  `leewayspeed` INT
+  `leewayspeed` INT,
+  `timeouttime` INT,
+  `attendancethreshold` INT,
+
+  
 );
 
 -- Insert the values into the serversettings table
-INSERT INTO `serversettings` (`speedofhash`, `leewayspeed`) VALUES (5000, 4);
+INSERT INTO `serversettings` (`speedofhash`, `leewayspeed`, `timeouttime`, `attendancethreshold`) VALUES (5000, 4, 3600000 , 80 );
