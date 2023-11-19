@@ -271,8 +271,7 @@ CREATE TABLE `serversettings` (
   `speedofhash` INT,
   `leewayspeed` INT,
   `timeouttime` INT,
-  `attendancethreshold` INT,
-
+  `attendancethreshold` INT
   
 );
 
