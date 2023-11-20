@@ -8,6 +8,7 @@ import CourseDetails from './createcourse/CourseDetails';
 import StepButtons from './createcourse/StepButtons';
 import StudentList from './createcourse/StudentList';
 import TopicGroupAndTopicsSelector from './createcourse/TopicsGroupAndTopics';
+import BackgroundContainer from "../background/BackgroundContainer";
 // this is view for teacher to create the course
 const CreateCourseCustom: React.FC = () => {
 	const {user} = useContext(UserContext);
@@ -56,6 +57,22 @@ const CreateCourseCustom: React.FC = () => {
 				return false;
 		}
 	};
+
+	const getFormClassName = () => {
+		switch (currentStep) {
+			case 1:
+				return "w-full md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/5 mx-auto bg-white p-4 rounded shadow-md";
+			case 2:
+				return "w-full md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/3 mx-auto bg-white p-4 rounded shadow-md";
+			case 3:
+				return "w-full 2xl:w-2/3 mx-auto bg-white p-4 rounded shadow-md";
+			case 4:
+				return "w-full md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/3 mx-auto bg-white p-4 rounded shadow-md";
+			default:
+				return "w-full md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/3 mx-auto bg-white p-4 rounded shadow-md";
+		}
+	};
+
 	const incrementStep = () => {
 		if (validateFields()) {
 			setCurrentStep(prevStep => prevStep + 1);
@@ -105,9 +122,10 @@ const CreateCourseCustom: React.FC = () => {
 	}, [instructorEmail, user.email]);
 
 	return (
+		<BackgroundContainer>
 		<form
 			onSubmit={event => handleSubmit(event)}
-			className="w-12/12 md:w-11/12 lg:w-11/12 2xl:w-1/2 mx-auto bg-white p-6 rounded shadow-md"
+			className={getFormClassName()}
 		>
 			{currentStep === 1 && (
 				<CourseDetails
@@ -145,6 +163,7 @@ const CreateCourseCustom: React.FC = () => {
 				extrastep={false}
 			/>
 		</form>
+		</BackgroundContainer>
 	);
 };
 

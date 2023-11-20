@@ -33,7 +33,7 @@ const StepButtons: React.FC<StepButtonsProps> = ({
 					text="Create Course"
 					type="submit"
 					onClick={onSubmitClick}
-					marginTop="mt-5"
+					marginTop="mt-2"
 				/>
 			)}
 		</div>
