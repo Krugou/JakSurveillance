@@ -172,13 +172,17 @@ const setupSocketHandlers = (io: Server) => {
 						.then(response => {
 							console.log('Success:', response);
 							io.to(socketId).emit('youhavebeensavedintoclass', SelectedClassid);
-							const student = CourseStudents.find(
-								(student: Student) => student.studentnumber === studentId.toString(),
+							console.log(
+								'🚀 ~ file: socketHandlers.ts:179 ~ io.on ~ CourseStudents:',
+								CourseStudents,
 							);
-							// remember to change back to 0
-							if (student && student.GDPR === 1) {
-								ArrayOfStudents.push(studentId);
-							} else if (student) {
+							const student = CourseStudents.find(
+								(student: Student) =>
+									Number(student.studentnumber) === Number(studentId),
+							);
+
+							
+							if (student) {
 								ArrayOfStudents.push(
 									`${student.first_name} ${student.last_name.charAt(0)}.`,
 								);

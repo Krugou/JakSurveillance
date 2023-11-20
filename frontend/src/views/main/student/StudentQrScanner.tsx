@@ -36,9 +36,10 @@ const StudentQrScanner: React.FC = () => {
 					console.log('secureHash', secureHash);
 					console.log('classid', classid);
 					let studentId;
-					if (user) {
-						studentId = user.userid;
-					}
+
+					studentId = 1;
+					console.log('🚀 ~ file: StudentQrScanner.tsx:41 ~ studentId:', studentId);
+
 					const unixtime = Date.now();
 					newSocket.emit(
 						'inputThatStudentHasArrivedToClass',
@@ -65,10 +66,7 @@ const StudentQrScanner: React.FC = () => {
 		[scanned],
 	);
 	const [shouldRender, setShouldRender] = useState(true);
-	const handleScanError = (error?: Error) => {
-		setErrorMessage(error?.message || 'Error');
-		console.log(error?.message);
-	};
+
 	const onResetClick = useCallback(() => {
 		setScanned(false);
 		setShouldRender(false);
@@ -94,9 +92,13 @@ const StudentQrScanner: React.FC = () => {
 		// Return an empty function when there's nothing to clean up
 		return () => {};
 	}, [successState, counter]);
+	const handleError = (error: any) => {
+		console.log('error', error);
+		setErrorMessage(error.message);
+	};
 	return (
 		<>
-			{user && (
+			{user && user.studentnumber && (
 				<div className="flex flex-col items-center justify-center w-1/2 m-auto  ">
 					{successState ? (
 						<p className="text-3xl font-bold mb-4">
@@ -113,7 +115,12 @@ const StudentQrScanner: React.FC = () => {
 					</div>
 
 					{shouldRender && (
-						<QrScanner onDecode={onNewScanResult} onError={handleScanError} />
+						<QrScanner
+							onDecode={onNewScanResult}
+							onError={handleError}
+							scanDelay={2000}
+							hideCount={false}
+						/>
 					)}
 
 					<button
