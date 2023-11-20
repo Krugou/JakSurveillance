@@ -67,8 +67,11 @@ const CreateCourseEasy: React.FC = () => {
 
 			formDataFile.append('instructorEmail', 'teacher@metropolia.fi'); // get email from userContext
 			formDataFile.append('checkCourseDetails', shouldCheckDetails.toString());
-
-			const response = await apiHooks.excelInput({formDataFile});
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
+			const response = await apiHooks.excelInput({formDataFile}, token);
 
 			if (response) {
 				toast.success('Excel file uploaded');
@@ -103,8 +106,11 @@ const CreateCourseEasy: React.FC = () => {
 			topics: topicsFormData.topics,
 			instructorEmail: user.email, // get email from userContext
 		};
-
-		const response = await apiHooks.createCourse(courseData);
+		const token: string | null = localStorage.getItem('userToken');
+		if (!token) {
+			throw new Error('No token available');
+		}
+		const response = await apiHooks.createCourse(courseData, token);
 		console.log(
 			'🚀 ~ file: CreateCourseEasy.tsx:108 ~ handleSubmit ~ response:',
 			response,

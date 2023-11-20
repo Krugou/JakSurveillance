@@ -23,7 +23,11 @@ const AttendanceRoom: React.FC = () => {
 		const dateToday = new Date().toISOString().slice(0, 19).replace('T', ' ');
 		const studentnumbers = courseStudents.map(student => student.studentnumber);
 		if (classid) {
-			apiHooks.finishClass(dateToday, studentnumbers, classid);
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
+			apiHooks.finishClass(dateToday, studentnumbers, classid, token);
 		}
 	};
 	useEffect(() => {

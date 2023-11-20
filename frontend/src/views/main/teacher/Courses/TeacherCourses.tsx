@@ -22,7 +22,14 @@ const TeacherCourses: React.FC = () => {
 	useEffect(() => {
 		const fetchCourses = async () => {
 			if (user) {
-				const courses = await apihooks.getAllCoursesByInstructorEmail(user.email);
+				const token: string | null = localStorage.getItem('userToken');
+				if (!token) {
+					throw new Error('No token available');
+				}
+				const courses = await apihooks.getAllCoursesByInstructorEmail(
+					user.email,
+					token,
+				);
 				console.log(
 					'🚀 ~ file: TeacherCourses.tsx:25 ~ fetchCourses ~ courses:',
 					courses,

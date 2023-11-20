@@ -77,8 +77,11 @@ const CreateCourseCustom: React.FC = () => {
 			topics: topicsFormData.topics,
 			instructorEmail: user.email, // get email from userContext
 		};
-
-		const response = await apiHooks.createCourse(courseData);
+		const token: string | null = localStorage.getItem('userToken');
+		if (!token) {
+			throw new Error('No token available');
+		}
+		const response = await apiHooks.createCourse(courseData, token);
 
 		if (response) {
 			toast.success('Course created');

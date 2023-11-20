@@ -33,7 +33,11 @@ const CreateLecture: React.FC = () => {
 	}
 	useEffect(() => {
 		if (selectedCourse) {
-			apihooks.getCourseReservations(selectedCourse).then(data => {
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
+			apihooks.getCourseReservations(selectedCourse, token).then(data => {
 				const dates = data.reservations.map(
 					(reservation: Reservation) => new Date(reservation.startDate),
 				);
@@ -49,7 +53,11 @@ const CreateLecture: React.FC = () => {
 	}, [calendarOpen]);
 	useEffect(() => {
 		if (user) {
-			apihooks.getAllCoursesByInstructorEmail(user.email).then(data => {
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
+			apihooks.getAllCoursesByInstructorEmail(user.email, token).then(data => {
 				setCourses(data);
 			});
 		}

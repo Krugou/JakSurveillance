@@ -64,7 +64,11 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 	};
 
 	useEffect(() => {
-		apiHooks.getAllTopicGroupsAndTopicsInsideThem().then(data => {
+		const token: string | null = localStorage.getItem('userToken');
+		if (!token) {
+			throw new Error('No token available');
+		}
+		apiHooks.getAllTopicGroupsAndTopicsInsideThem(token).then(data => {
 			setTopicData(data);
 			if (data.length > 0) {
 				setCourseTopicGroup(data[0].topicgroupname);

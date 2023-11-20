@@ -48,11 +48,12 @@ interface CreateCourseInputs {
 interface CreateCourseFile {
 	formDataFile: FormData;
 }
-const createCourse = async (courseData: CreateCourseInputs) => {
+const createCourse = async (courseData: CreateCourseInputs, token:string) => {
 	const options: RequestInit = {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
 		},
 		body: JSON.stringify(courseData),
 	};
@@ -72,18 +73,21 @@ const excelInput = async (inputs: CreateCourseFile) => {
 };
 interface getCourseReservations {
 	code: string;
+	token: string;
 }
 interface checkIfCourseExists {
 	codes: string;
+	token: string;
 }
 
 const checkIfCourseExists = async (inputs: checkIfCourseExists) => {
-	const {codes} = inputs;
+	const {codes, token} = inputs;
 
 	const options = {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
 		},
 		body: JSON.stringify({
 			codes: codes,
@@ -93,12 +97,13 @@ const checkIfCourseExists = async (inputs: checkIfCourseExists) => {
 	return await doFetch(url, options);
 };
 
-const getAllCoursesByInstructorEmail = async (email: string) => {
+const getAllCoursesByInstructorEmail = async (email: string, token: string) => {
 	// Define your fetch options
 	const options = {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
 		},
 	};
 
@@ -106,31 +111,34 @@ const getAllCoursesByInstructorEmail = async (email: string) => {
 	return await doFetch(`${baseUrl}courses/instructor/${email}`, options);
 };
 
-const getAllTopicGroupsAndTopicsInsideThem = async () => {
+const getAllTopicGroupsAndTopicsInsideThem = async (token: string) => {
 	const response = await doFetch(baseUrl + 'courses/topics', {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
 		},
 	});
 	return response;
 };
-const getCourseDetailByCourseId = async (courseId: string) => {
+const getCourseDetailByCourseId = async (courseId: string, token: string) => {
 	const response = await doFetch(baseUrl + 'courses/coursesbyid/' + courseId, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
 		},
 	});
 	return response;
 };
 const getCourseReservations = async (inputs: getCourseReservations) => {
-	const {code} = inputs;
+	const {code, token} = inputs;
 
 	const options = {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
 		},
 		body: JSON.stringify({
 			code: code,
@@ -149,6 +157,7 @@ const CreateLecture = async (
 	start_date: Date,
 	end_date: Date,
 	timeofday: string,
+	token: string,
 ) => {
 	const inputDate = start_date;
 	const formattedStart_date = new Date(inputDate)
@@ -165,7 +174,7 @@ const CreateLecture = async (
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
-			
+			Authorization: 'Bearer ' + token,
 		},
 		body: JSON.stringify({
 			topicname,
@@ -205,11 +214,13 @@ const finishClass = async (
 	date: string,
 	studentnumbers: string[],
 	classid: string,
+	token: string,
 ) => {
 	const options = {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
 		},
 		body: JSON.stringify({
 			date,
@@ -254,7 +265,7 @@ const updateServerSettings = async (
 	leewayspeed: number,
 	timeouttime: number,
 	attendancethreshold: number,
-	token:string,
+	token: string,
 ) => {
 	const options = {
 		method: 'POST',

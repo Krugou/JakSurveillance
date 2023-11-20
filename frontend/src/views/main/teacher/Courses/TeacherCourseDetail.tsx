@@ -25,7 +25,11 @@ const TeacherCourseDetail: React.FC = () => {
 		console.log(id);
 		const fetchCourses = async () => {
 			if (id) {
-				const courseData = await apihooks.getCourseDetailByCourseId(id);
+				const token: string | null = localStorage.getItem('userToken');
+				if (!token) {
+					throw new Error('No token available');
+				}
+				const courseData = await apihooks.getCourseDetailByCourseId(id, token);
 				console.log(
 					'🚀 ~ file: TeacherCourses.tsx:14 ~ fetchCourses ~ courses:',
 					courseData,
