@@ -34,7 +34,7 @@ const StudentProfile: React.FC = () => {
 				</p>
 			</div>
 			<button
-				className="px-4 py-2 mt-4 bg-blue-500 text-white rounded hover:bg-blue-700"
+				className="px-4 py-2 mt-4 bg-metropoliaSupportBlue text-white rounded hover:bg-blue-700"
 				onClick={() => navigate('/student/courses')} // Navigate to /student/courses when the button is clicked
 			>
 				My Courses
