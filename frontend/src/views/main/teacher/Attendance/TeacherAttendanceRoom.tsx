@@ -46,7 +46,7 @@ const AttendanceRoom: React.FC = () => {
 				console.log('Socket connected');
 			});
 
-			newSocket.emit('getCurrentHashForQrGenerator', classid);
+			newSocket.emit('createAttendanceCollection', classid);
 			newSocket.on('getallstudentsinclass', courseStudents => {
 				setCourseStudents(courseStudents);
 			});
@@ -58,7 +58,7 @@ const AttendanceRoom: React.FC = () => {
 				setCourseStudents(courseStudents);
 			});
 			newSocket.on(
-				'getCurrentHashForQrGeneratorServingHashAndChangeTime',
+				'updateAttendanceCollectionData',
 				(
 					hash,
 					changeTime,
