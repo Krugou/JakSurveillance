@@ -165,6 +165,7 @@ const CreateLecture = async (
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
+			
 		},
 		body: JSON.stringify({
 			topicname,
@@ -237,11 +238,12 @@ const getAttendanceInfoByUsercourseid = async (
 		options,
 	);
 };
-const fetchServerSettings = async () => {
+const fetchServerSettings = async (token: string) => {
 	const options = {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
 		},
 	};
 	const url = `${baseUrl}admin`;
@@ -252,11 +254,13 @@ const updateServerSettings = async (
 	leewayspeed: number,
 	timeouttime: number,
 	attendancethreshold: number,
+	token:string,
 ) => {
 	const options = {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
 		},
 		body: JSON.stringify({
 			speedofhash,
