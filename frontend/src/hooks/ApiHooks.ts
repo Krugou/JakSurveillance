@@ -49,10 +49,6 @@ interface CreateCourseFile {
 	formDataFile: FormData;
 }
 const createCourse = async (courseData: CreateCourseInputs) => {
-	console.log(
-		'🚀 ~ file: ApiHooks.ts:44 ~ createCourse ~ courseData:',
-		courseData,
-	);
 	const options: RequestInit = {
 		method: 'POST',
 		headers: {
