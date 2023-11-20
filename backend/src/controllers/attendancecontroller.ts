@@ -37,7 +37,7 @@ const attendanceController: AttendanceController = {
 
 			const usercourseid = usercourseResult[0].usercourseid;
 			const attendanceResultCheck = await attendanceModel.checkAttendance(
-				usercourseid,
+				usercourseid,classid
 			);
 
 			if (!attendanceResultCheck || attendanceResultCheck.length > 0) {
