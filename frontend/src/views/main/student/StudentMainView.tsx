@@ -22,6 +22,7 @@ const MainView: React.FC = () => {
 					title="View Courses"
 					description="View your own courses"
 				/>
+				<Card path='/student/qr' title='Attendance Qr Scanner' description='Scan QR to mark attendance' />
 			</div>
 		</BackgroundContainer>
 	);
