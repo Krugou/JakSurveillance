@@ -5,7 +5,7 @@ import TeacherAttendanceRoutes from './teacher/TeacherAttendanceRoutes';
 import TeacherCoursesRoutes from './teacher/TeacherCoursesRoutes';
 import TeacherStudentsRoutes from './teacher/TeacherStudentsRoutes';
 import TeacherHelpVideos from '../views/main/teacher/TeacherHelpVideos';
-
+import TeacherProfile from '../views/main/teacher/TeacherProfile.tsx';
 const TeacherRoutes = () => {
 	return (
 		<Routes>
@@ -14,6 +14,8 @@ const TeacherRoutes = () => {
 			<Route path="courses/*" element={<TeacherCoursesRoutes />} />
 			<Route path="students/*" element={<TeacherStudentsRoutes />} />
 			<Route path="attendance/*" element={<TeacherAttendanceRoutes />} />
+			<Route path="profile" element={<TeacherProfile />} />
+
 			<Route path="*" element={<TeacherMainView />} />
 		</Routes>
 	);

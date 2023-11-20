@@ -7,7 +7,8 @@ interface User {
 	first_name: string;
 	last_name: string;
 	email: string;
-	studentgroup?: string;
+	group_name?: string; // Studentgroup name
+	created_at: string;
 
 	// add other properties as needed
 }
