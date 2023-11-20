@@ -9,12 +9,6 @@ const MainView: React.FC = () => {
 
 			<div className="flex 2xl:w-2/5 xl:w-5/6 lg:w-11/12 w-full flex-wrap p-5 justify-center gap-4">
 				<Card
-					path="/teacher/attendance"
-					title="View Attendance"
-					description="View your course attendance"
-				/>
-
-				<Card
 					path="/teacher/students"
 					title="Manage Students"
 					description="Manage your students details"
