@@ -20,9 +20,8 @@ interface CourseDetail {
 }
 
 const TeacherCourseDetail: React.FC = () => {
-	const [courseData, setCourseData] = useState<CourseDetail | null>(null);
-
 	const {id} = useParams<{id: string}>();
+	const [courseData, setCourseData] = useState<CourseDetail | null>(null);
 
 	useEffect(() => {
 		console.log(id);
