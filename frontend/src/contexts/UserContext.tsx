@@ -9,6 +9,7 @@ interface User {
 	email: string;
 	group_name?: string; // Studentgroup name
 	created_at: string;
+	userid: number;
 
 	// add other properties as needed
 }
