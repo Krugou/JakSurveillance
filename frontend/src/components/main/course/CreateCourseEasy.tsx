@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {toast} from 'react-toastify';
 import {UserContext} from '../../../contexts/UserContext.tsx';
 import apiHooks from '../../../hooks/ApiHooks';
 import AddTeachers from './createcourse/AddTeachers';
@@ -70,6 +71,7 @@ const CreateCourseEasy: React.FC = () => {
 			const response = await apiHooks.excelInput({formDataFile});
 
 			if (response) {
+				toast.success('Excel file uploaded');
 				setCourseName(response.courseName);
 				setStudentGroup(response.studentGroup);
 				setCourseCode(response.courseCode);
@@ -81,7 +83,8 @@ const CreateCourseEasy: React.FC = () => {
 
 				setCurrentStep(prevStep => prevStep + 1);
 			} else {
-				console.error('File upload failed');
+				toast.error('Excel file upload failed');
+				console.error('Excel file upload failed');
 			}
 		}
 	};
@@ -102,11 +105,17 @@ const CreateCourseEasy: React.FC = () => {
 		};
 
 		const response = await apiHooks.createCourse(courseData);
+		console.log(
+			'🚀 ~ file: CreateCourseEasy.tsx:108 ~ handleSubmit ~ response:',
+			response,
+		);
 
 		if (response) {
+			toast.success('Course created');
 			navigate(`/teacher/courses/${response.courseId}`);
 			console.log('Course created');
 		} else {
+			toast.error('Course creation failed');
 			console.error('Course creation failed');
 		}
 	};

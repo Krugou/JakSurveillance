@@ -94,7 +94,10 @@ router.post('/create', async (req: Request, res: Response) => {
 		});
 	} catch (error) {
 		console.error(error);
-		res.status(500).send('Internal server error:' + error);
+		res.status(500).json({
+			error: 'Internal server error:',
+			message: error.message,
+		});
 	}
 });
 router.post('/excelinput', upload.single('file'), async (req, res) => {

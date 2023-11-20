@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {toast} from 'react-toastify';
 import {UserContext} from '../../../contexts/UserContext.tsx';
 import apiHooks from '../../../hooks/ApiHooks';
 import AddTeachers from './createcourse/AddTeachers';
@@ -80,9 +81,11 @@ const CreateCourseCustom: React.FC = () => {
 		const response = await apiHooks.createCourse(courseData);
 
 		if (response) {
+			toast.success('Course created');
 			navigate(`/teacher/courses/${response.courseId}`);
 			console.log('Course created');
 		} else {
+			toast.error('Course creation failed');
 			console.error('Course creation failed');
 		}
 	};
