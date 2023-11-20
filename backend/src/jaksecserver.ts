@@ -2,11 +2,11 @@
 import cors from 'cors';
 import {config} from 'dotenv';
 import {Server} from 'socket.io';
+import adminRoutes from './routes/adminroutes.js';
 import courseRoutes from './routes/courseroutes.js';
 import secureRoutes from './routes/secureroutes.js';
 import userRoutes from './routes/userroutes.js';
 import setupSocketHandlers from './sockets/socketHandlers.js';
-import adminRoutes from './routes/adminroutes.js';
 config();
 // console.log('dot env metropolia:' + process.env.APIKEYMETROPOLIA);
 
@@ -39,10 +39,10 @@ app.use(
 
 app.use(
 	'/courses',
-	// passport.authenticate('jwt', {session: false}),
+	passport.authenticate('jwt', {session: false}),
 	courseRoutes,
 );
-app.use('/admin', adminRoutes);
+app.use('/admin', passport.authenticate('jwt', {session: false}), adminRoutes);
 
 http.listen(port, () => {
 	console.log(
