@@ -3,7 +3,7 @@ import {UserContext} from '../../../contexts/UserContext';
 
 import {useNavigate} from 'react-router-dom'; // Import useNavigate
 
-const AdminProfile: React.FC = () => {
+const CounselorProfile: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate(); // Initialize useNavigate
 
@@ -14,7 +14,9 @@ const AdminProfile: React.FC = () => {
 
 	return (
 		<div className="flex flex-col items-center justify-center h-1/2 p-10 bg-gray-100 font-sans">
-			<h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">Admin Profile</h1>
+			<h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">
+				Counselor Profile
+			</h1>
 			<div className="text-md sm:text-xl mb-4">
 				<p className="mb-5">
 					<strong>Name:</strong> <span className="profileStat">{user.username}</span>
@@ -36,4 +38,4 @@ const AdminProfile: React.FC = () => {
 	);
 };
 
-export default AdminProfile;
+export default CounselorProfile;
