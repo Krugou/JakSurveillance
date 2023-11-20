@@ -65,8 +65,9 @@ const CreateCourseEasy: React.FC = () => {
 		if (file) {
 			const formDataFile = new FormData();
 			formDataFile.append('file', file);
-
-			formDataFile.append('instructorEmail', user.email); // get email from userContext
+			if (user) {
+				formDataFile.append('instructorEmail', user.email); // get email from userContext
+			}
 			formDataFile.append('checkCourseDetails', shouldCheckDetails.toString());
 			const token: string | null = localStorage.getItem('userToken');
 			if (!token) {
@@ -96,6 +97,10 @@ const CreateCourseEasy: React.FC = () => {
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 		try {
+			let email = '';
+			if (user) {
+				email = user.email;
+			}
 			const courseData = {
 				courseName: courseName,
 				courseCode: courseCode,
@@ -106,7 +111,7 @@ const CreateCourseEasy: React.FC = () => {
 				studentList: studentList,
 				topicGroup: topicsFormData.topicgroup,
 				topics: topicsFormData.topics,
-				instructorEmail: user.email, // get email from userContext
+				instructorEmail: email, // get email from userContext
 			};
 			const token: string | null = localStorage.getItem('userToken');
 			if (!token) {
@@ -127,7 +132,9 @@ const CreateCourseEasy: React.FC = () => {
 				console.error('Course creation failed');
 			}
 		} catch (error) {
-			toast.error(error.message);
+			if (error instanceof Error) {
+				toast.error(error.message);
+			}
 		}
 	};
 
