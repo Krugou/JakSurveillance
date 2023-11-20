@@ -1,7 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const SuccessAlert = ({successAlert, onClose}) => {
+interface SuccessAlertProps {
+	successAlert: string;
+	onClose: () => void;
+}
+
+const SuccessAlert: React.FC<SuccessAlertProps> = ({successAlert, onClose}) => {
 	return (
 		<div
 			className={`fixed inset-0 flex items-center justify-center ${
@@ -27,8 +31,3 @@ const SuccessAlert = ({successAlert, onClose}) => {
 };
 
 export default SuccessAlert;
-
-SuccessAlert.propTypes = {
-	successAlert: PropTypes.string.isRequired,
-	onClose: PropTypes.func.isRequired,
-};
