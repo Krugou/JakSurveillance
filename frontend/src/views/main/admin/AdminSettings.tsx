@@ -19,7 +19,11 @@ const AdminSettings = () => {
 
 	useEffect(() => {
 		const fetchSettings = async () => {
-			const serverSettings = await apiHooks.fetchServerSettings();
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
+			const serverSettings = await apiHooks.fetchServerSettings(token);
 			setSpeedofhash(serverSettings.speedofhash);
 			setLeewayspeed(serverSettings.leewayspeed);
 			setTimeouttime(serverSettings.timeouttime);
@@ -32,11 +36,16 @@ const AdminSettings = () => {
 
 	const handleUpdate = async () => {
 		try {
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
 			await apiHooks.updateServerSettings(
 				speedofhash,
 				leewayspeed,
 				timeouttime,
 				attendancethreshold,
+				token,
 			);
 			toast.success('Server settings updated successfully');
 		} catch (error) {
