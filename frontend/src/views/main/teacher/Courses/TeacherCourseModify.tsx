@@ -33,9 +33,8 @@ const TeacherCourseModify: React.FC = () => {
 		courseData ? courseData.start_date : '',
 	);
 	const [endDate, setEndDate] = useState(courseData ? courseData.end_date : '');
-	const [instructors, setInstructors] = useState(
-		courseData ? courseData.instructor_name : '',
-	);
+
+	const [instructors, setInstructors] = useState<string[]>([]);
 
 	const {id} = useParams<{id: string}>();
 
@@ -60,6 +59,12 @@ const TeacherCourseModify: React.FC = () => {
 		fetchCourses();
 	}, [id]);
 
+	useEffect(() => {
+		if (courseData?.instructor_name) {
+			setInstructors(courseData.instructor_name.split(','));
+		}
+	}, [courseData]);
+
 	if (isLoading) {
 		return <div>Loading...</div>;
 	}
@@ -77,7 +82,17 @@ const TeacherCourseModify: React.FC = () => {
 		};
 		console.log(modifiedData);
 	};
+	const deleteInstructor = index => {
+		const newInstructors = [...instructors];
+		newInstructors.splice(index, 1);
+		setInstructors(newInstructors);
+	};
 
+	const handleInputChange = (index, event) => {
+		const values = [...instructors];
+		values[index] = event.target.value;
+		setInstructors(values);
+	};
 	return (
 		<BackgroundContainer>
 			<h2 className="text-gray-800 font-semibold mb-6 text-md sm:text-2xl">
@@ -124,13 +139,38 @@ const TeacherCourseModify: React.FC = () => {
 					value={new Date(courseData?.end_date || '').toISOString().slice(0, 16)}
 					onChange={e => setEndDate(e.target.value)}
 				/>
-				<InputField
-					label="Course Instructors"
-					type="email"
-					name="email"
-					value={courseData?.instructor_name}
-					onChange={e => setInstructors(e.target.value)}
-				/>
+				<h2 className="text-gray-800 font-semibold mt-8 mb-2 text-md border-t border-black sm:text-2xl">
+					{' '}
+					Modify Course Instructors{' '}
+				</h2>
+				{instructors.map((instructor, index) => (
+					<div key={index} className="flex items-center mb-3">
+						<div className="flex flex-col mb-3">
+							<InputField
+								type="text"
+								name="email"
+								label="Email"
+								value={instructor}
+								onChange={event => handleInputChange(index, event)}
+							/>
+						</div>
+						{instructors.length > 1 && (
+							<button
+								className="ml-2 w-8 p-2 mt-5 bg-red-500 text-white font-bold rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+								onClick={() => deleteInstructor(index)}
+							>
+								x
+							</button>
+						)}
+					</div>
+				))}
+				<button
+					className="bg-metropoliaMainOrange w-1/2 mb-4 hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 rounded-xl px-4 focus:outline-none focus:shadow-outline"
+					type="button"
+					onClick={() => setInstructors([...instructors, ''])}
+				>
+					Add Instructor
+				</button>
 				<div className="flex w-full justify-center">
 					<button
 						className="bg-metropoliaMainOrange w-1/2 hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 rounded-xl px-4 focus:outline-none focus:shadow-outline"
