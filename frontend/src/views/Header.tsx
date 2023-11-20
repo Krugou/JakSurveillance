@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import logo from '../assets/images/metropolia_s_oranssi_en.png';
 import ErrorAlert from '../components/main/ErrorAlert';
 import NavigationButton from '../components/main/buttons/NavigationButton';
@@ -10,7 +10,7 @@ interface HeaderProps {
 }
 const Header: React.FC<HeaderProps> = ({title}) => {
 	const location = useLocation();
-	//const navigate = useNavigate();
+	const navigate = useNavigate();
 	const [alert, setAlert] = useState<string | null>('');
 	const {user, setUser} = useContext(UserContext);
 	// console.log('Header', userContext);
