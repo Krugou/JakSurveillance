@@ -35,14 +35,11 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 				localStorage.removeItem('userToken');
 				setUser(null); // or setUser({ role: '', username: '' }) for an empty User object
 			}
-		}
-		/*
-		else {
+		} else {
 			if (location.pathname !== '/' && location.pathname !== '/login') {
 				navigate('/login');
 			}
 		}
-		*/
 	};
 	useEffect(() => {
 		getUserInfo();
