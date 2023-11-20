@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {UserContext} from '../../../contexts/UserContext.tsx';
 import apiHooks from '../../../hooks/ApiHooks';
 import AddTeachers from './createcourse/AddTeachers';
 import CourseDetails from './createcourse/CourseDetails';
@@ -8,6 +9,7 @@ import StudentList from './createcourse/StudentList';
 import TopicGroupAndTopicsSelector from './createcourse/TopicsGroupAndTopics';
 // this is view for teacher to create the course
 const CreateCourseCustom: React.FC = () => {
+	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
 	const [currentStep, setCurrentStep] = useState(1);
 	const [courseName, setCourseName] = useState('');
@@ -72,7 +74,7 @@ const CreateCourseCustom: React.FC = () => {
 			studentList: studentList,
 			topicGroup: topicsFormData.topicgroup,
 			topics: topicsFormData.topics,
-			instructorEmail: 'teacher@metropolia.fi', // get email from userContext
+			instructorEmail: user.email, // get email from userContext
 		};
 
 		const response = await apiHooks.createCourse(courseData);
@@ -90,11 +92,11 @@ const CreateCourseCustom: React.FC = () => {
 	};
 
 	useEffect(() => {
-		setInstructorEmail('teacher@metropolia.fi'); // get email from userContext
+		setInstructorEmail(user.email); // get email from userContext
 		if (instructorEmail) {
 			setInstructors([{email: instructorEmail}]);
 		}
-	}, [instructorEmail]);
+	}, [instructorEmail, user.email]);
 
 	return (
 		<form
