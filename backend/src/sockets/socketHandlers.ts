@@ -5,19 +5,20 @@ import fetchReal from '../utils/fetch.js';
 config();
 let hash = '';
 const timestamps: {start: number; end: number; hash: string}[] = [];
+let speedOfHashChange = 6000; // milliseconds
+let leewaytimes = 5;
+let timeout = 3600000; // 1 hour
+
+let howMuchLeeWay = 0;
 interface Student {
-	studentnumber: string;
+	studentnumber: number;
 	GDPR: number;
 	first_name: string;
 	last_name: string;
 	// add other properties as needed
 }
 // this defines how often the hash changes or how fast student need to be in class while doing attendance
-let speedOfHashChange = 6000; // milliseconds
-let leewaytimes = 5;
-let timeout = 3600000; // 1 hour
-let token;
-async function getToken() {
+const getToken = async () => {
 	try {
 		const response = await fetchReal.doFetch('http://localhost:3002/users/', {
 			method: 'post', // or 'GET'
@@ -30,14 +31,15 @@ async function getToken() {
 			}),
 		});
 
-		token = response.token;
+		return response.token;
 	} catch (error) {
 		// Handle the error here
 		console.error(error);
 	}
-}
-async function fetchDataAndUpdate() {
+};
+const fetchDataAndUpdate = async () => {
 	try {
+		const token = await getToken();
 		const response = await fetchReal.doFetch('http://localhost:3002/admin/ ', {
 			method: 'GET', // or 'GET'
 			headers: {
@@ -49,27 +51,16 @@ async function fetchDataAndUpdate() {
 		speedOfHashChange = response.speedofhash;
 		leewaytimes = response.leewayspeed;
 		timeout = response.timeouttime;
-		console.log(
-			'🚀 ~ file: socketHandlers.ts:29 ~ fetchDataAndUpdate ~ timeout:',
-			timeout,
-		);
 	} catch (error) {
 		// Handle the error here
 		console.error(error);
 	}
-}
-let howMuchLeeWay = 0;
+};
 // Call the function
-getToken().then(() => {
-	fetchDataAndUpdate().then(() => {
-		howMuchLeeWay = speedOfHashChange * leewaytimes;
-	});
-});
 
 const updateHash = () => {
 	const start = Date.now();
 	hash = crypto.randomBytes(20).toString('hex');
-	// console.log('Updated hash:', hash);
 	const end = Date.now() + speedOfHashChange;
 
 	timestamps.push({start, end, hash});
@@ -80,42 +71,58 @@ const updateHash = () => {
 	}
 };
 // handle new socket.io connections
-let SelectedClassid = '';
-const ArrayOfStudents: any[] = [];
-let CourseStudents: Student[] = [];
+const presentStudents: {[classid: string]: any[]} = {};
+const notYetPresentStudents: {[classid: string]: Student[]} = {};
 const setupSocketHandlers = (io: Server) => {
 	io.on('connection', (socket: Socket) => {
-		console.log('a user connected');
+		console.log('user joined: ' + socket.id);
 		// handle disconnect
 		socket.on('disconnect', () => {
 			console.log('user disconnected');
 		});
-		let classStarted = false;
-		let classFinishedTimeoutId: NodeJS.Timeout;
-		socket.on('getCurrentHashForQrGenerator', classid => {
+		fetchDataAndUpdate()
+			.then(() => {
+				howMuchLeeWay = speedOfHashChange * leewaytimes;
+			})
+			.catch(error => {
+				console.error(error);
+			});
+
+		socket.on('createAttendanceCollection', async classid => {
 			socket.join(classid);
-			fetchReal
-				.doFetch(
-					'http://localhost:3002/courses/attendance/getallstudentsinclass/',
-					{
-						method: 'POST', // or 'GET'
-						headers: {
-							'Content-Type': 'application/json',
-							Authorization: 'Bearer ' + token,
+			const token = await getToken();
+			if (presentStudents[classid] && notYetPresentStudents[classid]) {
+				// The lists already exist, so use them
+				io
+					.to(classid)
+					.emit('getallstudentsinclass', notYetPresentStudents[classid]);
+			} else {
+				fetchReal
+					.doFetch(
+						'http://localhost:3002/courses/attendance/getallstudentsinclass/',
+						{
+							method: 'POST', // or 'GET'
+							headers: {
+								'Content-Type': 'application/json',
+								Authorization: 'Bearer ' + token,
+							},
+							body: JSON.stringify({
+								classid: classid,
+							}),
 						},
-						body: JSON.stringify({
-							classid: classid,
-						}),
-					},
-				)
-				.then(response => {
-					CourseStudents = response;
-					io.to(classid).emit('getallstudentsinclass', CourseStudents);
-				})
-				.catch(error => {
-					console.error('Error:', error);
-				});
-			console.log('🚀 ~ file: socketHandlers.ts:37 ~ io.on ~ hash:', hash);
+					)
+					.then(response => {
+						notYetPresentStudents[classid] = response;
+						presentStudents[classid] = []; // Initialize with an empty array
+
+						io
+							.to(classid)
+							.emit('getallstudentsinclass', notYetPresentStudents[classid]);
+					})
+					.catch(error => {
+						console.error('Error:', error);
+					});
+			}
 			updateHash();
 			setInterval(updateHash, speedOfHashChange);
 			// Emit the event every `speedOfHashChange` milliseconds
@@ -124,45 +131,16 @@ const setupSocketHandlers = (io: Server) => {
 				io
 					.to(classid)
 					.emit(
-						'getCurrentHashForQrGeneratorServingHashAndChangeTime',
+						'updateAttendanceCollectionData',
 						hash,
 						speedOfHashChange,
 						classid,
 						servertime.getTime(),
-						ArrayOfStudents,
-						CourseStudents,
+						presentStudents[classid],
+						notYetPresentStudents[classid],
 					);
-
-				// Start the timer when the first student starts getting the hash
-				if (!classStarted) {
-					classStarted = true;
-					classFinishedTimeoutId = setTimeout(() => {
-						// Fetch "class finished" when the timer runs out
-						fetchReal
-							.doFetch('http://localhost:3002/courses/attendance/classfinished', {
-								method: 'POST',
-								headers: {
-									'Content-Type': 'application/json',
-									Authorization: 'Bearer ' + token,
-								},
-								body: JSON.stringify({
-									classid: classid,
-								}),
-							})
-							.then(response => {
-								// Handle the response here
-								console.log('Class finished:', response);
-								// Emit "class finished" event
-								io.to(classid).emit('classfinished', classid);
-							})
-							.catch(error => {
-								console.error('Error:', error);
-							});
-					}, timeout);
-				}
 			}, speedOfHashChange);
-			SelectedClassid = classid;
-			console.log('SelectedClassid:', SelectedClassid);
+
 			// Clear the interval when the socket disconnects
 			socket.on('disconnect', () => {
 				clearInterval(intervalId);
@@ -170,22 +148,22 @@ const setupSocketHandlers = (io: Server) => {
 		});
 		socket.on(
 			'inputThatStudentHasArrivedToClass',
-			(
+			async (
 				secureHash: string,
 				studentId: string,
 				unixtime: number,
 				classid: number,
 			) => {
+				if (studentId === '') {
+					io.to(socket.id).emit('inputThatStudentHasArrivedToClassTooSlow', classid);
+				}
 				// find the timestamp that matches the secureHash and unixtime
 				const timestamp = timestamps.find(
 					t => t.hash === secureHash && unixtime >= t.start && unixtime <= t.end,
 				);
-
-				const socketId = socket.id;
-
 				if (timestamp) {
 					// Emit the 'youhavebeensavedintoclass' event only to the client who sent the event
-
+					const token = await getToken();
 					fetchReal
 						.doFetch('http://localhost:3002/courses/attendance/', {
 							method: 'POST', // or 'GET'
@@ -202,38 +180,30 @@ const setupSocketHandlers = (io: Server) => {
 						})
 						.then(response => {
 							console.log('Success:', response);
-							io.to(socketId).emit('youhavebeensavedintoclass', SelectedClassid);
-							console.log(
-								'🚀 ~ file: socketHandlers.ts:179 ~ io.on ~ CourseStudents:',
-								CourseStudents,
-							);
-							const student = CourseStudents.find(
+
+							const studentIndex = notYetPresentStudents[classid].findIndex(
 								(student: Student) =>
 									Number(student.studentnumber) === Number(studentId),
 							);
 
-							if (student) {
-								ArrayOfStudents.push(
+							if (studentIndex !== -1) {
+								const student = notYetPresentStudents[classid][studentIndex];
+								presentStudents[classid].push(
 									`${student.first_name} ${student.last_name.charAt(0)}.`,
 								);
+								notYetPresentStudents[classid].splice(studentIndex, 1); // Remove the student from notYetPresentStudents
 							} else {
 								console.log('Student not found');
 							}
 
-							CourseStudents = CourseStudents.filter(
-								student => student.studentnumber !== studentId,
-							);
-
-							console.log('Accepted:', secureHash, studentId, unixtime);
+							io.to(socket.id).emit('youhavebeensavedintoclass', classid);
 						})
 						.catch(error => {
 							// Handle the error here
 							console.error(error);
 						});
 				} else {
-					io
-						.to(socketId)
-						.emit('inputThatStudentHasArrivedToClassTooSlow', SelectedClassid); // send error message to all clients
+					io.to(socket.id).emit('inputThatStudentHasArrivedToClassTooSlow', classid);
 				}
 			},
 		);
