@@ -6,7 +6,7 @@ const InputField = ({label = '', type, name, value, onChange}) => (
 			{label}
 		</label>
 		<input
-			className="border rounded py-2 px-3 text-grey-800 w-full"
+			className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
 			type={type}
 			name={name}
 			id={name}
