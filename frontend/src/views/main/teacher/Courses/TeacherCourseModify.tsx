@@ -22,7 +22,7 @@ const TeacherCourseModify: React.FC = () => {
 
 	return (
 		<BackgroundContainer>
-			<div className="m-4 rounded shadow-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-2/5 mx-auto">
+			<div className="m-4 rounded bg-white shadow-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-2/5 mx-auto">
 				<form onSubmit={handleSubmit} className="px-6 py-4">
 					<label className="font-bold text-xl mb-2">Course Name</label>
 					<input
@@ -37,12 +37,14 @@ const TeacherCourseModify: React.FC = () => {
 						onChange={e => setDescription(e.target.value)}
 						className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
 					/>
+					<div className="m-auto w-1/2">
 					<button
 						type="submit"
 						className="w-full p-2 text-white font-bold rounded bg-metropoliaMainOrange hover:hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-blue-600"
 					>
 						Modify Course
 					</button>
+					</div>
 				</form>
 			</div>
 		</BackgroundContainer>
