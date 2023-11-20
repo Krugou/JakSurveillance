@@ -224,6 +224,7 @@ const CreateCourseEasy: React.FC = () => {
 					onPrevClick={() => setCurrentStep(prevStep => prevStep - 1)}
 					onNextClick={incrementStep}
 					onSubmitClick={handleSubmitWrapper} // Use the wrapper function here
+					extrastep={true}
 				/>
 			)}
 		</form>

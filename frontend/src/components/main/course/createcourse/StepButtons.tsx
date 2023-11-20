@@ -6,6 +6,7 @@ interface StepButtonsProps {
 	onPrevClick: () => void;
 	onNextClick: () => void;
 	onSubmitClick: () => void;
+	extrastep?: boolean;
 }
 
 const StepButtons: React.FC<StepButtonsProps> = ({
@@ -13,6 +14,7 @@ const StepButtons: React.FC<StepButtonsProps> = ({
 	onPrevClick,
 	onNextClick,
 	onSubmitClick,
+	extrastep = false,
 }) => {
 	return (
 		<div
@@ -23,10 +25,10 @@ const StepButtons: React.FC<StepButtonsProps> = ({
 			{currentStep > 1 && (
 				<StepButton text="Previous" type="button" onClick={onPrevClick} />
 			)}
-			{currentStep >= 1 && currentStep <= 3 && (
+			{currentStep >= 1 && currentStep <= (extrastep ? 4 : 3) && (
 				<StepButton text="Next" type="button" onClick={onNextClick} />
 			)}
-			{currentStep === 4 && (
+			{currentStep === (extrastep ? 5 : 4) && (
 				<StepButton
 					text="Create Course"
 					type="submit"

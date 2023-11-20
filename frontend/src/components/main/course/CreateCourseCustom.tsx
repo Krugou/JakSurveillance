@@ -134,6 +134,7 @@ const CreateCourseCustom: React.FC = () => {
 				onPrevClick={() => setCurrentStep(prevStep => prevStep - 1)}
 				onNextClick={incrementStep}
 				onSubmitClick={handleSubmitWrapper} // Call handleSubmitWrapper without arguments
+				extrastep={false}
 			/>
 		</form>
 	);
