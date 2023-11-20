@@ -10,6 +10,7 @@ const Logo = () => {
 					</div>
 				</div>
 			</div>
+
 			<p className="text-4xl m-2 p-2 font-bold text-center tracking-widest subpixel-antialiased">
 				JakSec
 			</p>
