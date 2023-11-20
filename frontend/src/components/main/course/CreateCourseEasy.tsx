@@ -95,35 +95,39 @@ const CreateCourseEasy: React.FC = () => {
 
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
-		const courseData = {
-			courseName: courseName,
-			courseCode: courseCode,
-			studentGroup: studentGroup,
-			startDate: startDate,
-			endDate: endDate,
-			instructors: instructors,
-			studentList: studentList,
-			topicGroup: topicsFormData.topicgroup,
-			topics: topicsFormData.topics,
-			instructorEmail: user.email, // get email from userContext
-		};
-		const token: string | null = localStorage.getItem('userToken');
-		if (!token) {
-			throw new Error('No token available');
-		}
-		const response = await apiHooks.createCourse(courseData, token);
-		console.log(
-			'🚀 ~ file: CreateCourseEasy.tsx:108 ~ handleSubmit ~ response:',
-			response,
-		);
+		try {
+			const courseData = {
+				courseName: courseName,
+				courseCode: courseCode,
+				studentGroup: studentGroup,
+				startDate: startDate,
+				endDate: endDate,
+				instructors: instructors,
+				studentList: studentList,
+				topicGroup: topicsFormData.topicgroup,
+				topics: topicsFormData.topics,
+				instructorEmail: user.email, // get email from userContext
+			};
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
+			const response = await apiHooks.createCourse(courseData, token);
+			console.log(
+				'🚀 ~ file: CreateCourseEasy.tsx:108 ~ handleSubmit ~ response:',
+				response,
+			);
 
-		if (response) {
-			toast.success('Course created');
-			navigate(`/teacher/courses/${response.courseId}`);
-			console.log('Course created');
-		} else {
-			toast.error('Course creation failed');
-			console.error('Course creation failed');
+			if (response) {
+				toast.success('Course created');
+				navigate(`/teacher/courses/${response.courseId}`);
+				console.log('Course created');
+			} else {
+				toast.error('Course creation failed');
+				console.error('Course creation failed');
+			}
+		} catch (error) {
+			toast.error(error.message);
 		}
 	};
 
