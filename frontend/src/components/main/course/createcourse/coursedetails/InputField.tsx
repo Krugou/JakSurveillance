@@ -1,7 +1,7 @@
 import React from 'react';
 
 const InputField = ({label = '', type, name, value, onChange}) => (
-	<div className="flex flex-col mb-3">
+	<>
 		<label className="mb-2 font-bold text-gray-900" htmlFor={name}>
 			{label}
 		</label>
@@ -15,6 +15,6 @@ const InputField = ({label = '', type, name, value, onChange}) => (
 			aria-label={label}
 			required
 		/>
-	</div>
+	</>
 );
 export default InputField;
