@@ -22,10 +22,12 @@ const TeacherCourses: React.FC = () => {
 	useEffect(() => {
 		const fetchCourses = async () => {
 			if (user) {
+				// Get token from local storage
 				const token: string | null = localStorage.getItem('userToken');
 				if (!token) {
 					throw new Error('No token available');
 				}
+				// Fetch courses by instructor email
 				const courses = await apihooks.getAllCoursesByInstructorEmail(
 					user.email,
 					token,
