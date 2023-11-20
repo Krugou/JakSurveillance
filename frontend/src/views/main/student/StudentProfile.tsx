@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {UserContext} from '../../../contexts/UserContext';
-
+import ProfileInfo from '../../../components/profiles/ProfileInfo';
 /*
 const getAttendanceColorClass = (attendance: number): string => {
 	if (attendance >= 90) {
@@ -27,18 +27,10 @@ const StudentProfile: React.FC = () => {
 		<div className="flex flex-col items-center justify-center h-1/2 p-10 bg-gray-100 font-sans">
 			<h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">Student Profile</h1>
 			<div className="text-md sm:text-xl mb-4">
-				<p className="mb-5">
-					<strong>Name:</strong> <span className="profileStat">{user.username}</span>
-				</p>
-				<p className="mb-5">
-					<strong>Email:</strong> <span className="profileStat">{user.email}</span>
-				</p>
-				<p className="mb-5">
-					<strong>Role:</strong> <span className="profileStat">{user.role}</span>
-				</p>
+				<ProfileInfo user={user} />
 				<p className="mb-5">
 					<strong>Student Group:</strong>{' '}
-					<span className="profileStat">{user.studentgroup}</span>
+					<span className="profileStat">{user.group_name}</span>
 				</p>
 			</div>
 			<button

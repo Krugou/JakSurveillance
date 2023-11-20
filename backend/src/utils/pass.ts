@@ -66,6 +66,7 @@ export const generateTokenAndUser = (
 		first_name,
 		last_name,
 		email,
+		created_at: new Date(),
 	};
 	const token = jwt.sign(user, process.env.JWT_SECRET as string, {
 		expiresIn: '2h',
