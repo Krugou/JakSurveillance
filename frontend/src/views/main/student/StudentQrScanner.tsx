@@ -1,7 +1,9 @@
 import {QrScanner} from '@yudiel/react-qr-scanner';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import io, {Socket} from 'socket.io-client';
+import {UserContext} from '../../../contexts/UserContext.tsx';
 const StudentQrScanner: React.FC = () => {
+	const {user} = useContext(UserContext);
 	const [successState, setSuccessState] = useState(false);
 	const [scanned, setScanned] = useState(false);
 	const [socket, setSocket] = useState<Socket | null>(null);
@@ -33,7 +35,10 @@ const StudentQrScanner: React.FC = () => {
 					console.log('scanned');
 					console.log('secureHash', secureHash);
 					console.log('classid', classid);
-					const studentId = Math.floor(Math.random() * 42) + 1; // replace with your student id
+					let studentId;
+					if (user) {
+						studentId = user.userid;
+					}
 					const unixtime = Date.now();
 					newSocket.emit(
 						'inputThatStudentHasArrivedToClass',
@@ -84,40 +89,41 @@ const StudentQrScanner: React.FC = () => {
 			return () => clearTimeout(timer);
 		}
 		if (counter === 0) {
-			// todo change this to the correct url
-			window.location.href = 'qr';
+			window.location.href = 'mainview';
 		}
 		// Return an empty function when there's nothing to clean up
 		return () => {};
 	}, [successState, counter]);
 	return (
 		<>
-			<div className="flex flex-col items-center justify-center w-1/2 m-auto  ">
-				{successState ? (
-					<p className="text-3xl font-bold mb-4">
-						You can leave this site now redirecting in {counter} seconds
-					</p>
-				) : (
-					<p className="text-xl font-bold mb-4">Scan QR code to get attendance</p>
-				)}
-				<div className="flex justify-center">
-					{successState && <p className="text-green-500 font-bold">Success</p>}
-					{!successState && scanned && (
-						<p className="text-red-500 font-bold">Failure</p>
+			{user && (
+				<div className="flex flex-col items-center justify-center w-1/2 m-auto  ">
+					{successState ? (
+						<p className="text-3xl font-bold mb-4">
+							You can leave this site now redirecting in {counter} seconds
+						</p>
+					) : (
+						<p className="text-xl font-bold mb-4">Scan QR code to get attendance</p>
 					)}
+					<div className="flex justify-center">
+						{successState && <p className="text-green-500 font-bold">Success</p>}
+						{!successState && scanned && (
+							<p className="text-red-500 font-bold">Failure</p>
+						)}
+					</div>
+
+					{shouldRender && (
+						<QrScanner onDecode={onNewScanResult} onError={handleScanError} />
+					)}
+
+					<button
+						className="bg-blue-500 m-2 p-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+						onClick={onResetClick}
+					>
+						Try again or reset
+					</button>
 				</div>
-
-				{shouldRender && (
-					<QrScanner onDecode={onNewScanResult} onError={handleScanError} />
-				)}
-
-				<button
-					className="bg-blue-500 m-2 p-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-					onClick={onResetClick}
-				>
-					Try again or reset
-				</button>
-			</div>
+			)}
 		</>
 	);
 };
