@@ -8,7 +8,7 @@ import apiHooks from '../hooks/ApiHooks';
 interface HeaderProps {
 	title: string;
 }
-const Header: React.FC<HeaderProps> = ({title}) => {
+const Header: React.FC<HeaderProps> = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const [alert, setAlert] = useState<string | null>('');
@@ -62,16 +62,16 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 	}
 
 	return (
-		<header className="flex items-center sm:p-4 p-0 m-4 justify-between">
+		<header className="flex items-center sm:flex-row flex-col sm:p-4 p-0 m-4 justify-between">
 			{alert && <ErrorAlert onClose={() => setAlert(null)} alert={alert} />}
 			<a href={`/${user.role.toLowerCase()}/mainview`}>
 				<img
 					src={logo}
 					alt="Logo"
-					className="w-24 sm:w-32 md:w-48 lg:w-64 h-auto mr-4"
+					className="w-48 sm:w-32 mb-5 md:w-48 lg:w-64 h-auto mr-4"
 				/>
 			</a>
-			<div className="flex items-center m-2 p-2">
+			<div className="flex w-full gap-10 justify-center sm:w-fit items-center m-2 p-2">
 				{user && (
 					<>
 						<NavigationButton
@@ -82,10 +82,6 @@ const Header: React.FC<HeaderProps> = ({title}) => {
 						<NavigationButton user={user} path="/logout" label="Logout" />
 					</>
 				)}
-
-				<h1 className="text-xs mx-2 px-2 sm:text-sm md:text-lg lg:text-xl">
-					{title}
-				</h1>
 			</div>
 		</header>
 	);
