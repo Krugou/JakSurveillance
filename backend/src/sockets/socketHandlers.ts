@@ -100,6 +100,7 @@ const setupSocketHandlers = (io: Server) => {
 						method: 'POST', // or 'GET'
 						headers: {
 							'Content-Type': 'application/json',
+							Authorization: 'Bearer ' + token,
 						},
 						body: JSON.stringify({
 							classid: classid,
@@ -139,6 +140,7 @@ const setupSocketHandlers = (io: Server) => {
 								method: 'POST',
 								headers: {
 									'Content-Type': 'application/json',
+									Authorization: 'Bearer ' + token,
 								},
 								body: JSON.stringify({
 									classid: classid,
