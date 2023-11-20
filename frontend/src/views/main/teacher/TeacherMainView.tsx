@@ -22,7 +22,7 @@ const MainView: React.FC = () => {
 
 				<Card
 					path="/teacher/courses/"
-					title="View Courses"
+					title="Your Courses"
 					description="View all of your courses"
 				/>
 
