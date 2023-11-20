@@ -93,6 +93,7 @@ const setupSocketHandlers = (io: Server) => {
 		let classStarted = false;
 		let classFinishedTimeoutId: NodeJS.Timeout;
 		socket.on('getCurrentHashForQrGenerator', classid => {
+			socket.join(classid);
 			fetchReal
 				.doFetch(
 					'http://localhost:3002/courses/attendance/getallstudentsinclass/',
@@ -109,7 +110,7 @@ const setupSocketHandlers = (io: Server) => {
 				)
 				.then(response => {
 					CourseStudents = response;
-					socket.emit('getallstudentsinclass', CourseStudents);
+					io.to(classid).emit('getallstudentsinclass', CourseStudents);
 				})
 				.catch(error => {
 					console.error('Error:', error);
@@ -120,15 +121,17 @@ const setupSocketHandlers = (io: Server) => {
 			// Emit the event every `speedOfHashChange` milliseconds
 			const servertime = new Date();
 			const intervalId = setInterval(() => {
-				socket.emit(
-					'getCurrentHashForQrGeneratorServingHashAndChangeTime',
-					hash,
-					speedOfHashChange,
-					classid,
-					servertime.getTime(),
-					ArrayOfStudents,
-					CourseStudents,
-				);
+				io
+					.to(classid)
+					.emit(
+						'getCurrentHashForQrGeneratorServingHashAndChangeTime',
+						hash,
+						speedOfHashChange,
+						classid,
+						servertime.getTime(),
+						ArrayOfStudents,
+						CourseStudents,
+					);
 
 				// Start the timer when the first student starts getting the hash
 				if (!classStarted) {
@@ -150,7 +153,7 @@ const setupSocketHandlers = (io: Server) => {
 								// Handle the response here
 								console.log('Class finished:', response);
 								// Emit "class finished" event
-								socket.emit('classfinished', classid);
+								io.to(classid).emit('classfinished', classid);
 							})
 							.catch(error => {
 								console.error('Error:', error);
