@@ -13,7 +13,10 @@ interface CourseDetail {
 	end_date: Date;
 	code: string;
 	studentgroup_name: string;
+	created_at: string;
 	topic_names: string[];
+	user_count: number;
+	instructor_name: string;
 }
 
 const TeacherCourseDetail: React.FC = () => {

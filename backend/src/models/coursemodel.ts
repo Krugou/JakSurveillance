@@ -468,13 +468,17 @@ const course: CourseModel = {
 		try {
 			const [rows] = await pool.promise().query<RowDataPacket[]>(
 				`SELECT courses.*, studentgroups.group_name AS studentgroup_name, 
-              GROUP_CONCAT(topics.topicname) AS topic_names
-          FROM courses
-          JOIN studentgroups ON courses.studentgroupid = studentgroups.studentgroupid
-          LEFT JOIN coursetopics ON courses.courseid = coursetopics.courseid
-          LEFT JOIN topics ON coursetopics.topicid = topics.topicid
-          WHERE courses.courseid = ?
-          GROUP BY courses.courseid`,
+				GROUP_CONCAT(DISTINCT topics.topicname) AS topic_names,
+				COUNT(usercourses.userid) AS user_count,
+				GROUP_CONCAT(DISTINCT u2.email) AS instructor_name FROM courses
+JOIN studentgroups ON courses.studentgroupid = studentgroups.studentgroupid
+LEFT JOIN courseinstructors ci ON courses.courseid = ci.courseid
+LEFT JOIN users u2 ON ci.userid = u2.userid
+LEFT JOIN coursetopics ON courses.courseid = coursetopics.courseid
+LEFT JOIN topics ON coursetopics.topicid = topics.topicid
+LEFT JOIN usercourses ON courses.courseid = usercourses.courseid
+WHERE courses.courseid = ?
+GROUP BY courses.courseid;`,
 				[courseId],
 			);
 
