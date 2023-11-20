@@ -78,7 +78,7 @@ const attendanceModel: AttendanceModel = {
             JOIN courses ON class.courseid = courses.courseid
             JOIN usercourses ON attendance.usercourseid = usercourses.usercourseid
 						JOIN courseinstructors ON usercourses.courseid = courseinstructors.courseid
-						JOIN USERS ON courseinstructors.userid = users.userid
+						JOIN users ON courseinstructors.userid = users.userid
             WHERE attendance.usercourseid = ? AND usercourses.userid = ?;`,
 				[usercourseId, userid],
 			);
