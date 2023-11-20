@@ -59,30 +59,31 @@ const StudentList = ({studentList, setStudentList}) => {
 	};
 
 	return (
-		<div className="overflow-hidden h-1/2">
-			<button
-				aria-label={hideExtraColumns ? 'Show All Columns' : 'Hide Extra Columns'}
-				className="p-1 bg-metropoliaMainOrange text-sm text-white font-bold rounded-xl hover:bg-metropoliaSecondaryOrange focus:outline-none mb-4"
-				onClick={event => {
-					event.preventDefault();
-					toggleExtraColumns();
-				}}
-			>
-				{hideExtraColumns ? 'Show All Columns' : 'Hide Extra Columns'}
-			</button>
-			<table className="table-auto w-full">
-				<div className="max-h-96 h-96 overflow-y-scroll">
-					<thead className="sticky top-0 bg-white z-10">
+		<div className="relative">
+			<div className="overflow-x-scroll h-1/2 relative">
+				<button
+					aria-label={hideExtraColumns ? 'Show All Columns' : 'Hide Extra Columns'}
+					className="p-1 bg-metropoliaMainOrange text-sm text-white font-bold rounded-xl hover:bg-metropoliaSecondaryOrange focus:outline-none mb-4 sticky top-0 left-0"
+					onClick={event => {
+						event.preventDefault();
+						toggleExtraColumns();
+					}}
+				>
+					{hideExtraColumns ? 'Show All Columns' : 'Hide Extra Columns'}
+				</button>
+				<table className="table-auto w-full">
+					<div className="max-h-96 h-96 overflow-y-scroll">
+						<thead className="sticky top-0 bg-white z-10">
 						<tr>
 							{studentList.length > 0 &&
 								Object.keys(studentList[0]).map(
 									(key, index) =>
 										!hiddenColumns[key] && (
-											<th key={index} className="px-4 py-2">
+											<th key={index} className="px-4 w-fit py-2">
 												{key}
 												<button
 													aria-label="Hide Column"
-													className="ml-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark p-2"
+													className="ml-2 bg-metropoliaMainOrange text-sm text-white font-bold rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark p-1"
 													onClick={() =>
 														setHiddenColumns(
 															(prevHiddenColumns: Record<string, boolean>) => ({
@@ -99,15 +100,15 @@ const StudentList = ({studentList, setStudentList}) => {
 								)}
 							{studentList.length > 1 && <th className="px-4 py-2">Actions</th>}
 						</tr>
-					</thead>
-					<tbody>
+						</thead>
+						<tbody>
 						{studentList.map(
 							(student: Record<string, string | number>, index: number) => (
 								<tr key={index}>
 									{Object.entries(student).map(
 										([key, value], innerIndex) =>
 											!hiddenColumns[key] && (
-												<td key={innerIndex} className="border px-4 py-2">
+												<td key={innerIndex} className="border w-fit px-2 py-2">
 													<InputField
 														type="text"
 														name={key}
@@ -126,7 +127,7 @@ const StudentList = ({studentList, setStudentList}) => {
 											<button
 												aria-label="Delete Student"
 												type="button"
-												className="p-2 bg-red-500 text-white font-bold rounded hover:metropoliaSecondaryOrange focus:outline-none"
+												className="p-2 w-full bg-red-500 text-white font-bold rounded hover:metropoliaSecondaryOrange focus:outline-none"
 												onClick={() => deleteStudent(index)}
 											>
 												x
@@ -136,15 +137,16 @@ const StudentList = ({studentList, setStudentList}) => {
 								</tr>
 							),
 						)}
-					</tbody>
-				</div>
-			</table>
-			<button
-				className="p-1 mt-2 text-sm bg-metropoliaMainOrange text-white font-bold rounded-xl hover:bg-metropoliaSecondaryOrange focus:outline-none mb-4"
-				onClick={event => addStudent(event)}
-			>
-				Add Student
-			</button>
+						</tbody>
+					</div>
+				</table>
+				<button
+					className="p-1 mt-2 text-sm bg-metropoliaMainOrange text-white font-bold rounded-xl hover:bg-metropoliaSecondaryOrange focus:outline-none mb-4"
+					onClick={event => addStudent(event)}
+				>
+					Add Student
+				</button>
+			</div>
 		</div>
 	);
 };
