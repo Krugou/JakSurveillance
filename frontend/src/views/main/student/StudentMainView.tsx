@@ -6,7 +6,7 @@ const MainView: React.FC = () => {
 	return (
 		<BackgroundContainer>
 			<MainViewTitle role={'Student'} />
-			<div className="flex flex- w-full items-center justify-center h-1/2">
+			<div className="flex flex-wrap w-full items-center justify-center h-1/2">
 				<Card
 					path="/student/attendance"
 					title="View attendance"
