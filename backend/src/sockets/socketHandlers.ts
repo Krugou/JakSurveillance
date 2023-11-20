@@ -1,7 +1,8 @@
 import crypto from 'crypto';
+import {config} from 'dotenv';
 import {Server, Socket} from 'socket.io';
 import fetchReal from '../utils/fetch.js';
-
+config();
 let hash = '';
 const timestamps: {start: number; end: number; hash: string}[] = [];
 interface Student {
@@ -15,12 +16,33 @@ interface Student {
 let speedOfHashChange = 6000; // milliseconds
 let leewaytimes = 5;
 let timeout = 3600000; // 1 hour
+let token;
+async function getToken() {
+	try {
+		const response = await fetchReal.doFetch('http://localhost:3002/users/', {
+			method: 'post', // or 'GET'
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				username: process.env.devaccount,
+				password: process.env.devpass,
+			}),
+		});
+
+		token = response.token;
+	} catch (error) {
+		// Handle the error here
+		console.error(error);
+	}
+}
 async function fetchDataAndUpdate() {
 	try {
 		const response = await fetchReal.doFetch('http://localhost:3002/admin/ ', {
 			method: 'GET', // or 'GET'
 			headers: {
 				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + token,
 			},
 		});
 
@@ -38,9 +60,12 @@ async function fetchDataAndUpdate() {
 }
 let howMuchLeeWay = 0;
 // Call the function
-fetchDataAndUpdate().then(() => {
-	howMuchLeeWay = speedOfHashChange * leewaytimes;
+getToken().then(() => {
+	fetchDataAndUpdate().then(() => {
+		howMuchLeeWay = speedOfHashChange * leewaytimes;
+	});
 });
+
 const updateHash = () => {
 	const start = Date.now();
 	hash = crypto.randomBytes(20).toString('hex');
@@ -161,6 +186,7 @@ const setupSocketHandlers = (io: Server) => {
 							method: 'POST', // or 'GET'
 							headers: {
 								'Content-Type': 'application/json',
+								Authorization: 'Bearer ' + token,
 							},
 							body: JSON.stringify({
 								status: '1',
@@ -181,7 +207,6 @@ const setupSocketHandlers = (io: Server) => {
 									Number(student.studentnumber) === Number(studentId),
 							);
 
-							
 							if (student) {
 								ArrayOfStudents.push(
 									`${student.first_name} ${student.last_name.charAt(0)}.`,
