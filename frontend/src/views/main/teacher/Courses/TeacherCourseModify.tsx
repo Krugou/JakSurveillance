@@ -78,7 +78,6 @@ const TeacherCourseModify: React.FC = () => {
 		console.log(modifiedData);
 	};
 
-	console.log(courseData);
 	return (
 		<BackgroundContainer>
 			<h2 className="text-gray-800 font-semibold mb-6 text-md sm:text-2xl">
@@ -115,14 +114,14 @@ const TeacherCourseModify: React.FC = () => {
 					label="Start Date"
 					type="datetime-local"
 					name="startDate"
-					value={courseData?.start_date}
+					value={new Date(courseData?.start_date || '').toISOString().slice(0, 16)}
 					onChange={e => setStartDate(e.target.value)}
 				/>
 				<InputField
 					label="End Date"
 					type="datetime-local"
 					name="endDate"
-					value={courseData?.end_date}
+					value={new Date(courseData?.end_date || '').toISOString().slice(0, 16)}
 					onChange={e => setEndDate(e.target.value)}
 				/>
 				<InputField
