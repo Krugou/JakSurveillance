@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import apihooks from '../../../../hooks/ApiHooks';
 import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
+import InputField from '../../../../components/main/course/createcourse/coursedetails/InputField';
 // this is view for teacher to modify the single course details
 
 interface CourseDetail {
@@ -18,8 +19,25 @@ interface CourseDetail {
 }
 
 const TeacherCourseModify: React.FC = () => {
-	const {id} = useParams<{id: string}>();
 	const [courseData, setCourseData] = useState<CourseDetail | null>(null);
+	const [courseName, setCourseName] = useState(
+		courseData ? courseData.name : '',
+	);
+	const [courseCode, setCourseCode] = useState(
+		courseData ? courseData.code : '',
+	);
+	const [studentGroup, setStudentGroup] = useState(
+		courseData ? courseData.studentgroup_name : '',
+	);
+	const [startDate, setStartDate] = useState(
+		courseData ? courseData.start_date : '',
+	);
+	const [endDate, setEndDate] = useState(courseData ? courseData.end_date : '');
+	const [instructors, setInstructors] = useState(
+		courseData ? courseData.instructor_name : '',
+	);
+
+	const {id} = useParams<{id: string}>();
 
 	// Replace with actual data fetching
 
@@ -48,7 +66,16 @@ const TeacherCourseModify: React.FC = () => {
 
 	const handleSubmit = (event: React.FormEvent) => {
 		event.preventDefault();
-		// Handle the form submission here
+
+		const modifiedData = {
+			courseName: courseName,
+			courseCode: courseCode,
+			studentGroup: studentGroup,
+			startDate: startDate,
+			endDate: endDate,
+			instructors: instructors,
+		};
+		console.log(modifiedData);
 	};
 
 	console.log(courseData);
@@ -57,66 +84,54 @@ const TeacherCourseModify: React.FC = () => {
 			<h2 className="text-gray-800 font-semibold mb-6 text-md sm:text-2xl">
 				Modify Course
 			</h2>
+
 			<form
 				onSubmit={handleSubmit}
 				className="bg-white md:w-2/4 xl:w-1/4 w-full sm:w-2/3 shadow-md rounded-xl px-8 pt-6 pb-8 mb-4 mx-auto"
 			>
-				<div className="mb-4">
-					<label
-						className="block text-gray-700 text-sm sm:text-lg font-bold mb-2"
-						htmlFor="courseName"
-					>
-						Course Name
-					</label>
-					<input
-						className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-						id="courseName"
-						type="text"
-						value={courseData?.name}
-					/>
-				</div>
-				<div className="mb-4">
-					<label
-						className="block text-gray-700 text-sm sm:text-lg font-bold mb-2"
-						htmlFor="courseCode"
-					>
-						Course Code
-					</label>
-					<input
-						className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-						id="courseCode"
-						type="text"
-						value={courseData?.code}
-					/>
-				</div>
-				<div className="mb-4">
-					<label
-						className="block text-gray-700 text-sm sm:text-lg font-bold mb-2"
-						htmlFor="startDate"
-					>
-						Start Date
-					</label>
-					<input
-						className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-						id="startDate"
-						type="text"
-						value={courseData?.start_date}
-					/>
-				</div>
-				<div className="mb-4">
-					<label
-						className="block text-gray-700 text-sm sm:text-lg font-bold mb-2"
-						htmlFor="endDate"
-					>
-						End Date
-					</label>
-					<input
-						className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-						id="endDate"
-						type="date"
-						value={courseData?.end_date}
-					/>
-				</div>
+				<InputField
+					label="Course Code"
+					type="text"
+					name="courseCode"
+					value={courseData?.code}
+					onChange={e => setCourseCode(e.target.value)}
+				/>
+
+				<InputField
+					label="Course Name"
+					type="text"
+					name="courseName"
+					value={courseData?.name}
+					onChange={e => setCourseName(e.target.value)}
+				/>
+				<InputField
+					label="Student Group"
+					type="text"
+					name="studentGroup"
+					value={courseData?.studentgroup_name}
+					onChange={e => setStudentGroup(e.target.value)}
+				/>
+				<InputField
+					label="Start Date"
+					type="datetime-local"
+					name="startDate"
+					value={courseData?.start_date}
+					onChange={e => setStartDate(e.target.value)}
+				/>
+				<InputField
+					label="End Date"
+					type="datetime-local"
+					name="endDate"
+					value={courseData?.end_date}
+					onChange={e => setEndDate(e.target.value)}
+				/>
+				<InputField
+					label="Course Instructors"
+					type="email"
+					name="email"
+					value={courseData?.instructor_name}
+					onChange={e => setInstructors(e.target.value)}
+				/>
 				<div className="flex w-full justify-center">
 					<button
 						className="bg-metropoliaMainOrange w-1/2 hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 rounded-xl px-4 focus:outline-none focus:shadow-outline"
