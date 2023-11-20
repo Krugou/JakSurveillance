@@ -32,7 +32,7 @@ interface AttendanceModel {
 		usercourseid: number,
 		classid: number,
 	) => Promise<any>;
-	checkAttendance: (usercourseid: number) => Promise<any>;
+
 	getAttendanceById: (insertid: number) => Promise<any>;
 	getAttendanceByUserCourseIdDateClassId: (
 		usercourseid: number,
@@ -183,10 +183,13 @@ const attendanceModel: AttendanceModel = {
 			throw new Error('Failed to insert attendance');
 		}
 	},
-	async checkAttendance(usercourseid: number) {
+	async checkAttendance(usercourseid: number, classid: number) {
 		const [attendanceResultCheck] = await pool
 			.promise()
-			.query('SELECT * FROM attendance WHERE usercourseid = ?', [usercourseid]);
+			.query('SELECT * FROM attendance WHERE usercourseid = ? AND classid = ?', [
+				usercourseid,
+				classid,
+			]);
 		return attendanceResultCheck;
 	},
 	async getAttendanceById(insertid: number) {
