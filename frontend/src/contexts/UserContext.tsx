@@ -10,6 +10,7 @@ interface User {
 	group_name?: string; // Studentgroup name
 	created_at: string;
 	userid: number;
+	studentnumber?: number;
 
 	// add other properties as needed
 }
