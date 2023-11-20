@@ -36,8 +36,9 @@ const StudentQrScanner: React.FC = () => {
 					console.log('secureHash', secureHash);
 					console.log('classid', classid);
 					let studentId;
-
-					studentId = user.studentnumber;
+					if (user && user.studentnumber) {
+						studentId = user.studentnumber;
+					}
 					console.log('🚀 ~ file: StudentQrScanner.tsx:41 ~ studentId:', studentId);
 
 					const unixtime = Date.now();

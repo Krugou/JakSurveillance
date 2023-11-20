@@ -76,7 +76,6 @@ const excelInput = async (inputs: CreateCourseFile, token: string) => {
 };
 interface getCourseReservations {
 	code: string;
-	token: string;
 }
 interface checkIfCourseExists {
 	codes: string;
@@ -134,8 +133,8 @@ const getCourseDetailByCourseId = async (courseId: string, token: string) => {
 	});
 	return response;
 };
-const getCourseReservations = async (inputs: getCourseReservations) => {
-	const {code, token} = inputs;
+const getCourseReservations = async (inputs: getCourseReservations, token) => {
+	const {code} = inputs;
 
 	const options = {
 		method: 'POST',

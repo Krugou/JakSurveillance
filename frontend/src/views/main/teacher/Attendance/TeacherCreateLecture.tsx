@@ -135,6 +135,10 @@ const CreateLecture: React.FC = () => {
 
 		try {
 			let response;
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
 			if (selectedCourse !== null) {
 				response = await apihooks.CreateLecture(
 					selectedParticipant,
@@ -142,6 +146,7 @@ const CreateLecture: React.FC = () => {
 					date,
 					date,
 					selectedLocation,
+					token,
 				);
 			}
 			const {classid} = response;
