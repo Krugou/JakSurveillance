@@ -95,7 +95,6 @@ router.post('/create', async (req: Request, res: Response) => {
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({
-			error: 'Internal server error:',
 			message: error.message,
 		});
 	}
