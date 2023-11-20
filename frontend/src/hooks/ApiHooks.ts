@@ -48,7 +48,7 @@ interface CreateCourseInputs {
 interface CreateCourseFile {
 	formDataFile: FormData;
 }
-const createCourse = async (courseData: CreateCourseInputs, token:string) => {
+const createCourse = async (courseData: CreateCourseInputs, token: string) => {
 	const options: RequestInit = {
 		method: 'POST',
 		headers: {
@@ -61,9 +61,12 @@ const createCourse = async (courseData: CreateCourseInputs, token:string) => {
 	const url = `${baseUrl}courses/create`; // append the endpoint to the baseUrl
 	return doFetch(url, options);
 };
-const excelInput = async (inputs: CreateCourseFile) => {
+const excelInput = async (inputs: CreateCourseFile, token) => {
 	const {formDataFile} = inputs;
 	const options: RequestInit = {
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
 		method: 'POST',
 		body: formDataFile,
 	};
