@@ -23,14 +23,18 @@ const CourseStudents: React.FC<Props> = ({coursestudents}) => {
 	return (
 		<div
 			className={`flex flex-row ${
-				coursestudents.length === 0 ? 'justify-center' : 'justify-end'
+				coursestudents.length > 10 ? 'justify-start' : 'justify-center'
 			} bg-white p-4 rounded-lg shadow-md w-full mt-4 overflow-hidden`}
 		>
 			{coursestudents.length === 0 ? (
 				<p className="">All students saved</p>
 			) : (
 				// <div className={`whitespace-nowrap animate-slide-${slideDirection}`}>
-				<div className={`whitespace-nowrap animate-backandforth`}>
+				<div
+					className={`whitespace-nowrap ${
+						coursestudents.length > 8 ? 'animate-backandforth' : ''
+					}`}
+				>
 					{coursestudents.map((student, index) => {
 						const formattedName = `${student.first_name} ${student.last_name.charAt(
 							0,
