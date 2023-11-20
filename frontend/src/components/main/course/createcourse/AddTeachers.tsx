@@ -1,4 +1,5 @@
 import React from 'react';
+import InputField from './coursedetails/InputField';
 const AddTeachers = ({
 	instructors,
 	handleInputChange,
@@ -18,8 +19,10 @@ const AddTeachers = ({
 			<legend className="text-xl mb-3">Add teachers</legend>
 			{instructors.map((instructor, index) => (
 				<div key={index} className="flex justify-between items-center mb-3">
-					<input
-						className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+					<InputField
+						type="text"
+						name="email"
+						label="Email"
 						value={instructor.email}
 						onChange={event => handleInputChange(index, event)}
 					/>
