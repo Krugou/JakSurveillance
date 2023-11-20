@@ -83,7 +83,7 @@ const courseController = {
 				const existingCourse = await courseModel.findByCode(code);
 
 				if (existingCourse) {
-					throw new Error('Course already exists');
+					return Promise.reject(new Error('Course with this code already exists'));
 				}
 
 				const courseResult = await courseModel.insertCourse(
@@ -102,7 +102,9 @@ const courseController = {
 						);
 
 					if (!instructorInserted) {
-						throw new Error('Failed to insert instructor into courseinstructors');
+						return Promise.reject(
+							new Error('Instructor could not be inserted into the course'),
+						);
 					}
 				}
 				let topicGroupId = 0;
