@@ -29,10 +29,7 @@ const TeacherStudentsView: React.FC = () => {
 		const fetchStudents = async () => {
 			const userid = 3; // Replace with actual instructor ID
 			const students = await apiHooks.getStudentsByInstructorId(userid, token);
-			console.log(
-				'🚀 ~ file: TeacherStudentsView.tsx:22 ~ fetchStudents ~ students:',
-				students,
-			);
+
 			setStudents(students);
 			setLoading(false);
 		};
