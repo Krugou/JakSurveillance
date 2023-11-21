@@ -82,17 +82,21 @@ const finishLecture = async (lectureid: string, io) => {
 		),
 		lectureid: lectureid,
 	};
+	console.log('🚀 ~ file: socketHandlers.ts:89 ~ finishLecture ~ data:', data);
 	const token = await getToken();
 	// Send a POST request to the '/lecturefinished/' route
 	try {
-		const response = await fetch('http://localhost:3002/lecturefinished/', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: 'Bearer ' + token,
+		const response = await fetch(
+			'http://localhost:3002/courses/attendance/lecturefinished/',
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: 'Bearer ' + token,
+				},
+				body: JSON.stringify(data),
 			},
-			body: JSON.stringify(data),
-		});
+		);
 
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
