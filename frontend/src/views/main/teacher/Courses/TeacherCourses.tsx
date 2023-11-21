@@ -34,10 +34,6 @@ const TeacherCourses: React.FC = () => {
 					user.email,
 					token,
 				);
-				console.log(
-					'🚀 ~ file: TeacherCourses.tsx:25 ~ fetchCourses ~ courses:',
-					courses,
-				);
 
 				setCourses(courses);
 			}
