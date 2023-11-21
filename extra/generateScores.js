@@ -85,7 +85,9 @@ const filenames = fs.readdirSync(__dirname);
 // Filter the filenames for .drawio and .png files
 const filteredFilenames = filenames.filter(
 	filename =>
-		path.extname(filename) === '.drawio' || path.extname(filename) === '.png',
+		path.extname(filename) === '.drawio' ||
+		path.extname(filename) === '.png' ||
+		path.extname(filename) === '.xls',
 );
 
 // Write the object to the JSON file
