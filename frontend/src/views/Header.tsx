@@ -37,6 +37,9 @@ const Header: React.FC<HeaderProps> = () => {
 				// If the user info is successfully fetched, set the user
 				if (user) {
 					setUser(user);
+					if (location.pathname === '/') {
+						navigate(`/${user.role.toLowerCase()}/mainview`);
+					}
 					return;
 				}
 			} catch (error) {
