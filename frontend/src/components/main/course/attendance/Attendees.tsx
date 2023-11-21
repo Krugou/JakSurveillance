@@ -5,11 +5,11 @@ interface AttendeesProps {
 }
 
 const Attendees: React.FC<AttendeesProps> = ({arrayOfStudents}) => {
-	const arrayOfStudentstest = ['Aaa B.', 'bbb C.', 'ccc D.', 'ddd E.','Aaa B.', 'bbb C.', 'ccc D.', 'ddd E.','Aaa B.', 'bbb C.', 'ccc D.', 'ddd E.','Aaa B.', 'bbb C.', 'ccc D.', 'ddd E.','Aaa B.', 'bbb C.', 'ccc D.', 'ddd E.','Aaa B.', 'bbb C.', 'ccc D.', 'ddd E.','Aaa B.', 'bbb C.', 'ccc D.', 'ddd E.','Aaa B.', 'bbb C.', 'ccc D.', 'ddd E.','Aaa B.', 'bbb C.', 'ccc D.', 'ddd E.','Aaa B.', 'bbb C.', 'ccc D.', 'ddd E.'];
+	const arrayOfStudentstest = ['Aaa B.', 'bbb C.', 'ccc D.','Aaa B.', 'bbb C.', 'ccc D.','Aaa B.', 'bbb C.', 'ccc D.','Aaa B.', 'bbb C.', 'ccc D.','Aaa B.', 'bbb C.', 'ccc D.','Aaa B.', 'bbb C.', 'ccc D.','Aaa B.', 'bbb C.', 'ccc D.','Aaa B.', 'bbb C.', 'ccc D.','Aaa B.', 'bbb C.', 'ccc D.'];
 	const students =
 		arrayOfStudents.length > 0 ? arrayOfStudents : arrayOfStudentstest;
 	return (
-		<div className="text-md max-w-[15em] max-h-[25em] overflow-y-scroll sm:text-xl mb-4">
+		<div className="text-md max-w-full sm:max-w-[15em] max-h-[25em] overflow-y-scroll sm:text-xl mb-4">
 			<div className="flex flex-wrap justify-center">
 				{students.map((student, index) => (
 					<div

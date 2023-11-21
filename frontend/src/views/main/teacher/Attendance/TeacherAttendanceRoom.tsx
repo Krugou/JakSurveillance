@@ -100,13 +100,13 @@ const AttendanceRoom: React.FC = () => {
 	return (
 		<BackgroundContainer>
 		<div className="flex flex-col w-full xl:w-4/5 2xl:w-3/4 h-full p-5 bg-gray-100">
-			<div className="flex flex-row justify-between items-start">
-				<div className="flex flex-row w-[50rem] ">
+			<div className="flex flex-col-reverse sm:flex-row justify-between items-start">
+				<div className="flex sm:flex-row items-center flex-col-reverse w-full ">
 					<QRCode
 						size={256}
 						value={hashValue}
 						viewBox={`0 0 256 256`}
-						className="w-full h-full"
+						className="md:w-[32em] w-full h-full"
 					/>
 
 					<Attendees arrayOfStudents={arrayOfStudents} />
@@ -117,7 +117,7 @@ const AttendanceRoom: React.FC = () => {
 			</div>
 			<button
 				onClick={handleLectureFinished}
-				className="bg-metropoliaMainOrange w-80 p-5 m-4 hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 rounded"
+				className="bg-metropoliaMainOrange sm:w-fit w-full mt-5 p-5 hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 rounded"
 			>
 				Finish Lecture
 			</button>
