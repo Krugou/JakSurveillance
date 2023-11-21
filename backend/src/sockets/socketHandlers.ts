@@ -158,16 +158,13 @@ const setupSocketHandlers = (io: Server) => {
 			updateHash();
 			setInterval(updateHash, speedOfHashChange);
 			// Emit the event every `speedOfHashChange` milliseconds
-			const servertime = new Date();
 			const intervalId = setInterval(() => {
 				io
 					.to(lectureid)
 					.emit(
 						'updateAttendanceCollectionData',
 						hash,
-						speedOfHashChange,
 						lectureid,
-						servertime.getTime(),
 						presentStudents[lectureid],
 						notYetPresentStudents[lectureid],
 					);
