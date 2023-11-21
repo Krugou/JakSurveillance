@@ -9,7 +9,7 @@ const Attendees: React.FC<AttendeesProps> = ({arrayOfStudents}) => {
 	const students =
 		arrayOfStudents.length > 0 ? arrayOfStudents : arrayOfStudentstest;
 	return (
-		<div className="text-md max-w-full sm:max-w-[15em] max-h-[25em] overflow-y-scroll sm:text-xl mb-4">
+		<div className="text-md max-w-full w-full sm:max-w-[15em] max-h-[25em] h-[25em] overflow-y-scroll sm:text-xl mb-4">
 			<div className="flex flex-wrap justify-center">
 				{students.map((student, index) => (
 					<div

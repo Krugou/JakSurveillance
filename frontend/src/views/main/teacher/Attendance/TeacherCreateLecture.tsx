@@ -166,23 +166,23 @@ const CreateLecture: React.FC = () => {
 
 	return (
 		<BackgroundContainer>
-			<div className="flex flex-col 2xl:w-1/4 sm:w-3/5 lg:w-2/5 md:w-3/5 w-11/12 items-center rounded-lg justify-center h-1/2 sm:p-5 p-2 bg-orange-100">
+			<div className="flex flex-col 2xl:w-2/6 sm:w-4/5 lg:w-3/5 md:w-3/5 w-full items-center rounded-lg justify-center sm:p-5 p-1 bg-orange-100">
 				<h1 className="text-lg sm:text-2xl font-bold p-2 mb-8 mt-5">
 					Create new lecture
 				</h1>
 				<div className="flex w-full justify-center">
 					<div className="flex w-1/4 flex-col gap-5">
-						<label className="text-xl flex justify-end" htmlFor="course">
+						<label className="sm:text-xl text-md flex justify-end" htmlFor="course">
 							Course :
 						</label>
-						<label className="text-xl flex justify-end" htmlFor="topic">
+						<label className="sm:text-xl text-md flex justify-end" htmlFor="topic">
 							Topic :
 						</label>
 					</div>
-					<div className="w-full sm:w-4/5 lg:w-11/12 flex flex-col gap-3">
+					<div className="w-3/4 sm:w-4/5 lg:w-11/12 flex flex-col gap-3">
 						<select
 							id="course"
-							className="block h-8 ml-5 mr-3"
+							className="block h-8 sm:ml-5 ml-1 mr-3"
 							value={selectedSession}
 							onChange={e => {
 								const selectedCourseId = e.target.value;
@@ -219,7 +219,7 @@ const CreateLecture: React.FC = () => {
 						</select>
 						<select
 							id="topic"
-							className="block h-8 mr-3 ml-5 mt-1"
+							className="block h-8 mr-3 sm:ml-5 ml-1 sm:mt-1 mt-none"
 							value={selectedParticipant}
 							onChange={e => {
 								setSelectedParticipant(e.target.value);
