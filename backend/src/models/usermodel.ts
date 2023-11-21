@@ -247,9 +247,7 @@ const UserModel = {
 
 		return userResult;
 	},
-	getStudentsByInstructorId: async (
-		instructorId: number,
-	): Promise<UserInfo[]> => {
+	getStudentsByInstructorId: async (userid: number): Promise<UserInfo[]> => {
 		try {
 			const [rows] = await UserModel.pool.promise().query<RowDataPacket[]>(
 				`SELECT u.*
@@ -258,7 +256,7 @@ const UserModel = {
           JOIN courses c ON uc.courseid = c.courseid
           JOIN courseinstructors ci ON c.courseid = ci.courseid
           WHERE ci.userid = ? AND u.roleid = 1;`,
-				[instructorId],
+				[userid],
 			);
 
 			return rows as UserInfo[];

@@ -282,6 +282,17 @@ const updateServerSettings = async (
 	const url = `${baseUrl}admin`;
 	return doFetch(url, options);
 };
+const getStudentsByInstructorId = async (userid: number, token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	const url = `${baseUrl}courses/students/${userid}`;
+	return doFetch(url, options);
+};
 
 const deleteCourse = async (courseId: number, token: string) => {
 	const options = {
@@ -312,5 +323,6 @@ const apiHooks = {
 	updateServerSettings,
 	deleteCourse,
 	getLectureInfo,
+	getStudentsByInstructorId,
 };
 export default apiHooks;

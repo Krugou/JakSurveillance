@@ -315,17 +315,18 @@ router.delete('/delete/:id', async (req: Request, res: Response) => {
 		res.status(500).send('Server error');
 	}
 });
-router.get('/students/:instructorId', async (req: Request, res: Response) => {
+router.get('/students/:userid', async (req: Request, res: Response) => {
 	// Get the instructor ID from the request
-	const instructorId = Number(req.params.instructorId);
-	if (isNaN(instructorId)) {
-		res.status(400).send('Invalid instructor ID');
+	const userid = Number(req.params.userid);
+	
+	if (isNaN(userid)) {
+		res.status(400).send('Invalid user ID');
 		return;
 	}
 
 	try {
 		// Get the students for the instructor
-		const students = await UserModel.getStudentsByInstructorId(instructorId);
+		const students = await UserModel.getStudentsByInstructorId(userid);
 		res.json(students);
 	} catch (err) {
 		console.error(err);
