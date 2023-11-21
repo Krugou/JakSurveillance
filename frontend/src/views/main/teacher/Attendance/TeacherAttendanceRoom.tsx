@@ -1,17 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import QRCode from 'react-qr-code';
 import {useParams} from 'react-router-dom';
+import {toast} from 'react-toastify';
 import io, {Socket} from 'socket.io-client';
+import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import Attendees from '../../../../components/main/course/attendance/Attendees';
 import CourseStudents from '../../../../components/main/course/attendance/CourseStudents';
+import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
-import BackgroundContainer from "../../../../components/main/background/BackgroundContainer";
 const AttendanceRoom: React.FC = () => {
+	const {user} = useContext(UserContext);
 	const {lectureid} = useParams<{lectureid: string}>();
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [arrayOfStudents, setArrayOfStudents] = useState<string[]>([]);
 	const [courseStudents, setCourseStudents] = useState<Student[]>([]);
 	const [serverMessage, setServerMessage] = useState('');
+	const [countdown, setCountdown] = useState<null | number>(null);
+	const [courseName, setCourseName] = useState('');
+	const [courseCode, setCourseCode] = useState('');
+	const [topicname, setTopicname] = useState('');
 
 	interface Student {
 		studentnumber: string;
@@ -20,17 +27,39 @@ const AttendanceRoom: React.FC = () => {
 		userid: number;
 	}
 	const [hashValue, setHashValue] = useState('');
-	const handleLectureFinished = () => {
-		const dateToday = new Date().toISOString().slice(0, 19).replace('T', ' ');
-		const studentnumbers = courseStudents.map(student => student.studentnumber);
-		if (lectureid) {
-			const token: string | null = localStorage.getItem('userToken');
-			if (!token) {
-				throw new Error('No token available');
-			}
-			apiHooks.finishLecture(dateToday, studentnumbers, lectureid, token);
+
+	useEffect(() => {
+		if (!user) {
+			toast.error('No user information available');
+			return;
 		}
-	};
+
+		if (!lectureid) {
+			toast.error('No lecture ID provided');
+			return;
+		}
+
+		const token: string | null = localStorage.getItem('userToken');
+
+		if (!token) {
+			toast.error('No token available');
+			return;
+		}
+
+		apiHooks
+			.getLectureInfo(lectureid, token)
+
+			.then(info => {
+				setCourseCode(info.code);
+				setCourseName(info.name);
+				setTopicname(info.topicname);
+				toast.success('Lecture info retrieved successfully');
+			})
+			.catch(error => {
+				console.error('Error getting lecture info:', error);
+				toast.error('Error getting lecture info');
+			});
+	}, [lectureid]);
 	useEffect(() => {
 		if (!socket) {
 			const socketURL =
@@ -48,7 +77,12 @@ const AttendanceRoom: React.FC = () => {
 			});
 
 			newSocket.emit('createAttendanceCollection', lectureid);
-
+			newSocket.on('lecturestarted', (checklectureid, timeout) => {
+				if (checklectureid === lectureid) {
+					console.log('lecture started: ' + checklectureid + timeout);
+					setCountdown(timeout / 1000); // convert milliseconds to seconds
+				}
+			});
 			newSocket.on('getallstudentsinlecture', courseStudents => {
 				setCourseStudents(courseStudents);
 			});
@@ -96,36 +130,70 @@ const AttendanceRoom: React.FC = () => {
 			}
 		};
 	}, [socket]);
+	const handleLectureFinished = () => {
+		if (!socket) {
+			toast.error('Socket is not connected');
+			return;
+		}
 
+		socket.emit('lecturefinishedwithbutton', lectureid);
+	};
+	useEffect(() => {
+		let intervalId;
+
+		if (countdown > 0) {
+			intervalId = setInterval(() => {
+				setCountdown(countdown - 1);
+			}, 1000);
+		}
+
+		return () => {
+			if (intervalId) {
+				clearInterval(intervalId);
+			}
+		};
+	}, [countdown]);
 	return (
 		<BackgroundContainer>
-		<div className="flex flex-col w-full xl:w-4/5 2xl:w-3/4 h-full p-5 bg-gray-100">
-			<div className="flex flex-col-reverse sm:flex-row justify-between items-start">
-				<div className="flex sm:flex-row items-center flex-col-reverse w-full ">
-					<QRCode
-						size={256}
-						value={hashValue}
-						viewBox={`0 0 256 256`}
-						className="md:w-[32em] w-full h-full"
-					/>
-
-					<Attendees arrayOfStudents={arrayOfStudents} />
+			<div className="flex flex-col w-full xl:w-4/5 2xl:w-3/4 h-full p-5 bg-gray-100">
+				<div>
+					<h1 className="text-4xl font-bold">
+						{courseName} - {courseCode} - {topicname} - {Math.floor(countdown / 60)}{' '}
+						minutes {countdown % 60} seconds
+					</h1>
 				</div>
-				<h2 className="text-2xl ml-2">
-					<label className="text-metropoliaTrendGreen">{arrayOfStudents.length}</label>/<label className="text-metropoliaSupportRed">{courseStudents.length}</label>
-				</h2>
+				<div className="flex flex-col-reverse sm:flex-row justify-between items-start">
+					<div className="flex sm:flex-row items-center flex-col-reverse w-full ">
+						<QRCode
+							size={256}
+							value={hashValue}
+							viewBox={`0 0 256 256`}
+							className="md:w-[32em] w-full h-full"
+						/>
+
+						<Attendees arrayOfStudents={arrayOfStudents} />
+					</div>
+					<h2 className="text-2xl ml-2">
+						<label className="text-metropoliaTrendGreen">
+							{arrayOfStudents.length}
+						</label>
+						/
+						<label className="text-metropoliaSupportRed">
+							{courseStudents.length}
+						</label>
+					</h2>
+				</div>
+				<button
+					onClick={handleLectureFinished}
+					className="bg-metropoliaMainOrange sm:w-fit w-full mt-5 p-5 hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 rounded"
+				>
+					Finish Lecture
+				</button>
+				<CourseStudents coursestudents={courseStudents} />
+				<div className="flex flex-col ">
+					<div className="h-auto mx-auto max-w-10 w-full">{serverMessage}</div>
+				</div>
 			</div>
-			<button
-				onClick={handleLectureFinished}
-				className="bg-metropoliaMainOrange sm:w-fit w-full mt-5 p-5 hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 rounded"
-			>
-				Finish Lecture
-			</button>
-			<CourseStudents coursestudents={courseStudents} />
-			<div className="flex flex-col ">
-				<div className="h-auto mx-auto max-w-10 w-full">{serverMessage}</div>
-			</div>
-		</div>
 		</BackgroundContainer>
 	);
 };
