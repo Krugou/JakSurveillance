@@ -23,21 +23,21 @@ interface AttendanceModel {
 	checkAndInsertAttendance: (
 		date: string,
 		studentnumbers: string[],
-		classid: string,
+		lectureid: string,
 	) => Promise<void>;
 
 	insertAttendance: (
 		status: number,
 		date: string,
 		usercourseid: number,
-		classid: number,
+		lectureid: number,
 	) => Promise<any>;
 
 	getAttendanceById: (insertid: number) => Promise<any>;
-	getAttendanceByUserCourseIdDateClassId: (
+	getAttendanceByUserCourseIdDateLectureId: (
 		usercourseid: number,
 		date: string,
-		classid: number,
+		lectureid: number,
 	) => Promise<any>;
 }
 
@@ -71,11 +71,11 @@ const attendanceModel: AttendanceModel = {
 		try {
 			//console.log(userid, 'USERIDDD');
 			const [rows] = await pool.promise().query<RowDataPacket[]>(
-				`SELECT attendance.status, class.start_date, class.timeofday, topics.topicname, courses.name, users.email AS teacher
+				`SELECT attendance.status, lecture.start_date, lecture.timeofday, topics.topicname, courses.name, users.email AS teacher
             FROM attendance 
-            JOIN class ON attendance.classid = class.classid
-            JOIN topics ON class.topicid = topics.topicid
-            JOIN courses ON class.courseid = courses.courseid
+            JOIN lecture ON attendance.lectureid = lecture.lectureid
+            JOIN topics ON lecture.topicid = topics.topicid
+            JOIN courses ON lecture.courseid = courses.courseid
             JOIN usercourses ON attendance.usercourseid = usercourses.usercourseid
 						JOIN courseinstructors ON usercourses.courseid = courseinstructors.courseid
 						JOIN users ON courseinstructors.userid = users.userid
@@ -90,7 +90,7 @@ const attendanceModel: AttendanceModel = {
 		}
 	},
 
-	async insertIntoAttendance(status, date, studentnumber, classid) {
+	async insertIntoAttendance(status, date, studentnumber, lectureid) {
 		try {
 			// Find usercourseid based on studentnumber
 			const [usercourseResult] = (await pool
@@ -128,8 +128,8 @@ const attendanceModel: AttendanceModel = {
 			const [insertResult] = (await pool
 				.promise()
 				.query(
-					'INSERT INTO attendance (status, date, usercourseid, classid) VALUES (?, ?, ?, ?)',
-					[status, date, usercourseid, classid],
+					'INSERT INTO attendance (status, date, usercourseid, lectureid) VALUES (?, ?, ?, ?)',
+					[status, date, usercourseid, lectureid],
 				)) as ResultSetHeader[];
 
 			// Get the inserted row
@@ -147,16 +147,16 @@ const attendanceModel: AttendanceModel = {
 		}
 	},
 
-	async getAttendanceByUserCourseIdDateClassId(
+	async getAttendanceByUserCourseIdDateLectureId(
 		usercourseid: number,
 		date: string,
-		classid: number,
+		lectureid: number,
 	) {
 		const [attendanceResult] = await pool
 			.promise()
 			.query(
-				'SELECT * FROM attendance WHERE usercourseid = ? AND date = ? AND classid = ?',
-				[usercourseid, date, classid],
+				'SELECT * FROM attendance WHERE usercourseid = ? AND date = ? AND lectureid = ?',
+				[usercourseid, date, lectureid],
 			);
 		return attendanceResult;
 	},
@@ -165,9 +165,9 @@ const attendanceModel: AttendanceModel = {
 		status: number,
 		date: string,
 		usercourseid: number,
-		classid: number,
+		lectureid: number,
 	) {
-		if (!date || !usercourseid || !classid) {
+		if (!date || !usercourseid || !lectureid) {
 			throw new Error('Invalid parameters');
 		}
 
@@ -175,20 +175,20 @@ const attendanceModel: AttendanceModel = {
 			return await pool
 				.promise()
 				.query(
-					'INSERT INTO attendance (status, date, usercourseid, classid) VALUES (?, ?, ?, ?)',
-					[status, date, usercourseid, classid],
+					'INSERT INTO attendance (status, date, usercourseid, lectureid) VALUES (?, ?, ?, ?)',
+					[status, date, usercourseid, lectureid],
 				);
 		} catch (error) {
 			console.error(error);
 			throw new Error('Failed to insert attendance');
 		}
 	},
-	async checkAttendance(usercourseid: number, classid: number) {
+	async checkAttendance(usercourseid: number, lectureid: number) {
 		const [attendanceResultCheck] = await pool
 			.promise()
-			.query('SELECT * FROM attendance WHERE usercourseid = ? AND classid = ?', [
+			.query('SELECT * FROM attendance WHERE usercourseid = ? AND lectureid = ?', [
 				usercourseid,
-				classid,
+				lectureid,
 			]);
 		return attendanceResultCheck;
 	},

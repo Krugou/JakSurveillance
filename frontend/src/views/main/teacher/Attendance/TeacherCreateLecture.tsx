@@ -149,9 +149,9 @@ const CreateLecture: React.FC = () => {
 					token,
 				);
 			}
-			const {classid} = response;
-			navigate(`/teacher/attendance/${classid}`);
-			console.log(`Class created successfully with classid ${classid}`);
+			const {lectureid} = response;
+			navigate(`/teacher/attendance/${lectureid}`);
+			console.log(`Class created successfully with lectureid ${lectureid}`);
 		} catch (error) {
 			console.error(`Error creating class: ${error}`);
 		}

@@ -23,38 +23,38 @@ CREATE TABLE IF NOT EXISTS `attendance` (
   `date` date NOT NULL,
   `attendanceid` int(11) NOT NULL AUTO_INCREMENT,
   `usercourseid` int(11) NOT NULL,
-  `classid` int(11) NOT NULL,
+  `lectureid` int(11) NOT NULL,
   PRIMARY KEY (`attendanceid`),
   KEY `usercourseid` (`usercourseid`),
-  KEY `classid` (`classid`),
+  KEY `lectureid` (`lectureid`),
   CONSTRAINT `attendance_ibfk_1` FOREIGN KEY (`usercourseid`) REFERENCES `usercourses` (`usercourseid`),
-  CONSTRAINT `attendance_ibfk_2` FOREIGN KEY (`classid`) REFERENCES `class` (`classid`)
+  CONSTRAINT `attendance_ibfk_2` FOREIGN KEY (`lectureid`) REFERENCES `lecture` (`lectureid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Dumping data for table jaksec.attendance: ~0 rows (suunnilleen)
 /*!40000 ALTER TABLE `attendance` DISABLE KEYS */;
 /*!40000 ALTER TABLE `attendance` ENABLE KEYS */;
 
--- Dumping structure for taulu jaksec.class
-CREATE TABLE IF NOT EXISTS `class` (
-  `classid` int(11) NOT NULL AUTO_INCREMENT,
+-- Dumping structure for taulu jaksec.lecture
+CREATE TABLE IF NOT EXISTS `lecture` (
+  `lectureid` int(11) NOT NULL AUTO_INCREMENT,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
   `timeofday` enum('am', 'pm') NOT NULL,
   `topicid` int(11) NOT NULL,
   `courseid` int(11) NOT NULL,
-  PRIMARY KEY (`classid`),
+  PRIMARY KEY (`lectureid`),
   KEY `topicid` (`topicid`),
   KEY `courseid` (`courseid`),
-  CONSTRAINT `class_ibfk_1` FOREIGN KEY (`topicid`) REFERENCES `topics` (`topicid`),
-  CONSTRAINT `class_ibfk_2` FOREIGN KEY (`courseid`) REFERENCES `courses` (`courseid`)
+  CONSTRAINT `lecture_ibfk_1` FOREIGN KEY (`topicid`) REFERENCES `topics` (`topicid`),
+  CONSTRAINT `lecture_ibfk_2` FOREIGN KEY (`courseid`) REFERENCES `courses` (`courseid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 
--- Dumping data for table jaksec.class: ~0 rows (suunnilleen)
-/*!40000 ALTER TABLE `class` DISABLE KEYS */;
-/*!40000 ALTER TABLE `class` ENABLE KEYS */;
+-- Dumping data for table jaksec.lecture: ~0 rows (suunnilleen)
+/*!40000 ALTER TABLE `lecture` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lecture` ENABLE KEYS */;
 
 -- Dumping structure for taulu jaksec.courseinstructors
 CREATE TABLE IF NOT EXISTS `courseinstructors` (

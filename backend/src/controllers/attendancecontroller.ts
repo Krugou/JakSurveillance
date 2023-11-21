@@ -5,12 +5,12 @@ interface AttendanceController {
 		status: string,
 		date: Date,
 		studentnumber: string,
-		classid: string,
+		lectureid: string,
 	) => Promise<any>;
 	checkAndInsertStatusNotPresentAttendance: (
 		date: Date,
 		studentnumbers: string[],
-		classid: string,
+		lectureid: string,
 	) => Promise<any>;
 }
 const attendanceController: AttendanceController = {
@@ -18,10 +18,10 @@ const attendanceController: AttendanceController = {
 		status: string,
 		date: Date,
 		studentnumber: string,
-		classid: string,
+		lectureid: string,
 	) {
 		try {
-			if (!status || !date || !studentnumber || !classid) {
+			if (!status || !date || !studentnumber || !lectureid) {
 				throw new Error('Invalid parameters');
 			}
 
@@ -37,7 +37,7 @@ const attendanceController: AttendanceController = {
 
 			const usercourseid = usercourseResult[0].usercourseid;
 			const attendanceResultCheck = await attendanceModel.checkAttendance(
-				usercourseid,classid
+				usercourseid,lectureid
 			);
 
 			if (!attendanceResultCheck || attendanceResultCheck.length > 0) {
@@ -50,7 +50,7 @@ const attendanceController: AttendanceController = {
 				status,
 				date,
 				usercourseid,
-				classid,
+				lectureid,
 			);
 			console.log(
 				'🚀 ~ file: attendancecontroller.ts:42 ~ insertResult:',
@@ -78,7 +78,7 @@ const attendanceController: AttendanceController = {
 		}
 	},
 
-	async checkAndInsertStatusNotPresentAttendance(date, studentnumbers, classid) {
+	async checkAndInsertStatusNotPresentAttendance(date, studentnumbers, lectureid) {
 		try {
 			for (const studentnumber of studentnumbers) {
 				const usercourseResult = await usercoursesModel.getUserCourseId(
@@ -96,10 +96,10 @@ const attendanceController: AttendanceController = {
 				const usercourseid = usercourseResult[0].usercourseid;
 
 				const attendanceResult =
-					await attendanceModel.getAttendanceByUserCourseIdDateClassId(
+					await attendanceModel.getAttendanceByUserCourseIdDateLectureId(
 						usercourseid,
 						date,
-						classid,
+						lectureid,
 					);
 
 				if (attendanceResult.length === 0) {
@@ -108,7 +108,7 @@ const attendanceController: AttendanceController = {
 						status,
 						date,
 						usercourseid,
-						classid,
+						lectureid,
 					);
 				}
 			}

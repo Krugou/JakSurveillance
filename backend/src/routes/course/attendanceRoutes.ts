@@ -1,9 +1,9 @@
 // attendanceRoutes.ts
 import express, {Request, Response, Router} from 'express';
 import attendanceController from '../../controllers/attendancecontroller.js';
-import classController from '../../controllers/classcontroller.js';
+import lectureController from '../../controllers/lecturecontroller.js';
 import Attendance from '../../models/attendancemodel.js'; // Adjust the path according to your project structure
-import Class from '../../models/classmodel.js';
+import Lecture from '../../models/lecturemodel.js';
 
 const router: Router = express.Router();
 
@@ -47,10 +47,10 @@ router.get('/usercourse/:id', async (req: Request, res: Response) => {
 
 router.post('/', async (req: Request, res: Response) => {
 	try {
-		const {status, date, studentnumber, classid} = req.body;
+		const {status, date, studentnumber, lectureid} = req.body;
 
 		// Validate request body
-		if (!status || !date || !studentnumber || !classid) {
+		if (!status || !date || !studentnumber || !lectureid) {
 			return res.status(400).send('Missing required fields');
 		}
 
@@ -58,7 +58,7 @@ router.post('/', async (req: Request, res: Response) => {
 			status,
 			date,
 			studentnumber,
-			classid,
+			lectureid,
 		);
 		// Send response back to client
 		res.status(200).send(insertedData);
@@ -69,13 +69,13 @@ router.post('/', async (req: Request, res: Response) => {
 		res.status(500).send(`Server error: ${err.message}`);
 	}
 });
-router.post('/classfinished/', async (req: Request, res: Response) => {
+router.post('/lecturefinished/', async (req: Request, res: Response) => {
 	try {
-		const {date, studentnumbers, classid} = req.body;
+		const {date, studentnumbers, lectureid} = req.body;
 		await attendanceController.checkAndInsertStatusNotPresentAttendance(
 			date,
 			studentnumbers,
-			classid,
+			lectureid,
 		);
 		res
 			.status(201)
@@ -85,28 +85,28 @@ router.post('/classfinished/', async (req: Request, res: Response) => {
 		res.status(500).send('Server error');
 	}
 });
-router.post('/getallstudentsinclass/', async (req: Request, res: Response) => {
+router.post('/getallstudentsinlecture/', async (req: Request, res: Response) => {
 	try {
-		const {classid} = req.body;
-		const allStudentsInClass = await Class.getStudentsByClassId(classid);
-		res.status(201).json(allStudentsInClass);
+		const {lectureid} = req.body;
+		const allStudentsInLecture = await Lecture.getStudentsByLectureId(lectureid);
+		res.status(201).json(allStudentsInLecture);
 	} catch (err) {
 		console.error(err);
 		res.status(500).send('Server error');
 	}
 });
-router.post('/class/', async (req: Request, res: Response) => {
+router.post('/lecture/', async (req: Request, res: Response) => {
 	try {
 		const {topicname, coursecode, start_date, end_date, timeofday} = req.body;
 		console.log(req.body);
-		const classid = await classController.insertIntoClass(
+		const lectureid = await lectureController.insertIntoLecture(
 			topicname,
 			coursecode,
 			start_date,
 			end_date,
 			timeofday,
 		);
-		res.status(201).json({message: 'class created', classid});
+		res.status(201).json({message: 'lecture created', lectureid});
 	} catch (err) {
 		console.error(err);
 		res.status(500).send('Server error');

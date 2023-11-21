@@ -6,7 +6,7 @@ import Attendees from '../../../../components/main/course/attendance/Attendees';
 import CourseStudents from '../../../../components/main/course/attendance/CourseStudents';
 import apiHooks from '../../../../hooks/ApiHooks';
 const AttendanceRoom: React.FC = () => {
-	const {classid} = useParams<{classid: string}>();
+	const {lectureid} = useParams<{lectureid: string}>();
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [arrayOfStudents, setArrayOfStudents] = useState<string[]>([]);
 	const [courseStudents, setCourseStudents] = useState<Student[]>([]);
@@ -19,15 +19,15 @@ const AttendanceRoom: React.FC = () => {
 		userid: number;
 	}
 	const [hashValue, setHashValue] = useState('');
-	const handleClassFinished = () => {
+	const handleLectureFinished = () => {
 		const dateToday = new Date().toISOString().slice(0, 19).replace('T', ' ');
 		const studentnumbers = courseStudents.map(student => student.studentnumber);
-		if (classid) {
+		if (lectureid) {
 			const token: string | null = localStorage.getItem('userToken');
 			if (!token) {
 				throw new Error('No token available');
 			}
-			apiHooks.finishClass(dateToday, studentnumbers, classid, token);
+			apiHooks.finishLecture(dateToday, studentnumbers, lectureid, token);
 		}
 	};
 	useEffect(() => {
@@ -46,8 +46,8 @@ const AttendanceRoom: React.FC = () => {
 				console.log('Socket connected');
 			});
 
-			newSocket.emit('createAttendanceCollection', classid);
-			newSocket.on('getallstudentsinclass', courseStudents => {
+			newSocket.emit('createAttendanceCollection', lectureid);
+			newSocket.on('getallstudentsinlecture', courseStudents => {
 				setCourseStudents(courseStudents);
 			});
 			newSocket.on('updatecoursestudents', courseStudents => {
@@ -62,18 +62,18 @@ const AttendanceRoom: React.FC = () => {
 				(
 					hash,
 					changeTime,
-					classid,
+					lectureid,
 					servertime,
 					arrayOfStudents,
 					courseStudents,
 				) => {
-					setHashValue(hash + '/' + classid);
+					setHashValue(hash + '/' + lectureid);
 					setArrayOfStudents(arrayOfStudents);
 					setServerMessage(
 						' change time: ' +
 							changeTime +
-							' classid: ' +
-							classid +
+							' lectureid: ' +
+							lectureid +
 							' server time: ' +
 							servertime,
 					);
@@ -84,7 +84,7 @@ const AttendanceRoom: React.FC = () => {
 				console.log('Disconnected from the server');
 			});
 		}
-	}, [classid]);
+	}, [lectureid]);
 
 	useEffect(() => {
 		return () => {
@@ -113,10 +113,10 @@ const AttendanceRoom: React.FC = () => {
 				</h2>
 			</div>
 			<button
-				onClick={handleClassFinished}
+				onClick={handleLectureFinished}
 				className="bg-blue-500 p-5 m-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 			>
-				Finish class
+				Finish Lecture
 			</button>
 			<CourseStudents coursestudents={courseStudents} />
 			<div className="flex flex-col ">

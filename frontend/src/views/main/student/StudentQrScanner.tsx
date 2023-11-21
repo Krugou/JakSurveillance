@@ -12,7 +12,7 @@ const StudentQrScanner: React.FC = () => {
 	const onNewScanResult = useCallback(
 		(decodedText: string) => {
 			// Handle the scan result here
-			const [secureHash, classid] = decodedText.split('/');
+			const [secureHash, lectureid] = decodedText.split('/');
 			// Create a new socket connection if one does not already exist
 			if (!socket) {
 				const socketURL =
@@ -29,11 +29,11 @@ const StudentQrScanner: React.FC = () => {
 					console.log('Socket connected');
 				});
 
-				// Emit the 'inputThatStudentHasArrivedToClass' event to the server
+				// Emit the 'inputThatStudentHasArrivedToLecture' event to the server
 				if (!scanned) {
 					console.log('scanned');
 					console.log('secureHash', secureHash);
-					console.log('classid', classid);
+					console.log('lectureid', lectureid);
 					let studentId;
 					if (user && user.studentnumber) {
 						studentId = user.studentnumber;
@@ -42,24 +42,24 @@ const StudentQrScanner: React.FC = () => {
 
 					const unixtime = Date.now();
 					newSocket.emit(
-						'inputThatStudentHasArrivedToClass',
+						'inputThatStudentHasArrivedToLecture',
 						secureHash,
 						studentId,
 						unixtime,
-						classid,
+						lectureid,
 					);
 
 					setScanned(true);
 				}
-				newSocket.on('youhavebeensavedintoclass', studentId => {
-					toast.success(`You have been saved into ${classid} lecture`);
-					console.log('You have been saved into class', studentId);
+				newSocket.on('youhavebeensavedintolecture', studentId => {
+					toast.success(`You have been saved into ${lectureid} lecture`);
+					console.log('You have been saved into lecture', studentId);
 					toast.success('redirecting to mainview');
 					navigate('/student/mainview');
 				});
-				newSocket.on('inputThatStudentHasArrivedToClassTooSlow', studentId2 => {
+				newSocket.on('inputThatStudentHasArrivedToLectureTooSlow', studentId2 => {
 					toast.error('You were too slow, try again');
-					console.log('inputThatStudentHasArrivedToClassTooSlow', studentId2);
+					console.log('inputThatStudentHasArrivedToLectureTooSlow', studentId2);
 				});
 			}
 		},

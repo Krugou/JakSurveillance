@@ -1,6 +1,6 @@
 # Metropolia Attendance app project
 
->This app is made for metropolia university of applied sciences to help teachers to take attendance in their classes.
+>This app is made for metropolia university of applied sciences to help teachers to take attendance in their Lectures.
 
 [Project link here!](https://JakSec.northeurope.cloudapp.azure.com/)
 

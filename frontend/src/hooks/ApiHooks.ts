@@ -186,7 +186,7 @@ const CreateLecture = async (
 			timeofday,
 		}),
 	};
-	const url = `${baseUrl}courses/attendance/class/`;
+	const url = `${baseUrl}courses/attendance/lecture/`;
 	return doFetch(url, options);
 };
 const getUserInfoByToken = async (token: string) => {
@@ -212,10 +212,10 @@ const getAllCourseInfoByUserEmail = async (token: string) => {
 	// Use the email to make the API request
 	return await doFetch(`${baseUrl}courses/user/all`, options);
 };
-const finishClass = async (
+const finishLecture = async (
 	date: string,
 	studentnumbers: string[],
-	classid: string,
+	lectureid: string,
 	token: string,
 ) => {
 	const options = {
@@ -227,10 +227,10 @@ const finishClass = async (
 		body: JSON.stringify({
 			date,
 			studentnumbers,
-			classid,
+			lectureid,
 		}),
 	};
-	const url = `${baseUrl}courses/attendance/classfinished/`;
+	const url = `${baseUrl}courses/attendance/lecturefinished/`;
 	return doFetch(url, options);
 };
 const getAttendanceInfoByUsercourseid = async (
@@ -298,7 +298,7 @@ const apiHooks = {
 	CreateLecture,
 	getUserInfoByToken,
 	getAllCourseInfoByUserEmail,
-	finishClass,
+	finishLecture,
 	getAttendanceInfoByUsercourseid,
 	excelInput,
 	updateServerSettings,
