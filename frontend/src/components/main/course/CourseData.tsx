@@ -4,8 +4,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteModal from '../modals/DeleteModal';
 import apiHooks from '../../../hooks/ApiHooks';
-
 import {toast} from 'react-toastify';
+import {useNavigate} from 'react-router-dom';
 interface Course {
 	courseid: number;
 	name: string;
@@ -24,11 +24,14 @@ interface Course {
 
 interface CourseDataProps {
 	courseData: object;
+	updateView?: () => void;
 }
 
-const CourseData: React.FC<CourseDataProps> = ({courseData}) => {
+const CourseData: React.FC<CourseDataProps> = ({courseData, updateView}) => {
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 	const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
+
+	const navigate = useNavigate();
 
 	const handleDeleteCourse = async (courseid: number) => {
 		setIsDeleteModalOpen(false);
@@ -36,9 +39,16 @@ const CourseData: React.FC<CourseDataProps> = ({courseData}) => {
 		// Get token from local storage
 		const token: string = localStorage.getItem('userToken') || '';
 		try {
-			const response = await apiHooks.deleteCourse(courseid, token);
-			if (response) {
-				toast.success('Course deleted');
+			await apiHooks.deleteCourse(courseid, token);
+
+			toast.success('Course deleted');
+			// Check if we are in the TeacherCourseDetail route
+			if (location.pathname.includes('/teacher/courses/')) {
+				// If so, navigate to TeacherCourses
+				navigate('/teacher/courses');
+			} else {
+				// Otherwise, update the view
+				if (updateView) updateView();
 			}
 		} catch (error) {
 			if (error instanceof Error) {
@@ -63,6 +73,12 @@ const CourseData: React.FC<CourseDataProps> = ({courseData}) => {
 			document.body.classList.remove('overflow-hidden');
 		}
 	}, [isDeleteModalOpen]);
+
+	const handleDelete = () => {
+		if (selectedCourseId !== null) {
+			handleDeleteCourse(selectedCourseId);
+		}
+	};
 
 	const currentUrl = window.location.href;
 	console.log(courseData);
@@ -137,11 +153,7 @@ const CourseData: React.FC<CourseDataProps> = ({courseData}) => {
 				))}
 			<DeleteModal
 				isOpen={isDeleteModalOpen}
-				onDelete={() => {
-					if (selectedCourseId !== null) {
-						handleDeleteCourse(selectedCourseId);
-					}
-				}}
+				onDelete={handleDelete}
 				onClose={closeDeleteModal}
 			/>
 		</>

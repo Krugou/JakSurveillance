@@ -19,6 +19,7 @@ interface Course {
 const TeacherCourses: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const [courses, setCourses] = useState<Course[]>([]); // Specify the type for courses
+	const {update, setUpdate} = useContext(UserContext);
 
 	useEffect(() => {
 		const fetchCourses = async () => {
@@ -43,13 +44,16 @@ const TeacherCourses: React.FC = () => {
 		};
 
 		fetchCourses();
-	}, [user]);
+	}, [user, update]);
 
+	const updateView = () => {
+		setUpdate(!update);
+	};
 	return (
 		<BackgroundContainer>
 			<h2 className="font-bold text-lg">My courses</h2>
 			<div className="w-full sm:w-3/4 md:w-2/4 lg:w-2/5 2xl:w-1/5">
-				<CourseData courseData={courses} />
+				<CourseData courseData={courses} updateView={updateView} />
 			</div>
 		</BackgroundContainer>
 	);
