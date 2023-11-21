@@ -159,6 +159,7 @@ const CreateLecture = async (
 	start_date: Date,
 	end_date: Date,
 	timeofday: string,
+	state: string,
 	token: string,
 ) => {
 	const inputDate = start_date;
@@ -184,6 +185,7 @@ const CreateLecture = async (
 			start_date: formattedStart_date,
 			end_date: formattedEnd_date,
 			timeofday,
+			state,
 		}),
 	};
 	const url = `${baseUrl}courses/attendance/lecture/`;
