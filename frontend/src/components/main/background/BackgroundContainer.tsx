@@ -22,7 +22,6 @@ const BackgroundContainer: React.FC<BackgroundContainerProps> = ({
 
 	useEffect(() => {
 		const url = getRandomBackgroundUrl();
-		console.log('Background URL:', url);
 		setBackgroundUrl(url);
 	}, []); // The empty dependency array ensures this effect runs only once on mount
 
