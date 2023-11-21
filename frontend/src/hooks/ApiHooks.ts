@@ -1,4 +1,3 @@
-import {body} from 'express-validator';
 ('use strict');
 
 const baseUrl =
