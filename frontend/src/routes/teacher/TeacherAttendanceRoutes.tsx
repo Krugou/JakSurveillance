@@ -8,7 +8,7 @@ const TeacherAttendanceRoutes: React.FC = () => {
 	return (
 		<Routes>
 			<Route path="createlecture" element={<TeacherCreateLecture />} />
-			<Route path=":classid" element={<TeacherAttendanceRoom />} />
+			<Route path=":lectureid" element={<TeacherAttendanceRoom />} />
 			<Route path="*" element={<TeacherMainView />} />
 		</Routes>
 	);
