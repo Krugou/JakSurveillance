@@ -4,9 +4,8 @@ import usermodel from '../models/usermodel.js';
 import fetchReal from '../utils/fetch.js';
 //import { body, validationResult } from 'express-validator'; FOR VALIDATION
 import jwt from 'jsonwebtoken';
-import {User} from '../utils/pass.js';
-import {generateTokenAndUser} from '../utils/pass.js';
 import UserModel from '../models/usermodel.js';
+import {User, generateTokenAndUser} from '../utils/pass.js';
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
 
 const router: Router = express.Router();
@@ -186,8 +185,10 @@ router.post('/', async (req: Request, res: Response, next) => {
 				if (userFromDB === null) {
 					// If the staff user doesn't exist, add them to the database
 					const addStaffUserResponse = await UserModel.addStaffUser(userData);
-
-					console.log(addStaffUserResponse);
+					console.log(
+						'🚀 ~ file: userroutes.ts:189 ~ router.post ~ addStaffUserResponse:',
+						addStaffUserResponse,
+					);
 				}
 			} catch (error) {
 				console.error(error);
