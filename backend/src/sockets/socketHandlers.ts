@@ -71,6 +71,36 @@ const updateHash = () => {
 		timestamps.shift();
 	}
 };
+const finishLecture = async (lectureid: string, io) => {
+	io.to(lectureid).emit('lecturefinished');
+
+	// Prepare the data to be sent
+	const data = {
+		date: new Date().toISOString().slice(0, 19).replace('T', ' '),
+		studentnumbers: notYetPresentStudents[lectureid].map(
+			student => student.studentnumber,
+		),
+		lectureid: lectureid,
+	};
+	const token = await getToken();
+	// Send a POST request to the '/lecturefinished/' route
+	try {
+		const response = await fetch('http://localhost:3002/lecturefinished/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + token,
+			},
+			body: JSON.stringify(data),
+		});
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+	} catch (error) {
+		console.error('Error:', error);
+	}
+};
 // handle new socket.io connections
 const presentStudents: {[lectureid: string]: any[]} = {};
 const notYetPresentStudents: {[lectureid: string]: Student[]} = {};
@@ -91,7 +121,7 @@ const setupSocketHandlers = (io: Server) => {
 
 		socket.on('createAttendanceCollection', async lectureid => {
 			socket.join(lectureid);
-			
+			io.to(lectureid).emit('lecturestarted', lectureid, timeout);
 			const token = await getToken();
 			if (presentStudents[lectureid] && notYetPresentStudents[lectureid]) {
 				// The lists already exist, so use them
@@ -143,6 +173,16 @@ const setupSocketHandlers = (io: Server) => {
 					);
 			}, speedOfHashChange);
 
+			// Set a timeout to emit 'classfinished' event after 'timeout' milliseconds
+			setTimeout(() => {
+				finishLecture(lectureid, io);
+			}, timeout);
+
+			// ...
+
+			socket.on('lecturefinishedwithbutton', async (lectureid: string) => {
+				finishLecture(lectureid, io);
+			});
 			// Clear the interval when the socket disconnects
 			socket.on('disconnect', () => {
 				clearInterval(intervalId);
