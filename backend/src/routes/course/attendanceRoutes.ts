@@ -119,13 +119,15 @@ router.post('/lecture/', async (req: Request, res: Response) => {
 		res.status(500).send('Server error');
 	}
 });
-router.post('/lectureinfo/', async (req: Request, res: Response) => {
+router.get('/lectureinfo/:lectureid', async (req: Request, res: Response) => {
 	try {
-		const {lectureid} = req.body;
+		const {lectureid} = req.params;
+
 		const lectureInfo = await lectureModel.getLectureWithCourseAndTopic(
 			lectureid,
 		);
-		res.status(201).json(lectureInfo);
+
+		res.status(200).json(lectureInfo);
 	} catch (err) {
 		console.error(err);
 		res.status(500).send('Server error');
