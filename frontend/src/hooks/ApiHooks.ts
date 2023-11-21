@@ -218,17 +218,17 @@ const getAllCourseInfoByUserEmail = async (token: string) => {
 
 const getLectureInfo = async (lectureid: string, token: string) => {
 	const options = {
-		method: 'POST',
+		method: 'GET',
 		headers: {
 			Authorization: 'Bearer ' + token,
 		},
-		body: JSON.stringify({
-			lectureid,
-		}),
 	};
 
-	// Use the email to make the API request
-	return await doFetch(`${baseUrl}courses/attendance/lectureinfo/`, options);
+	// Use the lectureid as a URL parameter
+	return await doFetch(
+		`${baseUrl}courses/attendance/lectureinfo/${lectureid}`,
+		options,
+	);
 };
 const getAttendanceInfoByUsercourseid = async (
 	usercourseid: number,
