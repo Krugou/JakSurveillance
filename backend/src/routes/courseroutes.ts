@@ -2,15 +2,15 @@ import {config} from 'dotenv';
 import express, {Request, Response, Router} from 'express';
 import multer from 'multer';
 import XLSX from 'xlsx';
+import courseController from '../controllers/coursecontroller.js';
+import course from '../models/coursemodel.js';
+import UserModel from '../models/usermodel.js';
 import openData from '../utils/opendata.js';
+import attendanceRoutes from './course/attendanceRoutes.js';
 import topicRoutes from './course/topicRoutes.js';
 config();
 const upload = multer();
 const router: Router = express.Router();
-
-import courseController from '../controllers/coursecontroller.js';
-import course from '../models/coursemodel.js';
-import attendanceRoutes from './course/attendanceRoutes.js';
 router.get('/', async (_req: Request, res: Response) => {
 	try {
 		const [rows] = await course.fetchAllCourses();
@@ -310,6 +310,23 @@ router.delete('/delete/:id', async (req: Request, res: Response) => {
 		}
 		const result = await course.deleteCourse(courseId);
 		res.json(result);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server error');
+	}
+});
+router.get('/students/:instructorId', async (req: Request, res: Response) => {
+	// Get the instructor ID from the request
+	const instructorId = Number(req.params.instructorId);
+	if (isNaN(instructorId)) {
+		res.status(400).send('Invalid instructor ID');
+		return;
+	}
+
+	try {
+		// Get the students for the instructor
+		const students = await UserModel.getStudentsByInstructorId(instructorId);
+		res.json(students);
 	} catch (err) {
 		console.error(err);
 		res.status(500).send('Server error');
