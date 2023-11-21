@@ -72,11 +72,16 @@ router.post('/', async (req: Request, res: Response) => {
 router.post('/lecturefinished/', async (req: Request, res: Response) => {
 	try {
 		const {date, studentnumbers, lectureid} = req.body;
+		console.log(
+			'🚀 ~ file: attendanceRoutes.ts:75 ~ router.post ~ req.body:',
+			req.body,
+		);
 		await attendanceController.checkAndInsertStatusNotPresentAttendance(
 			date,
 			studentnumbers,
 			lectureid,
 		);
+		await lectureModel.updateLectureState(lectureid, 'closed');
 		res
 			.status(201)
 			.send('Attendance put as not present for rest of students not present');
