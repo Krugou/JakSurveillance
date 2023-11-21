@@ -6,6 +6,7 @@ import {useNavigate} from 'react-router-dom';
 import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
+import { toast } from 'react-toastify';
 const CreateLecture: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
@@ -117,13 +118,20 @@ const CreateLecture: React.FC = () => {
 	}, [courses]);
 
 	const handleOpenAttendance = async () => {
+		const state = 'open';
+
 		if (Array.isArray(date)) {
-			console.error(`Cannot create attendance for multiple dates`);
+			toast.error(`Cannot create attendance for multiple dates`);
 			return;
 		}
 
 		if (!selectedLocation) {
-			console.error(`Time of day not selected`);
+			toast.error(`Time of day not selected`);
+			return;
+		}
+
+		if (!selectedParticipant || !selectedCourse) {
+			toast.error(`Participant or course not selected`);
 			return;
 		}
 
@@ -134,26 +142,34 @@ const CreateLecture: React.FC = () => {
 		end_date.setHours(selectedLocation === 'am' ? 13 : 17, 30, 0, 0);
 
 		try {
-			let response;
 			const token: string | null = localStorage.getItem('userToken');
 			if (!token) {
+				toast.error('No token available');
 				throw new Error('No token available');
 			}
-			if (selectedCourse !== null) {
-				response = await apihooks.CreateLecture(
-					selectedParticipant,
-					selectedCourse,
-					date,
-					date,
-					selectedLocation,
-					token,
-				);
+
+			const response = await apihooks.CreateLecture(
+				selectedParticipant,
+				selectedCourse,
+				start_date,
+				end_date,
+				selectedLocation,
+				state,
+				token,
+			);
+
+			if (!response || !response.lectureid) {
+				toast.error('Error creating lecture');
+				throw new Error('Error creating lecture');
 			}
+
 			const {lectureid} = response;
 			navigate(`/teacher/attendance/${lectureid}`);
-			console.log(`Class created successfully with lectureid ${lectureid}`);
+			toast.success(`Lecture created successfully with lectureid ${lectureid}`);
+			console.log(`Lecture created successfully with lectureid ${lectureid}`);
 		} catch (error) {
-			console.error(`Error creating class: ${error}`);
+			toast.error(`Error creating lecture: ${error}`);
+			console.error(`Error creating lecture: ${error}`);
 		}
 	};
 	interface Course {
