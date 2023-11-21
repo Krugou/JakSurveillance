@@ -143,7 +143,7 @@ const AttendanceRoom: React.FC = () => {
 	useEffect(() => {
 		let intervalId;
 
-		if (countdown > 0) {
+		if (countdown !== null && countdown > 0) {
 			intervalId = setInterval(() => {
 				setCountdown(countdown - 1);
 			}, 1000);
@@ -163,8 +163,10 @@ const AttendanceRoom: React.FC = () => {
 				<div className="flex flex-col w-full xl:w-4/5 2xl:w-3/4 h-full p-5 bg-gray-100">
 					<div>
 						<h1 className="text-4xl p-2 m-2 font-bold">
-							{courseName} - {courseCode} - {topicname} - {Math.floor(countdown / 60)}{' '}
-							minutes {countdown % 60} seconds
+							{courseName} - {courseCode} - {topicname} -{' '}
+							{countdown !== null
+								? `${Math.floor(countdown / 60)} minutes ${countdown % 60} seconds`
+								: 'Loading...'}
 						</h1>
 					</div>
 					<div className="flex flex-col-reverse sm:flex-row justify-between items-start">
