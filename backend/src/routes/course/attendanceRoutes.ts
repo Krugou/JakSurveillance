@@ -1,5 +1,5 @@
 // attendanceRoutes.ts
-import express, { Request, Response, Router } from 'express';
+import express, {Request, Response, Router} from 'express';
 import attendanceController from '../../controllers/attendancecontroller.js';
 import lectureController from '../../controllers/lecturecontroller.js';
 import Attendance from '../../models/attendancemodel.js'; // Adjust the path according to your project structure
@@ -122,13 +122,15 @@ router.post('/lecture/', async (req: Request, res: Response) => {
 router.post('/lectureinfo/', async (req: Request, res: Response) => {
 	try {
 		const {lectureid} = req.body;
-		const lectureInfo = await lectureModel.getLectureWithCourseAndTopic(lectureid);
+		const lectureInfo = await lectureModel.getLectureWithCourseAndTopic(
+			lectureid,
+		);
 		res.status(201).json(lectureInfo);
 	} catch (err) {
 		console.error(err);
 		res.status(500).send('Server error');
 	}
-},
+});
 
 router.get('/studentsattendance', async (req: Request, res: Response) => {
 	try {
