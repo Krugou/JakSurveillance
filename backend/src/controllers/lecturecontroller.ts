@@ -9,6 +9,7 @@ const lectureController = {
 		start_date: Date,
 		end_date: Date,
 		timeofday: 'am' | 'pm',
+		state: 'open' | 'closed',
 	) {
 		try {
 			const topicId = await topicModel.findTopicIdUsingTopicName(topicname);
@@ -33,6 +34,7 @@ const lectureController = {
 				timeofday,
 				topicid,
 				courseid,
+				state,
 			);
 			const lectureid = result.insertId;
 			console.log('🚀 ~ file: lecturemodel.ts:88 ~ lectureid:', lectureid);
