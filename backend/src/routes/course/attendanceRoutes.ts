@@ -85,21 +85,25 @@ router.post('/lecturefinished/', async (req: Request, res: Response) => {
 		res.status(500).send('Server error');
 	}
 });
-router.post('/getallstudentsinlecture/', async (req: Request, res: Response) => {
-	try {
-		const {lectureid} = req.body;
-		const allStudentsInLecture = await lectureModel.getStudentsByLectureId(
-			lectureid,
-		);
-		res.status(201).json(allStudentsInLecture);
-	} catch (err) {
-		console.error(err);
-		res.status(500).send('Server error');
-	}
-});
+router.post(
+	'/getallstudentsinlecture/',
+	async (req: Request, res: Response) => {
+		try {
+			const {lectureid} = req.body;
+			const allStudentsInLecture = await lectureModel.getStudentsByLectureId(
+				lectureid,
+			);
+			res.status(201).json(allStudentsInLecture);
+		} catch (err) {
+			console.error(err);
+			res.status(500).send('Server error');
+		}
+	},
+);
 router.post('/lecture/', async (req: Request, res: Response) => {
 	try {
-		const {topicname, coursecode, start_date, end_date, timeofday} = req.body;
+		const {topicname, coursecode, start_date, end_date, timeofday, state} =
+			req.body;
 		console.log(req.body);
 		const lectureid = await lectureController.insertIntoLecture(
 			topicname,
@@ -107,6 +111,7 @@ router.post('/lecture/', async (req: Request, res: Response) => {
 			start_date,
 			end_date,
 			timeofday,
+			state,
 		);
 		res.status(201).json({message: 'lecture created', lectureid});
 	} catch (err) {
