@@ -11,6 +11,7 @@ interface User {
 	created_at: string;
 	userid: number;
 	studentnumber?: number;
+	gdpr?: number;
 
 	// add other properties as needed
 }
