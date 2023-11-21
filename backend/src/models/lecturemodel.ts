@@ -178,7 +178,9 @@ const lectureModel: LectureModel = {
 		try {
 			const [rows] = await pool
 				.promise()
-				.query<RowDataPacket[]>('SELECT * FROM lecture WHERE topicid = ?', [topicid]);
+				.query<RowDataPacket[]>('SELECT * FROM lecture WHERE topicid = ?', [
+					topicid,
+				]);
 			return rows as Lecture[];
 		} catch (error) {
 			console.error(error);
