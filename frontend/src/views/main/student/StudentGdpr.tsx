@@ -1,5 +1,5 @@
 import {CircularProgress} from '@mui/material';
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {UserContext} from '../../../contexts/UserContext.tsx';
@@ -7,7 +7,7 @@ import {UserContext} from '../../../contexts/UserContext.tsx';
 
 
 const StudentGdpr = () => {
-	const {user, setUser} = useContext<User | null>(UserContext);
+	const {user, setUser} = useContext(UserContext);
 
 	const navigate = useNavigate();
 
