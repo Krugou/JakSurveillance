@@ -227,6 +227,21 @@ const lectureModel: LectureModel = {
 			return Promise.reject(error);
 		}
 	},
+	async updateLectureState(lectureid: number, state: string) {
+		try {
+			const [result] = await pool
+				.promise()
+				.query('UPDATE lecture SET state = ? WHERE lectureid = ?', [
+					state,
+					lectureid,
+				]);
+
+			return result;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
 	// other methods...
 };
 
