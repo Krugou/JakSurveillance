@@ -247,6 +247,26 @@ const UserModel = {
 
 		return userResult;
 	},
+	getStudentsByInstructorId: async (
+		instructorId: number,
+	): Promise<UserInfo[]> => {
+		try {
+			const [rows] = await UserModel.pool.promise().query<RowDataPacket[]>(
+				`SELECT u.*
+          FROM users u
+          JOIN usercourses uc ON u.userid = uc.userid
+          JOIN courses c ON uc.courseid = c.courseid
+          JOIN courseinstructors ci ON c.courseid = ci.courseid
+          WHERE ci.userid = ? AND u.roleid = 1;`,
+				[instructorId],
+			);
+
+			return rows as UserInfo[];
+		} catch (error) {
+			console.error(error);
+			throw new Error('Database error');
+		}
+	},
 };
 
 export default UserModel;
