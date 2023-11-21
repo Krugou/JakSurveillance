@@ -78,9 +78,13 @@ const UserModel = {
 			const [userRows] = await UserModel.pool
 				.promise()
 				.query<RowDataPacket[]>(
-					`SELECT users.userid, users.username, users.email, users.first_name, users.last_name, users.created_at, users.studentnumber, roles.name AS role FROM users JOIN roles ON users.roleid = roles.roleid WHERE users.email = ?;`,
+					`SELECT users.userid, users.username, users.email, users.first_name, users.last_name, users.created_at, users.studentnumber, users.gdpr AS gdpr, roles.name AS role FROM users JOIN roles ON users.roleid = roles.roleid WHERE users.email = ?;`,
 					[email],
 				);
+			console.log(
+				'🚀 ~ file: usermodel.ts:84 ~ getAllUserInfo: ~ userRows:',
+				userRows,
+			);
 
 			if (userRows.length > 0) {
 				userData = userRows.pop() as UserInfo;
