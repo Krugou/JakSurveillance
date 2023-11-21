@@ -23,8 +23,13 @@ interface LectureModel {
 		topicname: string,
 		coursecode: string,
 		timeofday: 'am' | 'pm',
+		state: 'open' | 'closed',
 	): Promise<void>;
-	updateLectureDates(id: number, start_date: Date, end_date: Date): Promise<void>;
+	updateLectureDates(
+		id: number,
+		start_date: Date,
+		end_date: Date,
+	): Promise<void>;
 	deleteByLectureId(id: number): Promise<void>;
 	countAllLecturees(): Promise<number>;
 	findByTopicId(topicid: number): Promise<Lecture[]>;
@@ -187,12 +192,19 @@ const lectureModel: LectureModel = {
 			return Promise.reject(error);
 		}
 	},
-	async insertIntoLecture(start_date, end_date, timeofday, topicid, courseid) {
+	async insertIntoLecture(
+		start_date,
+		end_date,
+		timeofday,
+		topicid,
+		courseid,
+		state,
+	) {
 		const [result] = await pool
 			.promise()
 			.query(
-				'INSERT INTO lecture (start_date, end_date, timeofday, topicid, courseid) VALUES (?, ?, ?, ?, ?)',
-				[start_date, end_date, timeofday, topicid, courseid],
+				'INSERT INTO lecture (start_date, end_date, timeofday, topicid, courseid) VALUES (?, ?, ?, ?, ?,?)',
+				[start_date, end_date, timeofday, topicid, courseid, state],
 			);
 		return result;
 	},
