@@ -1,5 +1,6 @@
 import React, {useContext, useRef, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {toast} from 'react-toastify';
 import ErrorAlert from '../../components/main/ErrorAlert.tsx';
 import BackgroundContainer from '../../components/main/background/BackgroundContainer.tsx';
 import {UserContext} from '../../contexts/UserContext.tsx';
@@ -16,7 +17,6 @@ const Login: React.FC = () => {
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 
-		//console.log(username, password, user);
 		const inputs = {
 			username: usernameRef.current?.value || '',
 			password: passwordRef.current?.value || '',
@@ -28,8 +28,8 @@ const Login: React.FC = () => {
 				localStorage.setItem('userToken', response.token); // set the token
 				setUser(response.user); // set the user info into the context
 				navigate(`/${response.user.role.toLowerCase()}/mainview`);
+				toast.success('Login successful');
 			}
-			console.log(response, 'LOGIN RESPONSE');
 		} catch (error) {
 			if (error instanceof Error) {
 				// Now TypeScript knows that 'error' is an instance of Error
@@ -39,8 +39,6 @@ const Login: React.FC = () => {
 				console.log(error);
 			}
 		}
-
-		//console.log('🚀 ~ file: App.tsx:41 ~ App ~ inputs:', inputs);
 	};
 
 	return (
