@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import QRCode from 'react-qr-code';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import io, {Socket} from 'socket.io-client';
 import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
@@ -9,12 +9,12 @@ import CourseStudents from '../../../../components/main/course/attendance/Course
 import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
 const AttendanceRoom: React.FC = () => {
+	const navigate = useNavigate();
 	const {user} = useContext(UserContext);
 	const {lectureid} = useParams<{lectureid: string}>();
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [arrayOfStudents, setArrayOfStudents] = useState<string[]>([]);
 	const [courseStudents, setCourseStudents] = useState<Student[]>([]);
-	const [serverMessage, setServerMessage] = useState('');
 	const [countdown, setCountdown] = useState<null | number>(null);
 	const [courseName, setCourseName] = useState('');
 	const [courseCode, setCourseCode] = useState('');
@@ -79,7 +79,6 @@ const AttendanceRoom: React.FC = () => {
 			newSocket.emit('createAttendanceCollection', lectureid);
 			newSocket.on('lecturestarted', (checklectureid, timeout) => {
 				if (checklectureid === lectureid) {
-					console.log('lecture started: ' + checklectureid + timeout);
 					setCountdown(timeout / 1000); // convert milliseconds to seconds
 				}
 			});
@@ -87,32 +86,14 @@ const AttendanceRoom: React.FC = () => {
 				setCourseStudents(courseStudents);
 			});
 			newSocket.on('updatecoursestudents', courseStudents => {
-				console.log(
-					'🚀 ~ file: TeacherAttendanceRoom.tsx:54 ~ useEffect ~ courseStudents:',
-					courseStudents,
-				);
 				setCourseStudents(courseStudents);
 			});
 			newSocket.on(
 				'updateAttendanceCollectionData',
-				(
-					hash,
-					changeTime,
-					lectureid,
-					servertime,
-					arrayOfStudents,
-					courseStudents,
-				) => {
+				(hash, lectureid, arrayOfStudents, courseStudents) => {
 					setHashValue(hash + '/' + lectureid);
 					setArrayOfStudents(arrayOfStudents);
-					setServerMessage(
-						' change time: ' +
-							changeTime +
-							' lectureid: ' +
-							lectureid +
-							' server time: ' +
-							servertime,
-					);
+
 					setCourseStudents(courseStudents);
 				},
 			);
@@ -157,7 +138,7 @@ const AttendanceRoom: React.FC = () => {
 		<BackgroundContainer>
 			<div className="flex flex-col w-full xl:w-4/5 2xl:w-3/4 h-full p-5 bg-gray-100">
 				<div>
-					<h1 className="text-4xl font-bold">
+					<h1 className="text-4xl p-2 m-2 font-bold">
 						{courseName} - {courseCode} - {topicname} - {Math.floor(countdown / 60)}{' '}
 						minutes {countdown % 60} seconds
 					</h1>
@@ -190,9 +171,6 @@ const AttendanceRoom: React.FC = () => {
 					Finish Lecture
 				</button>
 				<CourseStudents coursestudents={courseStudents} />
-				<div className="flex flex-col ">
-					<div className="h-auto mx-auto max-w-10 w-full">{serverMessage}</div>
-				</div>
 			</div>
 		</BackgroundContainer>
 	);
