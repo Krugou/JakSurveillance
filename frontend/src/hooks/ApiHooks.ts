@@ -215,30 +215,10 @@ const getAllCourseInfoByUserEmail = async (token: string) => {
 	// Use the email to make the API request
 	return await doFetch(`${baseUrl}courses/user/all`, options);
 };
-const finishLecture = async (
-	date: string,
-	studentnumbers: string[],
-	lectureid: string,
-	token: string,
-) => {
-	const options = {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: 'Bearer ' + token,
-		},
-		body: JSON.stringify({
-			date,
-			studentnumbers,
-			lectureid,
-		}),
-	};
-	const url = `${baseUrl}courses/attendance/lecturefinished/`;
-	return doFetch(url, options);
-};
+
 const getLectureInfo = async (lectureid: string, token: string) => {
 	const options = {
-		method: 'GET',
+		method: 'POST',
 		headers: {
 			Authorization: 'Bearer ' + token,
 		},
@@ -327,7 +307,6 @@ const apiHooks = {
 	CreateLecture,
 	getUserInfoByToken,
 	getAllCourseInfoByUserEmail,
-	finishLecture,
 	getAttendanceInfoByUsercourseid,
 	excelInput,
 	updateServerSettings,
