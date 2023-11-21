@@ -1,3 +1,4 @@
+import {CircularProgress} from '@mui/material';
 import React, {useContext, useEffect, useState} from 'react';
 import QRCode from 'react-qr-code';
 import {useNavigate, useParams} from 'react-router-dom';
@@ -19,6 +20,7 @@ const AttendanceRoom: React.FC = () => {
 	const [courseName, setCourseName] = useState('');
 	const [courseCode, setCourseCode] = useState('');
 	const [topicname, setTopicname] = useState('');
+	const [loading, setLoading] = useState(false);
 
 	interface Student {
 		studentnumber: string;
@@ -46,9 +48,11 @@ const AttendanceRoom: React.FC = () => {
 			return;
 		}
 
+		// Set loading to true at the start of the data fetch
+		setLoading(true);
+
 		apiHooks
 			.getLectureInfo(lectureid, token)
-
 			.then(info => {
 				if (info.state === 'closed') {
 					toast.error('Lecture is already closed');
@@ -59,10 +63,16 @@ const AttendanceRoom: React.FC = () => {
 				setCourseName(info.name);
 				setTopicname(info.topicname);
 				toast.success('Lecture info retrieved successfully');
+
+				// Set loading to false when the data fetch is done
+				setLoading(false);
 			})
 			.catch(error => {
 				console.error('Error getting lecture info:', error);
 				toast.error('Error getting lecture info');
+
+				// Set loading to false even if there was an error
+				setLoading(false);
 			});
 	}, [lectureid]);
 	useEffect(() => {
@@ -147,42 +157,46 @@ const AttendanceRoom: React.FC = () => {
 	}, [countdown]);
 	return (
 		<BackgroundContainer>
-			<div className="flex flex-col w-full xl:w-4/5 2xl:w-3/4 h-full p-5 bg-gray-100">
-				<div>
-					<h1 className="text-4xl p-2 m-2 font-bold">
-						{courseName} - {courseCode} - {topicname} - {Math.floor(countdown / 60)}{' '}
-						minutes {countdown % 60} seconds
-					</h1>
-				</div>
-				<div className="flex flex-col-reverse sm:flex-row justify-between items-start">
-					<div className="flex sm:flex-row items-center flex-col-reverse w-full ">
-						<QRCode
-							size={256}
-							value={hashValue}
-							viewBox={`0 0 256 256`}
-							className="md:w-[32em] w-full h-full"
-						/>
-
-						<Attendees arrayOfStudents={arrayOfStudents} />
+			{loading ? (
+				<CircularProgress />
+			) : (
+				<div className="flex flex-col w-full xl:w-4/5 2xl:w-3/4 h-full p-5 bg-gray-100">
+					<div>
+						<h1 className="text-4xl p-2 m-2 font-bold">
+							{courseName} - {courseCode} - {topicname} - {Math.floor(countdown / 60)}{' '}
+							minutes {countdown % 60} seconds
+						</h1>
 					</div>
-					<h2 className="text-2xl ml-2">
-						<label className="text-metropoliaTrendGreen">
-							{arrayOfStudents.length}
-						</label>
-						/
-						<label className="text-metropoliaSupportRed">
-							{courseStudents.length}
-						</label>
-					</h2>
+					<div className="flex flex-col-reverse sm:flex-row justify-between items-start">
+						<div className="flex sm:flex-row items-center flex-col-reverse w-full ">
+							<QRCode
+								size={256}
+								value={hashValue}
+								viewBox={`0 0 256 256`}
+								className="md:w-[32em] w-full h-full"
+							/>
+
+							<Attendees arrayOfStudents={arrayOfStudents} />
+						</div>
+						<h2 className="text-2xl ml-2">
+							<label className="text-metropoliaTrendGreen">
+								{arrayOfStudents.length}
+							</label>
+							/
+							<label className="text-metropoliaSupportRed">
+								{courseStudents.length}
+							</label>
+						</h2>
+					</div>
+					<button
+						onClick={handleLectureFinished}
+						className="bg-metropoliaMainOrange sm:w-fit w-full mt-5 p-5 hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 rounded"
+					>
+						Finish Lecture
+					</button>
+					<CourseStudents coursestudents={courseStudents} />
 				</div>
-				<button
-					onClick={handleLectureFinished}
-					className="bg-metropoliaMainOrange sm:w-fit w-full mt-5 p-5 hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 rounded"
-				>
-					Finish Lecture
-				</button>
-				<CourseStudents coursestudents={courseStudents} />
-			</div>
+			)}
 		</BackgroundContainer>
 	);
 };
