@@ -50,6 +50,11 @@ const AttendanceRoom: React.FC = () => {
 			.getLectureInfo(lectureid, token)
 
 			.then(info => {
+				if (info.state === 'closed') {
+					toast.error('Lecture is already closed');
+					navigate('/teacher/mainview');
+					return;
+				}
 				setCourseCode(info.code);
 				setCourseName(info.name);
 				setTopicname(info.topicname);
@@ -80,6 +85,11 @@ const AttendanceRoom: React.FC = () => {
 			newSocket.on('lecturestarted', (checklectureid, timeout) => {
 				if (checklectureid === lectureid) {
 					setCountdown(timeout / 1000); // convert milliseconds to seconds
+				}
+			});
+			newSocket.on('lecturefinished', checklectureid => {
+				if (checklectureid === lectureid) {
+					navigate('/teacher/mainview');
 				}
 			});
 			newSocket.on('getallstudentsinlecture', courseStudents => {
