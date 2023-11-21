@@ -72,8 +72,7 @@ const updateHash = () => {
 	}
 };
 const finishLecture = async (lectureid: string, io) => {
-	io.to(lectureid).emit('lecturefinished');
-
+	
 	// Prepare the data to be sent
 	const data = {
 		date: new Date().toISOString().slice(0, 19).replace('T', ' '),
@@ -82,7 +81,6 @@ const finishLecture = async (lectureid: string, io) => {
 		),
 		lectureid: lectureid,
 	};
-	console.log('🚀 ~ file: socketHandlers.ts:89 ~ finishLecture ~ data:', data);
 	const token = await getToken();
 	// Send a POST request to the '/lecturefinished/' route
 	try {
@@ -101,6 +99,7 @@ const finishLecture = async (lectureid: string, io) => {
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
+		io.to(lectureid).emit('lecturefinished', lectureid);
 	} catch (error) {
 		console.error('Error:', error);
 	}
