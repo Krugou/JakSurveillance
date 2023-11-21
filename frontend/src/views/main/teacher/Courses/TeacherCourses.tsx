@@ -3,6 +3,7 @@ import BackgroundContainer from '../../../../components/main/background/Backgrou
 import CourseData from '../../../../components/main/course/CourseData';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
+
 interface Course {
 	courseid: number;
 	name: string;

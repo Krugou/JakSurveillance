@@ -4,6 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteModal from '../modals/DeleteModal';
 import apiHooks from '../../../hooks/ApiHooks';
+
 import {toast} from 'react-toastify';
 interface Course {
 	courseid: number;
@@ -33,13 +34,16 @@ const CourseData: React.FC<CourseDataProps> = ({courseData}) => {
 		setIsDeleteModalOpen(false);
 
 		// Get token from local storage
-		const token: string | null = localStorage.getItem('userToken');
-
+		const token: string = localStorage.getItem('userToken') || '';
 		try {
 			const response = await apiHooks.deleteCourse(courseid, token);
-			console.log(response);
+			if (response) {
+				toast.success('Course deleted');
+			}
 		} catch (error) {
-			toast.error(error.message);
+			if (error instanceof Error) {
+				toast.error(error.message);
+			}
 		}
 	};
 
@@ -133,7 +137,11 @@ const CourseData: React.FC<CourseDataProps> = ({courseData}) => {
 				))}
 			<DeleteModal
 				isOpen={isDeleteModalOpen}
-				onDelete={() => handleDeleteCourse(selectedCourseId)}
+				onDelete={() => {
+					if (selectedCourseId !== null) {
+						handleDeleteCourse(selectedCourseId);
+					}
+				}}
 				onClose={closeDeleteModal}
 			/>
 		</>
