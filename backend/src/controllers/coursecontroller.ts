@@ -214,8 +214,17 @@ const courseController = {
 						}
 						// Insert the user into the course
 
-						await userCourseModel.insertUserCourse(userId, courseId);
+						const existingUserCourse = await userCourseModel.checkIfUserCourseExists(
+							userId,
+							courseId,
+						);
 
+						if (existingUserCourse.length === 0) {
+							// Insert the user into the course
+							await userCourseModel.insertUserCourse(userId, courseId);
+						} else {
+							console.error('User is already enrolled in this course');
+						}
 						/*
 						try {
 							await usercourse_topicsModel.insertUserCourseTopic(
