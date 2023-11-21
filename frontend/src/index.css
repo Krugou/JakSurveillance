@@ -1,26 +1,25 @@
+@font-face {
+	font-family: 'Open Sans';
+	src: url(./assets/fonts/OpenSans-Regular.ttf);
+}
+
+@font-face {
+	font-family: 'Open Sans Bold';
+	src: url(./assets/fonts/OpenSans-Bold.ttf);
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer components{
-    .profileStat {
-        @apply bg-metropoliaMainOrange p-1.5 rounded text-white;
-    }
-    .react-calendar__tile--now  {
-        @apply bg-transparent;
-    }
-    .react-calendar__tile.highlight {
-        @apply bg-metropoliaMainOrange;
-    }
-   
-    }
-
-
-
-
-
-
-
-
-
-
+@layer components {
+	.profileStat {
+		@apply bg-metropoliaMainOrange p-1.5 rounded text-white;
+	}
+	.react-calendar__tile--now {
+		@apply bg-transparent;
+	}
+	.react-calendar__tile.highlight {
+		@apply bg-metropoliaMainOrange;
+	}
+}
