@@ -91,6 +91,7 @@ const setupSocketHandlers = (io: Server) => {
 
 		socket.on('createAttendanceCollection', async lectureid => {
 			socket.join(lectureid);
+			
 			const token = await getToken();
 			if (presentStudents[lectureid] && notYetPresentStudents[lectureid]) {
 				// The lists already exist, so use them
