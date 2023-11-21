@@ -3,7 +3,7 @@ import express, {Request, Response, Router} from 'express';
 import attendanceController from '../../controllers/attendancecontroller.js';
 import lectureController from '../../controllers/lecturecontroller.js';
 import Attendance from '../../models/attendancemodel.js'; // Adjust the path according to your project structure
-import Lecture from '../../models/lecturemodel.js';
+import lectureModel from '../../models/lecturemodel.js';
 
 const router: Router = express.Router();
 
@@ -88,7 +88,9 @@ router.post('/lecturefinished/', async (req: Request, res: Response) => {
 router.post('/getallstudentsinlecture/', async (req: Request, res: Response) => {
 	try {
 		const {lectureid} = req.body;
-		const allStudentsInLecture = await Lecture.getStudentsByLectureId(lectureid);
+		const allStudentsInLecture = await lectureModel.getStudentsByLectureId(
+			lectureid,
+		);
 		res.status(201).json(allStudentsInLecture);
 	} catch (err) {
 		console.error(err);
