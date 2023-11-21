@@ -89,6 +89,7 @@ const AttendanceRoom: React.FC = () => {
 			});
 			newSocket.on('lecturefinished', checklectureid => {
 				if (checklectureid === lectureid) {
+					toast.success('Lecture finished');
 					navigate('/teacher/mainview');
 				}
 			});
