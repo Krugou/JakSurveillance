@@ -111,7 +111,7 @@ const AttendanceRoom: React.FC = () => {
 
 					<Attendees arrayOfStudents={arrayOfStudents} />
 				</div>
-				<h2 className="text-2xl">
+				<h2 className="text-2xl ml-2">
 					<label className="text-metropoliaTrendGreen">{arrayOfStudents.length}</label>/<label className="text-metropoliaSupportRed">{courseStudents.length}</label>
 				</h2>
 			</div>
