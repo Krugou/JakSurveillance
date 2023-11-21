@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `lecture` (
   `timeofday` enum('am', 'pm') NOT NULL,
   `topicid` int(11) NOT NULL,
   `courseid` int(11) NOT NULL,
+  `state` ENUM('open', 'closed') NOT NULL DEFAULT 'open',
   PRIMARY KEY (`lectureid`),
   KEY `topicid` (`topicid`),
   KEY `courseid` (`courseid`),
