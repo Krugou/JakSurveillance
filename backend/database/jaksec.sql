@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `attendance` (
   KEY `usercourseid` (`usercourseid`),
   KEY `lectureid` (`lectureid`),
   CONSTRAINT `attendance_ibfk_1` FOREIGN KEY (`usercourseid`) REFERENCES `usercourses` (`usercourseid`),
-  CONSTRAINT `attendance_ibfk_2` FOREIGN KEY (`lectureid`) REFERENCES `lecture` (`lectureid`)
+  CONSTRAINT `attendance_ibfk_2` FOREIGN KEY (`lectureid`) REFERENCES `lecture` (`lectureid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Dumping data for table jaksec.attendance: ~0 rows (suunnilleen)
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `lecture` (
   KEY `topicid` (`topicid`),
   KEY `courseid` (`courseid`),
   CONSTRAINT `lecture_ibfk_1` FOREIGN KEY (`topicid`) REFERENCES `topics` (`topicid`),
-  CONSTRAINT `lecture_ibfk_2` FOREIGN KEY (`courseid`) REFERENCES `courses` (`courseid`)
+  CONSTRAINT `lecture_ibfk_2` FOREIGN KEY (`courseid`) REFERENCES `courses` (`courseid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `courseinstructors` (
   `userid` int(11) NOT NULL,
   KEY `courseid` (`courseid`),
   KEY `userid` (`userid`),
-  CONSTRAINT `courseinstructors_ibfk_1` FOREIGN KEY (`courseid`) REFERENCES `courses` (`courseid`),
+  CONSTRAINT `courseinstructors_ibfk_1` FOREIGN KEY (`courseid`) REFERENCES `courses` (`courseid`) ON DELETE CASCADE,
   CONSTRAINT `courseinstructors_ibfk_2` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `coursetopics` (
   `topicid` int(11) NOT NULL,
   KEY `courseid` (`courseid`),
   KEY `topicid` (`topicid`),
-  CONSTRAINT `coursetopics_ibfk_1` FOREIGN KEY (`courseid`) REFERENCES `courses` (`courseid`),
+  CONSTRAINT `coursetopics_ibfk_1` FOREIGN KEY (`courseid`) REFERENCES `courses` (`courseid`) ON DELETE CASCADE,
   CONSTRAINT `coursetopics_ibfk_2` FOREIGN KEY (`topicid`) REFERENCES `topics` (`topicid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -178,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `usercourses` (
   KEY `userid` (`userid`),
   KEY `courseid` (`courseid`),
   CONSTRAINT `usercourses_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`),
-  CONSTRAINT `usercourses_ibfk_2` FOREIGN KEY (`courseid`) REFERENCES `courses` (`courseid`)
+  CONSTRAINT `usercourses_ibfk_2` FOREIGN KEY (`courseid`) REFERENCES `courses` (`courseid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Dumping data for table jaksec.usercourses: ~0 rows (suunnilleen)

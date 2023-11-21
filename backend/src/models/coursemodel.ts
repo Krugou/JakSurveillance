@@ -555,6 +555,26 @@ const course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
+
+	async deleteCourse(courseId: number): Promise<string> {
+		try {
+			// Disable foreign key checks
+
+			// Delete the course
+			const [result] = await pool
+				.promise()
+				.query('DELETE FROM courses WHERE courseid = ?', [courseId]);
+
+			// Enable foreign key checks again
+
+			// Return a success message
+			return result.affectedRows > 0;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
+
 	checkIfCourseExists: function (code: string): Promise<boolean> {
 		throw new Error('Function not implemented.');
 	},

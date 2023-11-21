@@ -3,6 +3,8 @@ import MainViewButton from '../buttons/MainViewButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteModal from '../modals/DeleteModal';
+import apiHooks from '../../../hooks/ApiHooks';
+import {toast} from 'react-toastify';
 interface Course {
 	courseid: number;
 	name: string;
@@ -25,13 +27,24 @@ interface CourseDataProps {
 
 const CourseData: React.FC<CourseDataProps> = ({courseData}) => {
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+	const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
 
-	const handleDeleteCourse = () => {
-		console.log('Delete course');
+	const handleDeleteCourse = async (courseid: number) => {
 		setIsDeleteModalOpen(false);
+
+		// Get token from local storage
+		const token: string | null = localStorage.getItem('userToken');
+
+		try {
+			const response = await apiHooks.deleteCourse(courseid, token);
+			console.log(response);
+		} catch (error) {
+			toast.error(error.message);
+		}
 	};
 
-	const openDeleteModal = () => {
+	const openDeleteModal = (courseid: number) => {
+		setSelectedCourseId(courseid);
 		setIsDeleteModalOpen(true);
 	};
 
@@ -61,7 +74,7 @@ const CourseData: React.FC<CourseDataProps> = ({courseData}) => {
 						<Tooltip title="Delete this course">
 							<DeleteIcon
 								className="absolute top-0 right-0 m-4 cursor-pointer text-red-500 hover:text-red-700"
-								onClick={openDeleteModal}
+								onClick={() => openDeleteModal(course.courseid)}
 							/>
 						</Tooltip>
 						{/* Position the DeleteIcon at the top right corner */}
@@ -120,7 +133,7 @@ const CourseData: React.FC<CourseDataProps> = ({courseData}) => {
 				))}
 			<DeleteModal
 				isOpen={isDeleteModalOpen}
-				onDelete={handleDeleteCourse}
+				onDelete={() => handleDeleteCourse(selectedCourseId)}
 				onClose={closeDeleteModal}
 			/>
 		</>

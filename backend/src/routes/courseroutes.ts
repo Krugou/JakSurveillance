@@ -288,4 +288,32 @@ router.get('/user/all', async (req: Request, res: Response) => {
 		res.status(500).send('Server error');
 	}
 });
+
+router.delete('/delete/:id', async (req: Request, res: Response) => {
+	// Validate that the user is logged in
+	try {
+		// Check if the user's role is either 'teacher' or 'admin'
+		if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
+			// If not, return an error
+			return res.status(403).json({error: 'Unauthorized'});
+		}
+	} catch (error) {
+		console.log('error', error);
+	}
+
+	// Get the course ID from the request
+	try {
+		const courseId = Number(req.params.id);
+		if (isNaN(courseId)) {
+			res.status(400).send('Invalid course ID');
+			return;
+		}
+		const result = await course.deleteCourse(courseId);
+		res.json(result);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server error');
+	}
+});
+
 export default router;

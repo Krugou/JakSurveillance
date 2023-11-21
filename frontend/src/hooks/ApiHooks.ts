@@ -288,6 +288,18 @@ const updateServerSettings = async (
 	return doFetch(url, options);
 };
 
+const deleteCourse = async (courseId: number, token: string) => {
+	const options = {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	const url = `${baseUrl}courses/delete/${courseId}`;
+	return doFetch(url, options);
+};
+
 const apiHooks = {
 	fetchServerSettings,
 	postLogin,
@@ -304,5 +316,6 @@ const apiHooks = {
 	getAttendanceInfoByUsercourseid,
 	excelInput,
 	updateServerSettings,
+	deleteCourse,
 };
 export default apiHooks;
