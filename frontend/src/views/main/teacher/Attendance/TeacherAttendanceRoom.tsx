@@ -47,6 +47,7 @@ const AttendanceRoom: React.FC = () => {
 			});
 
 			newSocket.emit('createAttendanceCollection', lectureid);
+
 			newSocket.on('getallstudentsinlecture', courseStudents => {
 				setCourseStudents(courseStudents);
 			});
