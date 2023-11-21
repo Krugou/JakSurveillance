@@ -47,6 +47,7 @@ interface LectureModel {
 		| OkPacket[]
 		| ProcedureCallPacket
 	>;
+	getLectureWithCourseAndTopic(lectureid: number): Promise<any>;
 	// other methods...
 }
 
@@ -207,6 +208,24 @@ const lectureModel: LectureModel = {
 				[start_date, end_date, timeofday, topicid, courseid, state],
 			);
 		return result;
+	},
+	async getLectureWithCourseAndTopic(lectureid: number) {
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					'SELECT l.*, c.*, t.* FROM lecture l ' +
+						'JOIN courses c ON l.courseid = c.courseid ' +
+						'JOIN topics t ON l.topicid = t.topicid ' +
+						'WHERE l.lectureid = ?',
+					[lectureid],
+				);
+
+			return rows[0] ?? null;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
 	},
 	// other methods...
 };
