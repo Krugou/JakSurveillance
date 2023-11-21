@@ -5,7 +5,7 @@ interface AttendeesProps {
 }
 
 const Attendees: React.FC<AttendeesProps> = ({arrayOfStudents}) => {
-	const arrayOfStudentstest = ['Aaa B.', 'bbb C.', 'ccc D.','Aaa B.', 'bbb C.', 'ccc D.','Aaa B.', 'bbb C.', 'ccc D.','Aaa B.', 'bbb C.', 'ccc D.','Aaa B.', 'bbb C.', 'ccc D.','Aaa B.', 'bbb C.', 'ccc D.','Aaa B.', 'bbb C.', 'ccc D.','Aaa B.', 'bbb C.', 'ccc D.','Aaa B.', 'bbb C.', 'ccc D.'];
+	const arrayOfStudentstest = ['Aaa B.', 'bbb C.', 'ccc D.'];
 	const students =
 		arrayOfStudents.length > 0 ? arrayOfStudents : arrayOfStudentstest;
 	return (
