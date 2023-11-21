@@ -5,11 +5,21 @@ import BackgroundContainer from '../../../../components/main/background/Backgrou
 import MainViewButton from '../../../../components/main/buttons/MainViewButton';
 import apiHooks from '../../../../hooks/ApiHooks'; // Import apiHooks
 
+interface Student {
+	first_name: string;
+	last_name: string;
+	email: string;
+	username: string;
+	studentnumber: number;
+	roleid: number;
+	studentgroupid: number;
+	created_at: string;
+	userid: number;
+}
 // this is view for teacher to see the list of students in single course
 const TeacherStudentsView: React.FC = () => {
-	const [students, setStudents] = useState([]); // Add a new state variable for students
-	const [loading, setLoading] = useState(true); // Add a new state variable for loading
-
+	const [students, setStudents] = useState<Student[]>([]);
+	const [loading, setLoading] = useState(true);
 	useEffect(() => {
 		const token: string | null = localStorage.getItem('userToken');
 		if (!token) {
@@ -37,9 +47,9 @@ const TeacherStudentsView: React.FC = () => {
 	return (
 		<BackgroundContainer>
 			<div className="flex flex-wrap w-3/4 bg-gray-100 p-5">
-				{students.map((student, index) => (
+				{students.map(student => (
 					<div
-						key={index}
+						key={student.userid}
 						className="m-4 bg-white rounded shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5"
 					>
 						<div className="px-6 py-4">
@@ -55,9 +65,12 @@ const TeacherStudentsView: React.FC = () => {
 							)}
 							{student.created_at && <p>Created At: {student.created_at}</p>}
 							<div className="flex justify-between">
-								<MainViewButton path="/teacher/students/:id" text="Student details" />
 								<MainViewButton
-									path="/teacher/students/:id/attendances"
+									path={`/teacher/students/${student.userid}`}
+									text="Student details"
+								/>
+								<MainViewButton
+									path={`/teacher/students/${student.userid}/attendances`}
 									text="Student Attendance"
 								/>
 							</div>
