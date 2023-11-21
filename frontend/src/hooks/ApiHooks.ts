@@ -1,4 +1,5 @@
-'use strict';
+import {body} from 'express-validator';
+('use strict');
 
 const baseUrl =
 	import.meta.env.MODE === 'development'
@@ -235,6 +236,20 @@ const finishLecture = async (
 	const url = `${baseUrl}courses/attendance/lecturefinished/`;
 	return doFetch(url, options);
 };
+const getLectureInfo = async (lectureid: string, token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+		body: JSON.stringify({
+			lectureid,
+		}),
+	};
+
+	// Use the email to make the API request
+	return await doFetch(`${baseUrl}courses/attendance/lectureinfo/`, options);
+};
 const getAttendanceInfoByUsercourseid = async (
 	usercourseid: number,
 	token: string,
@@ -317,5 +332,6 @@ const apiHooks = {
 	excelInput,
 	updateServerSettings,
 	deleteCourse,
+	getLectureInfo,
 };
 export default apiHooks;
