@@ -5,6 +5,7 @@ import io, {Socket} from 'socket.io-client';
 import Attendees from '../../../../components/main/course/attendance/Attendees';
 import CourseStudents from '../../../../components/main/course/attendance/CourseStudents';
 import apiHooks from '../../../../hooks/ApiHooks';
+import BackgroundContainer from "../../../../components/main/background/BackgroundContainer";
 const AttendanceRoom: React.FC = () => {
 	const {lectureid} = useParams<{lectureid: string}>();
 	const [socket, setSocket] = useState<Socket | null>(null);
@@ -97,25 +98,26 @@ const AttendanceRoom: React.FC = () => {
 	}, [socket]);
 
 	return (
-		<div className="flex flex-col w-full h-full p-10 bg-gray-100">
+		<BackgroundContainer>
+		<div className="flex flex-col w-full xl:w-4/5 2xl:w-3/4 h-full p-5 bg-gray-100">
 			<div className="flex flex-row justify-between items-start">
-				<div className="flex flex-row w-1/2 ">
+				<div className="flex flex-row w-[50rem] ">
 					<QRCode
 						size={256}
 						value={hashValue}
 						viewBox={`0 0 256 256`}
-						className="w-1/2 h-auto "
+						className="w-full h-full"
 					/>
 
 					<Attendees arrayOfStudents={arrayOfStudents} />
 				</div>
-				<h2 className="text-xl">
-					{arrayOfStudents.length + '/' + courseStudents.length}
+				<h2 className="text-2xl">
+					<label className="text-metropoliaTrendGreen">{arrayOfStudents.length}</label>/<label className="text-metropoliaSupportRed">{courseStudents.length}</label>
 				</h2>
 			</div>
 			<button
 				onClick={handleLectureFinished}
-				className="bg-blue-500 p-5 m-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+				className="bg-metropoliaMainOrange w-80 p-5 m-4 hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 rounded"
 			>
 				Finish Lecture
 			</button>
@@ -124,6 +126,7 @@ const AttendanceRoom: React.FC = () => {
 				<div className="h-auto mx-auto max-w-10 w-full">{serverMessage}</div>
 			</div>
 		</div>
+		</BackgroundContainer>
 	);
 };
 
