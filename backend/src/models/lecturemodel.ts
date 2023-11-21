@@ -203,7 +203,7 @@ const lectureModel: LectureModel = {
 		const [result] = await pool
 			.promise()
 			.query(
-				'INSERT INTO lecture (start_date, end_date, timeofday, topicid, courseid) VALUES (?, ?, ?, ?, ?,?)',
+				'INSERT INTO lecture (start_date, end_date, timeofday, topicid, courseid, state) VALUES (?, ?, ?, ?, ?, ?)',
 				[start_date, end_date, timeofday, topicid, courseid, state],
 			);
 		return result;
