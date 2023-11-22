@@ -1,14 +1,25 @@
-import React, {useContext} from 'react';
-import {UserContext} from '../../../contexts/UserContext';
+import React, {useContext, useEffect, useState} from 'react';
 import ProfileInfo from '../../../components/profiles/ProfileInfo';
+import {UserContext} from '../../../contexts/UserContext';
 
+import {CircularProgress} from '@mui/material';
 import {useNavigate} from 'react-router-dom'; // Import useNavigate
 
 const TeacherProfile: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate(); // Initialize useNavigate
+	const [isLoading, setIsLoading] = useState(true);
 
-	// Error handling
+	useEffect(() => {
+		if (user) {
+			setIsLoading(false);
+		}
+	}, [user]);
+
+	if (isLoading) {
+		return <CircularProgress />;
+	}
+
 	if (!user) {
 		return <div>No user data available.</div>;
 	}
