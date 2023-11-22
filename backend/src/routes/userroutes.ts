@@ -189,6 +189,8 @@ router.post('/', async (req: Request, res: Response, next) => {
 						'🚀 ~ file: userroutes.ts:189 ~ router.post ~ addStaffUserResponse:',
 						addStaffUserResponse,
 					);
+					// Call the authenticate function to handle passport authentication
+					authenticate(req, res, next, username);
 				}
 			} catch (error) {
 				console.error(error);
@@ -196,13 +198,12 @@ router.post('/', async (req: Request, res: Response, next) => {
 			}
 		}
 
-		// IF THE USER is found in database or they're staff (meaning their account gets created with first login), implement login for them
-
-		// Call the authenticate function to handle passport authentication
-		console.log('try to authentticate');
-		authenticate(req, res, next, username);
-
-		// res.json(metropoliaData);
+		// If the logged-in user is not Metropolia staff, authenticate them
+		if (metropoliaData.staff === false) {
+			// Call the authenticate function to handle passport authentication
+			console.log('try to authentticate');
+			authenticate(req, res, next, username);
+		}
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({error: 'Internal server error'});
