@@ -5,6 +5,7 @@ const AddTeachers = ({
 	handleInputChange,
 	setInstructors,
 	instructorEmail,
+	modify = false,
 }) => {
 	const deleteInstructor = index => {
 		const newInstructors = [...instructors];
@@ -16,7 +17,11 @@ const AddTeachers = ({
 	};
 	return (
 		<fieldset className="mb-5">
-			<legend className="text-xl mb-3">Add teachers</legend>
+			{!modify ? (
+				<legend className="text-xl mb-3">Add teachers</legend>
+			) : (
+				<legend className="text-xl mb-3">Modify teachers</legend>
+			)}
 			{instructors.map((instructor, index) => (
 				<div key={index} className="flex items-center mb-3">
 					<div className="flex flex-col mb-3">
