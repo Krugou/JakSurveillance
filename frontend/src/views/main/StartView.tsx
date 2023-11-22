@@ -10,7 +10,14 @@ const StartView = () => {
 				<StartViewButton />
 			</div>
 
-			<p>Build date: {import.meta.env.VITE_REACT_APP_BUILD_DATE}</p>
+			{import.meta.env.MODE === 'development' ? (
+				<>
+					<p>Development mode</p>
+					<p> no PWA </p>
+				</>
+			) : (
+				<p>Build date: {import.meta.env.VITE_REACT_APP_BUILD_DATE}</p>
+			)}
 		</div>
 	);
 };
