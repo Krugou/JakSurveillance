@@ -222,12 +222,10 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table jaksec.users: ~6 rows (suunnilleen)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`userid`, `username`, `email`, `staff`, `first_name`, `last_name`, `created_at`, `studentnumber`, `studentgroupid`, `roleid`, `GDPR`) VALUES
-	(1, 'MrAnderson', 'mr.anderson@example.com', 1, 'Mr', 'Anderson', NOW(), NULL, NULL, 4, 1),
-	(2, 'admin', 'admin@metropolia.fi', 1, 'Admin', 'Admin', NOW(), NULL, NULL, 4, 1),
-	(3, 'teacher', 'teacher@metropolia.fi', 1, 'Teacher', 'Teacher', NOW(), NULL, NULL, 3, 1),
-	(4, 'counselor', 'counselor@metropolia.fi', 1, 'Counselor', 'Counselor', NOW(), NULL, NULL, 2, 1),
-	(5, 'student', 'student@metropolia.fi', 0, 'Student', 'Student', NOW(), NULL, NULL, 1, 1),
-  (6, 'student2', 'student2@metropolia.fi', 0, 'Student2', 'Student2', NOW(), NULL, NULL, 1, 1);
+    (1, 'MrAnderson', 'mr.anderson@example.com', 1, 'Mr', 'Anderson', NOW(), NULL, NULL, 4, 1);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+
+
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
