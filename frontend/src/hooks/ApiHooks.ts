@@ -320,8 +320,22 @@ const deleteCourse = async (courseId: number, token: string) => {
 	const url = `${baseUrl}courses/delete/${courseId}`;
 	return doFetch(url, options);
 };
-
+const updateOwnedTopicgroupandtheirtopics = async (topicGroup, topics = []) => {
+	const options = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			topicGroup,
+			topics,
+		}),
+	};
+	const url = `${baseUrl}courses/topics/update`;
+	return doFetch(url, options);
+};
 const apiHooks = {
+	updateOwnedTopicgroupandtheirtopics,
 	fetchServerSettings,
 	postLogin,
 	createCourse,
