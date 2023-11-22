@@ -7,7 +7,7 @@ import {toast} from 'react-toastify';
 import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
-import { CircularProgress } from '@mui/material';
+import {CircularProgress} from '@mui/material';
 const CreateLecture: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
@@ -201,6 +201,11 @@ const CreateLecture: React.FC = () => {
 								id="course"
 								className="block h-8 sm:ml-5 ml-1 mr-3"
 								value={selectedSession}
+								onClick={() => {
+									if (courses.length === 0) {
+										toast.error('You have no courses');
+									}
+								}}
 								onChange={e => {
 									const selectedCourseId = e.target.value;
 
