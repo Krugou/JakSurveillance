@@ -1,5 +1,6 @@
 import {CircularProgress} from '@mui/material';
 import React, {useContext, useEffect, useState} from 'react';
+import {toast} from 'react-toastify';
 import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
 
@@ -90,9 +91,13 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 			apiHooks
 				.updateOwnedTopicgroupandtheirtopics(topicGroup, topics, user.email, token)
 				.then(response => {
-					console.log(response);
+					if (response) {
+						toast.success('Topic group updated successfully for ' + response.userid);
+						setIsCustomGroup(false);
+					}
 				})
 				.catch(error => {
+					toast.error('Error updating topic group');
 					console.error(error);
 				});
 		}
