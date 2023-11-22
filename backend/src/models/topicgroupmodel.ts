@@ -20,7 +20,10 @@ interface TopicGroupModel {
 	insertIntoTopicGroup(topicgroupname: string): Promise<void>;
 	fetchAllTopicGroupsWithTopics(): Promise<RowDataPacket[]>;
 	checkIfTopicGroupExists(topicgroup: string): Promise<RowDataPacket[]>;
-	insertTopicGroup(topicgroup: string): Promise<ResultSetHeader>;
+	insertTopicGroup(
+		topicgroup: string,
+		topicgroupowner: number,
+	): Promise<ResultSetHeader>;
 
 	// other methods...
 }
@@ -88,18 +91,7 @@ const topicGroupModel: TopicGroupModel = {
 	 * @param {string} topicgroupname - The name of the topic group to insert.
 	 * @returns {Promise<void>} A promise that resolves when the insertion is complete.
 	 */
-	async insertIntoTopicGroup(topicgroupname) {
-		try {
-			await pool
-				.promise()
-				.query('INSERT INTO topicgroups (topicgroupname) VALUES (?)', [
-					topicgroupname,
-				]);
-		} catch (error) {
-			console.error(error);
-			return Promise.reject(error);
-		}
-	},
+
 	async checkIfTopicGroupExists(topicgroup: string) {
 		const [existingTopic] = await pool
 			.promise()
@@ -110,12 +102,12 @@ const topicGroupModel: TopicGroupModel = {
 
 		return existingTopic;
 	},
-	async insertTopicGroup(topicgroup: string) {
+	async insertTopicGroup(topicgroup: string, topicgroupowner: number) {
 		const [topicResult] = await pool
 			.promise()
 			.query<ResultSetHeader>(
-				'INSERT INTO topicgroups (topicgroupname) VALUES (?)',
-				[topicgroup],
+				'INSERT INTO topicgroups (topicgroupname, userid) VALUES (?, ?)',
+				[topicgroup, topicgroupowner],
 			);
 
 		return topicResult;
