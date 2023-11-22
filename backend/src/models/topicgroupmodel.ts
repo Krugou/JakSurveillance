@@ -18,6 +18,9 @@ interface TopicGroupModel {
 	fetchAllTopicGroups(): Promise<[RowDataPacket[], FieldPacket[]]>;
 	findByTopicGroupId(id: number): Promise<TopicGroup | null>;
 	fetchAllTopicGroupsWithTopics(): Promise<RowDataPacket[]>;
+	fetchAllTopicGroupsWithTopicsByUserId(
+		userid: number,
+	): Promise<RowDataPacket[]>;
 	checkIfTopicGroupExists(topicgroup: string): Promise<RowDataPacket[]>;
 	insertTopicGroup(
 		topicgroup: string,

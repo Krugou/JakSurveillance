@@ -123,14 +123,18 @@ const getAllTopicGroupsAndTopicsInsideThem = async (token: string) => {
 	});
 	return response;
 };
-const getAllTopicGroupsAndTopicsInsideThemByUserid = async (userid: number) => {
+const getAllTopicGroupsAndTopicsInsideThemByUserid = async (
+	email: string,
+	token: string,
+) => {
 	const response = await doFetch(baseUrl + 'courses/topics', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
 		},
 		body: JSON.stringify({
-			userid: userid,
+			email: email,
 		}),
 	});
 	return response;

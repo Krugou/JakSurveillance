@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
+import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
 
 interface Props {
@@ -11,6 +12,7 @@ interface TopicGroup {
 	// other properties...
 }
 const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
+	const {user} = useContext(UserContext);
 	const [topicData, setTopicData] = useState<TopicGroup[]>([]);
 	const [courseTopicGroup, setCourseTopicGroup] = useState('');
 	const [selectedGroupTopics, setSelectedGroupTopics] = useState<string[]>([]);
@@ -68,13 +70,19 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 		if (!token) {
 			throw new Error('No token available');
 		}
-		apiHooks.getAllTopicGroupsAndTopicsInsideThem(token).then(data => {
-			setTopicData(data);
-			if (data.length > 0) {
-				setCourseTopicGroup(data[0].topicgroupname);
-			}
-		});
-	}, []);
+		if (user) {
+		
+			apiHooks
+				.getAllTopicGroupsAndTopicsInsideThemByUserid(user.email, token)
+				.then(data => {
+					setTopicData(data);
+					
+					if (data.length > 0) {
+						setCourseTopicGroup(data[0].topicgroupname);
+					}
+				});
+		}
+	}, [user]);
 
 	useEffect(() => {
 		const selectedGroup = topicData.find(
@@ -147,56 +155,56 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 								Custom Topics
 							</label>
 							<div className="flex flex-col gap-4 w-full">
-							{customTopics.map((topic, index) => (
-								<div key={index} className="flex items-center">
-									<input
-										id={`customTopics-${index}`}
-										type="text"
-										placeholder="Custom Topic"
-										value={topic}
-										onChange={e => handleCustomTopicChange(index, e.target.value)}
-										className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange mr-2"
-										title='add custom topics here example: "exam"'
-									/>
-									{customTopics.length > 1 && (
-										<button
-											type="button"
-											onClick={() => {
-												setCustomTopics(prevTopics =>
-													prevTopics.filter((_, i) => i !== index),
-												);
-											}}
-											className="p-2 bg-red-500 text-white rounded hover:bg-red-600"
-											title="Remove custom topic"
-										>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 20 20"
-												fill="currentColor"
-												className="w-4 h-4"
+								{customTopics.map((topic, index) => (
+									<div key={index} className="flex items-center">
+										<input
+											id={`customTopics-${index}`}
+											type="text"
+											placeholder="Custom Topic"
+											value={topic}
+											onChange={e => handleCustomTopicChange(index, e.target.value)}
+											className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange mr-2"
+											title='add custom topics here example: "exam"'
+										/>
+										{customTopics.length > 1 && (
+											<button
+												type="button"
+												onClick={() => {
+													setCustomTopics(prevTopics =>
+														prevTopics.filter((_, i) => i !== index),
+													);
+												}}
+												className="p-2 bg-red-500 text-white rounded hover:bg-red-600"
+												title="Remove custom topic"
 											>
-												<path
-													fillRule="evenodd"
-													d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L10 8.586l-2.293-2.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 001.414 1.414L10 11.414l2.293 2.293a1 1 0 001.414-1.414L11.414 10l2.293-2.293z"
-													clipRule="evenodd"
-												/>
-											</svg>
-										</button>
-									)}
-								</div>
-							))}
-							<button
-								type="button"
-								onClick={() => {
-									setCustomTopics(prevTopics => [...prevTopics, customTopic]);
-									setCustomTopic('');
-								}}
-								className="mb-3 w-fit p-2 bg-metropoliaMainOrange text-white text-sm rounded-3xl hover:bg-metropoliaSecondaryOrange"
-							>
-								Add Custom Topic
-							</button>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													viewBox="0 0 20 20"
+													fill="currentColor"
+													className="w-4 h-4"
+												>
+													<path
+														fillRule="evenodd"
+														d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L10 8.586l-2.293-2.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 001.414 1.414L10 11.414l2.293 2.293a1 1 0 001.414-1.414L11.414 10l2.293-2.293z"
+														clipRule="evenodd"
+													/>
+												</svg>
+											</button>
+										)}
+									</div>
+								))}
+								<button
+									type="button"
+									onClick={() => {
+										setCustomTopics(prevTopics => [...prevTopics, customTopic]);
+										setCustomTopic('');
+									}}
+									className="mb-3 w-fit p-2 bg-metropoliaMainOrange text-white text-sm rounded-3xl hover:bg-metropoliaSecondaryOrange"
+								>
+									Add Custom Topic
+								</button>
+							</div>
 						</div>
-					</div>
 					</div>
 				</>
 			) : (
