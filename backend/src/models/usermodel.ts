@@ -82,7 +82,6 @@ const UserModel = {
 					[email],
 				);
 
-
 			if (userRows.length > 0) {
 				userData = userRows.pop() as UserInfo;
 
@@ -264,6 +263,23 @@ const UserModel = {
 		} catch (error) {
 			console.error(error);
 			throw new Error('Database error');
+		}
+	},
+	changeRoleId: async (email: string, roleId: number) => {
+		console.log('🚀 ~ file: usermodel.ts:269 ~ changeRoleId: ~ roleId:', roleId);
+		console.log('🚀 ~ file: usermodel.ts:269 ~ changeRoleId: ~ email:', email);
+		try {
+			const [result] = await pool
+				.promise()
+				.query<ResultSetHeader>('UPDATE users SET roleid = ? WHERE email = ?', [
+					roleId,
+					email,
+				]);
+			console.log('🚀 ~ file: usermodel.ts:276 ~ changeRoleId: ~ result:', result);
+			return result;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
 		}
 	},
 };
