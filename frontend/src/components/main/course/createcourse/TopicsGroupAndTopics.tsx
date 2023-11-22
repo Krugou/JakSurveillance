@@ -91,9 +91,11 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 			apiHooks
 				.updateOwnedTopicgroupandtheirtopics(topicGroup, topics, user.email, token)
 				.then(response => {
-					if (response) {
-						toast.success('Topic group updated successfully for ' + response.userid);
+					if (response.state === 'success') {
+						toast.success('Topic group saved successfully for ' + response.email);
 						setIsCustomGroup(false);
+						setCustomTopics(['']);
+						setCustomTopicGroup('');
 					}
 				})
 				.catch(error => {
