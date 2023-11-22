@@ -186,6 +186,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 					}
 				}
 				// Call the authenticate function to handle passport authentication
+				console.log('staff try to authenticate');
 				authenticate(req, res, next, username);
 			} catch (error) {
 				console.error(error);
@@ -196,7 +197,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 		// If the logged-in user is not Metropolia staff, authenticate them
 		if (metropoliaData.staff === false) {
 			// Call the authenticate function to handle passport authentication
-			console.log('try to authentticate');
+			console.log('non-staff try to authenticate');
 			authenticate(req, res, next, username);
 		}
 	} catch (error) {
