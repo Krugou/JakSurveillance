@@ -2,7 +2,7 @@ import React from 'react';
 
 const MainViewTitle = ({role}) => {
 	return (
-		<h1 className="text-4xl font-bold text-gray-700 mb-5 underline">
+		<h1 className="text-4xl font-bold text-metropoliaSupportBlack mb-5 ">
 			{role} Dashboard
 		</h1>
 	);
