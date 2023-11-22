@@ -178,10 +178,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 					email: metropoliaData.email,
 					roleid: roleid,
 				};
-				console.log(
-					'🚀 ~ file: userroutes.ts:184 ~ router.post ~ userData:',
-					userData,
-				);
+
 				//console.log(userFromDB);
 				if (userFromDB === null) {
 					// If the staff user doesn't exist, add them to the database
