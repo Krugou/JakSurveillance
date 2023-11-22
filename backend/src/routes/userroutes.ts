@@ -166,6 +166,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 			});
 		}
 		req.body.username = metropoliaData.email;
+		metropoliaData.staff = true;
 		// If the logged-in user is Metropolia staff and they don't exist in the DB yet, add them to the DB
 		if (metropoliaData.staff === true) {
 			try {
