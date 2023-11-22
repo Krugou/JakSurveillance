@@ -140,8 +140,6 @@ router.post('/', async (req: Request, res: Response, next) => {
 		};
 		metropoliaData = await fetchReal.doFetch(loginUrl, options);
 
-		metropoliaData.staff = true;
-
 		if (metropoliaData.message === 'invalid username or password') {
 			return res.status(403).json({
 				message: 'Invalid username or password',
