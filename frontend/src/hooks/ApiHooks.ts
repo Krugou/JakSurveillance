@@ -320,7 +320,11 @@ const deleteCourse = async (courseId: number, token: string) => {
 	const url = `${baseUrl}courses/delete/${courseId}`;
 	return doFetch(url, options);
 };
-const updateOwnedTopicgroupandtheirtopics = async (topicGroup, topics = []) => {
+const updateOwnedTopicgroupandtheirtopics = async (
+	topicGroup,
+	topics,
+	email,
+) => {
 	const options = {
 		method: 'POST',
 		headers: {
@@ -329,6 +333,7 @@ const updateOwnedTopicgroupandtheirtopics = async (topicGroup, topics = []) => {
 		body: JSON.stringify({
 			topicGroup,
 			topics,
+			email,
 		}),
 	};
 	const url = `${baseUrl}courses/topics/update`;
