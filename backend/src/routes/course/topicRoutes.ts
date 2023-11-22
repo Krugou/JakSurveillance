@@ -33,12 +33,12 @@ router.post('/update', async (req: Request, res: Response) => {
 			'🚀 ~ file: topicRoutes.ts:32 ~ router.post ~ req.body:',
 			req.body,
 		);
-		// const topicGroupData = await TopicGroupController.updateTopicGroup(
-		// 	topicGroup,
-		// 	topics,
-		// 	email,
-		// );
-		// res.send(topicGroupData);
+		const topicGroupData = await TopicGroupController.updateTopicGroup(
+			topicGroup,
+			topics,
+			email,
+		);
+		res.status(200).send(topicGroupData);
 	} catch (err) {
 		console.error(err);
 		res.status(500).send('Server error: ' + err);
