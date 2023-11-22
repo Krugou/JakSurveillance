@@ -64,6 +64,21 @@ const topicGroupModel: TopicGroupModel = {
 			return Promise.reject(error);
 		}
 	},
+	async fetchAllTopicGroupsWithTopicsByUserId(userid: number) {
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					'SELECT topicgroups.topicgroupname, GROUP_CONCAT(topics.topicname) as topics FROM topicgroups LEFT JOIN topicsingroup ON topicgroups.topicgroupid = topicsingroup.topicgroupid LEFT JOIN topics ON topicsingroup.topicid = topics.topicid WHERE topicgroups.userid = ? GROUP BY topicgroups.topicgroupid',
+					[userid],
+				);
+
+			return rows;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
 	/**
 	 * @method findByTopicGroupId
 	 * @description Finds a topic group by its ID.
