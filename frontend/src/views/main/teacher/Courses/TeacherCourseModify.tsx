@@ -2,8 +2,9 @@ import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import apihooks from '../../../../hooks/ApiHooks';
 import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
-import InputField from '../../../../components/main/course/createcourse/coursedetails/InputField';
+import CourseDetails from '../../../../components/main/course/createcourse/CourseDetails';
 import AddTeachers from '../../../../components/main/course/createcourse/AddTeachers';
+import {set} from 'date-fns';
 // this is view for teacher to modify the single course details
 
 interface CourseDetail {
@@ -24,9 +25,7 @@ const TeacherCourseModify: React.FC = () => {
 	const [courseName, setCourseName] = useState(
 		courseData ? courseData.name : '',
 	);
-	const [courseCode, setCourseCode] = useState(
-		courseData ? courseData.code : '',
-	);
+	const [courseCode, setCourseCode] = useState<string>('');
 	const [studentGroup, setStudentGroup] = useState(
 		courseData ? courseData.studentgroup_name : '',
 	);
@@ -63,13 +62,25 @@ const TeacherCourseModify: React.FC = () => {
 	}, [id]);
 
 	useEffect(() => {
-		if (courseData?.instructor_name) {
-			setInstructors(
-				courseData.instructor_name.split(',').map(email => ({email})),
-			);
+		if (courseData) {
+			setCourseCode(courseData.code);
+			setCourseName(courseData.name);
+			setStudentGroup(courseData.studentgroup_name);
+			const startDate = new Date(courseData.start_date || '')
+				.toISOString()
+				.slice(0, 16);
+			setStartDate(startDate);
+			const endDate = new Date(courseData.end_date || '')
+				.toISOString()
+				.slice(0, 16);
+			setEndDate(endDate);
+			if (courseData.instructor_name) {
+				setInstructors(
+					courseData.instructor_name.split(',').map(email => ({email})),
+				);
+			}
 		}
 	}, [courseData]);
-
 	if (isLoading) {
 		return <div>Loading...</div>;
 	}
@@ -104,41 +115,18 @@ const TeacherCourseModify: React.FC = () => {
 				onSubmit={handleSubmit}
 				className="bg-white md:w-2/4 xl:w-1/4 w-full sm:w-2/3 shadow-md rounded-xl px-8 pt-6 pb-8 mb-4 mx-auto"
 			>
-				<InputField
-					label="Course Code"
-					type="text"
-					name="courseCode"
-					value={courseData?.code}
-					onChange={e => setCourseCode(e.target.value)}
-				/>
-
-				<InputField
-					label="Course Name"
-					type="text"
-					name="courseName"
-					value={courseData?.name}
-					onChange={e => setCourseName(e.target.value)}
-				/>
-				<InputField
-					label="Student Group"
-					type="text"
-					name="studentGroup"
-					value={courseData?.studentgroup_name}
-					onChange={e => setStudentGroup(e.target.value)}
-				/>
-				<InputField
-					label="Start Date"
-					type="datetime-local"
-					name="startDate"
-					value={new Date(courseData?.start_date || '').toISOString().slice(0, 16)}
-					onChange={e => setStartDate(e.target.value)}
-				/>
-				<InputField
-					label="End Date"
-					type="datetime-local"
-					name="endDate"
-					value={new Date(courseData?.end_date || '').toISOString().slice(0, 16)}
-					onChange={e => setEndDate(e.target.value)}
+				<CourseDetails
+					courseCode={courseCode}
+					setCourseCode={setCourseCode}
+					courseName={courseName}
+					setCourseName={setCourseName}
+					studentGroup={studentGroup}
+					setStudentGroup={setStudentGroup}
+					startDate={startDate}
+					setStartDate={setStartDate}
+					endDate={endDate}
+					setEndDate={setEndDate}
+					modify={true}
 				/>
 				<AddTeachers
 					instructors={instructors}

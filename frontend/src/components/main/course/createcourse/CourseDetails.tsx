@@ -12,10 +12,15 @@ const CourseDetails = ({
 	setStartDate,
 	endDate,
 	setEndDate,
+	modify = false,
 }) => {
 	return (
 		<fieldset>
-			<legend className="mb-5 ml-1 text-xl">Please check Course Details</legend>
+			{modify ? (
+				<></>
+			) : (
+				<legend className="mb-5 ml-1 text-xl">Please check Course Details</legend>
+			)}
 
 			<InputField
 				label="Course Code"
