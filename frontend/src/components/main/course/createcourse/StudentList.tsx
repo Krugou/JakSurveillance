@@ -87,8 +87,8 @@ const StudentList = ({studentList, setStudentList}) => {
 				>
 					{hideExtraColumns ? 'Show All Columns' : 'Hide Extra Columns'}
 				</button>
-				<table className="table-auto w-full">
-					<div className="max-h-96 h-96 overflow-y-scroll relative">
+				<div className="max-h-96 h-96 overflow-y-scroll relative">
+					<table className="table-auto w-full">
 						<thead className="sticky top-0 bg-white z-10">
 							<tr>
 								{studentList.length > 0 &&
@@ -163,8 +163,8 @@ const StudentList = ({studentList, setStudentList}) => {
 								),
 							)}
 						</tbody>
-					</div>
-				</table>
+					</table>
+				</div>
 				<button
 					className="p-1 mt-2 text-sm sticky top-0 left-0 bg-metropoliaMainOrange text-white font-bold rounded-xl hover:bg-metropoliaSecondaryOrange focus:outline-none mb-4"
 					onClick={event => addStudent(event)}
