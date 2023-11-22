@@ -4,6 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteModal from '../modals/DeleteModal';
 import apiHooks from '../../../hooks/ApiHooks';
+import EditIcon from '@mui/icons-material/Edit';
 import {toast} from 'react-toastify';
 import {useNavigate} from 'react-router-dom';
 interface Course {
@@ -91,9 +92,17 @@ const CourseData: React.FC<CourseDataProps> = ({courseData, updateView}) => {
 						className="mt-4 bg-white p-5 rounded-lg mb-4 relative"
 					>
 						{/* Add a relative position to the card container */}
+						<Tooltip title="Modify this course">
+							<EditIcon
+								fontSize="large"
+								className="absolute top-0 right-0 m-4 mr-16 cursor-pointer text-black bg-gray-300 rounded-full p-1 hover:text-gray-700"
+								onClick={() => navigate(`/teacher/courses/${course.courseid}/modify`)}
+							/>
+						</Tooltip>
 						<Tooltip title="Delete this course">
 							<DeleteIcon
-								className="absolute top-0 right-0 m-4 cursor-pointer text-red-500 hover:text-red-700"
+								fontSize="large"
+								className="absolute top-0 right-0 m-4 cursor-pointer text-red-500 bg-gray-300 rounded-full p-1 hover:text-red-700"
 								onClick={() => openDeleteModal(course.courseid)}
 							/>
 						</Tooltip>
@@ -137,10 +146,6 @@ const CourseData: React.FC<CourseDataProps> = ({courseData, updateView}) => {
 										<p className="text-gray-700">Instructors: </p>
 										<p>{course.instructor_name}</p>
 									</div>
-									<MainViewButton
-										path={`/teacher/courses/${course.courseid}/modify`}
-										text="Modify details"
-									/>
 								</>
 							) : (
 								<MainViewButton
