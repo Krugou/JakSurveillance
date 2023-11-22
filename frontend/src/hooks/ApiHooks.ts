@@ -324,11 +324,13 @@ const updateOwnedTopicgroupandtheirtopics = async (
 	topicGroup,
 	topics,
 	email,
+	token: string,
 ) => {
 	const options = {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
 		},
 		body: JSON.stringify({
 			topicGroup,
