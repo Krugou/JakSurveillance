@@ -64,6 +64,7 @@ const Login: React.FC = () => {
 						type="text"
 						ref={usernameRef}
 						placeholder="Metropolia username"
+						aria-label="Metropolia username"
 					/>
 				</div>
 				<div className="mb-6">
@@ -78,15 +79,16 @@ const Login: React.FC = () => {
 						id="password"
 						type="password"
 						ref={passwordRef}
+						aria-label="Metropolia password"
 						placeholder="Metropolia password"
 					/>
 				</div>
 				<div className="flex w-full justify-center">
 					<button
 						className="bg-metropoliaMainOrange w-1/2 hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 rounded-xl px-4 focus:outline-none focus:shadow-outline"
-						type="button"
 						onClick={handleSubmit}
 						type="submit"
+						aria-label="Sign In"
 					>
 						Sign In
 					</button>
