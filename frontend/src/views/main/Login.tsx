@@ -86,6 +86,7 @@ const Login: React.FC = () => {
 						className="bg-metropoliaMainOrange w-1/2 hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 rounded-xl px-4 focus:outline-none focus:shadow-outline"
 						type="button"
 						onClick={handleSubmit}
+						type="submit"
 					>
 						Sign In
 					</button>
