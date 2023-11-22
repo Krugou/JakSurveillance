@@ -17,7 +17,6 @@ interface TopicGroup {
 interface TopicGroupModel {
 	fetchAllTopicGroups(): Promise<[RowDataPacket[], FieldPacket[]]>;
 	findByTopicGroupId(id: number): Promise<TopicGroup | null>;
-	insertIntoTopicGroup(topicgroupname: string): Promise<void>;
 	fetchAllTopicGroupsWithTopics(): Promise<RowDataPacket[]>;
 	checkIfTopicGroupExists(topicgroup: string): Promise<RowDataPacket[]>;
 	insertTopicGroup(
@@ -85,12 +84,6 @@ const topicGroupModel: TopicGroupModel = {
 			return Promise.reject(error);
 		}
 	},
-	/**
-	 * @method insertIntoTopicGroup
-	 * @description Inserts a new topic group into the database.
-	 * @param {string} topicgroupname - The name of the topic group to insert.
-	 * @returns {Promise<void>} A promise that resolves when the insertion is complete.
-	 */
 
 	async checkIfTopicGroupExists(topicgroup: string) {
 		const [existingTopic] = await pool
