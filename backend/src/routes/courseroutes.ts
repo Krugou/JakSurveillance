@@ -173,8 +173,8 @@ router.post('/excelinput', upload.single('file'), async (req, res) => {
 		const studentList = data
 			.filter(item => item.__EMPTY !== 'Etunimi')
 			.map(item => {
-				const first_name = item.__EMPTY;
 				const last_name = item[fullCourseName];
+				const first_name = item.__EMPTY;
 				const name = item.__EMPTY_1;
 				const email = item.__EMPTY_2;
 				const studentnumber = item.__EMPTY_3;
@@ -186,8 +186,8 @@ router.post('/excelinput', upload.single('file'), async (req, res) => {
 				const evaluation = item.__EMPTY_9;
 
 				return {
-					first_name,
 					last_name,
+					first_name,
 					name,
 					email,
 					studentnumber,
@@ -318,7 +318,7 @@ router.delete('/delete/:id', async (req: Request, res: Response) => {
 router.get('/students/:userid', async (req: Request, res: Response) => {
 	// Get the instructor ID from the request
 	const userid = Number(req.params.userid);
-	
+
 	if (isNaN(userid)) {
 		res.status(400).send('Invalid user ID');
 		return;
