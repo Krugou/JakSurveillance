@@ -123,6 +123,18 @@ const getAllTopicGroupsAndTopicsInsideThem = async (token: string) => {
 	});
 	return response;
 };
+const getAllTopicGroupsAndTopicsInsideThemByUserid = async (userid: number) => {
+	const response = await doFetch(baseUrl + 'courses/topics', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			userid: userid,
+		}),
+	});
+	return response;
+};
 const getCourseDetailByCourseId = async (courseId: string, token: string) => {
 	const response = await doFetch(baseUrl + 'courses/coursesbyid/' + courseId, {
 		method: 'GET',
@@ -323,5 +335,6 @@ const apiHooks = {
 	deleteCourse,
 	getLectureInfo,
 	getStudentsByInstructorId,
+	getAllTopicGroupsAndTopicsInsideThemByUserid,
 };
 export default apiHooks;
