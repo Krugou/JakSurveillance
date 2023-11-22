@@ -79,11 +79,16 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 		}
 	}, [user]);
 	const handleApply = () => {
+		event?.preventDefault();
 		const topics = customTopics;
 		const topicGroup = customTopicGroup;
+		const token: string | null = localStorage.getItem('userToken');
+		if (!token) {
+			throw new Error('No token available');
+		}
 		if (user) {
 			apiHooks
-				.updateOwnedTopicgroupandtheirtopics(topicGroup, topics, user.email)
+				.updateOwnedTopicgroupandtheirtopics(topicGroup, topics, user.email, token)
 				.then(response => {
 					console.log(response);
 				})
