@@ -2,6 +2,9 @@ import React, {useEffect, useState} from 'react';
 import InputField from './coursedetails/InputField';
 
 const StudentList = ({studentList, setStudentList}) => {
+	const [lastStudentNumber, setLastStudentNumber] = useState(777);
+	const [lastEmailNumber, setLastEmailNumber] = useState(1);
+	const [sortAscending, setSortAscending] = useState(true);
 	const [hiddenColumns, setHiddenColumns] = useState<Record<string, boolean>>({
 		admingroups: true,
 		arrivalgroup: true,
@@ -9,27 +12,39 @@ const StudentList = ({studentList, setStudentList}) => {
 		evaluation: true,
 		program: true,
 		registration: true,
+		name: true,
 	});
 	const [hideExtraColumns, setHideExtraColumns] = useState(true);
 
 	const addStudent = event => {
 		event.preventDefault();
 		const newStudent = {
-			first_name: 'example',
-			last_name: 'example',
-			name: 'example',
-			email: 'example@gmail.com',
-			studentnumber: '2442',
-			admingroups: 'example',
-			arrivalgroup: 'example',
-			educationform: 'example',
-			evaluation: 'example',
-			program: 'example',
-			registration: 'example',
+			first_name: 'Matti',
+			last_name: 'Meikäläinen',
+			name: 'Meikäläinen Matti',
+			email: `Matti.meikalainen${lastEmailNumber}@metropolia.com`,
+			studentnumber: lastStudentNumber.toString(),
+			admingroups: 'tvt19spo',
+			arrivalgroup: 'xyz',
+			educationform: 'Päivätoteutus',
+			evaluation: '1',
+			program: 'Degree Programme in Information Technology',
+			registration: 'Hyväksytty',
 		};
 		setStudentList([...studentList, newStudent]);
+		setLastStudentNumber(lastStudentNumber + 1);
+		setLastEmailNumber(lastEmailNumber + 1);
 	};
-
+	const sortStudents = () => {
+		event.preventDefault();
+		const sortedStudentList = [...studentList].sort((a, b) =>
+			sortAscending
+				? a.last_name.localeCompare(b.last_name)
+				: b.last_name.localeCompare(a.last_name),
+		);
+		setStudentList(sortedStudentList);
+		setSortAscending(!sortAscending); // Toggle the sort direction for the next sort
+	};
 	const deleteStudent = index => {
 		const newStudentList = [...studentList];
 		newStudentList.splice(index, 1);
@@ -53,6 +68,7 @@ const StudentList = ({studentList, setStudentList}) => {
 						evaluation: true,
 						program: true,
 						registration: true,
+						name: true,
 				  } as Record<string, boolean>),
 		);
 		setHideExtraColumns(!hideExtraColumns);
@@ -74,69 +90,78 @@ const StudentList = ({studentList, setStudentList}) => {
 				<table className="table-auto w-full">
 					<div className="max-h-96 h-96 overflow-y-scroll relative">
 						<thead className="sticky top-0 bg-white z-10">
-						<tr>
-							{studentList.length > 0 &&
-								Object.keys(studentList[0]).map(
-									(key, index) =>
-										!hiddenColumns[key] && (
-											<th key={index} className="px-4 py-2">
-												{key}
-												<button
-													aria-label="Hide Column"
-													className="ml-2 bg-metropoliaMainOrange text-sm text-white font-bold rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark p-1"
-													onClick={() =>
-														setHiddenColumns(
-															(prevHiddenColumns: Record<string, boolean>) => ({
-																...prevHiddenColumns,
-																[key]: true,
-															}),
-														)
-													}
-												>
-													Hide
-												</button>
-											</th>
-										),
-								)}
-							{studentList.length > 1 && <th className="px-4 py-2">Actions</th>}
-						</tr>
-						</thead>
-						<tbody>
-						{studentList.map(
-							(student: Record<string, string | number>, index: number) => (
-								<tr key={index}>
-									{Object.entries(student).map(
-										([key, value], innerIndex) =>
+							<tr>
+								{studentList.length > 0 &&
+									Object.keys(studentList[0]).map(
+										(key, index) =>
 											!hiddenColumns[key] && (
-												<td key={innerIndex} className="border px-2 py-2">
-													<InputField
-														type="text"
-														name={key}
-														value={value.toString()}
-														onChange={e => {
-															const newStudentList = [...studentList];
-															newStudentList[index][key] = e.target.value;
-															setStudentList(newStudentList);
-														}}
-													/>
-												</td>
+												<th key={index} className="px-4 py-2">
+													{key}
+													{key === 'last_name' && (
+														<button
+															aria-label="Sort Column"
+															className="ml-2 bg-metropoliaMainOrange text-sm text-white font-bold rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark p-1"
+															onClick={sortStudents}
+														>
+															Sort
+														</button>
+													)}
+													<button
+														aria-label="Hide Column"
+														className="ml-2 bg-metropoliaMainOrange text-sm text-white font-bold rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark p-1"
+														onClick={() =>
+															setHiddenColumns(
+																(prevHiddenColumns: Record<string, boolean>) => ({
+																	...prevHiddenColumns,
+																	[key]: true,
+																}),
+															)
+														}
+													>
+														Hide
+													</button>
+												</th>
 											),
 									)}
-									{studentList.length > 1 && (
-										<td className="border px-4 py-2">
-											<button
-												aria-label="Delete Student"
-												type="button"
-												className="p-2 w-full bg-red-500 text-white font-bold rounded hover:metropoliaSecondaryOrange focus:outline-none"
-												onClick={() => deleteStudent(index)}
-											>
-												x
-											</button>
-										</td>
-									)}
-								</tr>
-							),
-						)}
+								{studentList.length > 1 && <th className="px-4 py-2">Actions</th>}
+							</tr>
+						</thead>
+						<tbody>
+							{studentList.map(
+								(student: Record<string, string | number>, index: number) => (
+									<tr key={index}>
+										{Object.entries(student).map(
+											([key, value], innerIndex) =>
+												!hiddenColumns[key] && (
+													<td key={innerIndex} className="border px-2 py-2">
+														<InputField
+															type="text"
+															name={key}
+															value={value.toString()}
+															onChange={e => {
+																const newStudentList = [...studentList];
+																newStudentList[index][key] = e.target.value;
+																setStudentList(newStudentList);
+															}}
+														/>
+													</td>
+												),
+										)}
+										{studentList.length > 1 && (
+											<td className="border px-4 py-2">
+												<button
+													aria-label="Delete Student"
+													type="button"
+													className="p-2 w-full bg-red-500 text-white font-bold rounded hover:metropoliaSecondaryOrange focus:outline-none"
+													onClick={() => deleteStudent(index)}
+												>
+													x
+												</button>
+											</td>
+										)}
+									</tr>
+								),
+							)}
 						</tbody>
 					</div>
 				</table>
