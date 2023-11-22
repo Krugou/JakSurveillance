@@ -81,7 +81,7 @@ const UserModel = {
 					`SELECT users.userid, users.username, users.email, users.first_name, users.last_name, users.created_at, users.studentnumber, users.gdpr AS gdpr, roles.name AS role FROM users JOIN roles ON users.roleid = roles.roleid WHERE users.email = ?;`,
 					[email],
 				);
-			
+
 
 			if (userRows.length > 0) {
 				userData = userRows.pop() as UserInfo;

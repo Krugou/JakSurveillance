@@ -39,13 +39,6 @@ const MainView: React.FC = () => {
 					description="See instructions for all available tasks"
 				/>
 			</div>
-			<FirstTimeLoginModal isOpen={} onClose={}>
-				<h1 className="text-2xl mb-4">Welcome JakSurveillance!</h1>
-				<p>If you ever find yourself unsure of what to do, head over to our Instruction Videos section. There, you'll find comprehensive guides to help you make the most of JakSurveillance.</p>
-				<button onClick={} className="bg-gray-500 text-white p-2 mt-4 rounded">
-					Close Modal
-				</button>
-			</FirstTimeLoginModal>
 		</BackgroundContainer>
 	);
 };
