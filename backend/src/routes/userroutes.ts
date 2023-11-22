@@ -181,6 +181,9 @@ router.post('/', async (req: Request, res: Response, next) => {
 				if (userFromDB === null) {
 					// If the staff user doesn't exist, add them to the database
 					const addStaffUserResponse = await UserModel.addStaffUser(userData);
+					if (!addStaffUserResponse) {
+						console.error('Failed to add staff user');
+					}
 				}
 				// Call the authenticate function to handle passport authentication
 				authenticate(req, res, next, username);
