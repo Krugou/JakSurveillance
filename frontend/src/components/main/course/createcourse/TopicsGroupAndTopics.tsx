@@ -79,16 +79,18 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 		}
 	}, [user]);
 	const handleApply = () => {
-		const topics = isCustomGroup ? customTopics : courseTopics;
-		const topicGroup = isCustomGroup ? customTopicGroup : courseTopicGroup;
-		apiHooks
-			.updateOwnedTopicgroupandtheirtopics(topicGroup, topics)
-			.then(response => {
-				console.log(response);
-			})
-			.catch(error => {
-				console.error(error);
-			});
+		const topics = customTopics;
+		const topicGroup = customTopicGroup;
+		if (user) {
+			apiHooks
+				.updateOwnedTopicgroupandtheirtopics(topicGroup, topics, user.email)
+				.then(response => {
+					console.log(response);
+				})
+				.catch(error => {
+					console.error(error);
+				});
+		}
 	};
 
 	useEffect(() => {
@@ -161,7 +163,10 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 								className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
 								title='add custom topic group here example: "customGroup"'
 							/>
-							<button className="mb-3 w-fit p-2 bg-metropoliaMainOrange text-white text-sm rounded-3xl hover:bg-metropoliaSecondaryOrange">
+							<button
+								className="mb-3 w-fit p-2 bg-metropoliaMainOrange text-white text-sm rounded-3xl hover:bg-metropoliaSecondaryOrange"
+								onClick={handleApply}
+							>
 								Apply
 							</button>
 						</div>
