@@ -160,9 +160,9 @@ const AttendanceRoom: React.FC = () => {
 			{loading ? (
 				<CircularProgress />
 			) : (
-				<div className="flex flex-col w-full xl:w-4/5 2xl:w-3/4 h-full p-5 bg-gray-100">
+				<div className="flex flex-col w-full xl:w-4/5 2xl:w-1/2 h-full p-5 bg-gray-100">
 					<div>
-						<h1 className="text-4xl p-2 m-2 font-bold">
+						<h1 className="text-2xl pb-5 font-bold">
 							{courseName} - {courseCode} - {topicname} -{' '}
 							{countdown !== null
 								? `${Math.floor(countdown / 60)} minutes ${countdown % 60} seconds`
@@ -175,7 +175,7 @@ const AttendanceRoom: React.FC = () => {
 								size={256}
 								value={hashValue}
 								viewBox={`0 0 256 256`}
-								className="md:w-[32em] w-full h-full"
+								className="md:w-[20em] w-full h-full"
 							/>
 
 							<Attendees arrayOfStudents={arrayOfStudents} />
@@ -190,13 +190,15 @@ const AttendanceRoom: React.FC = () => {
 							</label>
 						</h2>
 					</div>
+					<div className="flex sm:flex-row-reverse flex-col gap-5 items-center justify-end">
 					<button
 						onClick={handleLectureFinished}
-						className="bg-metropoliaMainOrange sm:w-fit w-full mt-5 p-5 hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 rounded"
+						className="bg-metropoliaMainOrange sm:w-fit h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSecondaryOrange text-white font-bold rounded"
 					>
 						Finish Lecture
 					</button>
 					<CourseStudents coursestudents={courseStudents} />
+					</div>
 				</div>
 			)}
 		</BackgroundContainer>

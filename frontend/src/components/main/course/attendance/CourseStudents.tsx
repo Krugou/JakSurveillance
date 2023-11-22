@@ -24,7 +24,7 @@ const CourseStudents: React.FC<Props> = ({coursestudents}) => {
 		<div
 			className={`flex flex-row ${
 				coursestudents.length > 10 ? 'justify-start' : 'justify-center'
-			} bg-white p-4 rounded-lg shadow-md w-full mt-4 overflow-hidden`}
+			} bg-white p-3 rounded-lg shadow-md w-full mt-4 overflow-hidden`}
 		>
 			{coursestudents.length === 0 ? (
 				<p className="">All students saved</p>
