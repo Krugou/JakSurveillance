@@ -1,4 +1,6 @@
 import TopicGroupModel from '../models/topicgroupmodel.js';
+import TopicInGroupModel from '../models/topicingroupmodel.js';
+import TopicModel from '../models/topicmodel.js';
 import UserModel from '../models/usermodel.js';
 
 const TopicGroupController = {
@@ -14,12 +16,13 @@ const TopicGroupController = {
 			return Promise.reject(error);
 		}
 	},
-	async updateTopicGroup(
-		topicGroup: string,
-		topics: string[],
-		instructorUserId: number,
-	) {
+	async updateTopicGroup(topicGroup: string, topics: string[], email: string) {
 		try {
+			let instructorUserId;
+			if (email) {
+				const user = await UserModel.getAllUserInfo(email);
+				instructorUserId = user.userid;
+			}
 			if (topicGroup) {
 				const newTopicGroup = await TopicGroupModel.insertTopicGroup(
 					topicGroup,
@@ -51,6 +54,15 @@ const TopicGroupController = {
 					}
 				}
 			}
+			return {
+				state: 'success',
+				message:
+					'Topic group entered for userid: ' +
+					instructorUserId +
+					' with topicgroupname: ' +
+					topicGroup,
+				userid: instructorUserId,
+			};
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
