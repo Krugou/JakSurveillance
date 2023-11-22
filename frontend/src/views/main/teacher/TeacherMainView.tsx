@@ -3,6 +3,7 @@ import BackgroundContainer from '../../../components/main/background/BackgroundC
 import Card from '../../../components/main/cards/Card';
 import MainViewTitle from '../../../components/main/titles/MainViewTitle';
 import FirstTimeLoginModal from "../../../components/main/modals/FirstTimeLoginModal";
+import WelcomeModal from '../../../components/main/modals/WelcomeModal';
 const MainView: React.FC = () => {
 	return (
 		<BackgroundContainer>
@@ -39,6 +40,7 @@ const MainView: React.FC = () => {
 					description="See instructions for all available tasks"
 				/>
 			</div>
+			<WelcomeModal />
 		</BackgroundContainer>
 	);
 };
