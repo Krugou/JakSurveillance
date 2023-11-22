@@ -23,6 +23,7 @@ const Login: React.FC = () => {
 		};
 		try {
 			const response = await apiHooks.postLogin(inputs);
+			console.log('🚀 ~ file: Login.tsx:26 ~ handleSubmit ~ response:', response);
 			// this navigates to the mainview of the user type
 			if (response) {
 				localStorage.setItem('userToken', response.token); // set the token
