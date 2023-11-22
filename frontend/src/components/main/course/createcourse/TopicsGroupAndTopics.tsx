@@ -1,3 +1,4 @@
+import {CircularProgress} from '@mui/material';
 import React, {useContext, useEffect, useState} from 'react';
 import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
@@ -21,7 +22,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 	const [customTopicGroup, setCustomTopicGroup] = useState('');
 	const [customTopic, setCustomTopic] = useState('');
 	const [isCustomGroup, setIsCustomGroup] = useState(false);
-
+	const [loading, setLoading] = useState(true);
 	const handleTopicChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const selectedTopics = Array.from(
 			e.target.selectedOptions,
@@ -51,13 +52,6 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 			topics: topics,
 		}));
 	};
-	// useEffect(() => {
-	// 	console.log(topicsFormData);
-	// }, [isCustomGroup, topicsFormData]);
-
-	// const addCustomTopic = () => {
-	// 	setCustomTopics(prevTopics => [...prevTopics, '']);
-	// };
 
 	const handleCustomTopicChange = (index: number, value: string) => {
 		const newTopics = [...customTopics];
@@ -71,18 +65,31 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 			throw new Error('No token available');
 		}
 		if (user) {
-		
 			apiHooks
 				.getAllTopicGroupsAndTopicsInsideThemByUserid(user.email, token)
 				.then(data => {
 					setTopicData(data);
-					
 					if (data.length > 0) {
 						setCourseTopicGroup(data[0].topicgroupname);
+					} else {
+						setIsCustomGroup(true);
 					}
+					setLoading(false);
 				});
 		}
 	}, [user]);
+	const handleApply = () => {
+		const topics = isCustomGroup ? customTopics : courseTopics;
+		const topicGroup = isCustomGroup ? customTopicGroup : courseTopicGroup;
+		apiHooks
+			.updateOwnedTopicgroupandtheirtopics(topicGroup, topics)
+			.then(response => {
+				console.log(response);
+			})
+			.catch(error => {
+				console.error(error);
+			});
+	};
 
 	useEffect(() => {
 		const selectedGroup = topicData.find(
@@ -119,18 +126,23 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 		customTopics,
 		topicData,
 	]);
-
+	if (loading) {
+		return <CircularProgress />;
+	}
 	return (
 		<fieldset>
 			<div className="flex justify-between items-center">
 				<h2 className="text-xl mb-3 ">Topic Details</h2>
-				<button
-					type="button"
-					onClick={() => setIsCustomGroup(prev => !prev)}
-					className="mb-3 w-fit text-sm p-2 bg-metropoliaMainOrange text-white rounded-3xl hover:bg-metropoliaSecondaryOrange"
-				>
-					{isCustomGroup ? 'Select Existing Group' : 'Create Custom Group'}
-				</button>
+
+				{topicData.length > 0 && (
+					<button
+						type="button"
+						onClick={() => setIsCustomGroup(prev => !prev)}
+						className="mb-3 w-fit text-sm p-2 bg-metropoliaMainOrange text-white rounded-3xl hover:bg-metropoliaSecondaryOrange"
+					>
+						{isCustomGroup ? 'Select Existing Group' : 'Create Custom Group'}
+					</button>
+				)}
 			</div>
 
 			{isCustomGroup ? (
@@ -149,6 +161,9 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 								className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
 								title='add custom topic group here example: "customGroup"'
 							/>
+							<button className="mb-3 w-fit p-2 bg-metropoliaMainOrange text-white text-sm rounded-3xl hover:bg-metropoliaSecondaryOrange">
+								Apply
+							</button>
 						</div>
 						<div>
 							<label htmlFor="customTopics" className="block font-semibold mb-1">
