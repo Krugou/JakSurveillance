@@ -47,7 +47,7 @@ const TeacherCourses: React.FC = () => {
 	};
 	return (
 		<BackgroundContainer>
-			<h2 className="font-bold text-lg">My courses</h2>
+			<h2 className="font-bold text-3xl">My courses</h2>
 			<div className="w-full sm:w-3/4 md:w-2/4 lg:w-2/5 2xl:w-1/5">
 				<CourseData courseData={courses} updateView={updateView} />
 			</div>
