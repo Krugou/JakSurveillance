@@ -18,10 +18,20 @@ router.get('/', async (_req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
 	try {
 		const {email} = req.body;
-		const topicGroup = await TopicGroupController.getAllUserTopicGroupsAndTopics(
-			email,
-		);
-		res.send(topicGroup);
+		const topicGroupData =
+			await TopicGroupController.getAllUserTopicGroupsAndTopics(email);
+		res.send(topicGroupData);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server error: ' + err);
+	}
+});
+router.post('/update', async (req: Request, res: Response) => {
+	try {
+		const {topicGroup, topics,email} = req.body;
+		const topicGroupData =
+			await TopicGroupController.updateTopicGroup(topicGroup, topics,email);
+		res.send(topicGroupData);
 	} catch (err) {
 		console.error(err);
 		res.status(500).send('Server error: ' + err);
