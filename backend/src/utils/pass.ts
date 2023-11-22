@@ -60,6 +60,7 @@ export const generateTokenAndUser = (
 	last_name: string,
 	email: string,
 ) => {
+	
 	const user = {
 		role,
 		username,
