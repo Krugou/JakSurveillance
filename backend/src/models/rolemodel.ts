@@ -11,6 +11,7 @@ interface RoleModel {
 	fetchAllRoles(): Promise<[RowDataPacket[], FieldPacket[]]>;
 	findByRoleId(id: number): Promise<Role | null>;
 	insertIntoRole(rolename: string): Promise<void>;
+	fetchTeacherAndCounselorRoles(): Promise<RowDataPacket[]>;
 	// other methods...
 }
 
@@ -18,6 +19,19 @@ const roleModel: RoleModel = {
 	async fetchAllRoles() {
 		try {
 			return await pool.promise().query<RowDataPacket[]>('SELECT * FROM roles');
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
+	async fetchTeacherAndCounselorRoles() {
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					"SELECT * FROM roles WHERE name IN ('teacher', 'counselor')",
+				);
+			return rows;
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
