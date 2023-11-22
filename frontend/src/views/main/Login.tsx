@@ -27,15 +27,15 @@ const Login: React.FC = () => {
 			if (response) {
 				localStorage.setItem('userToken', response.token); // set the token
 				setUser(response.user); // set the user info into the context
-				navigate(`/${response.user.role.toLowerCase()}/mainview`);
 				toast.success('Login successful');
+				navigate(`/${response.user.role.toLowerCase()}/mainview`);
 			}
 		} catch (error) {
 			if (error instanceof Error) {
-				// Now TypeScript knows that 'error' is an instance of Error
+				toast.error(error.message);
 				setAlert(error.message);
 			} else {
-				// 'error' could be anything else
+				toast.error('Error logging in');
 				console.log(error);
 			}
 		}
