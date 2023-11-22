@@ -17,9 +17,15 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
 	}
 
 	return (
-		<div className="fixed inset-0 flex items-center justify-center z-50">
+		<div
+			className="fixed inset-0 flex items-center justify-center z-50"
+			onClick={onClose}
+		>
 			<div className="fixed inset-0 bg-black opacity-70"></div>
-			<div className="bg-white w-10/12 lg:w-3/12 sm:w-1/2 p-6 rounded-lg shadow-lg z-10 border-4 border-red-700">
+			<div
+				className="bg-white w-10/12 lg:w-3/12 sm:w-1/2 p-6 rounded-lg shadow-lg z-10 border-4 border-red-700"
+				onClick={e => e.stopPropagation()}
+			>
 				<h3 className="text-xl leading-6 font-medium text-gray-900">
 					Confirmation
 				</h3>
