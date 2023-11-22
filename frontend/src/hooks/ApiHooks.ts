@@ -341,8 +341,34 @@ const updateOwnedTopicgroupandtheirtopics = async (
 	const url = `${baseUrl}courses/topics/update`;
 	return doFetch(url, options);
 };
+// Define the function to fetch all roles
+const fetchAllRoles = async (token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	return await doFetch(baseUrl + 'admin/rolesspecial', options);
+};
+
+// Define the function to change role ID
+const changeRoleId = async (email: string, roleId: string, token: string) => {
+	const options = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+		body: JSON.stringify({email, roleId}),
+	};
+	return await doFetch(baseUrl + 'admin/change-role', options);
+};
 const apiHooks = {
 	updateOwnedTopicgroupandtheirtopics,
+	fetchAllRoles,
+	changeRoleId,
 	fetchServerSettings,
 	postLogin,
 	createCourse,
