@@ -159,34 +159,36 @@ router.post('/', async (req: Request, res: Response, next) => {
 					metropoliaData.email,
 				);
 
+				let roleid;
+				switch (metropoliaData.user) {
+					case 'admin':
+						roleid = 4;
+						break;
+					case 'counselor':
+						roleid = 2;
+						break;
+					default:
+						roleid = 3; // default to teacher
+				}
+				const userData = {
+					username: metropoliaData.user,
+					staff: 1,
+					first_name: metropoliaData.firstname,
+					last_name: metropoliaData.lastname,
+					email: metropoliaData.email,
+					roleid: roleid,
+				};
+				console.log(
+					'🚀 ~ file: userroutes.ts:184 ~ router.post ~ userData:',
+					userData,
+				);
 				//console.log(userFromDB);
 				if (userFromDB === null) {
-					let roleid;
-					switch (metropoliaData.user) {
-						case 'admin':
-							roleid = 4;
-							break;
-						case 'counselor':
-							roleid = 2;
-							break;
-						default:
-							roleid = 3; // default to teacher
-					}
-
-					const userData = {
-						username: metropoliaData.user,
-						staff: 1,
-						first_name: metropoliaData.firstname,
-						last_name: metropoliaData.lastname,
-						email: metropoliaData.email,
-						roleid: roleid,
-					};
 					// If the staff user doesn't exist, add them to the database
 					const addStaffUserResponse = await UserModel.addStaffUser(userData);
-
-					// Call the authenticate function to handle passport authentication
-					authenticate(req, res, next, username);
 				}
+				// Call the authenticate function to handle passport authentication
+				authenticate(req, res, next, username);
 			} catch (error) {
 				console.error(error);
 				return res.status(500).json({error: 'Internal server error'});
