@@ -20,7 +20,7 @@ const AttendanceRoom: React.FC = () => {
 	const [courseName, setCourseName] = useState('');
 	const [courseCode, setCourseCode] = useState('');
 	const [topicname, setTopicname] = useState('');
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	interface Student {
 		studentnumber: string;
@@ -47,9 +47,6 @@ const AttendanceRoom: React.FC = () => {
 			toast.error('No token available');
 			return;
 		}
-
-		// Set loading to true at the start of the data fetch
-		setLoading(true);
 
 		apiHooks
 			.getLectureInfo(lectureid, token)
