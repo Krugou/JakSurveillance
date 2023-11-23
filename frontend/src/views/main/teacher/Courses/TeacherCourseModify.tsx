@@ -4,7 +4,11 @@ import apihooks from '../../../../hooks/ApiHooks';
 import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import CourseDetails from '../../../../components/main/course/createcourse/CourseDetails';
 import AddTeachers from '../../../../components/main/course/createcourse/AddTeachers';
-import {set} from 'date-fns';
+import TopicGroupAndTopicsSelector from '../../../../components/main/course/createcourse/TopicsGroupAndTopics';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // this is view for teacher to modify the single course details
 
 interface CourseDetail {
@@ -39,7 +43,7 @@ const TeacherCourseModify: React.FC = () => {
 
 	const {id} = useParams<{id: string}>();
 
-	// Replace with actual data fetching
+	const [topicsFormData, setTopicsFormData] = useState<any>([]);
 
 	const [isLoading, setIsLoading] = useState(true);
 
@@ -87,7 +91,7 @@ const TeacherCourseModify: React.FC = () => {
 
 	const handleSubmit = (event: React.FormEvent) => {
 		event.preventDefault();
-
+		console.log(topicsFormData, 'topicsFormData');
 		const modifiedData = {
 			courseName: courseName,
 			courseCode: courseCode,
@@ -128,13 +132,38 @@ const TeacherCourseModify: React.FC = () => {
 					setEndDate={setEndDate}
 					modify={true}
 				/>
-				<AddTeachers
-					instructors={instructors}
-					setInstructors={setInstructors}
-					instructorEmail={instructorEmail}
-					handleInputChange={handleInputChange}
-					modify={true}
-				/>
+				<Accordion className="mt-4 mb-4">
+					<AccordionSummary
+						expandIcon={<ExpandMoreIcon />}
+						aria-controls="panel1a-content"
+						id="panel1a-header"
+					>
+						Topic Selector
+					</AccordionSummary>
+					<AccordionDetails>
+						<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
+					</AccordionDetails>
+				</Accordion>
+
+				<Accordion className="mt-4 mb-4">
+					<AccordionSummary
+						expandIcon={<ExpandMoreIcon />}
+						aria-controls="panel2a-content"
+						id="panel2a-header"
+					>
+						Add Teachers
+					</AccordionSummary>
+					<AccordionDetails>
+						<AddTeachers
+							instructors={instructors}
+							setInstructors={setInstructors}
+							instructorEmail={instructorEmail}
+							handleInputChange={handleInputChange}
+							modify={true}
+						/>
+					</AccordionDetails>
+				</Accordion>
+
 				<div className="flex w-full justify-center">
 					<button
 						className="bg-metropoliaMainOrange w-1/2 hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 rounded-xl px-4 focus:outline-none focus:shadow-outline"
