@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `courses` (
   `code` varchar(20) NOT NULL,
   `studentgroupid` int(11) DEFAULT NULL,
   PRIMARY KEY (`courseid`),
+  UNIQUE (`code`),
   KEY `studentgroupid` (`studentgroupid`),
   CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`studentgroupid`) REFERENCES `studentgroups` (`studentgroupid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
