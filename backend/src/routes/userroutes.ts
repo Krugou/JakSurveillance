@@ -81,7 +81,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 		metropoliaData = {
 			staff: true,
 			user: process.env.devaccount,
-			firstname: 'Admin',
+			firstname: 'Gustav',
 			lastname: 'Admin',
 			email: 'admin@metropolia.fi',
 		};
@@ -91,8 +91,8 @@ router.post('/', async (req: Request, res: Response, next) => {
 	) {
 		metropoliaData = {
 			staff: true,
-			user: 'teacher',
-			firstname: 'Teacher',
+			user: process.env.devteacheraccount,
+			firstname: 'Willie',
 			lastname: 'Teacher',
 			email: 'teacher@metropolia.fi',
 		};
@@ -103,7 +103,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 		metropoliaData = {
 			staff: false,
 			user: process.env.devstudentaccount,
-			firstname: 'Student',
+			firstname: 'Sam',
 			lastname: 'Student',
 			email: 'student@metropolia.fi',
 		};
@@ -114,7 +114,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 		metropoliaData = {
 			staff: false,
 			user: process.env.devstudent2account,
-			firstname: 'Student2',
+			firstname: 'Laurel',
 			lastname: 'Student2',
 			email: 'student2@metropolia.fi',
 		};
@@ -125,7 +125,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 		metropoliaData = {
 			staff: true,
 			user: process.env.devcounseloraccount,
-			firstname: 'Counselor',
+			firstname: 'Cass',
 			lastname: 'Counselor',
 			email: 'counselor@metropolia.fi',
 		};
