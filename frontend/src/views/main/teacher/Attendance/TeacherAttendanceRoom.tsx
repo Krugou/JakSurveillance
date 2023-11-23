@@ -118,6 +118,21 @@ const AttendanceRoom: React.FC = () => {
 					setCourseStudents(courseStudents);
 				},
 			);
+			newSocket.on('manualstudentinsertSuccess', lectureid => {
+				if (lectureid === lectureid) {
+					toast.success('Student inserted successfully');
+				}
+			});
+			newSocket.on('manualstudentinsertError', lectureid => {
+				if (lectureid === lectureid) {
+					toast.error('Error inserting student');
+				}
+			});
+			newSocket.on('manualstudentinsertFailedEmpty', lectureid => {
+				if (lectureid === lectureid) {
+					toast.error('Student number is empty');
+				}
+			});
 			newSocket.on('disconnect', () => {
 				console.log('Disconnected from the server');
 			});
@@ -191,13 +206,17 @@ const AttendanceRoom: React.FC = () => {
 						</h2>
 					</div>
 					<div className="flex sm:flex-row-reverse flex-col gap-5 items-center justify-end">
-					<button
-						onClick={handleLectureFinished}
-						className="bg-metropoliaMainOrange sm:w-fit h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSecondaryOrange text-white font-bold rounded"
-					>
-						Finish Lecture
-					</button>
-					<CourseStudents coursestudents={courseStudents} />
+						<button
+							onClick={handleLectureFinished}
+							className="bg-metropoliaMainOrange sm:w-fit h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSecondaryOrange text-white font-bold rounded"
+						>
+							Finish Lecture
+						</button>
+						<CourseStudents
+							coursestudents={courseStudents}
+							socket={socket}
+							lectureid={lectureid}
+						/>
 					</div>
 				</div>
 			)}
