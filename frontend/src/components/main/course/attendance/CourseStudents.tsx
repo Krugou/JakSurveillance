@@ -65,8 +65,8 @@ const CourseStudents: React.FC<Props> = ({
 				setBounceGroup(null);
 			}}
 			onMouseLeave={() => setBounceGroup(prevGroup => (prevGroup + 1) % 2)}
-			className={`${
-				coursestudents.length > 10 ? 'justify-start' : 'justify-center'
+			className={`flex ${
+				coursestudents.length > 5 ? 'justify-start' : 'justify-center'
 			} bg-white p-3 rounded-lg shadow-md w-full mt-4 overflow-hidden overflow-x-auto`}
 		>
 			{coursestudents.length === 0 ? (
