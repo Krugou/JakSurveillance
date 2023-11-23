@@ -651,13 +651,17 @@ const course: CourseModel = {
 						`SELECT userid FROM users WHERE email = ? AND staff = 1`,
 						[instructor],
 					);
+					if (rows.length === 0) {
+						throw new Error(
+							`Teacher's email was not found or the user is not a member of staff`,
+						);
+					}
 					const userid = rows[0].userid;
 					await connection.query(
 						`INSERT INTO courseinstructors (userid, courseid) VALUES (?, ?)`,
 						[userid, courseid],
 					);
 				}
-
 				await connection.commit();
 			} catch (error) {
 				await connection.rollback();

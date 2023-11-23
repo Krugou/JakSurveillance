@@ -378,10 +378,10 @@ const fetchUsers = async (token: string) => {
 interface ModifiedData {
 	courseId?: string;
 	courseName?: string;
-	courseCode?: string;
-	studentGroup?: string;
 	startDate?: Date;
 	endDate?: Date;
+	courseCode?: string;
+	studentGroup?: string;
 	instructors?: string[];
 	topic_names?: string[];
 }
