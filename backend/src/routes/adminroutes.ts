@@ -39,5 +39,14 @@ router.post('/change-role', async (req: Request, res: Response) => {
 		res.status(500).json({message: 'Internal server error'});
 	}
 });
+router.get('/getusers', async (req: Request, res: Response) => {
+	try {
+		const users = await usermodel.fetchUsers();
+		res.send(users);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({message: 'Internal server error'});
+	}
+});
 
 export default router;
