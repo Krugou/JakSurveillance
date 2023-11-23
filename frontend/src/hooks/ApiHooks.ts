@@ -411,7 +411,17 @@ const fetchUserById = async (userid: number, token: string) => {
 	};
 	return await doFetch(baseUrl + 'admin/getuser/' + userid, options);
 };
+const getCourses = async (token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	return await doFetch(baseUrl + 'admin/getcourses', options);
+};
 const apiHooks = {
+	getCourses,
 	fetchUserById,
 	fetchUsers,
 	updateOwnedTopicgroupandtheirtopics,
