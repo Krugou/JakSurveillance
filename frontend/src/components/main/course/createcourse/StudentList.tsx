@@ -35,7 +35,7 @@ const StudentList = ({studentList, setStudentList}) => {
 		setLastStudentNumber(lastStudentNumber + 1);
 		setLastEmailNumber(lastEmailNumber + 1);
 	};
-	const sortStudents = () => {
+	const sortStudents = event => {
 		event.preventDefault();
 		const sortedStudentList = [...studentList].sort((a, b) =>
 			sortAscending
