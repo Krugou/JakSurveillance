@@ -90,7 +90,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 			// Check if any of the custom topics are empty
 			const emptyTopic = topics.find(topic => topic.trim() === '');
 			if (emptyTopic !== undefined) {
-				toast.error('Please fill all the custom topics before applying.');
+				toast.error('Please fill all empty custom topics before applying.');
 				return;
 			}
 			apiHooks
