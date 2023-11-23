@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Socket } from 'socket.io-client';
+import React, {useEffect, useRef, useState} from 'react';
+import {Socket} from 'socket.io-client';
 interface Props {
 	coursestudents: {
 		first_name: string;
@@ -24,6 +24,29 @@ const CourseStudents: React.FC<Props> = ({
 	const [isDragging, setIsDragging] = useState(false);
 	const [startX, setStartX] = useState(0);
 	const [scrollLeft, setScrollLeft] = useState(0);
+	const [remainingTime, setRemainingTime] = useState(60); // Initialize remaining time to 60 seconds
+
+	useEffect(() => {
+		let timerId;
+
+		if (coursestudents.length === 0 && remainingTime > 0) {
+			timerId = setInterval(() => {
+				setRemainingTime(prevTime => prevTime - 1);
+			}, 1000);
+		} else if (remainingTime === 0) {
+			if (socket) {
+				socket.emit('lecturefinishedwithbutton', lectureid);
+			}
+			setRemainingTime(60); // Reset the timer
+		}
+
+		return () => {
+			if (timerId) {
+				clearInterval(timerId);
+			}
+		};
+	}, [coursestudents, remainingTime, socket, lectureid]);
+
 	const onMouseDown = e => {
 		setIsDragging(true);
 		setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
@@ -94,7 +117,11 @@ const CourseStudents: React.FC<Props> = ({
 			} bg-white p-3 rounded-lg shadow-md w-full mt-4 overflow-hidden overflow-x-auto`}
 		>
 			{coursestudents.length === 0 ? (
-				<p className="">All students saved</p>
+				<p className="">
+					{remainingTime > 0
+						? `All students are here. Auto closing in ${remainingTime} seconds`
+						: 'All students saved'}
+				</p>
 			) : (
 				<div
 					className={`   whitespace-nowrap `}
