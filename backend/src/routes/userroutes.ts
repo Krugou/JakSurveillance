@@ -156,7 +156,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 				const userFromDB: unknown = await UserModel.getAllUserInfo(
 					metropoliaData.email,
 				);
-
+				// dev purposes only change back to teacher only default when in production
 				let roleid;
 				switch (metropoliaData.user) {
 					case 'admin':
