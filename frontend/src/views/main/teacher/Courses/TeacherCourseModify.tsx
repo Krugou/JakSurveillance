@@ -138,7 +138,7 @@ const TeacherCourseModify: React.FC = () => {
 						aria-controls="panel1a-content"
 						id="panel1a-header"
 					>
-						Topic Selector
+						Modify Topics
 					</AccordionSummary>
 					<AccordionDetails>
 						<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
@@ -151,7 +151,7 @@ const TeacherCourseModify: React.FC = () => {
 						aria-controls="panel2a-content"
 						id="panel2a-header"
 					>
-						Add Teachers
+						Modify Teachers
 					</AccordionSummary>
 					<AccordionDetails>
 						<AddTeachers
