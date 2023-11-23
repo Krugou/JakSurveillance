@@ -122,6 +122,7 @@ const setupSocketHandlers = (io: Server) => {
 			// Fetch and update data when a new lecture is started
 			fetchDataAndUpdate()
 				.then(() => {
+					console.log('settings updated');
 					howMuchLeeWay = speedOfHashChange * leewaytimes;
 				})
 				.catch(error => {
