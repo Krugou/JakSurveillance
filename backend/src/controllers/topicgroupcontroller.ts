@@ -61,7 +61,7 @@ const TopicGroupController = {
 					instructorUserId +
 					' with topicgroupname: ' +
 					topicGroup,
-				email: user.email,
+				email: email,
 			};
 		} catch (error) {
 			console.error(error);
