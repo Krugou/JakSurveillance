@@ -1,5 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Socket} from 'socket.io-client';
+import React, { useEffect, useRef, useState } from 'react';
+import { Socket } from 'socket.io-client';
 interface Props {
 	coursestudents: {
 		first_name: string;
@@ -21,13 +21,32 @@ const CourseStudents: React.FC<Props> = ({
 	const [bounceGroup, setBounceGroup] = useState(0);
 	const lastItemRef = useRef(null);
 	const firstItemRef = useRef(null);
+	const [isDragging, setIsDragging] = useState(false);
+	const [startX, setStartX] = useState(0);
+	const [scrollLeft, setScrollLeft] = useState(0);
+	const onMouseDown = e => {
+		setIsDragging(true);
+		setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
+		setScrollLeft(scrollContainerRef.current.scrollLeft);
+	};
+
+	const onMouseEnd = () => {
+		setIsDragging(false);
+	};
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setBounceGroup(prevGroup => (prevGroup + 1) % 2);
-		}, 2500); // Change every 2 seconds
+		}, 4000); // Change every 4 seconds
 
 		return () => clearInterval(interval);
 	}, []);
+	const onMouseMove = e => {
+		if (!isDragging) return;
+		e.preventDefault();
+		const x = e.pageX - scrollContainerRef.current.offsetLeft;
+		const walk = (x - startX) * 3; //scroll-fast
+		scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+	};
 	const scrollDirectionRef = useRef(1);
 	const scrollInterval = useRef(null);
 	const scrollSlowly = () => {
@@ -41,7 +60,7 @@ const CourseStudents: React.FC<Props> = ({
 			}
 			scrollPositionRef.current += scrollDirectionRef.current;
 			element.scrollLeft = scrollPositionRef.current;
-		}, 200);
+		}, 70);
 	};
 	useEffect(() => {
 		scrollSlowly();
@@ -49,14 +68,7 @@ const CourseStudents: React.FC<Props> = ({
 			clearInterval(scrollInterval.current);
 		};
 	}, [coursestudents]);
-	useEffect(() => {
-		return () => {
-			// Disconnect the socket when the component unmounts
-			if (socket) {
-				socket.disconnect();
-			}
-		};
-	}, [socket]);
+
 	return (
 		<div
 			ref={scrollContainerRef}
@@ -65,6 +77,10 @@ const CourseStudents: React.FC<Props> = ({
 					scrollPositionRef.current = scrollContainerRef.current.scrollLeft;
 				}
 			}}
+			onMouseDown={onMouseDown}
+			onMouseLeave={onMouseEnd}
+			onMouseUp={onMouseEnd}
+			onMouseMove={onMouseMove}
 			onMouseEnter={() => {
 				clearInterval(scrollInterval.current);
 				if (scrollContainerRef.current) {
@@ -73,7 +89,7 @@ const CourseStudents: React.FC<Props> = ({
 				setBounceGroup(null);
 			}}
 			onMouseLeave={() => setBounceGroup(prevGroup => (prevGroup + 1) % 2)}
-			className={`flex ${
+			className={`noSelect hideScrollbar flex ${
 				coursestudents.length > 5 ? 'justify-start' : 'justify-center'
 			} bg-white p-3 rounded-lg shadow-md w-full mt-4 overflow-hidden overflow-x-auto`}
 		>
@@ -116,6 +132,7 @@ const CourseStudents: React.FC<Props> = ({
 										const studentName = `${student.first_name} ${student.last_name}`;
 										const confirmMessage = `Are you sure you want to add ${studentName} as attended?`;
 										if (window.confirm(confirmMessage)) {
+											console.log(socket);
 											socket.emit('manualstudentinsert', student.studentnumber, lectureid);
 										}
 									}
