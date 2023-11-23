@@ -125,9 +125,12 @@ const TeacherCourseModify: React.FC = () => {
 			toast.success('Course modified successfully');
 			navigate('/teacher/courses/' + id);
 		} catch (error) {
-			toast.error(error.message);
+			if (error instanceof Error) {
+				toast.error(error.message);
+			} else {
+				toast.error('An unknown error occurred');
+			}
 		}
-
 		console.log(modifiedData);
 	};
 
