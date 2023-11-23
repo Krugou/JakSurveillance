@@ -78,7 +78,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 					setLoading(false);
 				});
 		}
-	}, [user]);
+	}, [user, isCustomGroup]);
 	const handleApply = () => {
 		event?.preventDefault();
 		const topics = customTopics;
@@ -169,6 +169,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 								Custom Topic Group
 							</label>
 							<input
+								required
 								id="customTopicGroup"
 								type="text"
 								placeholder="Custom Topic Group"
@@ -192,6 +193,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 								{customTopics.map((topic, index) => (
 									<div key={index} className="flex items-center">
 										<input
+											required
 											id={`customTopics-${index}`}
 											type="text"
 											placeholder="Custom Topic"
