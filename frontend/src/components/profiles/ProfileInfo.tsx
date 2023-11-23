@@ -61,13 +61,15 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 					{new Date(user.created_at).toLocaleDateString()}
 				</span>
 			</p>
-			<button
-				className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-				onClick={handleOpen}
-			>
-				Change Role
-			</button>
-			{open && (
+			{['counselor', 'teacher'].includes(user.role) && (
+				<button
+					className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+					onClick={handleOpen}
+				>
+					Change Role
+				</button>
+			)}
+			{open && ['counselor', 'teacher'].includes(user.role) && (
 				<div className="mt-5">
 					<h2 className="text-2xl font-bold mb-3">Change Role</h2>
 					<select
