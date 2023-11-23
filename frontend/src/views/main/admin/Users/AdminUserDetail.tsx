@@ -2,7 +2,7 @@ import React from 'react';
 // import MainViewButton from '../../../components/main/buttons/MainViewButton';
 // import TeacherStudentDetail from '../teacher/Students/TeacherStudentDetail';
 
-const AdminUsers: React.FC = () => {
+const AdminUserDetail: React.FC = () => {
 	// const {id} = useParams<{id: string}>();
 
 	// Replace with actual data fetching
@@ -28,4 +28,4 @@ const AdminUsers: React.FC = () => {
 	);
 };
 
-export default AdminUsers;
+export default AdminUserDetail;
