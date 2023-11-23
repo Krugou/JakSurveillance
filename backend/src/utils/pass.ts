@@ -53,26 +53,5 @@ export interface User {
 	last_name: string;
 }
 
-export const generateTokenAndUser = (
-	username: string,
-	role: string,
-	first_name: string,
-	last_name: string,
-	email: string,
-) => {
-	
-	const user = {
-		role,
-		username,
-		first_name,
-		last_name,
-		email,
-		created_at: new Date(),
-	};
-	const token = jwt.sign(user, process.env.JWT_SECRET as string, {
-		expiresIn: '2h',
-	});
-	return {user, token};
-};
 
 export default passport; // Export passport as the default export

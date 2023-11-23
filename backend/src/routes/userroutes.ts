@@ -5,7 +5,7 @@ import fetchReal from '../utils/fetch.js';
 //import { body, validationResult } from 'express-validator'; FOR VALIDATION
 import jwt from 'jsonwebtoken';
 import UserModel from '../models/usermodel.js';
-import {User, generateTokenAndUser} from '../utils/pass.js';
+import {User} from '../utils/pass.js';
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
 
 const router: Router = express.Router();
