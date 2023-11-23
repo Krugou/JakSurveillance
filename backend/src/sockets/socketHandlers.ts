@@ -57,20 +57,22 @@ const fetchDataAndUpdate = async () => {
 		console.error(error);
 	}
 };
-// Call the function
 
+// Update the hash and timestamps
 const updateHash = () => {
+	// Generate a random hash
 	const start = Date.now();
 	hash = crypto.randomBytes(20).toString('hex');
 	const end = Date.now() + speedOfHashChange;
-
+	// Add the hash and timestamps to the timestamps array
 	timestamps.push({start, end, hash});
 	const timestampslength = howMuchLeeWay / speedOfHashChange;
-
+	// Remove the oldest hash and timestamp if the timestamps array is too long
 	if (timestamps.length > timestampslength) {
 		timestamps.shift();
 	}
 };
+// Send a POST request to the '/lecturefinished/' route
 const finishLecture = async (lectureid: string, io) => {
 	// Prepare the data to be sent
 	const data = {
@@ -103,9 +105,10 @@ const finishLecture = async (lectureid: string, io) => {
 		console.error('Error:', error);
 	}
 };
-// handle new socket.io connections
+// The lists of students who have arrived and who have not yet arrived
 const presentStudents: {[lectureid: string]: any[]} = {};
 const notYetPresentStudents: {[lectureid: string]: Student[]} = {};
+// The timeout id for the lecture
 let lectureTimeoutId: NodeJS.Timeout;
 const setupSocketHandlers = (io: Server) => {
 	io.on('connection', (socket: Socket) => {
@@ -124,15 +127,19 @@ const setupSocketHandlers = (io: Server) => {
 				.catch(error => {
 					console.error(error);
 				});
+			// Join the room with the lectureid
 			socket.join(lectureid);
+			// Emit the 'lecturestarted' event to the room with the lectureid
 			io.to(lectureid).emit('lecturestarted', lectureid, timeout);
+			// Get the list of students who have arrived and who have not yet arrived
 			const token = await getToken();
 			if (presentStudents[lectureid] && notYetPresentStudents[lectureid]) {
-				// The lists already exist, so use them
+				// If the lists already exist, emit them to the room with the lectureid
 				io
 					.to(lectureid)
 					.emit('getallstudentsinlecture', notYetPresentStudents[lectureid]);
 			} else {
+				// If the lists do not exist, fetch them from the server and emit them to the room with the lectureid
 				fetchReal
 					.doFetch(
 						'http://localhost:3002/courses/attendance/getallstudentsinlecture/',
@@ -148,9 +155,10 @@ const setupSocketHandlers = (io: Server) => {
 						},
 					)
 					.then(response => {
+						// Handle the response here
 						notYetPresentStudents[lectureid] = response;
-						presentStudents[lectureid] = []; // Initialize with an empty array
-
+						presentStudents[lectureid] = [];
+						// Emit the lists to the room with the lectureid
 						io
 							.to(lectureid)
 							.emit('getallstudentsinlecture', notYetPresentStudents[lectureid]);
@@ -159,9 +167,10 @@ const setupSocketHandlers = (io: Server) => {
 						console.error('Error:', error);
 					});
 			}
+			// Update the hash every `speedOfHashChange` milliseconds
 			updateHash();
 			setInterval(updateHash, speedOfHashChange);
-			// Emit the event every `speedOfHashChange` milliseconds
+			// Emit the hash to the room with the lectureid
 			const intervalId = setInterval(() => {
 				io
 					.to(lectureid)
@@ -181,8 +190,7 @@ const setupSocketHandlers = (io: Server) => {
 				finishLecture(lectureid, io);
 			}, timeout);
 
-			// ...
-
+			// Handle the 'lecturefinishedwithbutton' event
 			socket.on('lecturefinishedwithbutton', async (lectureid: string) => {
 				finishLecture(lectureid, io);
 			});
@@ -191,6 +199,8 @@ const setupSocketHandlers = (io: Server) => {
 				clearInterval(intervalId);
 			});
 		});
+		// Handle the 'inputThatStudentHasArrivedToLecture' event
+		// This event is emitted when the student inputs the secure hash and unixtime
 		socket.on(
 			'inputThatStudentHasArrivedToLecture',
 			async (
@@ -256,10 +266,13 @@ const setupSocketHandlers = (io: Server) => {
 				}
 			},
 		);
+		// Handle the 'manualstudentinsert' event
+		// This event is emitted when the teacher inputs the student id
 		socket.on(
 			'manualstudentinsert',
 			async (studentId: string, lectureid: number) => {
 				console.log('manualstudentinsert', studentId, lectureid);
+				// Emit the 'manualstudentinsertFailed' event only to the client who sent the event
 				if (studentId === '') {
 					io.to(socket.id).emit('manualstudentinsertFailedEmpty', lectureid);
 					return;
@@ -297,11 +310,12 @@ const setupSocketHandlers = (io: Server) => {
 						} else {
 							console.log('Student not found');
 						}
-
+						// Emit the 'manualstudentinsertSuccess' event only to the client who sent the event
 						io.to(socket.id).emit('manualstudentinsertSuccess', lectureid);
 					})
 					.catch(error => {
 						console.error(error);
+						// Emit the 'manualstudentinsertError' event only to the client who sent the event
 						io.to(socket.id).emit('manualstudentinsertError', lectureid);
 					});
 			},
