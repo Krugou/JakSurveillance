@@ -88,7 +88,6 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 			throw new Error('No token available');
 		}
 		if (user) {
-			alert(topics, topicGroup, 'topics, topicgroup');
 			apiHooks
 				.updateOwnedTopicgroupandtheirtopics(topicGroup, topics, user.email, token)
 				.then(response => {
