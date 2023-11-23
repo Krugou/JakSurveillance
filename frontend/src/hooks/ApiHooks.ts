@@ -402,8 +402,17 @@ const modifyCourse = async (
 	const url = `${baseUrl}courses/update/${courseId}`;
 	return doFetch(url, options);
 };
-
+const fetchUserById = async (userid: number, token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	return await doFetch(baseUrl + 'admin/getuser/' + userid, options);
+};
 const apiHooks = {
+	fetchUserById,
 	fetchUsers,
 	updateOwnedTopicgroupandtheirtopics,
 	fetchAllRoles,
