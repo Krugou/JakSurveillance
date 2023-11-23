@@ -421,6 +421,65 @@ const course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
+	async getCoursesWithDetails(): Promise<Course[]> {
+		try {
+			const [rows]: RowDataPacket[][] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					`SELECT 
+                courses.courseid,
+                courses.name,
+                courses.start_date,
+                courses.end_date,
+                courses.code,
+                studentgroups.group_name AS student_group,
+                topics.topicname,
+                instructors.email AS instructor_email
+            FROM 
+                courses
+            LEFT JOIN 
+                studentgroups ON courses.studentgroupid = studentgroups.studentgroupid
+            LEFT JOIN 
+                coursetopics ON courses.courseid = coursetopics.courseid
+            LEFT JOIN 
+                topics ON coursetopics.topicid = topics.topicid
+            LEFT JOIN 
+                courseinstructors ON courses.courseid = courseinstructors.courseid
+            LEFT JOIN 
+                users AS instructors ON courseinstructors.userid = instructors.userid;`,
+				);
+
+			// Transform the flat data structure into a nested one
+			const courses = rows.reduce((acc, row) => {
+				const courseIndex = acc.findIndex(
+					course => course.courseid === row.courseid,
+				);
+
+				if (courseIndex === -1) {
+					acc.push({
+						courseid: row.courseid,
+						name: row.name,
+						start_date: row.start_date,
+						end_date: row.end_date,
+						code: row.code,
+						student_group: row.student_group,
+						topics: [row.topicname],
+						instructors: [row.instructor_email],
+					});
+				} else {
+					acc[courseIndex].topics.push(row.topicname);
+					acc[courseIndex].instructors.push(row.instructor_email);
+				}
+
+				return acc;
+			}, []);
+
+			return courses;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
 };
 
 export default course;
