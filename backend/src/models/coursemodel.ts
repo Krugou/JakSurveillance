@@ -304,45 +304,48 @@ const course: CourseModel = {
 		let studentgroupid: string | undefined = '';
 		// Get the topic group id if the topic group name is provided
 		if (topic_names.length > 0) {
+			const connection = await pool.promise().getConnection();
+			await connection.beginTransaction();
+
 			try {
 				// Delete all topics from the course
-				await pool
-					.promise()
-					.query(`DELETE FROM coursetopics WHERE courseid = ?`, [courseid]);
+				await connection.query(`DELETE FROM coursetopics WHERE courseid = ?`, [
+					courseid,
+				]);
 
 				// Insert the new topics into database if they don't exist
-
 				for (const topic of topic_names) {
-					const [rows] = await pool
-						.promise()
-						.query<RowDataPacket[]>(`SELECT * FROM topics WHERE topicname = ?`, [
+					const [rows] = await connection.query<RowDataPacket[]>(
+						`SELECT * FROM topics WHERE topicname = ?`,
+						[topic],
+					);
+					if (rows.length === 0) {
+						await connection.query(`INSERT INTO topics (topicname) VALUES (?)`, [
 							topic,
 						]);
-					if (rows.length === 0) {
-						await pool
-							.promise()
-							.query(`INSERT INTO topics (topicname) VALUES (?)`, [topic]);
 					}
 
 					// Select the topicid for each topic name
-					const [rows2] = await pool
-						.promise()
-						.query<RowDataPacket[]>(
-							`SELECT topicid FROM topics WHERE topicname = ?`,
-							[topic],
-						);
+					const [rows2] = await connection.query<RowDataPacket[]>(
+						`SELECT topicid FROM topics WHERE topicname = ?`,
+						[topic],
+					);
 					const topicid = rows2[0].topicid;
+
 					// Insert the new topics into the course
-					await pool
-						.promise()
-						.query(`INSERT INTO coursetopics (courseid, topicid) VALUES (?, ?)`, [
-							courseid,
-							topicid,
-						]);
+					await connection.query(
+						`INSERT INTO coursetopics (courseid, topicid) VALUES (?, ?)`,
+						[courseid, topicid],
+					);
 				}
+
+				await connection.commit();
 			} catch (error) {
+				await connection.rollback();
 				console.error(error);
 				return Promise.reject(error);
+			} finally {
+				connection.release();
 			}
 		}
 
