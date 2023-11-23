@@ -88,6 +88,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 			throw new Error('No token available');
 		}
 		if (user) {
+			alert(topics, topicGroup, 'topics, topicgroup');
 			apiHooks
 				.updateOwnedTopicgroupandtheirtopics(topicGroup, topics, user.email, token)
 				.then(response => {
@@ -99,7 +100,9 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 					}
 				})
 				.catch(error => {
-					toast.error('Error updating topic group');
+					error.message
+						? toast.error(error.message)
+						: toast.error('Error updating topic group');
 					console.error(error);
 				});
 		}

@@ -33,6 +33,16 @@ router.post('/update', async (req: Request, res: Response) => {
 			'🚀 ~ file: topicRoutes.ts:32 ~ router.post ~ req.body:',
 			req.body,
 		);
+		if (!topicGroup) {
+			return res.status(400).send({message: 'Topic group is required'});
+		}
+		if (
+			!topics ||
+			topics.length === 0 ||
+			topics.every(topic => topic.trim() === '')
+		) {
+			return res.status(400).send({message: 'Topics are required'});
+		}
 		const topicGroupData = await TopicGroupController.updateTopicGroup(
 			topicGroup,
 			topics,
