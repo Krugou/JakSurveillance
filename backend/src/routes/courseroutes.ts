@@ -383,7 +383,7 @@ router.put('/update/:courseid', async (req: Request, res: Response) => {
 		res.json(result);
 	} catch (err) {
 		console.error(err);
-		res.status(500).send('Internal server error');
+		res.status(500).send({message: err.message});
 	}
 });
 

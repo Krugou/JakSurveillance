@@ -122,8 +122,9 @@ const TeacherCourseModify: React.FC = () => {
 		try {
 			const result = await apiHooks.modifyCourse(token, id, modifiedData);
 			console.log(result);
+			toast.success('Course modified successfully');
 		} catch (error) {
-			console.log(error);
+			toast.error(error.message);
 		}
 
 		console.log(modifiedData);
@@ -136,7 +137,7 @@ const TeacherCourseModify: React.FC = () => {
 	};
 
 	const handleTopicChange = topic => {
-		toast.info('Topic changed');
+		toast.info('Topics changed');
 		setModifiedTopics(prevTopics =>
 			prevTopics.includes(topic)
 				? prevTopics.filter(t => t !== topic)
@@ -160,7 +161,9 @@ const TeacherCourseModify: React.FC = () => {
 			</h2>
 
 			<form
-				onSubmit={handleSubmit}
+				onSubmit={e => {
+					e.preventDefault();
+				}}
 				className="bg-white md:w-2/4 xl:w-1/4 w-full sm:w-2/3 shadow-md rounded-xl px-8 pt-6 pb-8 mb-4 mx-auto"
 			>
 				<CourseDetails
@@ -202,7 +205,11 @@ const TeacherCourseModify: React.FC = () => {
 				>
 					Modify Topics
 				</button>
-				<Modal open={open} onClose={() => setOpen(false)}>
+				<Modal
+					open={open}
+					onClose={() => setOpen(false)}
+					onClick={e => e.stopPropagation()}
+				>
 					<div className="p-4 bg-white rounded shadow-lg max-w-lg mx-auto mt-10">
 						<h2 className="text-2xl mb-4">Edit Topics for {courseName}</h2>
 

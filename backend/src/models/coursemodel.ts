@@ -579,6 +579,7 @@ const course: CourseModel = {
 		throw new Error('Function not implemented.');
 	},
 
+	// Function for updating course info
 	async updateCourseInfo(
 		courseid: number,
 		name: string,
@@ -635,37 +636,35 @@ const course: CourseModel = {
 		}
 
 		if (instructors) {
+			const connection = await pool.promise().getConnection();
+			await connection.beginTransaction();
+
 			try {
 				// Delete all instructors from the course
-
-				await pool
-					.promise()
-					.query(`DELETE FROM courseinstructors WHERE courseid = ?`, [courseid]);
+				await connection.query(`DELETE FROM courseinstructors WHERE courseid = ?`, [
+					courseid,
+				]);
 
 				// Insert the new instructors into the course
 				for (const instructor of instructors) {
-					try {
-						const [rows] = await pool
-							.promise()
-							.query<RowDataPacket[]>(
-								`SELECT userid FROM users WHERE email = ? AND staff = 1`,
-								[instructor],
-							);
-						const userid = rows[0].userid;
-						await pool
-							.promise()
-							.query(
-								`INSERT INTO courseinstructors (userid, courseid) VALUES (?, ?)`,
-								[userid, courseid],
-							);
-					} catch (error) {
-						console.error(error);
-						return Promise.reject(error);
-					}
+					const [rows] = await connection.query<RowDataPacket[]>(
+						`SELECT userid FROM users WHERE email = ? AND staff = 1`,
+						[instructor],
+					);
+					const userid = rows[0].userid;
+					await connection.query(
+						`INSERT INTO courseinstructors (userid, courseid) VALUES (?, ?)`,
+						[userid, courseid],
+					);
 				}
+
+				await connection.commit();
 			} catch (error) {
+				await connection.rollback();
 				console.error(error);
 				return Promise.reject(error);
+			} finally {
+				connection.release();
 			}
 		}
 
@@ -678,10 +677,15 @@ const course: CourseModel = {
 						`SELECT studentgroupid FROM studentgroups WHERE group_name = ?`,
 						[studentgroupname],
 					);
+				if (rows.length === 0) {
+					throw new Error(`No student group found with name ${studentgroupname}`);
+				}
 				studentgroupid = rows[0].studentgroupid;
 			} catch (error) {
 				console.error(error);
-				return Promise.reject(error);
+				return Promise.reject(
+					new Error(`Failed to get student group: ${error.message}`),
+				);
 			}
 		}
 
