@@ -59,7 +59,6 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 		newTopics[index] = value;
 		setCustomTopics(newTopics);
 	};
-
 	useEffect(() => {
 		const token: string | null = localStorage.getItem('userToken');
 		if (!token) {
@@ -71,7 +70,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 				.then(data => {
 					setTopicData(data);
 					if (data.length > 0) {
-						setCourseTopicGroup(data[0].topicgroupname);
+						setCourseTopicGroup(data[data.length - 1].topicgroupname);
 					} else {
 						setIsCustomGroup(true);
 					}
