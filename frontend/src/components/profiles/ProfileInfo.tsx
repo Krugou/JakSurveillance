@@ -23,6 +23,7 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 		const fetchRoles = async () => {
 			const roles = await apiHooks.fetchAllRoles(token);
 			setRoles(roles);
+			setSelectedRole(roles[0]?.roleid || '');
 		};
 		fetchRoles();
 	}, []);
