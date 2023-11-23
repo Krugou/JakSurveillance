@@ -106,6 +106,7 @@ const finishLecture = async (lectureid: string, io) => {
 // handle new socket.io connections
 const presentStudents: {[lectureid: string]: any[]} = {};
 const notYetPresentStudents: {[lectureid: string]: Student[]} = {};
+let lectureTimeoutId: NodeJS.Timeout;
 const setupSocketHandlers = (io: Server) => {
 	io.on('connection', (socket: Socket) => {
 		console.log('user joined: ' + socket.id);
@@ -113,15 +114,16 @@ const setupSocketHandlers = (io: Server) => {
 		socket.on('disconnect', () => {
 			console.log('user disconnected');
 		});
-		fetchDataAndUpdate()
-			.then(() => {
-				howMuchLeeWay = speedOfHashChange * leewaytimes;
-			})
-			.catch(error => {
-				console.error(error);
-			});
 
 		socket.on('createAttendanceCollection', async lectureid => {
+			// Fetch and update data when a new lecture is started
+			fetchDataAndUpdate()
+				.then(() => {
+					howMuchLeeWay = speedOfHashChange * leewaytimes;
+				})
+				.catch(error => {
+					console.error(error);
+				});
 			socket.join(lectureid);
 			io.to(lectureid).emit('lecturestarted', lectureid, timeout);
 			const token = await getToken();
@@ -171,9 +173,11 @@ const setupSocketHandlers = (io: Server) => {
 						notYetPresentStudents[lectureid],
 					);
 			}, speedOfHashChange);
-
+			if (lectureTimeoutId) {
+				clearTimeout(lectureTimeoutId);
+			}
 			// Set a timeout to emit 'classfinished' event after 'timeout' milliseconds
-			setTimeout(() => {
+			lectureTimeoutId = setTimeout(() => {
 				finishLecture(lectureid, io);
 			}, timeout);
 
