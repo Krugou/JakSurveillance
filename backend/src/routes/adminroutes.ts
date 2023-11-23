@@ -48,5 +48,15 @@ router.get('/getusers', async (req: Request, res: Response) => {
 		res.status(500).json({message: 'Internal server error'});
 	}
 });
+router.get('/getuser/:userid', async (req: Request, res: Response) => {
+	try {
+		const {userid} = req.params;
+		const user = await usermodel.fetchUserById(Number(userid));
+		res.send(user);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({message: 'Internal server error'});
+	}
+});
 
 export default router;
