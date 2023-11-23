@@ -16,6 +16,8 @@ const CourseStudents: React.FC<Props> = ({
 	socket,
 	lectureid,
 }) => {
+	const scrollContainerRef = useRef(null);
+	const scrollPositionRef = useRef(0);
 	const [bounceGroup, setBounceGroup] = useState(0);
 	const lastItemRef = useRef(null);
 	const firstItemRef = useRef(null);
@@ -26,21 +28,54 @@ const CourseStudents: React.FC<Props> = ({
 
 		return () => clearInterval(interval);
 	}, []);
-
+	const scrollDirectionRef = useRef(1);
+	const scrollInterval = useRef(null);
+	const scrollSlowly = () => {
+		const element = scrollContainerRef.current;
+		if (!element) return;
+		scrollInterval.current = setInterval(() => {
+			if (scrollPositionRef.current >= element.scrollWidth - element.clientWidth) {
+				scrollDirectionRef.current = -1; // Change direction to left
+			} else if (scrollPositionRef.current <= 0) {
+				scrollDirectionRef.current = 1; // Change direction to right
+			}
+			scrollPositionRef.current += scrollDirectionRef.current;
+			element.scrollLeft = scrollPositionRef.current;
+		}, 200);
+	};
+	useEffect(() => {
+		scrollSlowly();
+		return () => {
+			clearInterval(scrollInterval.current);
+		};
+	}, [coursestudents]);
 	return (
 		<div
-			className={`flex flex-row ${
+			ref={scrollContainerRef}
+			onScroll={() => {
+				if (scrollContainerRef.current) {
+					scrollPositionRef.current = scrollContainerRef.current.scrollLeft;
+				}
+			}}
+			onMouseEnter={() => {
+				clearInterval(scrollInterval.current);
+				if (scrollContainerRef.current) {
+					scrollPositionRef.current = scrollContainerRef.current.scrollLeft;
+				}
+				setBounceGroup(null);
+			}}
+			onMouseLeave={() => setBounceGroup(prevGroup => (prevGroup + 1) % 2)}
+			className={`${
 				coursestudents.length > 10 ? 'justify-start' : 'justify-center'
-			} bg-white p-3 rounded-lg shadow-md w-full mt-4 overflow-hidden`}
+			} bg-white p-3 rounded-lg shadow-md w-full mt-4 overflow-hidden overflow-x-auto`}
 		>
 			{coursestudents.length === 0 ? (
 				<p className="">All students saved</p>
 			) : (
-				// <div className={`whitespace-nowrap animate-slide-${slideDirection}`}>
 				<div
-					className={`whitespace-nowrap ${
-						coursestudents.length > 8 ? 'animate-backandforth' : ''
-					}`}
+					className={`   whitespace-nowrap `}
+					onMouseEnter={() => setBounceGroup(null)}
+					onMouseLeave={() => setBounceGroup(prevGroup => (prevGroup + 1) % 2)}
 				>
 					{coursestudents.map((student, index) => {
 						const formattedName = `${student.first_name} ${student.last_name.charAt(
