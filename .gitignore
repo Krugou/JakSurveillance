@@ -98,7 +98,7 @@ backend/jaksec/
 backend/nodejs/*
 frontend/package-lock.json
 package-lock.json
-
+.VSCodeCounter/
 pnpm-debug.log*
 node_modules
 dist-ssr
