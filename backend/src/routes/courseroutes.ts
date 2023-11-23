@@ -360,11 +360,11 @@ router.put('/update/:courseid', async (req: Request, res: Response) => {
 		courseName,
 		courseCode,
 		studentGroup,
-		startDate,
-		endDate,
+		start_date,
+		end_date,
 		instructors,
 		topic_names,
-	} = req.body;
+	} = req.body.modifiedData;
 
 	console.log(req.body);
 
@@ -373,8 +373,8 @@ router.put('/update/:courseid', async (req: Request, res: Response) => {
 		const result = await course.updateCourseInfo(
 			courseId,
 			courseName,
-			startDate,
-			endDate,
+			start_date,
+			end_date,
 			courseCode,
 			studentGroup,
 			instructors,

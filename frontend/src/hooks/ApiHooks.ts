@@ -376,13 +376,14 @@ const fetchUsers = async (token: string) => {
 };
 
 interface ModifiedData {
+	courseId?: string;
 	courseName?: string;
 	courseCode?: string;
 	studentGroup?: string;
 	startDate?: Date;
 	endDate?: Date;
-	topic_names?: string[];
 	instructors?: string[];
+	topic_names?: string[];
 }
 
 const modifyCourse = async (
@@ -398,7 +399,6 @@ const modifyCourse = async (
 		},
 		body: JSON.stringify({modifiedData}),
 	};
-	console.log('asdasd');
 	const url = `${baseUrl}courses/update/${courseId}`;
 	return doFetch(url, options);
 };

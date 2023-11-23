@@ -598,15 +598,28 @@ const course: CourseModel = {
 					.promise()
 					.query(`DELETE FROM coursetopics WHERE courseid = ?`, [courseid]);
 
-				// Select the topicid for each topic name
+				// Insert the new topics into database if they don't exist
+
 				for (const topic of topic_names) {
 					const [rows] = await pool
+						.promise()
+						.query<RowDataPacket[]>(`SELECT * FROM topics WHERE topicname = ?`, [
+							topic,
+						]);
+					if (rows.length === 0) {
+						await pool
+							.promise()
+							.query(`INSERT INTO topics (topicname) VALUES (?)`, [topic]);
+					}
+
+					// Select the topicid for each topic name
+					const [rows2] = await pool
 						.promise()
 						.query<RowDataPacket[]>(
 							`SELECT topicid FROM topics WHERE topicname = ?`,
 							[topic],
 						);
-					const topicid = rows[0].topicid;
+					const topicid = rows2[0].topicid;
 					// Insert the new topics into the course
 					await pool
 						.promise()
