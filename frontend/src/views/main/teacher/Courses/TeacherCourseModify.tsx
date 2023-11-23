@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import apiHooks from '../../../../hooks/ApiHooks';
 import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import CourseDetails from '../../../../components/main/course/createcourse/CourseDetails';
@@ -52,7 +52,7 @@ const TeacherCourseModify: React.FC = () => {
 	const [open, setOpen] = useState(false);
 	const [instructors, setInstructors] = useState<{email: string}[]>([]);
 	const [instructorEmail, setInstructorEmail] = useState('');
-
+	const navigate = useNavigate();
 	const {id} = useParams<{id: string}>();
 
 	const [isLoading, setIsLoading] = useState(true);
@@ -123,6 +123,7 @@ const TeacherCourseModify: React.FC = () => {
 			const result = await apiHooks.modifyCourse(token, id, modifiedData);
 			console.log(result);
 			toast.success('Course modified successfully');
+			navigate('/teacher/courses/' + id);
 		} catch (error) {
 			toast.error(error.message);
 		}
