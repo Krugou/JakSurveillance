@@ -166,11 +166,11 @@ const TeacherCourseModify: React.FC = () => {
 
 				<div className="flex w-full justify-center">
 					<button
-						className="bg-metropoliaMainOrange w-1/2 hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 rounded-xl px-4 focus:outline-none focus:shadow-outline"
+						className=" bg-metropoliaTrendGreen w-1/2 hover:bg-green-600 text-white font-bold py-2 rounded-xl px-4 focus:outline-none focus:shadow-outline"
 						type="button"
 						onClick={handleSubmit}
 					>
-						Modify Course
+						Finish
 					</button>
 				</div>
 			</form>
