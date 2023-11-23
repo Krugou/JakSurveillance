@@ -302,12 +302,12 @@ const course: CourseModel = {
 		topic_names: string[],
 	): Promise<void> {
 		let studentgroupid: string | undefined = '';
-		// Get the topic group id if the topic group name is provided
-		if (topic_names.length > 0) {
-			const connection = await pool.promise().getConnection();
-			await connection.beginTransaction();
+		const connection = await pool.promise().getConnection();
+		await connection.beginTransaction();
 
-			try {
+		try {
+			// Get the topic group id if the topic group name is provided
+			if (topic_names.length > 0) {
 				// Delete all topics from the course
 				await connection.query(`DELETE FROM coursetopics WHERE courseid = ?`, [
 					courseid,
@@ -338,22 +338,9 @@ const course: CourseModel = {
 						[courseid, topicid],
 					);
 				}
-
-				await connection.commit();
-			} catch (error) {
-				await connection.rollback();
-				console.error(error);
-				return Promise.reject(error);
-			} finally {
-				connection.release();
 			}
-		}
 
-		if (instructors) {
-			const connection = await pool.promise().getConnection();
-			await connection.beginTransaction();
-
-			try {
+			if (instructors) {
 				// Delete all instructors from the course
 				await connection.query(`DELETE FROM courseinstructors WHERE courseid = ?`, [
 					courseid,
@@ -376,49 +363,36 @@ const course: CourseModel = {
 						[userid, courseid],
 					);
 				}
-				await connection.commit();
-			} catch (error) {
-				await connection.rollback();
-				console.error(error);
-				return Promise.reject(error);
-			} finally {
-				connection.release();
 			}
-		}
 
-		// Get the student group id if the student group name is provided
-		if (studentgroupname) {
-			try {
-				const [rows] = await pool
-					.promise()
-					.query<RowDataPacket[]>(
-						`SELECT studentgroupid FROM studentgroups WHERE group_name = ?`,
-						[studentgroupname],
-					);
+			// Get the student group id if the student group name is provided
+			if (studentgroupname) {
+				const [rows] = await connection.query<RowDataPacket[]>(
+					`SELECT studentgroupid FROM studentgroups WHERE group_name = ?`,
+					[studentgroupname],
+				);
 				if (rows.length === 0) {
 					throw new Error(`No student group found with name ${studentgroupname}`);
 				}
 				studentgroupid = rows[0].studentgroupid;
-			} catch (error) {
-				console.error(error);
-				return Promise.reject(
-					new Error(`Failed to get student group: ${error.message}`),
-				);
 			}
-		}
 
-		// Update the course info
-		try {
-			const [rows] = await pool
-				.promise()
-				.query<RowDataPacket[]>(
-					`UPDATE courses SET name = ?, start_date = ?, end_date = ?, code = ?, studentgroupid = ? WHERE courseid = ?`,
-					[name, start_date, end_date, code, studentgroupid, courseid],
-				);
+			// Update the course info
+			const [rows] = await connection.query<RowDataPacket[]>(
+				`UPDATE courses SET name = ?, start_date = ?, end_date = ?, code = ?, studentgroupid = ? WHERE courseid = ?`,
+				[name, start_date, end_date, code, studentgroupid, courseid],
+			);
+
+			await connection.commit();
+
+			// q: if i return here, does the finally block still run?
 			return rows as Course[];
 		} catch (error) {
+			await connection.rollback();
 			console.error(error);
 			return Promise.reject(error);
+		} finally {
+			connection.release();
 		}
 	},
 	async getCoursesWithDetails(): Promise<Course[]> {
