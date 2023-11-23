@@ -4,11 +4,19 @@ import apihooks from '../../../../hooks/ApiHooks';
 import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import CourseDetails from '../../../../components/main/course/createcourse/CourseDetails';
 import AddTeachers from '../../../../components/main/course/createcourse/AddTeachers';
-import TopicGroupAndTopicsSelector from '../../../../components/main/course/createcourse/TopicsGroupAndTopics';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
+import Modal from '@mui/material/Modal';
+import Checkbox from '@mui/material/Checkbox';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import TextField from '@mui/material/TextField';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import AddIcon from '@mui/icons-material/Add';
+import InputAdornment from '@mui/material/InputAdornment';
+import Button from '@mui/material/Button';
+import {toast} from 'react-toastify';
 // this is view for teacher to modify the single course details
 
 interface CourseDetail {
@@ -19,7 +27,7 @@ interface CourseDetail {
 	code: string;
 	studentgroup_name: string;
 	created_at: string;
-	topic_names: string[];
+	topic_names: string;
 	user_count: number;
 	instructor_name: string;
 }
@@ -37,16 +45,17 @@ const TeacherCourseModify: React.FC = () => {
 		courseData ? courseData.start_date : '',
 	);
 	const [endDate, setEndDate] = useState(courseData ? courseData.end_date : '');
-
+	const [courseTopics, setCourseTopics] = useState<string[]>([]);
+	const [modifiedTopics, setModifiedTopics] = useState<string[]>([]);
+	const [initialCourseTopics, setInitialCourseTopics] = useState<string[]>([]);
+	const [open, setOpen] = useState(false);
 	const [instructors, setInstructors] = useState<{email: string}[]>([]);
 	const [instructorEmail, setInstructorEmail] = useState('');
 
 	const {id} = useParams<{id: string}>();
 
-	const [topicsFormData, setTopicsFormData] = useState<any>([]);
-
 	const [isLoading, setIsLoading] = useState(true);
-
+	const [newTopic, setNewTopic] = useState('');
 	useEffect(() => {
 		const fetchCourses = async () => {
 			if (id) {
@@ -56,6 +65,7 @@ const TeacherCourseModify: React.FC = () => {
 					throw new Error('No token available');
 				}
 				const courseData = await apihooks.getCourseDetailByCourseId(id, token);
+				console.log(courseData, 'COUSRDATA');
 				setCourseData(courseData[0]);
 				setIsLoading(false);
 				setInstructorEmail(courseData[0].instructor_name);
@@ -83,6 +93,12 @@ const TeacherCourseModify: React.FC = () => {
 					courseData.instructor_name.split(',').map(email => ({email})),
 				);
 			}
+			// Parse the topics from the courseData into an array of strings
+			const topics = courseData.topic_names.split(',');
+			// Set the courseTopics state
+			setCourseTopics(topics);
+			setModifiedTopics(topics);
+			setInitialCourseTopics(topics);
 		}
 	}, [courseData]);
 	if (isLoading) {
@@ -91,13 +107,13 @@ const TeacherCourseModify: React.FC = () => {
 
 	const handleSubmit = (event: React.FormEvent) => {
 		event.preventDefault();
-		console.log(topicsFormData, 'topicsFormData');
 		const modifiedData = {
 			courseName: courseName,
 			courseCode: courseCode,
 			studentGroup: studentGroup,
 			startDate: startDate,
 			endDate: endDate,
+			topic_names: modifiedTopics,
 			instructors: instructors.map(instructor => instructor.email),
 		};
 		console.log(modifiedData);
@@ -107,6 +123,24 @@ const TeacherCourseModify: React.FC = () => {
 		const values = [...instructors];
 		values[index].email = event.target.value;
 		setInstructors(values);
+	};
+
+	const handleTopicChange = topic => {
+		toast.info('Topic changed');
+		setModifiedTopics(prevTopics =>
+			prevTopics.includes(topic)
+				? prevTopics.filter(t => t !== topic)
+				: [...prevTopics, topic],
+		);
+	};
+
+	const handleDeleteTopic = topic => {
+		setCourseTopics(prevTopics => prevTopics.filter(t => t !== topic));
+		setModifiedTopics(prevTopics => prevTopics.filter(t => t !== topic));
+	};
+	const resetData = () => {
+		setCourseTopics(initialCourseTopics);
+		setModifiedTopics(initialCourseTopics);
 	};
 
 	return (
@@ -132,18 +166,6 @@ const TeacherCourseModify: React.FC = () => {
 					setEndDate={setEndDate}
 					modify={true}
 				/>
-				<Accordion className="mt-4 mb-4">
-					<AccordionSummary
-						expandIcon={<ExpandMoreIcon />}
-						aria-controls="panel1a-content"
-						id="panel1a-header"
-					>
-						Modify Topics
-					</AccordionSummary>
-					<AccordionDetails>
-						<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
-					</AccordionDetails>
-				</Accordion>
 
 				<Accordion className="mt-4 mb-4">
 					<AccordionSummary
@@ -164,9 +186,72 @@ const TeacherCourseModify: React.FC = () => {
 					</AccordionDetails>
 				</Accordion>
 
+				<button
+					className="mt-4 mb-4 w-full bg-white text-left shadow rounded-md p-4 focus:outline-none focus:shadow-outline"
+					onClick={() => setOpen(true)}
+				>
+					Modify Topics
+				</button>
+				<Modal open={open} onClose={() => setOpen(false)}>
+					<div className="p-4 bg-white rounded shadow-lg max-w-lg mx-auto mt-10">
+						<h2 className="text-2xl mb-4">Edit Topics for {courseName}</h2>
+
+						<TextField
+							value={newTopic}
+							onChange={e => setNewTopic(e.target.value)}
+							label="New Topic"
+							variant="outlined"
+							className="mb-6"
+							fullWidth
+							required
+							InputProps={{
+								endAdornment: (
+									<InputAdornment position="end">
+										<IconButton
+											onClick={() => {
+												if (newTopic.trim() !== '') {
+													setCourseTopics(prevTopics => [...prevTopics, newTopic]);
+													setNewTopic('');
+												}
+											}}
+										>
+											<AddIcon />
+										</IconButton>
+									</InputAdornment>
+								),
+							}}
+						/>
+						{courseTopics.map((topic, index) => (
+							<div key={index} className="flex items-center mb-2 mt-3">
+								<Checkbox
+									checked={modifiedTopics.includes(topic)}
+									onChange={() => handleTopicChange(topic)}
+								/>
+								<p className="flex-grow">{topic}</p>
+								<IconButton onClick={() => handleDeleteTopic(topic)}>
+									<DeleteIcon />
+								</IconButton>
+							</div>
+						))}
+						<p className="text-sm text-gray-500 mb-4">
+							Only checked topics will be included in the course, deleting them from
+							the view will also exclude them.
+						</p>
+						<div className="flex justify-between mt-6">
+							<Button
+								variant="outlined"
+								color="secondary"
+								onClick={resetData}
+								className="mr-10"
+							>
+								RESET
+							</Button>
+						</div>
+					</div>
+				</Modal>
 				<div className="flex w-full justify-center">
 					<button
-						className=" bg-metropoliaTrendGreen w-1/2 hover:bg-green-600 text-white font-bold py-2 rounded-xl px-4 focus:outline-none focus:shadow-outline"
+						className=" bg-metropoliaTrendGreen w-1/2  hover:bg-green-600 text-white font-bold py-2 rounded-xl px-4 focus:outline-none focus:shadow-outline"
 						type="button"
 						onClick={handleSubmit}
 					>
