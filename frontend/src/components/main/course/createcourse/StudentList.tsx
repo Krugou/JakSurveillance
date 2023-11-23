@@ -1,6 +1,15 @@
+import DeleteIcon from '@mui/icons-material/Delete';
+import LockIcon from '@mui/icons-material/Lock';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import {IconButton} from '@mui/material';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import React, {useEffect, useState} from 'react';
 import InputField from './coursedetails/InputField';
-
 const StudentList = ({studentList, setStudentList}) => {
 	const [lastStudentNumber, setLastStudentNumber] = useState(777);
 	const [lastEmailNumber, setLastEmailNumber] = useState(1);
@@ -14,8 +23,36 @@ const StudentList = ({studentList, setStudentList}) => {
 		registration: true,
 		name: true,
 	});
+	const [open, setOpen] = useState(false);
+	const [toBeDeleted, setToBeDeleted] = useState<number | null>(null);
 	const [hideExtraColumns, setHideExtraColumns] = useState(true);
+	const [lockedFields, setLockedFields] = useState<boolean[]>(
+		new Array(studentList.length).fill(true),
+	);
 
+	const handleClickOpen = (index: number) => {
+		setToBeDeleted(index);
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
+
+	const handleDelete = () => {
+		if (toBeDeleted !== null) {
+			deleteStudent(toBeDeleted);
+		}
+		setOpen(false);
+	};
+
+	const toggleLock = (index: number) => {
+		setLockedFields(prevLockedFields => {
+			const newLockedFields = [...prevLockedFields];
+			newLockedFields[index] = !newLockedFields[index];
+			return newLockedFields;
+		});
+	};
 	const addStudent = event => {
 		event.preventDefault();
 		const newStudent = {
@@ -143,20 +180,44 @@ const StudentList = ({studentList, setStudentList}) => {
 																newStudentList[index][key] = e.target.value;
 																setStudentList(newStudentList);
 															}}
+															disabled={lockedFields[index]}
 														/>
 													</td>
 												),
 										)}
 										{studentList.length > 1 && (
 											<td className="border px-4 py-2">
-												<button
+												<IconButton onClick={() => toggleLock(index)}>
+													{lockedFields[index] ? <LockOpenIcon /> : <LockIcon />}
+												</IconButton>
+												<IconButton
 													aria-label="Delete Student"
-													type="button"
-													className="p-2 w-full bg-red-500 text-white font-bold rounded hover:metropoliaSecondaryOrange focus:outline-none"
-													onClick={() => deleteStudent(index)}
+													color="error"
+													onClick={() => handleClickOpen(index)}
 												>
-													x
-												</button>
+													<DeleteIcon />
+												</IconButton>
+												<Dialog
+													open={open}
+													onClose={handleClose}
+													aria-labelledby="alert-dialog-title"
+													aria-describedby="alert-dialog-description"
+												>
+													<DialogTitle id="alert-dialog-title">
+														{'Delete Student'}
+													</DialogTitle>
+													<DialogContent>
+														<DialogContentText id="alert-dialog-description">
+															Are you sure you want to delete this student?
+														</DialogContentText>
+													</DialogContent>
+													<DialogActions>
+														<Button onClick={handleClose}>Cancel</Button>
+														<Button onClick={handleDelete} color="error" autoFocus>
+															Delete
+														</Button>
+													</DialogActions>
+												</Dialog>
 											</td>
 										)}
 									</tr>
