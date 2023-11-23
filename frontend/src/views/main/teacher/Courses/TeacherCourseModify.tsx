@@ -17,6 +17,7 @@ import AddIcon from '@mui/icons-material/Add';
 import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
 import {toast} from 'react-toastify';
+
 // this is view for teacher to modify the single course details
 
 interface CourseDetail {
@@ -116,6 +117,9 @@ const TeacherCourseModify: React.FC = () => {
 			topic_names: modifiedTopics,
 			instructors: instructors.map(instructor => instructor.email),
 		};
+
+		apihooks.modifyCourse(id, modifiedData);
+
 		console.log(modifiedData);
 	};
 

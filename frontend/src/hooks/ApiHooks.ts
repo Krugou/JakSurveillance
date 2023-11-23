@@ -374,6 +374,34 @@ const fetchUsers = async (token: string) => {
 	};
 	return await doFetch(baseUrl + 'admin/getusers', options);
 };
+
+interface ModifiedData {
+	courseName?: string;
+	courseCode?: string;
+	studentGroup?: string;
+	startDate?: string;
+	endDate?: string;
+	topic_names?: string[];
+	instructors?: string[];
+}
+
+const modifyCourse = async (
+	token: string,
+	courseId: number,
+	modifiedData: ModifiedData,
+) => {
+	const options = {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+		body: JSON.stringify({modifiedData}),
+	};
+	const url = `${baseUrl}courses/update/${courseId}`;
+	return doFetch(url, options);
+};
+
 const apiHooks = {
 	fetchUsers,
 	updateOwnedTopicgroupandtheirtopics,
@@ -397,5 +425,6 @@ const apiHooks = {
 	getLectureInfo,
 	getStudentsByInstructorId,
 	getAllTopicGroupsAndTopicsInsideThemByUserid,
+	modifyCourse,
 };
 export default apiHooks;
