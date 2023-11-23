@@ -1,6 +1,22 @@
 import React from 'react';
 
-const InputField = ({label = '', type, name, value, onChange}) => (
+interface InputFieldProps {
+	label?: string;
+	type: string;
+	name: string;
+	value: string;
+	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+	disabled?: boolean;
+}
+
+const InputField: React.FC<InputFieldProps> = ({
+	label = '',
+	type,
+	name,
+	value,
+	onChange,
+	disabled = false,
+}) => (
 	<>
 		<label className="mb-2 font-bold text-gray-900" htmlFor={name}>
 			{label}
@@ -14,7 +30,9 @@ const InputField = ({label = '', type, name, value, onChange}) => (
 			onChange={onChange}
 			aria-label={label}
 			required
+			disabled={disabled} // Add the disabled prop here
 		/>
 	</>
 );
+
 export default InputField;
