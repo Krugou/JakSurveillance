@@ -473,7 +473,7 @@ const course: CourseModel = {
 
 				return acc;
 			}, []);
-
+			
 			return courses;
 		} catch (error) {
 			console.error(error);
