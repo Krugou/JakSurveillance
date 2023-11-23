@@ -365,7 +365,17 @@ const changeRoleId = async (email: string, roleId: string, token: string) => {
 	};
 	return await doFetch(baseUrl + 'admin/change-role', options);
 };
+const fetchUsers = async (token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	return await doFetch(baseUrl + 'admin/getusers', options);
+};
 const apiHooks = {
+	fetchUsers,
 	updateOwnedTopicgroupandtheirtopics,
 	fetchAllRoles,
 	changeRoleId,
