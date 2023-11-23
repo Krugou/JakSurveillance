@@ -1,5 +1,6 @@
 import express, {Request, Response, Router} from 'express';
 import adminController from '../controllers/admincontroller.js';
+import course from '../models/coursemodel.js';
 import rolemodel from '../models/rolemodel.js';
 import usermodel from '../models/usermodel.js';
 const router: Router = express.Router();
@@ -53,6 +54,15 @@ router.get('/getuser/:userid', async (req: Request, res: Response) => {
 		const {userid} = req.params;
 		const user = await usermodel.fetchUserById(Number(userid));
 		res.send(user);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({message: 'Internal server error'});
+	}
+});
+router.get('/getcourses', async (req: Request, res: Response) => {
+	try {
+		const courses = await course.getCoursesWithDetails();
+		res.send(courses);
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({message: 'Internal server error'});
