@@ -1,28 +1,59 @@
-import React from 'react';
-// import MainViewButton from '../../../components/main/buttons/MainViewButton';
-// import TeacherStudentDetail from '../teacher/Students/TeacherStudentDetail';
+import {Typography} from '@mui/material';
+import React, {useContext, useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
+import {UserContext} from '../../../../contexts/UserContext';
+import apiHooks from '../../../../hooks/ApiHooks';
 
 const AdminUserDetail: React.FC = () => {
-	// const {id} = useParams<{id: string}>();
+	const {userid} = useParams<{userid: number}>();
+	const {user} = useContext(UserContext);
+	const [fetchUser, setFetchUser] = useState<any[]>([]);
 
-	// Replace with actual data fetching
-	const Teacher = {
-		name: `Teacher ${id}`,
-		course: 'Course Name',
-	};
+	useEffect(() => {
+		if (user) {
+			// Get token from local storage
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
+
+			// Create an async function inside the effect
+			const fetchUser = async () => {
+				const fetchedUser = await apiHooks.fetchUserById(userid, token);
+				setFetchUser(fetchedUser[0]);
+				console.log(fetchedUser[0]);
+			};
+
+			// Call the async function
+			fetchUser();
+		}
+	}, [user]);
 
 	return (
-		<div className="bg-gray-100 p-5">
-			{/* <TeacherStudentDetail></TeacherStudentDetail> */}
-			<div className="m-4 bg-white rounded shadow-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-2/5 mx-auto">
-				<div className="px-6 py-4">
-					<div className="font-bold text-xl mb-2">{Teacher.name}</div>
-					<p className="text-gray-700 text-base">Enrolled in: {Teacher.course}</p>
-					{/* <MainViewButton
-						path={`/adming/users/${id}/modify`}
-						text="Modify details"
-					/> */}
-				</div>
+		<div className="md:flex md:space-x-4">
+			<div className="md:w-1/2">
+				{fetchUser.first_name && (
+					<Typography variant="h6">First Name: {fetchUser.first_name}</Typography>
+				)}
+				{fetchUser.last_name && (
+					<Typography variant="h6">Last Name: {fetchUser.last_name}</Typography>
+				)}
+				{fetchUser.email && (
+					<Typography variant="h6">Email: {fetchUser.email}</Typography>
+				)}
+			</div>
+			<div className="md:w-1/2">
+				{fetchUser.role && (
+					<Typography variant="h6">Role: {fetchUser.role}</Typography>
+				)}
+				{fetchUser.studentnumber && (
+					<Typography variant="h6">
+						Student Number: {fetchUser.studentnumber}
+					</Typography>
+				)}
+				{fetchUser.userid && (
+					<Typography variant="h6">User ID: {fetchUser.userid}</Typography>
+				)}
 			</div>
 		</div>
 	);

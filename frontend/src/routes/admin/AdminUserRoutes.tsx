@@ -9,8 +9,8 @@ const AdminUserRoutes: React.FC = () => {
 	return (
 		<Routes>
 			<Route path="/" element={<AdminUsers />} />
-			<Route path="/:id" element={<AdminUserDetail />} />
-			<Route path="/:id/modify" element={<AdminUserModify />} />
+			<Route path="/:userid" element={<AdminUserDetail />} />
+			<Route path="/:userid/modify" element={<AdminUserModify />} />
 			<Route path="*" element={<AdminMainView />} />
 		</Routes>
 	);
