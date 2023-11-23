@@ -49,6 +49,14 @@ const CourseStudents: React.FC<Props> = ({
 			clearInterval(scrollInterval.current);
 		};
 	}, [coursestudents]);
+	useEffect(() => {
+		return () => {
+			// Disconnect the socket when the component unmounts
+			if (socket) {
+				socket.disconnect();
+			}
+		};
+	}, [socket]);
 	return (
 		<div
 			ref={scrollContainerRef}
