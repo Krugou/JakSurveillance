@@ -72,7 +72,6 @@ const updateHash = () => {
 	}
 };
 const finishLecture = async (lectureid: string, io) => {
-	
 	// Prepare the data to be sent
 	const data = {
 		date: new Date().toISOString().slice(0, 19).replace('T', ' '),
@@ -251,6 +250,56 @@ const setupSocketHandlers = (io: Server) => {
 						.to(socket.id)
 						.emit('inputThatStudentHasArrivedToLectureTooSlow', lectureid);
 				}
+			},
+		);
+		socket.on(
+			'manualstudentinsert',
+			async (studentId: string, lectureid: number) => {
+				console.log('manualstudentinsert', studentId, lectureid);
+				if (studentId === '') {
+					io.to(socket.id).emit('manualstudentinsertFailedEmpty', lectureid);
+					return;
+				}
+
+				const token = await getToken();
+				fetchReal
+					.doFetch('http://localhost:3002/courses/attendance/', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+							Authorization: 'Bearer ' + token,
+						},
+						body: JSON.stringify({
+							status: '1',
+							date: new Date().toISOString().slice(0, 19).replace('T', ' '),
+							studentnumber: studentId,
+							lectureid: lectureid,
+						}),
+					})
+					.then(response => {
+						console.log('Success:', response);
+
+						const studentIndex = notYetPresentStudents[lectureid].findIndex(
+							(student: Student) =>
+								Number(student.studentnumber) === Number(studentId),
+						);
+
+						if (studentIndex !== -1) {
+							const student = notYetPresentStudents[lectureid][studentIndex];
+							presentStudents[lectureid].push(
+								`${student.first_name} ${student.last_name.charAt(0)}.`,
+							);
+							notYetPresentStudents[lectureid].splice(studentIndex, 1); // Remove the student from notYetPresentStudents
+						} else {
+							console.log('Student not found');
+						}
+
+						io.to(socket.id).emit('manualstudentinsertSuccess', lectureid);
+					})
+					.catch(error => {
+						console.error(error);
+						io.to(socket.id).emit('manualstudentinsertError', lectureid);
+					});
 			},
 		);
 	});
