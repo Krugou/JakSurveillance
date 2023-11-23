@@ -1,14 +1,21 @@
 import React, {useEffect, useRef, useState} from 'react';
-
+import {Socket} from 'socket.io-client';
 interface Props {
 	coursestudents: {
 		first_name: string;
 		last_name: string;
 		userid: number;
+		studentnumber: string;
 	}[];
+	socket: Socket | null;
+	lectureid: number;
 }
 
-const CourseStudents: React.FC<Props> = ({coursestudents}) => {
+const CourseStudents: React.FC<Props> = ({
+	coursestudents,
+	socket,
+	lectureid,
+}) => {
 	const [bounceGroup, setBounceGroup] = useState(0);
 	const lastItemRef = useRef(null);
 	const firstItemRef = useRef(null);
@@ -61,6 +68,15 @@ const CourseStudents: React.FC<Props> = ({coursestudents}) => {
 								className={`inline-block p-2 m-2 text-white sm:text-sm font-semibold ${bgColorClass} ${shapeClass} ${
 									isBouncing ? 'animate-bounce' : ''
 								}`}
+								onClick={() => {
+									if (socket) {
+										const studentName = `${student.first_name} ${student.last_name}`;
+										const confirmMessage = `Are you sure you want to add ${studentName} as attended?`;
+										if (window.confirm(confirmMessage)) {
+											socket.emit('manualstudentinsert', student.studentnumber, lectureid);
+										}
+									}
+								}}
 							>
 								{formattedName}
 							</p>
