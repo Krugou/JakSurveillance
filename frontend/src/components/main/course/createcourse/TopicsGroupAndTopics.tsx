@@ -87,6 +87,12 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 			throw new Error('No token available');
 		}
 		if (user) {
+			// Check if any of the custom topics are empty
+			const emptyTopic = topics.find(topic => topic.trim() === '');
+			if (emptyTopic !== undefined) {
+				toast.error('Please fill all the custom topics before applying.');
+				return;
+			}
 			apiHooks
 				.updateOwnedTopicgroupandtheirtopics(topicGroup, topics, user.email, token)
 				.then(response => {
