@@ -1,28 +1,111 @@
-import React from 'react';
-import {useParams} from 'react-router-dom';
-import MainViewButton from '../../../components/main/buttons/MainViewButton';
-import TeacherStudentDetail from '../teacher/Students/TeacherStudentDetail';
+import SortIcon from '@mui/icons-material/Sort';
+import {IconButton} from '@mui/material';
+import React, {useContext, useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import InputField from '../../../components/main/course/createcourse/coursedetails/InputField';
+import {UserContext} from '../../../contexts/UserContext';
+import apiHooks from '../../../hooks/ApiHooks';
 
 const AdminUsers: React.FC = () => {
-	const {id} = useParams<{id: string}>();
-
-	// Replace with actual data fetching
-	const Teacher = {
-		name: `Teacher ${id}`,
-		course: 'Course Name',
+	const {user} = useContext(UserContext);
+	const [users, setUsers] = useState<any[]>([]);
+	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+	const [searchTerm, setSearchTerm] = useState('');
+	const [sortKey, setSortKey] = useState('last_name');
+	const sortedUsers = [...users].sort((a, b) => {
+		if (a[sortKey] < b[sortKey]) return sortOrder === 'asc' ? -1 : 1;
+		if (a[sortKey] > b[sortKey]) return sortOrder === 'asc' ? 1 : -1;
+		return 0;
+	});
+	const sortUsers = (key: string) => {
+		setSortKey(key);
+		setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
 	};
+	const filteredUsers = sortedUsers.filter(user =>
+		Object.values(user).some(
+			value =>
+				typeof value === 'string' &&
+				value.toLowerCase().includes(searchTerm.toLowerCase()),
+		),
+	);
+	const navigate = useNavigate();
+	useEffect(() => {
+		if (user) {
+			// Get token from local storage
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
 
+			// Create an async function inside the effect
+			const fetchUsers = async () => {
+				const fetchedUsers = await apiHooks.fetchUsers(token);
+				setUsers(fetchedUsers);
+			};
+
+			// Call the async function
+			fetchUsers();
+		}
+	}, [user]);
 	return (
-		<div className="bg-gray-100 p-5">
-			<TeacherStudentDetail></TeacherStudentDetail>
-			<div className="m-4 bg-white rounded shadow-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-2/5 mx-auto">
-				<div className="px-6 py-4">
-					<div className="font-bold text-xl mb-2">{Teacher.name}</div>
-					<p className="text-gray-700 text-base">Enrolled in: {Teacher.course}</p>
-					<MainViewButton
-						path={`/adming/users/${id}/modify`}
-						text="Modify details"
-					/>
+		<div className="relative">
+			<div className="w-1/4 m-4 p-4">
+				<InputField
+					type="text"
+					name="search"
+					value={searchTerm}
+					onChange={e => setSearchTerm(e.target.value)}
+					placeholder="Search..."
+					label="Search"
+				/>
+			</div>
+			<div className="h-1/2 relative overflow-x-scroll">
+				<div className="max-h-96 h-96 overflow-y-scroll relative">
+					<table className="table-auto w-full">
+						<thead className="sticky top-0 bg-white z-10">
+							<tr>
+								{[
+									'last_name',
+									'email',
+									'username',
+									'first_name',
+									'role',
+									'studentnumber',
+								].map((key, index) => (
+									<th key={index} className="px-4 py-2">
+										{key}
+										<IconButton onClick={() => sortUsers(key)}>
+											<SortIcon />
+										</IconButton>
+									</th>
+								))}
+							</tr>
+						</thead>
+						<tbody>
+							{filteredUsers.map(
+								(user: Record<string, string | number>, index: number) => (
+									<tr
+										key={index}
+										onClick={() => navigate(`/admin/users/${user.userid}`)}
+										className="cursor-pointer hover:bg-gray-200"
+									>
+										{[
+											'last_name',
+											'email',
+											'username',
+											'first_name',
+											'role',
+											'studentnumber',
+										].map((key, innerIndex) => (
+											<td key={innerIndex} className="border px-2 py-2">
+												{user[key]}
+											</td>
+										))}
+									</tr>
+								),
+							)}
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
