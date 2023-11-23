@@ -180,7 +180,7 @@ const TeacherCourseModify: React.FC = () => {
 					modify={true}
 				/>
 
-				<Accordion className="mt-4 mb-4">
+				<Accordion className="mt-4 mb-4" onClick={e => e.stopPropagation()}>
 					<AccordionSummary
 						expandIcon={<ExpandMoreIcon />}
 						aria-controls="panel2a-content"

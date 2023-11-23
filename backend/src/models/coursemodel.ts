@@ -298,8 +298,8 @@ const course: CourseModel = {
 		end_date: Date,
 		code: string,
 		studentgroupname: string,
-		topic_names: string[],
 		instructors: string[],
+		topic_names: string[],
 	): Promise<void> {
 		let studentgroupid: string | undefined = '';
 		// Get the topic group id if the topic group name is provided
