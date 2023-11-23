@@ -7,6 +7,7 @@ interface InputFieldProps {
 	value: string;
 	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	disabled?: boolean;
+	placeholder?: string;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -16,13 +17,14 @@ const InputField: React.FC<InputFieldProps> = ({
 	value,
 	onChange,
 	disabled = false,
+	placeholder = '',
 }) => (
 	<>
 		<label className="mb-2 font-bold text-gray-900" htmlFor={name}>
 			{label}
 		</label>
 		<input
-			className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+			className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange "
 			type={type}
 			name={name}
 			id={name}
@@ -30,7 +32,8 @@ const InputField: React.FC<InputFieldProps> = ({
 			onChange={onChange}
 			aria-label={label}
 			required
-			disabled={disabled} // Add the disabled prop here
+			disabled={disabled}
+			placeholder={placeholder} 
 		/>
 	</>
 );
