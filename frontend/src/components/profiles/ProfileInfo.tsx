@@ -10,9 +10,15 @@ interface ProfileInfoPros {
 	};
 }
 
+// Define Role interface
+interface Role {
+	roleid: string;
+	name: string;
+}
+
 const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 	const [open, setOpen] = useState(false);
-	const [roles, setRoles] = useState([]);
+	const [roles, setRoles] = useState<Role[]>([]);
 	const [selectedRole, setSelectedRole] = useState('');
 
 	useEffect(() => {
@@ -75,6 +81,7 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 				<div className="mt-5">
 					<h2 className="text-2xl font-bold mb-3">Change Role</h2>
 					<select
+						title="Role Selection" // Add title attribute here
 						className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
 						value={selectedRole}
 						onChange={e => setSelectedRole(e.target.value)}
@@ -85,12 +92,14 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 					</select>
 					<div className="mt-5 flex justify-between">
 						<button
+							type="button" // Add type attribute here
 							className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
 							onClick={handleClose}
 						>
 							Cancel
 						</button>
 						<button
+							type="button" // Add type attribute here
 							className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
 							onClick={handleRoleChange}
 						>
