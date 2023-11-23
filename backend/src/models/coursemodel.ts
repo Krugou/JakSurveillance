@@ -578,6 +578,114 @@ const course: CourseModel = {
 	checkIfCourseExists: function (code: string): Promise<boolean> {
 		throw new Error('Function not implemented.');
 	},
+
+	async updateCourseInfo(
+		courseid: number,
+		name: string,
+		start_date: Date,
+		end_date: Date,
+		code: string,
+		studentgroupname: string,
+		topic_names: string[],
+		instructors: string[],
+	): Promise<void> {
+		let studentgroupid: string | undefined = '';
+		// Get the topic group id if the topic group name is provided
+		if (topic_names.length > 0) {
+			try {
+				// Delete all topics from the course
+				await pool
+					.promise()
+					.query(`DELETE FROM coursetopics WHERE courseid = ?`, [courseid]);
+
+				// Select the topicid for each topic name
+				for (const topic of topic_names) {
+					const [rows] = await pool
+						.promise()
+						.query<RowDataPacket[]>(
+							`SELECT topicid FROM topics WHERE topicname = ?`,
+							[topic],
+						);
+					const topicid = rows[0].topicid;
+					// Insert the new topics into the course
+					await pool
+						.promise()
+						.query(`INSERT INTO coursetopics (courseid, topicid) VALUES (?, ?)`, [
+							courseid,
+							topicid,
+						]);
+				}
+			} catch (error) {
+				console.error(error);
+				return Promise.reject(error);
+			}
+		}
+
+		if (instructors) {
+			try {
+				// Delete all instructors from the course
+
+				await pool
+					.promise()
+					.query(`DELETE FROM courseinstructors WHERE courseid = ?`, [courseid]);
+
+				// Insert the new instructors into the course
+				for (const instructor of instructors) {
+					try {
+						const [rows] = await pool
+							.promise()
+							.query<RowDataPacket[]>(
+								`SELECT userid FROM users WHERE email = ? AND staff = 1`,
+								[instructor],
+							);
+						const userid = rows[0].userid;
+						await pool
+							.promise()
+							.query(
+								`INSERT INTO courseinstructors (userid, courseid) VALUES (?, ?)`,
+								[userid, courseid],
+							);
+					} catch (error) {
+						console.error(error);
+						return Promise.reject(error);
+					}
+				}
+			} catch (error) {
+				console.error(error);
+				return Promise.reject(error);
+			}
+		}
+
+		// Get the student group id if the student group name is provided
+		if (studentgroupname) {
+			try {
+				const [rows] = await pool
+					.promise()
+					.query<RowDataPacket[]>(
+						`SELECT studentgroupid FROM studentgroups WHERE group_name = ?`,
+						[studentgroupname],
+					);
+				studentgroupid = rows[0].studentgroupid;
+			} catch (error) {
+				console.error(error);
+				return Promise.reject(error);
+			}
+		}
+
+		// Update the course info
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					`UPDATE courses SET name = ?, start_date = ?, end_date = ?, code = ?, studentgroupid = ? WHERE courseid = ?`,
+					[name, start_date, end_date, code, studentgroupid, courseid],
+				);
+			return rows as Course[];
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
 };
 
 export default course;

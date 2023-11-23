@@ -379,15 +379,15 @@ interface ModifiedData {
 	courseName?: string;
 	courseCode?: string;
 	studentGroup?: string;
-	startDate?: string;
-	endDate?: string;
+	startDate?: Date;
+	endDate?: Date;
 	topic_names?: string[];
 	instructors?: string[];
 }
 
 const modifyCourse = async (
-	token: string,
-	courseId: number,
+	token: string | null,
+	courseId: string | undefined,
 	modifiedData: ModifiedData,
 ) => {
 	const options = {
@@ -398,6 +398,7 @@ const modifyCourse = async (
 		},
 		body: JSON.stringify({modifiedData}),
 	};
+	console.log('asdasd');
 	const url = `${baseUrl}courses/update/${courseId}`;
 	return doFetch(url, options);
 };

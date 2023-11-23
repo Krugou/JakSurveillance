@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
-import apihooks from '../../../../hooks/ApiHooks';
+import apiHooks from '../../../../hooks/ApiHooks';
 import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import CourseDetails from '../../../../components/main/course/createcourse/CourseDetails';
 import AddTeachers from '../../../../components/main/course/createcourse/AddTeachers';
@@ -65,7 +65,7 @@ const TeacherCourseModify: React.FC = () => {
 				if (!token) {
 					throw new Error('No token available');
 				}
-				const courseData = await apihooks.getCourseDetailByCourseId(id, token);
+				const courseData = await apiHooks.getCourseDetailByCourseId(id, token);
 				console.log(courseData, 'COUSRDATA');
 				setCourseData(courseData[0]);
 				setIsLoading(false);
@@ -106,19 +106,25 @@ const TeacherCourseModify: React.FC = () => {
 		return <div>Loading...</div>;
 	}
 
-	const handleSubmit = (event: React.FormEvent) => {
+	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 		const modifiedData = {
 			courseName: courseName,
 			courseCode: courseCode,
 			studentGroup: studentGroup,
-			startDate: startDate,
-			endDate: endDate,
+			start_date: startDate,
+			end_date: endDate,
 			topic_names: modifiedTopics,
 			instructors: instructors.map(instructor => instructor.email),
 		};
+		const token: string | null = localStorage.getItem('userToken');
 
-		apihooks.modifyCourse(id, modifiedData);
+		try {
+			const result = await apiHooks.modifyCourse(token, id, modifiedData);
+			console.log(result);
+		} catch (error) {
+			console.log(error);
+		}
 
 		console.log(modifiedData);
 	};

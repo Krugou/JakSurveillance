@@ -334,4 +334,57 @@ router.get('/students/:userid', async (req: Request, res: Response) => {
 	}
 });
 
+router.put('/update/:courseid', async (req: Request, res: Response) => {
+	console.log('OPIJAWIDOJAWIODAWIOJAWD IOJIAWD JIDAWOAWD');
+	// Validate that the user is logged in
+	try {
+		// Check if the user's role is either 'teacher' or 'admin'
+		if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
+			// If not, return an error
+			return res.status(403).json({error: 'Unauthorized'});
+		}
+	} catch (error) {
+		console.log('error', error);
+	}
+
+	// Get the course ID from the request
+	const courseId = Number(req.params.courseid);
+
+	if (isNaN(courseId)) {
+		res.status(400).send('Invalid course ID');
+		return;
+	}
+
+	// Get the course data from the request body
+	const {
+		courseName,
+		courseCode,
+		studentGroup,
+		startDate,
+		endDate,
+		instructors,
+		topic_names,
+	} = req.body;
+
+	console.log(req.body);
+
+	try {
+		// Update the course
+		const result = await course.updateCourseInfo(
+			courseId,
+			courseName,
+			startDate,
+			endDate,
+			courseCode,
+			studentGroup,
+			instructors,
+			topic_names,
+		);
+		res.json(result);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Internal server error');
+	}
+});
+
 export default router;
