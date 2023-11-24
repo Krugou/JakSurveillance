@@ -96,12 +96,10 @@ const TeacherStudentsView: React.FC = () => {
 								<MainViewButton
 									path={`/teacher/students/${student.userid}`}
 									text="Details"
-									className=""
 								/>
 								<MainViewButton
 									path={`/teacher/students/${student.userid}/attendances`}
 									text="Attendance"
-									className=""
 								/>
 							</div>
 						</div>
