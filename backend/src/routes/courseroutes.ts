@@ -8,6 +8,8 @@ import UserModel from '../models/usermodel.js';
 import openData from '../utils/opendata.js';
 import attendanceRoutes from './course/attendanceRoutes.js';
 import topicRoutes from './course/topicRoutes.js';
+import {body, validationResult} from 'express-validator';
+
 config();
 const upload = multer();
 const router: Router = express.Router();
@@ -334,57 +336,88 @@ router.get('/students/:userid', async (req: Request, res: Response) => {
 	}
 });
 
-router.put('/update/:courseid', async (req: Request, res: Response) => {
-	console.log('OPIJAWIDOJAWIODAWIOJAWD IOJIAWD JIDAWOAWD');
-	// Validate that the user is logged in
-	try {
-		// Check if the user's role is either 'teacher' or 'admin'
-		if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
-			// If not, return an error
-			return res.status(403).json({error: 'Unauthorized'});
+router.put(
+	'/update/:courseid',
+	[
+		body('modifiedData.courseName')
+			.trim()
+			.escape()
+			.notEmpty()
+			.withMessage('Course name is required'),
+		body('modifiedData.courseCode')
+			.trim()
+			.escape()
+			.notEmpty()
+			.withMessage('Course code is required'),
+		body('modifiedData.studentGroup').trim().escape().optional(),
+		body('modifiedData.start_date')
+			.trim()
+			.escape()
+			.notEmpty()
+			.withMessage('Start date is required'),
+		body('modifiedData.end_date')
+			.trim()
+			.escape()
+			.notEmpty()
+			.withMessage('End date is required'),
+		body('modifiedData.instructors')
+			.isArray()
+			.withMessage('Instructors must be an array'),
+	],
+	async (req: Request, res: Response) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			console.log(errors.array());
+			return res.status(400).json({errors: errors.array()});
 		}
-	} catch (error) {
-		console.log('error', error);
-	}
+		// Validate that the user is logged in
+		try {
+			// Check if the user's role is either 'teacher' or 'admin'
+			if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
+				// If not, return an error
+				return res.status(403).json({error: 'Unauthorized'});
+			}
+		} catch (error) {
+			console.log('error', error);
+		}
 
-	// Get the course ID from the request
-	const courseId = Number(req.params.courseid);
+		// Get the course ID from the request
+		const courseId = Number(req.params.courseid);
 
-	if (isNaN(courseId)) {
-		res.status(400).send('Invalid course ID');
-		return;
-	}
+		if (isNaN(courseId)) {
+			res.status(400).send('Invalid course ID');
+			return;
+		}
 
-	// Get the course data from the request body
-	const {
-		courseName,
-		courseCode,
-		studentGroup,
-		start_date,
-		end_date,
-		instructors,
-		topic_names,
-	} = req.body.modifiedData;
-
-	console.log(req.body);
-
-	try {
-		// Update the course
-		const result = await course.updateCourseInfo(
-			courseId,
+		// Get the course data from the request body
+		const {
 			courseName,
-			start_date,
-			end_date,
 			courseCode,
 			studentGroup,
+			start_date,
+			end_date,
 			instructors,
 			topic_names,
-		);
-		res.json(result);
-	} catch (err) {
-		console.error(err);
-		res.status(500).send({message: err.message});
-	}
-});
+		} = req.body.modifiedData;
+
+		try {
+			// Update the course
+			const result = await course.updateCourseInfo(
+				courseId,
+				courseName,
+				start_date,
+				end_date,
+				courseCode,
+				studentGroup,
+				instructors,
+				topic_names,
+			);
+			res.json(result);
+		} catch (err) {
+			console.error(err);
+			res.status(500).send({message: err.message});
+		}
+	},
+);
 
 export default router;
