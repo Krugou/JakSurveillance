@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
-import MainViewButton from '../../../../components/main/buttons/MainViewButton';
+import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
 const CounselorStudentsView: React.FC = () => {
 	const [students, setStudents] = useState<string[]>([]); // Replace with actual data
 	if (!students) {
@@ -22,7 +22,10 @@ const CounselorStudentsView: React.FC = () => {
 								Some description about the student.
 							</p>
 							<div className="flex justify-between">
-								<MainViewButton path="/counselor/students/:id" text="Student details" />
+								<GeneralLinkButton
+									path="/counselor/students/:id"
+									text="Student details"
+								/>
 							</div>
 						</div>
 					</div>

@@ -2,10 +2,10 @@ import {CircularProgress} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
-import MainViewButton from '../../../../components/main/buttons/MainViewButton';
+import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
+import InputField from '../../../../components/main/course/createcourse/coursedetails/InputField';
 import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks'; // Import apiHooks
-import InputField from '../../../../components/main/course/createcourse/coursedetails/InputField';
 interface Student {
 	first_name: string;
 	last_name: string;
@@ -92,11 +92,11 @@ const TeacherStudentsView: React.FC = () => {
 								<p>Account created: {new Date(student.created_at).toLocaleString()}</p>
 							)}
 							<div className="flex flex-wrap justify-between">
-								<MainViewButton
+								<GeneralLinkButton
 									path={`/teacher/students/${student.userid}`}
 									text="Details"
 								/>
-								<MainViewButton
+								<GeneralLinkButton
 									path={`/teacher/students/${student.userid}/attendances`}
 									text="Attendance"
 								/>

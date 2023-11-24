@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import MainViewButton from '../buttons/MainViewButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Tooltip from '@mui/material/Tooltip';
-import DeleteModal from '../modals/DeleteModal';
-import apiHooks from '../../../hooks/ApiHooks';
 import EditIcon from '@mui/icons-material/Edit';
-import {toast} from 'react-toastify';
+import Tooltip from '@mui/material/Tooltip';
+import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {toast} from 'react-toastify';
+import apiHooks from '../../../hooks/ApiHooks';
+import GeneralLinkButton from '../buttons/GeneralLinkButton';
+import DeleteModal from '../modals/DeleteModal';
 interface Course {
 	courseid: number;
 	name: string;
@@ -148,7 +148,7 @@ const CourseData: React.FC<CourseDataProps> = ({courseData, updateView}) => {
 									</div>
 								</>
 							) : (
-								<MainViewButton
+								<GeneralLinkButton
 									path={`/teacher/courses/${course.courseid}`}
 									text="View details"
 								/>
