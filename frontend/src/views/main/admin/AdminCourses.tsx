@@ -1,16 +1,35 @@
+import SortIcon from '@mui/icons-material/Sort';
+import {IconButton} from '@mui/material';
 import React, {useContext, useEffect, useState} from 'react';
-import MainViewButton from '../../../components/main/buttons/MainViewButton';
+import InputField from '../../../components/main/course/createcourse/coursedetails/InputField';
 import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/apiHooks';
+
 const AdminCourses: React.FC = () => {
 	const {user} = useContext(UserContext);
-	const courseOptions = ['Course 1', 'Course 2', 'Course 3']; // Replace with your course options
-	const [selectedCourse, setSelectedCourse] = useState(courseOptions[0]);
 	const [courses, setCourses] = useState<Course[]>([]);
-	const handleCourseChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-		setSelectedCourse(event.target.value);
+	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+	const [searchTerm, setSearchTerm] = useState('');
+	const [sortKey, setSortKey] = useState('name');
+
+	const sortedCourses = [...courses].sort((a, b) => {
+		if (a[sortKey] < b[sortKey]) return sortOrder === 'asc' ? -1 : 1;
+		if (a[sortKey] > b[sortKey]) return sortOrder === 'asc' ? 1 : -1;
+		return 0;
+	});
+
+	const sortCourses = (key: string) => {
+		setSortKey(key);
+		setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
 	};
 
+	const filteredCourses = sortedCourses.filter(course =>
+		Object.values(course).some(
+			value =>
+				typeof value === 'string' &&
+				value.toLowerCase().includes(searchTerm.toLowerCase()),
+		),
+	);
 	useEffect(() => {
 		if (user) {
 			// Get token from local storage
@@ -22,10 +41,7 @@ const AdminCourses: React.FC = () => {
 			// Create an async function inside the effect
 			const fetchCourses = async () => {
 				const fetchedCourses = await apiHooks.getCourses(token);
-				console.log(
-					'🚀 ~ file: AdminCourses.tsx:25 ~ fetchCourses ~ fetchedCourses:',
-					fetchedCourses,
-				);
+
 				setCourses(fetchedCourses);
 			};
 
@@ -36,6 +52,16 @@ const AdminCourses: React.FC = () => {
 
 	return (
 		<div className="relative">
+			<div className="w-1/4 m-4 p-4">
+				<InputField
+					type="text"
+					name="search"
+					value={searchTerm}
+					onChange={e => setSearchTerm(e.target.value)}
+					placeholder="Search..."
+					label="Search"
+				/>
+			</div>
 			<div className="h-1/2 relative overflow-x-scroll">
 				<div className="max-h-96 h-96 overflow-y-scroll relative">
 					<table className="table-auto w-full">
@@ -52,12 +78,15 @@ const AdminCourses: React.FC = () => {
 								].map((key, index) => (
 									<th key={index} className="px-4 py-2">
 										{key}
+										<IconButton onClick={() => sortCourses(key)}>
+											<SortIcon />
+										</IconButton>
 									</th>
 								))}
 							</tr>
 						</thead>
 						<tbody>
-							{courses.map((course, index) => (
+							{filteredCourses.map((course, index) => (
 								<tr key={index} className="cursor-pointer hover:bg-gray-200">
 									{[
 										'name',
