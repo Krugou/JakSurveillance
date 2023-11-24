@@ -64,21 +64,23 @@ const TeacherStudentsView: React.FC = () => {
 		<BackgroundContainer>
 			<h1 className="text-2xl font-bold mb-4">Your Students</h1>
 			<div className="flex flex-wrap w-3/4 bg-gray-100 p-5">
-				<InputField
-					type="text"
-					name="search"
-					value={searchTerm}
-					onChange={e => setSearchTerm(e.target.value)}
-					placeholder="Search..."
-					label="Search"
-				/>
+				<div className="w-full m-4 p-4">
+					<InputField
+						type="text"
+						name="search"
+						value={searchTerm}
+						onChange={e => setSearchTerm(e.target.value)}
+						placeholder="Search..."
+						label="Search by name"
+					/>
+				</div>
 				{filteredStudents.map(student => (
 					<div
 						key={student.userid}
-						className="m-4 bg-white rounded shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5"
+						className="m-4 bg-white rounded shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 min-w-max"
 					>
-						<div className="px-6 py-4">
-							<div className="font-bold text-xl mb-2">
+						<div className="px-6 py-4 text-sm sm:text-base">
+							<div className="font-bold text-lg mb-2">
 								{student.first_name} {student.last_name}
 							</div>
 							{student.email && <p>Email: {student.email}</p>}
@@ -89,14 +91,17 @@ const TeacherStudentsView: React.FC = () => {
 								<p>Student Group ID: {student.studentgroupid}</p>
 							)}
 							{student.created_at && <p>Created At: {student.created_at}</p>}
-							<div className="flex justify-between">
+
+							<div className="flex flex-wrap justify-between">
 								<MainViewButton
 									path={`/teacher/students/${student.userid}`}
-									text="Student details"
+									text="Details"
+									className=""
 								/>
 								<MainViewButton
 									path={`/teacher/students/${student.userid}/attendances`}
-									text="Student Attendance"
+									text="Attendance"
+									className=""
 								/>
 							</div>
 						</div>
