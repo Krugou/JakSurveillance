@@ -18,6 +18,7 @@ interface UserInfo {
 	userid?: number;
 	studentnumber?: string;
 	role?: string;
+	gdpr?: number;
 }
 /**
  * @interface User
@@ -307,6 +308,49 @@ const UserModel = {
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
+		}
+	},
+	/**
+	 * Updates the GDPR status of a user based on their user ID.
+	 * @param {number} userId - The ID of the user to update.
+	 * @param {number} gdprStatus - The new GDPR status to set for the user (0 or 1).
+	 * @returns {Promise<boolean>} A promise that resolves to a boolean indicating whether the update was successful.
+	 */
+	updateUserGDPRStatus: async (userId: number): Promise<boolean> => {
+		try {
+			const [rows] = (await UserModel.pool
+				.promise()
+				.execute('UPDATE users SET gdpr = 1 WHERE userid = ?', [userId])) as unknown as [
+				ResultSetHeader,
+				FieldPacket[]
+			];
+
+			return rows.affectedRows > 0;
+		} catch (error) {
+			console.error(error);
+			throw new Error('Database error');
+		}
+	},
+
+	/**
+	 * Gets the GDPR status of a user based on their user ID.
+	 * @param {number} userId - The ID of the user to check.
+	 * @returns {Promise<number>} A promise that resolves to the user's GDPR status (0 or 1).
+	 */
+	getUserGDPRStatus: async (userId: number): Promise<number> => {
+		try {
+			const [rows] = await UserModel.pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT gdpr FROM users WHERE userid = ?', [userId]);
+
+			if (rows.length > 0) {
+				return rows[0].gdpr;
+			} else {
+				throw new Error('User not found');
+			}
+		} catch (error) {
+			console.error(error);
+			throw new Error('Database error');
 		}
 	},
 };

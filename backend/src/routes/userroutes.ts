@@ -6,6 +6,7 @@ import fetchReal from '../utils/fetch.js';
 import jwt from 'jsonwebtoken';
 import UserModel from '../models/usermodel.js';
 import {User} from '../utils/pass.js';
+import Usermodel from "../models/usermodel.js";
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
 
 const router: Router = express.Router();
@@ -203,6 +204,18 @@ router.post('/', async (req: Request, res: Response, next) => {
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({error: 'Internal server error'});
+	}
+});
+
+router.put('/accept-gdpr/:userid', async (req, res) => {
+	const userId = req.params.userid;
+	console.log(userId, "jotatjdkfgfdfd")
+	try {
+		await Usermodel.updateUserGDPRStatus(userId);
+		res.json({ success: true });
+	} catch (error) {
+		console.error(error);
+		res.status(500).send('Internal Server Error');
 	}
 });
 

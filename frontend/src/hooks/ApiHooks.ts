@@ -309,6 +309,19 @@ const getStudentsByInstructorId = async (userid: number, token: string) => {
 	return doFetch(url, options);
 };
 
+const updateGdprStatus = async (userid: number, token: string) => {
+	console.log(userid)
+	const options = {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	const url = `${baseUrl}users/accept-gdpr/${userid}`;
+	return doFetch(url, options);
+}
+
 const deleteCourse = async (courseId: number, token: string) => {
 	const options = {
 		method: 'DELETE',
@@ -446,5 +459,7 @@ const apiHooks = {
 	getStudentsByInstructorId,
 	getAllTopicGroupsAndTopicsInsideThemByUserid,
 	modifyCourse,
+	updateGdprStatus,
+
 };
 export default apiHooks;

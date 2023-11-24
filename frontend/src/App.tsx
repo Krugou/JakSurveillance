@@ -13,6 +13,7 @@ import Header from './views/Header.tsx';
 import Logout from './views/Logout.tsx';
 import Login from './views/main/Login.tsx';
 import StartView from './views/main/StartView.tsx';
+import Gdpr from "./views/main/Gdpr";
 const intervalMS = 60 * 60 * 1000;
 const App = () => {
 	useRegisterSW({
@@ -46,6 +47,7 @@ const App = () => {
 						<Route path="teacher/*" element={<TeacherRoutes />} />
 						<Route path="logout" element={<Logout />} />
 						<Route path="login" element={<Login />} />
+						<Route path="gdpr" element={<Gdpr />} />
 					</Routes>
 				</main>
 				<Footer />

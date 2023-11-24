@@ -6,7 +6,6 @@ import StudentMainView from '../views/main/student/StudentMainView.tsx';
 import StudentProfile from '../views/main/student/StudentProfile.tsx';
 import StudentQrScanner from '../views/main/student/StudentQrScanner.tsx';
 import StudentCourseAttendance from '../views/main/student/StudentCourseAttendance.tsx';
-import StudentGdpr from '../views/main/student/StudentGdpr.tsx';
 
 const StudentRoutes = () => {
 	return (
@@ -20,7 +19,6 @@ const StudentRoutes = () => {
 				path="courses/attendance/:usercourseid"
 				element={<StudentCourseAttendance />}
 			/>
-			<Route path="gdpr" element={<StudentGdpr />} />
 			<Route path="*" element={<StudentMainView />} />
 		</Routes>
 	);

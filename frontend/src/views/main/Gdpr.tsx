@@ -2,18 +2,31 @@ import {CircularProgress} from '@mui/material';
 import React, {useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {UserContext} from '../../../contexts/UserContext.tsx';
+import {UserContext} from '../../contexts/UserContext.tsx';
+import apiHooks from '../../hooks/ApiHooks.ts';
 
-
-
-const StudentGdpr = () => {
+const Gdpr = () => {
 	const {user, setUser} = useContext(UserContext);
 
 	const navigate = useNavigate();
 
-	const handleAccept = () => {
-		toast.success('GDPR accepted thank you!');
-		navigate('/student/mainview');
+	const handleAccept = async  () => {
+		if (user) {
+			// Get token from local storage
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
+			const response = await apiHooks.updateGdprStatus(user.userid, token)
+			console.log(response);
+			if (response.success) {
+				toast.success('GDPR accepted thank you!');
+				navigate('/student/mainview');
+			}
+			else {
+				toast.error('There was error with your GDPR acceptance')
+			}
+		}
 	};
 	const handleDecline = () => {
 		toast.success('GDPR declined bye!');
@@ -51,4 +64,4 @@ const StudentGdpr = () => {
 	);
 };
 
-export default StudentGdpr;
+export default Gdpr;

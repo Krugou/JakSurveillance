@@ -14,6 +14,7 @@ const Login: React.FC = () => {
 	const {setUser} = useContext(UserContext);
 	const navigate = useNavigate();
 
+
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 
@@ -23,13 +24,18 @@ const Login: React.FC = () => {
 		};
 		try {
 			const response = await apiHooks.postLogin(inputs);
-			console.log('🚀 ~ file: Login.tsx:26 ~ handleSubmit ~ response:', response);
+			console.log('🚀 ~ file: Login.tsx:26 ~ handleSubmit ~ response:', response.user);
 			// this navigates to the mainview of the user type
 			if (response) {
-				localStorage.setItem('userToken', response.token); // set the token
+				localStorage.setItem('userToken', response.token)
 				setUser(response.user); // set the user info into the context
 				toast.success('Login successful');
-				navigate(`/${response.user.role.toLowerCase()}/mainview`);
+				if (response.user.gdpr === 0) {
+					navigate(`/gdpr`)
+				}
+				else{
+					navigate(`/${response.user.role.toLowerCase()}/mainview`);
+				}
 			}
 		} catch (error) {
 			if (error instanceof Error) {
