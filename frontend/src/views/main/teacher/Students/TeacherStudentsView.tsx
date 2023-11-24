@@ -52,6 +52,7 @@ const TeacherStudentsView: React.FC = () => {
 
 	return (
 		<BackgroundContainer>
+			<h1 className="text-2xl font-bold mb-4">Your Students</h1>
 			<div className="flex flex-wrap w-3/4 bg-gray-100 p-5">
 				{students.map(student => (
 					<div
