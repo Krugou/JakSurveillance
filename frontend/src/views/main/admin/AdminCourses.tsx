@@ -3,8 +3,17 @@ import {CircularProgress, IconButton} from '@mui/material';
 import React, {useContext, useEffect, useState} from 'react';
 import InputField from '../../../components/main/course/createcourse/coursedetails/InputField';
 import {UserContext} from '../../../contexts/UserContext';
-import apiHooks from '../../../hooks/apiHooks';
+import apiHooks from '../../../hooks/ApiHooks';
 
+interface Course {
+	name: string;
+	code: string;
+	start_date: string;
+	end_date: string;
+	student_group: string[];
+	topics: string[];
+	instructors: string[];
+}
 const AdminCourses: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const [courses, setCourses] = useState<Course[]>([]);
@@ -32,6 +41,7 @@ const AdminCourses: React.FC = () => {
 	);
 	useEffect(() => {
 		if (user) {
+			setIsLoading(true);
 			// Get token from local storage
 			const token: string | null = localStorage.getItem('userToken');
 			if (!token) {
