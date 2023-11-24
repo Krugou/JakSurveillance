@@ -3,8 +3,8 @@ import React, {useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import MainViewButton from '../../../../components/main/buttons/MainViewButton';
+import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks'; // Import apiHooks
-
 interface Student {
 	first_name: string;
 	last_name: string;
@@ -18,6 +18,7 @@ interface Student {
 }
 // this is view for teacher to see the list of students in single course
 const TeacherStudentsView: React.FC = () => {
+	const {user} = React.useContext(UserContext);
 	const [students, setStudents] = useState<Student[]>([]);
 	const [loading, setLoading] = useState(true);
 	useEffect(() => {
@@ -27,11 +28,19 @@ const TeacherStudentsView: React.FC = () => {
 			throw new Error('No token available');
 		}
 		const fetchStudents = async () => {
-			const userid = 3; // Replace with actual instructor ID
-			const students = await apiHooks.getStudentsByInstructorId(userid, token);
+			if (user) {
+				const students = await apiHooks.getStudentsByInstructorId(
+					user.userid,
+					token,
+				);
+				console.log(
+					'🚀 ~ file: TeacherStudentsView.tsx:32 ~ fetchStudents ~ students:',
+					students,
+				);
 
-			setStudents(students);
-			setLoading(false);
+				setStudents(students);
+				setLoading(false);
+			}
 		};
 
 		fetchStudents();
