@@ -320,10 +320,9 @@ const UserModel = {
 		try {
 			const [rows] = (await UserModel.pool
 				.promise()
-				.execute('UPDATE users SET gdpr = 1 WHERE userid = ?', [userId])) as unknown as [
-				ResultSetHeader,
-				FieldPacket[]
-			];
+				.execute('UPDATE users SET gdpr = 1 WHERE userid = ?', [
+					userId,
+				])) as unknown as [ResultSetHeader, FieldPacket[]];
 
 			return rows.affectedRows > 0;
 		} catch (error) {
@@ -341,7 +340,9 @@ const UserModel = {
 		try {
 			const [rows] = await UserModel.pool
 				.promise()
-				.query<RowDataPacket[]>('SELECT gdpr FROM users WHERE userid = ?', [userId]);
+				.query<RowDataPacket[]>('SELECT gdpr FROM users WHERE userid = ?', [
+					userId,
+				]);
 
 			if (rows.length > 0) {
 				return rows[0].gdpr;

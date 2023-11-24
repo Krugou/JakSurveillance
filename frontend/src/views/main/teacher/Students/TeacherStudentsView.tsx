@@ -5,6 +5,7 @@ import BackgroundContainer from '../../../../components/main/background/Backgrou
 import MainViewButton from '../../../../components/main/buttons/MainViewButton';
 import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks'; // Import apiHooks
+import InputField from '../../../../components/main/course/createcourse/coursedetails/InputField';
 interface Student {
 	first_name: string;
 	last_name: string;
@@ -21,6 +22,8 @@ const TeacherStudentsView: React.FC = () => {
 	const {user} = React.useContext(UserContext);
 	const [students, setStudents] = useState<Student[]>([]);
 	const [loading, setLoading] = useState(true);
+	const [searchTerm, setSearchTerm] = useState('');
+
 	useEffect(() => {
 		const token: string | null = localStorage.getItem('userToken');
 		if (!token) {
@@ -50,11 +53,26 @@ const TeacherStudentsView: React.FC = () => {
 		return <CircularProgress />;
 	}
 
+	const filteredStudents = students.filter(student =>
+		Object.values(student).some(
+			value =>
+				typeof value === 'string' &&
+				value.toLowerCase().includes(searchTerm.toLowerCase()),
+		),
+	);
 	return (
 		<BackgroundContainer>
 			<h1 className="text-2xl font-bold mb-4">Your Students</h1>
 			<div className="flex flex-wrap w-3/4 bg-gray-100 p-5">
-				{students.map(student => (
+				<InputField
+					type="text"
+					name="search"
+					value={searchTerm}
+					onChange={e => setSearchTerm(e.target.value)}
+					placeholder="Search..."
+					label="Search"
+				/>
+				{filteredStudents.map(student => (
 					<div
 						key={student.userid}
 						className="m-4 bg-white rounded shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5"
