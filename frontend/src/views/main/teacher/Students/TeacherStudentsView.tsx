@@ -16,6 +16,7 @@ interface Student {
 	studentgroupid: number;
 	created_at: string;
 	userid: number;
+	group_name: string;
 }
 // this is view for teacher to see the list of students in single course
 const TeacherStudentsView: React.FC = () => {
@@ -77,21 +78,19 @@ const TeacherStudentsView: React.FC = () => {
 				{filteredStudents.map(student => (
 					<div
 						key={student.userid}
-						className="m-4 bg-white rounded shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 min-w-max"
+						className="mb-4 mx-1 lg:mx-2 xl:mx-4 bg-white rounded shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 min-w-max"
 					>
-						<div className="px-6 py-4 text-sm sm:text-base">
+						<div className="px-4 lg:px-6 py-2 lg:py-4 text-sm md:text-base">
 							<div className="font-bold text-lg mb-2">
 								{student.first_name} {student.last_name}
 							</div>
 							{student.email && <p>Email: {student.email}</p>}
 							{student.username && <p>Username: {student.username}</p>}
 							{student.studentnumber && <p>Student Number: {student.studentnumber}</p>}
-							{student.roleid && <p>Role ID: {student.roleid}</p>}
-							{student.studentgroupid && (
-								<p>Student Group ID: {student.studentgroupid}</p>
+							{student.group_name && <p>Student Group: {student.group_name}</p>}
+							{student.created_at && (
+								<p>Account created: {new Date(student.created_at).toLocaleString()}</p>
 							)}
-							{student.created_at && <p>Created At: {student.created_at}</p>}
-
 							<div className="flex flex-wrap justify-between">
 								<MainViewButton
 									path={`/teacher/students/${student.userid}`}

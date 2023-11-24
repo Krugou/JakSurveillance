@@ -251,8 +251,9 @@ const UserModel = {
 	getStudentsByInstructorId: async (userid: number): Promise<UserInfo[]> => {
 		try {
 			const [rows] = await UserModel.pool.promise().query<RowDataPacket[]>(
-				`SELECT DISTINCT u.*
+				`SELECT DISTINCT u.*, studentgroups.group_name
           FROM users u
+					JOIN studentgroups ON u.studentgroupid = studentgroups.studentgroupid
           JOIN usercourses uc ON u.userid = uc.userid
           JOIN courses c ON uc.courseid = c.courseid
           JOIN courseinstructors ci ON c.courseid = ci.courseid
