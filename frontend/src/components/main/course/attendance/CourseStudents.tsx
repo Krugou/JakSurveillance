@@ -16,15 +16,15 @@ const CourseStudents: React.FC<Props> = ({
 	socket,
 	lectureid,
 }) => {
-	const scrollContainerRef = useRef(null);
-	const scrollPositionRef = useRef(0);
-	const [bounceGroup, setBounceGroup] = useState(0);
-	const lastItemRef = useRef(null);
-	const firstItemRef = useRef(null);
-	const [isDragging, setIsDragging] = useState(false);
-	const [startX, setStartX] = useState(0);
-	const [scrollLeft, setScrollLeft] = useState(0);
-	const [remainingTime, setRemainingTime] = useState(60); // Initialize remaining time to 60 seconds
+	const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+	const scrollPositionRef = useRef<number>(0);
+	const [bounceGroup, setBounceGroup] = useState<number | null>(0);
+	const lastItemRef = useRef<HTMLParagraphElement | null>(null);
+	const firstItemRef = useRef<HTMLParagraphElement | null>(null);
+	const [isDragging, setIsDragging] = useState<boolean>(false);
+	const [startX, setStartX] = useState<number>(0);
+	const [scrollLeft, setScrollLeft] = useState<number>(0);
+	const [remainingTime, setRemainingTime] = useState<number>(60);
 
 	useEffect(() => {
 		let timerId;
@@ -47,35 +47,38 @@ const CourseStudents: React.FC<Props> = ({
 		};
 	}, [coursestudents, remainingTime, socket, lectureid]);
 
-	const onMouseDown = e => {
-		setIsDragging(true);
-		setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
-		setScrollLeft(scrollContainerRef.current.scrollLeft);
+	const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+		if (scrollContainerRef.current) {
+			setIsDragging(true);
+			setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
+			setScrollLeft(scrollContainerRef.current.scrollLeft);
+		}
 	};
 
 	const onMouseEnd = () => {
 		setIsDragging(false);
 	};
 	useEffect(() => {
-		const interval = setInterval(() => {
-			setBounceGroup(prevGroup => (prevGroup + 1) % 2);
+		const interval = window.setInterval(() => {
+			setBounceGroup(prevGroup => (prevGroup !== null ? (prevGroup + 1) % 2 : 0));
 		}, 4000); // Change every 4 seconds
 
 		return () => clearInterval(interval);
 	}, []);
-	const onMouseMove = e => {
-		if (!isDragging) return;
+	const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+		if (!isDragging || !scrollContainerRef.current) return;
 		e.preventDefault();
 		const x = e.pageX - scrollContainerRef.current.offsetLeft;
 		const walk = (x - startX) * 3; //scroll-fast
 		scrollContainerRef.current.scrollLeft = scrollLeft - walk;
 	};
+	const scrollInterval = useRef<number | null>(null);
+
 	const scrollDirectionRef = useRef(1);
-	const scrollInterval = useRef(null);
 	const scrollSlowly = () => {
 		const element = scrollContainerRef.current;
 		if (!element) return;
-		scrollInterval.current = setInterval(() => {
+		scrollInterval.current = window.setInterval(() => {
 			if (scrollPositionRef.current >= element.scrollWidth - element.clientWidth) {
 				scrollDirectionRef.current = -1; // Change direction to left
 			} else if (scrollPositionRef.current <= 0) {
@@ -88,7 +91,9 @@ const CourseStudents: React.FC<Props> = ({
 	useEffect(() => {
 		scrollSlowly();
 		return () => {
-			clearInterval(scrollInterval.current);
+			if (scrollInterval.current !== null) {
+				clearInterval(scrollInterval.current);
+			}
 		};
 	}, [coursestudents]);
 
@@ -101,17 +106,21 @@ const CourseStudents: React.FC<Props> = ({
 				}
 			}}
 			onMouseDown={onMouseDown}
-			onMouseLeave={onMouseEnd}
+			onMouseLeave={() => {
+				onMouseEnd();
+				setBounceGroup(prevGroup => (prevGroup !== null ? (prevGroup + 1) % 2 : 0));
+			}}
 			onMouseUp={onMouseEnd}
 			onMouseMove={onMouseMove}
 			onMouseEnter={() => {
-				clearInterval(scrollInterval.current);
+				if (scrollInterval.current !== null) {
+					clearInterval(scrollInterval.current);
+				}
 				if (scrollContainerRef.current) {
 					scrollPositionRef.current = scrollContainerRef.current.scrollLeft;
 				}
 				setBounceGroup(null);
 			}}
-			onMouseLeave={() => setBounceGroup(prevGroup => (prevGroup + 1) % 2)}
 			className={`noSelect hideScrollbar flex ${
 				coursestudents.length > 5 ? 'justify-start' : 'justify-center'
 			} bg-white p-3 rounded-lg shadow-md w-full mt-4 overflow-hidden overflow-x-auto`}
@@ -123,11 +132,7 @@ const CourseStudents: React.FC<Props> = ({
 						: 'All students saved'}
 				</p>
 			) : (
-				<div
-					className={`   whitespace-nowrap `}
-					onMouseEnter={() => setBounceGroup(null)}
-					onMouseLeave={() => setBounceGroup(prevGroup => (prevGroup + 1) % 2)}
-				>
+				<div className={`   whitespace-nowrap `}>
 					{coursestudents.map((student, index) => {
 						const formattedName = `${student.first_name} ${student.last_name.charAt(
 							0,
