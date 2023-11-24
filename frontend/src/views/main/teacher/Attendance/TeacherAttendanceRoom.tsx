@@ -212,7 +212,7 @@ const AttendanceRoom: React.FC = () => {
 						<CourseStudents
 							coursestudents={courseStudents}
 							socket={socket}
-							lectureid={lectureid}
+							lectureid={Number(lectureid)}
 						/>
 					</div>
 				</div>
