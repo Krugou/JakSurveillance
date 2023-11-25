@@ -54,7 +54,11 @@ const courseController = {
 				const instructorUserId = existingInstructor[0].userid;
 				instructorUserIds.push(instructorUserId);
 			}
+			const existingCourse = await courseModel.findByCode(code);
 
+			if (existingCourse) {
+				return Promise.reject(new Error('Course with this code already exists'));
+			}
 			try {
 				const existingStudentGroup = await studentGroupModel.checkIfGroupNameExists(
 					group_name,
@@ -80,11 +84,7 @@ const courseController = {
 					.slice(0, 19)
 					.replace('T', ' ');
 
-				const existingCourse = await courseModel.findByCode(code);
-
-				if (existingCourse) {
-					return Promise.reject(new Error('Course with this code already exists'));
-				}
+				
 
 				const courseResult = await courseModel.insertCourse(
 					name,
