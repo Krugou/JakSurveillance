@@ -1,5 +1,5 @@
 import SortIcon from '@mui/icons-material/Sort';
-import {CircularProgress, IconButton} from '@mui/material';
+import {CircularProgress} from '@mui/material';
 import React, {useContext, useEffect, useState} from 'react';
 import InputField from '../../../components/main/course/createcourse/coursedetails/InputField';
 import {UserContext} from '../../../contexts/UserContext';
@@ -99,6 +99,7 @@ const AdminCourses: React.FC = () => {
 											<th key={index} className="px-4 py-2">
 												{key}
 												<button
+													aria-label={`Sort by ${key}`} // Add this line
 													className="ml-2 bg-metropoliaMainOrange text-sm text-white font-bold rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark p-1"
 													onClick={() => sortCourses(key)}
 												>
