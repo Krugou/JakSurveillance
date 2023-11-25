@@ -1,22 +1,22 @@
-import React, {useState, useEffect} from 'react';
-import {useParams, useNavigate} from 'react-router-dom';
-import apiHooks from '../../../../hooks/ApiHooks';
-import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
-import CourseDetails from '../../../../components/main/course/createcourse/CourseDetails';
-import AddTeachers from '../../../../components/main/course/createcourse/AddTeachers';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import Modal from '@mui/material/Modal';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import TextField from '@mui/material/TextField';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import AddIcon from '@mui/icons-material/Add';
 import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import TextField from '@mui/material/TextField';
+import React, {useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
+import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
+import AddTeachers from '../../../../components/main/course/createcourse/AddTeachers';
+import CourseDetails from '../../../../components/main/course/createcourse/CourseDetails';
+import apiHooks from '../../../../hooks/ApiHooks';
 
 // this is view for teacher to modify the single course details
 
@@ -54,6 +54,7 @@ const TeacherCourseModify: React.FC = () => {
 	const [instructorEmail, setInstructorEmail] = useState('');
 	const navigate = useNavigate();
 	const {id} = useParams<{id: string}>();
+	const [courseExists, setCourseExists] = useState(false);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [newTopic, setNewTopic] = useState('');
@@ -134,12 +135,6 @@ const TeacherCourseModify: React.FC = () => {
 		console.log(modifiedData);
 	};
 
-	const handleInputChange = (index, event) => {
-		const values = [...instructors];
-		values[index].email = event.target.value;
-		setInstructors(values);
-	};
-
 	const handleTopicChange = topic => {
 		toast.info('Topics changed');
 		setModifiedTopics(prevTopics =>
@@ -182,6 +177,8 @@ const TeacherCourseModify: React.FC = () => {
 					endDate={endDate}
 					setEndDate={setEndDate}
 					modify={true}
+					courseExists={courseExists}
+					setCourseExists={setCourseExists}
 				/>
 
 				<Accordion className="mt-4 mb-4" onClick={e => e.stopPropagation()}>
@@ -197,7 +194,6 @@ const TeacherCourseModify: React.FC = () => {
 							instructors={instructors}
 							setInstructors={setInstructors}
 							instructorEmail={instructorEmail}
-							handleInputChange={handleInputChange}
 							modify={true}
 						/>
 					</AccordionDetails>
