@@ -443,8 +443,19 @@ const getUserInfoByUserid = async (token: string, id: string) => {
 	};
 	return await doFetch(baseUrl + 'users/' + id, options);
 };
-
+const checkCourseCode = async (code: string, token: string) => {
+	const options = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	const url = `${baseUrl}courses/checkcode/${code}`;
+	return doFetch(url, options);
+};
 const apiHooks = {
+	checkCourseCode,
 	getCourses,
 	fetchUserById,
 	fetchUsers,
