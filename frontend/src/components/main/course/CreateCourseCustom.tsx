@@ -15,36 +15,35 @@ const CreateCourseCustom: React.FC = () => {
 	const navigate = useNavigate();
 	const [currentStep, setCurrentStep] = useState(1);
 	const [courseName, setCourseName] = useState('');
-
+	type Instructor = {
+		email: string;
+		exists?: boolean;
+	};
 	const [courseCode, setCourseCode] = useState('');
 	const [studentGroup, setStudentGroup] = useState('');
 	const [startDate, setStartDate] = useState('');
 
 	const [instructorEmail, setInstructorEmail] = useState('');
-	const [instructors, setInstructors] = useState([{email: ''}]);
+	const [instructors, setInstructors] = useState<Instructor[]>([{email: ''}]);
 
 	const [studentList, setStudentList] = useState<string[]>([]);
 	const [endDate, setEndDate] = useState('');
 	const [topicsFormData, setTopicsFormData] = useState<any>([]);
 	const [courseExists, setCourseExists] = useState(false);
-	const handleInputChange = (index, event) => {
-		const values = [...instructors];
-		values[index].email = event.target.value;
-		setInstructors(values);
-	};
 
 	const validateFields = () => {
 		switch (currentStep) {
 			case 1:
 				return courseCode && courseName && studentGroup && startDate && endDate;
 			case 2:
+				return studentList && studentList.length > 0;
+			case 3:
 				return (
 					instructors &&
 					instructors.length > 0 &&
 					instructors.every(instructor => instructor.email)
 				);
-			case 3:
-				return studentList && studentList.length > 0;
+
 			case 4:
 				return (
 					topicsFormData &&
@@ -62,9 +61,9 @@ const CreateCourseCustom: React.FC = () => {
 			case 1:
 				return 'w-full md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/5 mx-auto bg-white p-4 rounded shadow-md';
 			case 2:
-				return 'w-full md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/3 mx-auto bg-white p-4 rounded shadow-md';
-			case 3:
 				return 'w-full 2xl:w-2/3 mx-auto bg-white p-4 rounded shadow-md';
+			case 3:
+				return 'w-full md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/3 mx-auto bg-white p-4 rounded shadow-md';
 			case 4:
 				return 'w-full md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/3 mx-auto bg-white p-4 rounded shadow-md';
 			default:
@@ -75,6 +74,8 @@ const CreateCourseCustom: React.FC = () => {
 	const incrementStep = () => {
 		if (courseExists) {
 			alert('A course with this code already exists.');
+		} else if (!instructors.every(instructor => instructor.exists)) {
+			alert('One or more instructors do not exist in the database.');
 		} else if (validateFields()) {
 			setCurrentStep(prevStep => prevStep + 1);
 		} else {
@@ -126,7 +127,7 @@ const CreateCourseCustom: React.FC = () => {
 		}
 		setInstructorEmail(email); // get email from userContext
 		if (instructorEmail) {
-			setInstructors([{email: instructorEmail}]);
+			setInstructors([{email: instructorEmail, exists: true}]);
 		}
 	}, [instructorEmail, user]);
 
@@ -149,16 +150,16 @@ const CreateCourseCustom: React.FC = () => {
 						setCourseExists={setCourseExists}
 					/>
 				)}
+
 				{currentStep === 2 && (
+					<StudentList studentList={studentList} setStudentList={setStudentList} />
+				)}
+				{currentStep === 3 && (
 					<AddTeachers
 						instructors={instructors}
-						handleInputChange={handleInputChange}
 						setInstructors={setInstructors}
 						instructorEmail={instructorEmail}
 					/>
-				)}
-				{currentStep === 3 && (
-					<StudentList studentList={studentList} setStudentList={setStudentList} />
 				)}
 				{currentStep === 4 && (
 					<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
@@ -167,7 +168,7 @@ const CreateCourseCustom: React.FC = () => {
 					currentStep={currentStep}
 					onPrevClick={() => setCurrentStep(prevStep => prevStep - 1)}
 					onNextClick={incrementStep}
-					onSubmitClick={handleSubmitWrapper} // Call handleSubmitWrapper without arguments
+					onSubmitClick={handleSubmitWrapper}
 					extrastep={false}
 				/>
 			</form>
