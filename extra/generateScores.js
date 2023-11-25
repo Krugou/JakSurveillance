@@ -9,6 +9,7 @@ const owner = 'Krugou';
 const repo = 'JakSurveillance';
 // console.log(process.env.GITHUBTOKEN);
 const octokit = new Octokit({auth: process.env.GITHUBTOKEN});
+
 const getContributorsStats = async () => {
 	while (true) {
 		const response = await octokit.rest.repos.getContributorsStats({
@@ -58,12 +59,22 @@ const generateScores = async () => {
 			`Scores for ${login}: commits - ${commits}, additions - ${additions}, deletions - ${deletions}, total changes - ${totalChanges}, last commit time - ${lastCommitTime}`,
 		);
 
+		// Get weekly scores
+		const weeklyScores = contributor.weeks.map(week => ({
+			weekStart: new Date(week.w * 1000).toISOString().split('T')[0], // Convert Unix timestamp to date
+			additions: week.a,
+			deletions: week.d,
+			commits: week.c,
+			totalChanges: week.a - week.d, // Calculate total changes for the week
+		}));
+
 		scores[login] = {
 			commits: commits,
 			additions: additions,
 			deletions: deletions,
 			totalChanges: totalChanges,
 			lastCommitTime: lastCommitTime,
+			weeklyScores: weeklyScores, // Add weekly scores to the scores object
 		};
 	}
 

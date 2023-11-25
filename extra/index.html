@@ -7,6 +7,7 @@
     <title>JakSec
         extra folder</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
 
 <body class="bg-gradient-to-r from-green-400 to-blue-500 m-4 p-4">
@@ -22,10 +23,12 @@
         <div id="dataContainer">
             <!-- Data will be inserted here -->
         </div>
+        <canvas id="myChart"></canvas>
     </div>
     <div id="dataContainer2" class="container mx-auto px-4 py-8"> </div>
 
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
     <script>
@@ -69,6 +72,7 @@
                     row.appendChild( div4 );
 
                     dataContainer.appendChild( row );
+
                 }
 
                 // Update the displayed last commit time every second
@@ -94,27 +98,78 @@
 
                         const timeElement = document.getElementById( `time-${ contributor }` );
                         timeElement.innerText = timeString;
+
                     }
                 }, 1000 );
-            } );
-        fetch( 'links.json' )
-            .then( response => response.json() )
-            .then( links => {
-                const dataContainer = document.getElementById( 'dataContainer2' );
-                dataContainer.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4';
+                // Create an array of colors for the chart (you may want to adjust this)
+                const colors = [ 'rgba(75, 192, 192, 0.2)', 'rgba(192, 75, 75, 0.2)', 'rgba(75, 75, 192, 0.2)', 'rgba(192, 192, 75, 0.2)' ];
 
-                for ( const link of links ) {
-                    const row = document.createElement( 'div' );
-                    row.className = 'flex items-center justify-center h-24 rounded-lg shadow bg-white hover:bg-blue-500 hover:text-white transition-colors duration-200';
+                // Create an array of border colors for the chart (you may want to adjust this)
+                const borderColors = [ 'rgba(75, 192, 192, 1)', 'rgba(192, 75, 75, 1)', 'rgba(75, 75, 192, 1)', 'rgba(192, 192, 75, 1)' ];
 
+                const datasets = sortedData.map( ( [ contributor, stats ], index ) => {
+                    const data = stats.weeklyScores.map( week => week.totalChanges );
+                    return {
+                        label: contributor,
+                        data: data,
+                        backgroundColor: colors[ index % colors.length ],
+                        borderColor: borderColors[ index % borderColors.length ],
+                        borderWidth: 1
+                    };
+                } );
+
+                const ctx = document.getElementById( 'myChart' ).getContext( '2d' );
+                const myChart = new Chart( ctx, {
+                    type: 'line', // Change the chart type to 'line'
+                    data: {
+                        labels: Array.from( { length: sortedData[ 0 ][ 1 ].weeklyScores.length }, ( _, i ) => `Week ${ i + 1 }` ), // Create labels for each week
+                        datasets: datasets
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                } );
+                async function fetchLinks () {
+                    const response = await fetch( 'links.json' );
+                    const links = await response.json();
+                    return links;
+                }
+
+                function createLinkElement ( link ) {
                     const a = document.createElement( 'a' );
                     a.href = link;
-                    a.className = "text-lg font-bold";
-                    a.textContent = link;
+                    a.className = "text-lg rounded-lg shadow bg-white hover:bg-blue-500 hover:text-white transition-colors duration-200 border-2 border-blue-500 bg-green-200 font-bold block h-full flex items-center justify-center";
 
-                    row.appendChild( a );
-                    dataContainer.appendChild( row );
+                    const row = document.createElement( 'div' );
+                    row.className = '';
+
+                    a.textContent = link;
+                    a.appendChild( row );
+
+                    return a;
                 }
+
+                async function populateLinks () {
+                    try {
+                        const dataContainer = document.getElementById( 'dataContainer2' );
+                        dataContainer.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4';
+
+                        const links = await fetchLinks();
+
+                        for ( const link of links ) {
+                            const linkElement = createLinkElement( link );
+                            dataContainer.appendChild( linkElement );
+                        }
+                    } catch ( error ) {
+                        console.error( 'Error:', error );
+                    }
+                }
+
+                populateLinks();
             } );
     </script>
 </body>
