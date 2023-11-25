@@ -454,7 +454,18 @@ const checkCourseCode = async (code: string, token: string) => {
 	const url = `${baseUrl}courses/checkcode/${code}`;
 	return doFetch(url, options);
 };
+const checkStaffByEmail = async (email: string, token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	return await doFetch(`${baseUrl}users/check-staff/${email}`, options);
+};
 const apiHooks = {
+	checkStaffByEmail,
 	checkCourseCode,
 	getCourses,
 	fetchUserById,
