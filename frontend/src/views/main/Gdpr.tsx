@@ -22,7 +22,7 @@ const Gdpr = () => {
 			console.log(response);
 			if (response.success) {
 				toast.success('GDPR accepted thank you!');
-				navigate(`/${response.user.role.toLowerCase()}/mainview`);
+				navigate(`/${user.role.toLowerCase()}/mainview`);
 			} else {
 				toast.error('There was error with your GDPR acceptance');
 			}
