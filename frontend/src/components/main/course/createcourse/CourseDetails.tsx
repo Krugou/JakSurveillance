@@ -18,42 +18,30 @@ const CourseDetails = ({
 	courseExists,
 	setCourseExists,
 }) => {
-	const [originalCourseCode, setOriginalCourseCode] = useState('');
-
+	const [firstCourseCode] = useState(courseCode);
+	const [courseCodeChanged, setCourseCodeChanged] = useState(false);
 	useEffect(() => {
 		const token: string | null = localStorage.getItem('userToken');
 		if (!token) {
 			throw new Error('No token available');
 		}
+		const delay = 1000; // Delay in milliseconds
+
+		const checkCode = async () => {
+			const response = await apihooks.checkCourseCode(courseCode, token);
+			const exists = response.exists;
+			setCourseExists(exists);
+		};
+
 		if (!modify) {
 			// Only run the check if courseCode has changed
-
-			const checkCode = async () => {
-				const response = await apihooks.checkCourseCode(courseCode, token);
-				const exists = response.exists;
-				setCourseExists(exists);
-				if (exists) {
-					toast.error('A course with this code already exists.');
-				}
-			};
-
-			checkCode();
+			setTimeout(checkCode, delay);
 		} else {
-			setOriginalCourseCode(courseCode);
-			if (courseCode !== originalCourseCode) {
-				const checkCode = async () => {
-					const response = await apihooks.checkCourseCode(courseCode, token);
-					const exists = response.exists;
-					setCourseExists(exists);
-					if (exists) {
-						toast.error('A course with this code already exists.');
-					}
-				};
-
-				checkCode();
+			if (courseCode !== firstCourseCode && firstCourseCode !== '') {
+				setTimeout(checkCode, delay);
 			}
 		}
-	}, [courseCode, modify]);
+	}, [courseCode]);
 	return (
 		<fieldset>
 			{modify ? (
@@ -70,17 +58,20 @@ const CourseDetails = ({
 				onChange={e => {
 					setCourseCode(e.target.value);
 					setCourseExists(false);
+					if (e.target.value !== firstCourseCode) {
+						setCourseCodeChanged(true);
+					}
 				}}
 			/>
 			{!modify && courseExists && (
 				<p className="text-red-400">A course with this code already exists.</p>
 			)}
-			{modify && courseExists && courseCode !== originalCourseCode && (
+			{modify && courseExists && courseCode !== firstCourseCode && (
 				<p className="text-red-400">A course with this code already exists.</p>
 			)}
 
-			{modify && courseCode === originalCourseCode && (
-				<p className="text-green-400">Original course code has been restored.</p>
+			{modify && courseCode === firstCourseCode && courseCodeChanged && (
+				<p className="text-green-400">First course code has been restored.</p>
 			)}
 
 			<InputField
