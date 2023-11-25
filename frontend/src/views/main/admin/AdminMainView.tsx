@@ -10,11 +10,6 @@ const AdminMainView: React.FC = () => {
 
 			<div className="flex 2xl:w-2/5 xl:w-5/6 lg:w-11/12 w-full flex-wrap p-5 justify-center gap-4">
 				<Card
-					path="/admin/students"
-					title="Students"
-					description="Manage any student"
-				/>
-				<Card
 					path="/admin/courses/"
 					title="Courses"
 					description="Manage any course"

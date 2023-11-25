@@ -98,9 +98,12 @@ const AdminCourses: React.FC = () => {
 										].map((key, index) => (
 											<th key={index} className="px-4 py-2">
 												{key}
-												<IconButton onClick={() => sortCourses(key)}>
+												<button
+													className="ml-2 bg-metropoliaMainOrange text-sm text-white font-bold rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark p-1"
+													onClick={() => sortCourses(key)}
+												>
 													<SortIcon />
-												</IconButton>
+												</button>
 											</th>
 										))}
 									</tr>

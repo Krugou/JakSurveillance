@@ -1,6 +1,8 @@
 import DeleteIcon from '@mui/icons-material/Delete';
+import HideSourceIcon from '@mui/icons-material/HideSource';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import SortIcon from '@mui/icons-material/Sort';
 import {IconButton} from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -140,7 +142,7 @@ const StudentList = ({studentList, setStudentList}) => {
 															className="ml-2 bg-metropoliaMainOrange text-sm text-white font-bold rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark p-1"
 															onClick={sortStudents}
 														>
-															Sort
+															<SortIcon />
 														</button>
 													)}
 													<button
@@ -155,7 +157,7 @@ const StudentList = ({studentList, setStudentList}) => {
 															)
 														}
 													>
-														Hide
+														<HideSourceIcon />
 													</button>
 												</th>
 											),
