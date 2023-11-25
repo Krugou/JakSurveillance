@@ -1,5 +1,6 @@
 import {config} from 'dotenv';
 import express, {Request, Response, Router} from 'express';
+import {body, validationResult} from 'express-validator';
 import multer from 'multer';
 import XLSX from 'xlsx';
 import courseController from '../controllers/coursecontroller.js';
@@ -8,7 +9,6 @@ import UserModel from '../models/usermodel.js';
 import openData from '../utils/opendata.js';
 import attendanceRoutes from './course/attendanceRoutes.js';
 import topicRoutes from './course/topicRoutes.js';
-import {body, validationResult} from 'express-validator';
 
 config();
 const upload = multer();
@@ -42,6 +42,17 @@ router.post('/check', express.json(), async (req: Request, res: Response) => {
 		res.status(200).json({
 			exists: true,
 		}); // send the data as the response
+	} catch (error) {
+		console.error('Error:', error);
+		res.status(500).send('Internal server error');
+	}
+});
+router.post('/checkcode/:code', async (req: Request, res: Response) => {
+	const {code} = req.params;
+
+	try {
+		const exists = await course.findByCode(code);
+		res.status(200).json({exists});
 	} catch (error) {
 		console.error('Error:', error);
 		res.status(500).send('Internal server error');
