@@ -70,6 +70,9 @@ const TeacherStudentDetail: React.FC = () => {
 	return (
 		<div className="bg-gray-100 p-5">
 			<ProfileInfo user={student} />
+			<h2 className="text-2xl font-bold mt-5 text-center">
+				{student.first_name + ' ' + student.last_name}'s Courses
+			</h2>
 			<StudentCourseGrid courses={courses} showEndedCourses={true} />
 		</div>
 	);

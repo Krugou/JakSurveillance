@@ -7,6 +7,8 @@ interface ProfileInfoPros {
 		email: string;
 		role: string;
 		created_at: string;
+		first_name: string;
+		last_name: string;
 	};
 }
 
@@ -54,7 +56,14 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 	return (
 		<div className="space-y-5">
 			<p className="flex justify-between items-center">
-				<strong>Name:</strong> <span className="profileStat">{user.username}</span>
+				<strong>Name:</strong>{' '}
+				<span className="profileStat">
+					{user.first_name + ' ' + user.last_name}
+				</span>
+			</p>
+			<p className="flex justify-between items-center">
+				<strong>Username:</strong>{' '}
+				<span className="profileStat">{user.username}</span>
 			</p>
 			<p className="flex justify-between items-center">
 				<strong>Email:</strong> <span className="profileStat">{user.email}</span>
