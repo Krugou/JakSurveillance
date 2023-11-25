@@ -1,12 +1,14 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
+import apiHooks from '../../../../hooks/ApiHooks';
 import InputField from './coursedetails/InputField';
 const AddTeachers = ({
 	instructors,
-	handleInputChange,
 	setInstructors,
 	instructorEmail,
 	modify = false,
 }) => {
+	const [errorMessages, setErrorMessages] = useState<string[]>([]);
+	const timeouts = useRef<(number | null)[]>([]);
 	const deleteInstructor = index => {
 		const newInstructors = [...instructors];
 		newInstructors.splice(index, 1);
@@ -14,6 +16,38 @@ const AddTeachers = ({
 	};
 	const addInstructor = () => {
 		setInstructors([...instructors, {email: ''}]);
+	};
+	const handleInputChange = (
+		index: number,
+		event: React.ChangeEvent<HTMLInputElement>,
+	) => {
+		const values = [...instructors];
+		values[index].email = event.target.value;
+		setInstructors(values);
+
+		if (timeouts.current[index] !== null) {
+			window.clearTimeout(timeouts.current[index] as number);
+		}
+
+		timeouts.current[index] = window.setTimeout(async () => {
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
+			const response = await apiHooks.checkStaffByEmail(event.target.value, token);
+			const exists = response.exists;
+			values[index].exists = exists;
+			setInstructors(values);
+
+			const newErrorMessages = [...errorMessages];
+			if (!exists) {
+				newErrorMessages[index] =
+					'A staff member with this email doesnt exist in database.';
+			} else {
+				newErrorMessages[index] = '';
+			}
+			setErrorMessages(newErrorMessages);
+		}, 2000);
 	};
 	return (
 		<fieldset className="mb-5">
@@ -28,6 +62,9 @@ const AddTeachers = ({
 							value={instructor.email}
 							onChange={event => handleInputChange(index, event)}
 						/>
+						{errorMessages[index] && (
+							<p className="text-red-500">{errorMessages[index]}</p>
+						)}
 					</div>
 					{instructors.length > 1 && instructor.email !== instructorEmail && (
 						<button
