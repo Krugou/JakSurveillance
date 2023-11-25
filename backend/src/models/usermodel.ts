@@ -222,6 +222,16 @@ const UserModel = {
 
 		return existingUserByEmail;
 	},
+	async checkIfUserExistsByEmailAndisStaff(email: string) {
+		const [existingUserByEmail] = await pool
+			.promise()
+			.query<RowDataPacket[]>(
+				'SELECT * FROM users WHERE email = ? AND staff = 1',
+				[email],
+			);
+
+		return existingUserByEmail;
+	},
 	async updateUserStudentNumber(studentnumber: string, email: string) {
 		const result = await this.pool
 			.promise()
