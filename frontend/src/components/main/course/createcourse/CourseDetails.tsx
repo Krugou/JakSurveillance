@@ -1,5 +1,7 @@
 // Define the new CourseDetails component
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {toast} from 'react-toastify';
+import apihooks from '../../../../hooks/ApiHooks';
 import InputField from './coursedetails/InputField';
 const CourseDetails = ({
 	courseCode,
@@ -13,7 +15,25 @@ const CourseDetails = ({
 	endDate,
 	setEndDate,
 	modify = false,
+	courseExists,
+	setCourseExists,
 }) => {
+	useEffect(() => {
+		const token: string | null = localStorage.getItem('userToken');
+		if (!token) {
+			throw new Error('No token available');
+		}
+		const checkCode = async () => {
+			const response = await apihooks.checkCourseCode(courseCode, token);
+			const exists = response.exists;
+			setCourseExists(exists);
+			if (exists) {
+				toast.error('A course with this code already exists.');
+			}
+		};
+
+		checkCode();
+	}, [courseCode]);
 	return (
 		<fieldset>
 			{modify ? (
@@ -27,8 +47,14 @@ const CourseDetails = ({
 				type="text"
 				name="courseCode"
 				value={courseCode}
-				onChange={e => setCourseCode(e.target.value)}
+				onChange={e => {
+					setCourseCode(e.target.value);
+					setCourseExists(false);
+				}}
 			/>
+			{courseExists && (
+				<p className="text-red-400">A course with this code already exists.</p>
+			)}
 
 			<InputField
 				label="Course Name"
