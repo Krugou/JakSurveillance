@@ -5,7 +5,11 @@ import ErrorAlert from '../../components/main/ErrorAlert.tsx';
 import BackgroundContainer from '../../components/main/background/BackgroundContainer.tsx';
 import {UserContext} from '../../contexts/UserContext.tsx';
 import apiHooks from '../../hooks/ApiHooks.ts';
-
+/**
+ * Login component.
+ *
+ * @component
+ */
 const Login: React.FC = () => {
 	const usernameRef = useRef<HTMLInputElement>(null);
 	const passwordRef = useRef<HTMLInputElement>(null);
@@ -13,8 +17,11 @@ const Login: React.FC = () => {
 
 	const {setUser} = useContext(UserContext);
 	const navigate = useNavigate();
-
-
+	/**
+	 * Handles the form submission.
+	 *
+	 * @param {React.FormEvent} event - The form event.
+	 */
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 
@@ -24,16 +31,21 @@ const Login: React.FC = () => {
 		};
 		try {
 			const response = await apiHooks.postLogin(inputs);
-			console.log('🚀 ~ file: Login.tsx:26 ~ handleSubmit ~ response:', response.user);
+			console.log(
+				'🚀 ~ file: Login.tsx:26 ~ handleSubmit ~ response:',
+				response.user,
+			);
 			// this navigates to the mainview of the user type
 			if (response) {
-				localStorage.setItem('userToken', response.token)
+				localStorage.setItem('userToken', response.token);
 				setUser(response.user); // set the user info into the context
 				toast.success('Login successful');
-				if (response.user.gdpr === 0) {
-					navigate(`/gdpr`)
-				}
-				else{
+				if (
+					response.user.gdpr === 0 &&
+					response.user.role.toLowerCase() === 'student'
+				) {
+					navigate(`/gdpr`);
+				} else {
 					navigate(`/${response.user.role.toLowerCase()}/mainview`);
 				}
 			}
