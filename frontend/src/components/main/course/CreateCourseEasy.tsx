@@ -29,9 +29,8 @@ const CreateCourseEasy: React.FC = () => {
 
 	const [studentList, setStudentList] = useState<string[]>([]);
 	const [endDate, setEndDate] = useState('');
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const [topicsFormData, setTopicsFormData] = useState<any>([]);
-
+	const [courseExists, setCourseExists] = useState(false);
 	const handleInputChange = (index, event) => {
 		const values = [...instructors];
 		values[index].email = event.target.value;
@@ -184,7 +183,9 @@ const CreateCourseEasy: React.FC = () => {
 	};
 
 	const incrementStep = () => {
-		if (validateFields()) {
+		if (courseExists) {
+			alert('A course with this code already exists.');
+		} else if (validateFields()) {
 			setCurrentStep(prevStep => prevStep + 1);
 		} else {
 			alert('Please fill all required fields.');
@@ -248,6 +249,8 @@ const CreateCourseEasy: React.FC = () => {
 						setStartDate={setStartDate}
 						endDate={endDate}
 						setEndDate={setEndDate}
+						courseExists={courseExists}
+						setCourseExists={setCourseExists}
 					/>
 				)}
 				{currentStep === 3 && (
