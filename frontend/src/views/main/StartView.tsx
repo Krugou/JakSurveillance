@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../../src/index.css';
 import Logo from '../../components/Logo';
 import StartViewButton from '../../components/main/buttons/StartViewButton';
 const StartView = () => {
