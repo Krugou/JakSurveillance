@@ -1,6 +1,5 @@
 // Define the new CourseDetails component
 import React, {useEffect, useState} from 'react';
-import {toast} from 'react-toastify';
 import apihooks from '../../../../hooks/ApiHooks';
 import InputField from './coursedetails/InputField';
 const CourseDetails = ({

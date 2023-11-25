@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import apiHooks from '../../../../hooks/ApiHooks';
-
+import ProfileInfo from '../../../../components/profiles/ProfileInfo';
 interface Student {
 	email: string;
 	first_name: string;
@@ -13,6 +13,7 @@ interface Student {
 	studentnumber: string;
 	userid: number;
 	username: string;
+	created_at: string;
 	// Include other properties of student here
 }
 
@@ -47,17 +48,7 @@ const TeacherStudentDetail: React.FC = () => {
 
 	return (
 		<div className="bg-gray-100 p-5">
-			<div className="m-4 bg-white rounded shadow-lg w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-2/5 mx-auto">
-				<p>Email: {student?.email}</p>
-				<p>First Name: {student?.first_name}</p>
-				<p>Last Name: {student?.last_name}</p>
-				<p>Role: {student?.role}</p>
-				<p>Role ID: {student?.roleid}</p>
-				<p>Staff: {student?.staff}</p>
-				<p>Student Number: {student?.studentnumber}</p>
-				<p>User ID: {student?.userid}</p>
-				<p>Username: {student?.username}</p>
-			</div>
+			<ProfileInfo user={student} />
 		</div>
 	);
 };

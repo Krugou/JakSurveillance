@@ -312,7 +312,7 @@ const UserModel = {
 			const [result] = await pool
 				.promise()
 				.query<RowDataPacket[]>(
-					`SELECT u.userid, u.username, u.email, u.first_name, u.last_name, u.studentnumber, u.staff, u.roleid, r.name AS role FROM users u JOIN roles r ON u.roleid = r.roleid WHERE u.userid = ?;`,
+					`SELECT u.*, r.name AS role FROM users u JOIN roles r ON u.roleid = r.roleid WHERE u.userid = ?;`,
 					[userid],
 				);
 			return result;
