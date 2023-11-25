@@ -94,7 +94,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 										navigate(`/student/courses/attendance/${course.usercourseid}`)
 									}
 								>
-									View your attendance
+									Attendance
 								</button>
 							</div>
 						</Tooltip>
