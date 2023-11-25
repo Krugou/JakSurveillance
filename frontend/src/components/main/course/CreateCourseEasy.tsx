@@ -24,18 +24,17 @@ const CreateCourseEasy: React.FC = () => {
 	const [uploadFile, setUploadFile] = useState<string>(
 		'Click here to upload a file',
 	);
+	type Instructor = {
+		email: string;
+		exists?: boolean;
+	};
 	const [instructorEmail, setInstructorEmail] = useState('');
-	const [instructors, setInstructors] = useState([{email: ''}]);
+	const [instructors, setInstructors] = useState<Instructor[]>([{email: ''}]);
 
 	const [studentList, setStudentList] = useState<string[]>([]);
 	const [endDate, setEndDate] = useState('');
 	const [topicsFormData, setTopicsFormData] = useState<any>([]);
 	const [courseExists, setCourseExists] = useState(false);
-	const handleInputChange = (index, event) => {
-		const values = [...instructors];
-		values[index].email = event.target.value;
-		setInstructors(values);
-	};
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const selectedFile = event.target.files?.[0];
 		if (selectedFile) {
@@ -145,14 +144,15 @@ const CreateCourseEasy: React.FC = () => {
 		switch (currentStep) {
 			case 2:
 				return courseCode && courseName && studentGroup && startDate && endDate;
+
 			case 3:
+				return studentList && studentList.length > 0;
+			case 4:
 				return (
 					instructors &&
 					instructors.length > 0 &&
 					instructors.every(instructor => instructor.email)
 				);
-			case 4:
-				return studentList && studentList.length > 0;
 			case 5:
 				return (
 					topicsFormData &&
@@ -172,9 +172,9 @@ const CreateCourseEasy: React.FC = () => {
 			case 2:
 				return 'w-full md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/3 mx-auto bg-white p-4 rounded shadow-md';
 			case 3:
-				return 'w-full md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/3 mx-auto bg-white p-4 rounded shadow-md';
-			case 4:
 				return 'w-full 2xl:w-2/3 mx-auto bg-white p-4 rounded shadow-md';
+			case 4:
+				return 'w-full md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/3 mx-auto bg-white p-4 rounded shadow-md';
 			case 5:
 				return 'w-full md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/3 mx-auto bg-white p-4 rounded shadow-md';
 			default:
@@ -185,6 +185,8 @@ const CreateCourseEasy: React.FC = () => {
 	const incrementStep = () => {
 		if (courseExists) {
 			alert('A course with this code already exists.');
+		} else if (!instructors.every(instructor => instructor.exists)) {
+			alert('One or more instructors do not exist in the database.');
 		} else if (validateFields()) {
 			setCurrentStep(prevStep => prevStep + 1);
 		} else {
@@ -194,7 +196,7 @@ const CreateCourseEasy: React.FC = () => {
 
 	useEffect(() => {
 		if (instructorEmail) {
-			setInstructors([{email: instructorEmail}]);
+			setInstructors([{email: instructorEmail, exists: true}]);
 		}
 	}, [instructorEmail]);
 	return (
@@ -253,16 +255,16 @@ const CreateCourseEasy: React.FC = () => {
 						setCourseExists={setCourseExists}
 					/>
 				)}
+
 				{currentStep === 3 && (
+					<StudentList studentList={studentList} setStudentList={setStudentList} />
+				)}
+				{currentStep === 4 && (
 					<AddTeachers
 						instructors={instructors}
-						handleInputChange={handleInputChange}
 						setInstructors={setInstructors}
 						instructorEmail={instructorEmail}
 					/>
-				)}
-				{currentStep === 4 && (
-					<StudentList studentList={studentList} setStudentList={setStudentList} />
 				)}
 				{currentStep === 5 && (
 					<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
