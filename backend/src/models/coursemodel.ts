@@ -155,15 +155,15 @@ const course: CourseModel = {
 		}
 	},
 
-	async findByCode(code) {
+	async findByCode(code: string): Promise<boolean> {
 		try {
 			const [rows] = await pool
 				.promise()
 				.query<RowDataPacket[]>('SELECT * FROM courses WHERE code = ?', [code]);
-			return (rows[0] as Course) || null;
+			return Boolean(rows[0]);
 		} catch (error) {
 			console.error(error);
-			return Promise.reject(error);
+			throw new Error('Database query failed');
 		}
 	},
 
@@ -447,7 +447,7 @@ const course: CourseModel = {
 
 				return acc;
 			}, []);
-			
+
 			return courses;
 		} catch (error) {
 			console.error(error);
