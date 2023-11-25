@@ -3,7 +3,8 @@ import {useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import apiHooks from '../../../../hooks/ApiHooks';
 import ProfileInfo from '../../../../components/profiles/ProfileInfo';
-interface Student {
+import StudentCourseGrid from '../../../../components/main/course/StudentCourseGrid';
+interface StudentInfo {
 	email: string;
 	first_name: string;
 	last_name: string;
@@ -17,10 +18,28 @@ interface Student {
 	// Include other properties of student here
 }
 
+interface Course {
+	courseid: number;
+	course_name: string;
+	startDate: string;
+	endDate: string;
+	code: string;
+	student_group: number | null;
+	topic_names: string;
+	selected_topics: string;
+	instructor_name: string;
+	usercourseid: number;
+}
+interface Student {
+	// Existing properties...
+
+	user: StudentInfo; // Replace 'any' with the actual type of 'user'
+	courses: Course[];
+}
 const TeacherStudentDetail: React.FC = () => {
 	const {id} = useParams<{id: string}>();
-	const [student, setStudent] = useState<Student | null>(null); // Define the student state variable as a Student object
-
+	const [student, setStudent] = useState<StudentInfo | null>(null); // Define the student state variable as a Student object
+	const [courses, setCourses] = useState<Course[]>([]); // Define the courses state variable as an array of Course objects
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -33,8 +52,10 @@ const TeacherStudentDetail: React.FC = () => {
 					id as string,
 				);
 				console.log(response);
-				setStudent(response); // Set the student state variable with the response
+				setStudent(response.user);
+				setCourses(response.courses);
 			} catch (error) {
+				console.log(error);
 				toast.error('Error fetching student data');
 			}
 		};
@@ -49,6 +70,7 @@ const TeacherStudentDetail: React.FC = () => {
 	return (
 		<div className="bg-gray-100 p-5">
 			<ProfileInfo user={student} />
+			<StudentCourseGrid courses={courses} showEndedCourses={true} />
 		</div>
 	);
 };

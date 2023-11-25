@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import UserModel from '../models/usermodel.js';
 import {User} from '../utils/pass.js';
 import Usermodel from '../models/usermodel.js';
+import course from '../models/coursemodel.js';
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
 
 const router: Router = express.Router();
@@ -223,7 +224,10 @@ router.get('/:userid', async (req: Request, res: Response) => {
 	const userid = req.params.userid;
 	try {
 		const users = await usermodel.fetchUserById(userid);
-		res.send(users[0]);
+		const email = users[0].email;
+		const courses = await course.getStudentsCourses(email);
+
+		res.send({user: users[0], courses: courses});
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({message: 'Internal server error'});
