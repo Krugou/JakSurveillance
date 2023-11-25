@@ -229,5 +229,19 @@ router.get('/:userid', async (req: Request, res: Response) => {
 		res.status(500).json({message: 'Internal server error'});
 	}
 });
+router.get('/check-staff/:email', async (req: Request, res: Response) => {
+	const email = req.params.email;
+	try {
+		const user = await usermodel.checkIfUserExistsByEmailAndisStaff(email);
+		if (user.length > 0) {
+			res.json({exists: true, user: user[0]});
+		} else {
+			res.json({exists: false});
+		}
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({message: 'Internal server error'});
+	}
+});
 
 export default router;
