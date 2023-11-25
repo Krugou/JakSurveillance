@@ -1,5 +1,5 @@
 import SortIcon from '@mui/icons-material/Sort';
-import {CircularProgress, IconButton} from '@mui/material';
+import {CircularProgress} from '@mui/material';
 import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import InputField from '../../../components/main/course/createcourse/coursedetails/InputField';
