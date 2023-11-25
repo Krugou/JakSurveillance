@@ -18,22 +18,42 @@ const CourseDetails = ({
 	courseExists,
 	setCourseExists,
 }) => {
+	const [originalCourseCode, setOriginalCourseCode] = useState('');
+
 	useEffect(() => {
 		const token: string | null = localStorage.getItem('userToken');
 		if (!token) {
 			throw new Error('No token available');
 		}
-		const checkCode = async () => {
-			const response = await apihooks.checkCourseCode(courseCode, token);
-			const exists = response.exists;
-			setCourseExists(exists);
-			if (exists) {
-				toast.error('A course with this code already exists.');
-			}
-		};
+		if (!modify) {
+			// Only run the check if courseCode has changed
 
-		checkCode();
-	}, [courseCode]);
+			const checkCode = async () => {
+				const response = await apihooks.checkCourseCode(courseCode, token);
+				const exists = response.exists;
+				setCourseExists(exists);
+				if (exists) {
+					toast.error('A course with this code already exists.');
+				}
+			};
+
+			checkCode();
+		} else {
+			setOriginalCourseCode(courseCode);
+			if (courseCode !== originalCourseCode) {
+				const checkCode = async () => {
+					const response = await apihooks.checkCourseCode(courseCode, token);
+					const exists = response.exists;
+					setCourseExists(exists);
+					if (exists) {
+						toast.error('A course with this code already exists.');
+					}
+				};
+
+				checkCode();
+			}
+		}
+	}, [courseCode, modify]);
 	return (
 		<fieldset>
 			{modify ? (
@@ -52,8 +72,15 @@ const CourseDetails = ({
 					setCourseExists(false);
 				}}
 			/>
-			{courseExists && (
+			{!modify && courseExists && (
 				<p className="text-red-400">A course with this code already exists.</p>
+			)}
+			{modify && courseExists && courseCode !== originalCourseCode && (
+				<p className="text-red-400">A course with this code already exists.</p>
+			)}
+
+			{modify && courseCode === originalCourseCode && (
+				<p className="text-green-400">Original course code has been restored.</p>
 			)}
 
 			<InputField
