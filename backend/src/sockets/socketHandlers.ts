@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import {config} from 'dotenv';
 import {Server, Socket} from 'socket.io';
-import fetchReal from '../utils/fetch.js';
+import doFetch from '../utils/doFetch.js';
 config();
 let hash = '';
 const timestamps: {start: number; end: number; hash: string}[] = [];
@@ -21,7 +21,7 @@ interface Student {
 const getToken = async () => {
 	try {
 		// admin login to get token use dev account from .env file
-		const response = await fetchReal.doFetch('http://localhost:3002/users/', {
+		const response = await doFetch('http://localhost:3002/users/', {
 			method: 'post', // or 'GET'
 			headers: {
 				'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ const getToken = async () => {
 const fetchDataAndUpdate = async () => {
 	try {
 		const token = await getToken();
-		const response = await fetchReal.doFetch('http://localhost:3002/admin/ ', {
+		const response = await doFetch('http://localhost:3002/admin/ ', {
 			method: 'GET', // or 'GET'
 			headers: {
 				'Content-Type': 'application/json',
@@ -141,8 +141,7 @@ const setupSocketHandlers = (io: Server) => {
 					.emit('getallstudentsinlecture', notYetPresentStudents[lectureid]);
 			} else {
 				// If the lists do not exist, fetch them from the server and emit them to the room with the lectureid
-				fetchReal
-					.doFetch(
+				doFetch(
 						'http://localhost:3002/courses/attendance/getallstudentsinlecture/',
 						{
 							method: 'POST', // or 'GET'
@@ -222,8 +221,7 @@ const setupSocketHandlers = (io: Server) => {
 				if (timestamp) {
 					// Emit the 'youhavebeensavedintolecture' event only to the client who sent the event
 					const token = await getToken();
-					fetchReal
-						.doFetch('http://localhost:3002/courses/attendance/', {
+					doFetch('http://localhost:3002/courses/attendance/', {
 							method: 'POST', // or 'GET'
 							headers: {
 								'Content-Type': 'application/json',
@@ -280,8 +278,7 @@ const setupSocketHandlers = (io: Server) => {
 				}
 
 				const token = await getToken();
-				fetchReal
-					.doFetch('http://localhost:3002/courses/attendance/', {
+				doFetch('http://localhost:3002/courses/attendance/', {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json',
