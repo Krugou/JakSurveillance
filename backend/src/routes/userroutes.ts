@@ -1,7 +1,7 @@
 import express, {Request, Response, Router} from 'express';
 import passport from 'passport';
 import usermodel from '../models/usermodel.js';
-import fetchReal from '../utils/fetch.js';
+import doFetch from '../utils/doFetch.js';
 //import { body, validationResult } from 'express-validator'; FOR VALIDATION
 import jwt from 'jsonwebtoken';
 import UserModel from '../models/usermodel.js';
@@ -140,7 +140,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 			},
 			body: JSON.stringify({username, password}),
 		};
-		metropoliaData = await fetchReal.doFetch(loginUrl, options);
+		metropoliaData = await doFetch(loginUrl, options);
 
 		if (metropoliaData.message === 'invalid username or password') {
 			return res.status(403).json({
