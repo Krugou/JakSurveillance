@@ -1,7 +1,13 @@
 import {config} from 'dotenv';
-import fetchReal from './fetch.js';
+import doFetch from './doFetch.js';
 config();
-
+/**
+ * Check reservations from open data.
+ *
+ * @param {string} code - The code of the realization.
+ * @param {string} studentGroup - The student group.
+ * @returns {Promise} The data from the API.
+ */
 const CheckOpenDataReservations = async (
 	code?: string,
 	studentGroup?: string,
@@ -21,17 +27,19 @@ const CheckOpenDataReservations = async (
 		body: body,
 	};
 
-	const response = await fetchReal.doFetch(url, options as any);
+	const response = await doFetch(url, options as any);
 
 	const data = response;
 
 	return data;
 };
+/**
+ * Check realization from open data.
+ *
+ * @param {string} code - The code of the realization.
+ * @returns {Promise} The data from the API.
+ */
 const checkOpenDataRealization = async (code: string) => {
-	// console.log(
-	// 	'🚀 ~ file: opendata.ts:36 ~ checkOpenDataRealization ~ code:',
-	// 	code,
-	// );
 	const url = 'https://opendata.metropolia.fi/r1/realization/search';
 	const options = {
 		method: 'POST',
@@ -42,19 +50,18 @@ const checkOpenDataRealization = async (code: string) => {
 		body: JSON.stringify({codes: [code]}),
 	};
 
-	const response = await fetchReal.doFetchResponse(url, options as any);
+	const response = await doFetch(url, options as any);
 	if (!response.ok) {
 		throw new Error(`Fetch request failed with status ${response.status}`);
 	}
 
 	const data = await response.json();
-	// console.log(
-	// 	'🚀 ~ file: opendata.ts:55 ~ checkOpenDataRealization ~ response:',
-	// 	data,
-	// );
 
 	return data;
 };
+/**
+ * Open data functions.
+ */
 const openData = {
 	CheckOpenDataReservations,
 	checkOpenDataRealization,
