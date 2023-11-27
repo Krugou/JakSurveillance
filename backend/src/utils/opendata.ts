@@ -27,11 +27,7 @@ const CheckOpenDataReservations = async (
 		body: body,
 	};
 
-	const response = await doFetch(url, options as any);
-
-	const data = response;
-
-	return data;
+	return await doFetch(url, options as any);
 };
 /**
  * Check realization from open data.
@@ -50,14 +46,7 @@ const checkOpenDataRealization = async (code: string) => {
 		body: JSON.stringify({codes: [code]}),
 	};
 
-	const response = await doFetch(url, options as any);
-	if (!response.ok) {
-		throw new Error(`Fetch request failed with status ${response.status}`);
-	}
-
-	const data = await response.json();
-
-	return data;
+	return await doFetch(url, options as any);
 };
 /**
  * Open data functions.
