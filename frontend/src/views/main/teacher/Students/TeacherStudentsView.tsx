@@ -48,12 +48,6 @@ const TeacherStudentsView: React.FC = () => {
 				setLoading(false);
 			}
 			if (user.role === 'counselor') {
-				const token: string | null = localStorage.getItem('userToken');
-				if (!token) {
-					toast.error('No token available');
-					throw new Error('No token available');
-				}
-				console.log(token, 'token');
 				const students = await apiHooks.fetchAllStudents(token);
 
 				console.log(
