@@ -120,6 +120,14 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 						onChange={handleSearchChange}
 						className="w-1/6 mt-10 p-4 m-2 border border-black rounded"
 					/>
+					<button>
+						<a
+							href={`/api/attendance/export/${usercourseid}`}
+							className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+						>
+							Export to PDF
+						</a>
+					</button>
 					<FormControl className="md:w-1/4 mt-2 md:mt-0">
 						<label>Sort Topics:</label>
 						<Select
@@ -144,7 +152,10 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 						</Select>
 					</FormControl>
 				</div>
-				<AttendanceTable filteredAttendanceData={filteredAttendanceData} />
+				<AttendanceTable
+					filteredAttendanceData={filteredAttendanceData}
+					student={student}
+				/>
 			</div>
 		);
 	} else {
