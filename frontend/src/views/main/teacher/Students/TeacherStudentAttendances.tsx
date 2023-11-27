@@ -71,7 +71,19 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 			'Status',
 		];
 
-		autoTable(doc, {head: [tableHeaders], body: tableData});
+		autoTable(doc, {
+			head: [tableHeaders],
+			body: tableData,
+			startY: 25, // start the table below the title
+
+			didDrawPage: data => {
+				// Add header
+				doc.setFontSize(20);
+				doc.setTextColor(40);
+				doc.setFont('helvetica', 'normal');
+				doc.text('Attendance Report', data.settings.margin.left, 20);
+			},
+		});
 		doc.save(`${student?.first_name} ${student?.last_name}'s attendance.pdf`);
 	};
 
@@ -98,7 +110,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 		};
 
 		fetchData();
-	}, [usercourseid, student]);
+	}, [usercourseid]);
 
 	// If the attendance data is not available, return a loading message
 	if (!attendanceData) {
