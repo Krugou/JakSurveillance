@@ -10,6 +10,7 @@ import autoTable from 'jspdf-autotable';
 import PrintIcon from '@mui/icons-material/Print';
 import metropolia_logo from '../../../../assets/images/metropolia_s_oranssi_en.png';
 import * as XLSX from 'xlsx';
+import GetAppIcon from '@mui/icons-material/GetApp';
 
 // Interface for the attendance data
 interface Attendance {
@@ -217,7 +218,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 					</Tooltip>
 					<Tooltip title="Export to Excel">
 						<button onClick={exportToExcel}>
-							<PrintIcon />
+							<GetAppIcon />
 						</button>
 					</Tooltip>
 					<FormControl className="md:w-1/4 mt-2 md:mt-0">
