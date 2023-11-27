@@ -33,9 +33,9 @@ const TeacherStudentsView: React.FC = () => {
 			throw new Error('No token available');
 		}
 		const fetchStudents = async () => {
-			if (user.role === 'teacher') {
+			if (user?.role === 'teacher') {
 				const students = await apiHooks.getStudentsByInstructorId(
-					user.userid,
+					user?.userid,
 					token,
 				);
 
@@ -47,7 +47,7 @@ const TeacherStudentsView: React.FC = () => {
 				setStudents(students);
 				setLoading(false);
 			}
-			if (user.role === 'counselor') {
+			if (user?.role === 'counselor') {
 				const students = await apiHooks.fetchAllStudents(token);
 
 				console.log(
