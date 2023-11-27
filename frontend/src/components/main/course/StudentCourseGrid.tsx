@@ -1,8 +1,9 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import ReportIcon from '@mui/icons-material/Report';
 import Tooltip from '@mui/material/Tooltip';
 import {UserContext} from '../../../contexts/UserContext';
+import EditTopicsModal from '../modals/EditTopicsModal';
 interface Course {
 	courseid: number;
 	course_name: string;
@@ -27,6 +28,17 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 }) => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
+
+	const [open, setOpen] = useState(false);
+
+	const handleOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
+
 	return (
 		<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
 			{courses
@@ -102,6 +114,21 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 								>
 									Attendance
 								</button>
+								{user?.role === 'counselor' && (
+									<>
+										<button
+											className={`mt-4 ml-4 font-bold py-2 px-4 rounded ${
+												isCourseEnded
+													? 'bg-metropoliaSupportRed hover:bg-red-900'
+													: 'bg-metropoliaTrendGreen hover:bg-green-700'
+											} text-white`}
+											onClick={handleOpen}
+										>
+											Edit Topics for Student
+										</button>
+										<EditTopicsModal isOpen={open} handleClose={handleClose} />
+									</>
+								)}
 							</div>
 						</Tooltip>
 					);
