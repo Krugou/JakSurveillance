@@ -74,7 +74,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 		};
 
 		fetchData();
-	}, [usercourseid]);
+	}, [usercourseid, student]);
 
 	// If the attendance data is not available, return a loading message
 	if (!attendanceData) {
@@ -109,7 +109,8 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 		return (
 			<div className="overflow-x-auto flex flex-col border-x border-t">
 				<h1 className="text-xl sm:text-4xl font-bold mt-2 mb-8 text-center">
-					Attendance for Course {attendanceData[0].name}
+					{student?.first_name + ' ' + student?.last_name}'s attendance in course:{' '}
+					{attendanceData[0].name}
 				</h1>
 				<div className="flex items-center justify-around flex-wrap">
 					<input
