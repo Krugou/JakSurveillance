@@ -114,8 +114,8 @@ const StudentCourseAttendance: React.FC = () => {
 									<span className="selector-text">All</span>
 								</div>
 							</MenuItem>
-							{uniqueTopics.map(topic => (
-								<MenuItem value={topic}>
+							{uniqueTopics.map((topic, index) => (
+								<MenuItem key={index} value={topic}>
 									<div className="item-selector">
 										<AutorenewIcon className="highest-star-selector-icon" />
 										<span className="selector-text">{topic}</span>
