@@ -52,40 +52,6 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 	const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(event.target.value);
 	};
-	const exportToPDF = () => {
-		const doc = new jsPDF();
-		const tableData = filteredAttendanceData.map(attendance => [
-			new Date(attendance.start_date).toLocaleDateString(),
-			student ? `${student.first_name} ${student.last_name}` : '',
-			attendance.teacher,
-			attendance.timeofday,
-			attendance.topicname,
-			attendance.status === 1 ? 'Present' : 'Absent',
-		]);
-		const tableHeaders = [
-			'Date',
-			'Student',
-			'Teacher',
-			'Time of Day',
-			'Topic',
-			'Status',
-		];
-
-		autoTable(doc, {
-			head: [tableHeaders],
-			body: tableData,
-			startY: 25, // start the table below the title
-
-			didDrawPage: data => {
-				// Add header
-				doc.setFontSize(20);
-				doc.setTextColor(40);
-				doc.setFont('helvetica', 'normal');
-				doc.text('Attendance Report', data.settings.margin.left, 20);
-			},
-		});
-		doc.save(`${student?.first_name} ${student?.last_name}'s attendance.pdf`);
-	};
 
 	// Fetch attendance data for the course
 	useEffect(() => {
@@ -120,6 +86,45 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 	// Function to handle sort option change
 	const handleChange = event => {
 		setSortOption(event.target.value);
+	};
+
+	const exportToPDF = () => {
+		const doc = new jsPDF();
+		const tableData = filteredAttendanceData.map(attendance => [
+			new Date(attendance.start_date).toLocaleDateString(),
+			student ? `${student.first_name} ${student.last_name}` : '',
+			attendance.teacher,
+			attendance.timeofday,
+			attendance.topicname,
+			attendance.status === 1 ? 'Present' : 'Absent',
+		]);
+		const tableHeaders = [
+			'Date',
+			'Student',
+			'Teacher',
+			'Time of Day',
+			'Topic',
+			'Status',
+		];
+
+		autoTable(doc, {
+			head: [tableHeaders],
+			body: tableData,
+			startY: 25, // start the table below the title
+
+			didDrawPage: data => {
+				// Add header
+				doc.setFontSize(20);
+				doc.setTextColor(40);
+				doc.setFont('helvetica', 'normal');
+				doc.text(
+					`${attendanceData[0].name} attendance for ${student?.first_name} ${student?.last_name}`,
+					data.settings.margin.left,
+					20,
+				);
+			},
+		});
+		doc.save(`${student?.first_name} ${student?.last_name}'s attendance.pdf`);
 	};
 
 	// Create an array of unique topics from the attendance data
