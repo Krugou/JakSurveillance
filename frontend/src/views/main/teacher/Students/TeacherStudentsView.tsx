@@ -105,11 +105,11 @@ const TeacherStudentsView: React.FC = () => {
 							)}
 							<div className="flex flex-wrap justify-between">
 								<GeneralLinkButton
-									path={`/teacher/students/${student.userid}`}
+									path={`/${user?.role}/students/${student.userid}`}
 									text="Details"
 								/>
 								<GeneralLinkButton
-									path={`/teacher/students/${student.userid}/attendances`}
+									path={`/${user?.role}/students/${student.userid}/attendances`}
 									text="Attendance"
 								/>
 							</div>

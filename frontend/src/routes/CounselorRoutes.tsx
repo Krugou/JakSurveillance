@@ -11,7 +11,7 @@ const CounselorRoutes = () => {
 			<Route path="*" element={<CounselorMainView />} />
 			<Route path="profile" element={<CounselorProfile />} />
 			<Route path="helpvideos" element={<CounselorHelpVideos />} />
-			<Route path="/students" element={<CounselorStudentRoutes />} />
+			<Route path="students/*" element={<CounselorStudentRoutes />} />
 		</Routes>
 	);
 };
