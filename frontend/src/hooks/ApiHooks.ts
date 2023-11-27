@@ -355,7 +355,7 @@ const updateOwnedTopicgroupandtheirtopics = async (
 	return doFetch(url, options);
 };
 // Define the function to fetch all roles
-const fetchAllRoles = async (token: string) => {
+const fetchAllRolesSpecial = async (token: string) => {
 	const options = {
 		method: 'GET',
 		headers: {
@@ -364,6 +364,15 @@ const fetchAllRoles = async (token: string) => {
 		},
 	};
 	return await doFetch(baseUrl + 'admin/rolesspecial', options);
+};
+const fetchAllRoles = async (token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	return await doFetch(baseUrl + 'admin/roles', options);
 };
 
 // Define the function to change role ID
@@ -484,6 +493,7 @@ const apiHooks = {
 	fetchUsers,
 	updateOwnedTopicgroupandtheirtopics,
 	fetchAllRoles,
+	fetchAllRolesSpecial,
 	changeRoleId,
 	fetchServerSettings,
 	postLogin,
