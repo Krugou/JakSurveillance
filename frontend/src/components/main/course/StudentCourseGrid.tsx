@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import ReportIcon from '@mui/icons-material/Report';
 import Tooltip from '@mui/material/Tooltip';
+import {UserContext} from '../../../contexts/UserContext';
 interface Course {
 	courseid: number;
 	course_name: string;
@@ -24,6 +25,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 	courses,
 	showEndedCourses,
 }) => {
+	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
 	return (
 		<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
@@ -91,7 +93,11 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 											: 'bg-metropoliaTrendGreen hover:bg-green-700'
 									} text-white`}
 									onClick={() =>
-										navigate(`/student/courses/attendance/${course.usercourseid}`)
+										user?.role === 'student'
+											? navigate(`/student/courses/attendance/${course.usercourseid}`)
+											: navigate(
+													`/${user?.role}/students/attendance/${course.usercourseid}`,
+											  )
 									}
 								>
 									Attendance

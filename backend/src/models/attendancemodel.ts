@@ -198,6 +198,15 @@ const attendanceModel: AttendanceModel = {
 			.query('SELECT * FROM attendance WHERE attendanceid = ?', [insertid]);
 		return attendanceResult;
 	},
+	async getUserIdByUserCourseId(usercourseid: number) {
+		const [userResult] = await pool
+			.promise()
+			.query(
+				'SELECT userid FROM users WHERE userid IN (SELECT userid FROM usercourses WHERE usercourseid = ?)',
+				[usercourseid],
+			);
+		return userResult[0].userid;
+	},
 };
 
 export default attendanceModel;
