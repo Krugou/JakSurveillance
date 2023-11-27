@@ -1,6 +1,8 @@
-import {Typography} from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import Button from '@mui/material/Button';
 import React, {useContext, useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
+import SimpleUserView from '../../../../components/main/admin/SimpleUserView';
 import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
 
@@ -8,6 +10,7 @@ const AdminUserDetail: React.FC = () => {
 	const {userid} = useParams<{userid: string}>(); // Change the type to string
 	const {user} = useContext(UserContext);
 	const [fetchUser, setFetchUser] = useState<any>(null);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (user) {
@@ -29,33 +32,22 @@ const AdminUserDetail: React.FC = () => {
 		}
 	}, [user, userid]);
 
+	const handleEdit = () => {
+		navigate(`./modify`);
+	};
+
 	return (
 		fetchUser && (
-			<div className="md:flex md:space-x-4">
-				<div className="md:w-1/2">
-					{fetchUser.first_name && (
-						<Typography variant="h6">First Name: {fetchUser.first_name}</Typography>
-					)}
-					{fetchUser.last_name && (
-						<Typography variant="h6">Last Name: {fetchUser.last_name}</Typography>
-					)}
-					{fetchUser.email && (
-						<Typography variant="h6">Email: {fetchUser.email}</Typography>
-					)}
-				</div>
-				<div className="md:w-1/2">
-					{fetchUser.role && (
-						<Typography variant="h6">Role: {fetchUser.role}</Typography>
-					)}
-					{fetchUser.studentnumber && (
-						<Typography variant="h6">
-							Student Number: {fetchUser.studentnumber}
-						</Typography>
-					)}
-					{fetchUser.userid && (
-						<Typography variant="h6">User ID: {fetchUser.userid}</Typography>
-					)}
-				</div>
+			<div className="flex flex-col md:space-x-4 justify-center items-center">
+				<SimpleUserView user={fetchUser} />
+				<Button
+					variant="contained"
+					color="primary"
+					startIcon={<EditIcon />}
+					onClick={handleEdit}
+				>
+					Edit
+				</Button>
 			</div>
 		)
 	);
