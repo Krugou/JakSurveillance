@@ -9,6 +9,7 @@ import {jsPDF} from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import PrintIcon from '@mui/icons-material/Print';
 import metropolia_logo from '../../../../assets/images/metropolia_s_oranssi_en.png';
+import * as XLSX from 'xlsx';
 
 // Interface for the attendance data
 interface Attendance {
@@ -91,6 +92,48 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 		setSortOption(event.target.value);
 	};
 
+	const createTables = mode => {
+		let tableHeaders;
+		let tableData;
+		if (mode === 'pdf') {
+			tableHeaders = [
+				'Date',
+				'Student',
+				'Teacher',
+				'Time of Day',
+				'Topic',
+				'Status',
+			];
+
+			tableData = filteredAttendanceData.map(attendance => [
+				new Date(attendance.start_date).toLocaleDateString(),
+				student ? `${student.first_name} ${student.last_name}` : '',
+				attendance.teacher,
+				attendance.timeofday,
+				attendance.topicname,
+				attendance.status === 1 ? 'Present' : 'Absent',
+			]);
+		} else if (mode === 'excel') {
+			tableHeaders = [
+				'Date',
+				'Student',
+				'Teacher',
+				'Time of Day',
+				'Topic',
+				'Status',
+			];
+
+			tableData = filteredAttendanceData.map(attendance => ({
+				Date: new Date(attendance.start_date).toLocaleDateString(),
+				Student: student ? `${student.first_name} ${student.last_name}` : '',
+				Teacher: attendance.teacher,
+				'Time of Day': attendance.timeofday,
+				Topic: attendance.topicname,
+				Status: attendance.status === 1 ? 'Present' : 'Absent',
+			}));
+		}
+		return {tableHeaders, tableData};
+	};
 	const exportToPDF = () => {
 		const doc = new jsPDF();
 		const imgWidth = 180; // Set the width as per your requirement
@@ -99,22 +142,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 		const imgY = 10;
 
 		doc.addImage(metropolia_logo, 'PNG', imgX, imgY, imgWidth, imgHeight);
-		const tableData = filteredAttendanceData.map(attendance => [
-			new Date(attendance.start_date).toLocaleDateString(),
-			student ? `${student.first_name} ${student.last_name}` : '',
-			attendance.teacher,
-			attendance.timeofday,
-			attendance.topicname,
-			attendance.status === 1 ? 'Present' : 'Absent',
-		]);
-		const tableHeaders = [
-			'Date',
-			'Student',
-			'Teacher',
-			'Time of Day',
-			'Topic',
-			'Status',
-		];
+		const {tableHeaders, tableData} = createTables('pdf');
 
 		autoTable(doc, {
 			head: [tableHeaders],
@@ -135,6 +163,17 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 			},
 		});
 		doc.save(`${student?.first_name} ${student?.last_name}'s attendance.pdf`);
+	};
+
+	const exportToExcel = () => {
+		const {tableHeaders, tableData} = createTables('excel');
+		const ws = XLSX.utils.json_to_sheet(tableData, {header: tableHeaders});
+		const wb = XLSX.utils.book_new();
+		XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+		XLSX.writeFile(
+			wb,
+			`${student?.first_name} ${student?.last_name}'s attendance.xlsx`,
+		);
 	};
 
 	// Create an array of unique topics from the attendance data
@@ -173,6 +212,11 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 					/>
 					<Tooltip title="Print to pdf">
 						<button onClick={exportToPDF}>
+							<PrintIcon />
+						</button>
+					</Tooltip>
+					<Tooltip title="Export to Excel">
+						<button onClick={exportToExcel}>
 							<PrintIcon />
 						</button>
 					</Tooltip>
