@@ -2,11 +2,13 @@ import React from 'react';
 import {useEffect, useState, ChangeEvent} from 'react';
 import {useParams} from 'react-router-dom';
 import apiHooks from '../../../../hooks/ApiHooks';
-import {FormControl, MenuItem, Select} from '@mui/material';
+import {FormControl, MenuItem, Select, Tooltip} from '@mui/material';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import AttendanceTable from '../../../../components/main/course/attendance/AttendanceTable';
 import {jsPDF} from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import PrintIcon from '@mui/icons-material/Print';
+
 // Interface for the attendance data
 interface Attendance {
 	date: string;
@@ -161,14 +163,11 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 						onChange={handleSearchChange}
 						className="w-1/6 mt-10 p-4 m-2 border border-black rounded"
 					/>
-					<button>
-						<a
-							onClick={exportToPDF}
-							className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-						>
-							Export to PDF
-						</a>
-					</button>
+					<Tooltip title="Print to pdf">
+						<button onClick={exportToPDF}>
+							<PrintIcon />
+						</button>
+					</Tooltip>
 					<FormControl className="md:w-1/4 mt-2 md:mt-0">
 						<label>Sort Topics:</label>
 						<Select
