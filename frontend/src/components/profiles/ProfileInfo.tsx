@@ -29,7 +29,7 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 			throw new Error('No token available');
 		}
 		const fetchRoles = async () => {
-			const roles = await apiHooks.fetchAllRoles(token);
+			const roles = await apiHooks.fetchAllRolesSpecial(token);
 			setRoles(roles);
 			setSelectedRole(roles[0]?.roleid || '');
 		};
