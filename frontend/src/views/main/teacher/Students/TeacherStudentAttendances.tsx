@@ -1,10 +1,8 @@
 import React from 'react';
-import StudentAttendance from "../../student/StudentAttendance";
+import StudentAttendance from '../../student/StudentAttendance';
 
 const TeacherStudentAttendances: React.FC = () => {
-    return (
-        <StudentAttendance></StudentAttendance>
-    );
+	return <StudentAttendance></StudentAttendance>;
 };
 
 export default TeacherStudentAttendances;
