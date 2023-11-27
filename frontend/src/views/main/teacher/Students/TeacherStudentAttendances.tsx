@@ -63,7 +63,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 					usercourseid,
 					token,
 				);
-				setStudent(response[0].userinfo);
+				setStudent(response[0]?.userinfo);
 
 				console.log(response, 'RESPONSE');
 				console.log(student, 'student');

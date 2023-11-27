@@ -47,7 +47,9 @@ router.get('/usercourse/:id', async (req: Request, res: Response) => {
 			id,
 			userid,
 		);
-		userinfo ? (attendanceData[0].userinfo = userinfo) : null;
+		attendanceData[0] && userinfo
+			? (attendanceData[0].userinfo = userinfo)
+			: null;
 		res.json(attendanceData);
 	} catch (err) {
 		console.error(err);
