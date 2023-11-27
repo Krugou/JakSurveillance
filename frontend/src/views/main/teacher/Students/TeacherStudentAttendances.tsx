@@ -5,7 +5,8 @@ import apiHooks from '../../../../hooks/ApiHooks';
 import {FormControl, MenuItem, Select} from '@mui/material';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import AttendanceTable from '../../../../components/main/course/attendance/AttendanceTable';
-
+import {jsPDF} from 'jspdf';
+import autoTable from 'jspdf-autotable';
 // Interface for the attendance data
 interface Attendance {
 	date: string;
@@ -51,6 +52,29 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 	const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(event.target.value);
 	};
+	const exportToPDF = () => {
+		const doc = new jsPDF();
+		const tableData = filteredAttendanceData.map(attendance => [
+			new Date(attendance.start_date).toLocaleDateString(),
+			student ? `${student.first_name} ${student.last_name}` : '',
+			attendance.teacher,
+			attendance.timeofday,
+			attendance.topicname,
+			attendance.status === 1 ? 'Present' : 'Absent',
+		]);
+		const tableHeaders = [
+			'Date',
+			'Student',
+			'Teacher',
+			'Time of Day',
+			'Topic',
+			'Status',
+		];
+
+		autoTable(doc, {head: [tableHeaders], body: tableData});
+		doc.save(`${student?.first_name} ${student?.last_name}'s attendance.pdf`);
+	};
+
 	// Fetch attendance data for the course
 	useEffect(() => {
 		const fetchData = async () => {
@@ -122,7 +146,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 					/>
 					<button>
 						<a
-							href={`/api/attendance/export/${usercourseid}`}
+							onClick={exportToPDF}
 							className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 						>
 							Export to PDF

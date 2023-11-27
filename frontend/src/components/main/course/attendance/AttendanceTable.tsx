@@ -1,5 +1,14 @@
 import React from 'react';
 
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
+} from '@mui/material';
+
 interface Attendance {
 	date: string;
 	name: string;
@@ -33,23 +42,35 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 	student,
 }) => {
 	return (
-		<div className="overflow-x-auto border-x border-t m-6">
-			<table className="table-auto w-full">
-				<thead className="border-b">
-					<tr className="bg-gray-100">
-						<th className="text-left p-4 font-medium underline">Date</th>
+		<TableContainer className="overflow-x-auto border-x border-t m-6">
+			<Table className="table-auto w-full">
+				<TableHead className="border-b">
+					<TableRow className="bg-gray-100">
+						<TableCell className="text-left p-4 font-medium underline">
+							Date
+						</TableCell>
 						{student && (
-							<th className="text-left p-4 font-medium underline">Student:</th>
+							<TableCell className="text-left p-4 font-medium underline">
+								Student:
+							</TableCell>
 						)}
-						<th className="text-left p-4 font-medium underline">Teacher</th>
-						<th className="text-left p-4 font-medium underline">Time of Day</th>
-						<th className="text-left p-4 font-medium underline">Topic</th>
-						<th className="text-left p-4 font-medium underline">Status</th>
-					</tr>
-				</thead>
-				<tbody>
+						<TableCell className="text-left p-4 font-medium underline">
+							Teacher
+						</TableCell>
+						<TableCell className="text-left p-4 font-medium underline">
+							Time of Day
+						</TableCell>
+						<TableCell className="text-left p-4 font-medium underline">
+							Topic
+						</TableCell>
+						<TableCell className="text-left p-4 font-medium underline">
+							Status
+						</TableCell>
+					</TableRow>
+				</TableHead>
+				<TableBody>
 					{filteredAttendanceData.map((attendance, index) => (
-						<tr
+						<TableRow
 							key={index}
 							className={`border-b hover:bg-gray-50 ${
 								attendance.status === 0
@@ -57,23 +78,25 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 									: 'bg-metropoliaTrendGreen'
 							}`}
 						>
-							<td className="p-4">
+							<TableCell className="p-4">
 								{new Date(attendance.start_date).toLocaleDateString()}
-							</td>
+							</TableCell>
 							{student && (
-								<td className="p-4">
+								<TableCell className="p-4">
 									{student.first_name} {student.last_name}
-								</td>
+								</TableCell>
 							)}
-							<td className="p-4">{attendance.teacher}</td>
-							<td className="p-4">{attendance.timeofday}</td>
-							<td className="p-4">{attendance.topicname}</td>
-							<td className="p-4">{attendance.status === 1 ? 'Present' : 'Absent'}</td>
-						</tr>
+							<TableCell className="p-4">{attendance.teacher}</TableCell>
+							<TableCell className="p-4">{attendance.timeofday}</TableCell>
+							<TableCell className="p-4">{attendance.topicname}</TableCell>
+							<TableCell className="p-4">
+								{attendance.status === 1 ? 'Present' : 'Absent'}
+							</TableCell>
+						</TableRow>
 					))}
-				</tbody>
-			</table>
-		</div>
+				</TableBody>
+			</Table>
+		</TableContainer>
 	);
 };
 
