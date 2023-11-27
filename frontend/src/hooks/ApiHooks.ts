@@ -441,7 +441,7 @@ const getUserInfoByUserid = async (token: string, id: string) => {
 			Authorization: 'Bearer ' + token,
 		},
 	};
-	return await doFetch(baseUrl + 'users/' + id, options);
+	return await doFetch(baseUrl + 'courses/' + id, options);
 };
 const checkCourseCode = async (code: string, token: string) => {
 	const options = {
@@ -464,6 +464,18 @@ const checkStaffByEmail = async (email: string, token: string) => {
 	};
 	return await doFetch(`${baseUrl}users/check-staff/${email}`, options);
 };
+
+const fetchAllStudents = async (token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	return await doFetch(`${baseUrl}secure/students`, options);
+};
+
 const apiHooks = {
 	checkStaffByEmail,
 	checkCourseCode,
@@ -494,5 +506,6 @@ const apiHooks = {
 	modifyCourse,
 	updateGdprStatus,
 	getUserInfoByUserid,
+	fetchAllStudents,
 };
 export default apiHooks;

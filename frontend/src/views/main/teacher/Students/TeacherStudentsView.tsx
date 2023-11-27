@@ -27,21 +27,39 @@ const TeacherStudentsView: React.FC = () => {
 
 	useEffect(() => {
 		const token: string | null = localStorage.getItem('userToken');
+
 		if (!token) {
 			toast.error('No token available');
 			throw new Error('No token available');
 		}
 		const fetchStudents = async () => {
-			if (user) {
+			if (user.role === 'teacher') {
 				const students = await apiHooks.getStudentsByInstructorId(
 					user.userid,
 					token,
 				);
+
 				console.log(
 					'🚀 ~ file: TeacherStudentsView.tsx:32 ~ fetchStudents ~ students:',
 					students,
 				);
 
+				setStudents(students);
+				setLoading(false);
+			}
+			if (user.role === 'counselor') {
+				const token: string | null = localStorage.getItem('userToken');
+				if (!token) {
+					toast.error('No token available');
+					throw new Error('No token available');
+				}
+				console.log(token, 'token');
+				const students = await apiHooks.fetchAllStudents(token);
+
+				console.log(
+					'🚀 ~ file: TeacherStudentsView.tsx:32 ~ fetchStudents ~ students:',
+					students,
+				);
 				setStudents(students);
 				setLoading(false);
 			}

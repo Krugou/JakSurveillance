@@ -219,20 +219,6 @@ router.put('/accept-gdpr/:userid', async (req, res) => {
 		res.status(500).send('Internal Server Error');
 	}
 });
-
-router.get('/:userid', async (req: Request, res: Response) => {
-	const userid = req.params.userid;
-	try {
-		const users = await usermodel.fetchUserById(userid);
-		const email = users[0].email;
-		const courses = await course.getStudentsCourses(email);
-
-		res.send({user: users[0], courses: courses});
-	} catch (error) {
-		console.error(error);
-		res.status(500).json({message: 'Internal server error'});
-	}
-});
 router.get('/check-staff/:email', async (req: Request, res: Response) => {
 	const email = req.params.email;
 	try {
