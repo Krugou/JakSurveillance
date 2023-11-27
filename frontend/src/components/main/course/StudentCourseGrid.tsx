@@ -90,7 +90,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 									{course.course_name + ' ' + course.code}
 								</h2>
 								<p className="mb-1">
-									<strong>Your Topics:</strong> {topics}
+									<strong>Assigned Topics:</strong> {topics}
 								</p>
 								<p className="mb-1">
 									<strong>Start Date:</strong> {startDate}
