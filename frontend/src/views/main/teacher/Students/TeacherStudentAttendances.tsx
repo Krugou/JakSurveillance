@@ -112,7 +112,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 		autoTable(doc, {
 			head: [tableHeaders],
 			body: tableData,
-			startY: 25, // start the table below the title
+			startY: 35, // start the table below the title
 
 			didDrawPage: data => {
 				// Add header
@@ -124,6 +124,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 					data.settings.margin.left,
 					20,
 				);
+				doc.text(`Topics: ${sortOption}`, data.settings.margin.left, 30);
 			},
 		});
 		doc.save(`${student?.first_name} ${student?.last_name}'s attendance.pdf`);
