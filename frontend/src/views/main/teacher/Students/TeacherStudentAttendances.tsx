@@ -11,7 +11,7 @@ import PrintIcon from '@mui/icons-material/Print';
 import metropolia_logo from '../../../../assets/images/metropolia_s_oranssi_en.png';
 import * as XLSX from 'xlsx';
 import GetAppIcon from '@mui/icons-material/GetApp';
-
+import {toast} from 'react-toastify';
 // Interface for the attendance data
 interface Attendance {
 	date: string;
@@ -41,8 +41,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 	const {usercourseid} = useParams<{usercourseid}>();
 
 	// State to keep track of the sort option
-	const [sortOption, setSortOption] = useState('All');
-
+	const [sortOption, setSortOption] = useState('All Topics');
 	// State to keep track of the attendance data
 	const [attendanceData, setAttendanceData] = useState<Attendance[] | null>(
 		null,
@@ -164,6 +163,13 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 			},
 		});
 		doc.save(`${student?.first_name} ${student?.last_name}'s attendance.pdf`);
+		toast.success(
+			`${student?.first_name} ${student?.last_name}'s attendance PDF for topics: ${sortOption} downloaded successfully. `,
+			{
+				position: toast.POSITION.TOP_CENTER, // or toast.POSITION.BOTTOM_CENTER
+				autoClose: 7000, // Display the toast for 5 seconds
+			},
+		);
 	};
 
 	const exportToExcel = () => {
@@ -173,7 +179,14 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 		XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 		XLSX.writeFile(
 			wb,
-			`${student?.first_name} ${student?.last_name}'s attendance.xlsx`,
+			`${student?.first_name} ${student?.last_name}_${attendanceData[0].name}_${sortOption} attendance.xlsx`,
+		);
+		toast.success(
+			`${student?.first_name} ${student?.last_name}'s attendance EXCEL for topics: ${sortOption} downloaded successfully. `,
+			{
+				position: toast.POSITION.TOP_CENTER, // or toast.POSITION.BOTTOM_CENTER
+				autoClose: 7000, // Display the toast for 5 seconds
+			},
 		);
 	};
 
@@ -194,7 +207,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 	const filteredAttendanceData = attendanceData.filter(
 		attendance =>
 			new Date(attendance.start_date).toLocaleDateString().includes(searchTerm) &&
-			(sortOption === 'All' || attendance.topicname === sortOption),
+			(sortOption === 'All Topics' || attendance.topicname === sortOption),
 	);
 	if (attendanceData.length > 0) {
 		return (
@@ -228,10 +241,10 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 							value={sortOption}
 							onChange={handleChange}
 						>
-							<MenuItem value="All">
+							<MenuItem value="All Topics">
 								<div className="item-selector">
 									<AutorenewIcon className="highest-star-selector-icon" />
-									<span className="selector-text">All</span>
+									<span className="selector-text">All Topics</span>
 								</div>
 							</MenuItem>
 							{uniqueTopics.map((topic, index) => (
