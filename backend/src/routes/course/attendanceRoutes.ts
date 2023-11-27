@@ -34,17 +34,20 @@ router.get('/usercourse/:id', async (req: Request, res: Response) => {
 	try {
 		const id = Number(req.params.id);
 		let userid = req.user.userid;
+		let userinfo;
 		if (
 			req.user.role === 'teacher' ||
 			req.user.role === 'admin' ||
 			req.user.role === 'counselor'
 		) {
-			userid = await Attendance.getUserIdByUserCourseId(id);
+			userinfo = await Attendance.getUserInfoByUserCourseId(id);
+			userid = userinfo.userid;
 		}
 		const attendanceData = await Attendance.findAllAttendancesByUserCourseId(
 			id,
 			userid,
 		);
+		userinfo ? (attendanceData[0].userinfo = userinfo) : null;
 		res.json(attendanceData);
 	} catch (err) {
 		console.error(err);

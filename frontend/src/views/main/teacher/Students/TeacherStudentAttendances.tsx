@@ -16,8 +16,21 @@ interface Attendance {
 	teacher: string;
 	status: number;
 }
+interface StudentInfo {
+	email: string;
+	first_name: string;
+	last_name: string;
+	role: string;
+	roleid: number;
+	staff: number;
+	studentnumber: string;
+	userid: number;
+	username: string;
+	created_at: string;
+	// Include other properties of student here
+}
 
-const StudentCourseAttendance: React.FC = () => {
+const TeacherStudentCourseAttendance: React.FC = () => {
 	// Get the usercourseid from the url
 	const {usercourseid} = useParams<{usercourseid}>();
 
@@ -28,6 +41,8 @@ const StudentCourseAttendance: React.FC = () => {
 	const [attendanceData, setAttendanceData] = useState<Attendance[] | null>(
 		null,
 	);
+
+	const [student, setStudent] = useState<StudentInfo | null>(null); // Define the student state variable as a Student object
 
 	// State to keep track of the search term
 	const [searchTerm, setSearchTerm] = useState('');
@@ -48,7 +63,10 @@ const StudentCourseAttendance: React.FC = () => {
 					usercourseid,
 					token,
 				);
+				setStudent(response[0].userinfo);
+
 				console.log(response, 'RESPONSE');
+				console.log(student, 'student');
 				setAttendanceData(response);
 			} catch (error) {
 				console.error('Error:', error);
@@ -133,4 +151,4 @@ const StudentCourseAttendance: React.FC = () => {
 	}
 };
 
-export default StudentCourseAttendance;
+export default TeacherStudentCourseAttendance;
