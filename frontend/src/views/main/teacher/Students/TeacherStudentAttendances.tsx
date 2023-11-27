@@ -8,6 +8,7 @@ import AttendanceTable from '../../../../components/main/course/attendance/Atten
 import {jsPDF} from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import PrintIcon from '@mui/icons-material/Print';
+import metropolia_logo from '../../../../assets/images/metropolia_s_oranssi_en.png';
 
 // Interface for the attendance data
 interface Attendance {
@@ -92,6 +93,12 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 
 	const exportToPDF = () => {
 		const doc = new jsPDF();
+		const imgWidth = 180; // Set the width as per your requirement
+		const imgHeight = (imgWidth * 1267) / 4961; // Calculate the height based on the aspect ratio
+		const imgX = 15;
+		const imgY = 10;
+
+		doc.addImage(metropolia_logo, 'PNG', imgX, imgY, imgWidth, imgHeight);
 		const tableData = filteredAttendanceData.map(attendance => [
 			new Date(attendance.start_date).toLocaleDateString(),
 			student ? `${student.first_name} ${student.last_name}` : '',
@@ -112,7 +119,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 		autoTable(doc, {
 			head: [tableHeaders],
 			body: tableData,
-			startY: 35, // start the table below the title
+			startY: 90, // start the table below the title
 
 			didDrawPage: data => {
 				// Add header
@@ -122,9 +129,9 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 				doc.text(
 					`${attendanceData[0].name} attendance for ${student?.first_name} ${student?.last_name}`,
 					data.settings.margin.left,
-					20,
+					75,
 				);
-				doc.text(`Topics: ${sortOption}`, data.settings.margin.left, 30);
+				doc.text(`Topics: ${sortOption}`, data.settings.margin.left, 85);
 			},
 		});
 		doc.save(`${student?.first_name} ${student?.last_name}'s attendance.pdf`);
