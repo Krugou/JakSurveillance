@@ -37,7 +37,6 @@ const Login: React.FC = () => {
 			);
 			// this navigates to the mainview of the user type
 			if (response) {
-				console.log(response, 'RESPONSE');
 				localStorage.setItem('userToken', response.token);
 				setUser(response.user); // set the user info into the context
 				toast.success('Login successful');
