@@ -29,6 +29,15 @@ router.get('/rolesspecial', async (_req: Request, res: Response) => {
 		res.status(500).json({message: 'Internal server error'});
 	}
 });
+router.get('/roles', async (_req: Request, res: Response) => {
+	try {
+		const roles = await rolemodel.fetchAllRoles();
+		res.send(roles);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({message: 'Internal server error'});
+	}
+});
 
 router.post('/change-role', async (req: Request, res: Response) => {
 	try {
