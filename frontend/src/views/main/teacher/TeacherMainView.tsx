@@ -38,7 +38,7 @@ const MainView: React.FC = () => {
 				{courses.length === 0 && (
 					<div className="relative">
 						<div className="animate-bounce gap-2 flex md:flex-row flex-col items-center">
-							<p className="text-center text-white font-bold">Start Here!</p>
+							<p className="text-center text-white text-xl">Start Here!</p>
 							<div className="w-4 h-4 border-t-2 border-r-2 transform md:rotate-45 rotate-135 border-white"></div>
 						</div>
 					</div>

@@ -55,20 +55,20 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 
 	return (
 		<div className="space-y-5">
-			<p className="flex justify-between items-center">
+			<p className="flex items-center gap-2">
 				<strong>Name:</strong>{' '}
 				<span className="profileStat">
 					{user.first_name + ' ' + user.last_name}
 				</span>
 			</p>
-			<p className="flex justify-between items-center">
+			<p className="flex items-center gap-2">
 				<strong>Username:</strong>{' '}
 				<span className="profileStat">{user.username}</span>
 			</p>
-			<p className="flex justify-between items-center">
+			<p className="flex items-center gap-2">
 				<strong>Email:</strong> <span className="profileStat">{user.email}</span>
 			</p>
-			<p className="flex justify-between items-center">
+			<p className="flex items-center gap-2">
 				<strong>Role:</strong> <span className="profileStat">{user.role}</span>
 				{['counselor', 'teacher'].includes(user.role) && (
 					<button
@@ -79,7 +79,7 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 					</button>
 				)}
 			</p>
-			<p className="flex justify-between items-center">
+			<p className="flex items-center gap-2">
 				<strong>Account created:</strong>{' '}
 				<span className="profileStat">
 					{new Date(user.created_at).toLocaleDateString()}
@@ -99,7 +99,7 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 							<option value={role.roleid}>{role.name}</option>
 						))}
 					</select>
-					<div className="mt-5 flex justify-between">
+					<div className="mt-5 flex gap-10">
 						<button
 							type="button" // Add type attribute here
 							className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"

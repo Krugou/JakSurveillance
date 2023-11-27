@@ -4,6 +4,7 @@ import {toast} from 'react-toastify';
 import apiHooks from '../../../../hooks/ApiHooks';
 import ProfileInfo from '../../../../components/profiles/ProfileInfo';
 import StudentCourseGrid from '../../../../components/main/course/StudentCourseGrid';
+import BackgroundContainer from "../../../../components/main/background/BackgroundContainer";
 interface StudentInfo {
 	email: string;
 	first_name: string;
@@ -68,13 +69,19 @@ const TeacherStudentDetail: React.FC = () => {
 	}
 
 	return (
-		<div className="bg-gray-100 p-5">
+		<BackgroundContainer>
+		<div className="bg-gray-100 rounded-lg p-5">
+			<h2 className="text-2xl font-bold underline underline-offset-8 decoration-metropoliaMainOrange mb-5">
+				{student.first_name + ' ' + student.last_name}'s Info
+			</h2>
 			<ProfileInfo user={student} />
-			<h2 className="text-2xl font-bold mt-5 text-center">
+			<div className="w-full mt-10 h-1 bg-metropoliaMainOrange rounded-md"></div>
+			<h2 className="text-2xl font-bold mt-10 underline underline-offset-8 decoration-metropoliaMainOrange mb-5">
 				{student.first_name + ' ' + student.last_name}'s Courses
 			</h2>
 			<StudentCourseGrid courses={courses} showEndedCourses={true} />
 		</div>
+		</BackgroundContainer>
 	);
 };
 
