@@ -7,6 +7,9 @@ export default {
 			bold: ['Open Sans Bold', 'sans-serif'],
 		},
 		extend: {
+			rotate: {
+				'135':'135deg',
+			},
 			colors: {
 				metropoliaMainOrange: '#ff5000',
 				metropoliaSecondaryOrange: '#e54b00',
