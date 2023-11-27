@@ -29,12 +29,15 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
 
+	// State for the modal
 	const [open, setOpen] = useState(false);
 
+	// Open and close the modal
 	const handleOpen = () => {
 		setOpen(true);
 	};
 
+	// Open and close the modal
 	const handleClose = () => {
 		setOpen(false);
 	};

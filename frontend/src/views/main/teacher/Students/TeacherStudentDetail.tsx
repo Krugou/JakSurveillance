@@ -53,6 +53,7 @@ const TeacherStudentDetail: React.FC = () => {
 					id as string,
 				);
 				console.log(response);
+				// Set the student and courses state variables
 				setStudent(response.user);
 				setCourses(response.courses);
 			} catch (error) {
@@ -64,6 +65,7 @@ const TeacherStudentDetail: React.FC = () => {
 		fetchData();
 	}, [id]);
 
+	// If the student state variable is null, show a loading indicator
 	if (!student) {
 		return <div>Loading...</div>;
 	}

@@ -19,10 +19,14 @@ interface Role {
 }
 
 const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
+	// Define state variables for the modal
 	const [open, setOpen] = useState(false);
+	// Define state variables for the roles
 	const [roles, setRoles] = useState<Role[]>([]);
+	// Define state variable for the selected role
 	const [selectedRole, setSelectedRole] = useState('');
 
+	// Fetch the roles when the component is mounted
 	useEffect(() => {
 		const token: string | null = localStorage.getItem('userToken');
 		if (!token) {
@@ -44,11 +48,13 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 		setOpen(false);
 	};
 
+	// Handle the role change
 	const handleRoleChange = async () => {
 		const token: string | null = localStorage.getItem('userToken');
 		if (!token) {
 			throw new Error('No token available');
 		}
+		// Call the API to change the role
 		await apiHooks.changeRoleId(user.email, selectedRole, token);
 		handleClose();
 	};
