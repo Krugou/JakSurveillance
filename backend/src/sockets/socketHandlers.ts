@@ -100,7 +100,9 @@ const finishLecture = async (lectureid: string, io) => {
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
-		io.to(lectureid).emit('lecturefinished', lectureid);
+		if (response.ok) {
+			io.to(lectureid).emit('lecturefinished', lectureid);
+		}
 	} catch (error) {
 		console.error('Error:', error);
 	}
@@ -142,18 +144,18 @@ const setupSocketHandlers = (io: Server) => {
 			} else {
 				// If the lists do not exist, fetch them from the server and emit them to the room with the lectureid
 				doFetch(
-						'http://localhost:3002/courses/attendance/getallstudentsinlecture/',
-						{
-							method: 'POST', // or 'GET'
-							headers: {
-								'Content-Type': 'application/json',
-								Authorization: 'Bearer ' + token,
-							},
-							body: JSON.stringify({
-								lectureid: lectureid,
-							}),
+					'http://localhost:3002/courses/attendance/getallstudentsinlecture/',
+					{
+						method: 'POST', // or 'GET'
+						headers: {
+							'Content-Type': 'application/json',
+							Authorization: 'Bearer ' + token,
 						},
-					)
+						body: JSON.stringify({
+							lectureid: lectureid,
+						}),
+					},
+				)
 					.then(response => {
 						// Handle the response here
 						notYetPresentStudents[lectureid] = response;
@@ -222,18 +224,18 @@ const setupSocketHandlers = (io: Server) => {
 					// Emit the 'youhavebeensavedintolecture' event only to the client who sent the event
 					const token = await getToken();
 					doFetch('http://localhost:3002/courses/attendance/', {
-							method: 'POST', // or 'GET'
-							headers: {
-								'Content-Type': 'application/json',
-								Authorization: 'Bearer ' + token,
-							},
-							body: JSON.stringify({
-								status: '1',
-								date: new Date().toISOString().slice(0, 19).replace('T', ' '),
-								studentnumber: studentId,
-								lectureid: lectureid,
-							}),
-						})
+						method: 'POST', // or 'GET'
+						headers: {
+							'Content-Type': 'application/json',
+							Authorization: 'Bearer ' + token,
+						},
+						body: JSON.stringify({
+							status: '1',
+							date: new Date().toISOString().slice(0, 19).replace('T', ' '),
+							studentnumber: studentId,
+							lectureid: lectureid,
+						}),
+					})
 						.then(response => {
 							console.log('Success:', response);
 
@@ -279,18 +281,18 @@ const setupSocketHandlers = (io: Server) => {
 
 				const token = await getToken();
 				doFetch('http://localhost:3002/courses/attendance/', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-							Authorization: 'Bearer ' + token,
-						},
-						body: JSON.stringify({
-							status: '1',
-							date: new Date().toISOString().slice(0, 19).replace('T', ' '),
-							studentnumber: studentId,
-							lectureid: lectureid,
-						}),
-					})
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: 'Bearer ' + token,
+					},
+					body: JSON.stringify({
+						status: '1',
+						date: new Date().toISOString().slice(0, 19).replace('T', ' '),
+						studentnumber: studentId,
+						lectureid: lectureid,
+					}),
+				})
 					.then(response => {
 						console.log('Success:', response);
 
