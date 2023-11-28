@@ -505,7 +505,6 @@ const updateUserCourseTopics = async (
 
 const updateAttendanceStatus = async (
 	usercourseid: number,
-	status: number,
 	token: string,
 ) => {
 	console.log(usercourseid);

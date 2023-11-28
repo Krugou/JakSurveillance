@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import {
 	MenuItem,
@@ -10,8 +10,7 @@ import {
 	TableHead,
 	TableRow,
 } from '@mui/material';
-import {toast} from 'react-toastify';
-import apiHooks from '../../../../hooks/ApiHooks';
+import { toast } from 'react-toastify';
 
 interface Attendance {
 	date: string;
@@ -21,7 +20,6 @@ interface Attendance {
 	topicname: string;
 	teacher: string;
 	status: number;
-	usercourseid: number;
 }
 
 interface AttendanceFromTeacher {
@@ -58,10 +56,10 @@ interface AttendanceTableProps {
 }
 
 const AttendanceTable: React.FC<AttendanceTableProps> = ({
-	filteredAttendanceData,
-	student,
-	allAttendances,
-}) => {
+															 filteredAttendanceData,
+															 student,
+															 allAttendances,
+														 }) => {
 	const [attendanceData, setAttendanceData] = useState<Attendance[]>(
 		filteredAttendanceData,
 	);
@@ -72,20 +70,6 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 			updatedAttendanceData[index].status = newStatus;
 			setAttendanceData(updatedAttendanceData);
 
-			const token: string | null = localStorage.getItem('userToken');
-			if (token === null) {
-				// Handle the case when token is null
-				console.error('No token found');
-				return;
-			}
-			// Update status in the database
-			const response = await apiHooks.updateAttendanceStatus(
-				updatedAttendanceData[index].usercourseid,
-				newStatus,
-				token, // Replace with the actual access token
-			);
-
-			console.log('API Response:', response);
 
 			// You can add a toast notification or any other feedback here
 			toast.success('Attendance status updated successfully');
@@ -95,6 +79,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 			toast.error('Failed to update attendance status');
 		}
 	};
+
 	return (
 		<TableContainer className="overflow-x-auto border-x border-t m-6">
 			<Table className="table-auto w-full">
@@ -103,7 +88,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 						<TableCell className="text-left p-4 font-medium underline">
 							Date
 						</TableCell>
-						{student | allAttendances && (
+						{student && allAttendances && (
 							<TableCell className="text-left p-4 font-medium underline">
 								Student:
 							</TableCell>
@@ -151,7 +136,9 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 							<TableCell className="p-4">
 								<Select
 									value={attendance.status}
-									onChange={e => handleStatusChange(index, e.target.value as number)}
+									onChange={(e) =>
+										handleStatusChange(index, e.target.value as number)
+									}
 								>
 									<MenuItem value={0}>Absent</MenuItem>
 									<MenuItem value={1}>Present</MenuItem>
