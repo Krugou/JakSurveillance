@@ -1,11 +1,13 @@
 import SortIcon from '@mui/icons-material/Sort';
 import {CircularProgress} from '@mui/material';
 import React, {useContext, useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import InputField from '../../../components/main/course/createcourse/coursedetails/InputField';
 import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/ApiHooks';
 
 interface Course {
+	courseid: string;
 	name: string;
 	code: string;
 	start_date: string;
@@ -15,6 +17,8 @@ interface Course {
 	instructors: string[];
 }
 const AdminCourses: React.FC = () => {
+	const navigate = useNavigate();
+
 	const {user} = useContext(UserContext);
 	const [courses, setCourses] = useState<Course[]>([]);
 	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
@@ -26,7 +30,9 @@ const AdminCourses: React.FC = () => {
 		if (a[sortKey] > b[sortKey]) return sortOrder === 'asc' ? 1 : -1;
 		return 0;
 	});
-
+	const navigateToCourse = (courseId: string) => {
+		navigate(`./${courseId}`);
+	};
 	const sortCourses = (key: string) => {
 		setSortKey(key);
 		setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -52,6 +58,7 @@ const AdminCourses: React.FC = () => {
 
 			const fetchCourses = async () => {
 				const fetchedCourses = await apiHooks.getCourses(token);
+
 				setCourses(fetchedCourses);
 				setIsLoading(false);
 			};
@@ -111,7 +118,11 @@ const AdminCourses: React.FC = () => {
 								</thead>
 								<tbody>
 									{filteredCourses.map((course, index) => (
-										<tr key={index} className="cursor-pointer hover:bg-gray-200">
+										<tr
+											key={index}
+											className="cursor-pointer hover:bg-gray-200"
+											onClick={() => navigateToCourse(course.courseid)}
+										>
 											{[
 												'name',
 												'code',
