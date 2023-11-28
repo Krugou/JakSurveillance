@@ -2,6 +2,8 @@ import TopicGroupModel from '../models/topicgroupmodel.js';
 import TopicInGroupModel from '../models/topicingroupmodel.js';
 import TopicModel from '../models/topicmodel.js';
 import UserModel from '../models/usermodel.js';
+import usercourse_topicsModel from '../models/usercourse_topicsmodel.js';
+import pool from '../config/adminDBPool.js';
 
 const TopicGroupController = {
 	async getAllUserTopicGroupsAndTopics(email: string) {
@@ -66,6 +68,49 @@ const TopicGroupController = {
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
+		}
+	},
+
+	async updateUserCourseTopics(usercourseid: number, topics: string[]) {
+		const connection = await pool.promise().getConnection();
+
+		try {
+			await connection.beginTransaction();
+
+			await usercourse_topicsModel.deleteUserCourseTopic(usercourseid, connection);
+
+			for (const topic of topics) {
+				let topicId;
+				const existingTopic = await TopicModel.checkIfTopicExists(
+					topic,
+					connection,
+				);
+
+				if (existingTopic.length > 0) {
+					topicId = existingTopic[0].topicid;
+				} else {
+					throw new Error('Topic does not exist');
+				}
+
+				await usercourse_topicsModel.insertUserCourseTopic(
+					usercourseid,
+					topicId,
+					connection,
+				);
+			}
+
+			await connection.commit();
+
+			return {
+				state: 'success',
+				message: 'Topics updated for usercourseid: ' + usercourseid,
+			};
+		} catch (error) {
+			await connection.rollback();
+			console.error(error);
+			return Promise.reject(error);
+		} finally {
+			connection.release();
 		}
 	},
 };

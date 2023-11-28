@@ -13,13 +13,45 @@ const usercourse_topicsModel = {
 		return existingUserCourseTopic;
 	},
 
-	async insertUserCourseTopic(usercourseid: number, topicId: number) {
-		const result = await pool
-			.promise()
-			.query(
+	async deleteUserCourseTopic(usercourseid: number, connection: any) {
+		let result;
+
+		if (connection) {
+			result = await connection.query(
+				'DELETE FROM usercourse_topics WHERE usercourseid = ?',
+				[usercourseid],
+			);
+		} else {
+			result = await pool
+				.promise()
+				.query('DELETE FROM usercourse_topics WHERE usercourseid = ?', [
+					usercourseid,
+				]);
+		}
+
+		return result;
+	},
+
+	async insertUserCourseTopic(
+		usercourseid: number,
+		topicId: number,
+		connection: any,
+	) {
+		let result;
+
+		if (connection) {
+			result = await connection.query(
 				'INSERT INTO usercourse_topics (usercourseid, topicid) VALUES (?, ?)',
 				[usercourseid, topicId],
 			);
+		} else {
+			result = await pool
+				.promise()
+				.query(
+					'INSERT INTO usercourse_topics (usercourseid, topicid) VALUES (?, ?)',
+					[usercourseid, topicId],
+				);
+		}
 
 		return result;
 	},

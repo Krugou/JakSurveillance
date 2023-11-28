@@ -5,6 +5,7 @@ import Tooltip from '@mui/material/Tooltip';
 import {UserContext} from '../../../contexts/UserContext';
 import EditTopicsModal from '../modals/EditTopicsModal';
 import {toast} from 'react-toastify';
+import apiHooks from '../../../hooks/ApiHooks';
 interface Course {
 	courseid: number;
 	course_name: string;
@@ -37,7 +38,6 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 	const [open, setOpen] = useState(false);
 	const [newTopic, setNewTopic] = useState('');
 
-	console.log(courses, 'COURSES');
 	// Open and close the modal
 	const handleOpen = (thisCourseName, thisCourseTopics, thisusercourseid) => {
 		setOpen(true);
@@ -65,10 +65,19 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 		setModifiedTopics(initialCourseTopics);
 	};
 	const handleSave = usercourseid => {
-		toast.success('Topics saved');
 		console.log(usercourseid, 'USERCOURSEID');
+		console.log(modifiedTopics);
+		const token = localStorage.getItem('userToken');
+		if (!token) {
+			throw new Error('No token available');
+		}
 		try {
-		} catch (error) {}
+			apiHooks.updateUserCourseTopics(token, usercourseid, modifiedTopics);
+
+			toast.success('Topics saved');
+		} catch (error) {
+			toast.error('Error saving topics');
+		}
 
 		setOpen(false);
 	};

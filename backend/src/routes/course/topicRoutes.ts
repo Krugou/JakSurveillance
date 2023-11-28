@@ -54,5 +54,31 @@ router.post('/update', async (req: Request, res: Response) => {
 		res.status(500).send('Server error: ' + err);
 	}
 });
+router.post('/update/:usercourseid', async (req: Request, res: Response) => {
+	try {
+		if (
+			req.user?.role !== 'admin' &&
+			req.user?.role !== 'teacher' &&
+			req.user?.role !== 'counselor'
+		) {
+			return res.status(401).send({message: 'Unauthorized'});
+		}
+
+		const {usercourseid} = req.params;
+		const {modifiedTopics} = req.body;
+		if (!modifiedTopics) {
+			return res.status(400).send({message: 'Topics are required'});
+		}
+
+		const topicResponse = await TopicGroupController.updateUserCourseTopics(
+			usercourseid,
+			modifiedTopics,
+		);
+		res.status(200).send(topicResponse);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server error: ' + err);
+	}
+});
 
 export default router;

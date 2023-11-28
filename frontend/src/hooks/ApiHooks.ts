@@ -484,7 +484,24 @@ const fetchAllStudents = async (token: string) => {
 	};
 	return await doFetch(`${baseUrl}secure/students`, options);
 };
-
+const updateUserCourseTopics = async (
+	token: string,
+	usercourseid,
+	modifiedTopics,
+) => {
+	const options = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+		body: JSON.stringify({modifiedTopics}),
+	};
+	return await doFetch(
+		`${baseUrl}courses/topics/update/${usercourseid}`,
+		options,
+	);
+};
 const apiHooks = {
 	checkStaffByEmail,
 	checkCourseCode,
@@ -517,5 +534,6 @@ const apiHooks = {
 	updateGdprStatus,
 	getUserInfoByUserid,
 	fetchAllStudents,
+	updateUserCourseTopics,
 };
 export default apiHooks;
