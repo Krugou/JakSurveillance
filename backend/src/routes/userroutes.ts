@@ -7,7 +7,6 @@ import jwt from 'jsonwebtoken';
 import UserModel from '../models/usermodel.js';
 import {User} from '../utils/pass.js';
 import Usermodel from '../models/usermodel.js';
-import course from '../models/coursemodel.js';
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
 
 const router: Router = express.Router();
@@ -180,16 +179,28 @@ router.post('/', async (req: Request, res: Response, next) => {
 				};
 
 				//console.log(userFromDB);
+
 				if (userFromDB === null) {
 					// If the staff user doesn't exist, add them to the database
 					const addStaffUserResponse = await UserModel.addStaffUser(userData);
 					if (!addStaffUserResponse) {
 						console.error('Failed to add staff user');
 					}
+					// Create a token for the user
+					const token = jwt.sign(
+						addStaffUserResponse as User,
+						process.env.JWT_SECRET as string,
+						{
+							expiresIn: '2h',
+						},
+					);
+					// Send the user and the token in the response
+					res.json({user: addStaffUserResponse, token});
+				} else {
+					// If the staff user exists, authenticate their login
+					console.log('staff try to authenticate');
+					authenticate(req, res, next, username);
 				}
-				// Call the authenticate function to handle passport authentication
-				console.log('staff try to authenticate');
-				authenticate(req, res, next, username);
 			} catch (error) {
 				console.error(error);
 				return res.status(500).json({error: 'Internal server error'});

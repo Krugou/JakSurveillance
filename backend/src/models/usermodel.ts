@@ -129,14 +129,28 @@ const UserModel = {
 	 * @param {User} user - The user to add.
 	 * @returns {Promise<boolean>} A promise that resolves to a boolean indicating whether the addition was successful.
 	 */
-	addStaffUser: async (user: User): Promise<unknown> => {
+	addStaffUser: async (user: User): Promise<User | null> => {
 		try {
 			const {username, email, staff, first_name, last_name, roleid} = user;
-			(await UserModel.pool.execute(
-				'INSERT INTO users (username, email, staff, first_name, last_name, roleid) VALUES (?, ?, ?, ?, ?, ?)',
-				[username, email, staff, first_name, last_name, roleid],
-			)) as unknown as [ResultSetHeader, FieldPacket[]];
-			return;
+			const result = await pool
+				.promise()
+				.query(
+					'INSERT INTO users (username, email, staff, first_name, last_name, roleid) VALUES (?, ?, ?, ?, ?, ?)',
+					[username, email, staff, first_name, last_name, roleid],
+				);
+
+			const insertId = result[0].insertId;
+			const [rows] = await pool
+				.promise()
+				.query(
+					`SELECT users.userid, users.username, users.email, users.first_name, users.last_name, users.created_at, users.studentnumber, users.gdpr AS gdpr, roles.name AS role FROM users JOIN roles ON users.roleid = roles.roleid WHERE users.userid = ?;`,
+					[insertId],
+				);
+			if (rows.length > 0) {
+				return rows[0] as User;
+			} else {
+				return null;
+			}
 		} catch (error) {
 			console.error(error);
 			throw new Error('Database error');
