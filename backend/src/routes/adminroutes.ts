@@ -77,5 +77,14 @@ router.get('/getcourses', async (req: Request, res: Response) => {
 		res.status(500).json({message: 'Internal server error'});
 	}
 });
-
+router.put('/updateuser', async (req: Request, res: Response) => {
+	try {
+		const user = req.body;
+		await usermodel.updateUser(user);
+		res.send({message: 'User updated successfully'});
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({message: 'Internal server error'});
+	}
+});
 export default router;
