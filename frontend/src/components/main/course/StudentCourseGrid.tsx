@@ -136,6 +136,12 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 								<p className="mb-1">
 									<strong>Assigned Topics:</strong> {topics}
 								</p>
+								{user?.role !== 'student' && (
+									<p className="mb-1">
+										<strong>All Topics on course:</strong>{' '}
+										{course?.topic_names.replace(/,/g, ', ')}
+									</p>
+								)}
 								<p className="mb-1">
 									<strong>Start Date:</strong> {startDate}
 								</p>
