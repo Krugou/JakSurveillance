@@ -99,6 +99,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 			console.log(response);
 			toast.success('Topics saved');
 
+			// Rerender the view after saving the topics
 			updateView && updateView();
 		} catch (error) {
 			toast.error('Error saving topics');
