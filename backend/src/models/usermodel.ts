@@ -392,6 +392,46 @@ const UserModel = {
 			return Promise.reject(error);
 		}
 	},
+	updateUser: async (user: any) => {
+		const {
+			userid,
+			first_name,
+			last_name,
+			email,
+			username,
+			role,
+			GDPR,
+			roleid,
+			staff,
+			studentgroupid,
+			studentnumber,
+		} = user;
+
+		try {
+			const [result] = await pool.promise().query<RowDataPacket[]>(
+				`UPDATE users
+                SET first_name = ?, last_name = ?, email = ?, username = ?, role = ?,  GDPR = ?, roleid = ?, staff = ?, studentgroupid = ?, studentnumber = ?
+                WHERE userid = ?`,
+				[
+					first_name,
+					last_name,
+					email,
+					username,
+					role,
+					GDPR,
+					roleid,
+					staff,
+					studentgroupid,
+					studentnumber,
+					userid,
+				],
+			);
+			return result;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
 };
 
 export default UserModel;
