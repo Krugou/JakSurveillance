@@ -8,19 +8,20 @@ interface StudentGroup {
 }
 
 interface StudentGroupModel {
-	fetchAllStudentGroups(): Promise<[RowDataPacket[], FieldPacket[]]>;
 	findByStudentGroupId(id: number): Promise<StudentGroup | null>;
 	insertIntoStudentGroup(studentgroupname: string): Promise<{insertId: number}>;
 	checkIfGroupNameExists(group_name: string): Promise<RowDataPacket[] | null>;
+	fetchAllStudentGroups(): Promise<RowDataPacket[]>;
 	// other methods...
 }
 
 const studentGroupModel: StudentGroupModel = {
 	async fetchAllStudentGroups() {
 		try {
-			return await pool
+			const [results] = await pool
 				.promise()
-				.query<RowDataPacket[]>('SELECT * FROM studentgroup');
+				.query<RowDataPacket[]>('SELECT * FROM studentgroups');
+			return results;
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
