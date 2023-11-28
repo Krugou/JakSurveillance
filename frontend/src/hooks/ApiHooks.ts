@@ -503,8 +503,12 @@ const updateUserCourseTopics = async (
 	);
 };
 
-const updateAttendanceStatus = async (usercourseid: number, status: number, token: string) => {
-	console.log(usercourseid)
+const updateAttendanceStatus = async (
+	usercourseid: number,
+	status: number,
+	token: string,
+) => {
+	console.log(usercourseid);
 	const options = {
 		method: 'PUT',
 		headers: {
@@ -513,11 +517,24 @@ const updateAttendanceStatus = async (usercourseid: number, status: number, toke
 		},
 	};
 	const url = `${baseUrl}courses/attendance/usercourse/update-status/${usercourseid}`;
-	console.log(url)
+	console.log(url);
+	return doFetch(url, options);
+};
+const updateUser = async (token: string, user: any) => {
+	const options = {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+		body: JSON.stringify({user}),
+	};
+	const url = `${baseUrl}admin/updateuser`;
 	return doFetch(url, options);
 };
 
 const apiHooks = {
+	updateUser,
 	checkStaffByEmail,
 	checkCourseCode,
 	getCourses,
