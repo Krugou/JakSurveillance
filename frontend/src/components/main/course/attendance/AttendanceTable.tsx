@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 
 import {
 	MenuItem,
@@ -24,6 +24,20 @@ interface Attendance {
 	usercourseid: number;
 }
 
+interface AttendanceFromTeacher {
+	date: string;
+	name: string;
+	start_date: string;
+	timeofday: string;
+	topicname: string;
+	teacher: string;
+	status: number;
+	usercourseid: number;
+	email: string;
+	first_name: string;
+	last_name: string;
+	studentnumber: string;
+}
 interface StudentInfo {
 	email: string;
 	first_name: string;
@@ -38,7 +52,7 @@ interface StudentInfo {
 	// Include other properties of student here
 }
 interface AttendanceTableProps {
-	filteredAttendanceData: Attendance[];
+	filteredAttendanceData: Attendance[] | AttendanceFromTeacher[];
 	student?: StudentInfo | null;
 	allAttendances?: boolean;
 }
