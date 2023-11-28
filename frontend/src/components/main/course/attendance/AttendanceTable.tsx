@@ -57,7 +57,11 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 			setAttendanceData(updatedAttendanceData);
 
 			const token: string | null = localStorage.getItem('userToken');
-
+			if (token === null) {
+				// Handle the case when token is null
+				console.error('No token found');
+				return;
+			}
 			// Update status in the database
 			const response = await apiHooks.updateAttendanceStatus(
 				updatedAttendanceData[index].usercourseid,
