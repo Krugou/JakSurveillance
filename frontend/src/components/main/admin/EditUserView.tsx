@@ -28,14 +28,41 @@ interface Role {
 	// include other properties if they exist
 }
 
+/**
+ * @typedef {Object} EditUserViewProps
+ * @property {Object} user - The user object.
+ * @property {Function} onSave - The function to call when the save button is clicked.
+ */
+
+/**
+ * @typedef {Object} StudentGroup
+ * @property {number} studentgroupid - The ID of the student group.
+ * @property {string} group_name - The name of the student group.
+ */
+
+/**
+ * @typedef {Object} Role
+ * @property {number} roleid - The ID of the role.
+ * @property {string} name - The name of the role.
+ */
+/**
+ * The EditUserView component allows the user to edit a user's details.
+ * @param {EditUserViewProps} props - The props.
+ */
 const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
+	// State for the edited user, roles, student groups, and whether the student number is taken
 	const [editedUser, setEditedUser] = useState(user);
 	const [roles, setRoles] = useState<Role[]>([]);
 	const [studentGroups, setStudentGroups] = useState<StudentGroup[]>([]);
-	const isStudentNumberTakenRef = useRef(false);
-	const [originalStudentNumber, setOriginalStudentNumber] = useState(
-		user.studentnumber,
-	);
+	const [isStudentNumberTaken, setIsStudentNumberTaken] = useState(false);
+	// State for the original student number and timeout ID
+	const [originalStudentNumber] = useState(user.studentnumber);
+	const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+
+	/**
+	 * Handles changes to the input fields.
+	 * @param {React.ChangeEvent<HTMLInputElement | HTMLSelectElement>} event - The change event.
+	 */
 	const handleInputChange = (
 		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
 	) => {
@@ -48,9 +75,14 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 			[event.target.name]: value,
 		});
 	};
+
+	/**
+	 * Handles the click event of the save button.
+	 */
 	const handleSaveClick = () => {
 		onSave(editedUser);
 	};
+	// Fetch all roles when the component mounts
 	useEffect(() => {
 		const getRoles = async () => {
 			// Get token from local storage
@@ -65,6 +97,8 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 
 		getRoles();
 	}, []);
+
+	// Check if the student number exists when it changes
 	useEffect(() => {
 		const checkStudentNumber = async () => {
 			// Get token from local storage
@@ -74,21 +108,45 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 			}
 			// Only check if the student number has changed from the original
 			if (editedUser.studentnumber !== originalStudentNumber) {
-				const exists = await apihooks.checkStudentNumberExists(
+				const response = await apihooks.checkStudentNumberExists(
 					editedUser.studentnumber.toString(),
 					token,
 				);
-				if (exists) {
-					isStudentNumberTakenRef.current = true;
+
+				if (response.exists) {
+					setIsStudentNumberTaken(true);
 				} else {
-					isStudentNumberTakenRef.current = false;
+					setIsStudentNumberTaken(false);
 				}
 			}
+			console.log(
+				'checkStudentNumber ' +
+					editedUser.studentnumber +
+					' ' +
+					originalStudentNumber,
+			);
+			if (Number(editedUser.studentnumber) === Number(originalStudentNumber)) {
+				setIsStudentNumberTaken(false);
+			}
 		};
+
 		if (editedUser.studentnumber) {
-			checkStudentNumber();
+			// If there is a previous timeout, clear it
+			if (timeoutId) {
+				clearTimeout(timeoutId);
+			}
+
+			// Start a new timeout
+			const newTimeoutId = setTimeout(() => {
+				checkStudentNumber();
+			}, 500); // 500ms delay
+
+			// Save the timeout ID so it can be cleared if the student number changes
+			setTimeoutId(newTimeoutId);
 		}
 	}, [editedUser.studentnumber, originalStudentNumber]);
+
+	// Fetch all student groups when the component mounts
 	useEffect(() => {
 		const getStudentGroups = async () => {
 			// Get token from local storage
@@ -103,6 +161,7 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 		getStudentGroups();
 	}, []);
 
+	// render the component
 	return (
 		<div className="flex flex-col md:space-x-4 justify-center items-center">
 			<h1 className="text-2xl font-bold mb-4">Edit User {editedUser.userid}</h1>
@@ -205,7 +264,7 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 							onChange={handleInputChange}
 							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
 						/>
-						{isStudentNumberTakenRef.current && (
+						{isStudentNumberTaken && (
 							<span className="text-red-500">Student number taken</span>
 						)}
 					</label>
