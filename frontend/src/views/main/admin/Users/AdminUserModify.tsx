@@ -5,7 +5,7 @@ import EditUserView from '../../../../components/main/admin/EditUserView';
 import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
 interface User {
-	userid: number;
+	userid: string;
 	username: string | null;
 	email: string;
 	staff: number;

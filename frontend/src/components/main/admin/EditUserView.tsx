@@ -1,21 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import apihooks from '../../../hooks/ApiHooks';
+interface User {
+	userid: string;
+	username: string | null;
+	email: string;
+	staff: number;
+	first_name: string;
+	last_name: string;
+	created_at: string;
+	studentnumber: number;
+	studentgroupid: number;
+	roleid: number;
+	GDPR: number;
+	role: string;
+}
 interface EditUserViewProps {
-	user: {
-		role: string;
-		first_name: string;
-		last_name: string;
-		email: string;
-		studentnumber: number;
-		userid: string;
-		username: string;
-		created_at: string;
-		GDPR: number;
-		roleid: number;
-		staff: number;
-		studentgroupid: number;
-	};
-	onSave: (user: EditUserViewProps['user']) => void;
+	user: User;
+	onSave: (user: User) => void;
 }
 interface StudentGroup {
 	studentgroupid: number;
