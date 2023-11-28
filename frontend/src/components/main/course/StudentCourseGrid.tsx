@@ -6,7 +6,6 @@ import {UserContext} from '../../../contexts/UserContext';
 import EditTopicsModal from '../modals/EditTopicsModal';
 import {toast} from 'react-toastify';
 import apiHooks from '../../../hooks/ApiHooks';
-import {set} from 'date-fns';
 interface Course {
 	courseid: number;
 	course_name: string;
