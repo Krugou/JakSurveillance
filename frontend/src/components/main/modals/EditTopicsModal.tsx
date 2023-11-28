@@ -49,32 +49,33 @@ const EditTopicsModal: React.FC<EditTopicsModalProps> = ({
 		>
 			<div className="p-4 bg-white rounded shadow-lg max-w-lg mx-auto mt-10">
 				<h2 className="text-2xl mb-4">Edit Topics for {courseName}</h2>
-
-				<TextField
-					value={newTopic}
-					onChange={e => setNewTopic(e.target.value)}
-					label="New Topic"
-					variant="outlined"
-					className="mb-6"
-					fullWidth
-					required
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<IconButton
-									onClick={() => {
-										if (newTopic.trim() !== '') {
-											setCourseTopics([...courseTopics, newTopic]);
-											setNewTopic('');
-										}
-									}}
-								>
-									<AddIcon />
-								</IconButton>
-							</InputAdornment>
-						),
-					}}
-				/>
+				{!counselor && (
+					<TextField
+						value={newTopic}
+						onChange={e => setNewTopic(e.target.value)}
+						label="New Topic"
+						variant="outlined"
+						className="mb-6"
+						fullWidth
+						required
+						InputProps={{
+							endAdornment: (
+								<InputAdornment position="end">
+									<IconButton
+										onClick={() => {
+											if (newTopic.trim() !== '') {
+												setCourseTopics([...courseTopics, newTopic]);
+												setNewTopic('');
+											}
+										}}
+									>
+										<AddIcon />
+									</IconButton>
+								</InputAdornment>
+							),
+						}}
+					/>
+				)}
 				{courseTopics.map((topic, index) => (
 					<div key={index} className="flex items-center mb-2 mt-3">
 						<Checkbox
@@ -82,15 +83,23 @@ const EditTopicsModal: React.FC<EditTopicsModalProps> = ({
 							onChange={() => handleTopicChange(topic)}
 						/>
 						<p className="flex-grow">{topic}</p>
-						<IconButton onClick={() => handleDeleteTopic(topic)}>
-							<DeleteIcon />
-						</IconButton>
+						{!counselor && (
+							<IconButton onClick={() => handleDeleteTopic(topic)}>
+								<DeleteIcon />
+							</IconButton>
+						)}
 					</div>
 				))}
-				<p className="text-sm text-gray-500 mb-4">
-					Only checked topics will be included in the course, deleting them from the
-					view will also exclude them.
-				</p>
+				{counselor ? (
+					<p className="text-sm text-gray-500 mb-4">
+						Only checked topics will be included in the course
+					</p>
+				) : (
+					<p className="text-sm text-gray-500 mb-4">
+						Only checked topics will be included in the course, deleting them from the
+						view will also exclude them.
+					</p>
+				)}
 				<div className="flex justify-between mt-6">
 					<Button
 						variant="outlined"
