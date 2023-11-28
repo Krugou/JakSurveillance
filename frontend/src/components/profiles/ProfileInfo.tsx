@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {toast} from 'react-toastify';
 import apiHooks from '../../hooks/ApiHooks'; // Replace with the correct path to your ApiHooks file
 
 interface ProfileInfoPros {
@@ -41,7 +42,7 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 	}, []);
 
 	const handleOpen = () => {
-		setOpen(true);
+		setOpen(prevOpen => !prevOpen);
 	};
 
 	const handleClose = () => {
@@ -54,9 +55,24 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 		if (!token) {
 			throw new Error('No token available');
 		}
-		// Call the API to change the role
-		await apiHooks.changeRoleId(user.email, selectedRole, token);
-		handleClose();
+		try {
+			// Call the API to change the role
+			const response = await apiHooks.changeRoleId(
+				user.email,
+				selectedRole,
+				token,
+			);
+			if (!response.ok) {
+				toast.error(response.error);
+			}
+
+			toast.success(response.message);
+			handleClose();
+		} catch (error) {
+			toast.error((error as Error).toString());
+			console.error('Failed to change role:', error);
+			// handle the error appropriately, e.g., show a message to the user
+		}
 	};
 
 	return (
@@ -78,7 +94,7 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 				<strong>Role:</strong> <span className="profileStat">{user.role}</span>
 				{['counselor', 'teacher'].includes(user.role) && (
 					<button
-						className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+						className="bg-metropoliaMainGrey hover:bg-metropoliaTrendLightBlue text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
 						onClick={handleOpen}
 					>
 						Change
