@@ -1,65 +1,183 @@
-import React, { useState } from 'react';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import Tooltip from '@mui/material/Tooltip';
+import React, {useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
+import {toast} from 'react-toastify';
+import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
+import DeleteModal from '../../../../components/main/modals/DeleteModal';
+import apiHooks from '../../../../hooks/ApiHooks';
 
-interface Person {
-    id: number;
-    name: string;
+// Define your course detail structure here
+interface CourseDetail {
+	courseid: number;
+	name: string;
+	description: string;
+	start_date: Date;
+	end_date: Date;
+	code: string;
+	studentgroup_name: string;
+	created_at: string;
+	topic_names: string[];
+	user_count: number;
+	instructor_name: string;
 }
+interface Course {
+	courseid: number;
+	name: string;
+	description: string;
+	start_date: string;
+	end_date: string;
+	code: string;
+	studentgroup_name: string;
+	topic_names: string;
+	created_at: string;
+	user_count: number;
+	instructor_name: string;
 
-const initialTeachers: Person[] = [
-    { id: 1, name: 'Teacher 1' },
-    { id: 2, name: 'Teacher 2' },
-    { id: 3, name: 'Teacher 3' },
-];
-
-const initialStudents: Person[] = [
-    { id: 4, name: 'Student 1' },
-    { id: 5, name: 'Student 2' },
-    { id: 6, name: 'Student 3' },
-];
-
+	// Include other properties of course here
+}
 const AdminCourseDetail: React.FC = () => {
-    const [teachers] = useState<Person[]>(initialTeachers);
-    const [students] = useState<Person[]>(initialStudents);
+	const {id} = useParams<{id: string}>();
+	const [courseData, setCourseData] = useState<CourseDetail | null>(null);
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+	const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
 
-    return (
-        <div className="bg-gray-100">
-            <div className="w-1/3 m-auto">
-                <div className="flex flex-col">
-                   <h2 className="profileStat mb-4 mt-4 w-fit">
-                       Course Name
-                   </h2>
-                    <h2 className="profileStat w-fit">
-                        Course Code
-                    </h2>
-                </div>
-                <div className="p-4 flex gap-10">
-                    <div className="mb-4 rounded bg-white p-3">
-                        <h2 className="text-xl font-bold mb-2">Teachers</h2>
-                        <ul>
-                            {teachers.map((teacher) => (
-                                <li key={teacher.id} className="flex gap-5 items-center p-2">
-                                    {teacher.name}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className="mb-4 rounded bg-white p-3">
-                        <h2 className="text-xl font-bold mb-2">Students</h2>
-                        <ul>
-                            {students.map((student) => (
-                                <li key={student.id} className="flex gap-5 items-center p-2">
-                                    {student.name}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-                <button className="bg-metropoliaMainOrange mb-4 text-white py-2 px-4 rounded">
-                    Save Changes
-                </button>
-            </div>
-        </div>
-    );
+	const navigate = useNavigate();
+
+	const handleDeleteCourse = async (courseid: number) => {
+		setIsDeleteModalOpen(false);
+
+		// Get token from local storage
+		const token: string = localStorage.getItem('userToken') || '';
+		try {
+			await apiHooks.deleteCourse(courseid, token);
+
+			toast.success('Course deleted');
+			// Check if we are in the TeacherCourseDetail route
+
+			navigate('/admin/courses');
+		} catch (error) {
+			if (error instanceof Error) {
+				toast.error(error.message);
+			}
+		}
+	};
+
+	const openDeleteModal = (courseid: number) => {
+		setSelectedCourseId(courseid);
+		setIsDeleteModalOpen(true);
+	};
+
+	const closeDeleteModal = () => {
+		setIsDeleteModalOpen(false);
+	};
+
+	useEffect(() => {
+		if (isDeleteModalOpen) {
+			document.body.classList.add('overflow-hidden');
+		} else {
+			document.body.classList.remove('overflow-hidden');
+		}
+	}, [isDeleteModalOpen]);
+
+	const handleDelete = () => {
+		if (selectedCourseId !== null) {
+			handleDeleteCourse(selectedCourseId);
+		}
+	};
+
+	useEffect(() => {
+		const fetchCourse = async () => {
+			if (id) {
+				const token: string | null = localStorage.getItem('userToken');
+				if (!token) {
+					throw new Error('No token available');
+				}
+				const courseData = await apiHooks.getCourseDetailByCourseId(id, token);
+
+				setCourseData(courseData);
+			}
+		};
+
+		fetchCourse();
+	}, [id]);
+
+	return (
+		<BackgroundContainer>
+			<h2 className="font-bold text-lg">CourseId {id}</h2>
+			<div className="m-4 bg-white rounded-lg shadow-lg mx-auto w-full sm:w-3/4 md:w-2/4 lg:w-2/5 2xl:w-1/5">
+				<>
+					{Array.isArray(courseData) &&
+						courseData.map((course: Course) => (
+							<div
+								key={course.courseid}
+								className="mt-4 bg-white p-5 rounded-lg mb-4 relative"
+							>
+								{/* Add a relative position to the card container */}
+								<Tooltip title="Modify this course">
+									<EditIcon
+										fontSize="large"
+										className="absolute top-0 right-0 m-4 mr-16 cursor-pointer text-black bg-gray-300 rounded-full p-1 hover:text-gray-700"
+										onClick={() => navigate(`/teacher/courses/${course.courseid}/modify`)}
+									/>
+								</Tooltip>
+								<Tooltip title="Delete this course">
+									<DeleteIcon
+										fontSize="large"
+										className="absolute top-0 right-0 m-4 cursor-pointer text-red-500 bg-gray-300 rounded-full p-1 hover:text-red-700"
+										onClick={() => openDeleteModal(course.courseid)}
+									/>
+								</Tooltip>
+								{/* Position the DeleteIcon at the top right corner */}
+								<p className="font-bold text-lg">{course.name}</p>
+								<p className="text-gray-700 text-base">{course.description}</p>
+								<div className="mt-2">
+									<div className="flex justify-between">
+										<p className="text-gray-700">Start date:</p>
+										<p>{new Date(course.start_date).toLocaleDateString()}</p>
+									</div>
+									<div className="flex justify-between">
+										<p className="text-gray-700">End date:</p>
+										<p>{new Date(course.end_date).toLocaleDateString()}</p>
+									</div>
+									<div className="flex justify-between">
+										<div className="text-gray-700">Code:</div>
+										<div>{course.code}</div>
+									</div>
+									<div className="flex justify-between">
+										<p className="text-gray-700">Student group:</p>
+										<p>{course.studentgroup_name}</p>
+									</div>
+									<div className="flex justify-between mb-2">
+										<p className="text-gray-700">Topics:</p>
+										<p>{course.topic_names?.replace(/,/g, ', ')}</p>
+									</div>
+									<h2 className="text-xl mt-4"> Additional Info</h2>
+									<div className="flex justify-between">
+										<p className="text-gray-700">Course Created at:</p>
+										<p>{new Date(course.created_at).toLocaleDateString()}</p>
+									</div>
+									<div className="flex justify-between">
+										<p className="text-gray-700">Amount of students</p>
+										<p>{course.user_count}</p>
+									</div>
+									<div className="flex justify-between mb-2">
+										<p className="text-gray-700">Instructors: </p>
+										<p>{course.instructor_name}</p>
+									</div>
+								</div>
+							</div>
+						))}
+					<DeleteModal
+						isOpen={isDeleteModalOpen}
+						onDelete={handleDelete}
+						onClose={closeDeleteModal}
+					/>
+				</>
+			</div>
+		</BackgroundContainer>
+	);
 };
 
 export default AdminCourseDetail;
