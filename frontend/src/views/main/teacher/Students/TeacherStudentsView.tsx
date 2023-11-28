@@ -1,7 +1,7 @@
 import {CircularProgress} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
-
+import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
 import InputField from '../../../../components/main/course/createcourse/coursedetails/InputField';
 import {UserContext} from '../../../../contexts/UserContext';
@@ -74,7 +74,7 @@ const TeacherStudentsView: React.FC = () => {
 		),
 	);
 	return (
-		<>
+		<BackgroundContainer>
 			<h1 className="text-2xl font-bold mb-4">Your Students</h1>
 			<div className="flex flex-wrap w-3/4 bg-gray-100 p-5">
 				<div className="w-full m-4 p-4">
@@ -117,7 +117,7 @@ const TeacherStudentsView: React.FC = () => {
 					</div>
 				))}
 			</div>
-		</>
+		</BackgroundContainer>
 	);
 };
 

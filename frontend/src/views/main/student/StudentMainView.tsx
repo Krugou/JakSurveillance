@@ -1,11 +1,11 @@
 import React from 'react';
-
+import BackgroundContainer from '../../../components/main/background/BackgroundContainer';
 import Card from '../../../components/main/cards/Card';
 import MainViewTitle from '../../../components/main/titles/MainViewTitle';
 
 const MainView: React.FC = () => {
 	return (
-		<>
+		<BackgroundContainer>
 			<MainViewTitle role={'Student'} />
 			<div className="flex flex-wrap w-full items-center justify-center h-1/2">
 				<Card
@@ -24,7 +24,7 @@ const MainView: React.FC = () => {
 					description="View your own courses"
 				/>
 			</div>
-		</>
+		</BackgroundContainer>
 	);
 };
 

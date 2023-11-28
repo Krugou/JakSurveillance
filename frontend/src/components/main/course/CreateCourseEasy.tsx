@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {UserContext} from '../../../contexts/UserContext.tsx';
 import apiHooks from '../../../hooks/ApiHooks';
-
+import BackgroundContainer from '../background/BackgroundContainer';
 import AddTeachers from './createcourse/AddTeachers';
 import CourseDetails from './createcourse/CourseDetails';
 import StepButtons from './createcourse/StepButtons';
@@ -200,84 +200,86 @@ const CreateCourseEasy: React.FC = () => {
 		}
 	}, [instructorEmail]);
 	return (
-		<form onSubmit={handleSubmit} className={getFormClassName()}>
-			{currentStep === 1 && (
-				<fieldset>
-					<legend className="text-xl mb-3">Insert Course Students Data File</legend>
-					<label className="w-full mb-2 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white transition-colors duration-300 ease-in-out">
-						<svg className="w-8 h-8 fill-current" viewBox="0 0 20 20">
-							<path d="M10 4a2 2 0 00-2 2v4a2 2 0 104 0V6a2 2 0 00-2-2zm0 12a6 6 0 100-12 6 6 0 000 12z" />
-						</svg>
-						<span className="mt-2 text-base font-medium leading-normal">
-							{uploadFile}
-						</span>
-						<input type="file" className="hidden" onChange={handleFileChange} />
-						<div className="w-full p-2 mt-2 bg-gray-100 text-gray-500 rounded-lg">
-							{selectedFile}
+		<BackgroundContainer>
+			<form onSubmit={handleSubmit} className={getFormClassName()}>
+				{currentStep === 1 && (
+					<fieldset>
+						<legend className="text-xl mb-3">Insert Course Students Data File</legend>
+						<label className="w-full mb-2 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white transition-colors duration-300 ease-in-out">
+							<svg className="w-8 h-8 fill-current" viewBox="0 0 20 20">
+								<path d="M10 4a2 2 0 00-2 2v4a2 2 0 104 0V6a2 2 0 00-2-2zm0 12a6 6 0 100-12 6 6 0 000 12z" />
+							</svg>
+							<span className="mt-2 text-base font-medium leading-normal">
+								{uploadFile}
+							</span>
+							<input type="file" className="hidden" onChange={handleFileChange} />
+							<div className="w-full p-2 mt-2 bg-gray-100 text-gray-500 rounded-lg">
+								{selectedFile}
+							</div>
+						</label>
+						<label className="flex items-center mt-2 mb-3 space-x-3">
+							<input
+								type="checkbox"
+								checked={shouldCheckDetails}
+								onChange={() => setShouldCheckDetails(prev => !prev)}
+								className="form-checkbox h-5 w-5 text-blue-600"
+							/>
+							<span className="text-gray-900 font-medium">
+								Check Course Details from Open Data
+							</span>
+						</label>
+						<div className="flex justify-end">
+							<button
+								type="button"
+								className="w-40 p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
+								onClick={handleExcelInput}
+							>
+								Next
+							</button>
 						</div>
-					</label>
-					<label className="flex items-center mt-2 mb-3 space-x-3">
-						<input
-							type="checkbox"
-							checked={shouldCheckDetails}
-							onChange={() => setShouldCheckDetails(prev => !prev)}
-							className="form-checkbox h-5 w-5 text-blue-600"
-						/>
-						<span className="text-gray-900 font-medium">
-							Check Course Details from Open Data
-						</span>
-					</label>
-					<div className="flex justify-end">
-						<button
-							type="button"
-							className="w-40 p-2 mt-2 bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-							onClick={handleExcelInput}
-						>
-							Next
-						</button>
-					</div>
-				</fieldset>
-			)}
-			{currentStep === 2 && (
-				<CourseDetails
-					courseCode={courseCode}
-					setCourseCode={setCourseCode}
-					courseName={courseName}
-					setCourseName={setCourseName}
-					studentGroup={studentGroup}
-					setStudentGroup={setStudentGroup}
-					startDate={startDate}
-					setStartDate={setStartDate}
-					endDate={endDate}
-					setEndDate={setEndDate}
-					courseExists={courseExists}
-					setCourseExists={setCourseExists}
-				/>
-			)}
+					</fieldset>
+				)}
+				{currentStep === 2 && (
+					<CourseDetails
+						courseCode={courseCode}
+						setCourseCode={setCourseCode}
+						courseName={courseName}
+						setCourseName={setCourseName}
+						studentGroup={studentGroup}
+						setStudentGroup={setStudentGroup}
+						startDate={startDate}
+						setStartDate={setStartDate}
+						endDate={endDate}
+						setEndDate={setEndDate}
+						courseExists={courseExists}
+						setCourseExists={setCourseExists}
+					/>
+				)}
 
-			{currentStep === 3 && (
-				<StudentList studentList={studentList} setStudentList={setStudentList} />
-			)}
-			{currentStep === 4 && (
-				<AddTeachers
-					instructors={instructors}
-					setInstructors={setInstructors}
-					instructorEmail={instructorEmail}
-				/>
-			)}
-			{currentStep === 5 && (
-				<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
-			)}
-			{currentStep >= 2 && (
-				<StepButtons
-					currentStep={currentStep}
-					onPrevClick={() => setCurrentStep(prevStep => prevStep - 1)}
-					onNextClick={incrementStep}
-					onSubmitClick={handleSubmitWrapper} // Use the wrapper function here
-					extrastep={true}
-				/>
-			)}
-		</form>
+				{currentStep === 3 && (
+					<StudentList studentList={studentList} setStudentList={setStudentList} />
+				)}
+				{currentStep === 4 && (
+					<AddTeachers
+						instructors={instructors}
+						setInstructors={setInstructors}
+						instructorEmail={instructorEmail}
+					/>
+				)}
+				{currentStep === 5 && (
+					<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
+				)}
+				{currentStep >= 2 && (
+					<StepButtons
+						currentStep={currentStep}
+						onPrevClick={() => setCurrentStep(prevStep => prevStep - 1)}
+						onNextClick={incrementStep}
+						onSubmitClick={handleSubmitWrapper} // Use the wrapper function here
+						extrastep={true}
+					/>
+				)}
+			</form>
+		</BackgroundContainer>
 	);
 };
 

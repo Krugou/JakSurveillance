@@ -1,10 +1,10 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import StudentCourseGrid from '../../../../components/main/course/StudentCourseGrid';
-import ProfileInfo from '../../../../components/profiles/ProfileInfo';
 import apiHooks from '../../../../hooks/ApiHooks';
-
+import ProfileInfo from '../../../../components/profiles/ProfileInfo';
+import StudentCourseGrid from '../../../../components/main/course/StudentCourseGrid';
+import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import {UserContext} from '../../../../contexts/UserContext';
 interface StudentInfo {
 	email: string;
@@ -76,21 +76,23 @@ const TeacherStudentDetail: React.FC = () => {
 		setUpdate(!update);
 	};
 	return (
-		<div className="bg-gray-100 rounded-lg p-5">
-			<h2 className="text-2xl font-bold underline underline-offset-8 decoration-metropoliaMainOrange mb-5">
-				{student.first_name + ' ' + student.last_name}'s Info
-			</h2>
-			<ProfileInfo user={student} />
-			<div className="w-full mt-10 h-1 bg-metropoliaMainOrange rounded-md"></div>
-			<h2 className="text-2xl font-bold mt-10 underline underline-offset-8 decoration-metropoliaMainOrange mb-5">
-				{student.first_name + ' ' + student.last_name}'s Courses
-			</h2>
-			<StudentCourseGrid
-				courses={courses}
-				showEndedCourses={true}
-				updateView={updateView}
-			/>
-		</div>
+		<BackgroundContainer>
+			<div className="bg-gray-100 rounded-lg p-5">
+				<h2 className="text-2xl font-bold underline underline-offset-8 decoration-metropoliaMainOrange mb-5">
+					{student.first_name + ' ' + student.last_name}'s Info
+				</h2>
+				<ProfileInfo user={student} />
+				<div className="w-full mt-10 h-1 bg-metropoliaMainOrange rounded-md"></div>
+				<h2 className="text-2xl font-bold mt-10 underline underline-offset-8 decoration-metropoliaMainOrange mb-5">
+					{student.first_name + ' ' + student.last_name}'s Courses
+				</h2>
+				<StudentCourseGrid
+					courses={courses}
+					showEndedCourses={true}
+					updateView={updateView}
+				/>
+			</div>
+		</BackgroundContainer>
 	);
 };
 

@@ -5,7 +5,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
-
+import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import AddTeachers from '../../../../components/main/course/createcourse/AddTeachers';
 import CourseDetails from '../../../../components/main/course/createcourse/CourseDetails';
 import EditTopicsModal from '../../../../components/main/modals/EditTopicsModal';
@@ -147,7 +147,7 @@ const TeacherCourseModify: React.FC = () => {
 	};
 
 	return (
-		<>
+		<BackgroundContainer>
 			<h2 className="text-gray-800 font-semibold mb-6 text-md sm:text-2xl">
 				Modify Course
 			</h2>
@@ -221,7 +221,7 @@ const TeacherCourseModify: React.FC = () => {
 					</button>
 				</div>
 			</form>
-		</>
+		</BackgroundContainer>
 	);
 };
 

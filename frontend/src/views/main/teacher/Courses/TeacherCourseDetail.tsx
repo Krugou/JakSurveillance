@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
-
+import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import CourseData from '../../../../components/main/course/CourseData';
 import apihooks from '../../../../hooks/ApiHooks';
 
@@ -44,12 +44,12 @@ const TeacherCourseDetail: React.FC = () => {
 	}, [id]);
 
 	return (
-		<>
+		<BackgroundContainer>
 			<h2 className="font-bold text-lg">My single course</h2>
 			<div className="m-4 bg-white rounded-lg shadow-lg mx-auto w-full sm:w-3/4 md:w-2/4 lg:w-2/5 2xl:w-1/5">
 				{courseData && <CourseData courseData={courseData} />}
 			</div>
-		</>
+		</BackgroundContainer>
 	);
 };
 

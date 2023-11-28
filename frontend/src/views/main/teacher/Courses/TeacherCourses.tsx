@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-
+import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import CourseData from '../../../../components/main/course/CourseData';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
@@ -46,12 +46,12 @@ const TeacherCourses: React.FC = () => {
 		setUpdate(!update);
 	};
 	return (
-		<>
+		<BackgroundContainer>
 			<h2 className="font-bold text-3xl xl:text-4xl">My courses</h2>
 			<div className="w-full sm:w-3/4 md:w-2/4 lg:w-2/5 2xl:w-1/5">
 				<CourseData courseData={courses} updateView={updateView} />
 			</div>
-		</>
+		</BackgroundContainer>
 	);
 };
 
