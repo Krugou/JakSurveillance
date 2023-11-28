@@ -60,8 +60,10 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 		setUsercourseid(thisusercourseid);
 	};
 
+	// Handle the topic change
 	const handleTopicChange = topic => {
 		toast.info('Topics changed');
+		// If the topic is already in the modified topics array, remove it
 		setModifiedTopics(prevTopics =>
 			prevTopics.includes(topic)
 				? prevTopics.filter(t => t !== topic)
@@ -69,10 +71,14 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 		);
 	};
 	const handleDeleteTopic = topic => {
+		// If the topic is already in the modified topics array, remove it
 		setCourseTopics(prevTopics => prevTopics.filter(t => t !== topic));
 		setModifiedTopics(prevTopics => prevTopics.filter(t => t !== topic));
 	};
+
+	// Reset the data
 	const resetData = () => {
+		// Reset the topics to the initial topics
 		setCourseTopics(initialCourseTopics);
 		setModifiedTopics(initialCourseTopics);
 	};
