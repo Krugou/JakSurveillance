@@ -532,7 +532,19 @@ const updateUser = async (token: string, user: any) => {
 	const url = `${baseUrl}admin/updateuser`;
 	return doFetch(url, options);
 };
-
+const getLecturesAndAttendances = async (
+	courseId: string | undefined,
+	token: string,
+) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	const url = `${baseUrl}courses/attendance/course/${courseId}`;
+	return doFetch(url, options);
+};
 const apiHooks = {
 	updateUser,
 	checkStaffByEmail,
@@ -568,5 +580,6 @@ const apiHooks = {
 	fetchAllStudents,
 	updateUserCourseTopics,
 	updateAttendanceStatus,
+	getLecturesAndAttendances,
 };
 export default apiHooks;
