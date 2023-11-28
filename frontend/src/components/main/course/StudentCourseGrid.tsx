@@ -85,7 +85,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 
 	const handleSave = async usercourseid => {
 		console.log(usercourseid, 'USERCOURSEID');
-		console.log(modifiedTopics);
+		console.log(modifiedTopics, 'MODIFIED TOPICS');
 		const token = localStorage.getItem('userToken');
 		if (!token) {
 			throw new Error('No token available');
