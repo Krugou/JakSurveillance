@@ -146,12 +146,24 @@ const CourseData: React.FC<CourseDataProps> = ({courseData, updateView}) => {
 										<p className="text-gray-700">Instructors: </p>
 										<p>{course.instructor_name}</p>
 									</div>
+									<GeneralLinkButton
+										path={`/teacher/courses/attendances/${course.courseid}`}
+										text="View attendances"
+									/>
 								</>
 							) : (
-								<GeneralLinkButton
-									path={`/teacher/courses/${course.courseid}`}
-									text="View details"
-								/>
+								<div className="flex">
+									<GeneralLinkButton
+										path={`/teacher/courses/${course.courseid}`}
+										text="View details"
+									/>
+									<div className="ml-2">
+										<GeneralLinkButton
+											path={`/teacher/courses/attendances/${course.courseid}`}
+											text="View attendances"
+										/>
+									</div>
+								</div>
 							)}
 						</div>
 					</div>

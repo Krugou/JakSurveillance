@@ -242,6 +242,24 @@ const lectureModel: LectureModel = {
 			return Promise.reject(error);
 		}
 	},
+	async getLecturesByCourseId(courseid: number) {
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					'SELECT * FROM lecture ' +
+						'JOIN courses ON lecture.courseid = courses.courseid ' +
+						'WHERE lecture.courseid = ?',
+					[courseid],
+				);
+
+			return rows ?? null;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
+
 	// other methods...
 };
 

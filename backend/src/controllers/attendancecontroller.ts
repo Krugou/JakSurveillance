@@ -1,4 +1,5 @@
 import attendanceModel from '../models/attendancemodel.js';
+import lectureModel from '../models/lecturemodel.js';
 import usercoursesModel from '../models/usercoursemodel.js';
 interface AttendanceController {
 	insertIntoAttendance: (
@@ -37,7 +38,8 @@ const attendanceController: AttendanceController = {
 
 			const usercourseid = usercourseResult[0].usercourseid;
 			const attendanceResultCheck = await attendanceModel.checkAttendance(
-				usercourseid,lectureid
+				usercourseid,
+				lectureid,
 			);
 
 			if (!attendanceResultCheck || attendanceResultCheck.length > 0) {
@@ -78,7 +80,11 @@ const attendanceController: AttendanceController = {
 		}
 	},
 
-	async checkAndInsertStatusNotPresentAttendance(date, studentnumbers, lectureid) {
+	async checkAndInsertStatusNotPresentAttendance(
+		date,
+		studentnumbers,
+		lectureid,
+	) {
 		try {
 			for (const studentnumber of studentnumbers) {
 				const usercourseResult = await usercoursesModel.getUserCourseId(
@@ -125,6 +131,27 @@ const attendanceController: AttendanceController = {
 		} catch (error) {
 			console.error(error);
 			return false;
+		}
+	},
+
+	async getLecturesAndAttendancesByCourseId(courseid: number) {
+		try {
+			const lectures = await lectureModel.getLecturesByCourseId(courseid);
+			const lecturesWithAttendances = await Promise.all(
+				lectures.map(async lecture => {
+					const attendances = await attendanceModel.getAttendaceByCourseId(
+						lecture.lectureid,
+					);
+					return {
+						...lecture,
+						attendances,
+					};
+				}),
+			);
+			return lecturesWithAttendances;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
 		}
 	},
 };
