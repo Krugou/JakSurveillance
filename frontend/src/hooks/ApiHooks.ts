@@ -545,7 +545,31 @@ const getLecturesAndAttendances = async (
 	const url = `${baseUrl}courses/attendance/course/${courseId}`;
 	return doFetch(url, options);
 };
+const fetchStudentGroups = async (token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	return await doFetch(baseUrl + 'admin/studentgroups', options);
+};
+const checkStudentNumberExists = async (
+	studentnumber: string,
+	token: string,
+) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	const url = `${baseUrl}admin/checkstudentnumber/${studentnumber}`;
+	return doFetch(url, options);
+};
 const apiHooks = {
+	checkStudentNumberExists,
+	fetchStudentGroups,
 	updateUser,
 	checkStaffByEmail,
 	checkCourseCode,

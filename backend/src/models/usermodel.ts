@@ -392,14 +392,13 @@ const UserModel = {
 			return Promise.reject(error);
 		}
 	},
-	updateUser: async (user: any) => {
+	updateUser: async user => {
 		const {
 			userid,
 			first_name,
 			last_name,
 			email,
 			username,
-			role,
 			GDPR,
 			roleid,
 			staff,
@@ -410,14 +409,13 @@ const UserModel = {
 		try {
 			const [result] = await pool.promise().query<RowDataPacket[]>(
 				`UPDATE users
-                SET first_name = ?, last_name = ?, email = ?, username = ?, role = ?,  GDPR = ?, roleid = ?, staff = ?, studentgroupid = ?, studentnumber = ?
+                SET first_name = ?, last_name = ?, email = ?, username = ?, GDPR = ?, roleid = ?, staff = ?, studentgroupid = ?, studentnumber = ?
                 WHERE userid = ?`,
 				[
 					first_name,
 					last_name,
 					email,
 					username,
-					role,
 					GDPR,
 					roleid,
 					staff,
@@ -431,6 +429,15 @@ const UserModel = {
 			console.error(error);
 			return Promise.reject(error);
 		}
+	},
+	checkIfStudentNumberExists: async (studentnumber: string) => {
+		const [existingStudentNumber] = await pool
+			.promise()
+			.query<RowDataPacket[]>('SELECT * FROM users WHERE studentnumber = ?', [
+				studentnumber,
+			]);
+
+		return existingStudentNumber;
 	},
 };
 

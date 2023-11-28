@@ -2,6 +2,7 @@ import express, {Request, Response, Router} from 'express';
 import adminController from '../controllers/admincontroller.js';
 import course from '../models/coursemodel.js';
 import rolemodel from '../models/rolemodel.js';
+import studentgroupmodel from '../models/studentgroupmodel.js';
 import usermodel from '../models/usermodel.js';
 const router: Router = express.Router();
 router.get('/', async (_req: Request, res: Response) => {
@@ -87,4 +88,33 @@ router.put('/updateuser', async (req: Request, res: Response) => {
 		res.status(500).json({message: 'Internal server error'});
 	}
 });
+router.get('/studentgroups', async (_req: Request, res: Response) => {
+	try {
+		const groups = await studentgroupmodel.fetchAllStudentGroups();
+		res.send(groups);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({message: 'Internal server error'});
+	}
+});
+router.get(
+	'/checkstudentnumber/:studentnumber',
+	async (req: Request, res: Response) => {
+		try {
+			const {studentnumber} = req.params;
+			const existingStudentNumber = await usermodel.checkIfStudentNumberExists(
+				studentnumber,
+			);
+			if (existingStudentNumber.length > 0) {
+				res.send({exists: true});
+			} else {
+				res.send({exists: false});
+			}
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({message: 'Internal server error'});
+		}
+	},
+);
+
 export default router;

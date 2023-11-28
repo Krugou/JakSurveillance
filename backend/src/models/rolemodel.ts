@@ -8,17 +8,20 @@ interface Role {
 }
 
 interface RoleModel {
-	fetchAllRoles(): Promise<[RowDataPacket[], FieldPacket[]]>;
 	findByRoleId(id: number): Promise<Role | null>;
 	insertIntoRole(rolename: string): Promise<void>;
 	fetchTeacherAndCounselorRoles(): Promise<RowDataPacket[]>;
+	fetchAllRoles(): Promise<RowDataPacket[]>;
 	// other methods...
 }
 
 const roleModel: RoleModel = {
 	async fetchAllRoles() {
 		try {
-			return await pool.promise().query<RowDataPacket[]>('SELECT * FROM roles');
+			const [results] = await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT * FROM roles');
+			return results;
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
