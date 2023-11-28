@@ -59,22 +59,23 @@ const TeacherCourseAttendances: React.FC = () => {
 			<h1 className="text-center text-3xl font-bold">
 				Teacher Course Attendances
 			</h1>
-			<Calendar
-				className="w-full"
-				onChange={handleDateChange}
-				value={selectedDate}
-				tileContent={({date}) => {
-					const calendarDate = new Date(date).toLocaleDateString();
+			<div className="flex justify-center m-4">
+				<Calendar
+					className="w-1/2"
+					onChange={handleDateChange}
+					value={selectedDate}
+					tileContent={({date}) => {
+						const calendarDate = new Date(date).toLocaleDateString();
 
-					const isLectureStartDate = lectureStartDates.includes(calendarDate);
+						const isLectureStartDate = lectureStartDates.includes(calendarDate);
 
-					// If it is, add a custom class to the tile
-					return isLectureStartDate ? (
-						<div className="bg-yellow-300 h-full w-full"></div>
-					) : null;
-				}}
-			/>
-
+						// If it is, add a custom class to the tile
+						return isLectureStartDate ? (
+							<div className="bg-yellow-300 h-full w-full"></div>
+						) : null;
+					}}
+				/>
+			</div>
 			{selectedDate && (
 				<div>
 					<h2>Attendances for {selectedDate.toLocaleDateString()}</h2>
