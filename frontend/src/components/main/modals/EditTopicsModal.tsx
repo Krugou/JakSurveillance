@@ -20,8 +20,9 @@ interface EditTopicsModalProps {
 	handleTopicChange: (topic: string) => void;
 	handleDeleteTopic: (topic: string) => void;
 	resetData: () => void;
-	handleSave?: () => void;
+	handleSave?: (usercourseid) => void;
 	counselor?: boolean;
+	usercourseid?: number;
 }
 
 const EditTopicsModal: React.FC<EditTopicsModalProps> = ({
@@ -38,6 +39,7 @@ const EditTopicsModal: React.FC<EditTopicsModalProps> = ({
 	resetData,
 	counselor,
 	handleSave,
+	usercourseid,
 }) => {
 	return (
 		<Modal
@@ -102,7 +104,7 @@ const EditTopicsModal: React.FC<EditTopicsModalProps> = ({
 						<Button
 							variant="contained"
 							color="primary"
-							onClick={() => handleSave && handleSave()}
+							onClick={() => handleSave && handleSave(usercourseid)}
 						>
 							SAVE NEW TOPICS
 						</Button>

@@ -33,17 +33,19 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 	const [courseTopics, setCourseTopics] = useState<string[]>([]);
 	const [modifiedTopics, setModifiedTopics] = useState<string[]>([]);
 	const [initialCourseTopics, setInitialCourseTopics] = useState<string[]>([]);
+	const [usercourseid, setUsercourseid] = useState<number>(0);
 	const [open, setOpen] = useState(false);
 	const [newTopic, setNewTopic] = useState('');
 
 	console.log(courses, 'COURSES');
 	// Open and close the modal
-	const handleOpen = (thisCourseName, thisCourseTopics) => {
+	const handleOpen = (thisCourseName, thisCourseTopics, thisusercourseid) => {
 		setOpen(true);
 		setCourseName(thisCourseName);
 		setInitialCourseTopics(thisCourseTopics);
 		setCourseTopics(thisCourseTopics);
 		setModifiedTopics(thisCourseTopics);
+		setUsercourseid(thisusercourseid);
 	};
 
 	const handleTopicChange = topic => {
@@ -62,8 +64,12 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 		setCourseTopics(initialCourseTopics);
 		setModifiedTopics(initialCourseTopics);
 	};
-	const handleSave = () => {
+	const handleSave = usercourseid => {
 		toast.success('Topics saved');
+		console.log(usercourseid, 'USERCOURSEID');
+		try {
+		} catch (error) {}
+
 		setOpen(false);
 	};
 
@@ -81,7 +87,6 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 					const startDate = new Date(course.startDate).toLocaleDateString();
 					const endDate = new Date(course.endDate);
 					const endDateString = endDate.toLocaleDateString();
-
 					const topicsArray = course.selected_topics
 						? course.selected_topics.split(',')
 						: course.topic_names
@@ -155,7 +160,9 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 													? 'bg-metropoliaSupportRed hover:bg-red-900'
 													: 'bg-metropoliaTrendGreen hover:bg-green-700'
 											} text-white`}
-											onClick={() => handleOpen(course.course_name, topicsArray)}
+											onClick={() =>
+												handleOpen(course.course_name, topicsArray, course.usercourseid)
+											}
 										>
 											Edit Topics for Student
 										</button>
@@ -172,6 +179,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 											handleDeleteTopic={handleDeleteTopic}
 											resetData={resetData}
 											counselor={true}
+											usercourseid={usercourseid}
 											handleSave={handleSave}
 										/>
 									</>
