@@ -62,6 +62,10 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 		setCourseTopics(initialCourseTopics);
 		setModifiedTopics(initialCourseTopics);
 	};
+	const handleSave = () => {
+		toast.success('Topics saved');
+		setOpen(false);
+	};
 
 	return (
 		<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
@@ -167,6 +171,8 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 											handleTopicChange={handleTopicChange}
 											handleDeleteTopic={handleDeleteTopic}
 											resetData={resetData}
+											counselor={true}
+											handleSave={handleSave}
 										/>
 									</>
 								)}
