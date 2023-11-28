@@ -40,11 +40,13 @@ interface StudentInfo {
 interface AttendanceTableProps {
 	filteredAttendanceData: Attendance[];
 	student?: StudentInfo | null;
+	allAttendances?: boolean;
 }
 
 const AttendanceTable: React.FC<AttendanceTableProps> = ({
 	filteredAttendanceData,
 	student,
+	allAttendances,
 }) => {
 	const [attendanceData, setAttendanceData] = useState<Attendance[]>(
 		filteredAttendanceData,
@@ -87,7 +89,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 						<TableCell className="text-left p-4 font-medium underline">
 							Date
 						</TableCell>
-						{student && (
+						{student | allAttendances && (
 							<TableCell className="text-left p-4 font-medium underline">
 								Student:
 							</TableCell>
@@ -122,6 +124,11 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 							{student && (
 								<TableCell className="p-4">
 									{student.first_name} {student.last_name}
+								</TableCell>
+							)}
+							{allAttendances && (
+								<TableCell className="p-4">
+									{attendance.first_name} {attendance.last_name}
 								</TableCell>
 							)}
 							<TableCell className="p-4">{attendance.teacher}</TableCell>

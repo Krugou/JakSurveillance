@@ -79,7 +79,10 @@ const TeacherCourseAttendances: React.FC = () => {
 				<div>
 					<h2>Attendances for {selectedDate.toLocaleDateString()}</h2>
 					{filteredAttendances.length > 0 ? (
-						<AttendanceTable filteredAttendanceData={filteredAttendances} />
+						<AttendanceTable
+							filteredAttendanceData={filteredAttendances}
+							allAttendances={true}
+						/>
 					) : (
 						<p>No attendances found for {selectedDate.toDateString()}</p>
 					)}
