@@ -292,8 +292,7 @@ const UserModel = {
 		}
 	},
 	changeRoleId: async (email: string, roleId: number) => {
-		console.log('🚀 ~ file: usermodel.ts:269 ~ changeRoleId: ~ roleId:', roleId);
-		console.log('🚀 ~ file: usermodel.ts:269 ~ changeRoleId: ~ email:', email);
+	
 		try {
 			const [result] = await pool
 				.promise()
