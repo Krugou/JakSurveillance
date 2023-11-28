@@ -20,6 +20,10 @@ interface AttendanceModel {
 		topicid: number,
 		usercourseid: number,
 	): Promise<void>;
+	updateAttendanceStatus: (
+		usercourseid: number,
+		status: number,
+	) => Promise<any>;
 	checkAndInsertAttendance: (
 		date: string,
 		studentnumbers: string[],
@@ -42,6 +46,27 @@ interface AttendanceModel {
 }
 
 const attendanceModel: AttendanceModel = {
+
+	async updateAttendanceStatus(usercourseid: number, status: number) {
+		try {
+			if (usercourseid === 0) {
+				throw new Error('Invalid usercourseid');
+			}
+
+			const result = await pool.promise().query(
+				'UPDATE attendance SET status = ? WHERE usercourseid = ? ORDER BY date DESC LIMIT 1',
+				[status, usercourseid]
+			);
+
+			console.log('Update result:', result);
+
+			return true;
+		} catch (error) {
+			console.error('Error updating attendance status:', error);
+			return false;
+		}
+	},
+
 	async fetchAllAttendances() {
 		try {
 			return await pool

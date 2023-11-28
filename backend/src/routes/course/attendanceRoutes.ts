@@ -4,6 +4,8 @@ import attendanceController from '../../controllers/attendancecontroller.js';
 import lectureController from '../../controllers/lecturecontroller.js';
 import Attendance from '../../models/attendancemodel.js'; // Adjust the path according to your project structure
 import lectureModel from '../../models/lecturemodel.js';
+import Usermodel from "../../models/usermodel";
+import attendanceModel from "../../models/attendancemodel.js";
 
 const router: Router = express.Router();
 
@@ -158,6 +160,26 @@ router.get('/studentsattendance', async (req: Request, res: Response) => {
 		res.json(attendanceData);
 	} catch (err) {
 		console.error(err);
+		res.status(500).send('Server error');
+	}
+});
+
+router.put('/usercourse/update-status/:usercourseid', async (req: Request, res: Response) => {
+	const usercourseId = req.params.usercourseid;
+	const { status } = req.body;
+
+	try {
+		console.log('Received usercourseId:', usercourseId);
+		console.log('Received status:', status);
+
+		// Log the SQL query
+		const query = `UPDATE attendance SET status = ? WHERE usercourseid = ? ORDER BY date DESC LIMIT 1`;
+		console.log('SQL Query:', query);
+
+		await attendanceController.updateAttendanceStatus(usercourseId, status);
+		res.status(200).json({ message: 'Attendance status updated successfully' });
+	} catch (error) {
+		console.error(error);
 		res.status(500).send('Server error');
 	}
 });

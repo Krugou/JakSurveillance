@@ -502,6 +502,21 @@ const updateUserCourseTopics = async (
 		options,
 	);
 };
+
+const updateAttendanceStatus = async (usercourseid: number, status: number, token: string) => {
+	console.log(usercourseid)
+	const options = {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	const url = `${baseUrl}courses/attendance/usercourse/update-status/${usercourseid}`;
+	console.log(url)
+	return doFetch(url, options);
+};
+
 const apiHooks = {
 	checkStaffByEmail,
 	checkCourseCode,
@@ -535,5 +550,6 @@ const apiHooks = {
 	getUserInfoByUserid,
 	fetchAllStudents,
 	updateUserCourseTopics,
+	updateAttendanceStatus,
 };
 export default apiHooks;

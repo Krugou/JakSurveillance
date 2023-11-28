@@ -117,6 +117,16 @@ const attendanceController: AttendanceController = {
 			return Promise.reject(error);
 		}
 	},
+
+	async updateAttendanceStatus(usercourseid: number, status: number) {
+		try {
+			await attendanceModel.updateAttendanceStatus(usercourseid, status);
+			return true;
+		} catch (error) {
+			console.error(error);
+			return false;
+		}
+	},
 };
 
 export default attendanceController;

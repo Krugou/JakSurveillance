@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
+	MenuItem,
+	Select,
 	Table,
 	TableBody,
 	TableCell,
@@ -8,6 +10,8 @@ import {
 	TableHead,
 	TableRow,
 } from '@mui/material';
+import apiHooks from "../../../../hooks/ApiHooks";
+import {toast} from "react-toastify";
 
 interface Attendance {
 	date: string;
@@ -17,6 +21,7 @@ interface Attendance {
 	topicname: string;
 	teacher: string;
 	status: number;
+	usercourseid: number;
 }
 
 interface StudentInfo {
@@ -38,34 +43,51 @@ interface AttendanceTableProps {
 }
 
 const AttendanceTable: React.FC<AttendanceTableProps> = ({
-	filteredAttendanceData,
-	student,
-}) => {
+															 filteredAttendanceData,
+															 student,
+														 }) => {
+	const [attendanceData, setAttendanceData] = useState<Attendance[]>(
+		filteredAttendanceData
+	);
+
+	const handleStatusChange = async (index: number, newStatus: number) => {
+		try {
+			const updatedAttendanceData = [...attendanceData];
+			updatedAttendanceData[index].status = newStatus;
+			setAttendanceData(updatedAttendanceData);
+
+			const token: string | null = localStorage.getItem('userToken');
+
+			// Update status in the database
+			const response = await apiHooks.updateAttendanceStatus(
+				updatedAttendanceData[index].usercourseid,
+				newStatus,
+				token // Replace with the actual access token
+			);
+
+			console.log('API Response:', response);
+
+			// You can add a toast notification or any other feedback here
+			toast.success('Attendance status updated successfully');
+		} catch (error) {
+			// Handle error
+			console.error(error);
+			toast.error('Failed to update attendance status');
+		}
+	};
 	return (
 		<TableContainer className="overflow-x-auto border-x border-t m-6">
 			<Table className="table-auto w-full">
 				<TableHead className="border-b">
 					<TableRow className="bg-gray-100">
-						<TableCell className="text-left p-4 font-medium underline">
-							Date
-						</TableCell>
+						<TableCell className="text-left p-4 font-medium underline">Date</TableCell>
 						{student && (
-							<TableCell className="text-left p-4 font-medium underline">
-								Student:
-							</TableCell>
+							<TableCell className="text-left p-4 font-medium underline">Student:</TableCell>
 						)}
-						<TableCell className="text-left p-4 font-medium underline">
-							Teacher
-						</TableCell>
-						<TableCell className="text-left p-4 font-medium underline">
-							Time of Day
-						</TableCell>
-						<TableCell className="text-left p-4 font-medium underline">
-							Topic
-						</TableCell>
-						<TableCell className="text-left p-4 font-medium underline">
-							Status
-						</TableCell>
+						<TableCell className="text-left p-4 font-medium underline">Teacher</TableCell>
+						<TableCell className="text-left p-4 font-medium underline">Time of Day</TableCell>
+						<TableCell className="text-left p-4 font-medium underline">Topic</TableCell>
+						<TableCell className="text-left p-4 font-medium underline">Status</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
@@ -73,9 +95,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 						<TableRow
 							key={index}
 							className={`border-b hover:bg-gray-50 ${
-								attendance.status === 0
-									? 'bg-metropoliaSupportRed'
-									: 'bg-metropoliaTrendGreen'
+								attendance.status === 0 ? 'bg-metropoliaSupportRed' : 'bg-metropoliaTrendGreen'
 							}`}
 						>
 							<TableCell className="p-4">
@@ -90,7 +110,15 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 							<TableCell className="p-4">{attendance.timeofday}</TableCell>
 							<TableCell className="p-4">{attendance.topicname}</TableCell>
 							<TableCell className="p-4">
-								{attendance.status === 1 ? 'Present' : 'Absent'}
+								<Select
+									value={attendance.status}
+									onChange={(e) =>
+										handleStatusChange(index, e.target.value as number)
+									}
+								>
+									<MenuItem value={0}>Absent</MenuItem>
+									<MenuItem value={1}>Present</MenuItem>
+								</Select>
 							</TableCell>
 						</TableRow>
 					))}
