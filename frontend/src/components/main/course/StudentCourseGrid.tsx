@@ -48,10 +48,15 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 		allTopicsArray,
 	) => {
 		setOpen(true);
+		// Set the course name and topics
 		setCourseName(thisCourseName);
+		// Set the initial topics to be used in the reset function (student's topics)
 		setInitialCourseTopics(thisCourseTopics);
+		// Set the course topics to be used in the modal (all topics in the course)
 		setCourseTopics(allTopicsArray);
+		// Set the modified topics
 		setModifiedTopics(thisCourseTopics);
+		// Set the usercourseid to be used in the save function
 		setUsercourseid(thisusercourseid);
 	};
 
