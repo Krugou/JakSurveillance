@@ -1,10 +1,8 @@
 import React, {useContext} from 'react';
-import {UserContext} from '../../../contexts/UserContext';
-import {useNavigate} from 'react-router-dom'; // Import useNavigate
 import ProfileInfo from '../../../components/profiles/ProfileInfo';
+import {UserContext} from '../../../contexts/UserContext';
 const AdminProfile: React.FC = () => {
 	const {user} = useContext(UserContext);
-	const navigate = useNavigate(); // Initialize useNavigate
 
 	// Error handling
 	if (!user) {
@@ -17,7 +15,6 @@ const AdminProfile: React.FC = () => {
 			<div className="text-md sm:text-xl mb-4">
 				<ProfileInfo user={user} />
 			</div>
-		
 		</div>
 	);
 };
