@@ -230,10 +230,20 @@ const attendanceModel: AttendanceModel = {
 			);
 		return userResult[0];
 	},
-	async getAttendaceByCourseId(lectureId: number) {
-		const [attendanceResult] = await pool
-			.promise()
-			.query('SELECT * FROM attendance WHERE lectureid = ?', [lectureId]);
+	async getAttendaceByCourseId(courseid: number) {
+		const [attendanceResult] = await pool.promise().query(
+			`SELECT attendance.status, lecture.start_date, lecture.timeofday, topics.topicname, courses.name, users.email AS teacher, attendingUsers.first_name, attendingUsers.last_name, attendingUsers.studentnumber, attendingUsers.email
+			FROM attendance 
+			JOIN lecture ON attendance.lectureid = lecture.lectureid
+			JOIN topics ON lecture.topicid = topics.topicid
+			JOIN courses ON lecture.courseid = courses.courseid
+			JOIN usercourses ON attendance.usercourseid = usercourses.usercourseid
+			JOIN courseinstructors ON courses.courseid = courseinstructors.courseid
+			JOIN users ON courseinstructors.userid = users.userid
+			JOIN users AS attendingUsers ON usercourses.userid = attendingUsers.userid
+			WHERE lecture.courseid = ?`,
+			[courseid],
+		);
 		return attendanceResult;
 	},
 };

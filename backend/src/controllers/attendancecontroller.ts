@@ -136,19 +136,8 @@ const attendanceController: AttendanceController = {
 
 	async getLecturesAndAttendancesByCourseId(courseid: number) {
 		try {
-			const lectures = await lectureModel.getLecturesByCourseId(courseid);
-			const lecturesWithAttendances = await Promise.all(
-				lectures.map(async lecture => {
-					const attendances = await attendanceModel.getAttendaceByCourseId(
-						lecture.lectureid,
-					);
-					return {
-						...lecture,
-						attendances,
-					};
-				}),
-			);
-			return lecturesWithAttendances;
+			const lectures = await attendanceModel.getAttendaceByCourseId(courseid);
+			return lectures;
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
