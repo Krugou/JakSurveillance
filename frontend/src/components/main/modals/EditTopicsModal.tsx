@@ -76,6 +76,7 @@ const EditTopicsModal: React.FC<EditTopicsModalProps> = ({
 						}}
 					/>
 				)}
+
 				{courseTopics.map((topic, index) => (
 					<div key={index} className="flex items-center mb-2 mt-3">
 						<Checkbox

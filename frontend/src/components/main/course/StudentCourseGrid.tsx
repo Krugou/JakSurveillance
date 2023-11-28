@@ -6,6 +6,7 @@ import {UserContext} from '../../../contexts/UserContext';
 import EditTopicsModal from '../modals/EditTopicsModal';
 import {toast} from 'react-toastify';
 import apiHooks from '../../../hooks/ApiHooks';
+import {set} from 'date-fns';
 interface Course {
 	courseid: number;
 	course_name: string;
@@ -39,11 +40,16 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 	const [newTopic, setNewTopic] = useState('');
 
 	// Open and close the modal
-	const handleOpen = (thisCourseName, thisCourseTopics, thisusercourseid) => {
+	const handleOpen = (
+		thisCourseName,
+		thisCourseTopics,
+		thisusercourseid,
+		allTopicsArray,
+	) => {
 		setOpen(true);
 		setCourseName(thisCourseName);
 		setInitialCourseTopics(thisCourseTopics);
-		setCourseTopics(thisCourseTopics);
+		setCourseTopics(allTopicsArray);
 		setModifiedTopics(thisCourseTopics);
 		setUsercourseid(thisusercourseid);
 	};
@@ -64,7 +70,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 		setCourseTopics(initialCourseTopics);
 		setModifiedTopics(initialCourseTopics);
 	};
-	const handleSave = usercourseid => {
+	const handleSave = async usercourseid => {
 		console.log(usercourseid, 'USERCOURSEID');
 		console.log(modifiedTopics);
 		const token = localStorage.getItem('userToken');
@@ -72,8 +78,12 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 			throw new Error('No token available');
 		}
 		try {
-			apiHooks.updateUserCourseTopics(token, usercourseid, modifiedTopics);
-
+			const response = await apiHooks.updateUserCourseTopics(
+				token,
+				usercourseid,
+				modifiedTopics,
+			);
+			console.log(response);
 			toast.success('Topics saved');
 		} catch (error) {
 			toast.error('Error saving topics');
@@ -96,7 +106,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 					const startDate = new Date(course.startDate).toLocaleDateString();
 					const endDate = new Date(course.endDate);
 					const endDateString = endDate.toLocaleDateString();
-					const topicsArray = course.selected_topics
+					const studentsTopicsArray = course.selected_topics
 						? course.selected_topics.split(',')
 						: course.topic_names
 						? course.topic_names.split(',')
@@ -110,6 +120,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 						? course.topic_names.replace(/,/g, ', ')
 						: 'You have no assigned topics on this course';
 
+					const allTopicsArray = course?.topic_names.split(',');
 					// Check if the course has ended
 					const isCourseEnded =
 						endDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
@@ -176,7 +187,12 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 													: 'bg-metropoliaTrendGreen hover:bg-green-700'
 											} text-white`}
 											onClick={() =>
-												handleOpen(course.course_name, topicsArray, course.usercourseid)
+												handleOpen(
+													course.course_name,
+													studentsTopicsArray,
+													course.usercourseid,
+													allTopicsArray,
+												)
 											}
 										>
 											Edit Topics for Student
