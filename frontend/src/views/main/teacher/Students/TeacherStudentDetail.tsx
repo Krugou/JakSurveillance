@@ -73,7 +73,6 @@ const TeacherStudentDetail: React.FC = () => {
 	}
 
 	const updateView = () => {
-		alert('updateView');
 		setUpdate(!update);
 	};
 	return (
