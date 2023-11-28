@@ -58,7 +58,7 @@ const AdminUserModify: React.FC = () => {
 			const response = await apiHooks.updateUser(token, editedUser);
 			toast.success(response.message);
 		} catch (error) {
-			toast.error('Failed to update user: ' + error.toString());
+			toast.error('Failed to update user: ' + (error as Error).toString());
 			// handle the error appropriately, e.g., show a message to the user
 		}
 	};
