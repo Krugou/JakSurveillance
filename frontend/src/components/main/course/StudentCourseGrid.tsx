@@ -4,6 +4,7 @@ import ReportIcon from '@mui/icons-material/Report';
 import Tooltip from '@mui/material/Tooltip';
 import {UserContext} from '../../../contexts/UserContext';
 import EditTopicsModal from '../modals/EditTopicsModal';
+import {toast} from 'react-toastify';
 interface Course {
 	courseid: number;
 	course_name: string;
@@ -28,18 +29,38 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 }) => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
-
-	// State for the modal
+	const [courseName, setCourseName] = useState('');
+	const [courseTopics, setCourseTopics] = useState<string[]>([]);
+	const [modifiedTopics, setModifiedTopics] = useState<string[]>([]);
+	const [initialCourseTopics, setInitialCourseTopics] = useState<string[]>([]);
 	const [open, setOpen] = useState(false);
+	const [newTopic, setNewTopic] = useState('');
 
+	console.log(courses, 'COURSES');
 	// Open and close the modal
-	const handleOpen = () => {
+	const handleOpen = (thisCourseName, thisCourseTopics) => {
 		setOpen(true);
+		setCourseName(thisCourseName);
+		setInitialCourseTopics(thisCourseTopics);
+		setCourseTopics(thisCourseTopics);
+		setModifiedTopics(thisCourseTopics);
 	};
 
-	// Open and close the modal
-	const handleClose = () => {
-		setOpen(false);
+	const handleTopicChange = topic => {
+		toast.info('Topics changed');
+		setModifiedTopics(prevTopics =>
+			prevTopics.includes(topic)
+				? prevTopics.filter(t => t !== topic)
+				: [...prevTopics, topic],
+		);
+	};
+	const handleDeleteTopic = topic => {
+		setCourseTopics(prevTopics => prevTopics.filter(t => t !== topic));
+		setModifiedTopics(prevTopics => prevTopics.filter(t => t !== topic));
+	};
+	const resetData = () => {
+		setCourseTopics(initialCourseTopics);
+		setModifiedTopics(initialCourseTopics);
 	};
 
 	return (
@@ -57,10 +78,15 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 					const endDate = new Date(course.endDate);
 					const endDateString = endDate.toLocaleDateString();
 
+					const topicsArray = course.selected_topics
+						? course.selected_topics.split(',')
+						: course.topic_names
+						? course.topic_names.split(',')
+						: [];
 					// Format the topics
 					const topics = course.selected_topics
 						? // If the course has selected topics by the student, use those
-						  course.selected_topics.replace(/,/g, ', ')
+						  course.selected_topics.replace(/,/g, ', ') // Replace commas with commas and spaces
 						: // Otherwise use the default topics
 						course.topic_names
 						? course.topic_names.replace(/,/g, ', ')
@@ -125,11 +151,23 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 													? 'bg-metropoliaSupportRed hover:bg-red-900'
 													: 'bg-metropoliaTrendGreen hover:bg-green-700'
 											} text-white`}
-											onClick={handleOpen}
+											onClick={() => handleOpen(course.course_name, topicsArray)}
 										>
 											Edit Topics for Student
 										</button>
-										<EditTopicsModal isOpen={open} handleClose={handleClose} />
+										<EditTopicsModal
+											open={open}
+											setOpen={setOpen}
+											courseName={courseName} // replace 'courseName' with the actual course name
+											newTopic={newTopic}
+											setNewTopic={setNewTopic}
+											courseTopics={courseTopics}
+											setCourseTopics={setCourseTopics}
+											modifiedTopics={modifiedTopics}
+											handleTopicChange={handleTopicChange}
+											handleDeleteTopic={handleDeleteTopic}
+											resetData={resetData}
+										/>
 									</>
 								)}
 							</div>

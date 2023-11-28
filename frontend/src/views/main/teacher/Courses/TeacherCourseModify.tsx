@@ -1,21 +1,14 @@
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import Modal from '@mui/material/Modal';
-import TextField from '@mui/material/TextField';
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import AddTeachers from '../../../../components/main/course/createcourse/AddTeachers';
 import CourseDetails from '../../../../components/main/course/createcourse/CourseDetails';
+import EditTopicsModal from '../../../../components/main/modals/EditTopicsModal';
 import apiHooks from '../../../../hooks/ApiHooks';
 
 // this is view for teacher to modify the single course details
@@ -205,67 +198,19 @@ const TeacherCourseModify: React.FC = () => {
 				>
 					Modify Topics
 				</button>
-				<Modal
+				<EditTopicsModal
 					open={open}
-					onClose={() => setOpen(false)}
-					onClick={e => e.stopPropagation()}
-				>
-					<div className="p-4 bg-white rounded shadow-lg max-w-lg mx-auto mt-10">
-						<h2 className="text-2xl mb-4">Edit Topics for {courseName}</h2>
-
-						<TextField
-							value={newTopic}
-							onChange={e => setNewTopic(e.target.value)}
-							label="New Topic"
-							variant="outlined"
-							className="mb-6"
-							fullWidth
-							required
-							InputProps={{
-								endAdornment: (
-									<InputAdornment position="end">
-										<IconButton
-											onClick={() => {
-												if (newTopic.trim() !== '') {
-													setCourseTopics(prevTopics => [...prevTopics, newTopic]);
-													setNewTopic('');
-												}
-											}}
-										>
-											<AddIcon />
-										</IconButton>
-									</InputAdornment>
-								),
-							}}
-						/>
-						{courseTopics.map((topic, index) => (
-							<div key={index} className="flex items-center mb-2 mt-3">
-								<Checkbox
-									checked={modifiedTopics.includes(topic)}
-									onChange={() => handleTopicChange(topic)}
-								/>
-								<p className="flex-grow">{topic}</p>
-								<IconButton onClick={() => handleDeleteTopic(topic)}>
-									<DeleteIcon />
-								</IconButton>
-							</div>
-						))}
-						<p className="text-sm text-gray-500 mb-4">
-							Only checked topics will be included in the course, deleting them from
-							the view will also exclude them.
-						</p>
-						<div className="flex justify-between mt-6">
-							<Button
-								variant="outlined"
-								color="secondary"
-								onClick={resetData}
-								className="mr-10"
-							>
-								RESET
-							</Button>
-						</div>
-					</div>
-				</Modal>
+					setOpen={setOpen}
+					courseName={courseName}
+					newTopic={newTopic}
+					setNewTopic={setNewTopic}
+					courseTopics={courseTopics}
+					setCourseTopics={setCourseTopics}
+					modifiedTopics={modifiedTopics}
+					handleTopicChange={handleTopicChange}
+					handleDeleteTopic={handleDeleteTopic}
+					resetData={resetData}
+				/>
 				<div className="flex w-full justify-center">
 					<button
 						className=" bg-metropoliaTrendGreen w-1/2  hover:bg-green-600 text-white font-bold py-2 rounded-xl px-4 focus:outline-none focus:shadow-outline"
