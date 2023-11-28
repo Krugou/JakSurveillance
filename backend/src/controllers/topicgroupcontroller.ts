@@ -72,40 +72,43 @@ const TopicGroupController = {
 	},
 
 	async updateUserCourseTopics(usercourseid: number, topics: string[]) {
+		// Get a connection from the pool
 		const connection = await pool.promise().getConnection();
 
 		try {
 			await connection.beginTransaction();
 
+			// Delete all existing topics for the usercourseid
 			await usercourse_topicsModel.deleteUserCourseTopic(usercourseid, connection);
-
+			// Insert the new topics for the usercourseid
 			for (const topic of topics) {
 				let topicId;
 				const existingTopic = await TopicModel.checkIfTopicExists(
 					topic,
 					connection,
 				);
-
+				// If the topic exists, get the topicid
 				if (existingTopic.length > 0) {
 					topicId = existingTopic[0].topicid;
 				} else {
 					throw new Error('Topic does not exist');
 				}
-
+				// Insert the topic for the usercourseid
 				await usercourse_topicsModel.insertUserCourseTopic(
 					usercourseid,
 					topicId,
 					connection,
 				);
 			}
-
+			// Commit the transaction
 			await connection.commit();
-
+			// Return a success message
 			return {
 				state: 'success',
 				message: 'Topics updated for usercourseid: ' + usercourseid,
 			};
 		} catch (error) {
+			// Rollback the transaction if there is an error
 			await connection.rollback();
 			console.error(error);
 			return Promise.reject(error);
