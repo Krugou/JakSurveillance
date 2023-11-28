@@ -195,6 +195,9 @@ router.post('/', async (req: Request, res: Response, next) => {
 						},
 					);
 					// Send the user and the token in the response
+					if (addStaffUserResponse === null) {
+						throw new Error('Failed to add staff user');
+					}
 					res.json({user: addStaffUserResponse, token});
 				} else {
 					// If the staff user exists, authenticate their login
