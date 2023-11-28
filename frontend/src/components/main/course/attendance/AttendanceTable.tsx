@@ -10,8 +10,8 @@ import {
 	TableHead,
 	TableRow,
 } from '@mui/material';
-import apiHooks from "../../../../hooks/ApiHooks";
-import {toast} from "react-toastify";
+import {toast} from 'react-toastify';
+import apiHooks from '../../../../hooks/ApiHooks';
 
 interface Attendance {
 	date: string;
@@ -43,11 +43,11 @@ interface AttendanceTableProps {
 }
 
 const AttendanceTable: React.FC<AttendanceTableProps> = ({
-															 filteredAttendanceData,
-															 student,
-														 }) => {
+	filteredAttendanceData,
+	student,
+}) => {
 	const [attendanceData, setAttendanceData] = useState<Attendance[]>(
-		filteredAttendanceData
+		filteredAttendanceData,
 	);
 
 	const handleStatusChange = async (index: number, newStatus: number) => {
@@ -62,7 +62,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 			const response = await apiHooks.updateAttendanceStatus(
 				updatedAttendanceData[index].usercourseid,
 				newStatus,
-				token // Replace with the actual access token
+				token, // Replace with the actual access token
 			);
 
 			console.log('API Response:', response);
@@ -80,14 +80,26 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 			<Table className="table-auto w-full">
 				<TableHead className="border-b">
 					<TableRow className="bg-gray-100">
-						<TableCell className="text-left p-4 font-medium underline">Date</TableCell>
+						<TableCell className="text-left p-4 font-medium underline">
+							Date
+						</TableCell>
 						{student && (
-							<TableCell className="text-left p-4 font-medium underline">Student:</TableCell>
+							<TableCell className="text-left p-4 font-medium underline">
+								Student:
+							</TableCell>
 						)}
-						<TableCell className="text-left p-4 font-medium underline">Teacher</TableCell>
-						<TableCell className="text-left p-4 font-medium underline">Time of Day</TableCell>
-						<TableCell className="text-left p-4 font-medium underline">Topic</TableCell>
-						<TableCell className="text-left p-4 font-medium underline">Status</TableCell>
+						<TableCell className="text-left p-4 font-medium underline">
+							Teacher
+						</TableCell>
+						<TableCell className="text-left p-4 font-medium underline">
+							Time of Day
+						</TableCell>
+						<TableCell className="text-left p-4 font-medium underline">
+							Topic
+						</TableCell>
+						<TableCell className="text-left p-4 font-medium underline">
+							Status
+						</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
@@ -95,7 +107,9 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 						<TableRow
 							key={index}
 							className={`border-b hover:bg-gray-50 ${
-								attendance.status === 0 ? 'bg-metropoliaSupportRed' : 'bg-metropoliaTrendGreen'
+								attendance.status === 0
+									? 'bg-metropoliaSupportRed'
+									: 'bg-metropoliaTrendGreen'
 							}`}
 						>
 							<TableCell className="p-4">
@@ -112,9 +126,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 							<TableCell className="p-4">
 								<Select
 									value={attendance.status}
-									onChange={(e) =>
-										handleStatusChange(index, e.target.value as number)
-									}
+									onChange={e => handleStatusChange(index, e.target.value as number)}
 								>
 									<MenuItem value={0}>Absent</MenuItem>
 									<MenuItem value={1}>Present</MenuItem>
