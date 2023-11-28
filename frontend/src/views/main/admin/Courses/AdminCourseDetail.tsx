@@ -54,7 +54,6 @@ const AdminCourseDetail: React.FC = () => {
 			await apiHooks.deleteCourse(courseid, token);
 
 			toast.success('Course deleted');
-			// Check if we are in the TeacherCourseDetail route
 
 			navigate('/admin/courses');
 		} catch (error) {
