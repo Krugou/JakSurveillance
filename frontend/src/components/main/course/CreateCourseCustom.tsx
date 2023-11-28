@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {UserContext} from '../../../contexts/UserContext.tsx';
 import apiHooks from '../../../hooks/ApiHooks';
-import BackgroundContainer from '../background/BackgroundContainer';
+
 import AddTeachers from './createcourse/AddTeachers';
 import CourseDetails from './createcourse/CourseDetails';
 import StepButtons from './createcourse/StepButtons';
@@ -132,47 +132,45 @@ const CreateCourseCustom: React.FC = () => {
 	}, [instructorEmail, user]);
 
 	return (
-		<BackgroundContainer>
-			<form onSubmit={event => handleSubmit(event)} className={getFormClassName()}>
-				{currentStep === 1 && (
-					<CourseDetails
-						courseCode={courseCode}
-						setCourseCode={setCourseCode}
-						courseName={courseName}
-						setCourseName={setCourseName}
-						studentGroup={studentGroup}
-						setStudentGroup={setStudentGroup}
-						startDate={startDate}
-						setStartDate={setStartDate}
-						endDate={endDate}
-						setEndDate={setEndDate}
-						courseExists={courseExists}
-						setCourseExists={setCourseExists}
-					/>
-				)}
-
-				{currentStep === 2 && (
-					<StudentList studentList={studentList} setStudentList={setStudentList} />
-				)}
-				{currentStep === 3 && (
-					<AddTeachers
-						instructors={instructors}
-						setInstructors={setInstructors}
-						instructorEmail={instructorEmail}
-					/>
-				)}
-				{currentStep === 4 && (
-					<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
-				)}
-				<StepButtons
-					currentStep={currentStep}
-					onPrevClick={() => setCurrentStep(prevStep => prevStep - 1)}
-					onNextClick={incrementStep}
-					onSubmitClick={handleSubmitWrapper}
-					extrastep={false}
+		<form onSubmit={event => handleSubmit(event)} className={getFormClassName()}>
+			{currentStep === 1 && (
+				<CourseDetails
+					courseCode={courseCode}
+					setCourseCode={setCourseCode}
+					courseName={courseName}
+					setCourseName={setCourseName}
+					studentGroup={studentGroup}
+					setStudentGroup={setStudentGroup}
+					startDate={startDate}
+					setStartDate={setStartDate}
+					endDate={endDate}
+					setEndDate={setEndDate}
+					courseExists={courseExists}
+					setCourseExists={setCourseExists}
 				/>
-			</form>
-		</BackgroundContainer>
+			)}
+
+			{currentStep === 2 && (
+				<StudentList studentList={studentList} setStudentList={setStudentList} />
+			)}
+			{currentStep === 3 && (
+				<AddTeachers
+					instructors={instructors}
+					setInstructors={setInstructors}
+					instructorEmail={instructorEmail}
+				/>
+			)}
+			{currentStep === 4 && (
+				<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
+			)}
+			<StepButtons
+				currentStep={currentStep}
+				onPrevClick={() => setCurrentStep(prevStep => prevStep - 1)}
+				onNextClick={incrementStep}
+				onSubmitClick={handleSubmitWrapper}
+				extrastep={false}
+			/>
+		</form>
 	);
 };
 

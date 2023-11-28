@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
-import BackgroundContainer from '../../../components/main/background/BackgroundContainer';
+import React, {useContext, useEffect, useState} from 'react';
+
 import Card from '../../../components/main/cards/Card';
-import MainViewTitle from '../../../components/main/titles/MainViewTitle';
 import WelcomeModal from '../../../components/main/modals/WelcomeModal';
+import MainViewTitle from '../../../components/main/titles/MainViewTitle';
+import {UserContext} from '../../../contexts/UserContext';
 import apihooks from '../../../hooks/ApiHooks';
-import { UserContext } from '../../../contexts/UserContext';
 
 const MainView: React.FC = () => {
-	const { user } = useContext(UserContext);
+	const {user} = useContext(UserContext);
 	const [courses, setCourses] = useState([]);
 
 	useEffect(() => {
@@ -21,7 +21,7 @@ const MainView: React.FC = () => {
 				// Fetch courses by instructor email
 				const fetchedCourses = await apihooks.getAllCoursesByInstructorEmail(
 					user.email,
-					token
+					token,
 				);
 				setCourses(fetchedCourses);
 			}
@@ -30,11 +30,10 @@ const MainView: React.FC = () => {
 	}, [user]);
 
 	return (
-		<BackgroundContainer>
+		<>
 			<MainViewTitle role={'Teacher'} />
 
 			<div className="flex flex-col md:flex-row 2xl:w-2/5 xl:w-5/6 lg:w-11/12 w-full flex-wrap p-5 justify-center items-center gap-4">
-
 				{courses.length === 0 && (
 					<div>
 						<div className="animate-bounce p-2 rounded-md bg-metropoliaMainOrange gap-1 flex md:flex-row flex-col items-center">
@@ -80,9 +79,8 @@ const MainView: React.FC = () => {
 				)}
 			</div>
 			<WelcomeModal />
-		</BackgroundContainer>
+		</>
 	);
 };
-
 
 export default MainView;

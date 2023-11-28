@@ -4,10 +4,10 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
+
+import {CircularProgress} from '@mui/material';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
-import {CircularProgress} from '@mui/material';
 const CreateLecture: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
@@ -178,7 +178,7 @@ const CreateLecture: React.FC = () => {
 	}
 
 	return (
-		<BackgroundContainer>
+		<>
 			{loading ? (
 				<CircularProgress />
 			) : (
@@ -309,7 +309,7 @@ const CreateLecture: React.FC = () => {
 					</button>
 				</div>
 			)}
-		</BackgroundContainer>
+		</>
 	);
 };
 
