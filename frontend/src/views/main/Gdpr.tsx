@@ -19,7 +19,7 @@ const Gdpr = () => {
 				throw new Error('No token available');
 			}
 			const response = await apiHooks.updateGdprStatus(user.userid, token);
-			console.log(response);
+			// console.log(response);
 			if (response.success) {
 				toast.success('GDPR accepted thank you!');
 				navigate(`/${user.role.toLowerCase()}/mainview`);
