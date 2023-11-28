@@ -42,7 +42,11 @@ const AdminUsers: React.FC = () => {
 			// Create an async function inside the effect
 			const fetchUsers = async () => {
 				const fetchedUsers = await apiHooks.fetchUsers(token);
-				setUsers(fetchedUsers);
+				// Filter out the current user
+				const otherUsers = fetchedUsers.filter(
+					fetchedUser => fetchedUser.userid !== user.userid,
+				);
+				setUsers(otherUsers);
 				setIsLoading(false);
 			};
 
