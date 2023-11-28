@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import apiHooks from '../../../../hooks/ApiHooks';
 import ProfileInfo from '../../../../components/profiles/ProfileInfo';
 import StudentCourseGrid from '../../../../components/main/course/StudentCourseGrid';
 import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
+import {UserContext} from '../../../../contexts/UserContext';
 interface StudentInfo {
 	email: string;
 	first_name: string;
@@ -41,6 +42,7 @@ const TeacherStudentDetail: React.FC = () => {
 	const {id} = useParams<{id: string}>();
 	const [student, setStudent] = useState<StudentInfo | null>(null); // Define the student state variable as a Student object
 	const [courses, setCourses] = useState<Course[]>([]); // Define the courses state variable as an array of Course objects
+	const {update, setUpdate} = useContext(UserContext);
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -63,13 +65,17 @@ const TeacherStudentDetail: React.FC = () => {
 		};
 
 		fetchData();
-	}, [id]);
+	}, [id, update]);
 
 	// If the student state variable is null, show a loading indicator
 	if (!student) {
 		return <div>Loading...</div>;
 	}
 
+	const updateView = () => {
+		alert('updateView');
+		setUpdate(!update);
+	};
 	return (
 		<BackgroundContainer>
 			<div className="bg-gray-100 rounded-lg p-5">
@@ -81,7 +87,11 @@ const TeacherStudentDetail: React.FC = () => {
 				<h2 className="text-2xl font-bold mt-10 underline underline-offset-8 decoration-metropoliaMainOrange mb-5">
 					{student.first_name + ' ' + student.last_name}'s Courses
 				</h2>
-				<StudentCourseGrid courses={courses} showEndedCourses={true} />
+				<StudentCourseGrid
+					courses={courses}
+					showEndedCourses={true}
+					updateView={updateView}
+				/>
 			</div>
 		</BackgroundContainer>
 	);

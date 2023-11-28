@@ -22,11 +22,13 @@ interface Course {
 interface StudentCourseGridProps {
 	courses: Course[];
 	showEndedCourses: boolean;
+	updateView?: () => void;
 }
 
 const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 	courses,
 	showEndedCourses,
+	updateView,
 }) => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
@@ -69,6 +71,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 		setCourseTopics(initialCourseTopics);
 		setModifiedTopics(initialCourseTopics);
 	};
+
 	const handleSave = async usercourseid => {
 		console.log(usercourseid, 'USERCOURSEID');
 		console.log(modifiedTopics);
@@ -84,6 +87,8 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 			);
 			console.log(response);
 			toast.success('Topics saved');
+
+			updateView && updateView();
 		} catch (error) {
 			toast.error('Error saving topics');
 		}
