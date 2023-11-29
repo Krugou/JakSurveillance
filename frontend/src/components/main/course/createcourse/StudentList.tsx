@@ -58,8 +58,8 @@ const StudentList = ({studentList, setStudentList}) => {
 	const addStudent = event => {
 		event.preventDefault();
 		const newStudent = {
-			first_name: 'Matti',
 			last_name: 'Meikäläinen',
+			first_name: 'Matti',
 			name: 'Meikäläinen Matti',
 			email: `Matti.meikalainen${lastEmailNumber}@metropolia.com`,
 			studentnumber: lastStudentNumber.toString(),
