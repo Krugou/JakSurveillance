@@ -65,6 +65,7 @@ const attendanceModel: AttendanceModel = {
 		}
 	},
 
+
 	async fetchAllAttendances() {
 		try {
 			return await pool

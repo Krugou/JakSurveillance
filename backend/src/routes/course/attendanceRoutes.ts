@@ -164,28 +164,24 @@ router.get('/studentsattendance', async (req: Request, res: Response) => {
 	}
 });
 
-router.put(
-	'/usercourse/update-status/:usercourseid',
-	async (req: Request, res: Response) => {
-		const usercourseId = req.params.usercourseid;
-		const {status} = req.body;
+router.put('/update', async (req: Request, res: Response) => {
 
-		try {
-			console.log('Received usercourseId:', usercourseId);
-			console.log('Received status:', status);
+	const { usercourseid,status } = req.body;
 
-			// Log the SQL query
-			const query = `UPDATE attendance SET status = ? WHERE usercourseid = ? ORDER BY date DESC LIMIT 1`;
-			console.log('SQL Query:', query);
+	try {
+		console.log('Received usercourseId:', usercourseid);
+		console.log('Received status:', status);
 
-			await attendanceController.updateAttendanceStatus(usercourseId, status);
-			res.status(200).json({message: 'Attendance status updated successfully'});
-		} catch (error) {
-			console.error(error);
-			res.status(500).send('Server error');
-		}
-	},
-);
+		const result = await attendanceController.updateAttendanceStatus(usercourseid, status);
+		console.log('Update result:', result);
+
+		res.status(200).json({ message: 'Attendance status updated successfully' });
+	} catch (error) {
+		console.error(error);
+		res.status(500).send('Server error');
+	}
+});
+
 router.get('/course/:courseid', async (req: Request, res: Response) => {
 	try {
 		if (
