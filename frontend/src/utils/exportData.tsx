@@ -2,6 +2,7 @@ import {jsPDF} from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import {toast} from 'react-toastify';
+import metropolia_logo from '../assets/images/metropolia_s_oranssi_en.png';
 // Function to create tables for PDF or Excel
 const createTables = (mode?, filteredAttendanceData?, student?) => {
 	let tableData;
@@ -38,12 +39,7 @@ const createTables = (mode?, filteredAttendanceData?, student?) => {
 	return {tableHeaders, tableData};
 };
 
-export const exportToPDF = (
-	metropolia_logo,
-	filteredAttendanceData,
-	student,
-	sortOption,
-) => {
+export const exportToPDF = (filteredAttendanceData, student, sortOption) => {
 	const doc = new jsPDF();
 	const imgWidth = 180;
 	const imgHeight = (imgWidth * 1267) / 4961;

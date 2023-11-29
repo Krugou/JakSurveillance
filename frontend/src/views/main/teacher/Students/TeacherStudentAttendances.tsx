@@ -6,7 +6,6 @@ import {FormControl, MenuItem, Select, Tooltip} from '@mui/material';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import AttendanceTable from '../../../../components/main/course/attendance/AttendanceTable';
 import PrintIcon from '@mui/icons-material/Print';
-import metropolia_logo from '../../../../assets/images/metropolia_s_oranssi_en.png';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import {exportToExcel, exportToPDF} from '../../../../utils/exportData';
 // Interface for the attendance data
@@ -103,7 +102,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 	);
 
 	const handleExportToPDF = () => {
-		exportToPDF(metropolia_logo, filteredAttendanceData, student, sortOption);
+		exportToPDF(filteredAttendanceData, student, sortOption);
 	};
 
 	const handleExportToExcel = () => {
