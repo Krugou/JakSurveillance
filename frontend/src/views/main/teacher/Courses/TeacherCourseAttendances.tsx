@@ -3,6 +3,10 @@ import Calendar from 'react-calendar';
 import {useParams} from 'react-router-dom';
 import apiHooks from '../../../../hooks/ApiHooks';
 import AttendanceTable from '../../../../components/main/course/attendance/AttendanceTable';
+import Tooltip from '@mui/material/Tooltip';
+import PrintIcon from '@mui/icons-material/Print';
+import GetAppIcon from '@mui/icons-material/GetApp';
+
 const TeacherCourseAttendances: React.FC = () => {
 	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 	const [lecturesAndTheirAttendances, setLecturesAndTheirAttendances] = useState<
@@ -83,12 +87,30 @@ const TeacherCourseAttendances: React.FC = () => {
 					</h2>
 
 					{filteredAttendances.length > 0 ? (
-						<AttendanceTable
-							filteredAttendanceData={filteredAttendances}
-							allAttendances={true}
-						/>
+						<>
+							<div className="flex justify-around mt-4 ">
+								<Tooltip title="Print to pdf">
+									<button>
+										<PrintIcon />
+									</button>
+								</Tooltip>
+								<Tooltip title="Export to Excel">
+									<button>
+										<GetAppIcon />
+									</button>
+								</Tooltip>
+							</div>
+							<AttendanceTable
+								filteredAttendanceData={filteredAttendances}
+								allAttendances={true}
+							/>
+						</>
 					) : (
-						<p>No attendances found for {selectedDate.toDateString()}</p>
+						<div className="flex justify-center mt-4">
+							<p className="text-xl">
+								No attendances found for {selectedDate.toDateString()}
+							</p>
+						</div>
 					)}
 				</div>
 			)}
