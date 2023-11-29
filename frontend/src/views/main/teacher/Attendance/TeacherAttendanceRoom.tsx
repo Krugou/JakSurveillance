@@ -35,7 +35,8 @@ const AttendanceRoom: React.FC = () => {
 	const [topicname, setTopicname] = useState('');
 	const [loading, setLoading] = useState(true);
 	const [hashValue, setHashValue] = useState('');
-
+	const [courseId, setCourseId] = useState('');
+	const [dataLoaded, setDataLoaded] = useState(false);
 	/**
 	 * useEffect hook for fetching lecture info.
 	 * This hook is run when the component mounts and whenever the lectureid changes.
@@ -71,6 +72,7 @@ const AttendanceRoom: React.FC = () => {
 		apiHooks
 			.getLectureInfo(lectureid, token)
 			.then(info => {
+				setCourseId(info.courseid);
 				// Check if the lecture is already closed
 				if (info.state === 'closed') {
 					// If so, display an error message, navigate to the main view, and exit the function
@@ -78,7 +80,7 @@ const AttendanceRoom: React.FC = () => {
 					navigate('/teacher/mainview');
 					return;
 				}
-				// Set the course code, course name, and topic name with the retrieved info
+				// Set the course code, course name, and topic name from the lecture info
 				setCourseCode(info.code);
 				setCourseName(info.name);
 				setTopicname(info.topicname);
@@ -87,6 +89,7 @@ const AttendanceRoom: React.FC = () => {
 
 				// Set loading to false when the data fetch is done
 				setLoading(false);
+				setDataLoaded(true);
 			})
 			.catch(error => {
 				// Log the error and display an error message
@@ -97,7 +100,9 @@ const AttendanceRoom: React.FC = () => {
 				setLoading(false);
 			});
 	}, [lectureid]); // This effect depends on the lectureid variable
-
+	useEffect(() => {
+		console.log('courseId:', courseId);
+	}, [courseId]);
 	/**
 	 * useEffect hook for managing socket connections.
 	 * This hook is run when the component mounts and whenever the lectureid changes.
@@ -133,14 +138,7 @@ const AttendanceRoom: React.FC = () => {
 					setCountdown(timeout / 1000); // convert milliseconds to seconds
 				}
 			});
-			// When the lecture finishes, navigate to the lectureid
-			newSocket.on('lecturefinished', checklectureid => {
-				console.log('lecturefinished');
-				if (checklectureid === lectureid) {
-					toast.success('Lecture finished');
-					navigate('/teacher/mainview'); // todo: navigate to the lectureid
-				}
-			});
+
 			// When receiving the list of all students in the lecture, update the state
 			newSocket.on('getallstudentsinlecture', courseStudents => {
 				setCourseStudents(courseStudents);
@@ -199,6 +197,26 @@ const AttendanceRoom: React.FC = () => {
 			}
 		};
 	}, [socket]); // This effect depends on the socket variable
+
+	useEffect(() => {
+		if (dataLoaded) {
+			// Only start listening for the event if data has been loaded
+			if (socket) {
+				// When the lecture is finished, display a success message and navigate to the attendance view
+				socket.on('lecturefinished', checklectureid => {
+					console.log('lecturefinished');
+					if (checklectureid === lectureid) {
+						toast.success('Lecture finished');
+						if (courseId) {
+							navigate(`/teacher/courses/attendances/${courseId}`);
+						} else {
+							console.error('courseId is not set');
+						}
+					}
+				});
+			}
+		}
+	}, [dataLoaded]);
 	/**
 	 * Function to handle the 'Finish Lecture' button click.
 	 * This function emits a 'lecturefinishedwithbutton' event with the lectureid.
@@ -240,6 +258,7 @@ const AttendanceRoom: React.FC = () => {
 			}
 		};
 	}, [countdown]); // This effect depends on the countdown variable
+
 	return (
 		<BackgroundContainer>
 			{loading ? (
