@@ -1,42 +1,63 @@
+import EditIcon from '@mui/icons-material/Edit';
+import {
+	Button,
+	Card,
+	CardContent,
+	Grid,
+	Tooltip,
+	Typography,
+} from '@mui/material';
 import React from 'react';
+import {useNavigate} from 'react-router-dom';
 
 interface SimpleUserViewProps {
 	user: {
-		role: string;
+		GDPR: number;
+		created_at: string;
+		email: string;
 		first_name: string;
 		last_name: string;
-		email: string;
-		studentnumber: string;
-		userid: string;
+		role: string;
+		roleid: number;
+		staff: number;
+		studentgroupid: number;
+		studentnumber: number;
+		userid: number;
+		username: string;
 	};
 }
 
 const SimpleUserView: React.FC<SimpleUserViewProps> = ({user}) => {
+	const navigate = useNavigate();
+
 	return (
-		<>
-			<h1 className="text-2xl font-bold mb-4">{user.role}</h1>
-			<div className="w-full md:w-1/2 p-4">
-				{user.first_name && (
-					<p className="mb-2 text-lg font-bold">First Name: {user.first_name}</p>
-				)}
-				{user.last_name && (
-					<p className="mb-2 text-lg font-bold">Last Name: {user.last_name}</p>
-				)}
-				{user.email && (
-					<p className="mb-2 text-lg font-bold">Email: {user.email}</p>
-				)}
-			</div>
-			<div className="w-full md:w-1/2 p-4">
-				{user.studentnumber && (
-					<p className="mb-2 text-lg font-bold">
-						Student Number: {user.studentnumber}
-					</p>
-				)}
-				{user.userid && (
-					<p className="mb-2 text-lg font-bold">User ID: {user.userid}</p>
-				)}
-			</div>
-		</>
+		<Card className="m-4">
+			<CardContent>
+				<Grid container spacing={2}>
+					<Grid item xs={12} sm={6}>
+						<Typography variant="h5" component="div">
+							{user.role}
+							<Tooltip title="Modify this course">
+								<EditIcon
+									fontSize="large"
+									className="cursor-pointer"
+									onClick={() => navigate(`./modify`)}
+								/>
+							</Tooltip>
+						</Typography>
+						<Typography variant="body1">First Name: {user.first_name}</Typography>
+						<Typography variant="body1">Last Name: {user.last_name}</Typography>
+						<Typography variant="body1">Email: {user.email}</Typography>
+					</Grid>
+					<Grid item xs={12} sm={6}>
+						<Typography variant="body1">
+							Student Number: {user.studentnumber}
+						</Typography>
+						<Typography variant="body1">User ID: {user.userid}</Typography>
+					</Grid>
+				</Grid>
+			</CardContent>
+		</Card>
 	);
 };
 
