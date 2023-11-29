@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import apiHooks from '../../hooks/ApiHooks'; // Replace with the correct path to your ApiHooks file
 
@@ -20,6 +21,8 @@ interface Role {
 }
 
 const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
+	// Define navigate
+	const Navigate = useNavigate();
 	// Define state variables for the modal
 	const [open, setOpen] = useState(false);
 	// Define state variables for the roles
@@ -66,7 +69,8 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 				toast.error(response.error);
 			}
 
-			toast.success(response.message);
+			toast.success(response.message + ' please log in again');
+			Navigate('/logout');
 			handleClose();
 		} catch (error) {
 			toast.error((error as Error).toString());
