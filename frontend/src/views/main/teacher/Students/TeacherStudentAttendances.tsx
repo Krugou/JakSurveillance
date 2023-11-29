@@ -101,10 +101,12 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 		),
 	);
 
+	// Function to handle export to PDF
 	const handleExportToPDF = () => {
 		exportToPDF(filteredAttendanceData, student, sortOption);
 	};
 
+	// Function to handle export to Excel
 	const handleExportToExcel = () => {
 		exportToExcel(filteredAttendanceData, student, sortOption);
 	};

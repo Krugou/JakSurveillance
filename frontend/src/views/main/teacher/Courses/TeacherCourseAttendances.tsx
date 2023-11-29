@@ -15,6 +15,7 @@ const TeacherCourseAttendances: React.FC = () => {
 	>([]); // [lecture, [attendances]
 	const {id: courseId} = useParams();
 
+	// Fetch the lectures and their attendances
 	useEffect(() => {
 		const fetchAttendances = async () => {
 			try {
@@ -24,6 +25,7 @@ const TeacherCourseAttendances: React.FC = () => {
 				}
 				const response = await apiHooks.getLecturesAndAttendances(courseId, token);
 				console.log(response, 'response');
+				// Set the lectures and their attendances
 				setLecturesAndTheirAttendances(response);
 			} catch (error) {
 				console.log(error);
@@ -32,13 +34,17 @@ const TeacherCourseAttendances: React.FC = () => {
 		fetchAttendances();
 	}, [courseId]);
 
+	// Function to handle date change
 	const handleDateChange = date => {
 		setSelectedDate(date);
 	};
+
+	// Map the lecture start dates to an array
 	const lectureStartDates = lecturesAndTheirAttendances.map(lecture =>
 		new Date(lecture.start_date).toLocaleDateString(),
 	);
 
+	// Filter the attendances based on the selected date
 	const filteredAttendances = selectedDate
 		? lecturesAndTheirAttendances
 				.filter(
@@ -59,15 +65,16 @@ const TeacherCourseAttendances: React.FC = () => {
 				}))
 		: [];
 
+	// Function to handle printing to pdf
 	const handlePrintToPdf = () => {
 		exportToPDF(filteredAttendances);
 	};
 
+	// Function to handle exporting to excel
 	const handleExportToExcel = () => {
 		exportToExcel(filteredAttendances);
 	};
 
-	console.log(filteredAttendances, 'fitlered');
 	return (
 		<div className="w-full">
 			<h1 className="text-center text-3xl font-bold">
