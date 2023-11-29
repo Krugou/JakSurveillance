@@ -178,11 +178,11 @@ const CreateLecture: React.FC = () => {
 	}
 
 	return (
-		<BackgroundContainer>
+		<div className="w-full">
 			{loading ? (
 				<CircularProgress />
 			) : (
-				<div className="flex flex-col 2xl:w-2/6 sm:w-4/5 lg:w-3/5 md:w-3/5 w-full items-center rounded-lg justify-center sm:p-5 p-1 bg-orange-100">
+				<div className="flex m-auto flex-col 2xl:w-2/6 sm:w-4/5 lg:w-3/5 md:w-3/5 w-full items-center rounded-lg justify-center sm:p-5 p-1 bg-orange-100">
 					<h1 className="text-lg sm:text-2xl font-bold p-2 mb-8 mt-5">
 						Create new lecture
 					</h1>
@@ -309,7 +309,7 @@ const CreateLecture: React.FC = () => {
 					</button>
 				</div>
 			)}
-		</BackgroundContainer>
+		</div>
 	);
 };
 

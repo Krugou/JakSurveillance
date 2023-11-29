@@ -132,7 +132,7 @@ const CreateCourseCustom: React.FC = () => {
 	}, [instructorEmail, user]);
 
 	return (
-		<BackgroundContainer>
+		<div className="w-full m-auto">
 			<form onSubmit={event => handleSubmit(event)} className={getFormClassName()}>
 				{currentStep === 1 && (
 					<CourseDetails
@@ -172,7 +172,7 @@ const CreateCourseCustom: React.FC = () => {
 					extrastep={false}
 				/>
 			</form>
-		</BackgroundContainer>
+		</div>
 	);
 };
 

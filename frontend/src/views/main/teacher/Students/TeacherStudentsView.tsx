@@ -74,9 +74,9 @@ const TeacherStudentsView: React.FC = () => {
 		),
 	);
 	return (
-		<BackgroundContainer>
-			<h1 className="text-2xl font-bold mb-4">Your Students</h1>
-			<div className="flex flex-wrap w-3/4 bg-gray-100 p-5">
+		<div className="w-5/12 mx-auto">
+			<h1 className="text-2xl text-center font-bold mb-4">Your Students</h1>
+			<div className="flex flex-wrap w-full max-h-[50em] overflow-y-scroll rounded-xl bg-gray-100 p-5">
 				<div className="w-full m-4 p-4">
 					<InputField
 						type="text"
@@ -117,7 +117,7 @@ const TeacherStudentsView: React.FC = () => {
 					</div>
 				))}
 			</div>
-		</BackgroundContainer>
+		</div>
 	);
 };
 

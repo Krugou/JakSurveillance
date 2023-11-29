@@ -147,8 +147,8 @@ const TeacherCourseModify: React.FC = () => {
 	};
 
 	return (
-		<BackgroundContainer>
-			<h2 className="text-gray-800 font-semibold mb-6 text-md sm:text-2xl">
+		<div className="w-full">
+			<h2 className="text-gray-800 text-center font-semibold mb-6 text-md sm:text-2xl">
 				Modify Course
 			</h2>
 
@@ -221,7 +221,7 @@ const TeacherCourseModify: React.FC = () => {
 					</button>
 				</div>
 			</form>
-		</BackgroundContainer>
+		</div>
 	);
 };
 

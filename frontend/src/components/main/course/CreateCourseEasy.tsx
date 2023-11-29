@@ -200,7 +200,7 @@ const CreateCourseEasy: React.FC = () => {
 		}
 	}, [instructorEmail]);
 	return (
-		<BackgroundContainer>
+		<div className="w-full">
 			<form onSubmit={handleSubmit} className={getFormClassName()}>
 				{currentStep === 1 && (
 					<fieldset>
@@ -279,7 +279,7 @@ const CreateCourseEasy: React.FC = () => {
 					/>
 				)}
 			</form>
-		</BackgroundContainer>
+		</div>
 	);
 };
 

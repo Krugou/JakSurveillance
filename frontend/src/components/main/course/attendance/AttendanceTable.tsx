@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import {
 	MenuItem,
@@ -10,7 +10,9 @@ import {
 	TableHead,
 	TableRow,
 } from '@mui/material';
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
+import ApiHooks from "../../../../hooks/ApiHooks";
+import {useParams} from "react-router-dom";
 
 interface Attendance {
 	date: string;
@@ -53,22 +55,28 @@ interface AttendanceTableProps {
 	filteredAttendanceData: Attendance[] | AttendanceFromTeacher[];
 	student?: StudentInfo | null;
 	allAttendances?: boolean;
+	usercourseId?: number;
 }
 
 const AttendanceTable: React.FC<AttendanceTableProps> = ({
-	filteredAttendanceData,
-	student,
-	allAttendances,
-}) => {
+															 filteredAttendanceData,
+															 student,
+															 allAttendances,
+	usercourseId,
+														 }) => {
 	const [attendanceData, setAttendanceData] = useState<Attendance[]>(
 		filteredAttendanceData,
 	);
 
 	const handleStatusChange = async (index: number, newStatus: number) => {
 		try {
+			console.log(usercourseId)
+			const token: string | null = localStorage.getItem('userToken');
 			const updatedAttendanceData = [...attendanceData];
 			updatedAttendanceData[index].status = newStatus;
 			setAttendanceData(updatedAttendanceData);
+			// Update the status in the database
+			await ApiHooks.updateAttendanceStatus(usercourseId, newStatus, token);
 
 			// You can add a toast notification or any other feedback here
 			toast.success('Attendance status updated successfully');
@@ -87,16 +95,9 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 						<TableCell className="text-left p-4 font-medium underline">
 							Date
 						</TableCell>
-						{student && (
 							<TableCell className="text-left p-4 font-medium underline">
 								Student:
 							</TableCell>
-						)}
-						{allAttendances && (
-							<TableCell className="text-left p-4 font-medium underline">
-								Student:
-							</TableCell>
-						)}
 						<TableCell className="text-left p-4 font-medium underline">
 							Teacher
 						</TableCell>
@@ -140,7 +141,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 							<TableCell className="p-4">
 								<Select
 									value={attendance.status}
-									onChange={e => handleStatusChange(index, e.target.value as number)}
+									onChange={(e) => handleStatusChange(index, e.target.value as number)}
 								>
 									<MenuItem value={0}>Absent</MenuItem>
 									<MenuItem value={1}>Present</MenuItem>

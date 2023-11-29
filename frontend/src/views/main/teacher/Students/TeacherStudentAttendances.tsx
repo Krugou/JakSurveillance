@@ -119,7 +119,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 	);
 	if (attendanceData.length > 0) {
 		return (
-			<div className="overflow-x-auto flex flex-col border-x border-t">
+			<div className="flex w-11/12 2xl:w-10/12 flex-col bg-gray-100 p-10 rounded-lg">
 				<h1 className="text-xl sm:text-4xl font-bold mt-2 mb-8 text-center">
 					{student?.first_name + ' ' + student?.last_name}'s attendance in course:{' '}
 					{attendanceData[0].name}
@@ -169,6 +169,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 				<AttendanceTable
 					filteredAttendanceData={filteredAttendanceData}
 					student={student}
+					usercourseId={usercourseid}
 				/>
 			</div>
 		);

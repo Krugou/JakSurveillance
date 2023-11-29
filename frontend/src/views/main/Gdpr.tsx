@@ -36,7 +36,7 @@ const Gdpr = () => {
 	};
 
 	return (
-		<BackgroundContainer>
+		<div>
 			<div className="flex flex-col items-center w-full justify-center">
 				{user?.gdpr === 0 ? (
 					<div className="p-6 m-4 bg-white rounded max-h-[30em] overflow-y-scroll shadow-md w-full flex flex-col gap-5 sm:w-3/4 md:w-1/2 2xl:w-1/4 xl:w-1/3">
@@ -173,7 +173,7 @@ const Gdpr = () => {
 					<CircularProgress />
 				)}
 			</div>
-		</BackgroundContainer>
+		</div>
 	);
 };
 

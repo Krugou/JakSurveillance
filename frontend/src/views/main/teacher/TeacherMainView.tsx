@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import BackgroundContainer from '../../../components/main/background/BackgroundContainer';
 import Card from '../../../components/main/cards/Card';
 import MainViewTitle from '../../../components/main/titles/MainViewTitle';
 import WelcomeModal from '../../../components/main/modals/WelcomeModal';
@@ -30,10 +29,10 @@ const MainView: React.FC = () => {
 	}, [user]);
 
 	return (
-		<BackgroundContainer>
+		<div className="w-full">
 			<MainViewTitle role={'Teacher'} />
 
-			<div className="flex flex-col md:flex-row 2xl:w-2/5 xl:w-5/6 lg:w-11/12 w-full flex-wrap p-5 justify-center items-center gap-4">
+			<div className="flex flex-col md:flex-row flex-wrap p-5 justify-center items-center gap-4">
 
 				{courses.length === 0 && (
 					<div>
@@ -80,7 +79,7 @@ const MainView: React.FC = () => {
 				)}
 			</div>
 			<WelcomeModal />
-		</BackgroundContainer>
+		</div>
 	);
 };
 

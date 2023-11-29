@@ -5,7 +5,7 @@ import MainViewTitle from '../../../components/main/titles/MainViewTitle';
 
 const MainView: React.FC = () => {
 	return (
-		<BackgroundContainer>
+		<div className="w-full">
 			<MainViewTitle role={'Student'} />
 			<div className="flex flex-wrap w-full items-center justify-center h-1/2">
 				<Card
@@ -24,7 +24,7 @@ const MainView: React.FC = () => {
 					description="View your own courses"
 				/>
 			</div>
-		</BackgroundContainer>
+		</div>
 	);
 };
 

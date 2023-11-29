@@ -27,7 +27,7 @@ const BackgroundContainer: React.FC<BackgroundContainerProps> = ({
 
 	return (
 		<div
-			className="flex flex-col pt-10 pb-10 pl-3 pr-3 items-center bg-cover bg-center"
+			className="flex flex-col w-full md:min-h-[82vh] md:h-fit h-fit pt-10 pb-10 pl-3 pr-3 items-center bg-cover bg-center"
 			style={{backgroundImage: `url(${backgroundUrl})`}}
 		>
 			{children}

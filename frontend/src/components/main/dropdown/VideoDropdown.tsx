@@ -46,7 +46,7 @@ const VideoDropdown: React.FC<VideoDropdownProps> = ({ title, src }) => {
         </span>
             </button>
             {isOpen && (
-                <div className="w-full h-full mt-4">
+                <div className="w-full h-full m-auto mt-4">
                     <video controls src={src} className="w-full rounded h-full" />
                 </div>
             )}

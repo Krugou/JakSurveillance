@@ -260,11 +260,11 @@ const AttendanceRoom: React.FC = () => {
 	}, [countdown]); // This effect depends on the countdown variable
 
 	return (
-		<BackgroundContainer>
+		<div className="w-full">
 			{loading ? (
 				<CircularProgress />
 			) : (
-				<div className="flex flex-col w-full xl:w-4/5 2xl:w-1/2 h-full p-5 bg-gray-100">
+				<div className="flex flex-col m-auto w-full xl:w-4/5 2xl:w-1/2 h-full p-5 bg-gray-100">
 					<div>
 						<h1 className="text-2xl pb-5 font-bold">
 							{courseName} - {courseCode} - {topicname} -{' '}
@@ -279,7 +279,7 @@ const AttendanceRoom: React.FC = () => {
 								size={256}
 								value={hashValue}
 								viewBox={`0 0 256 256`}
-								className="md:w-[20em] w-full h-full"
+								className="md:w-[40em] w-full h-full"
 							/>
 
 							<Attendees arrayOfStudents={arrayOfStudents} />
@@ -311,7 +311,7 @@ const AttendanceRoom: React.FC = () => {
 					</div>
 				</div>
 			)}
-		</BackgroundContainer>
+		</div>
 	);
 };
 
