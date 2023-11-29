@@ -45,7 +45,7 @@ const createTables = (mode?, filteredAttendanceData?, student?) => {
 
 export const exportToPDF = (filteredAttendanceData, student?, sortOption?) => {
 	const doc = new jsPDF();
-	const imgWidth = 180;
+	const imgWidth = 90;
 	const imgHeight = (imgWidth * 1267) / 4961;
 	const imgX = 15;
 	const imgY = 10;
@@ -62,7 +62,7 @@ export const exportToPDF = (filteredAttendanceData, student?, sortOption?) => {
 	autoTable(doc, {
 		head: [tableHeaders],
 		body: tableData,
-		startY: 90, // start the table below the title
+		startY: student ? 60 : 50, // start the table below the title
 
 		didDrawPage: data => {
 			// Add header
@@ -77,15 +77,15 @@ export const exportToPDF = (filteredAttendanceData, student?, sortOption?) => {
 						filteredAttendanceData[0].start_date,
 					).toLocaleDateString()}`,
 					data.settings.margin.left,
-					75,
+					45,
 				);
 			} else {
 				doc.text(
 					`${filteredAttendanceData[0].name} attendance for ${student?.first_name} ${student?.last_name}`,
 					data.settings.margin.left,
-					75,
+					45,
 				);
-				doc.text(`Topics: ${sortOption}`, data.settings.margin.left, 85);
+				doc.text(`Topics: ${sortOption}`, data.settings.margin.left, 55);
 			}
 		},
 	});
