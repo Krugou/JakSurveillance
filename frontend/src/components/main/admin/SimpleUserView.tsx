@@ -1,12 +1,5 @@
 import EditIcon from '@mui/icons-material/Edit';
-import {
-	Button,
-	Card,
-	CardContent,
-	Grid,
-	Tooltip,
-	Typography,
-} from '@mui/material';
+import {Card, CardContent, Grid, Tooltip, Typography} from '@mui/material';
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 
