@@ -11,7 +11,7 @@ router.get(
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	async (req: Request, res: Response) => {
 		try {
-			return await adminController.getServerSettings(_req as any, res as any);
+			return await adminController.getServerSettings(req as any, res as any);
 		} catch (error) {
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
