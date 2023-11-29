@@ -6,9 +6,10 @@ import AttendanceTable from '../../../../components/main/course/attendance/Atten
 import Tooltip from '@mui/material/Tooltip';
 import PrintIcon from '@mui/icons-material/Print';
 import GetAppIcon from '@mui/icons-material/GetApp';
+import {exportToExcel, exportToPDF} from '../../../../utils/exportData';
 
 const TeacherCourseAttendances: React.FC = () => {
-	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+	const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 	const [lecturesAndTheirAttendances, setLecturesAndTheirAttendances] = useState<
 		any[]
 	>([]); // [lecture, [attendances]
@@ -57,6 +58,15 @@ const TeacherCourseAttendances: React.FC = () => {
 					studentnumber: lecture.studentnumber,
 				}))
 		: [];
+
+	const handlePrintToPdf = () => {
+		exportToPDF(filteredAttendances);
+	};
+
+	const handleExportToExcel = () => {
+		exportToExcel(filteredAttendances);
+	};
+
 	console.log(filteredAttendances, 'fitlered');
 	return (
 		<div className="w-full">
@@ -90,12 +100,12 @@ const TeacherCourseAttendances: React.FC = () => {
 						<>
 							<div className="flex justify-around mt-4 ">
 								<Tooltip title="Print to pdf">
-									<button>
+									<button onClick={handlePrintToPdf}>
 										<PrintIcon />
 									</button>
 								</Tooltip>
 								<Tooltip title="Export to Excel">
-									<button>
+									<button onClick={handleExportToExcel}>
 										<GetAppIcon />
 									</button>
 								</Tooltip>

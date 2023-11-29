@@ -18,7 +18,9 @@ const createTables = (mode?, filteredAttendanceData?, student?) => {
 	if (mode === 'pdf') {
 		tableData = filteredAttendanceData.map(attendance => [
 			new Date(attendance.start_date).toLocaleDateString(),
-			student ? `${student.first_name} ${student.last_name}` : '',
+			student
+				? `${student.first_name} ${student.last_name}`
+				: attendance.first_name + ' ' + attendance.last_name,
 			attendance.teacher,
 			attendance.timeofday,
 			attendance.topicname,
@@ -26,20 +28,22 @@ const createTables = (mode?, filteredAttendanceData?, student?) => {
 		]);
 	} else if (mode === 'excel') {
 		// If mode is 'excel', set the table headers and data accordingly
-
 		tableData = filteredAttendanceData.map(attendance => ({
 			Date: new Date(attendance.start_date).toLocaleDateString(),
-			Student: student ? `${student.first_name} ${student.last_name}` : '',
+			Student: student
+				? `${student.first_name} ${student.last_name}`
+				: attendance.first_name + ' ' + attendance.last_name,
 			Teacher: attendance.teacher,
 			'Time of Day': attendance.timeofday,
 			Topic: attendance.topicname,
 			Status: attendance.status === 1 ? 'Present' : 'Absent',
 		}));
 	}
+
 	return {tableHeaders, tableData};
 };
 
-export const exportToPDF = (filteredAttendanceData, student, sortOption) => {
+export const exportToPDF = (filteredAttendanceData, student?, sortOption?) => {
 	const doc = new jsPDF();
 	const imgWidth = 180;
 	const imgHeight = (imgWidth * 1267) / 4961;
@@ -54,6 +58,7 @@ export const exportToPDF = (filteredAttendanceData, student, sortOption) => {
 	);
 
 	// Add the table to the PDF
+
 	autoTable(doc, {
 		head: [tableHeaders],
 		body: tableData,
@@ -65,27 +70,55 @@ export const exportToPDF = (filteredAttendanceData, student, sortOption) => {
 			doc.setTextColor(40); // Set text color to black
 			doc.setFont('helvetica', 'normal'); // Set font
 			// Add the course name and student name to the PDF
-			doc.text(
-				`${filteredAttendanceData[0].name} attendance for ${student?.first_name} ${student?.last_name}`,
-				data.settings.margin.left,
-				75,
-			);
-			doc.text(`Topics: ${sortOption}`, data.settings.margin.left, 85);
+
+			if (!student) {
+				doc.text(
+					`${filteredAttendanceData[0].name} attendance for ${new Date(
+						filteredAttendanceData[0].start_date,
+					).toLocaleDateString()}`,
+					data.settings.margin.left,
+					75,
+				);
+			} else {
+				doc.text(
+					`${filteredAttendanceData[0].name} attendance for ${student?.first_name} ${student?.last_name}`,
+					data.settings.margin.left,
+					75,
+				);
+				doc.text(`Topics: ${sortOption}`, data.settings.margin.left, 85);
+			}
 		},
 	});
 
 	// Save the PDF
-	doc.save(`${student?.first_name} ${student?.last_name}'s attendance.pdf`);
-	toast.success(
-		`${student?.first_name} ${student?.last_name}'s attendance PDF for topics: ${sortOption} downloaded successfully. `,
-		{
+	if (!student) {
+		doc.save(
+			`${filteredAttendanceData[0].name} attendance for ${new Date(
+				filteredAttendanceData[0].start_date,
+			).toLocaleDateString()} .pdf`,
+		);
+		toast.success('Attendance PDF downloaded successfully.', {
 			position: toast.POSITION.TOP_CENTER, // position the toast at the top center
 			autoClose: 7000, // Display the toast for 7 seconds
-		},
-	);
+		});
+	} else {
+		doc.save(`${student?.first_name} ${student?.last_name}'s attendance.pdf`);
+
+		toast.success(
+			`${student?.first_name} ${student?.last_name}'s attendance PDF for topics: ${sortOption} downloaded successfully. `,
+			{
+				position: toast.POSITION.TOP_CENTER, // position the toast at the top center
+				autoClose: 7000, // Display the toast for 7 seconds
+			},
+		);
+	}
 };
 // Function to export the attendance data to Excel
-export const exportToExcel = (filteredAttendanceData, student, sortOption) => {
+export const exportToExcel = (
+	filteredAttendanceData,
+	student?,
+	sortOption?,
+) => {
 	// Create the table
 	const {tableHeaders, tableData} = createTables(
 		'excel',
@@ -100,15 +133,29 @@ export const exportToExcel = (filteredAttendanceData, student, sortOption) => {
 	XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
 	// Save the workbook
-	XLSX.writeFile(
-		wb,
-		`${student?.first_name} ${student?.last_name}_${filteredAttendanceData[0].name}_${sortOption} attendance.xlsx`,
-	);
-	toast.success(
-		`${student?.first_name} ${student?.last_name}'s attendance EXCEL for topics: ${sortOption} downloaded successfully. `,
-		{
+	if (!student) {
+		XLSX.writeFile(
+			wb,
+			`${filteredAttendanceData[0].name} attendance for ${new Date(
+				filteredAttendanceData[0].start_date,
+			).toLocaleDateString()}.xlsx`,
+		);
+		toast.success('Attendance EXCEL downloaded successfully.', {
 			position: toast.POSITION.TOP_CENTER, // position the toast at the top center
-			autoClose: 7000, // Display the toast for 7 secondss
-		},
-	);
+			autoClose: 7000, // Display the toast for 7 seconds
+		});
+	} else {
+		XLSX.writeFile(
+			wb,
+			`${student?.first_name} ${student?.last_name}_${filteredAttendanceData[0].name}_${sortOption} attendance.xlsx`,
+		);
+		toast.success(
+			`${student?.first_name} ${student?.last_name}'s attendance EXCEL for topics: ${sortOption} downloaded successfully. `,
+			{
+				position: toast.POSITION.TOP_CENTER, // position the toast at the top center
+				autoClose: 7000, // Display the toast for 7 secondss
+			},
+		);
+	}
+	// Display a toast message
 };
