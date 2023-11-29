@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 import {
 	MenuItem,
@@ -10,7 +10,7 @@ import {
 	TableHead,
 	TableRow,
 } from '@mui/material';
-import { toast } from 'react-toastify';
+import {toast} from 'react-toastify';
 
 interface Attendance {
 	date: string;
@@ -56,10 +56,10 @@ interface AttendanceTableProps {
 }
 
 const AttendanceTable: React.FC<AttendanceTableProps> = ({
-															 filteredAttendanceData,
-															 student,
-															 allAttendances,
-														 }) => {
+	filteredAttendanceData,
+	student,
+	allAttendances,
+}) => {
 	const [attendanceData, setAttendanceData] = useState<Attendance[]>(
 		filteredAttendanceData,
 	);
@@ -69,7 +69,6 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 			const updatedAttendanceData = [...attendanceData];
 			updatedAttendanceData[index].status = newStatus;
 			setAttendanceData(updatedAttendanceData);
-
 
 			// You can add a toast notification or any other feedback here
 			toast.success('Attendance status updated successfully');
@@ -88,7 +87,12 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 						<TableCell className="text-left p-4 font-medium underline">
 							Date
 						</TableCell>
-						{student && allAttendances && (
+						{student && (
+							<TableCell className="text-left p-4 font-medium underline">
+								Student:
+							</TableCell>
+						)}
+						{allAttendances && (
 							<TableCell className="text-left p-4 font-medium underline">
 								Student:
 							</TableCell>
@@ -136,9 +140,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 							<TableCell className="p-4">
 								<Select
 									value={attendance.status}
-									onChange={(e) =>
-										handleStatusChange(index, e.target.value as number)
-									}
+									onChange={e => handleStatusChange(index, e.target.value as number)}
 								>
 									<MenuItem value={0}>Absent</MenuItem>
 									<MenuItem value={1}>Present</MenuItem>
