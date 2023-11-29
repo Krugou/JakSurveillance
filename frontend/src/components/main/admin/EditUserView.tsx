@@ -255,43 +255,45 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 					</label>
 				)}
 
-				{editedUser.studentnumber !== undefined && (
-					<label className="block">
-						<span className="text-gray-700">Student Number</span>
-						<input
-							type="number"
-							name="studentnumber"
-							value={editedUser.studentnumber}
-							onChange={handleInputChange}
-							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-						/>
-						{isStudentNumberTaken && (
-							<span className="text-red-500">Student number taken</span>
-						)}
-					</label>
-				)}
+				{editedUser.studentnumber !== undefined &&
+					editedUser.studentnumber !== null && (
+						<label className="block">
+							<span className="text-gray-700">Student Number</span>
+							<input
+								type="number"
+								name="studentnumber"
+								value={editedUser.studentnumber}
+								onChange={handleInputChange}
+								className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+							/>
+							{isStudentNumberTaken && (
+								<span className="text-red-500">Student number taken</span>
+							)}
+						</label>
+					)}
 
-				{studentGroups.length > 0 && (
-					<label className="block mt-4">
-						<span className="text-gray-700">Student Group</span>
-						<select
-							required={!!editedUser.studentgroupid}
-							name="studentgroupid"
-							value={editedUser.studentgroupid}
-							onChange={handleInputChange}
-							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-						>
-							{studentGroups.map(studentGroup => (
-								<option
-									key={studentGroup.studentgroupid}
-									value={studentGroup.studentgroupid}
-								>
-									{studentGroup.group_name}
-								</option>
-							))}
-						</select>
-					</label>
-				)}
+				{editedUser.studentgroupid !== undefined &&
+					editedUser.studentgroupid !== null && (
+						<label className="block mt-4">
+							<span className="text-gray-700">Student Group</span>
+							<select
+								required={!!editedUser.studentgroupid}
+								name="studentgroupid"
+								value={editedUser.studentgroupid}
+								onChange={handleInputChange}
+								className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+							>
+								{studentGroups.map(studentGroup => (
+									<option
+										key={studentGroup.studentgroupid}
+										value={studentGroup.studentgroupid}
+									>
+										{studentGroup.group_name}
+									</option>
+								))}
+							</select>
+						</label>
+					)}
 				<button
 					onClick={handleSaveClick}
 					className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
