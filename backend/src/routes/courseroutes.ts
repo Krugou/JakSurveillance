@@ -10,6 +10,7 @@ import openData from '../utils/opendata.js';
 import attendanceRoutes from './course/attendanceRoutes.js';
 import topicRoutes from './course/topicRoutes.js';
 import usermodel from '../models/usermodel.js';
+import checkUserRole from '../utils/checkRole.js';
 config();
 const upload = multer();
 const router: Router = express.Router();
@@ -302,32 +303,25 @@ router.get('/user/all', async (req: Request, res: Response) => {
 	}
 });
 
-router.delete('/delete/:id', async (req: Request, res: Response) => {
-	// Validate that the user is logged in
-	try {
-		// Check if the user's role is either 'teacher' or 'admin'
-		if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
-			// If not, return an error
-			return res.status(403).json({error: 'Unauthorized'});
+router.delete(
+	'/delete/:id',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	async (req: Request, res: Response) => {
+		// Get the course ID from the request
+		try {
+			const courseId = Number(req.params.id);
+			if (isNaN(courseId)) {
+				res.status(400).send('Invalid course ID');
+				return;
+			}
+			const result = await course.deleteCourse(courseId);
+			res.json(result);
+		} catch (err) {
+			console.error(err);
+			res.status(500).send('Server error');
 		}
-	} catch (error) {
-		console.log('error', error);
-	}
-
-	// Get the course ID from the request
-	try {
-		const courseId = Number(req.params.id);
-		if (isNaN(courseId)) {
-			res.status(400).send('Invalid course ID');
-			return;
-		}
-		const result = await course.deleteCourse(courseId);
-		res.json(result);
-	} catch (err) {
-		console.error(err);
-		res.status(500).send('Server error');
-	}
-});
+	},
+);
 router.get('/students/:userid', async (req: Request, res: Response) => {
 	// Get the instructor ID from the request
 	const userid = Number(req.params.userid);
