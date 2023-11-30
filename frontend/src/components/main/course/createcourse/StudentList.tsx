@@ -168,16 +168,16 @@ const StudentList = ({studentList, setStudentList}) => {
 						<tbody>
 							{studentList.map(
 								(student: Record<string, string | number>, index: number) => (
-									<tr key={index}>
+									<tr
+										key={index}
+										className={`border ${
+											lockedFields[index] ? '' : 'bg-metropoliaMainGrey bg-opacity-50  '
+										}`}
+									>
 										{Object.entries(student).map(
 											([key, value], innerIndex) =>
 												!hiddenColumns[key] && (
-													<td
-														key={innerIndex}
-														className={`border px-2 py-2 ${
-															lockedFields[index] ? '' : 'border-black'
-														}`}
-													>
+													<td key={innerIndex}>
 														<InputField
 															type="text"
 															name={key}
