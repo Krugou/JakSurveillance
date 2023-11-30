@@ -4,7 +4,6 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
 import {CircularProgress} from '@mui/material';
