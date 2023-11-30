@@ -79,11 +79,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 			updatedAttendanceData[index].status = newStatus;
 			setAttendanceData(updatedAttendanceData);
 			// Update the status in the database
-			await ApiHooks.updateAttendanceStatus(
-				attendanceid,
-				newStatus,
-				token,
-			);
+			await ApiHooks.updateAttendanceStatus(attendanceid, newStatus, token);
 
 			// You can add a toast notification or any other feedback here
 			toast.success('Attendance status updated successfully');
@@ -133,12 +129,12 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 							</TableCell>
 							{student && (
 								<TableCell className="px-6 py-4 whitespace-nowrap">
-									{student.first_name} {student.last_name}
+									{student.last_name} {student.first_name}
 								</TableCell>
 							)}
 							{allAttendances && (
 								<TableCell className="px-6 py-4 whitespace-nowrap">
-									{attendance.first_name} {attendance.last_name}
+									{attendance.last_name} {attendance.first_name}
 								</TableCell>
 							)}
 							<TableCell className="px-6 py-4 whitespace-nowrap">
