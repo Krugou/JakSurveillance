@@ -53,41 +53,35 @@ const lectureController = {
 			);
 
 			// Iterate over each student
-			for (let i = 0; i < allStudentsInLecture.length; i++) {
-				const student = allStudentsInLecture[i];
-				const usercourseid = student.usercourseid;
+			const filteredStudents = await Promise.all(
+				allStudentsInLecture.map(async student => {
+					const usercourseid = student.usercourseid;
 
-				// Fetch the modified topics associated with the student's course if there are any
-				const usercourseTopicIds =
-					await usercourse_topicsModel.findUserCourseTopicByUserCourseId(
-						usercourseid,
-					);
+					// Fetch the modified topics associated with the student's course if there are any
+					const usercourseTopicIds =
+						await usercourse_topicsModel.findUserCourseTopicByUserCourseId(
+							usercourseid,
+						);
 
-				console.log(usercourseTopicIds, 'JEP JEP');
-				console.log(allStudentsInLecture);
+					// If the student is enrolled in any modified topics
+					if (usercourseTopicIds.length > 0) {
+						// Map the topics to their IDs
+						const topicIds = usercourseTopicIds.map(topic => topic.topicid);
 
-				// If the student is enrolled in any modified topics
-				if (usercourseTopicIds.length > 0) {
-					// Map the topics to their IDs
-					const topicIds = usercourseTopicIds.map(topic => topic.topicid);
-					console.log(topicIds, 'topicIds');
-					let matchedStudents = false;
-					// If the student's topics were modified and they don't contain the current topic's id then remove them from the list of students
-					for (const topicId of topicIds) {
-						if (topicId === student.topicid) {
-							matchedStudents = true;
-							break;
+						// If the student's topics were modified and they don't contain the current topic's id then remove them from the list of students
+						if (!topicIds.includes(student.topicid)) {
+							return null;
 						}
 					}
 
-					if (!matchedStudents) {
-						allStudentsInLecture.splice(i, 1);
-						i--; // Decrement i because the array length has changed
-					}
-				}
-			}
+					return student;
+				}),
+			);
+
+			// Remove null values from the array
+			const finalStudents = filteredStudents.filter(student => student !== null);
 			// Return the updated list of students
-			return allStudentsInLecture;
+			return finalStudents;
 		} catch (error) {
 			console.error(error);
 		}
