@@ -73,48 +73,53 @@ const TeacherStudentsView: React.FC = () => {
 		),
 	);
 	return (
-		<div className="w-5/12 mx-auto">
+		<div className="2xl:w-9/12 w-full mx-auto">
 			<h1 className="text-2xl text-center font-bold mb-4">Your Students</h1>
-			<div className="flex flex-wrap w-full max-h-[50em] overflow-y-scroll rounded-xl bg-gray-100 p-5">
-				<div className="w-full m-4 p-4">
+			<div className="w-full max-h-[40em] 2xl:max-h-[60em] overflow-y-scroll rounded-xl bg-gray-100 p-2 sm:p-5">
+				<div className="w-11/12 sm:w-[20em] lg:ml-4 ml-2 mb-4">
 					<InputField
 						type="text"
 						name="search"
 						value={searchTerm}
-						onChange={e => setSearchTerm(e.target.value)}
+						onChange={(e) => setSearchTerm(e.target.value)}
 						placeholder="Search..."
 						label="Search by name"
 					/>
 				</div>
-				{filteredStudents.map(student => (
-					<div
-						key={student.userid}
-						className="mb-4 mx-1 lg:mx-2 xl:mx-4 bg-white rounded shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 min-w-max"
-					>
-						<div className="px-4 lg:px-6 py-2 lg:py-4 text-sm md:text-base">
-							<div className="font-bold text-lg mb-2">
-								{student.first_name} {student.last_name}
-							</div>
-							{student.email && <p>Email: {student.email}</p>}
-							{student.username && <p>Username: {student.username}</p>}
-							{student.studentnumber && <p>Student Number: {student.studentnumber}</p>}
-							{student.group_name && <p>Student Group: {student.group_name}</p>}
-							{student.created_at && (
-								<p>Account created: {new Date(student.created_at).toLocaleString()}</p>
-							)}
-							<div className="flex flex-wrap justify-between">
-								<GeneralLinkButton
-									path={`/${user?.role}/students/${student.userid}`}
-									text="Details"
-								/>
-								<GeneralLinkButton
-									path={`/${user?.role}/students/${student.userid}/attendances`}
-									text="Attendance"
-								/>
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+					{filteredStudents.map((student) => (
+						<div
+							key={student.userid}
+							className="mb-4 mx-1 lg:mx-2 xl:mx-4 bg-white rounded shadow-lg max-w-full w-12/12"
+						>
+							<div className="px-4 flex flex-col lg:px-4 py-2 lg:py-4 text-sm md:text-base">
+								<div className="font-bold text-lg mb-2">
+									{student.first_name} {student.last_name}
+								</div>
+								{student.email && <p>Email: </p>}
+								<p>{student.email}</p>
+								<div className="flex flex-col gap-3 mt-3">
+								{student.username && <p>Username: {student.username}</p>}
+								{student.studentnumber && <p>Student Number: {student.studentnumber}</p>}
+								{student.group_name && <p>Student Group: {student.group_name}</p>}
+								{student.created_at && (
+									<p>Account created: {new Date(student.created_at).toLocaleString()}</p>
+								)}
+								<div className="flex flex-wrap items-center justify-between">
+									<GeneralLinkButton
+										path={`/${user?.role}/students/${student.userid}`}
+										text="Details"
+									/>
+									<GeneralLinkButton
+										path={`/${user?.role}/students/${student.userid}/attendances`}
+										text="Attendance"
+									/>
+								</div>
+								</div>
 							</div>
 						</div>
-					</div>
-				))}
+					))}
+				</div>
 			</div>
 		</div>
 	);
