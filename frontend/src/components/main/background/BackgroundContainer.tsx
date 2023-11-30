@@ -29,12 +29,12 @@ const BackgroundContainer: React.FC<BackgroundContainerProps> = ({ children }) =
 	return (
 		<div className="flex flex-col h-screen">
 			<Header title="Attendance App" />
-			<div
-				className="flex-grow flex flex-col items-center bg-cover bg-center"
+			<main
+				className="flex-grow flex flex-col items-center p-10 bg-cover bg-center"
 				style={{ backgroundImage: `url(${backgroundUrl})` }}
 			>
 				{children}
-			</div>
+			</main>
 			<Footer />
 		</div>
 	);
