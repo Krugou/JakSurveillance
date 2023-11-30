@@ -1,7 +1,6 @@
 import {CircularProgress} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
-import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
 import InputField from '../../../../components/main/course/createcourse/coursedetails/InputField';
 import {UserContext} from '../../../../contexts/UserContext';
