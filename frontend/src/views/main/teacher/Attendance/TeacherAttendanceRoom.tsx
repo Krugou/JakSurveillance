@@ -4,7 +4,6 @@ import QRCode from 'react-qr-code';
 import {useNavigate, useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import io, {Socket} from 'socket.io-client';
-import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import Attendees from '../../../../components/main/course/attendance/Attendees';
 import CourseStudents from '../../../../components/main/course/attendance/CourseStudents';
 import {UserContext} from '../../../../contexts/UserContext';
