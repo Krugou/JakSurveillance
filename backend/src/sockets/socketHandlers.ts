@@ -246,9 +246,7 @@ const setupSocketHandlers = (io: Server) => {
 
 							if (studentIndex !== -1) {
 								const student = notYetPresentStudents[lectureid][studentIndex];
-								presentStudents[lectureid].push(
-									`${student.first_name} ${student.last_name.charAt(0)}.`,
-								);
+								presentStudents[lectureid].push(student);
 								notYetPresentStudents[lectureid].splice(studentIndex, 1); // Remove the student from notYetPresentStudents
 							} else {
 								console.log('Student not found');
@@ -303,9 +301,7 @@ const setupSocketHandlers = (io: Server) => {
 
 						if (studentIndex !== -1) {
 							const student = notYetPresentStudents[lectureid][studentIndex];
-							presentStudents[lectureid].push(
-								`${student.first_name} ${student.last_name.charAt(0)}.`,
-							);
+							presentStudents[lectureid].push(student);
 							notYetPresentStudents[lectureid].splice(studentIndex, 1); // Remove the student from notYetPresentStudents
 						} else {
 							console.log('Student not found');
@@ -317,6 +313,55 @@ const setupSocketHandlers = (io: Server) => {
 						console.error(error);
 						// Emit the 'manualstudentinsertError' event only to the client who sent the event
 						io.to(socket.id).emit('manualstudentinsertError', lectureid);
+					});
+			},
+		);
+		socket.on(
+			'manualStudentRemove',
+			async (studentId: string, lectureid: number) => {
+				console.log('manualStudentRemove', studentId, lectureid);
+				// Emit the 'manualStudentRemoveFailed' event only to the client who sent the event
+				if (studentId === '') {
+					io.to(socket.id).emit('manualStudentRemoveFailedEmpty', lectureid);
+					return;
+				}
+
+				const token = await getToken();
+				doFetch('http://localhost:3002/courses/attendance/', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: 'Bearer ' + token,
+					},
+					body: JSON.stringify({
+						status: '0',
+						date: new Date().toISOString().slice(0, 19).replace('T', ' '),
+						studentnumber: studentId,
+						lectureid: lectureid,
+					}),
+				})
+					.then(response => {
+						console.log('Success:', response);
+
+						const studentIndex = presentStudents[lectureid].findIndex(
+							(student: Student) =>
+								Number(student.studentnumber) === Number(studentId),
+						);
+
+						if (studentIndex !== -1) {
+							const student = presentStudents[lectureid][studentIndex];
+							notYetPresentStudents[lectureid].push(student);
+							presentStudents[lectureid].splice(studentIndex, 1); // Remove the student from presentStudents
+						} else {
+							console.log('Student not found');
+						}
+						// Emit the 'manualStudentRemoveSuccess' event only to the client who sent the event
+						io.to(socket.id).emit('manualStudentRemoveSuccess', lectureid);
+					})
+					.catch(error => {
+						console.error(error);
+						// Emit the 'manualStudentRemoveError' event only to the client who sent the event
+						io.to(socket.id).emit('manualStudentRemoveError', lectureid);
 					});
 			},
 		);
