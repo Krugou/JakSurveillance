@@ -87,57 +87,61 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 	};
 
 	return (
-		<TableContainer className="overflow-x-auto border-x border-t m-6">
-			<Table className="table-auto w-full">
-				<TableHead className="border-b">
-					<TableRow className="bg-gray-100">
-						<TableCell className="text-left p-4 font-medium underline">
+		<TableContainer className="overflow-x-auto border-gray-300 border-x border-t m-6 rounded-lg shadow">
+			<Table className="min-w-full divide-y divide-gray-200">
+				<TableHead className="bg-gray-50">
+					<TableRow>
+						<TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 							Date
 						</TableCell>
-						<TableCell className="text-left p-4 font-medium underline">
-							Student:
+						<TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+							Student
 						</TableCell>
-						<TableCell className="text-left p-4 font-medium underline">
+						<TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 							Teacher
 						</TableCell>
-						<TableCell className="text-left p-4 font-medium underline">
+						<TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 							Time of Day
 						</TableCell>
-						<TableCell className="text-left p-4 font-medium underline">
+						<TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 							Topic
 						</TableCell>
-						<TableCell className="text-left p-4 font-medium underline">
+						<TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 							Status
 						</TableCell>
 					</TableRow>
 				</TableHead>
-				<TableBody>
+				<TableBody className="bg-white divide-y divide-gray-200">
 					{filteredAttendanceData.map((attendance, index) => (
 						<TableRow
 							key={index}
 							className={`border-b hover:bg-gray-50 ${
-								attendance.status === 0
-									? 'bg-metropoliaSupportRed'
-									: 'bg-metropoliaTrendGreen'
+								attendance.status === 0 ? 'bg-red-200' : 'bg-green-200'
 							}`}
 						>
-							<TableCell className="p-4">
+							<TableCell className="px-6 py-4 whitespace-nowrap">
 								{new Date(attendance.start_date).toLocaleDateString()}
 							</TableCell>
 							{student && (
-								<TableCell className="p-4">
+								<TableCell className="px-6 py-4 whitespace-nowrap">
 									{student.first_name} {student.last_name}
 								</TableCell>
 							)}
 							{allAttendances && (
-								<TableCell className="p-4">
+								<TableCell className="px-6 py-4 whitespace-nowrap">
 									{attendance.first_name} {attendance.last_name}
 								</TableCell>
 							)}
-							<TableCell className="p-4">{attendance.teacher}</TableCell>
-							<TableCell className="p-4">{attendance.timeofday}</TableCell>
-							<TableCell className="p-4">{attendance.topicname}</TableCell>
-							<TableCell className="p-4">
+							<TableCell className="px-6 py-4 whitespace-nowrap">
+								{attendance.teacher}
+							</TableCell>
+							<TableCell className="px-6 py-4 whitespace-nowrap">
+								{attendance.timeofday}
+							</TableCell>
+							<TableCell className="px-6 py-4 whitespace-nowrap">
+								{attendance.topicname}
+							</TableCell>
+							<TableCell className="px-6 py-4 whitespace-nowrap">
 								<Select
 									value={attendance.status}
 									onChange={e => handleStatusChange(index, e.target.value as number)}

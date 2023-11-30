@@ -103,7 +103,7 @@ const TeacherCourseAttendances: React.FC = () => {
 				</div>
 			</div>
 			{selectedDate && (
-				<div className="bg-white">
+				<div className="bg-white p-2">
 					<h2 className="text-center text-2xl">
 						Attendances for {selectedDate.toLocaleDateString()}
 					</h2>
