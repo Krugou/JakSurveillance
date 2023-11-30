@@ -1,5 +1,6 @@
 import React from 'react';
 import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
+import Card from "../../../../components/main/cards/Card";
 
 const TeacherCreateCourse: React.FC = () => {
 	return (
@@ -8,8 +9,17 @@ const TeacherCreateCourse: React.FC = () => {
 				<h1 className="text-4xl text-center font-bold mb-8">Create Course</h1>
 				<p className="text-center mb-4">Choose between routes</p>
 				<div className="flex justify-center space-x-4">
-					<GeneralLinkButton path="easy" text="Excel Mode" />
-					<GeneralLinkButton path="custom" text="Custom Mode" />
+					<Card
+						path="/teacher/courses/create/easy"
+						title="Easy mode"
+						description="Create a course easily with an excel sheet"
+					/>
+
+					<Card
+						path="/teacher/courses/create/custom"
+						title="Custom mode"
+						description="Create a course with your custom details"
+					/>
 				</div>
 			</div>
 		</div>
