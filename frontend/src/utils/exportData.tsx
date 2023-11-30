@@ -19,8 +19,8 @@ const createTables = (mode?, filteredAttendanceData?, student?) => {
 		tableData = filteredAttendanceData.map(attendance => [
 			new Date(attendance.start_date).toLocaleDateString(),
 			student
-				? `${student.first_name} ${student.last_name}`
-				: attendance.first_name + ' ' + attendance.last_name,
+				? `${student.last_name} ${student.first_name}`
+				: attendance.last_name + ' ' + attendance.first_name,
 			attendance.teacher,
 			attendance.timeofday,
 			attendance.topicname,
@@ -31,8 +31,8 @@ const createTables = (mode?, filteredAttendanceData?, student?) => {
 		tableData = filteredAttendanceData.map(attendance => ({
 			Date: new Date(attendance.start_date).toLocaleDateString(),
 			Student: student
-				? `${student.first_name} ${student.last_name}`
-				: attendance.first_name + ' ' + attendance.last_name,
+				? ` ${student.last_name} ${student.first_name}`
+				: attendance.last_name + ' ' + attendance.first_name,
 			Teacher: attendance.teacher,
 			'Time of Day': attendance.timeofday,
 			Topic: attendance.topicname,
