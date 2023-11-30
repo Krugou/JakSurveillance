@@ -2,7 +2,6 @@ import React, {useContext, useRef, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import ErrorAlert from '../../components/main/ErrorAlert.tsx';
-import BackgroundContainer from '../../components/main/background/BackgroundContainer.tsx';
 import {UserContext} from '../../contexts/UserContext.tsx';
 import apiHooks from '../../hooks/ApiHooks.ts';
 /**
