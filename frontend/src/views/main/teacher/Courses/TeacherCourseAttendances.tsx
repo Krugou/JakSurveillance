@@ -107,13 +107,19 @@ const TeacherCourseAttendances: React.FC = () => {
 						<>
 							<div className="flex justify-around mt-4 ">
 								<Tooltip title="Print to pdf">
-									<button onClick={handlePrintToPdf}>
-										<PrintIcon />
+									<button
+										onClick={handlePrintToPdf}
+										className="bg-metropoliaMainOrange text-white p-2 rounded"
+									>
+										<PrintIcon fontSize="large" />
 									</button>
 								</Tooltip>
 								<Tooltip title="Export to Excel">
-									<button onClick={handleExportToExcel}>
-										<GetAppIcon />
+									<button
+										onClick={handleExportToExcel}
+										className="bg-metropoliaMainOrange text-white p-2 rounded"
+									>
+										<GetAppIcon fontSize="large" />
 									</button>
 								</Tooltip>
 							</div>

@@ -133,13 +133,19 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 						className="w-1/6 mt-10 p-4 m-2 border border-black rounded"
 					/>
 					<Tooltip title="Print to pdf">
-						<button onClick={handleExportToPDF}>
-							<PrintIcon />
+						<button
+							onClick={handleExportToPDF}
+							className="bg-metropoliaMainOrange text-white p-2 rounded"
+						>
+							<PrintIcon fontSize="large" />
 						</button>
 					</Tooltip>
 					<Tooltip title="Export to Excel">
-						<button onClick={handleExportToExcel}>
-							<GetAppIcon />
+						<button
+							onClick={handleExportToExcel}
+							className="bg-metropoliaMainOrange text-white p-2 rounded"
+						>
+							<GetAppIcon fontSize="large" />
 						</button>
 					</Tooltip>
 					<FormControl className="md:w-1/4 mt-2 md:mt-0">
