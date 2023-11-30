@@ -86,8 +86,8 @@ const TeacherCourseAttendances: React.FC = () => {
 			<h1 className="text-center text-3xl font-bold">
 				Teacher Course Attendances
 			</h1>
-			<div className="flex justify-start m-4">
-				<div className="w-1/3">
+			<div className="flex justify-center m-4">
+				<div className="w-full sm:w-1/2 lg:w-1/3">
 					<h2 className="text-center bg-metropoliaSecondaryOrange text-white p-2">
 						Find attendances based on day
 					</h2>
@@ -109,11 +109,7 @@ const TeacherCourseAttendances: React.FC = () => {
 				</div>
 			</div>
 			{selectedDate && (
-				<div className="bg-white p-2">
-					<h2 className="text-center text-2xl">
-						Attendances for {selectedDate.toLocaleDateString()}
-					</h2>
-
+				<div className="bg-white p-5 w-full 2xl:w-2/3 m-auto">
 					{filteredAttendances.length > 0 ? (
 						<>
 							<div className="flex justify-around mt-4 ">
@@ -125,6 +121,9 @@ const TeacherCourseAttendances: React.FC = () => {
 										<PrintIcon fontSize="large" />
 									</button>
 								</Tooltip>
+								<h2 className="text-center text-2xl">
+									Attendances for {selectedDate.toLocaleDateString()}
+								</h2>
 								<Tooltip title="Export to Excel">
 									<button
 										onClick={handleExportToExcel}

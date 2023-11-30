@@ -75,7 +75,7 @@ const TeacherStudentDetail: React.FC = () => {
 		setUpdate(!update);
 	};
 	return (
-		<div className="w-full">
+		<div className="w-2/3">
 			<div className="bg-gray-100 rounded-lg p-5">
 				<h2 className="text-2xl font-bold underline underline-offset-8 decoration-metropoliaMainOrange mb-5">
 					{student.first_name + ' ' + student.last_name}'s Info
