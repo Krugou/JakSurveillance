@@ -4,7 +4,7 @@
 		"lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx frontend/src backend/src",
 		"all": "npm i && cd backend && npm run all",
 		"alldev": "npm i && cd backend && npm run alldev",
-		"aleksi": "concurrently \"powershell -File gitpull.ps1\" \" npm i &&npm run alldev\"",
+		"aleksi": "concurrently \"powershell -File gitpull.ps1\" \" npm i && npm run alldev\"",
 		"build": " cd frontend && npm run build"
 	},
 	"devDependencies": {
