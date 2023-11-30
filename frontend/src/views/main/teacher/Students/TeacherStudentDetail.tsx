@@ -4,7 +4,6 @@ import {toast} from 'react-toastify';
 import apiHooks from '../../../../hooks/ApiHooks';
 import ProfileInfo from '../../../../components/profiles/ProfileInfo';
 import StudentCourseGrid from '../../../../components/main/course/StudentCourseGrid';
-import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import {UserContext} from '../../../../contexts/UserContext';
 interface StudentInfo {
 	email: string;
