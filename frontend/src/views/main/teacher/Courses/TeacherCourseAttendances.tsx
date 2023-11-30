@@ -80,9 +80,9 @@ const TeacherCourseAttendances: React.FC = () => {
 			<h1 className="text-center text-3xl font-bold">
 				Teacher Course Attendances
 			</h1>
-			<div className="flex justify-center m-4">
+			<div className="flex justify-start m-4">
 				<Calendar
-					className="w-1/2"
+					className="w-1/3"
 					onChange={handleDateChange}
 					value={selectedDate}
 					tileContent={({date}) => {
@@ -98,8 +98,8 @@ const TeacherCourseAttendances: React.FC = () => {
 				/>
 			</div>
 			{selectedDate && (
-				<div className=" border-t-8 border-b">
-					<h2 className="text-center text-2xl underline">
+				<div className="bg-white">
+					<h2 className="text-center text-2xl">
 						Attendances for {selectedDate.toLocaleDateString()}
 					</h2>
 
