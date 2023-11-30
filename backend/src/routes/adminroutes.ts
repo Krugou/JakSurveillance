@@ -157,6 +157,15 @@ router.get(
 			res.status(500).json({message: 'Internal server error'});
 		}
 	},
+	
 );
-
+router.get('/getrolecounts', checkUserRole(['admin', 'counselor', 'teacher']), async (req: Request, res: Response) => {
+	try {
+		const roleCounts = await usermodel.getRoleCounts();
+		res.send(roleCounts);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({message: 'Internal server error'});
+	}
+});
 export default router;
