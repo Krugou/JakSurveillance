@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import apiHooks from '../../../../hooks/ApiHooks';
 import {useEffect, useState} from 'react';
+import {toast} from 'react-toastify';
 const options = ['Option 1', 'Option 234', 'Option 3'];
 
 const TeacherCourseStats = () => {
@@ -19,6 +20,7 @@ const TeacherCourseStats = () => {
 				console.log(response, 'response');
 				setCourses(response);
 			} catch (error) {
+				toast.error('Error fetching courses');
 				console.log(error);
 			}
 		};
