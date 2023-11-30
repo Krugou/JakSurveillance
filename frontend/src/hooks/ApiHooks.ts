@@ -591,8 +591,18 @@ const getDetailsByCourseId = async (courseId: string, token: string) => {
 		options,
 	);
 };
+const roleCounts = async (token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	return await doFetch(baseUrl + 'admin/getrolecounts', options);
+};
 
 const apiHooks = {
+	roleCounts,
 	checkStudentNumberExists,
 	fetchStudentGroups,
 	updateUser,
