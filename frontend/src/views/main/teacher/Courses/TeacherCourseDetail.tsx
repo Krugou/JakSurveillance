@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
-import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import CourseData from '../../../../components/main/course/CourseData';
 import apihooks from '../../../../hooks/ApiHooks';
 

@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import CourseData from '../../../../components/main/course/CourseData';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
