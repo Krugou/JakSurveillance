@@ -8,6 +8,8 @@ import PrintIcon from '@mui/icons-material/Print';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import {UserContext} from '../../../../contexts/UserContext';
 import {exportToExcel, exportToPDF} from '../../../../utils/exportData';
+import Button from '@mui/material/Button';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
 
 const TeacherCourseAttendances: React.FC = () => {
 	const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
@@ -82,30 +84,38 @@ const TeacherCourseAttendances: React.FC = () => {
 	};
 
 	return (
-		<div className="w-full">
+		<div className="w-full p-4 bg-gray-100">
 			<h1 className="text-center text-3xl font-bold">
 				Teacher Course Attendances
 			</h1>
-			<div className="flex justify-center m-4">
-				<div className="w-full sm:w-1/2 lg:w-1/3">
-					<h2 className="text-center bg-metropoliaSecondaryOrange text-white p-2">
-						Find attendances based on day
-					</h2>
-					<Calendar
-						className="w-full"
-						onChange={handleDateChange}
-						value={selectedDate}
-						tileContent={({date}) => {
-							const calendarDate = new Date(date).toLocaleDateString();
+			<div className="flex justify-center m-4 ">
+				<div className="flex flex-col sm:flex-row items-center justify-center sm:space-x-4">
+					<div className="w-full sm:w-1/2 lg:w-1/3">
+						<h2 className="text-center bg-metropoliaSecondaryOrange text-white p-2">
+							Find attendances based on day
+						</h2>
+						<Calendar
+							className="w-full"
+							onChange={handleDateChange}
+							value={selectedDate}
+							tileContent={({date}) => {
+								const calendarDate = new Date(date).toLocaleDateString();
+								const isLectureStartDate = lectureStartDates.includes(calendarDate);
+								return isLectureStartDate ? (
+									<div className="bg-yellow-300 h-full w-full"></div>
+								) : null;
+							}}
+						/>
+					</div>
 
-							const isLectureStartDate = lectureStartDates.includes(calendarDate);
-
-							// If it is, add a custom class to the tile
-							return isLectureStartDate ? (
-								<div className="bg-yellow-300 h-full w-full"></div>
-							) : null;
-						}}
-					/>
+					<Button
+						variant="contained"
+						color="primary"
+						startIcon={<ShowChartIcon />}
+						className="mt-4 sm:mt-0"
+					>
+						Show All Attendances
+					</Button>
 				</div>
 			</div>
 			{selectedDate && (
