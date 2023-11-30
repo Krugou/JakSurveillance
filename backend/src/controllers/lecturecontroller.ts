@@ -1,6 +1,8 @@
+import {match} from 'assert';
 import course from '../models/coursemodel.js';
 import lectureModel from '../models/lecturemodel.js';
 import topicModel from '../models/topicmodel.js';
+import usercourse_topicsModel from '../models/usercourse_topicsmodel.js';
 
 const lectureController = {
 	async insertIntoLecture(
@@ -39,6 +41,45 @@ const lectureController = {
 			const lectureid = result.insertId;
 			console.log('🚀 ~ file: lecturemodel.ts:88 ~ lectureid:', lectureid);
 			return lectureid;
+		} catch (error) {
+			console.error(error);
+		}
+	},
+	async getStudentsInLecture(lectureid: number) {
+		try {
+			const allStudentsInLecture = await lectureModel.getStudentsByLectureId(
+				lectureid,
+			);
+			for (let i = 0; i < allStudentsInLecture.length; i++) {
+				const student = allStudentsInLecture[i];
+				const usercourseid = student.usercourseid;
+				const usercourseTopicIds =
+					await usercourse_topicsModel.findUserCourseTopicByUserCourseId(
+						usercourseid,
+					);
+				console.log(usercourseTopicIds, 'JEP JEP');
+				console.log(allStudentsInLecture);
+
+				if (usercourseTopicIds.length > 0) {
+					const topicIds = usercourseTopicIds.map(topic => topic.topicid);
+					console.log(topicIds, 'topicIds');
+					let matchedStudents = false;
+
+					for (const topicId of topicIds) {
+						if (topicId === student.topicid) {
+							matchedStudents = true;
+							break;
+						}
+					}
+
+					if (!matchedStudents) {
+						allStudentsInLecture.splice(i, 1);
+						i--; // Decrement i because the array length has changed
+					}
+				}
+			}
+
+			return allStudentsInLecture;
 		} catch (error) {
 			console.error(error);
 		}

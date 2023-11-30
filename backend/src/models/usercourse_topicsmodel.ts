@@ -55,6 +55,16 @@ const usercourse_topicsModel = {
 
 		return result;
 	},
+	async findUserCourseTopicByUserCourseId(usercourseid: number) {
+		const [rows] = await pool
+			.promise()
+			.query<RowDataPacket[]>(
+				'SELECT topicid FROM usercourse_topics WHERE usercourseid = ?',
+				[usercourseid],
+			);
+
+		return rows;
+	},
 };
 
 export default usercourse_topicsModel;
