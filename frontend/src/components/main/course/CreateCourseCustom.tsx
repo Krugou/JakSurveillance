@@ -3,7 +3,6 @@ import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {UserContext} from '../../../contexts/UserContext.tsx';
 import apiHooks from '../../../hooks/ApiHooks';
-import BackgroundContainer from '../background/BackgroundContainer';
 import AddTeachers from './createcourse/AddTeachers';
 import CourseDetails from './createcourse/CourseDetails';
 import StepButtons from './createcourse/StepButtons';
