@@ -218,6 +218,7 @@ const CourseStudents: React.FC<Props> = ({
 								className={`inline-block p-2 m-2 text-white sm:text-sm font-semibold ${bgColorClass} ${shapeClass} ${
 									isBouncing ? 'animate-bounce' : ''
 								}`}
+								title={`${student.first_name} ${student.last_name}`}
 								onClick={() => {
 									if (socket) {
 										const studentName = `${student.first_name} ${student.last_name}`;
