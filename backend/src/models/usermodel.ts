@@ -292,7 +292,6 @@ const UserModel = {
 		}
 	},
 	changeRoleId: async (email: string, roleId: number) => {
-	
 		try {
 			const [result] = await pool
 				.promise()
@@ -437,6 +436,16 @@ const UserModel = {
 			]);
 
 		return existingStudentNumber;
+	},
+	getRoleCounts: async () => {
+		const [rows] = await pool.promise().query<RowDataPacket[]>(
+			`SELECT r.name AS role_name, COUNT(*) AS user_count
+       FROM users u
+       JOIN roles r ON u.roleid = r.roleid
+       GROUP BY r.name`,
+		);
+
+		return rows;
 	},
 };
 
