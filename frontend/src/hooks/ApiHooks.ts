@@ -579,6 +579,18 @@ const getAllCourses = async (token: string) => {
 	};
 	return await doFetch(baseUrl + 'courses/getallcourses', options);
 };
+const getDetailsByCourseId = async (courseId: string, token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	return await doFetch(
+		baseUrl + 'courses/getdetailsbycourseid/' + courseId,
+		options,
+	);
+};
 
 const apiHooks = {
 	checkStudentNumberExists,
@@ -619,5 +631,6 @@ const apiHooks = {
 	updateAttendanceStatus,
 	getLecturesAndAttendances,
 	getAllCourses,
+	getDetailsByCourseId,
 };
 export default apiHooks;

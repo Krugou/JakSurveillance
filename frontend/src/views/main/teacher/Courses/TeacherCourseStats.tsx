@@ -27,15 +27,34 @@ const TeacherCourseStats = () => {
 		fetchCourses();
 	}, []);
 	console.log(courses, 'courses');
+
+	const handleCourseSelect = async (value: string) => {
+		const selectedCourse = courses.find(
+			course => `${course.name} ${course.code}` === value,
+		);
+		if (selectedCourse) {
+			try {
+				const response = await apiHooks.getDetailsByCourseId(
+					selectedCourse.courseid,
+					token,
+				);
+				console.log(response);
+			} catch (error) {
+				toast.error('Error fetching course details');
+				console.log(error);
+			}
+		}
+	};
 	return (
 		<div style={{width: 300}}>
 			<Autocomplete
 				freeSolo
-				options={options}
+				options={courses.map(course => `${course.name} ${course.code}`)}
+				onChange={(event, value) => handleCourseSelect(value)}
 				renderInput={params => (
 					<TextField
 						{...params}
-						label="freeSolo"
+						label="Search courses"
 						margin="normal"
 						variant="outlined"
 					/>
