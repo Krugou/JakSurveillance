@@ -96,10 +96,10 @@ const lectureModel: LectureModel = {
 	async getStudentsByLectureId(lectureid: number) {
 		try {
 			const [userRows] = await pool.promise().query<RowDataPacket[]>(
-				'SELECT u.* FROM users u ' +
-					'JOIN usercourses uc ON u.userid = uc.userid ' +
-					'JOIN lecture c ON uc.courseid = c.courseid ' +
-					'WHERE c.lectureid = ? AND u.roleid = 1', // Assuming roleid 1 is for students
+				`SELECT u.*, c.topicid, uc.usercourseid FROM users u  
+				JOIN usercourses uc ON u.userid = uc.userid 
+				JOIN lecture c ON uc.courseid = c.courseid 
+				WHERE c.lectureid = ? AND u.roleid = 1;`, // Assuming roleid 1 is for students
 				[lectureid],
 			);
 			const uniqueUserRows = userRows.reduce((unique, o) => {
@@ -115,6 +115,7 @@ const lectureModel: LectureModel = {
 			return [];
 		}
 	},
+
 	// async insertIntoLecture(
 	// 	topicname: string,
 	// 	coursecode: string,

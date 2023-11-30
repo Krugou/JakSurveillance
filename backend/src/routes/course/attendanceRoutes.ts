@@ -110,7 +110,7 @@ router.post(
 	async (req: Request, res: Response) => {
 		try {
 			const {lectureid} = req.body;
-			const allStudentsInLecture = await lectureModel.getStudentsByLectureId(
+			const allStudentsInLecture = await lectureController.getStudentsInLecture(
 				lectureid,
 			);
 			res.status(201).json(allStudentsInLecture);
