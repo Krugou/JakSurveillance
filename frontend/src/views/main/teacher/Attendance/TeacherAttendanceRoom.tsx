@@ -174,6 +174,11 @@ const AttendanceRoom: React.FC = () => {
 					toast.error('Student number is empty');
 				}
 			});
+			newSocket.on('manualStudentRemoveFailedEmpty', lectureid => {
+				if (lectureid === lectureid) {
+					toast.error('Student number is empty');
+				}
+			});
 			newSocket.on('manualStudentRemoveSuccess', lectureid => {
 				if (lectureid === lectureid) {
 					toast.success('Student removed successfully');
