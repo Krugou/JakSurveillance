@@ -174,6 +174,16 @@ const AttendanceRoom: React.FC = () => {
 					toast.error('Student number is empty');
 				}
 			});
+			newSocket.on('manualStudentRemoveSuccess', lectureid => {
+				if (lectureid === lectureid) {
+					toast.success('Student removed successfully');
+				}
+			});
+			newSocket.on('manualStudentRemoveError', lectureid => {
+				if (lectureid === lectureid) {
+					toast.error('Error removing student');
+				}
+			});
 			// When a student is inserted manually, display an error message if the student number is invalid
 			newSocket.on('disconnect', () => {
 				console.log('Disconnected from the server');
@@ -281,7 +291,11 @@ const AttendanceRoom: React.FC = () => {
 								className="md:w-[40em] w-full h-full"
 							/>
 
-							<Attendees arrayOfStudents={arrayOfStudents} />
+							<Attendees
+								arrayOfStudents={arrayOfStudents}
+								socket={socket}
+								lectureid={lectureid}
+							/>
 						</div>
 						<h2 className="text-2xl ml-2">
 							<label className="text-metropoliaTrendGreen">
