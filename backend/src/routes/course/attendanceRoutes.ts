@@ -165,25 +165,29 @@ router.get('/studentsattendance', async (req: Request, res: Response) => {
 	}
 });
 
-router.put('/update', async (req: Request, res: Response) => {
-	const {usercourseid, status} = req.body;
+router.put(
+	'/update',
+	checkUserRole(['admin', 'teacher', 'counselor']),
+	async (req: Request, res: Response) => {
+		const {attendanceid, status} = req.body;
 
-	try {
-		console.log('Received usercourseId:', usercourseid);
-		console.log('Received status:', status);
+		try {
+			console.log('Received attendanceid:', attendanceid);
+			console.log('Received status:', status);
 
-		const result = await attendanceController.updateAttendanceStatus(
-			usercourseid,
-			status,
-		);
-		console.log('Update result:', result);
+			const result = await attendanceController.updateAttendanceStatus(
+				attendanceid,
+				status,
+			);
+			console.log('Update result:', result);
 
-		res.status(200).json({message: 'Attendance status updated successfully'});
-	} catch (error) {
-		console.error(error);
-		res.status(500).send('Server error');
-	}
-});
+			res.status(200).json({message: 'Attendance status updated successfully'});
+		} catch (error) {
+			console.error(error);
+			res.status(500).send('Server error');
+		}
+	},
+);
 
 router.get(
 	'/course/:courseid',

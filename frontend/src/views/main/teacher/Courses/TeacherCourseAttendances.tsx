@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import Calendar from 'react-calendar';
 import {useParams} from 'react-router-dom';
 import apiHooks from '../../../../hooks/ApiHooks';
@@ -6,6 +6,7 @@ import AttendanceTable from '../../../../components/main/course/attendance/Atten
 import Tooltip from '@mui/material/Tooltip';
 import PrintIcon from '@mui/icons-material/Print';
 import GetAppIcon from '@mui/icons-material/GetApp';
+import {UserContext} from '../../../../contexts/UserContext';
 import {exportToExcel, exportToPDF} from '../../../../utils/exportData';
 
 const TeacherCourseAttendances: React.FC = () => {
@@ -14,6 +15,7 @@ const TeacherCourseAttendances: React.FC = () => {
 		any[]
 	>([]); // [lecture, [attendances]
 	const {id: courseId} = useParams();
+	const {update, setUpdate} = useContext(UserContext);
 
 	// Fetch the lectures and their attendances
 	useEffect(() => {
@@ -32,7 +34,7 @@ const TeacherCourseAttendances: React.FC = () => {
 			}
 		};
 		fetchAttendances();
-	}, [courseId]);
+	}, [courseId, update]);
 
 	// Function to handle date change
 	const handleDateChange = date => {
@@ -73,6 +75,10 @@ const TeacherCourseAttendances: React.FC = () => {
 	// Function to handle exporting to excel
 	const handleExportToExcel = () => {
 		exportToExcel(filteredAttendances);
+	};
+
+	const updateView = () => {
+		setUpdate(!update);
 	};
 
 	return (
@@ -131,6 +137,7 @@ const TeacherCourseAttendances: React.FC = () => {
 							<AttendanceTable
 								filteredAttendanceData={filteredAttendances}
 								allAttendances={true}
+								updateView={updateView}
 							/>
 						</>
 					) : (

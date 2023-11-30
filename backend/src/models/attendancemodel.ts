@@ -43,17 +43,17 @@ interface AttendanceModel {
 }
 
 const attendanceModel: AttendanceModel = {
-	async updateAttendanceStatus(usercourseid: number, status: number) {
+	async updateAttendanceStatus(attendanceid: number, status: number) {
 		try {
-			if (usercourseid === 0) {
+			if (attendanceid === 0) {
 				throw new Error('Invalid usercourseid');
 			}
 
 			const result = await pool
 				.promise()
 				.query(
-					'UPDATE attendance SET status = ? WHERE usercourseid = ? ORDER BY date DESC LIMIT 1',
-					[status, usercourseid],
+					'UPDATE attendance SET status = ? WHERE attendanceid = ? ORDER BY date DESC LIMIT 1',
+					[status, attendanceid],
 				);
 
 			console.log('Update result:', result);
@@ -64,7 +64,6 @@ const attendanceModel: AttendanceModel = {
 			return false;
 		}
 	},
-
 
 	async fetchAllAttendances() {
 		try {
@@ -233,7 +232,7 @@ const attendanceModel: AttendanceModel = {
 	},
 	async getAttendaceByCourseId(courseid: number) {
 		const [attendanceResult] = await pool.promise().query(
-			`SELECT attendance.status, lecture.start_date, lecture.timeofday, topics.topicname, courses.name, users.email AS teacher, attendingUsers.first_name, attendingUsers.last_name, attendingUsers.studentnumber, attendingUsers.email
+			`SELECT attendance.status, attendance.attendanceid, lecture.start_date, lecture.timeofday, topics.topicname, courses.name, users.email AS teacher, attendingUsers.first_name, attendingUsers.last_name, attendingUsers.studentnumber, attendingUsers.email
 			FROM attendance 
 			JOIN lecture ON attendance.lectureid = lecture.lectureid
 			JOIN topics ON lecture.topicid = topics.topicid

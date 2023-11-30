@@ -503,15 +503,20 @@ const updateUserCourseTopics = async (
 	);
 };
 
-const updateAttendanceStatus = async (usercourseid: number, status: number, token: string) => {
-	console.log(usercourseid)
+const updateAttendanceStatus = async (
+	attendanceid: number,
+	status: number,
+	token: string | null,
+) => {
+	console.log(attendanceid);
+	console.log(token, ' TOKEN');
 	const options = {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/json',
 			Authorization: 'Bearer ' + token,
 		},
-		body: JSON.stringify({ usercourseid, status }), // Include usercourseid in the request body
+		body: JSON.stringify({attendanceid, status}), // Include usercourseid in the request body
 	};
 
 	const url = `${baseUrl}courses/attendance/update`;

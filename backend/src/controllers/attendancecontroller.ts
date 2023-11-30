@@ -124,9 +124,9 @@ const attendanceController: AttendanceController = {
 		}
 	},
 
-	async updateAttendanceStatus(usercourseid: number, status: number) {
+	async updateAttendanceStatus(attendanceid: number, status: number) {
 		try {
-			await attendanceModel.updateAttendanceStatus(usercourseid, status);
+			await attendanceModel.updateAttendanceStatus(attendanceid, status);
 			return true;
 		} catch (error) {
 			console.error(error);

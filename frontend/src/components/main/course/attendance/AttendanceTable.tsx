@@ -55,6 +55,7 @@ interface AttendanceTableProps {
 	student?: StudentInfo | null;
 	allAttendances?: boolean;
 	usercourseId?: number;
+	updateView?: () => void;
 }
 
 const AttendanceTable: React.FC<AttendanceTableProps> = ({
@@ -62,12 +63,17 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 	student,
 	allAttendances,
 	usercourseId,
+	updateView,
 }) => {
 	const [attendanceData, setAttendanceData] = useState<Attendance[]>(
 		filteredAttendanceData,
 	);
 
-	const handleStatusChange = async (index: number, newStatus: number) => {
+	const handleStatusChange = async (
+		index: number,
+		newStatus: number,
+		attendanceid?,
+	) => {
 		try {
 			console.log(usercourseId);
 			const token: string | null = localStorage.getItem('userToken');
@@ -75,10 +81,15 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 			updatedAttendanceData[index].status = newStatus;
 			setAttendanceData(updatedAttendanceData);
 			// Update the status in the database
-			await ApiHooks.updateAttendanceStatus(usercourseId, newStatus, token);
+			await ApiHooks.updateAttendanceStatus(
+				usercourseId ? usercourseId : attendanceid,
+				newStatus,
+				token,
+			);
 
 			// You can add a toast notification or any other feedback here
 			toast.success('Attendance status updated successfully');
+			updateView && updateView();
 		} catch (error) {
 			// Handle error
 			console.error(error);
@@ -144,7 +155,13 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 							<TableCell className="px-6 py-4 whitespace-nowrap">
 								<Select
 									value={attendance.status}
-									onChange={e => handleStatusChange(index, e.target.value as number)}
+									onChange={e =>
+										handleStatusChange(
+											index,
+											e.target.value as number,
+											attendance.attendanceid,
+										)
+									}
 								>
 									<MenuItem value={0}>Absent</MenuItem>
 									<MenuItem value={1}>Present</MenuItem>
