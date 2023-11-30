@@ -1,6 +1,16 @@
 import React, {useRef, useState} from 'react';
 import apiHooks from '../../../../hooks/ApiHooks';
 import InputField from './coursedetails/InputField';
+
+/**
+ * Component for adding teachers to a course.
+ *
+ * @param {Object} props - Component props
+ * @param {Array} props.instructors - List of instructors
+ * @param {Function} props.setInstructors - Setter for instructors
+ * @param {string} props.instructorEmail - Email of the instructor
+ * @param {boolean} props.modify - Flag indicating whether the component is in modify mode
+ */
 const AddTeachers = ({
 	instructors,
 	setInstructors,
@@ -9,14 +19,20 @@ const AddTeachers = ({
 }) => {
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 	const timeouts = useRef<(number | null)[]>([]);
+
+	// Function to remove an instructor from the list
 	const deleteInstructor = index => {
 		const newInstructors = [...instructors];
 		newInstructors.splice(index, 1);
 		setInstructors(newInstructors);
 	};
+
+	// Function to add a new instructor to the list
 	const addInstructor = () => {
 		setInstructors([...instructors, {email: ''}]);
 	};
+
+	// Function to handle changes to the instructor email input field
 	const handleInputChange = (
 		index: number,
 		event: React.ChangeEvent<HTMLInputElement>,
@@ -25,10 +41,12 @@ const AddTeachers = ({
 		values[index].email = event.target.value;
 		setInstructors(values);
 
+		// Clear the previous timeout if it exists
 		if (timeouts.current[index] !== null) {
 			window.clearTimeout(timeouts.current[index] as number);
 		}
 
+		// Set a new timeout to check if the instructor exists after the user has stopped typing for 2 seconds
 		timeouts.current[index] = window.setTimeout(async () => {
 			const token: string | null = localStorage.getItem('userToken');
 			if (!token) {
@@ -49,6 +67,7 @@ const AddTeachers = ({
 			setErrorMessages(newErrorMessages);
 		}, 2000);
 	};
+
 	return (
 		<fieldset className="mb-5">
 			{!modify ? <legend className="text-xl mb-3">Add teachers</legend> : <></>}
@@ -85,4 +104,5 @@ const AddTeachers = ({
 		</fieldset>
 	);
 };
+
 export default AddTeachers;
