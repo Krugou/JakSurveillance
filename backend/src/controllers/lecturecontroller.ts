@@ -47,24 +47,32 @@ const lectureController = {
 	},
 	async getStudentsInLecture(lectureid: number) {
 		try {
+			// Fetch all students in the lecture with the given ID
 			const allStudentsInLecture = await lectureModel.getStudentsByLectureId(
 				lectureid,
 			);
+
+			// Iterate over each student
 			for (let i = 0; i < allStudentsInLecture.length; i++) {
 				const student = allStudentsInLecture[i];
 				const usercourseid = student.usercourseid;
+
+				// Fetch the modified topics associated with the student's course if there are any
 				const usercourseTopicIds =
 					await usercourse_topicsModel.findUserCourseTopicByUserCourseId(
 						usercourseid,
 					);
+
 				console.log(usercourseTopicIds, 'JEP JEP');
 				console.log(allStudentsInLecture);
 
+				// If the student is enrolled in any modified topics
 				if (usercourseTopicIds.length > 0) {
+					// Map the topics to their IDs
 					const topicIds = usercourseTopicIds.map(topic => topic.topicid);
 					console.log(topicIds, 'topicIds');
 					let matchedStudents = false;
-
+					// If the student's topics were modified and they don't contain the current topic's id then remove them from the list of students
 					for (const topicId of topicIds) {
 						if (topicId === student.topicid) {
 							matchedStudents = true;
@@ -78,7 +86,7 @@ const lectureController = {
 					}
 				}
 			}
-
+			// Return the updated list of students
 			return allStudentsInLecture;
 		} catch (error) {
 			console.error(error);
