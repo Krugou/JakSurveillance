@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 import {
 	MenuItem,
@@ -10,9 +10,8 @@ import {
 	TableHead,
 	TableRow,
 } from '@mui/material';
-import { toast } from 'react-toastify';
-import ApiHooks from "../../../../hooks/ApiHooks";
-import {useParams} from "react-router-dom";
+import {toast} from 'react-toastify';
+import ApiHooks from '../../../../hooks/ApiHooks';
 
 interface Attendance {
 	date: string;
@@ -59,18 +58,18 @@ interface AttendanceTableProps {
 }
 
 const AttendanceTable: React.FC<AttendanceTableProps> = ({
-															 filteredAttendanceData,
-															 student,
-															 allAttendances,
+	filteredAttendanceData,
+	student,
+	allAttendances,
 	usercourseId,
-														 }) => {
+}) => {
 	const [attendanceData, setAttendanceData] = useState<Attendance[]>(
 		filteredAttendanceData,
 	);
 
 	const handleStatusChange = async (index: number, newStatus: number) => {
 		try {
-			console.log(usercourseId)
+			console.log(usercourseId);
 			const token: string | null = localStorage.getItem('userToken');
 			const updatedAttendanceData = [...attendanceData];
 			updatedAttendanceData[index].status = newStatus;
@@ -95,9 +94,9 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 						<TableCell className="text-left p-4 font-medium underline">
 							Date
 						</TableCell>
-							<TableCell className="text-left p-4 font-medium underline">
-								Student:
-							</TableCell>
+						<TableCell className="text-left p-4 font-medium underline">
+							Student:
+						</TableCell>
 						<TableCell className="text-left p-4 font-medium underline">
 							Teacher
 						</TableCell>
@@ -141,7 +140,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 							<TableCell className="p-4">
 								<Select
 									value={attendance.status}
-									onChange={(e) => handleStatusChange(index, e.target.value as number)}
+									onChange={e => handleStatusChange(index, e.target.value as number)}
 								>
 									<MenuItem value={0}>Absent</MenuItem>
 									<MenuItem value={1}>Present</MenuItem>
