@@ -246,6 +246,17 @@ const attendanceModel: AttendanceModel = {
 		);
 		return attendanceResult;
 	},
+	async getLectureCountByTopic(courseid: number) {
+		const [result] = await pool.promise().query(
+			`SELECT topics.topicname, COUNT(lecture.lectureid) AS lecture_count
+			FROM lecture
+			JOIN topics ON lecture.topicid = topics.topicid
+			WHERE lecture.courseid = ?
+			GROUP BY topics.topicname;`,
+			[courseid],
+		);
+		return result;
+	},
 };
 
 export default attendanceModel;

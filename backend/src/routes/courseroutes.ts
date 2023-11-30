@@ -444,4 +444,25 @@ router.get('/:userid', async (req: Request, res: Response) => {
 		res.status(500).json({message: 'Internal server error'});
 	}
 });
+router.get(
+	'/getallcourses',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	async (req: Request, res: Response) => {
+		try {
+			if (req.user.role === 'counselor' || req.user.role === 'admin') {
+				const courses = await course.fetchAllCourses();
+				res.send(courses);
+			} else if (req.user.role === 'teacher') {
+				const courses = await course.getCoursesByInstructorEmail(req.user.email);
+				res.send(courses);
+			} else {
+				res.status(403).json({error: 'Unauthorized'});
+			}
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({message: 'Internal server error'});
+		}
+	},
+);
+
 export default router;

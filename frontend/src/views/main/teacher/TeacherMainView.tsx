@@ -82,6 +82,11 @@ const MainView: React.FC = () => {
 									title="Create new Lecture"
 									description="Open attendance gathering"
 								/>
+								<Card
+									path="/teacher/courses/stats"
+									title="Show Attendances stats "
+									description="Open attendance stats page"
+								/>
 							</>
 						)}
 					</div>

@@ -570,6 +570,16 @@ const checkStudentNumberExists = async (
 	const url = `${baseUrl}admin/checkstudentnumber/${studentnumber}`;
 	return doFetch(url, options);
 };
+const getAllCourses = async (token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	return await doFetch(baseUrl + 'courses/getallcourses', options);
+};
+
 const apiHooks = {
 	checkStudentNumberExists,
 	fetchStudentGroups,
@@ -608,5 +618,6 @@ const apiHooks = {
 	updateUserCourseTopics,
 	updateAttendanceStatus,
 	getLecturesAndAttendances,
+	getAllCourses,
 };
 export default apiHooks;
