@@ -445,6 +445,21 @@ router.get(
 		}
 	},
 );
+
+router.get(
+	'/getdetailsbycourseid/:courseId',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	async (req: Request, res: Response) => {
+		try {
+			const courseId = req.params.courseId;
+			const details = await courseController.getDetailsByCourseId(courseId);
+			res.json(details);
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({message: 'Internal server error'});
+		}
+	},
+);
 router.get('/:userid', async (req: Request, res: Response) => {
 	const userid = req.params.userid;
 	try {

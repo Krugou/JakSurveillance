@@ -34,6 +34,10 @@ const TeacherCourseStats = () => {
 		);
 		if (selectedCourse) {
 			try {
+				const token: string | null = localStorage.getItem('userToken');
+				if (!token) {
+					throw new Error('No token available');
+				}
 				const response = await apiHooks.getDetailsByCourseId(
 					selectedCourse.courseid,
 					token,

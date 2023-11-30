@@ -1,4 +1,5 @@
 import courseInstructorModel from '../models/courseinstructormodel.js';
+import course from '../models/coursemodel.js';
 import courseModel from '../models/coursemodel.js';
 import courseTopicModel from '../models/coursetopicmodel.js';
 import studentGroupModel from '../models/studentgroupmodel.js';
@@ -83,8 +84,6 @@ const courseController = {
 					.toISOString()
 					.slice(0, 19)
 					.replace('T', ' ');
-
-				
 
 				const courseResult = await courseModel.insertCourse(
 					name,
@@ -244,6 +243,16 @@ const courseController = {
 			return Promise.reject(error);
 		}
 		return courseId;
+	},
+	getDetailsByCourseId: async (courseId: string) => {
+		try {
+			const courseDetails = await course.getCourseDetails(courseId);
+
+			return courseDetails;
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
 	},
 };
 
