@@ -6,6 +6,7 @@ import Attendance from '../../models/attendancemodel.js'; // Adjust the path acc
 import lectureModel from '../../models/lecturemodel.js';
 import Usermodel from '../../models/usermodel';
 import attendanceModel from '../../models/attendancemodel.js';
+import checkUserRole from '../../utils/checkRole.js';
 
 const router: Router = express.Router();
 
@@ -165,43 +166,41 @@ router.get('/studentsattendance', async (req: Request, res: Response) => {
 });
 
 router.put('/update', async (req: Request, res: Response) => {
-
-	const { usercourseid,status } = req.body;
+	const {usercourseid, status} = req.body;
 
 	try {
 		console.log('Received usercourseId:', usercourseid);
 		console.log('Received status:', status);
 
-		const result = await attendanceController.updateAttendanceStatus(usercourseid, status);
+		const result = await attendanceController.updateAttendanceStatus(
+			usercourseid,
+			status,
+		);
 		console.log('Update result:', result);
 
-		res.status(200).json({ message: 'Attendance status updated successfully' });
+		res.status(200).json({message: 'Attendance status updated successfully'});
 	} catch (error) {
 		console.error(error);
 		res.status(500).send('Server error');
 	}
 });
 
-router.get('/course/:courseid', async (req: Request, res: Response) => {
-	try {
-		if (
-			req.user.role !== 'teacher' &&
-			req.user.role !== 'admin' &&
-			req.user.role !== 'counselor'
-		) {
-			res.status(401).send('Unauthorized');
+router.get(
+	'/course/:courseid',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	async (req: Request, res: Response) => {
+		try {
+			const courseid = Number(req.params.courseid);
+
+			const lecturesAndAttendancesData =
+				await attendanceController.getLecturesAndAttendancesByCourseId(courseid);
+
+			res.json(lecturesAndAttendancesData);
+		} catch (err) {
+			console.error(err);
+			res.status(500).send('Server error');
 		}
-
-		const courseid = Number(req.params.courseid);
-
-		const lecturesAndAttendancesData =
-			await attendanceController.getLecturesAndAttendancesByCourseId(courseid);
-
-		res.json(lecturesAndAttendancesData);
-	} catch (err) {
-		console.error(err);
-		res.status(500).send('Server error');
-	}
-});
+	},
+);
 
 export default router;
