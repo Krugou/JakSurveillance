@@ -24,9 +24,7 @@ const InputField: React.FC<InputFieldProps> = ({
 			{label}
 		</label>
 		<input
-			className={`w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange ${
-				!disabled ? 'border-black' : ''
-			}`}
+			className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange "
 			type={type}
 			name={name}
 			id={name}
@@ -35,7 +33,7 @@ const InputField: React.FC<InputFieldProps> = ({
 			aria-label={label}
 			required
 			disabled={disabled}
-			placeholder={placeholder}
+			placeholder={placeholder} 
 		/>
 	</>
 );
