@@ -94,7 +94,7 @@ const attendanceModel: AttendanceModel = {
 		try {
 			//console.log(userid, 'USERIDDD');
 			const [rows] = await pool.promise().query<RowDataPacket[]>(
-				`SELECT attendance.status, lecture.start_date, lecture.timeofday, topics.topicname, courses.name, users.email AS teacher
+				`SELECT attendance.status, attendance.attendanceid, lecture.start_date, lecture.timeofday, topics.topicname, courses.name, users.email AS teacher
             FROM attendance 
             JOIN lecture ON attendance.lectureid = lecture.lectureid
             JOIN topics ON lecture.topicid = topics.topicid

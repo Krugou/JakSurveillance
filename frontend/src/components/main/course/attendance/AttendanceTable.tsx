@@ -62,7 +62,6 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 	filteredAttendanceData,
 	student,
 	allAttendances,
-	usercourseId,
 	updateView,
 }) => {
 	const [attendanceData, setAttendanceData] = useState<Attendance[]>(
@@ -75,14 +74,13 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 		attendanceid?,
 	) => {
 		try {
-			console.log(usercourseId);
 			const token: string | null = localStorage.getItem('userToken');
 			const updatedAttendanceData = [...attendanceData];
 			updatedAttendanceData[index].status = newStatus;
 			setAttendanceData(updatedAttendanceData);
 			// Update the status in the database
 			await ApiHooks.updateAttendanceStatus(
-				usercourseId ? usercourseId : attendanceid,
+				attendanceid,
 				newStatus,
 				token,
 			);

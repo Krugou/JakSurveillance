@@ -1,9 +1,12 @@
-import React, {ReactNode, useEffect, useState} from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import tausta1 from '../../../assets/images/tausta1.png';
 import tausta2 from '../../../assets/images/tausta2.png';
 import tausta3 from '../../../assets/images/tausta3.png';
 import tausta4 from '../../../assets/images/tausta4.png';
 import tausta5 from '../../../assets/images/tausta5.png';
+import Footer from '../../../views/Footer';
+import Header from '../../../views/Header';
+
 interface BackgroundContainerProps {
 	children: ReactNode;
 }
@@ -15,9 +18,7 @@ const getRandomBackgroundUrl = (): string => {
 	return backgrounds[randomNumber];
 };
 
-const BackgroundContainer: React.FC<BackgroundContainerProps> = ({
-	children,
-}) => {
+const BackgroundContainer: React.FC<BackgroundContainerProps> = ({ children }) => {
 	const [backgroundUrl, setBackgroundUrl] = useState<string>('');
 
 	useEffect(() => {
@@ -26,11 +27,15 @@ const BackgroundContainer: React.FC<BackgroundContainerProps> = ({
 	}, []); // The empty dependency array ensures this effect runs only once on mount
 
 	return (
-		<div
-			className="flex flex-col w-full md:min-h-[82vh] md:h-fit h-fit pt-10 pb-10 pl-3 pr-3 items-center bg-cover bg-center"
-			style={{backgroundImage: `url(${backgroundUrl})`}}
-		>
-			{children}
+		<div className="flex flex-col h-screen">
+			<Header title="Attendance App" />
+			<div
+				className="flex-grow flex flex-col items-center bg-cover bg-center"
+				style={{ backgroundImage: `url(${backgroundUrl})` }}
+			>
+				{children}
+			</div>
+			<Footer />
 		</div>
 	);
 };

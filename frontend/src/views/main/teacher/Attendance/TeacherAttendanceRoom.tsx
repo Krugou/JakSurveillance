@@ -293,7 +293,7 @@ const AttendanceRoom: React.FC = () => {
 								size={256}
 								value={hashValue}
 								viewBox={`0 0 256 256`}
-								className="md:w-[40em] w-full h-full"
+								className="md:w-[30em] w-full h-full"
 							/>
 
 							<Attendees

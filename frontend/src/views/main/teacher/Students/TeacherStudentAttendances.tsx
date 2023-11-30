@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {useEffect, useState, ChangeEvent} from 'react';
 import {useParams} from 'react-router-dom';
 import apiHooks from '../../../../hooks/ApiHooks';
@@ -8,6 +8,7 @@ import AttendanceTable from '../../../../components/main/course/attendance/Atten
 import PrintIcon from '@mui/icons-material/Print';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import {exportToExcel, exportToPDF} from '../../../../utils/exportData';
+import {UserContext} from "../../../../contexts/UserContext";
 // Interface for the attendance data
 interface Attendance {
 	date: string;
@@ -35,6 +36,7 @@ interface StudentInfo {
 const TeacherStudentCourseAttendance: React.FC = () => {
 	// Get the usercourseid from the url
 	const {usercourseid} = useParams<{usercourseid}>();
+	const {update, setUpdate} = useContext(UserContext);
 
 	// State to keep track of the sort option
 	const [sortOption, setSortOption] = useState('All Topics');
@@ -76,7 +78,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 		};
 
 		fetchData();
-	}, [usercourseid]);
+	}, [usercourseid, update]);
 
 	// If the attendance data is not available, return a loading message
 	if (!attendanceData) {
@@ -117,6 +119,11 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 			new Date(attendance.start_date).toLocaleDateString().includes(searchTerm) &&
 			(sortOption === 'All Topics' || attendance.topicname === sortOption),
 	);
+
+	const updateView = () => {
+		setUpdate(!update);
+	};
+
 	if (attendanceData.length > 0) {
 		return (
 			<div className="flex w-11/12 2xl:w-10/12 flex-col bg-gray-100 p-10 rounded-lg">
@@ -175,7 +182,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 				<AttendanceTable
 					filteredAttendanceData={filteredAttendanceData}
 					student={student}
-					usercourseId={usercourseid}
+					updateView={updateView}
 				/>
 			</div>
 		);

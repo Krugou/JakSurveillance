@@ -38,7 +38,6 @@ const App = () => {
 		<UserProvider>
 			<ToastContainer />
 			<Router basename={import.meta.env.BASE_URL}>
-				<Header title="Attendance App" />
 				<main>
 					<BackgroundContainer>
 					<Routes>
@@ -53,7 +52,6 @@ const App = () => {
 					</Routes>
 					</BackgroundContainer>
 				</main>
-				<Footer />
 			</Router>
 		</UserProvider>
 	);
