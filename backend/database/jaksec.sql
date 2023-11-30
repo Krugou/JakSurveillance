@@ -192,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `usercourse_topics` (
   `topicid` int(11) NOT NULL,
   KEY `usercourseid` (`usercourseid`),
   KEY `topicid` (`topicid`),
-  CONSTRAINT `usercourse_topics_ibfk_1` FOREIGN KEY (`usercourseid`) REFERENCES `usercourses` (`usercourseid`),
+  CONSTRAINT `usercourse_topics_ibfk_1` FOREIGN KEY (`usercourseid`) REFERENCES `usercourses` (`usercourseid`) ON DELETE CASCADE, 
   CONSTRAINT `usercourse_topics_ibfk_2` FOREIGN KEY (`topicid`) REFERENCES `topics` (`topicid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
