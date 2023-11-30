@@ -118,7 +118,7 @@ const AdminCourseDetail: React.FC = () => {
 									<EditIcon
 										fontSize="large"
 										className="absolute top-0 right-0 m-4 mr-16 cursor-pointer text-black bg-gray-300 rounded-full p-1 hover:text-gray-700"
-										onClick={() => navigate(`/teacher/courses/${course.courseid}/modify`)}
+										onClick={() => navigate(`/admin/courses/${course.courseid}/modify`)}
 									/>
 								</Tooltip>
 								<Tooltip title="Delete this course">
