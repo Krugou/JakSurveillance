@@ -591,7 +591,7 @@ const getDetailsByCourseId = async (courseId: string, token: string) => {
 		options,
 	);
 };
-const roleCounts = async (token: string) => {
+const getRoleCounts = async (token: string) => {
 	const options = {
 		method: 'GET',
 		headers: {
@@ -602,7 +602,7 @@ const roleCounts = async (token: string) => {
 };
 
 const apiHooks = {
-	roleCounts,
+	getRoleCounts,
 	checkStudentNumberExists,
 	fetchStudentGroups,
 	updateUser,
