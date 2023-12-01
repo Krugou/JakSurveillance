@@ -22,7 +22,7 @@ interface AttendanceStats {
 
 interface AttendanceStatsTableProps {
 	allAttendanceCounts: AttendanceStats[];
-	treshold: number;
+	treshold: number | null;
 }
 
 const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
@@ -74,7 +74,11 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 										<div className="w-full h-4 rounded bg-gray-200 relative">
 											<div
 												className={`h-full rounded ${
-													item.attendanceCounts[i]?.percentage < treshold
+													treshold !== null
+														? item.attendanceCounts[i]?.percentage < treshold
+															? 'bg-metropoliaSupportRed'
+															: 'bg-metropoliaSupportBlue'
+														: item.attendanceCounts[i]?.percentage < 80
 														? 'bg-metropoliaSupportRed'
 														: 'bg-metropoliaSupportBlue'
 												}`}
