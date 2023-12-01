@@ -17,7 +17,7 @@ const Attendees: React.FC<AttendeesProps> = ({
 	lectureid,
 }) => {
 	return (
-		<div className="text-md max-w-full w-full sm:max-w-[15em] max-h-[15em] h-[15em] overflow-y-scroll sm:text-xl mb-4">
+		<div className="text-md max-w-full w-full sm:max-w-[15em] max-h-[15em] h-[15em] overflow-y-scroll m-2 p-2  sm:text-xl mb-4  border-2 border-metropoliaTrendGreen">
 			<div className="flex flex-wrap justify-center">
 				{arrayOfStudents.map((student, index) => {
 					const formattedName = `${student.first_name} ${student.last_name.charAt(

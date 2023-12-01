@@ -223,7 +223,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table jaksec.users: ~6 rows (suunnilleen)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`userid`, `username`, `email`, `staff`, `first_name`, `last_name`, `created_at`, `studentnumber`, `studentgroupid`, `roleid`, `GDPR`) VALUES
-    (1, 'MrAnderson', 'mr.anderson@example.com', 1, 'Mr', 'Anderson', NOW(), NULL, NULL, 4, 1);
+    (1, 'MrAnderson', 'mr.anderson@example.com', 1, 'Mr', 'Anderson', NOW(), NULL, NULL, 4, 1),
+    (2, 'admin', 'admin@metropolia.fi', 1, 'Gustav', 'Admin', NOW(), NULL, NULL, 4, 1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 

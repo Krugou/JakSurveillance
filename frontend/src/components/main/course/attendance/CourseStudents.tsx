@@ -180,7 +180,7 @@ const CourseStudents: React.FC<Props> = ({
 				}
 				setBounceGroup(null);
 			}}
-			className={`noSelect hideScrollbar flex ${
+			className={`noSelect hideScrollbar flex  border-2 border-metropoliaSupportRed ${
 				coursestudents.length > 5 ? 'justify-start' : 'justify-center'
 			} bg-white p-3 rounded-lg shadow-md w-full mt-4 overflow-hidden overflow-x-auto`}
 		>

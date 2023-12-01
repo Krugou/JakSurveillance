@@ -1,18 +1,17 @@
-import React from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import apiHooks from '../../../../hooks/ApiHooks';
-import {useEffect, useState} from 'react';
-import {toast} from 'react-toastify';
-import {useParams} from 'react-router-dom';
-import Tooltip from '@mui/material/Tooltip';
-import PrintIcon from '@mui/icons-material/Print';
 import GetAppIcon from '@mui/icons-material/GetApp';
-import {
-	exportStatsTableToPdf,
-	exportStatsTableToExcel,
-} from '../../../../utils/exportData';
+import PrintIcon from '@mui/icons-material/Print';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
+import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
+import {toast} from 'react-toastify';
 import AttendanceStatsTable from '../../../../components/main/course/attendance/AttendanceStatsTable';
+import apiHooks from '../../../../hooks/ApiHooks';
+import {
+	exportStatsTableToExcel,
+	exportStatsTableToPdf,
+} from '../../../../utils/exportData';
 
 interface Course {
 	name: string;
@@ -252,7 +251,7 @@ const TeacherCourseStats = () => {
 				{showTable && (
 					<AttendanceStatsTable
 						allAttendanceCounts={allAttendanceCounts}
-						treshold={threshold}
+						threshold={threshold}
 					/>
 				)}
 			</div>
