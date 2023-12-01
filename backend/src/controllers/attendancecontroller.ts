@@ -54,10 +54,6 @@ const attendanceController: AttendanceController = {
 				usercourseid,
 				lectureid,
 			);
-			console.log(
-				'🚀 ~ file: attendancecontroller.ts:42 ~ insertResult:',
-				insertResult,
-			);
 
 			if (!insertResult || !insertResult[0] || !insertResult[0].insertId) {
 				throw new Error('Failed to insert attendance');
