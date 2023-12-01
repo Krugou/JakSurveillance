@@ -196,13 +196,10 @@ export const exportStatsTableToPdf = (allAttendanceCounts, selectedCourse) => {
 				student.selectedTopics !== 'all'
 			) {
 				studentData.push('N/A');
-			} else if (
-				typeof item.attendanceCounts[i]?.percentage === 'number' &&
-				item.attendanceCounts[i]?.percentage !== 0
-			) {
-				studentData.push(`${item.attendanceCounts[i]?.percentage}%`);
-			} else {
+			} else if (item.attendanceCounts[i]?.percentage === 'No lectures') {
 				studentData.push('No lectures');
+			} else {
+				studentData.push(`${item.attendanceCounts[i]?.percentage}%`);
 			}
 		});
 		return studentData;

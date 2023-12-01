@@ -202,50 +202,57 @@ const TeacherCourseStats = () => {
 		exportStatsTableToExcel(allAttendanceCounts);
 	};
 	return (
-		<div className="w-full bg-white p-4 ">
-			<div className="w-1/3 m-auto">
-				<Autocomplete
-					freeSolo
-					options={courses.map(course => `${course.name} ${course.code}`)}
-					onChange={(_, value) => handleCourseSelect(value)}
-					value={
-						selectedCourse ? `${selectedCourse.name} ${selectedCourse.code}` : null
-					}
-					renderInput={params => (
-						<TextField
-							{...params}
-							label="Search courses"
-							margin="normal"
-							variant="outlined"
-						/>
-					)}
-				/>
+		<>
+			<h1 className="text-center text-2xl mb-2 bg-white p-3 rounded-md">
+				{' '}
+				Attendance Statistics per course{' '}
+			</h1>
+			<div className="w-full bg-white p-4 ">
+				<div className="w-1/3 m-auto">
+					<Autocomplete
+						freeSolo
+						options={courses.map(course => `${course.name} ${course.code}`)}
+						onChange={(_, value) => handleCourseSelect(value)}
+						value={
+							selectedCourse ? `${selectedCourse.name} ${selectedCourse.code}` : null
+						}
+						renderInput={params => (
+							<TextField
+								{...params}
+								label="Search courses"
+								margin="normal"
+								variant="outlined"
+							/>
+						)}
+					/>
+				</div>
+				<div className=" flex justify-between">
+					<Tooltip title="Print to pdf">
+						<button
+							onClick={handlePdfExport}
+							className="bg-metropoliaMainOrange text-white p-2 rounded"
+						>
+							<PrintIcon fontSize="large" />
+						</button>
+					</Tooltip>
+
+					<Tooltip title="Export to Excel">
+						<button
+							onClick={handleExcelExport}
+							className="bg-metropoliaMainOrange text-white p-2 rounded"
+						>
+							<GetAppIcon fontSize="large" />
+						</button>
+					</Tooltip>
+				</div>
+				{showTable && (
+					<AttendanceStatsTable
+						allAttendanceCounts={allAttendanceCounts}
+						treshold={threshold}
+					/>
+				)}
 			</div>
-			<div className=" flex justify-between">
-				<Tooltip title="Print to pdf">
-					<button
-						onClick={handlePdfExport}
-						className="bg-metropoliaMainOrange text-white p-2 rounded"
-					>
-						<PrintIcon fontSize="large" />
-					</button>
-				</Tooltip>
-				<Tooltip title="Export to Excel">
-					<button
-						onClick={handleExcelExport}
-						className="bg-metropoliaMainOrange text-white p-2 rounded"
-					>
-						<GetAppIcon fontSize="large" />
-					</button>
-				</Tooltip>
-			</div>
-			{showTable && (
-				<AttendanceStatsTable
-					allAttendanceCounts={allAttendanceCounts}
-					treshold={threshold}
-				/>
-			)}
-		</div>
+		</>
 	);
 };
 

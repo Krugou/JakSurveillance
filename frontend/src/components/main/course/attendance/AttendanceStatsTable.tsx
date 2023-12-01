@@ -6,8 +6,10 @@ import {
 	TableContainer,
 	TableHead,
 	TableRow,
+	Tooltip,
 } from '@mui/material';
 
+import InfoIcon from '@mui/icons-material/Info';
 interface AttendanceCount {
 	name: string;
 	count: number;
@@ -71,7 +73,9 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 										'N/A'
 									) : item.attendanceCounts[i]?.percentage.toString() ===
 									  'No lectures' ? (
-										'No lectures'
+										<Tooltip title="No lectures available for this topic">
+											<InfoIcon />
+										</Tooltip>
 									) : (
 										<div className="w-full h-4 rounded bg-gray-200 relative">
 											<div
