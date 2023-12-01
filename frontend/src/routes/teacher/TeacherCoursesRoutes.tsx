@@ -13,7 +13,7 @@ const TeacherCoursesRoutes: React.FC = () => {
 			<Route path="/" element={<TeacherCourses />} />
 			<Route path="create/*" element={<TeacherCreateCourseRoutes />} />
 			<Route path=":id/modify" element={<TeacherCourseModify />} />
-			<Route path="stats" element={<TeacherCourseStats />} />
+			<Route path="stats/:courseid?" element={<TeacherCourseStats />} />
 			<Route path="attendances/:id" element={<TeacherCourseAttendances />} />
 			<Route path=":id" element={<TeacherCourseDetail />} />
 			<Route path="*" element={<TeacherMainView />} />

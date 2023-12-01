@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react';
 import Calendar from 'react-calendar';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import apiHooks from '../../../../hooks/ApiHooks';
 import AttendanceTable from '../../../../components/main/course/attendance/AttendanceTable';
 import Tooltip from '@mui/material/Tooltip';
@@ -18,7 +18,7 @@ const TeacherCourseAttendances: React.FC = () => {
 	>([]); // [lecture, [attendances]
 	const {id: courseId} = useParams();
 	const {update, setUpdate} = useContext(UserContext);
-
+	const navigate = useNavigate();
 	// Fetch the lectures and their attendances
 	useEffect(() => {
 		const fetchAttendances = async () => {
@@ -113,8 +113,9 @@ const TeacherCourseAttendances: React.FC = () => {
 						color="primary"
 						startIcon={<ShowChartIcon />}
 						className="mt-4 sm:mt-0"
+						onClick={() => navigate(`/teacher/courses/stats/${courseId}`)}
 					>
-						Show All Attendances
+						Attendance statistics
 					</Button>
 				</div>
 			</div>

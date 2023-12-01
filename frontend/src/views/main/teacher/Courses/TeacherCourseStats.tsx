@@ -4,6 +4,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 import apiHooks from '../../../../hooks/ApiHooks';
 import {useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
+import {useParams} from 'react-router-dom';
+
 import AttendanceStatsTable from '../../../../components/main/course/attendance/AttendanceStatsTable';
 
 interface Course {
@@ -15,6 +17,8 @@ interface Course {
 
 const TeacherCourseStats = () => {
 	const [showTable, setShowTable] = useState(false);
+	const {courseid} = useParams<{courseid: string}>();
+	const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 
 	const [courses, setCourses] = useState<Course[]>([]);
 	const [allAttendanceCounts, setAllAttendanceCounts] = useState([]);
@@ -101,6 +105,8 @@ const TeacherCourseStats = () => {
 		);
 		if (selectedCourse) {
 			try {
+				setSelectedCourse(selectedCourse); // Add this line
+
 				const token: string | null = localStorage.getItem('userToken');
 				if (!token) {
 					throw new Error('No token available');
@@ -125,6 +131,18 @@ const TeacherCourseStats = () => {
 			}
 		}
 	};
+
+	useEffect(() => {
+		if (courseid) {
+			const selectedCourse = courses.find(
+				course => course.courseid.toString() === courseid,
+			);
+			if (selectedCourse) {
+				handleCourseSelect(`${selectedCourse.name} ${selectedCourse.code}`);
+			}
+		}
+	}, [courseid, courses]);
+
 	return (
 		<div className="w-full bg-white p-4 ">
 			<div className="w-1/3 m-auto">
@@ -132,6 +150,9 @@ const TeacherCourseStats = () => {
 					freeSolo
 					options={courses.map(course => `${course.name} ${course.code}`)}
 					onChange={(_, value) => handleCourseSelect(value)}
+					value={
+						selectedCourse ? `${selectedCourse.name} ${selectedCourse.code}` : null
+					}
 					renderInput={params => (
 						<TextField
 							{...params}
