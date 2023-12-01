@@ -260,7 +260,21 @@ const lectureModel: LectureModel = {
 			return Promise.reject(error);
 		}
 	},
+	async getCourseIDByLectureID(lectureid: number) {
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					'SELECT courseid FROM lecture WHERE lectureid = ?',
+					[lectureid],
+				);
 
+			return rows[0].courseid ?? null;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
 	// other methods...
 };
 
