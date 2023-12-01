@@ -255,11 +255,9 @@ const course: CourseModel = {
 		WHERE 
 				u.email = ?
 		GROUP BY 
-				c.start_date;`,
+				c.courseid;`,
 				[email],
 			);
-			//console.log(rows);
-
 			return rows as Course[];
 		} catch (error) {
 			console.error(error);
