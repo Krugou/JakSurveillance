@@ -2,10 +2,12 @@
 import express, {Request, Response, Router} from 'express';
 import attendanceController from '../../controllers/attendancecontroller.js';
 import lectureController from '../../controllers/lecturecontroller.js';
-import Attendance from '../../models/attendancemodel.js'; // Adjust the path according to your project structure
+import {
+	default as Attendance,
+	default as attendanceModel,
+} from '../../models/attendancemodel.js'; // Adjust the path according to your project structure
 import lectureModel from '../../models/lecturemodel.js';
 import Usermodel from '../../models/usermodel';
-import attendanceModel from '../../models/attendancemodel.js';
 import checkUserRole from '../../utils/checkRole.js';
 
 const router: Router = express.Router();
@@ -120,6 +122,17 @@ router.post(
 		}
 	},
 );
+
+router.post('/deletelecture/', async (req: Request, res: Response) => {
+	try {
+		const {lectureid} = req.body;
+		await lectureModel.deleteByLectureId(lectureid);
+		res.status(201).send('Lecture deleted');
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server error');
+	}
+});
 router.post('/lecture/', async (req: Request, res: Response) => {
 	try {
 		const {topicname, coursecode, start_date, end_date, timeofday, state} =
