@@ -12,12 +12,12 @@ const usercoursesModel = {
 
 		return existingUserCourse;
 	},
-	async getUserCourseId(studentnumber: number) {
+	async getUserCourseId(studentnumber: string, courseid: number) {
 		const [usercourseResult] = await pool
 			.promise()
 			.query(
-				'SELECT usercourseid FROM usercourses WHERE userid IN (SELECT userid FROM users WHERE studentnumber = ?)',
-				[studentnumber],
+				'SELECT usercourseid FROM usercourses WHERE userid IN (SELECT userid FROM users WHERE studentnumber = ?) AND courseid = ?',
+				[studentnumber, courseid],
 			);
 		return usercourseResult;
 	},
