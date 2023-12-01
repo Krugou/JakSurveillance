@@ -5,10 +5,12 @@ import apiHooks from '../../../../hooks/ApiHooks';
 import {useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import {useParams} from 'react-router-dom';
-import {exportToPDF, exportToExcel} from '../../../../utils/exportData';
 import Tooltip from '@mui/material/Tooltip';
 import PrintIcon from '@mui/icons-material/Print';
 import GetAppIcon from '@mui/icons-material/GetApp';
+import {jsPDF} from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import metropolia_logo from '../../../../assets/images/metropolia_s_oranssi_en.png';
 
 import AttendanceStatsTable from '../../../../components/main/course/attendance/AttendanceStatsTable';
 
@@ -19,13 +21,28 @@ interface Course {
 	// Include other properties of course here
 }
 
+interface AttendanceCount {
+	name: string;
+	selectedTopics: string | string[];
+	percentage: number;
+	count: number; // Add this line
+	topicname: string; // Add this line
+}
+
+interface TopicAttendance {
+	topicname: string;
+	attendanceCounts: AttendanceCount[];
+}
+
 const TeacherCourseStats = () => {
 	const [showTable, setShowTable] = useState(false);
 	const {courseid} = useParams<{courseid: string}>();
 	const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 	const [threshold, setThreshold] = useState(null);
 	const [courses, setCourses] = useState<Course[]>([]);
-	const [allAttendanceCounts, setAllAttendanceCounts] = useState([]);
+	const [allAttendanceCounts, setAllAttendanceCounts] = useState<
+		TopicAttendance[]
+	>([]);
 
 	// Get the attendance threshold % from the database
 	const getThreshold = async () => {
@@ -178,14 +195,56 @@ const TeacherCourseStats = () => {
 		}
 	}, [courseid, courses]);
 
-	const handlePrintToPdf = () => {
-		toast.info('Printing to pdf');
-		exportToPDF();
-	};
+	const exportTableToPdf = () => {
+		const doc = new jsPDF();
+		const topics = allAttendanceCounts.map(item => item.topicname);
 
-	const handleExportToExcel = () => {
-		toast.info('Printing to excel');
-		exportToExcel();
+		const imgWidth = 90;
+		const imgHeight = (imgWidth * 1267) / 4961;
+		const imgX = 15;
+		const imgY = 10;
+
+		doc.text(
+			`Attendance statistics for: ${
+				selectedCourse
+					? selectedCourse?.name + ' ' + selectedCourse?.code
+					: 'unknown course'
+			}`,
+			15,
+			45,
+		);
+
+		doc.addImage(metropolia_logo, 'PNG', imgX, imgY, imgWidth, imgHeight);
+		const columns = ['Student', 'Selected Topics', ...topics];
+		const data = allAttendanceCounts[0]?.attendanceCounts.map((student, i) => {
+			const studentData = [
+				student.name,
+				Array.isArray(student.selectedTopics)
+					? student.selectedTopics.join(', ')
+					: student.selectedTopics,
+			];
+			allAttendanceCounts.forEach(item => {
+				if (
+					Array.isArray(student.selectedTopics) &&
+					!student.selectedTopics.includes(item.topicname) &&
+					typeof student.selectedTopics === 'string' &&
+					student.selectedTopics !== 'all'
+				) {
+					studentData.push('N/A');
+				} else if (
+					typeof item.attendanceCounts[i]?.percentage === 'number' &&
+					item.attendanceCounts[i]?.percentage !== 0
+				) {
+					studentData.push(`${item.attendanceCounts[i]?.percentage}%`);
+				} else {
+					studentData.push('No lectures');
+				}
+			});
+			return studentData;
+		});
+
+		autoTable(doc, {columns, body: data, startY: 50});
+		doc.save('table.pdf');
 	};
 
 	return (
@@ -211,17 +270,14 @@ const TeacherCourseStats = () => {
 			<div className=" flex justify-between">
 				<Tooltip title="Print to pdf">
 					<button
-						onClick={handlePrintToPdf}
+						onClick={exportTableToPdf}
 						className="bg-metropoliaMainOrange text-white p-2 rounded"
 					>
 						<PrintIcon fontSize="large" />
 					</button>
 				</Tooltip>
 				<Tooltip title="Export to Excel">
-					<button
-						onClick={handleExportToExcel}
-						className="bg-metropoliaMainOrange text-white p-2 rounded"
-					>
+					<button className="bg-metropoliaMainOrange text-white p-2 rounded">
 						<GetAppIcon fontSize="large" />
 					</button>
 				</Tooltip>
