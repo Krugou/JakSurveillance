@@ -5,6 +5,7 @@ import apiHooks from '../../../../hooks/ApiHooks';
 import {useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import AttendanceStatsTable from '../../../../components/main/course/attendance/AttendanceStatsTable';
+import {set} from 'date-fns';
 
 interface Course {
 	name: string;
@@ -14,6 +15,8 @@ interface Course {
 }
 
 const TeacherCourseStats = () => {
+	const [showTable, setShowTable] = useState(false);
+
 	const [courses, setCourses] = useState<Course[]>([]);
 	const [allAttendanceCounts, setAllAttendanceCounts] = useState([]);
 	useEffect(() => {
@@ -125,6 +128,7 @@ const TeacherCourseStats = () => {
 					courseDetails.lectures,
 				);
 				setAllAttendanceCounts(allAttendanceCounts);
+				setShowTable(true);
 				console.log(allAttendanceCounts);
 			} catch (error) {
 				toast.error('Error fetching course details');
@@ -133,21 +137,25 @@ const TeacherCourseStats = () => {
 		}
 	};
 	return (
-		<div>
-			<Autocomplete
-				freeSolo
-				options={courses.map(course => `${course.name} ${course.code}`)}
-				onChange={(_, value) => handleCourseSelect(value)}
-				renderInput={params => (
-					<TextField
-						{...params}
-						label="Search courses"
-						margin="normal"
-						variant="outlined"
-					/>
-				)}
-			/>
-			<AttendanceStatsTable allAttendanceCounts={allAttendanceCounts} />
+		<div className="w-full bg-white p-4 ">
+			<div className="w-1/3 m-auto">
+				<Autocomplete
+					freeSolo
+					options={courses.map(course => `${course.name} ${course.code}`)}
+					onChange={(_, value) => handleCourseSelect(value)}
+					renderInput={params => (
+						<TextField
+							{...params}
+							label="Search courses"
+							margin="normal"
+							variant="outlined"
+						/>
+					)}
+				/>
+			</div>
+			{showTable && (
+				<AttendanceStatsTable allAttendanceCounts={allAttendanceCounts} />
+			)}
 		</div>
 	);
 };
