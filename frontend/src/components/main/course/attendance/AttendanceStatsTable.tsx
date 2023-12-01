@@ -51,19 +51,23 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 					</TableRow>
 				</TableHead>
 				<TableBody className="bg-white divide-y divide-gray-200">
-					{allAttendanceCounts[0]?.attendanceCounts.map((count, i) => (
+					{allAttendanceCounts[0]?.attendanceCounts.map((student, i) => (
 						<TableRow key={i} className="border-b hover:bg-gray-50">
 							<TableCell className="px-6 py-4 whitespace-nowrap">
-								{count.name}
+								{student.name}
 							</TableCell>
 							<TableCell className="px-6 py-4 whitespace-nowrap">
-								{Array.isArray(count.selectedTopics)
-									? count.selectedTopics.map(topic => topic.topicname).join(', ')
-									: count.selectedTopics}
+								{Array.isArray(student.selectedTopics)
+									? student.selectedTopics.join(', ')
+									: student.selectedTopics}
 							</TableCell>
 							{allAttendanceCounts.map((item, index) => (
 								<TableCell key={index} className="px-6 py-4 whitespace-nowrap">
-									{item.attendanceCounts[i]?.percentage}%
+									{Array.isArray(student.selectedTopics) &&
+									!student.selectedTopics.includes(item.topicname) &&
+									student.selectedTopics !== 'all'
+										? 'N/A'
+										: `${item.attendanceCounts[i]?.percentage}%`}
 								</TableCell>
 							))}
 						</TableRow>

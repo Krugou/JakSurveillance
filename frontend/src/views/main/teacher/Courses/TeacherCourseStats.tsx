@@ -63,7 +63,7 @@ const TeacherCourseStats = () => {
 			const name = user ? `${user.last_name} ${user.first_name}` : 'Unknown User';
 			const selectedTopics =
 				user && user.selectedParts && user.selectedParts.length > 0
-					? user.selectedParts
+					? user.selectedParts.map(part => part.topicname)
 					: 'all';
 			const percentage =
 				lecture_count > 0
