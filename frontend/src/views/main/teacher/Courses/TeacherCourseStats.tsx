@@ -5,6 +5,10 @@ import apiHooks from '../../../../hooks/ApiHooks';
 import {useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import {useParams} from 'react-router-dom';
+import {exportToPDF, exportToExcel} from '../../../../utils/exportData';
+import Tooltip from '@mui/material/Tooltip';
+import PrintIcon from '@mui/icons-material/Print';
+import GetAppIcon from '@mui/icons-material/GetApp';
 
 import AttendanceStatsTable from '../../../../components/main/course/attendance/AttendanceStatsTable';
 
@@ -174,6 +178,16 @@ const TeacherCourseStats = () => {
 		}
 	}, [courseid, courses]);
 
+	const handlePrintToPdf = () => {
+		toast.info('Printing to pdf');
+		exportToPDF();
+	};
+
+	const handleExportToExcel = () => {
+		toast.info('Printing to excel');
+		exportToExcel();
+	};
+
 	return (
 		<div className="w-full bg-white p-4 ">
 			<div className="w-1/3 m-auto">
@@ -193,6 +207,24 @@ const TeacherCourseStats = () => {
 						/>
 					)}
 				/>
+			</div>
+			<div className=" flex justify-between">
+				<Tooltip title="Print to pdf">
+					<button
+						onClick={handlePrintToPdf}
+						className="bg-metropoliaMainOrange text-white p-2 rounded"
+					>
+						<PrintIcon fontSize="large" />
+					</button>
+				</Tooltip>
+				<Tooltip title="Export to Excel">
+					<button
+						onClick={handleExportToExcel}
+						className="bg-metropoliaMainOrange text-white p-2 rounded"
+					>
+						<GetAppIcon fontSize="large" />
+					</button>
+				</Tooltip>
 			</div>
 			{showTable && (
 				<AttendanceStatsTable
