@@ -249,9 +249,10 @@ const attendanceModel: AttendanceModel = {
 	async getLectureCountByTopic(courseid: number) {
 		const [result] = await pool.promise().query(
 			`SELECT topics.topicname, COUNT(lecture.lectureid) AS lecture_count
-			FROM lecture
-			JOIN topics ON lecture.topicid = topics.topicid
-			WHERE lecture.courseid = ?
+			FROM coursetopics
+			JOIN topics ON coursetopics.topicid = topics.topicid
+			LEFT JOIN lecture ON lecture.topicid = topics.topicid AND lecture.courseid = coursetopics.courseid
+			WHERE coursetopics.courseid = 5
 			GROUP BY topics.topicname;`,
 			[courseid],
 		);
