@@ -316,6 +316,30 @@ const setupSocketHandlers = (io: Server) => {
 					});
 			},
 		);
+		socket.on('lecturenotused', async lectureid => {
+			
+			// delete lecture from database  	
+			const token = await getToken();
+			doFetch('http://localhost:3002/courses/attendance/deletelecture/', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: 'Bearer ' + token,
+				},
+				body: JSON.stringify({
+					lectureid: lectureid,
+				}),
+			})
+				.then(response => {
+					io.to(socket.id).emit('lecturedeleted', lectureid);
+				})
+				.catch(error => {
+					console.error(error);
+					// Emit the 'manualstudentinsertError' event only to the client who sent the event
+					io.to(socket.id).emit('lecturedeletederror', lectureid);
+				});
+		}
+		);
 		socket.on(
 			'manualStudentRemove',
 			async (studentId: string, lectureid: number) => {
