@@ -80,15 +80,22 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 										<div className="w-full h-4 rounded bg-gray-200 relative">
 											<div
 												className={`h-full rounded ${
-													treshold !== null
-														? item.attendanceCounts[i]?.percentage < treshold // if treshold is set, use it to determine the color
-															? 'bg-metropoliaSupportRed'
-															: 'bg-metropoliaSupportBlue'
-														: item.attendanceCounts[i]?.percentage < 80
+													item.attendanceCounts[i]?.percentage === 0
 														? 'bg-metropoliaSupportRed'
+														: treshold !== null
+														? Number(item.attendanceCounts[i]?.percentage) <= treshold
+															? 'bg-red-200'
+															: 'bg-metropoliaSupportBlue'
+														: Number(item.attendanceCounts[i]?.percentage) < 80
+														? 'bg-red-200'
 														: 'bg-metropoliaSupportBlue'
 												}`}
-												style={{width: `${item.attendanceCounts[i]?.percentage}%`}}
+												style={{
+													width:
+														item.attendanceCounts[i]?.percentage === 0
+															? '100%'
+															: `${item.attendanceCounts[i]?.percentage}%`,
+												}}
 											></div>
 											<span className="absolute w-full text-center text-xs text-gray-800">
 												{`${item.attendanceCounts[i]?.percentage}%`}
