@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `attendance` (
   PRIMARY KEY (`attendanceid`),
   KEY `usercourseid` (`usercourseid`),
   KEY `lectureid` (`lectureid`),
-  CONSTRAINT `attendance_ibfk_1` FOREIGN KEY (`usercourseid`) REFERENCES `usercourses` (`usercourseid`),
+  CONSTRAINT `attendance_ibfk_1` FOREIGN KEY (`usercourseid`) REFERENCES `usercourses` (`usercourseid`) ON DELETE CASCADE,
   CONSTRAINT `attendance_ibfk_2` FOREIGN KEY (`lectureid`) REFERENCES `lecture` (`lectureid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
