@@ -25,9 +25,10 @@ const attendanceController: AttendanceController = {
 			if (!status || !date || !studentnumber || !lectureid) {
 				throw new Error('Invalid parameters');
 			}
-
+			const courseId = await lectureModel.getCourseIDByLectureID(lectureid);
 			const usercourseResult = await usercoursesModel.getUserCourseId(
 				studentnumber,
+				courseId,
 			);
 
 			if (!usercourseResult || usercourseResult.length === 0) {
@@ -83,8 +84,10 @@ const attendanceController: AttendanceController = {
 	) {
 		try {
 			for (const studentnumber of studentnumbers) {
+				const courseId = await lectureModel.getCourseIDByLectureID(lectureid);
 				const usercourseResult = await usercoursesModel.getUserCourseId(
 					studentnumber,
+					courseId,
 				);
 
 				if (usercourseResult.length === 0) {
