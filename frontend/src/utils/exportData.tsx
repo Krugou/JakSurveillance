@@ -208,7 +208,10 @@ export const exportStatsTableToPdf = (allAttendanceCounts, selectedCourse) => {
 	autoTable(doc, {columns, body: data, startY: 50});
 	doc.save('table.pdf');
 };
-export const exportStatsTableToExcel = allAttendanceCounts => {
+export const exportStatsTableToExcel = (
+	allAttendanceCounts,
+	selectedCourse,
+) => {
 	// Headers
 	const headers = ['Student', 'Selected Topics'].concat(
 		allAttendanceCounts.map(item => item.topicname),
@@ -246,5 +249,8 @@ export const exportStatsTableToExcel = allAttendanceCounts => {
 	const wb = utils.book_new();
 	utils.book_append_sheet(wb, ws, 'Sheet1');
 
-	writeFile(wb, 'table.xlsx');
+	writeFile(
+		wb,
+		`${selectedCourse?.name}_${selectedCourse?.code}_attendancestatistics.xlsx`,
+	);
 };

@@ -196,10 +196,14 @@ const TeacherCourseStats = () => {
 	}, [courseid, courses]);
 
 	const handlePdfExport = () => {
+		if (!selectedCourse) {
+			toast.error('No course selected');
+			return;
+		}
 		exportStatsTableToPdf(allAttendanceCounts, selectedCourse);
 	};
 	const handleExcelExport = () => {
-		exportStatsTableToExcel(allAttendanceCounts);
+		exportStatsTableToExcel(allAttendanceCounts, selectedCourse);
 	};
 	return (
 		<>
