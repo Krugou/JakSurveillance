@@ -252,7 +252,7 @@ const attendanceModel: AttendanceModel = {
 			FROM coursetopics
 			JOIN topics ON coursetopics.topicid = topics.topicid
 			LEFT JOIN lecture ON lecture.topicid = topics.topicid AND lecture.courseid = coursetopics.courseid
-			WHERE coursetopics.courseid = 5
+			WHERE coursetopics.courseid = ?
 			GROUP BY topics.topicname;`,
 			[courseid],
 		);
