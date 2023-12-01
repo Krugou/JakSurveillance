@@ -69,8 +69,10 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 									typeof student.selectedTopics === 'string' &&
 									student.selectedTopics !== 'all' ? (
 										'N/A'
-									) : typeof item.attendanceCounts[i]?.percentage === 'number' &&
-									  item.attendanceCounts[i]?.percentage !== 0 ? (
+									) : item.attendanceCounts[i]?.percentage.toString() ===
+									  'No lectures' ? (
+										'No lectures'
+									) : (
 										<div className="w-full h-4 rounded bg-gray-200 relative">
 											<div
 												className={`h-full rounded ${
@@ -88,8 +90,6 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 												{`${item.attendanceCounts[i]?.percentage}%`}
 											</span>
 										</div>
-									) : (
-										'No lectures'
 									)}
 								</TableCell>
 							))}

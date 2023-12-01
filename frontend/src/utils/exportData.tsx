@@ -1,6 +1,7 @@
 import {jsPDF} from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
+import {utils, writeFile} from 'xlsx';
 import {toast} from 'react-toastify';
 import metropolia_logo from '../assets/images/metropolia_s_oranssi_en.png';
 // Function to create tables for PDF or Excel
@@ -209,4 +210,44 @@ export const exportStatsTableToPdf = (allAttendanceCounts, selectedCourse) => {
 
 	autoTable(doc, {columns, body: data, startY: 50});
 	doc.save('table.pdf');
+};
+export const exportStatsTableToExcel = allAttendanceCounts => {
+	// Headers
+	const headers = ['Student', 'Selected Topics'].concat(
+		allAttendanceCounts.map(item => item.topicname),
+	);
+
+	// Data
+	const ws_data = allAttendanceCounts[0]?.attendanceCounts.map((student, i) => {
+		const studentData = [
+			student.name,
+			Array.isArray(student.selectedTopics)
+				? student.selectedTopics.join(', ')
+				: student.selectedTopics,
+		];
+		allAttendanceCounts.forEach(item => {
+			if (
+				Array.isArray(student.selectedTopics) &&
+				!student.selectedTopics.includes(item.topicname) &&
+				typeof student.selectedTopics === 'string' &&
+				student.selectedTopics !== 'all'
+			) {
+				studentData.push('N/A');
+			} else if (item.attendanceCounts[i]?.percentage === 'No lectures') {
+				studentData.push('No lectures');
+			} else {
+				studentData.push(`${item.attendanceCounts[i]?.percentage}%`);
+			}
+		});
+		return studentData;
+	});
+
+	// Add headers to the data
+	ws_data.unshift(headers);
+
+	const ws = utils.aoa_to_sheet(ws_data);
+	const wb = utils.book_new();
+	utils.book_append_sheet(wb, ws, 'Sheet1');
+
+	writeFile(wb, 'table.xlsx');
 };

@@ -8,7 +8,10 @@ import {useParams} from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
 import PrintIcon from '@mui/icons-material/Print';
 import GetAppIcon from '@mui/icons-material/GetApp';
-import {exportStatsTableToPdf} from '../../../../utils/exportData';
+import {
+	exportStatsTableToPdf,
+	exportStatsTableToExcel,
+} from '../../../../utils/exportData';
 import AttendanceStatsTable from '../../../../components/main/course/attendance/AttendanceStatsTable';
 
 interface Course {
@@ -172,7 +175,7 @@ const TeacherCourseStats = () => {
 				);
 				setAllAttendanceCounts(allAttendanceCounts);
 				setShowTable(true);
-				console.log(allAttendanceCounts);
+				console.log(allAttendanceCounts, 'all attendancescounts');
 			} catch (error) {
 				toast.error('Error fetching course details');
 				console.log(error);
@@ -195,7 +198,9 @@ const TeacherCourseStats = () => {
 	const handlePdfExport = () => {
 		exportStatsTableToPdf(allAttendanceCounts, selectedCourse);
 	};
-
+	const handleExcelExport = () => {
+		exportStatsTableToExcel(allAttendanceCounts);
+	};
 	return (
 		<div className="w-full bg-white p-4 ">
 			<div className="w-1/3 m-auto">
@@ -226,7 +231,10 @@ const TeacherCourseStats = () => {
 					</button>
 				</Tooltip>
 				<Tooltip title="Export to Excel">
-					<button className="bg-metropoliaMainOrange text-white p-2 rounded">
+					<button
+						onClick={handleExcelExport}
+						className="bg-metropoliaMainOrange text-white p-2 rounded"
+					>
 						<GetAppIcon fontSize="large" />
 					</button>
 				</Tooltip>
