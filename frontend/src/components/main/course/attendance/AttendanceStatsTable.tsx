@@ -75,7 +75,7 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 											<div
 												className={`h-full rounded ${
 													treshold !== null
-														? item.attendanceCounts[i]?.percentage < treshold
+														? item.attendanceCounts[i]?.percentage < treshold // if treshold is set, use it to determine the color
 															? 'bg-metropoliaSupportRed'
 															: 'bg-metropoliaSupportBlue'
 														: item.attendanceCounts[i]?.percentage < 80
