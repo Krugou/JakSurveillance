@@ -13,7 +13,11 @@ const CreateLecture: React.FC = () => {
 	const [courses, setCourses] = useState<Course[]>([]);
 	const [date, setDate] = useState<Date | Date[]>(new Date());
 	const [calendarOpen, setCalendarOpen] = useState(false);
-	const [selectedTimeOfDay, setSelectedTimeOfDay] = useState<string>('');
+	const timeOfDay = ['am', 'pm'];
+
+	const [selectedTimeOfDay, setSelectedTimeOfDay] = useState<string>(
+		timeOfDay[0],
+	);
 	const [selectedSession, setSelectedSession] = useState<string>(
 		courses.length > 0 ? courses[0].courseid : '',
 	);
@@ -88,7 +92,6 @@ const CreateLecture: React.FC = () => {
 		return ''; // default return value
 	};
 	useEffect(() => {}, [selectedCourse]);
-	const timeOfDay = ['am', 'pm'];
 	const handleDateChangeCalendar = (
 		value: Date | Date[] | null | [Date | null, Date | null],
 	) => {
