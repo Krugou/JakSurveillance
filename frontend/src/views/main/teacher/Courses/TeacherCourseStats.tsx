@@ -5,7 +5,6 @@ import apiHooks from '../../../../hooks/ApiHooks';
 import {useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import AttendanceStatsTable from '../../../../components/main/course/attendance/AttendanceStatsTable';
-import {set} from 'date-fns';
 
 interface Course {
 	name: string;
@@ -68,7 +67,7 @@ const TeacherCourseStats = () => {
 			const percentage =
 				lecture_count > 0
 					? parseFloat(((count / lecture_count) * 100).toFixed(1))
-					: 0;
+					: 'No lectures';
 			return {
 				name,
 				count,
@@ -112,16 +111,6 @@ const TeacherCourseStats = () => {
 				);
 
 				console.log(courseDetails);
-
-				// Usage:
-				const topicname = 'eryteryt'; // Replace with the actual topicname
-				const attendanceCounts = calculateAttendanceForAllUsers(
-					courseDetails.users,
-					courseDetails.lectures,
-					topicname,
-				);
-
-				console.log(attendanceCounts);
 
 				const allAttendanceCounts = calculateAttendanceForAllTopics(
 					courseDetails.users,

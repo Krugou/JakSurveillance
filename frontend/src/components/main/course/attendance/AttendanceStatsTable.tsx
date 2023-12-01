@@ -67,6 +67,8 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 									!student.selectedTopics.includes(item.topicname) &&
 									student.selectedTopics !== 'all'
 										? 'N/A'
+										: item.attendanceCounts[i]?.percentage === 'No lectures'
+										? 'No lectures'
 										: `${item.attendanceCounts[i]?.percentage}%`}
 								</TableCell>
 							))}
