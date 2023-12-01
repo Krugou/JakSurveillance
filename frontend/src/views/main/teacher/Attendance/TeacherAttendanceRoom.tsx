@@ -206,8 +206,13 @@ const AttendanceRoom: React.FC = () => {
 		return () => {
 			// If the socket is defined
 			if (socket) {
+				if (arrayOfStudents.length === 0) {
+					socket.emit('lecturenotused', lectureid);
+				}
 				// Disconnect the socket when the component unmounts
 				socket.disconnect();
+
+				// If there are no more students, emit a "lecture not used" event
 			}
 		};
 	}, [socket]); // This effect depends on the socket variable
