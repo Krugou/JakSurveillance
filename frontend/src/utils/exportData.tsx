@@ -159,3 +159,54 @@ export const exportToExcel = (
 	}
 	// Display a toast message
 };
+export const exportStatsTableToPdf = (allAttendanceCounts, selectedCourse) => {
+	const doc = new jsPDF();
+	const topics = allAttendanceCounts.map(item => item.topicname);
+
+	const imgWidth = 90;
+	const imgHeight = (imgWidth * 1267) / 4961;
+	const imgX = 15;
+	const imgY = 10;
+
+	doc.text(
+		`Attendance statistics for: ${
+			selectedCourse
+				? selectedCourse?.name + ' ' + selectedCourse?.code
+				: 'unknown course'
+		}`,
+		15,
+		45,
+	);
+
+	doc.addImage(metropolia_logo, 'PNG', imgX, imgY, imgWidth, imgHeight);
+	const columns = ['Student', 'Selected Topics', ...topics];
+	const data = allAttendanceCounts[0]?.attendanceCounts.map((student, i) => {
+		const studentData = [
+			student.name,
+			Array.isArray(student.selectedTopics)
+				? student.selectedTopics.join(', ')
+				: student.selectedTopics,
+		];
+		allAttendanceCounts.forEach(item => {
+			if (
+				Array.isArray(student.selectedTopics) &&
+				!student.selectedTopics.includes(item.topicname) &&
+				typeof student.selectedTopics === 'string' &&
+				student.selectedTopics !== 'all'
+			) {
+				studentData.push('N/A');
+			} else if (
+				typeof item.attendanceCounts[i]?.percentage === 'number' &&
+				item.attendanceCounts[i]?.percentage !== 0
+			) {
+				studentData.push(`${item.attendanceCounts[i]?.percentage}%`);
+			} else {
+				studentData.push('No lectures');
+			}
+		});
+		return studentData;
+	});
+
+	autoTable(doc, {columns, body: data, startY: 50});
+	doc.save('table.pdf');
+};
