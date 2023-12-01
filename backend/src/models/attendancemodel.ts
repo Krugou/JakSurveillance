@@ -232,7 +232,7 @@ const attendanceModel: AttendanceModel = {
 	},
 	async getAttendaceByCourseId(courseid: number) {
 		const [attendanceResult] = await pool.promise().query(
-			`SELECT attendance.status, attendance.attendanceid, lecture.start_date, lecture.timeofday, topics.topicname, courses.name, users.email AS teacher, attendingUsers.first_name, attendingUsers.last_name, attendingUsers.studentnumber, attendingUsers.email
+			`SELECT attendance.status, attendance.attendanceid, usercourses.usercourseid, lecture.start_date, lecture.timeofday, topics.topicname, courses.name, users.email AS teacher, attendingUsers.first_name, attendingUsers.last_name, attendingUsers.studentnumber, attendingUsers.email, attendingUsers.userid
 			FROM attendance 
 			JOIN lecture ON attendance.lectureid = lecture.lectureid
 			JOIN topics ON lecture.topicid = topics.topicid

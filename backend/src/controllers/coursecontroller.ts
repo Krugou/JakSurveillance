@@ -1,3 +1,4 @@
+import attendanceModel from '../models/attendancemodel.js';
 import courseInstructorModel from '../models/courseinstructormodel.js';
 import course from '../models/coursemodel.js';
 import courseModel from '../models/coursemodel.js';
@@ -9,7 +10,7 @@ import topicModel from '../models/topicmodel.js';
 import usercourse_topicsModel from '../models/usercourse_topicsmodel.js';
 import userCourseModel from '../models/usercoursemodel.js';
 import userModel from '../models/usermodel.js';
-
+import attendanceModel from '../models/attendancemodel.js';
 interface Student {
 	email: string;
 	first_name: string;
@@ -246,9 +247,33 @@ const courseController = {
 	},
 	getDetailsByCourseId: async (courseId: string) => {
 		try {
-			const courseDetails = await course.getCourseDetails(courseId);
+			let usersOnCourse = await attendanceModel.getAttendaceByCourseId(courseId);
 
-			return courseDetails;
+			// Assuming usersOnCourse is an array of objects
+			const distinctUserCourseIds = [
+				...new Set(usersOnCourse.map(user => user.usercourseid)),
+			];
+
+			for (const usercourseid of distinctUserCourseIds) {
+				console.log(usercourseid, 'is a distinct usercourseid');
+				const selectedParts =
+					await usercourse_topicsModel.findUserCourseTopicByUserCourseId(
+						usercourseid,
+					);
+				console.log(selectedParts);
+
+				// Add userCourseTopic to each usersOnCourse object with the same usercourseid
+				usersOnCourse = usersOnCourse.map(user => {
+					if (user.usercourseid === usercourseid) {
+						return {...user, selectedParts};
+					} else {
+						return user;
+					}
+				});
+			}
+
+			const lectureCount = await attendanceModel.getLectureCountByTopic(courseId);
+			return {users: [...usersOnCourse], lectures: [...lectureCount]};
 		} catch (error) {
 			console.error(error);
 			throw error;

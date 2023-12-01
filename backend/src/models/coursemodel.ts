@@ -454,6 +454,34 @@ const course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
+	async getAllStudentsOnCourse(courseId: number): Promise<RowDataPacket[]> {
+		try {
+			const [rows]: RowDataPacket[][] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					`SELECT 
+								users.email,
+								users.first_name,
+								users.last_name,
+								users.studentnumber,
+								usercourses.usercourseid
+						FROM 
+								users
+						JOIN
+								usercourses ON users.userid = usercourses.userid
+						JOIN
+								courses ON usercourses.courseid = courses.courseid
+						WHERE
+								courses.courseid = ?;`,
+					[courseId],
+				);
+
+			return rows;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
 };
 
 export default course;
