@@ -31,6 +31,16 @@ const serverSettingsModel = {
 			return Promise.reject(error);
 		}
 	},
+	async getAttentanceThreshold(pool: Pool) {
+		try {
+			return await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT attendancethreshold FROM serversettings');
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
 };
 
 export default serverSettingsModel;

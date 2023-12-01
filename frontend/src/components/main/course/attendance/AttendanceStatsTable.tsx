@@ -22,13 +22,14 @@ interface AttendanceStats {
 
 interface AttendanceStatsTableProps {
 	allAttendanceCounts: AttendanceStats[];
+	treshold: number;
 }
 
 const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 	allAttendanceCounts,
+	treshold,
 }) => {
 	const topics = allAttendanceCounts.map(item => item.topicname);
-
 	return (
 		<TableContainer className="overflow-x-auto border-gray-300 border-x border-t mt-5 mb-5 rounded-lg shadow">
 			<Table className="min-w-full divide-y divide-gray-200">
@@ -62,16 +63,30 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 									: student.selectedTopics}
 							</TableCell>
 							{allAttendanceCounts.map((item, index) => (
-								<TableCell key={index} className="px-6 py-4 whitespace-nowrap">
+								<TableCell key={index}>
 									{Array.isArray(student.selectedTopics) &&
 									!student.selectedTopics.includes(item.topicname) &&
 									typeof student.selectedTopics === 'string' &&
-									student.selectedTopics !== 'all'
-										? 'N/A'
-										: typeof item.attendanceCounts[i]?.percentage === 'string' &&
-										  item.attendanceCounts[i]?.percentage.toString() === 'No lectures'
-										? 'No lectures'
-										: `${item.attendanceCounts[i]?.percentage}%`}
+									student.selectedTopics !== 'all' ? (
+										'N/A'
+									) : typeof item.attendanceCounts[i]?.percentage === 'number' &&
+									  item.attendanceCounts[i]?.percentage !== 0 ? (
+										<div className="w-full h-4 rounded bg-gray-200 relative">
+											<div
+												className={`h-full rounded ${
+													item.attendanceCounts[i]?.percentage < treshold
+														? 'bg-metropoliaSupportRed'
+														: 'bg-metropoliaSupportBlue'
+												}`}
+												style={{width: `${item.attendanceCounts[i]?.percentage}%`}}
+											></div>
+											<span className="absolute w-full text-center text-xs text-gray-800">
+												{`${item.attendanceCounts[i]?.percentage}%`}
+											</span>
+										</div>
+									) : (
+										'No lectures'
+									)}
 								</TableCell>
 							))}
 						</TableRow>

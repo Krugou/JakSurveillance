@@ -255,12 +255,10 @@ const courseController = {
 			];
 
 			for (const usercourseid of distinctUserCourseIds) {
-				console.log(usercourseid, 'is a distinct usercourseid');
 				const selectedParts =
 					await usercourse_topicsModel.findUserCourseTopicByUserCourseId(
 						usercourseid,
 					);
-				console.log(selectedParts);
 
 				// Add userCourseTopic to each usersOnCourse object with the same usercourseid
 				usersOnCourse = usersOnCourse.map(user => {

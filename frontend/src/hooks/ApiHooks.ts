@@ -600,6 +600,15 @@ const getRoleCounts = async (token: string) => {
 	};
 	return await doFetch(baseUrl + 'admin/getrolecounts', options);
 };
+const getAttendanceThreshold = async (token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	return await doFetch(baseUrl + 'secure/getattendancethreshold', options);
+};
 
 const apiHooks = {
 	getRoleCounts,
@@ -642,5 +651,6 @@ const apiHooks = {
 	getLecturesAndAttendances,
 	getAllCourses,
 	getDetailsByCourseId,
+	getAttendanceThreshold,
 };
 export default apiHooks;

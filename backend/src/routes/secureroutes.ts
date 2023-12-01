@@ -1,6 +1,8 @@
 import express, {Request, Response, Router} from 'express';
 import usermodel from '../models/usermodel.js';
 import checkUserRole from '../utils/checkRole.js';
+import serverSettingsModel from '../models/serversettingsmodel.js';
+import pool from '../config/adminDBPool.js';
 const router: Router = express.Router();
 
 router.get('/', (req: Request, res: Response) => {
@@ -21,5 +23,18 @@ router.get(
 		}
 	},
 );
-
+router.get(
+	'/getattendancethreshold',
+	checkUserRole(['admin', 'counselor', 'teacher']), // replace with your actual middleware if needed
+	async (req: Request, res: Response) => {
+		try {
+			const result = await serverSettingsModel.getAttentanceThreshold(pool); // replace with your actual function to get the threshold
+			const threshold = result[0][0].attendancethreshold;
+			res.send({attendancethreshold: threshold});
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({message: 'Internal server error'});
+		}
+	},
+);
 export default router;

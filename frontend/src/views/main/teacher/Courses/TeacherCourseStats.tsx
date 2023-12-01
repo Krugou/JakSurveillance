@@ -19,9 +19,26 @@ const TeacherCourseStats = () => {
 	const [showTable, setShowTable] = useState(false);
 	const {courseid} = useParams<{courseid: string}>();
 	const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-
+	const [threshold, setThreshold] = useState(null);
 	const [courses, setCourses] = useState<Course[]>([]);
 	const [allAttendanceCounts, setAllAttendanceCounts] = useState([]);
+
+	// Get the attendance threshold % from the database
+	const getThreshold = async () => {
+		try {
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
+			const response = await apiHooks.getAttendanceThreshold(token);
+			console.log(response, 'treshholdresponse');
+			setThreshold(response.attendancethreshold);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	// This function is called when the component is first rendered
 	useEffect(() => {
 		const fetchCourses = async () => {
 			try {
@@ -29,18 +46,23 @@ const TeacherCourseStats = () => {
 				if (!token) {
 					throw new Error('No token available');
 				}
+				// Fetch all courses using the token
+
 				const response = await apiHooks.getAllCourses(token);
 				console.log(response, 'response');
+				// Set the fetched courses to the state
 				setCourses(response);
 			} catch (error) {
+				// Show an error message if there's an error fetching courses
 				toast.error('Error fetching courses');
-				console.log(error);
 			}
 		};
 		fetchCourses();
+		getThreshold();
 	}, []);
 	console.log(courses, 'courses');
 
+	// This function calculates the attendance for a single user on a single topic
 	const sumUserAttendanceOnTopic = (users, userid, topicname) => {
 		return users.filter(
 			user =>
@@ -55,15 +77,18 @@ const TeacherCourseStats = () => {
 		).length;
 	};
 
+	// This function calculates the attendance for all users on a single topic
 	const calculateAttendanceForAllUsers = (users, lectures, topicname) => {
 		const uniqueUserIds = [...new Set(users.map(user => user.userid))];
 		const lecture = lectures.find(lecture => lecture.topicname === topicname);
 		const lecture_count = lecture ? lecture.lecture_count : 0;
 
+		// Calculate the attendance for each user
 		const attendanceCounts = uniqueUserIds.map(userid => {
 			const count = sumUserAttendanceOnTopic(users, userid, topicname);
 			const user = users.find(user => user.userid === userid);
 			const name = user ? `${user.last_name} ${user.first_name}` : 'Unknown User';
+			// Get the selected topics for the user
 			const selectedTopics =
 				user && user.selectedParts && user.selectedParts.length > 0
 					? user.selectedParts.map(part => part.topicname)
@@ -71,7 +96,7 @@ const TeacherCourseStats = () => {
 			const percentage =
 				lecture_count > 0
 					? parseFloat(((count / lecture_count) * 100).toFixed(1))
-					: 'No lectures';
+					: 'No lectures'; // Calculate the percentage of attendance for the user on the topic if there are lectures
 			return {
 				name,
 				count,
@@ -82,6 +107,7 @@ const TeacherCourseStats = () => {
 		});
 		return attendanceCounts;
 	};
+	// This function calculates the attendance for all users on all topics
 	const calculateAttendanceForAllTopics = (users, lectures) => {
 		return lectures.map(lecture => {
 			const attendanceCounts = calculateAttendanceForAllUsers(
@@ -96,13 +122,16 @@ const TeacherCourseStats = () => {
 		});
 	};
 
+	// This function is called when a course is selected
 	const handleCourseSelect = async (value: string | null) => {
 		if (!value) {
 			return;
 		}
+		// Find the selected course from the courses array
 		const selectedCourse = courses.find(
 			course => `${course.name} ${course.code}` === value,
 		);
+		// If the selected course is found, fetch the course details
 		if (selectedCourse) {
 			try {
 				setSelectedCourse(selectedCourse); // Add this line
@@ -118,6 +147,7 @@ const TeacherCourseStats = () => {
 
 				console.log(courseDetails);
 
+				// Calculate the attendance for all users on all topics for the selected course
 				const allAttendanceCounts = calculateAttendanceForAllTopics(
 					courseDetails.users,
 					courseDetails.lectures,
@@ -132,6 +162,7 @@ const TeacherCourseStats = () => {
 		}
 	};
 
+	// This function is called when the courseid changes in the url (when a course is selected)
 	useEffect(() => {
 		if (courseid) {
 			const selectedCourse = courses.find(
@@ -164,7 +195,10 @@ const TeacherCourseStats = () => {
 				/>
 			</div>
 			{showTable && (
-				<AttendanceStatsTable allAttendanceCounts={allAttendanceCounts} />
+				<AttendanceStatsTable
+					allAttendanceCounts={allAttendanceCounts}
+					treshold={threshold}
+				/>
 			)}
 		</div>
 	);
