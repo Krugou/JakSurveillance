@@ -13,12 +13,12 @@ const CreateLecture: React.FC = () => {
 	const [courses, setCourses] = useState<Course[]>([]);
 	const [date, setDate] = useState<Date | Date[]>(new Date());
 	const [calendarOpen, setCalendarOpen] = useState(false);
-	const [selectedLocation, setSelectedLocation] = useState<string>('');
+	const [selectedTimeOfDay, setSelectedTimeOfDay] = useState<string>('');
 	const [selectedSession, setSelectedSession] = useState<string>(
 		courses.length > 0 ? courses[0].courseid : '',
 	);
 	const [loading, setLoading] = useState(false);
-	const [selectedParticipant, setSelectedParticipant] = useState<string>('');
+	const [selectedTopic, setSelectedTopic] = useState<string>('');
 	const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 	const [highlightedDates, setHighlightedDates] = useState<Date[]>([]);
 
@@ -64,7 +64,7 @@ const CreateLecture: React.FC = () => {
 				setCourses(data);
 				setLoading(false);
 				setSelectedCourse(data[0]);
-				setSelectedParticipant(data[0].topic_names.split(',')[0]);
+				setSelectedTopic(data[0].topic_names.split(',')[0]);
 			});
 		}
 	}, [user]);
@@ -103,7 +103,7 @@ const CreateLecture: React.FC = () => {
 			if (date) {
 				setDate(date);
 				const hours = date.getHours();
-				setSelectedLocation(hours < 12 ? 'am' : 'pm');
+				setSelectedTimeOfDay(hours < 12 ? 'am' : 'pm');
 				setCalendarOpen(false);
 			}
 		}
@@ -117,21 +117,21 @@ const CreateLecture: React.FC = () => {
 			return;
 		}
 
-		if (!selectedLocation) {
+		if (!selectedTimeOfDay) {
 			toast.error(`Time of day not selected`);
 			return;
 		}
 
-		if (!selectedParticipant || !selectedCourse) {
-			toast.error(`Participant or course not selected`);
+		if (!selectedTopic || !selectedCourse) {
+			toast.error(`Topic or course not selected`);
 			return;
 		}
 
 		const start_date = new Date(date);
-		start_date.setHours(selectedLocation === 'am' ? 10 : 14, 30, 0, 0);
+		start_date.setHours(selectedTimeOfDay === 'am' ? 10 : 14, 30, 0, 0);
 
 		const end_date = new Date(date);
-		end_date.setHours(selectedLocation === 'am' ? 13 : 17, 30, 0, 0);
+		end_date.setHours(selectedTimeOfDay === 'am' ? 13 : 17, 30, 0, 0);
 
 		try {
 			const token: string | null = localStorage.getItem('userToken');
@@ -141,11 +141,11 @@ const CreateLecture: React.FC = () => {
 			}
 
 			const response = await apihooks.CreateLecture(
-				selectedParticipant,
+				selectedTopic,
 				selectedCourse,
 				start_date,
 				end_date,
-				selectedLocation,
+				selectedTimeOfDay,
 				state,
 				token,
 			);
@@ -169,7 +169,6 @@ const CreateLecture: React.FC = () => {
 		code: string;
 		courseid: string | (() => string);
 		topic_names: string;
-		// include other properties of selectedCourse here
 	}
 
 	return (
@@ -203,8 +202,16 @@ const CreateLecture: React.FC = () => {
 								}}
 								onChange={e => {
 									const selectedIndex = e.target.value;
+									console.log(
+										'🚀 ~ file: TeacherCreateLecture.tsx:205 ~ selectedIndex:',
+										selectedIndex,
+									);
 									setSelectedSession(selectedIndex);
 									setSelectedCourse(courses[selectedIndex] || null);
+									console.log(
+										'🚀 ~ file: TeacherCreateLecture.tsx:208 ~ courses[selectedIndex]:',
+										courses[selectedIndex],
+									);
 								}}
 							>
 								{Array.isArray(courses) &&
@@ -236,9 +243,9 @@ const CreateLecture: React.FC = () => {
 								title="Topic"
 								id="topic"
 								className="block h-8 mr-3 sm:ml-5 ml-1 sm:mt-1 mt-none"
-								value={selectedParticipant}
+								value={selectedTopic}
 								onChange={e => {
-									setSelectedParticipant(e.target.value);
+									setSelectedTopic(e.target.value);
 								}}
 							>
 								{selectedCourse &&
@@ -280,8 +287,8 @@ const CreateLecture: React.FC = () => {
 							<select
 								aria-label="Time of Day"
 								title="Time of Day"
-								value={selectedLocation}
-								onChange={e => setSelectedLocation(e.target.value)}
+								value={selectedTimeOfDay}
+								onChange={e => setSelectedTimeOfDay(e.target.value)}
 								className="block text-center appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 shadow leading-tight focus:outline-none focus:shadow-outline"
 							>
 								{timeOfDay.map(option => (
