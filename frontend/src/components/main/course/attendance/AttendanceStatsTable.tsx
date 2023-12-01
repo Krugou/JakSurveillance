@@ -13,8 +13,8 @@ interface AttendanceCount {
 	count: number;
 	topicname: string;
 	percentage: number;
+	selectedTopics: string | string[]; // Add this line
 }
-
 interface AttendanceStats {
 	topicname: string;
 	attendanceCounts: AttendanceCount[];
@@ -37,6 +37,9 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 						<TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 							Student
 						</TableCell>
+						<TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+							Selected Topics
+						</TableCell>
 						{topics.map((topic, index) => (
 							<TableCell
 								key={index}
@@ -52,6 +55,11 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 						<TableRow key={i} className="border-b hover:bg-gray-50">
 							<TableCell className="px-6 py-4 whitespace-nowrap">
 								{count.name}
+							</TableCell>
+							<TableCell className="px-6 py-4 whitespace-nowrap">
+								{Array.isArray(count.selectedTopics)
+									? count.selectedTopics.map(topic => topic.topicname).join(', ')
+									: count.selectedTopics}
 							</TableCell>
 							{allAttendanceCounts.map((item, index) => (
 								<TableCell key={index} className="px-6 py-4 whitespace-nowrap">

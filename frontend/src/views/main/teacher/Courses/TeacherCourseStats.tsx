@@ -58,6 +58,10 @@ const TeacherCourseStats = () => {
 			const count = sumUserAttendanceOnTopic(users, userid, topicname);
 			const user = users.find(user => user.userid === userid);
 			const name = user ? `${user.last_name} ${user.first_name}` : 'Unknown User';
+			const selectedTopics =
+				user && user.selectedParts && user.selectedParts.length > 0
+					? user.selectedParts
+					: 'all';
 			const percentage =
 				lecture_count > 0
 					? parseFloat(((count / lecture_count) * 100).toFixed(1))
@@ -67,6 +71,7 @@ const TeacherCourseStats = () => {
 				count,
 				topicname,
 				percentage,
+				selectedTopics,
 			};
 		});
 		return attendanceCounts;
