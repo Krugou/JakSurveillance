@@ -1,3 +1,4 @@
+import {CircularProgress} from '@mui/material';
 import {formatISO} from 'date-fns';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import Calendar from 'react-calendar';
@@ -6,7 +7,6 @@ import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
-import {CircularProgress} from '@mui/material';
 const CreateLecture: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
@@ -63,9 +63,11 @@ const CreateLecture: React.FC = () => {
 			apihooks.getAllCoursesByInstructorEmail(user.email, token).then(data => {
 				setCourses(data);
 				setLoading(false);
+				setSelectedCourse(data[0]);
+				setSelectedParticipant(data[0].topic_names.split(',')[0]);
 			});
 		}
-	}, []);
+	}, [user]);
 	const toggleCalendar = () => {
 		setCalendarOpen(prev => !prev);
 	};
@@ -106,12 +108,6 @@ const CreateLecture: React.FC = () => {
 			}
 		}
 	};
-	useEffect(() => {
-		if (courses.length > 0) {
-			setSelectedCourse(courses[0]);
-			setSelectedParticipant(courses[0].topic_names.split(',')[0]);
-		}
-	}, [courses]);
 
 	const handleOpenAttendance = async () => {
 		const state = 'open';
@@ -206,15 +202,13 @@ const CreateLecture: React.FC = () => {
 									}
 								}}
 								onChange={e => {
-									const selectedCourseId = e.target.value;
-
-									const newValue = parseInt(selectedCourseId, 10) - 1;
-									setSelectedSession(selectedCourseId);
-									setSelectedCourse(courses[newValue] || null);
+									const selectedIndex = e.target.value;
+									setSelectedSession(selectedIndex);
+									setSelectedCourse(courses[selectedIndex] || null);
 								}}
 							>
 								{Array.isArray(courses) &&
-									courses.map(course => {
+									courses.map((course, index) => {
 										// Ensure courseid is a string or number
 										const courseId =
 											typeof course.courseid === 'function'
@@ -232,7 +226,7 @@ const CreateLecture: React.FC = () => {
 										}
 
 										return (
-											<option key={courseId} value={courseId}>
+											<option key={index} value={index}>
 												{courseName + ' | ' + courseCode}
 											</option>
 										);
