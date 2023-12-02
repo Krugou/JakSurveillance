@@ -142,6 +142,37 @@ const attendanceController: AttendanceController = {
 			return Promise.reject(error);
 		}
 	},
+	async deleteAttendance(studentnumber, lectureid: number) {
+		try {
+			const courseId = await lectureModel.getCourseIDByLectureID(lectureid);
+			const usercourseResult = await usercoursesModel.getUserCourseId(
+				studentnumber,
+				courseId,
+			);
+
+			if (!usercourseResult || usercourseResult.length === 0) {
+				throw new Error(
+					`Usercourse not found for the studentnumber: ${studentnumber}`,
+				);
+			}
+
+			const usercourseid = usercourseResult[0].usercourseid;
+
+			const deleteResult = await attendanceModel.deleteAttendance(
+				usercourseid,
+				lectureid,
+			);
+
+			if (!deleteResult || deleteResult.affectedRows === 0) {
+				throw new Error('Failed to delete attendance');
+			}
+
+			return true;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
 };
 
 export default attendanceController;
