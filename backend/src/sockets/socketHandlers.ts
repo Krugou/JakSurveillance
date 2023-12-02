@@ -191,6 +191,24 @@ const setupSocketHandlers = (io: Server) => {
 			lectureTimeoutId = setTimeout(() => {
 				finishLecture(lectureid, io);
 			}, timeout);
+			// Set a timeout to delete the lecture from the database after 'timeout' milliseconds if no students have arrived
+			// setTimeout(async () => {
+			// 	// Check if presentStudents is empty
+			// 	if (presentStudents[lectureid].length === 0) {
+			// 		// Delete lecture from database
+			// 		const token = await getToken();
+			// 		doFetch('http://localhost:3002/courses/attendance/deletelecture/', {
+			// 			method: 'POST',
+			// 			headers: {
+			// 				'Content-Type': 'application/json',
+			// 				Authorization: 'Bearer ' + token,
+			// 			},
+			// 			body: JSON.stringify({
+			// 				lectureid: lectureid,
+			// 			}),
+			// 		});
+			// 	}
+			// }, timeout);
 
 			// Handle the 'lecturefinishedwithbutton' event
 			socket.on('lecturefinishedwithbutton', async (lectureid: string) => {
@@ -316,30 +334,7 @@ const setupSocketHandlers = (io: Server) => {
 					});
 			},
 		);
-		socket.on('lecturenotused', async lectureid => {
-			
-			// delete lecture from database  	
-			const token = await getToken();
-			doFetch('http://localhost:3002/courses/attendance/deletelecture/', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: 'Bearer ' + token,
-				},
-				body: JSON.stringify({
-					lectureid: lectureid,
-				}),
-			})
-				.then(response => {
-					io.to(socket.id).emit('lecturedeleted', lectureid);
-				})
-				.catch(error => {
-					console.error(error);
-					// Emit the 'manualstudentinsertError' event only to the client who sent the event
-					io.to(socket.id).emit('lecturedeletederror', lectureid);
-				});
-		}
-		);
+
 		socket.on(
 			'manualStudentRemove',
 			async (studentId: string, lectureid: number) => {
@@ -351,36 +346,34 @@ const setupSocketHandlers = (io: Server) => {
 				}
 
 				const token = await getToken();
-				doFetch('http://localhost:3002/courses/attendance/', {
+				doFetch('http://localhost:3002/courses/attendance/delete/', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
 						Authorization: 'Bearer ' + token,
 					},
 					body: JSON.stringify({
-						status: '0',
-						date: new Date().toISOString().slice(0, 19).replace('T', ' '),
 						studentnumber: studentId,
 						lectureid: lectureid,
 					}),
 				})
 					.then(response => {
-						console.log('Success:', response);
+						if (response) {
+							const studentIndex = presentStudents[lectureid].findIndex(
+								(student: Student) =>
+									Number(student.studentnumber) === Number(studentId),
+							);
 
-						const studentIndex = presentStudents[lectureid].findIndex(
-							(student: Student) =>
-								Number(student.studentnumber) === Number(studentId),
-						);
-
-						if (studentIndex !== -1) {
-							const student = presentStudents[lectureid][studentIndex];
-							notYetPresentStudents[lectureid].push(student);
-							presentStudents[lectureid].splice(studentIndex, 1); // Remove the student from presentStudents
-						} else {
-							console.log('Student not found');
+							if (studentIndex !== -1) {
+								const student = presentStudents[lectureid][studentIndex];
+								notYetPresentStudents[lectureid].push(student);
+								presentStudents[lectureid].splice(studentIndex, 1); // Remove the student from presentStudents
+							} else {
+								console.log('Student not found');
+							}
+							// Emit the 'manualStudentRemoveSuccess' event only to the client who sent the event
+							io.to(socket.id).emit('manualStudentRemoveSuccess', lectureid);
 						}
-						// Emit the 'manualStudentRemoveSuccess' event only to the client who sent the event
-						io.to(socket.id).emit('manualStudentRemoveSuccess', lectureid);
 					})
 					.catch(error => {
 						console.error(error);
