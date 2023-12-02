@@ -122,6 +122,17 @@ router.post(
 		}
 	},
 );
+router.post('/delete/', async (req: Request, res: Response) => {
+	try {
+		const {studentnumber} = req.body;
+		const lectureid = Number(req.body.lectureid);
+		await attendanceController.deleteAttendance(studentnumber, lectureid);
+		res.status(201).send(true);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send(false);
+	}
+});
 
 router.post('/deletelecture/', async (req: Request, res: Response) => {
 	try {
