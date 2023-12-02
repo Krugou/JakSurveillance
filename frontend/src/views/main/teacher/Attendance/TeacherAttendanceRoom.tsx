@@ -36,6 +36,7 @@ const AttendanceRoom: React.FC = () => {
 	const [hashValue, setHashValue] = useState('');
 	const [courseId, setCourseId] = useState('');
 	const [dataLoaded, setDataLoaded] = useState(false);
+	const [hashDataReceived, setHashDataReceived] = useState(false);
 	/**
 	 * useEffect hook for fetching lecture info.
 	 * This hook is run when the component mounts and whenever the lectureid changes.
@@ -150,6 +151,7 @@ const AttendanceRoom: React.FC = () => {
 			newSocket.on(
 				'updateAttendanceCollectionData',
 				(hash, lectureid, arrayOfStudents, courseStudents) => {
+					setHashDataReceived(true);
 					setHashValue(hash + '/' + lectureid);
 					setArrayOfStudents(arrayOfStudents);
 
@@ -294,12 +296,18 @@ const AttendanceRoom: React.FC = () => {
 					</div>
 					<div className="flex flex-col-reverse sm:flex-row justify-between items-start">
 						<div className="flex sm:flex-row items-center flex-col-reverse w-full ">
-							<QRCode
-								size={256}
-								value={hashValue}
-								viewBox={`0 0 256 256`}
-								className="md:w-[30em] w-full h-full"
-							/>
+							{!hashDataReceived ? (
+								<div className="flex items-center justify-center w-full h-full">
+									<CircularProgress />
+								</div>
+							) : (
+								<QRCode
+									size={256}
+									value={hashValue}
+									viewBox={`0 0 256 256`}
+									className="md:w-[30em] w-full h-full"
+								/>
+							)}
 
 							<Attendees
 								arrayOfStudents={arrayOfStudents}
