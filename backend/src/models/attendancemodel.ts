@@ -113,63 +113,6 @@ const attendanceModel: AttendanceModel = {
 		}
 	},
 
-	async insertIntoAttendance(status, date, studentnumber, lectureid) {
-		try {
-			// Find usercourseid based on studentnumber
-			const [usercourseResult] = (await pool
-				.promise()
-				.query(
-					'SELECT usercourseid FROM usercourses WHERE userid IN (SELECT userid FROM users WHERE studentnumber = ?)',
-					[studentnumber],
-				)) as RowDataPacket[];
-
-			if (usercourseResult.length === 0) {
-				// Handle the case where no usercourseid is found for the given studentnumber
-				console.error('Usercourse not found for the studentnumber:', studentnumber);
-				return Promise.reject('Usercourse not found');
-			}
-
-			const usercourseid = usercourseResult[0].usercourseid;
-
-			// Check if attendance with usercourseid already exists
-			const [attendanceResultCheck] = (await pool
-				.promise()
-				.query('SELECT * FROM attendance WHERE usercourseid = ?', [
-					usercourseid,
-				])) as RowDataPacket[];
-
-			if (attendanceResultCheck.length > 0) {
-				// Handle the case where attendance with usercourseid already exists
-				console.error(
-					'Attendance already exists for the usercourseid:',
-					usercourseid,
-				);
-				return Promise.reject('Attendance already exists');
-			}
-
-			// Insert into attendance
-			const [insertResult] = (await pool
-				.promise()
-				.query(
-					'INSERT INTO attendance (status, date, usercourseid, lectureid) VALUES (?, ?, ?, ?)',
-					[status, date, usercourseid, lectureid],
-				)) as ResultSetHeader[];
-
-			// Get the inserted row
-			const [attendanceResult] = (await pool
-				.promise()
-				.query('SELECT * FROM attendance WHERE attendanceid = ?', [
-					insertResult.insertId,
-				])) as RowDataPacket[];
-
-			// Return the inserted row
-			return attendanceResult[0];
-		} catch (error) {
-			console.error(error);
-			return Promise.reject(error);
-		}
-	},
-
 	async getAttendanceByUserCourseIdDateLectureId(
 		usercourseid: number,
 		date: string,
@@ -255,6 +198,19 @@ const attendanceModel: AttendanceModel = {
 			WHERE coursetopics.courseid = ?
 			GROUP BY topics.topicname;`,
 			[courseid],
+		);
+		return result;
+	},
+	async deleteAttendance(usercourseid: number, lectureid: number) {
+		const [result] = await pool
+			.promise()
+			.query('DELETE FROM attendance WHERE usercourseid = ? AND lectureid = ?', [
+				usercourseid,
+				lectureid,
+			]);
+		console.log(
+			'🚀 ~ file: attendancemodel.ts:212 ~ deleteAttendance ~ result:',
+			result,
 		);
 		return result;
 	},
