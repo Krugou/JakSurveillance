@@ -38,11 +38,7 @@ const Attendees: React.FC<AttendeesProps> = ({
 							title={`${student.first_name} ${student.last_name}`}
 							onClick={() => {
 								if (socket) {
-									const studentName = `${student.first_name} ${student.last_name}`;
-									const confirmMessage = `Are you sure you want to add ${studentName} as not attended?`;
-									if (window.confirm(confirmMessage)) {
-										socket.emit('manualStudentRemove', student.studentnumber, lectureid);
-									}
+									socket.emit('manualStudentRemove', student.studentnumber, lectureid);
 								}
 							}}
 						>
