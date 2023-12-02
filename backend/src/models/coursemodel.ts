@@ -395,31 +395,31 @@ const course: CourseModel = {
 	},
 	async getCoursesWithDetails(): Promise<Course[]> {
 		try {
-			const [rows]: RowDataPacket[][] = await pool
-				.promise()
-				.query<RowDataPacket[]>(
-					`SELECT 
-                courses.courseid,
-                courses.name,
-                courses.start_date,
-                courses.end_date,
-                courses.code,
-                studentgroups.group_name AS student_group,
-                topics.topicname,
-                instructors.email AS instructor_email
-            FROM 
-                courses
-            LEFT JOIN 
-                studentgroups ON courses.studentgroupid = studentgroups.studentgroupid
-            LEFT JOIN 
-                coursetopics ON courses.courseid = coursetopics.courseid
-            LEFT JOIN 
-                topics ON coursetopics.topicid = topics.topicid
-            LEFT JOIN 
-                courseinstructors ON courses.courseid = courseinstructors.courseid
-            LEFT JOIN 
-                users AS instructors ON courseinstructors.userid = instructors.userid;`,
-				);
+			const [rows]: RowDataPacket[][] = await pool.promise().query<
+				RowDataPacket[]
+			>(`
+        SELECT 
+            courses.courseid,
+            courses.name,
+            courses.start_date,
+            courses.end_date,
+            courses.code,
+            studentgroups.group_name AS student_group,
+            topics.topicname,
+            instructors.email AS instructor_email
+        FROM 
+            courses
+        LEFT JOIN 
+            studentgroups ON courses.studentgroupid = studentgroups.studentgroupid
+        LEFT JOIN 
+            coursetopics ON courses.courseid = coursetopics.courseid
+        LEFT JOIN 
+            topics ON coursetopics.topicid = topics.topicid
+        LEFT JOIN 
+            courseinstructors ON courses.courseid = courseinstructors.courseid
+        LEFT JOIN 
+            users AS instructors ON courseinstructors.userid = instructors.userid;
+    `);
 
 			// Transform the flat data structure into a nested one
 			const courses = rows.reduce((acc, row) => {
@@ -440,7 +440,9 @@ const course: CourseModel = {
 					});
 				} else {
 					acc[courseIndex].topics.push(row.topicname);
-					acc[courseIndex].instructors.push(row.instructor_email);
+					if (!acc[courseIndex].instructors.includes(row.instructor_email)) {
+						acc[courseIndex].instructors.push(row.instructor_email);
+					}
 				}
 
 				return acc;
