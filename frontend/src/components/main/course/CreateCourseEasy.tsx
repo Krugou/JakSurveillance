@@ -5,6 +5,7 @@ import {UserContext} from '../../../contexts/UserContext.tsx';
 import apiHooks from '../../../hooks/ApiHooks';
 import AddTeachers from './createcourse/AddTeachers';
 import CourseDetails from './createcourse/CourseDetails';
+import CreateCourseProgress from './createcourse/CreateCourseProgress.tsx';
 import StepButtons from './createcourse/StepButtons';
 import StudentList from './createcourse/StudentList';
 import TopicGroupAndTopicsSelector from './createcourse/TopicsGroupAndTopics';
@@ -200,6 +201,10 @@ const CreateCourseEasy: React.FC = () => {
 	}, [instructorEmail]);
 	return (
 		<div className="w-full">
+			{currentStep && (
+				<CreateCourseProgress currentStep={currentStep} createCourseMode="easy" />
+			)}
+			
 			<form onSubmit={handleSubmit} className={getFormClassName()}>
 				{currentStep === 1 && (
 					<fieldset>

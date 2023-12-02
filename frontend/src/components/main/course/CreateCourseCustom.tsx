@@ -5,6 +5,7 @@ import {UserContext} from '../../../contexts/UserContext.tsx';
 import apiHooks from '../../../hooks/ApiHooks';
 import AddTeachers from './createcourse/AddTeachers';
 import CourseDetails from './createcourse/CourseDetails';
+import CreateCourseProgress from './createcourse/CreateCourseProgress.tsx';
 import StepButtons from './createcourse/StepButtons';
 import StudentList from './createcourse/StudentList';
 import TopicGroupAndTopicsSelector from './createcourse/TopicsGroupAndTopics';
@@ -132,6 +133,9 @@ const CreateCourseCustom: React.FC = () => {
 
 	return (
 		<div className="w-full m-auto">
+			{currentStep && (
+				<CreateCourseProgress currentStep={currentStep} createCourseMode="custom" />
+			)}
 			<form onSubmit={event => handleSubmit(event)} className={getFormClassName()}>
 				{currentStep === 1 && (
 					<CourseDetails
