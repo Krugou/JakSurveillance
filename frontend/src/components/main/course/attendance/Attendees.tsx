@@ -26,7 +26,7 @@ const Attendees: React.FC<AttendeesProps> = ({
 					return (
 						<p
 							key={index}
-							className={`flex items-center justify-center m-2 p-2 rounded shadow-md ${
+							className={`flex items-center cursor-pointer justify-center m-2 p-2 rounded shadow-md ${
 								index % 4 === 0
 									? 'bg-metropoliaSupportRed text-white'
 									: index % 4 === 1
