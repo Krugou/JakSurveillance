@@ -171,6 +171,17 @@ const setupSocketHandlers = (io: Server) => {
 			}
 			// Update the hash every `speedOfHashChange` milliseconds
 			updateHash();
+			setTimeout(() => {
+				io
+					.to(lectureid)
+					.emit(
+						'updateAttendanceCollectionData',
+						hash,
+						lectureid,
+						presentStudents[lectureid],
+						notYetPresentStudents[lectureid],
+					);
+			}, 1000);
 			setInterval(updateHash, speedOfHashChange);
 			// Emit the hash to the room with the lectureid
 			const intervalId = setInterval(() => {
