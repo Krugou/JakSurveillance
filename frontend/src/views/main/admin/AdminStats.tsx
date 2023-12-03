@@ -73,8 +73,8 @@ const AdminStats = () => {
 	}
 
 	return (
-		<div className="flex flex-col items-center justify-center bg-white w-1/2">
-			<h2 className="mb-4">Admin Stats</h2>
+		<div className="flex flex-col items-center justify-center bg-white p-5 w-1/2">
+			<h2 className="mb-4 text-xl">Admin Stats</h2>
 			<Button
 				variant="contained"
 				color="primary"

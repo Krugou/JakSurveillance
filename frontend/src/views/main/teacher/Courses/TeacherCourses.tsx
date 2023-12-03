@@ -47,7 +47,7 @@ const TeacherCourses: React.FC = () => {
 	return (
 		<div className="w-full">
 			<h2 className="font-bold text-3xl text-center xl:text-4xl">My courses</h2>
-			<div className="w-full m-auto sm:w-3/4 md:w-2/4 lg:w-2/5 2xl:w-1/5">
+			<div className="grid 2xl:w-3/4 md:w-full sm:w-3/4 w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-4 m-auto">
 				<CourseData courseData={courses} updateView={updateView} />
 			</div>
 		</div>

@@ -152,7 +152,7 @@ const CourseData: React.FC<CourseDataProps> = ({courseData, updateView}) => {
 									/>
 								</>
 							) : (
-								<div className="flex">
+								<div className="flex justify-between">
 									<GeneralLinkButton
 										path={`/teacher/courses/${course.courseid}`}
 										text="View details"

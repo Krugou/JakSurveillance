@@ -55,7 +55,7 @@ const AdminUsers: React.FC = () => {
 		}
 	}, [user]);
 	return (
-		<div className="relative">
+		<div className="relative lg:w-fit w-full">
 			{isLoading ? (
 				<div className="flex justify-center items-center h-full">
 					<CircularProgress />
@@ -66,7 +66,7 @@ const AdminUsers: React.FC = () => {
 				</div>
 			) : (
 				<>
-					<div className="w-1/4 m-4 p-4">
+					<div className="lg:w-1/4 sm:w-[20em] w-1/2 mt-4 mb-4">
 						<InputField
 							type="text"
 							name="search"
@@ -76,8 +76,8 @@ const AdminUsers: React.FC = () => {
 							label="Search"
 						/>
 					</div>
-					<div className="h-1/2 relative overflow-x-scroll">
-						<div className="max-h-96 h-96 overflow-y-scroll relative">
+					<div className="relative bg-gray-100">
+						<div className="relative max-h-96 h-96 overflow-y-scroll">
 							<table className="table-auto w-full">
 								<thead className="sticky top-0 bg-white z-10">
 									<tr>

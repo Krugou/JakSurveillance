@@ -139,6 +139,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 						onChange={handleSearchChange}
 						className="w-1/6 mt-10 p-4 m-2 border border-black rounded"
 					/>
+					<div className="flex gap-2">
 					<Tooltip title="Print to pdf">
 						<button
 							onClick={handleExportToPDF}
@@ -155,6 +156,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 							<GetAppIcon fontSize="large" />
 						</button>
 					</Tooltip>
+					</div>
 					<FormControl className="md:w-1/4 mt-2 md:mt-0">
 						<label>Sort Topics:</label>
 						<Select

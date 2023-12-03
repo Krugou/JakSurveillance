@@ -3,7 +3,7 @@ import VideoDropdown from '../../../components/main/dropdown/VideoDropdown'; // 
 
 const AdminHelpVideos: React.FC = () => {
 	return (
-		<div className="bg-gray-100 p-5">
+		<div className="w-full p-5">
 			<h1 className="text-2xl font-semibold mb-10 text-center">
 				Admin Help Videos
 			</h1>

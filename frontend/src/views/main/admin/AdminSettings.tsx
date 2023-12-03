@@ -62,7 +62,7 @@ const AdminSettings = () => {
 	}
 
 	return (
-		<Container maxWidth="md" className="my-8 p-4 md:p-8">
+		<Container maxWidth="md" className="my-8 bg-white rounded-lg p-4 md:p-8">
 			<Grid container spacing={3}>
 				<Grid item xs={12}>
 					<Typography variant="h4" className="mb-4">
