@@ -114,14 +114,14 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 		additionalClasses = 'grid-cols-1 md:grid-cols-2';
 
 	} else if (courses.length >= 3) {
-		additionalClasses = 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3';
+		additionalClasses = 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 h-fit sm:max-h-[20em] overflow-hidden sm:overflow-y-scroll';
 	}
 	else if (courses.length === 1) {
 		additionalClasses = 'grid-cols-1';
 	}
 
 	return (
-		<div className={`grid ${additionalClasses} h-fit sm:max-h-[20em] overflow-hidden sm:overflow-y-scroll gap-4 mt-4`}>
+		<div className={`grid ${additionalClasses} gap-4 mt-4`}>
 			{courses
 				.filter(course => {
 					const endDate = new Date(course.endDate);
