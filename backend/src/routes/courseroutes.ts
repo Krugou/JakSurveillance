@@ -1,12 +1,12 @@
-import {config} from 'dotenv';
-import express, {Request, Response, Router} from 'express';
-import {body, validationResult} from 'express-validator';
+import { config } from 'dotenv';
+import express, { Request, Response, Router } from 'express';
+import { body, validationResult } from 'express-validator';
 import multer from 'multer';
 import XLSX from 'xlsx';
 import courseController from '../controllers/coursecontroller.js';
 import course from '../models/coursemodel.js';
 import usermodel from '../models/usermodel.js';
-import {CourseDetails, CourseUser, IData, Item} from '../types.js';
+import { CourseDetails, CourseUser, IData, Item } from '../types.js';
 import checkUserRole from '../utils/checkRole.js';
 import openData from '../utils/opendata.js';
 import attendanceRoutes from './course/attendanceRoutes.js';
