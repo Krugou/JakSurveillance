@@ -5,7 +5,7 @@
 	"description": "A script to generate scores for GitHub repository contributors",
 	"main": "generateScores.js",
 	"scripts": {
-		"start": "node generateScores.js && cd ../frontend && npm i && npm run docs && cd ../backend && npm i && npm run docs"
+		"start": "node generateScores.js"
 	},
 	"dependencies": {
 		"@octokit/rest": "^18.10.0",
