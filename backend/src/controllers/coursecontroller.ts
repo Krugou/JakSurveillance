@@ -307,15 +307,15 @@ const courseController = {
 			throw error;
 		}
 	},
-	removeStudentCourses: async (userid: number, courseid: number) => {
+	removeStudentCourses: async (usercourseid: number) => {
 		try {
-			const existingUserCourse = await userCourseModel.checkIfUserCourseExists(
-				userid,
-				courseid,
+			const existingUserCourse = await userCourseModel.getUserCourseByUsercourseid(
+				usercourseid,
 			);
+
 			if (existingUserCourse.length > 0) {
 				// Insert the user into the course
-				await userCourseModel.deleteUserCourse(userid, courseid);
+				await userCourseModel.deleteUserCourseByUsercourseid(usercourseid);
 			} else {
 				throw new Error('User is not enrolled on this course');
 			}

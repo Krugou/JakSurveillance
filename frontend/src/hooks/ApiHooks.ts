@@ -1,3 +1,5 @@
+import {alertClasses} from '@mui/material';
+
 ('use strict');
 
 const baseUrl =
@@ -626,8 +628,7 @@ const updateStudentCourses = async (
 };
 const deleteStudentFromCourse = async (
 	token: string,
-	userid: number | undefined,
-	courseid: number | undefined,
+	usercourseid: number | undefined,
 ) => {
 	const options = {
 		method: 'DELETE',
@@ -635,7 +636,7 @@ const deleteStudentFromCourse = async (
 			Authorization: 'Bearer ' + token,
 		},
 	};
-	const url = `${baseUrl}courses/deleteusercourse/${userid}/${courseid}`;
+	const url = `${baseUrl}courses/deleteusercourse/${usercourseid}`;
 	return doFetch(url, options);
 };
 

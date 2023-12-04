@@ -43,6 +43,18 @@ const usercoursesModel = {
 
 		return result;
 	},
+	async getUserCourseByUsercourseid(usercourseid: number) {
+		const [usercourseResult] = await pool
+			.promise()
+			.query('SELECT * FROM usercourses WHERE usercourseid = ?', usercourseid);
+		return usercourseResult;
+	},
+	async deleteUserCourseByUsercourseid(usercourseid: number) {
+		const result = await pool
+			.promise()
+			.query('DELETE FROM usercourses WHERE usercourseid = ?', usercourseid);
+		return result;
+	},
 };
 
 export default usercoursesModel;

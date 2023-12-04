@@ -455,12 +455,12 @@ router.post(
 	},
 );
 router.delete(
-	'/deleteusercourses/:userid/:courseid',
+	'/deleteusercourse/:usercourseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	async (req: Request, res: Response) => {
-		const {userid, courseid} = req.params;
+		const {usercourseid} = req.params;
 		try {
-			await courseController.removeStudentCourses(userid, courseid);
+			await courseController.removeStudentCourses(usercourseid);
 			res.status(200).json({message: 'Successfully deleted student courses'});
 		} catch (error) {
 			console.error(error);
