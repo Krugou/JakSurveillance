@@ -73,7 +73,10 @@ const TeacherCourseModify: React.FC = () => {
 		if (courseData) {
 			setCourseCode(courseData.code);
 			setCourseName(courseData.name);
-			setStudentGroup(courseData.studentgroup_name);
+
+			setStudentGroup(
+				courseData.studentgroup_name ? courseData.studentgroup_name : '',
+			);
 			const startDate = new Date(courseData.start_date || '')
 				.toISOString()
 				.slice(0, 16);
