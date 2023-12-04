@@ -71,6 +71,9 @@ const TeacherStudentDetail: React.FC = () => {
 			if (!token) {
 				throw new Error('No token available');
 			}
+			if (!courseid) {
+				throw new Error('No course selected');
+			}
 			const response = await apiHooks.updateStudentCourses(
 				token,
 				student?.userid,
