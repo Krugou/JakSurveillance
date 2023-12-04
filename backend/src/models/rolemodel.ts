@@ -1,6 +1,7 @@
 import {FieldPacket, RowDataPacket} from 'mysql2';
-import pool from '../config/adminDBPool.js';
+import createPool from '../config/createPool.js';
 
+const pool = createPool('ADMIN');
 interface Role {
 	roleid: number;
 	rolename: string;

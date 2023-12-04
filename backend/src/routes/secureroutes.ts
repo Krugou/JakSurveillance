@@ -1,8 +1,10 @@
 import express, {Request, Response, Router} from 'express';
+import createPool from '../config/createPool.js';
+import serverSettingsModel from '../models/serversettingsmodel.js';
 import usermodel from '../models/usermodel.js';
 import checkUserRole from '../utils/checkRole.js';
-import serverSettingsModel from '../models/serversettingsmodel.js';
-import pool from '../config/adminDBPool.js';
+
+const pool = createPool('ADMIN');
 const router: Router = express.Router();
 
 router.get('/', (req: Request, res: Response) => {

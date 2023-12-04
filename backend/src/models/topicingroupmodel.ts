@@ -1,6 +1,7 @@
 import {RowDataPacket} from 'mysql2';
-import pool from '../config/adminDBPool.js';
+import createPool from '../config/createPool.js';
 
+const pool = createPool('ADMIN');
 const topicsingroupModel = {
 	async checkIfTopicInGroupExists(topicGroupId: number, topicId: number) {
 		const [existingTopicInGroup] = await pool

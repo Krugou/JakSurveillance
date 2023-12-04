@@ -1,6 +1,7 @@
 import {ResultSetHeader, RowDataPacket} from 'mysql2';
-import pool from '../config/adminDBPool.js';
+import createPool from '../config/createPool.js';
 
+const pool = createPool('ADMIN');
 interface Course {
 	// Define the properties of a Course here
 	// For example:

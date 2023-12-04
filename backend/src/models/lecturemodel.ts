@@ -5,7 +5,9 @@ import {
 	ResultSetHeader,
 	RowDataPacket,
 } from 'mysql2';
-import pool from '../config/adminDBPool.js';
+import createPool from '../config/createPool.js';
+
+const pool = createPool('ADMIN');
 interface Lecture {
 	lectureid: number;
 	start_date: Date;

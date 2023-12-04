@@ -1,5 +1,7 @@
 import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
-import pool from '../config/adminDBPool.js';
+import createPool from '../config/createPool.js';
+
+const pool = createPool('ADMIN');
 /**
  * @method countTopics
  * @description Counts the number of topics in the database.

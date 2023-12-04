@@ -1,10 +1,11 @@
+import createPool from '../config/createPool.js';
 import TopicGroupModel from '../models/topicgroupmodel.js';
 import TopicInGroupModel from '../models/topicingroupmodel.js';
 import TopicModel from '../models/topicmodel.js';
-import UserModel from '../models/usermodel.js';
 import usercourse_topicsModel from '../models/usercourse_topicsmodel.js';
-import pool from '../config/adminDBPool.js';
+import UserModel from '../models/usermodel.js';
 
+const pool = createPool('ADMIN');
 const TopicGroupController = {
 	async getAllUserTopicGroupsAndTopics(email: string) {
 		try {

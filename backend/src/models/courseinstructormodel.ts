@@ -1,6 +1,7 @@
-import { ResultSetHeader } from 'mysql2';
-import pool from '../config/adminDBPool.js';
+import {ResultSetHeader} from 'mysql2';
+import createPool from '../config/createPool.js';
 
+const pool = createPool('ADMIN');
 const courseinstructorsModel = {
 	async insertCourseInstructor(instructoruserid: number, courseId: number) {
 		const [instructorResult] = await pool

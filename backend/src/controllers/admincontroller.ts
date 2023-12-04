@@ -1,6 +1,8 @@
 import {Request, Response} from 'express';
-import pool from '../config/adminDBPool.js';
+import createPool from '../config/createPool.js';
 import ServerSettingsModel from '../models/serversettingsmodel.js';
+
+const pool = createPool('ADMIN');
 interface AdminController {
 	getServerSettings: (_req: Request, res: Response) => Promise<any>;
 	updateServerSettings: (req: Request, res: Response) => Promise<any>;
@@ -17,7 +19,8 @@ const adminController: AdminController = {
 	},
 	async updateServerSettings(req: Request, res: Response) {
 		try {
-			const {speedofhash, leewayspeed, timeouttime, attendancethreshold} = req.body;
+			const {speedofhash, leewayspeed, timeouttime, attendancethreshold} =
+				req.body;
 			await ServerSettingsModel.updateServerSettings(
 				pool,
 				speedofhash,
