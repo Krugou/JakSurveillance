@@ -9,6 +9,7 @@ import {toast} from 'react-toastify';
 import AttendanceStatsTable from '../../../../components/main/course/attendance/AttendanceStatsTable';
 import apiHooks from '../../../../hooks/ApiHooks';
 import {UserContext} from '../../../../contexts/UserContext';
+import {useCourses} from '../../../../hooks/courseHooks';
 import {
 	exportStatsTableToExcel,
 	exportStatsTableToPdf,
@@ -39,7 +40,7 @@ const TeacherCourseStats = () => {
 	const {courseid} = useParams<{courseid: string}>();
 	const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 	const [threshold, setThreshold] = useState(null);
-	const [courses, setCourses] = useState<Course[]>([]);
+	const courses = useCourses();
 	const navigate = useNavigate();
 	const {user} = useContext(UserContext);
 	const [allAttendanceCounts, setAllAttendanceCounts] = useState<
@@ -63,24 +64,6 @@ const TeacherCourseStats = () => {
 
 	// This function is called when the component is first rendered
 	useEffect(() => {
-		const fetchCourses = async () => {
-			try {
-				const token: string | null = localStorage.getItem('userToken');
-				if (!token) {
-					throw new Error('No token available');
-				}
-				// Fetch all courses using the token
-
-				const response = await apiHooks.getAllCourses(token);
-				console.log(response, 'response');
-				// Set the fetched courses to the state
-				setCourses(response);
-			} catch (error) {
-				// Show an error message if there's an error fetching courses
-				toast.error('Error fetching courses');
-			}
-		};
-		fetchCourses();
 		getThreshold();
 	}, []);
 	console.log(courses, 'courses');

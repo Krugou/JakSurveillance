@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import ReportIcon from '@mui/icons-material/Report';
 import Tooltip from '@mui/material/Tooltip';
@@ -6,6 +6,11 @@ import {UserContext} from '../../../contexts/UserContext';
 import EditTopicsModal from '../modals/EditTopicsModal';
 import {toast} from 'react-toastify';
 import apiHooks from '../../../hooks/ApiHooks';
+import {Modal} from '@mui/material';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import {useCourses} from '../../../hooks/courseHooks';
+
 interface Course {
 	courseid: number;
 	course_name: string;
@@ -39,6 +44,18 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 	const [usercourseid, setUsercourseid] = useState<number>(0);
 	const [open, setOpen] = useState(false);
 	const [newTopic, setNewTopic] = useState('');
+	const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+
+	const [editCourseOpen, setEditCourseOpen] = useState(false);
+	const editCourses = useCourses();
+
+	const handleOpenEditCourse = () => {
+		setEditCourseOpen(true);
+	};
+
+	const handleCloseEditCourse = () => {
+		setEditCourseOpen(false);
+	};
 
 	// Open and close the modal
 	const handleOpen = (
@@ -112,13 +129,27 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 
 	if (courses.length === 2) {
 		additionalClasses = 'grid-cols-1 md:grid-cols-2';
-
 	} else if (courses.length >= 3) {
-		additionalClasses = 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 h-fit sm:max-h-[20em] overflow-hidden sm:overflow-y-scroll';
-	}
-	else if (courses.length === 1) {
+		additionalClasses =
+			'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 h-fit sm:max-h-[20em] overflow-hidden sm:overflow-y-scroll';
+	} else if (courses.length === 1) {
 		additionalClasses = 'grid-cols-1';
 	}
+	const handleCourseSelect = (value: string) => {
+		const selected = editCourses.find(
+			course => `${course.course_name} ${course.code}` === value,
+		);
+		setSelectedCourse(selected || null);
+	};
+	const handleAddStudentToCourse = () => {
+		if (selectedCourse) {
+			apiHooks
+				// Add the student to the selected course
+
+				// You'll need to implement this function yourself
+				.addStudentToCourse(selectedCourse);
+		}
+	};
 
 	return (
 		<div className={`grid ${additionalClasses} gap-4 mt-4`}>
@@ -247,6 +278,67 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 						</Tooltip>
 					);
 				})}
+			{user?.role !== 'student' && (
+				<>
+					<div
+						className="flex items-center justify-center text-center bg-gray-200 rounded-lg p-4 cursor-pointer transition-colors duration-200 ease-in-out hover:bg-gray-300"
+						onClick={() => {
+							handleOpenEditCourse();
+						}}
+					>
+						<button className="flex flex-col items-center">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								className="h-8 w-8 mb-2"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+								/>
+							</svg>
+							Add student to another course
+						</button>
+					</div>
+					<Modal open={editCourseOpen} onClose={handleCloseEditCourse}>
+						<div className="flex items-center justify-center">
+							<div className="bg-white rounded-lg p-8 m-4 max-w-xl mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+								<div className="flex justify-between sm:justify-around">
+									<Autocomplete
+										className="sm:w-[20em] w-1/2"
+										freeSolo
+										options={editCourses.map(course => `${course.name} ${course.code}`)}
+										onChange={(_, value) => handleCourseSelect(value)}
+										value={
+											selectedCourse
+												? `${selectedCourse.name} ${selectedCourse.code}`
+												: null
+										}
+										renderInput={params => (
+											<TextField
+												{...params}
+												label="Search courses"
+												margin="normal"
+												variant="outlined"
+											/>
+										)}
+									/>
+									<button
+										className="m-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+										onClick={handleAddStudentToCourse}
+									>
+										Add to course
+									</button>
+								</div>
+							</div>
+						</div>
+					</Modal>
+				</>
+			)}
 		</div>
 	);
 };

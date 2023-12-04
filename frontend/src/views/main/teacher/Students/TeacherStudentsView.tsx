@@ -81,13 +81,13 @@ const TeacherStudentsView: React.FC = () => {
 						type="text"
 						name="search"
 						value={searchTerm}
-						onChange={(e) => setSearchTerm(e.target.value)}
+						onChange={e => setSearchTerm(e.target.value)}
 						placeholder="Search..."
 						label="Search by name"
 					/>
 				</div>
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-					{filteredStudents.map((student) => (
+					{filteredStudents.map(student => (
 						<div
 							key={student.userid}
 							className="mb-4 mx-1 lg:mx-2 xl:mx-4 bg-white rounded shadow-lg max-w-full w-12/12"
@@ -99,22 +99,26 @@ const TeacherStudentsView: React.FC = () => {
 								{student.email && <p>Email: </p>}
 								<p>{student.email}</p>
 								<div className="flex flex-col gap-3 mt-3">
-								{student.username && <p>Username: {student.username}</p>}
-								{student.studentnumber && <p>Student Number: {student.studentnumber}</p>}
-								{student.group_name && <p>Student Group: {student.group_name}</p>}
-								{student.created_at && (
-									<p>Account created: {new Date(student.created_at).toLocaleString()}</p>
-								)}
-								<div className="flex flex-wrap items-center justify-between">
-									<GeneralLinkButton
-										path={`/${user?.role}/students/${student.userid}`}
-										text="Details"
-									/>
-									<GeneralLinkButton
-										path={`/${user?.role}/students/${student.userid}/attendances`}
-										text="Attendance"
-									/>
-								</div>
+									{student.username && <p>Username: {student.username}</p>}
+									{student.studentnumber && (
+										<p>Student Number: {student.studentnumber}</p>
+									)}
+									{student.group_name && <p>Student Group: {student.group_name}</p>}
+									{student.created_at && (
+										<p>
+											Account created: {new Date(student.created_at).toLocaleString()}
+										</p>
+									)}
+									<div className="flex flex-wrap items-center justify-between">
+										<GeneralLinkButton
+											path={`/${user?.role}/students/${student.userid}`}
+											text="Details"
+										/>
+										<GeneralLinkButton
+											path={`/${user?.role}/students/${student.userid}/attendances`}
+											text="Attendance"
+										/>
+									</div>
 								</div>
 							</div>
 						</div>
