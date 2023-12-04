@@ -66,11 +66,19 @@ interface CourseModel {
 		studentGroupId: number,
 	): Promise<ResultSetHeader>;
 	deleteCourse(courseId: number): Promise<string>;
-	
-	
 }
 const course: CourseModel = {
-	async fetchAllCourses() {},
+	async fetchAllCourses() {
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT * FROM courses');
+			return rows;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
 
 	async findByCourseId(id) {
 		try {
@@ -258,7 +266,7 @@ const course: CourseModel = {
 		}
 	},
 
-	async deleteCourse(courseId: number):  Promise<string>{
+	async deleteCourse(courseId: number): Promise<string> {
 		try {
 			// Disable foreign key checks
 
