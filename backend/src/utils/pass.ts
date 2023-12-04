@@ -1,6 +1,6 @@
 'use strict';
 import {config} from 'dotenv';
-import {User} from '../types.js';
+import {DoneFunction, DoneJwtFunction, JwtPayload, User} from '../types.js';
 config();
 
 // Import necessary modules and dependencies
@@ -11,13 +11,6 @@ import UserModel from '../models/usermodel.js'; // Import the UserModel without 
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 
-interface DoneFunction {
-	(
-		error: null | Error,
-		user?: false | User | undefined,
-		options?: {message: string},
-	): void;
-}
 // Define a local strategy for email and password login
 passport.use(
 	new Strategy(async (email: string, _password: string, done: DoneFunction) => {
@@ -37,14 +30,6 @@ passport.use(
 		}
 	}),
 );
-
-interface JwtPayload {
-	[key: string]: unknown;
-}
-
-interface DoneJwtFunction {
-	(error: unknown, user?: JwtPayload): void;
-}
 
 // Define a JWT strategy for handling JSON Web Tokens
 passport.use(

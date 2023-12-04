@@ -95,3 +95,17 @@ export interface CourseUser {
 	email: string;
 	userrole: number;
 }
+export interface DoneFunction {
+	(
+		error: null | Error,
+		user?: false | User | undefined,
+		options?: {message: string},
+	): void;
+}
+export interface JwtPayload {
+	[key: string]: unknown;
+}
+
+export interface DoneJwtFunction {
+	(error: unknown, user?: JwtPayload): void;
+}
