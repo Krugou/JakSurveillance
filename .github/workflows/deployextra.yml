@@ -46,6 +46,7 @@ jobs:
 
    - name: Generate frontend docs
      run: npm run docs
+     continue-on-error: true
      working-directory: frontend
 
    - name: Install backend dependencies
@@ -54,6 +55,7 @@ jobs:
 
    - name: Generate backend docs
      run: npm run docs
+     continue-on-error: true
      working-directory: backend
    - name: Setup Pages
      uses: actions/configure-pages@v3
