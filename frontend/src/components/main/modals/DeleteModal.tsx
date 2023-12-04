@@ -5,12 +5,14 @@ interface DeleteModalProps {
 	isOpen: boolean;
 	onDelete: () => void;
 	onClose: () => void;
+	student?: boolean;
 }
 
 const DeleteModal: React.FC<DeleteModalProps> = ({
 	isOpen,
 	onDelete,
 	onClose,
+	student = false,
 }) => {
 	if (!isOpen) {
 		return null;
@@ -30,9 +32,15 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
 					Confirmation
 				</h3>
 				<div className="mt-2">
-					<p className="text-base text-gray-500">
-						Are you sure you want to delete this course?
-					</p>
+					{student ? (
+						<p className="text-base text-gray-500">
+							Are you sure you want to delete student from this course?
+						</p>
+					) : (
+						<p className="text-base text-gray-500">
+							Are you sure you want to delete this course?
+						</p>
+					)}
 				</div>
 				<div className="bg-white mt-2  sm:px-6 sm:flex sm:flex-row-reverse">
 					<button

@@ -624,6 +624,21 @@ const updateStudentCourses = async (
 	const url = `${baseUrl}courses/updateusercourses/${userid}/${courseid}`;
 	return doFetch(url, options);
 };
+const deleteStudentFromCourse = async (
+	token: string,
+	userid: number | undefined,
+	courseid: number | undefined,
+) => {
+	const options = {
+		method: 'DELETE',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	const url = `${baseUrl}courses/deleteusercourse/${userid}/${courseid}`;
+	return doFetch(url, options);
+};
+
 const apiHooks = {
 	getRoleCounts,
 	checkStudentNumberExists,
@@ -667,5 +682,6 @@ const apiHooks = {
 	getDetailsByCourseId,
 	getAttendanceThreshold,
 	updateStudentCourses,
+	deleteStudentFromCourse,
 };
 export default apiHooks;

@@ -89,6 +89,27 @@ const TeacherStudentDetail: React.FC = () => {
 		}
 	};
 
+	const handleRemoveStudentFromCourse = async (
+		usercourseid: number | undefined,
+	) => {
+		try {
+			if (!token) {
+				throw new Error('No token available');
+			}
+			if (!usercourseid) {
+				throw new Error('No course selected');
+			}
+			const response = await apiHooks.deleteStudentFromCourse(token, usercourseid);
+			console.log(response);
+			// Remove the student from the selected course
+			toast.success('Student removed from course');
+			// You'll need to implement this function yourself
+		} catch (error) {
+			console.log(error);
+			error instanceof Error && toast.error(error.message);
+		}
+	};
+
 	// If the student state variable is null, show a loading indicator
 	if (!student) {
 		return <div>Loading...</div>;
@@ -113,6 +134,7 @@ const TeacherStudentDetail: React.FC = () => {
 					showEndedCourses={true}
 					updateView={updateView}
 					handleAddStudentToCourse={handleAddStudentToCourse}
+					handleRemoveStudentFromCourse={handleRemoveStudentFromCourse}
 				/>
 			</div>
 		</div>

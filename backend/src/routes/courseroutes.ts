@@ -1,12 +1,12 @@
-import { config } from 'dotenv';
-import express, { Request, Response, Router } from 'express';
-import { body, validationResult } from 'express-validator';
+import {config} from 'dotenv';
+import express, {Request, Response, Router} from 'express';
+import {body, validationResult} from 'express-validator';
 import multer from 'multer';
 import XLSX from 'xlsx';
 import courseController from '../controllers/coursecontroller.js';
 import course from '../models/coursemodel.js';
 import usermodel from '../models/usermodel.js';
-import { CourseDetails, CourseUser, IData, Item } from '../types.js';
+import {CourseDetails, CourseUser, IData, Item} from '../types.js';
 import checkUserRole from '../utils/checkRole.js';
 import openData from '../utils/opendata.js';
 import attendanceRoutes from './course/attendanceRoutes.js';
@@ -451,6 +451,20 @@ router.post(
 				errorMessage = error.message;
 			}
 			res.status(500).json({message: errorMessage});
+		}
+	},
+);
+router.delete(
+	'/deleteusercourses/:userid/:courseid',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	async (req: Request, res: Response) => {
+		const {userid, courseid} = req.params;
+		try {
+			await courseController.removeStudentCourses(userid, courseid);
+			res.status(200).json({message: 'Successfully deleted student courses'});
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({message: error.message || 'Internal server error'});
 		}
 	},
 );

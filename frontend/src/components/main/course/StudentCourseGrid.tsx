@@ -10,6 +10,9 @@ import {Modal} from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import {useCourses} from '../../../hooks/courseHooks';
+import Delete from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
+import DeleteModal from '../modals/DeleteModal';
 
 interface Course {
 	courseid: number;
@@ -35,6 +38,7 @@ interface StudentCourseGridProps {
 	showEndedCourses: boolean;
 	updateView?: () => void;
 	handleAddStudentToCourse?: (courseid: number | undefined) => void;
+	handleRemoveStudentFromCourse?: (usercourseid: number) => void;
 }
 
 const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
@@ -42,6 +46,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 	showEndedCourses,
 	updateView,
 	handleAddStudentToCourse,
+	handleRemoveStudentFromCourse,
 }) => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
@@ -55,6 +60,8 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 	const [selectedCourse, setSelectedCourse] = useState<SelectedCourse | null>(
 		null,
 	);
+
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
 	const [editCourseOpen, setEditCourseOpen] = useState(false);
 	const editCourses = useCourses();
@@ -150,7 +157,11 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 		);
 		setSelectedCourse(selected || null);
 	};
-
+	const handleDeleteCourse = usercourseid => {
+		handleRemoveStudentFromCourse && handleRemoveStudentFromCourse(usercourseid);
+		// Your delete logic here...
+		setIsDeleteModalOpen(false); // Close the modal
+	};
 	return (
 		<div className={`grid ${additionalClasses} gap-4 mt-4`}>
 			{courses
@@ -237,7 +248,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 								>
 									Attendance
 								</button>
-								{user?.role === 'counselor' && (
+								{user?.role !== 'student' && (
 									<>
 										<button
 											className={`mt-4 font-bold py-2 px-4 rounded ${
@@ -256,6 +267,24 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 										>
 											Edit Topics for Student
 										</button>
+										<Tooltip title="Remove student from course">
+											<div className="absolute bottom-5 right-5 bg-gray-100 rounded-lg">
+												<IconButton
+													onClick={() => {
+														setIsDeleteModalOpen(true);
+													}}
+													aria-label="remove student"
+												>
+													<Delete style={{color: 'red'}} />
+												</IconButton>
+											</div>
+										</Tooltip>
+										<DeleteModal
+											isOpen={isDeleteModalOpen}
+											onDelete={() => handleDeleteCourse(course.usercourseid)}
+											student={true}
+											onClose={() => setIsDeleteModalOpen(false)}
+										/>
 										<EditTopicsModal
 											open={open}
 											setOpen={setOpen}

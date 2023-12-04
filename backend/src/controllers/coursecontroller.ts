@@ -300,7 +300,24 @@ const courseController = {
 				// Insert the user into the course
 				await userCourseModel.insertUserCourse(userid, courseid);
 			} else {
-				throw new Error('User is already enrolled in this course');
+				throw new Error('User is already enrolled on this course');
+			}
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	},
+	removeStudentCourses: async (userid: number, courseid: number) => {
+		try {
+			const existingUserCourse = await userCourseModel.checkIfUserCourseExists(
+				userid,
+				courseid,
+			);
+			if (existingUserCourse.length > 0) {
+				// Insert the user into the course
+				await userCourseModel.deleteUserCourse(userid, courseid);
+			} else {
+				throw new Error('User is not enrolled on this course');
 			}
 		} catch (error) {
 			console.error(error);

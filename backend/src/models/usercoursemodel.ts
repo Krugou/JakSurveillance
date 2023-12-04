@@ -33,6 +33,16 @@ const usercoursesModel = {
 
 		return result;
 	},
+	async deleteUserCourse(userId: number, courseId: number) {
+		const result = await pool
+			.promise()
+			.query('DELETE FROM usercourses WHERE userid = ? AND courseid = ?', [
+				userId,
+				courseId,
+			]);
+
+		return result;
+	},
 };
 
 export default usercoursesModel;
