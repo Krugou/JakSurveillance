@@ -116,4 +116,6 @@ dist-ssr
 .vscode/launch.json
 extra/scores.json
 extra/links.json
+extra/backend/
+extra/frontend/
 backend/src/database/cleardatabase.ts
