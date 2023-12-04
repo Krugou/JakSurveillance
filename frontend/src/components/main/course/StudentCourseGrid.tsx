@@ -363,6 +363,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 										onClick={() => {
 											handleAddStudentToCourse &&
 												handleAddStudentToCourse(selectedCourse?.courseid);
+											handleCloseEditCourse();
 										}}
 									>
 										Add to course

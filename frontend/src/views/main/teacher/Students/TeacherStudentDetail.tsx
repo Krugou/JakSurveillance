@@ -66,6 +66,9 @@ const TeacherStudentDetail: React.FC = () => {
 		fetchData();
 	}, [id, update]);
 
+	const updateView = () => {
+		setUpdate(!update);
+	};
 	const handleAddStudentToCourse = async (courseid: number | undefined) => {
 		try {
 			if (!token) {
@@ -80,8 +83,11 @@ const TeacherStudentDetail: React.FC = () => {
 				courseid,
 			);
 			console.log(response);
-			// Add the student to the selected course
+			// Add the student to the selected course'
+
 			toast.success('Student added to course');
+
+			updateView();
 			// You'll need to implement this function yourself
 		} catch (error) {
 			console.log(error);
@@ -103,6 +109,7 @@ const TeacherStudentDetail: React.FC = () => {
 			console.log(response);
 			// Remove the student from the selected course
 			toast.success('Student removed from course');
+			updateView();
 			// You'll need to implement this function yourself
 		} catch (error) {
 			console.log(error);
@@ -115,9 +122,6 @@ const TeacherStudentDetail: React.FC = () => {
 		return <div>Loading...</div>;
 	}
 
-	const updateView = () => {
-		setUpdate(!update);
-	};
 	return (
 		<div className="w-fit">
 			<div className="bg-gray-100 rounded-lg p-5">
