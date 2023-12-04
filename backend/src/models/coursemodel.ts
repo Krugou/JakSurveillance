@@ -14,36 +14,12 @@ interface Course {
 	instructoremail: string;
 }
 
-interface Student {
-	email: string;
-	first_name: string;
-	name: string;
-	last_name: string;
-	studentnumber: number;
-	'Arrival Group': string;
-	'Admin Groups': string;
-	Program: string;
-	'Form of Education': string;
-	Registration: string;
-	Assessment: string;
-}
-
 interface CourseModel {
 	findCourseIdUsingCourseCode(coursecode: string): Promise<RowDataPacket[]>;
 	getStudentsCourses(email: string): unknown;
 	fetchAllCourses: () => Promise<RowDataPacket[]>;
 	findByCourseId: (id: number) => Promise<Course | null>;
-	insertIntoCourse: (
-		name: string,
-		start_date: Date,
-		end_date: Date,
-		code: string,
-		group_name: string,
-		students: Student[],
-		instructoremail: string,
-		topics?: string,
-		topicgroup?: string,
-	) => Promise<void>;
+
 	deleteByCourseId: (id: number) => Promise<void>;
 	updateCourseDetails: (
 		id: number,
@@ -54,7 +30,6 @@ interface CourseModel {
 		studentgroupid: number,
 	) => Promise<void>;
 	findByCode: (code: string) => Promise<Course | null>;
-	checkIfCourseExists: (code: string) => Promise<boolean>;
 	getCoursesByInstructorEmail(email: string): Promise<Course[]>;
 	countCourses(): Promise<number>;
 	getCoursesByCourseId(courseId: number): Promise<Course[]>;
@@ -65,7 +40,20 @@ interface CourseModel {
 		code: string,
 		studentGroupId: number,
 	): Promise<ResultSetHeader>;
-	deleteCourse(courseId: number): Promise<string>;
+	getStudentsCourses(email: string): Promise<Course[]>;
+	deleteCourse(courseId: number): Promise<string | undefined>;
+	updateCourseInfo(
+		courseid: number,
+		name: string,
+		start_date: Date,
+		end_date: Date,
+		code: string,
+		studentgroupname: string,
+		instructors: string[],
+		topic_names: string[],
+	): Promise<void>;
+	getCoursesWithDetails(): Promise<Course[]>;
+	getAllStudentsOnCourse(courseId: number): Promise<RowDataPacket[]>;
 }
 const course: CourseModel = {
 	async fetchAllCourses() {
@@ -266,10 +254,9 @@ const course: CourseModel = {
 		}
 	},
 
-	async deleteCourse(courseId: number): Promise<string> {
+	async deleteCourse(courseId: number): Promise<string | undefined> {
 		try {
 			// Disable foreign key checks
-
 			// Delete the course
 			const [result] = await pool
 				.promise()
@@ -277,7 +264,7 @@ const course: CourseModel = {
 
 			if ('affectedRows' in result) {
 				// Return a success message
-				return result.affectedRows > 0;
+				return (result.affectedRows > 0).toString();
 			}
 		} catch (error) {
 			console.error(error);
@@ -453,10 +440,8 @@ const course: CourseModel = {
 	},
 	async getAllStudentsOnCourse(courseId: number): Promise<RowDataPacket[]> {
 		try {
-			const [rows]: RowDataPacket[][] = await pool
-				.promise()
-				.query<RowDataPacket[]>(
-					`SELECT 
+			const [rows] = await pool.promise().query(
+				`SELECT 
 								users.email,
 								users.first_name,
 								users.last_name,
@@ -471,8 +456,8 @@ const course: CourseModel = {
 								courses ON usercourses.courseid = courses.courseid
 						WHERE
 								courses.courseid = ?;`,
-					[courseId],
-				);
+				[courseId],
+			);
 
 			return rows;
 		} catch (error) {
