@@ -88,7 +88,9 @@ const TeacherCourseModify: React.FC = () => {
 				);
 			}
 			// Parse the topics from the courseData into an array of strings
-			const topics = courseData.topic_names.split(',');
+			const topics = courseData.topic_names
+				? courseData.topic_names.split(',')
+				: [];
 			// Set the courseTopics state
 			setCourseTopics(topics);
 			setModifiedTopics(topics);
@@ -129,6 +131,7 @@ const TeacherCourseModify: React.FC = () => {
 
 	const handleTopicChange = topic => {
 		toast.info('Topics changed');
+
 		setModifiedTopics(prevTopics =>
 			prevTopics.includes(topic)
 				? prevTopics.filter(t => t !== topic)
