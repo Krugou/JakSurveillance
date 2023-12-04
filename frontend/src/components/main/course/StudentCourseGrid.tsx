@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import ReportIcon from '@mui/icons-material/Report';
 import Tooltip from '@mui/material/Tooltip';
@@ -24,11 +24,17 @@ interface Course {
 	usercourseid: number;
 }
 
+interface SelectedCourse {
+	name: string;
+	code: string;
+	courseid: number;
+}
+
 interface StudentCourseGridProps {
 	courses: Course[];
 	showEndedCourses: boolean;
 	updateView?: () => void;
-	handleAddStudentToCourse?: (courseid: number) => void;
+	handleAddStudentToCourse?: (courseid: number | undefined) => void;
 }
 
 const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
@@ -46,7 +52,9 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 	const [usercourseid, setUsercourseid] = useState<number>(0);
 	const [open, setOpen] = useState(false);
 	const [newTopic, setNewTopic] = useState('');
-	const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+	const [selectedCourse, setSelectedCourse] = useState<SelectedCourse | null>(
+		null,
+	);
 
 	const [editCourseOpen, setEditCourseOpen] = useState(false);
 	const editCourses = useCourses();
@@ -137,8 +145,8 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 		additionalClasses = 'grid-cols-1';
 	}
 	const handleCourseSelect = (value: string) => {
-		const selected = editCourses.find(
-			course => `${course.name} ${course.code}` === value,
+		const selected: SelectedCourse | undefined = editCourses.find(
+			(course: SelectedCourse) => `${course.name} ${course.code}` === value,
 		);
 		setSelectedCourse(selected || null);
 	};
@@ -303,8 +311,10 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 									<Autocomplete
 										className="sm:w-[20em] w-1/2"
 										freeSolo
-										options={editCourses.map(course => `${course.name} ${course.code}`)}
-										onChange={(_, value) => handleCourseSelect(value)}
+										options={editCourses.map(
+											(course: SelectedCourse) => `${course.name} ${course.code}`,
+										)}
+										onChange={(_, value) => handleCourseSelect(value as string)}
 										value={
 											selectedCourse
 												? `${selectedCourse.name} ${selectedCourse.code}`
@@ -322,7 +332,8 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 									<button
 										className="m-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 										onClick={() => {
-											handleAddStudentToCourse(selectedCourse?.courseid);
+											handleAddStudentToCourse &&
+												handleAddStudentToCourse(selectedCourse?.courseid);
 										}}
 									>
 										Add to course

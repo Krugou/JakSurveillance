@@ -66,7 +66,7 @@ const TeacherStudentDetail: React.FC = () => {
 		fetchData();
 	}, [id, update]);
 
-	const handleAddStudentToCourse = async (courseid: number) => {
+	const handleAddStudentToCourse = async (courseid: number | undefined) => {
 		try {
 			if (!token) {
 				throw new Error('No token available');

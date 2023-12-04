@@ -13,7 +13,7 @@ export const useCourses = () => {
 				const response = await apiHooks.getAllCourses(token);
 				setCourses(response);
 			} catch (error) {
-				toast.error('Error fetching courses');
+				console.error('Error fetching courses');
 			}
 		};
 

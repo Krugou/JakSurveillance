@@ -612,7 +612,7 @@ const getAttendanceThreshold = async (token: string) => {
 const updateStudentCourses = async (
 	token: string,
 	userid: number | undefined,
-	courseid: number,
+	courseid: number | undefined,
 ) => {
 	const options = {
 		method: 'POST',
