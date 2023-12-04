@@ -106,7 +106,6 @@ const attendanceModel: AttendanceModel = {
             WHERE attendance.usercourseid = ? AND usercourses.userid = ?;`,
 				[usercourseId, userid],
 			);
-			console.log(rows);
 			return rows;
 		} catch (error) {
 			console.error(error);
@@ -209,10 +208,7 @@ const attendanceModel: AttendanceModel = {
 				usercourseid,
 				lectureid,
 			]);
-		console.log(
-			'🚀 ~ file: attendancemodel.ts:212 ~ deleteAttendance ~ result:',
-			result,
-		);
+		
 		return result;
 	},
 };

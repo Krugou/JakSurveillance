@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import {config} from 'dotenv';
 import {Server, Socket} from 'socket.io';
 import doFetch from '../utils/doFetch.js';
+
 config();
 let hash = '';
 const timestamps: {start: number; end: number; hash: string}[] = [];
@@ -73,7 +74,7 @@ const updateHash = () => {
 	}
 };
 // Send a POST request to the '/lecturefinished/' route
-const finishLecture = async (lectureid: string, io) => {
+const finishLecture = async (lectureid: string, io: Server) => {
 	// Prepare the data to be sent
 	const data = {
 		date: new Date().toISOString().slice(0, 19).replace('T', ' '),

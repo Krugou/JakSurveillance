@@ -8,13 +8,12 @@ const pool = createPool('ADMIN');
 const router: Router = express.Router();
 
 router.get('/', (req: Request, res: Response) => {
-	//console.log('🚀 ~ file: secureroutes.ts:8 ~ router.get ~ req.user:', req.user);
 	res.json(req.user);
 });
 router.get(
 	'/students',
 	checkUserRole(['admin', 'counselor', 'teacher']),
-	async (req: Request, res: Response) => {
+	async (_req: Request, res: Response) => {
 		try {
 			const users = await usermodel.fetchAllStudents();
 			console.log(users, 'users');
@@ -28,7 +27,7 @@ router.get(
 router.get(
 	'/getattendancethreshold',
 	checkUserRole(['admin', 'counselor', 'teacher']), // replace with your actual middleware if needed
-	async (req: Request, res: Response) => {
+	async (_req: Request, res: Response) => {
 		try {
 			const result = await serverSettingsModel.getAttentanceThreshold(pool); // replace with your actual function to get the threshold
 			const threshold = result[0][0].attendancethreshold;
