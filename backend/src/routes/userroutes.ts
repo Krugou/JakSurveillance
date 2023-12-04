@@ -10,66 +10,16 @@ import {
 import doFetch from '../utils/doFetch.js';
 //import { body, validationResult } from 'express-validator'; FOR VALIDATION
 import jwt from 'jsonwebtoken';
-import {
-	default as UserModel,
-	default as Usermodel,
-} from '../models/usermodel.js';
+
 import {User} from '../types.js';
+import {authenticate} from '../utils/auth.js';
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
 
 const router: Router = express.Router();
-
 // Define your route handlers with TypeScript types
 router.get('/', (_req: Request, res: Response) => {
 	res.send('Hello, TypeScript with Express! This is the users route calling');
 });
-
-// Define a separate function for handling passport authentication
-
-const updateUsername = async (email: string, newUsername: string) => {
-	try {
-		console.log('USERNAME WAS UPDATED');
-		await usermodel.updateUsernameByEmail(email, newUsername);
-	} catch (error) {
-		console.error(error);
-	}
-};
-
-const authenticate = (
-	req: Request,
-	res: Response,
-	next: (err?: any) => void,
-	newUsername: string,
-) => {
-	passport.authenticate(
-		'local',
-		{session: false},
-		(err: Error, user: User, _info: any) => {
-			if (err || !user) {
-				console.error(err);
-				return res.status(403).json({
-					message: 'User is not assigned to any courses, contact your teacher',
-				});
-			}
-			req.login(user, {session: false}, err => {
-				if (err) {
-					console.error(err);
-					return res.status(403).json({
-						message: 'User is not assigned to any courses, contact your teacher',
-					});
-				}
-				if (user && !user.username) {
-					updateUsername(user.email, newUsername);
-					user.username = newUsername;
-				}
-				const token = jwt.sign(user as User, process.env.JWT_SECRET as string, {
-					expiresIn: '2h',
-				});
-				res.json({user, token});
-			});
-		},
-	)(req, res, next);
-};
 
 router.post('/', async (req: Request, res: Response, next) => {
 	// Check if the environment variables are not undefined
@@ -177,7 +127,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 		if (metropoliaData.staff === true) {
 			try {
 				// Check if the user exists in the database
-				const userFromDB: unknown = await UserModel.getAllUserInfo(
+				const userFromDB: unknown = await usermodel.getAllUserInfo(
 					metropoliaData.email,
 				);
 				// dev purposes only change back to teacher only default when in production
@@ -205,7 +155,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 
 				if (userFromDB === null) {
 					// If the staff user doesn't exist, add them to the database
-					const addStaffUserResponse = await UserModel.addStaffUser(userData);
+					const addStaffUserResponse = await usermodel.addStaffUser(userData);
 					if (!addStaffUserResponse) {
 						console.error('Failed to add staff user');
 					}
@@ -249,7 +199,7 @@ router.put('/accept-gdpr/:userid', async (req, res) => {
 	const userId = Number(req.params.userid);
 	console.log(userId, 'jotatjdkfgfdfd');
 	try {
-		await Usermodel.updateUserGDPRStatus(userId);
+		await usermodel.updateUserGDPRStatus(userId);
 		res.json({success: true});
 	} catch (error) {
 		console.error(error);

@@ -3,7 +3,6 @@ import {config} from 'dotenv';
 config();
 
 // Import necessary modules and dependencies
-import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import passportJWT from 'passport-jwt';
 import {Strategy} from 'passport-local';
