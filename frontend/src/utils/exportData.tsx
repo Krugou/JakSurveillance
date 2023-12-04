@@ -191,9 +191,7 @@ export const exportStatsTableToPdf = (allAttendanceCounts, selectedCourse) => {
 		allAttendanceCounts.forEach(item => {
 			if (
 				Array.isArray(student.selectedTopics) &&
-				!student.selectedTopics.includes(item.topicname) &&
-				typeof student.selectedTopics === 'string' &&
-				student.selectedTopics !== 'all'
+				!student.selectedTopics.includes(item.topicname)
 			) {
 				studentData.push('N/A');
 			} else if (item.attendanceCounts[i]?.percentage === 'No lectures') {
