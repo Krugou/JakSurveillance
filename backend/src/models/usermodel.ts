@@ -1,6 +1,8 @@
 import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
 
-import pool from '../config/adminDBPool.js'; // Adjust the path to your pool file
+import createPool from '../config/createPool.js';
+
+const pool = createPool('ADMIN'); // Adjust the path to your pool file
 
 /**
  * @interface UserInfo

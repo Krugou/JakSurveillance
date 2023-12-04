@@ -50,6 +50,7 @@ interface LectureModel {
 		| ProcedureCallPacket
 	>;
 	getLectureWithCourseAndTopic(lectureid: number): Promise<any>;
+	getCourseIDByLectureID(lectureid: number): Promise<any>;
 	// other methods...
 }
 
