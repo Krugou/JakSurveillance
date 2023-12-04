@@ -20,7 +20,7 @@ const Logout = () => {
 	}, [navigate, setUser]);
 
 	return (
-		<div className="flex justify-center items-center h-screen">
+		<div className="flex justify-center items-center h-full">
 			<CircularProgress color="primary" />
 		</div>
 	);
