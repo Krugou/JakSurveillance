@@ -31,6 +31,7 @@ interface Student {
 interface CourseModel {
 	findCourseIdUsingCourseCode(coursecode: string): Promise<RowDataPacket[]>;
 	getStudentsCourses(email: string): unknown;
+	fetchAllCourses: () => Promise<RowDataPacket[]>;
 	findByCourseId: (id: number) => Promise<Course | null>;
 	insertIntoCourse: (
 		name: string,
@@ -65,19 +66,11 @@ interface CourseModel {
 		studentGroupId: number,
 	): Promise<ResultSetHeader>;
 	deleteCourse(courseId: number): Promise<string>;
-	updateCourseInfo(
-		courseid: number,
-		name: string,
-		start_date: Date,
-		end_date: Date,
-		code: string,
-		studentgroupname: string,
-		instructors: string[],
-		topic_names: string[],
-	): Promise<void>;
+	
 	
 }
 const course: CourseModel = {
+	async fetchAllCourses() {},
 
 	async findByCourseId(id) {
 		try {
