@@ -1,12 +1,12 @@
-import {config} from 'dotenv';
-import express, {Request, Response, Router} from 'express';
-import {body, validationResult} from 'express-validator';
+import { config } from 'dotenv';
+import express, { Request, Response, Router } from 'express';
+import { body, validationResult } from 'express-validator';
 import multer from 'multer';
 import XLSX from 'xlsx';
 import courseController from '../controllers/coursecontroller.js';
 import course from '../models/coursemodel.js';
 import usermodel from '../models/usermodel.js';
-import {CourseDetails, CourseUser, IData, Item} from '../types.js';
+import { CourseDetails, CourseUser, IData, Item } from '../types.js';
 import checkUserRole from '../utils/checkRole.js';
 import openData from '../utils/opendata.js';
 import attendanceRoutes from './course/attendanceRoutes.js';
@@ -321,7 +321,7 @@ router.put(
 		// Validate that the user is logged in
 		try {
 			// Check if the user's role is either 'teacher' or 'admin'
-			if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
+			if (req.user && req.user.role !== 'teacher' && req.user.role !== 'admin') {
 				// If not, return an error
 				return res.status(403).json({error: 'Unauthorized'});
 			}
@@ -362,8 +362,10 @@ router.put(
 			);
 			res.json(result);
 		} catch (err) {
-			console.error(err);
-			res.status(500).send({message: err.message});
+			if (err instanceof Error) {
+				console.error(err);
+				res.status(500).send({message: err.message});
+			}
 		}
 	},
 );
@@ -389,7 +391,11 @@ router.get(
 			}
 		} catch (error) {
 			console.error(error);
-			res.status(500).json({message: error.message || 'Internal server error'});
+			let errorMessage = 'Internal server error';
+			if (error instanceof Error) {
+				errorMessage = error.message;
+			}
+			res.status(500).json({message: errorMessage});
 		}
 	},
 );
@@ -414,7 +420,8 @@ router.get(
 	async (req: Request, res: Response) => {
 		const userid = req.params.userid;
 		try {
-			const users = await usermodel.fetchUserById(userid);
+			const useridNumber = parseInt(userid, 10);
+			const users = await usermodel.fetchUserById(useridNumber);
 			const email = users[0].email;
 			const courses = await course.getStudentsCourses(email);
 
@@ -432,11 +439,18 @@ router.post(
 		const {userid, courseid} = req.params;
 
 		try {
-			await courseController.updateStudentCourses(userid, courseid);
+			const useridNumber = parseInt(userid, 10);
+			const courseidNumber = parseInt(courseid, 10);
+			await courseController.updateStudentCourses(useridNumber, courseidNumber);
+
 			res.status(200).json({message: 'Successfully updated student courses'});
 		} catch (error) {
 			console.error(error);
-			res.status(500).json({message: error.message || 'Internal server error'});
+			let errorMessage = 'Internal server error';
+			if (error instanceof Error) {
+				errorMessage = error.message;
+			}
+			res.status(500).json({message: errorMessage});
 		}
 	},
 );

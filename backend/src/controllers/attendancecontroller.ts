@@ -142,7 +142,7 @@ const attendanceController: AttendanceController = {
 			return Promise.reject(error);
 		}
 	},
-	async deleteAttendance(studentnumber, lectureid: number) {
+	async deleteAttendance(studentnumber:string, lectureid: number) {
 		try {
 			const courseId = await lectureModel.getCourseIDByLectureID(lectureid);
 			const usercourseResult = await usercoursesModel.getUserCourseId(

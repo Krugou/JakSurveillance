@@ -1,4 +1,8 @@
-import {FieldPacket, OkPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
+import {
+	FieldPacket,
+	
+	RowDataPacket,
+} from 'mysql2';
 import createPool from '../config/createPool.js';
 
 const pool = createPool('ADMIN');
@@ -13,32 +17,27 @@ interface AttendanceModel {
 	fetchAllAttendances(): Promise<[RowDataPacket[], FieldPacket[]]>;
 	findByAttendanceId(id: number): Promise<Attendance | null>;
 	findAllAttendancesByUserCourseId(
-		studentId: number,
-	): Promise<[RowDataPacket[], FieldPacket[]]>;
-	insertIntoAttendance(
-		start_date: string,
-		end_date: string,
-		topicid: number,
-		usercourseid: number,
-	): Promise<void>;
+		usercourseId: number,
+		userid: number,
+	): Promise<any>;
+
 	updateAttendanceStatus: (usercourseid: number, status: number) => Promise<any>;
-	checkAndInsertAttendance: (
-		date: string,
-		studentnumbers: string[],
-		lectureid: string,
-	) => Promise<void>;
 
-	insertAttendance: (
-		status: number,
-		date: string,
-		usercourseid: number,
-		lectureid: number,
-	) => Promise<any>;
-
+	getUserInfoByUserCourseId: (usercourseid: number) => Promise<any>;
+	getAttendaceByCourseId: (courseid: number) => Promise<any>;
 	getAttendanceById: (insertid: number) => Promise<any>;
 	getAttendanceByUserCourseIdDateLectureId: (
 		usercourseid: number,
 		date: string,
+		lectureid: number,
+	) => Promise<any>;
+	checkAttendance: (usercourseid: number, lectureid: number) => Promise<any>;
+	getLectureCountByTopic: (courseid: number) => Promise<any>;
+	deleteAttendance: (usercourseid: number, lectureid: number) => Promise<any>;
+	insertAttendance: (
+		status: number,
+		date: string,
+		usercourseid: number,
 		lectureid: number,
 	) => Promise<any>;
 }
@@ -165,12 +164,12 @@ const attendanceModel: AttendanceModel = {
 		return attendanceResult;
 	},
 	async getUserInfoByUserCourseId(usercourseid: number) {
-		const [userResult] = await pool
+		const [userResult] = (await pool
 			.promise()
 			.query(
 				'SELECT * FROM users WHERE userid IN (SELECT userid FROM usercourses WHERE usercourseid = ?)',
 				[usercourseid],
-			);
+			)) as RowDataPacket[];
 		return userResult[0];
 	},
 	async getAttendaceByCourseId(courseid: number) {
@@ -208,7 +207,7 @@ const attendanceModel: AttendanceModel = {
 				usercourseid,
 				lectureid,
 			]);
-		
+
 		return result;
 	},
 };
