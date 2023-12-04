@@ -1,7 +1,7 @@
-import {CircularProgress} from '@mui/material';
-import React, {useContext, useEffect, useState} from 'react';
-import {toast} from 'react-toastify';
-import {UserContext} from '../../../../contexts/UserContext';
+import { CircularProgress } from '@mui/material';
+import React, { useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { UserContext } from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
 
 interface Props {
@@ -263,19 +263,20 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 							</option>
 						))}
 					</select>
-					<select
-						title="Select Course Topics"
-						multiple
-						value={courseTopics}
-						onChange={handleTopicChange}
-						className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
-					>
+					<div className="border border-gray-200 ">
 						{selectedGroupTopics.map((topic, index) => (
-							<option key={index} value={topic}>
+							<div
+								key={index}
+								className={`p-4 text-metropoliaSupportWhite ${
+									index % 2 === 0
+										? 'bg-metropoliaMainOrange'
+										: 'bg-metropoliaSecondaryOrange'
+								}`}
+							>
 								{topic}
-							</option>
+							</div>
 						))}
-					</select>
+					</div>
 				</>
 			)}
 		</fieldset>
