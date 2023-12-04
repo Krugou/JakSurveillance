@@ -156,12 +156,12 @@ const course: CourseModel = {
 		}
 	},
 
-	async findByCode(code: string): Promise<boolean> {
+	async findByCode(code: string): Promise<Course | null> {
 		try {
 			const [rows] = await pool
 				.promise()
 				.query<RowDataPacket[]>('SELECT * FROM courses WHERE code = ?', [code]);
-			return Boolean(rows[0]);
+			return rows[0] ? (rows[0] as Course) : null;
 		} catch (error) {
 			console.error(error);
 			throw new Error('Database query failed');
