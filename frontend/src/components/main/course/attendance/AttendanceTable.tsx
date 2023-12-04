@@ -64,11 +64,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 	allAttendances,
 	updateView,
 }) => {
-	const handleStatusChange = async (
-		index: number,
-		newStatus: number,
-		attendanceid?,
-	) => {
+	const handleStatusChange = async (newStatus: number, attendanceid?) => {
 		try {
 			const token: string | null = localStorage.getItem('userToken');
 
@@ -144,11 +140,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 								<Select
 									value={attendance.status}
 									onChange={e =>
-										handleStatusChange(
-											index,
-											e.target.value as number,
-											attendance.attendanceid,
-										)
+										handleStatusChange(e.target.value as number, attendance.attendanceid)
 									}
 								>
 									<MenuItem value={0}>Absent</MenuItem>

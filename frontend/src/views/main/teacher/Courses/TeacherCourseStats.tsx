@@ -27,8 +27,9 @@ interface AttendanceCount {
 	name: string;
 	selectedTopics: string | string[];
 	percentage: number;
-	count: number; // Add this line
-	topicname: string; // Add this line
+	count: number;
+	topicname: string;
+	userid: number;
 }
 
 interface TopicAttendance {
