@@ -89,9 +89,11 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 						<TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 							Date
 						</TableCell>
-						<TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-							Student
-						</TableCell>
+						{student && (
+							<TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								Student
+							</TableCell>
+						)}
 						<TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 							Teacher
 						</TableCell>
