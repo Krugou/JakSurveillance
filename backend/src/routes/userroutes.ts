@@ -1,12 +1,6 @@
 import express, {Request, Response, Router} from 'express';
-import passport from 'passport';
 import usermodel from '../models/usermodel.js';
-import {
-	AuthenticateCallbackParams,
-	AuthenticateParams,
-	ResponseData,
-	UserData,
-} from '../types.js';
+import {ResponseData, UserData} from '../types.js';
 import doFetch from '../utils/doFetch.js';
 //import { body, validationResult } from 'express-validator'; FOR VALIDATION
 import jwt from 'jsonwebtoken';
