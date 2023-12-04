@@ -191,7 +191,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 									<strong>Course Instructors:</strong> {course.instructor_name}
 								</p>
 								<button
-									className={`mt-4 font-bold py-2 px-4 rounded ${
+									className={`mt-4 mr-4 font-bold py-2 px-4 rounded ${
 										isCourseEnded
 											? 'bg-metropoliaSupportRed hover:bg-red-900'
 											: 'bg-metropoliaTrendGreen hover:bg-green-700'
@@ -209,7 +209,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 								{user?.role === 'counselor' && (
 									<>
 										<button
-											className={`mt-4 ml-4 font-bold py-2 px-4 rounded ${
+											className={`mt-4 font-bold py-2 px-4 rounded ${
 												isCourseEnded
 													? 'bg-metropoliaSupportRed hover:bg-red-900'
 													: 'bg-metropoliaTrendGreen hover:bg-green-700'
