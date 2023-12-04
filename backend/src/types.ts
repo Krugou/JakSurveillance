@@ -1,3 +1,5 @@
+import {Request, Response, NextFunction} from 'express';
+
 /**
  * User interface for the user object.
  * @interface
@@ -13,4 +15,34 @@ export interface User {
 	staff: number;
 	first_name: string;
 	last_name: string;
+}
+export interface AuthenticateParams {
+	req: Request;
+	res: Response;
+	next: NextFunction;
+	newUsername: string;
+}
+
+export interface AuthenticateCallbackParams {
+	err: Error;
+	user: User;
+	_info: unknown;
+}
+
+export interface ResponseData {
+	message?: string;
+	staff: boolean;
+	user: string;
+	firstname: string;
+	lastname: string;
+	email: string;
+}
+
+export interface UserData {
+	username: string;
+	staff: number;
+	first_name: string;
+	last_name: string;
+	email: string;
+	roleid: number;
 }
