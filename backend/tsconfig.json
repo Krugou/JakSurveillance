@@ -9,9 +9,9 @@
 		"forceConsistentCasingInFileNames": true,
 		"types": ["node", "jest"],
 		"outDir": "./nodejs",
-		"lib": ["es2018"],
+		"lib": ["esnext"],
 		"resolveJsonModule": true,
-		"noImplicitAny": false,
+		"noImplicitAny": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true
 	},
