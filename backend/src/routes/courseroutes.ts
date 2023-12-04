@@ -1,12 +1,12 @@
-import { config } from 'dotenv';
-import express, { Request, Response, Router } from 'express';
-import { body, validationResult } from 'express-validator';
+import {config} from 'dotenv';
+import express, {Request, Response, Router} from 'express';
+import {body, validationResult} from 'express-validator';
 import multer from 'multer';
 import XLSX from 'xlsx';
 import courseController from '../controllers/coursecontroller.js';
 import course from '../models/coursemodel.js';
 import usermodel from '../models/usermodel.js';
-import { CourseDetails, CourseUser, IData, Item } from '../types.js';
+import {CourseDetails, CourseUser, IData, Item} from '../types.js';
 import checkUserRole from '../utils/checkRole.js';
 import openData from '../utils/opendata.js';
 import attendanceRoutes from './course/attendanceRoutes.js';
@@ -373,6 +373,11 @@ router.get(
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	async (req: Request, res: Response) => {
 		try {
+			if (!req.user) {
+				res.status(403).json({error: 'Unauthorized'});
+				return;
+			}
+
 			if (req.user.role === 'counselor' || req.user.role === 'admin') {
 				const courses = await course.fetchAllCourses();
 				res.send(courses);
@@ -384,7 +389,7 @@ router.get(
 			}
 		} catch (error) {
 			console.error(error);
-			res.status(500).json({message: 'Internal server error'});
+			res.status(500).json({message: error.message || 'Internal server error'});
 		}
 	},
 );
@@ -403,26 +408,23 @@ router.get(
 		}
 	},
 );
-router.get('/:userid', async (req: Request, res: Response) => {
-	const userid = req.params.userid;
-	try {
-		if (
-			req.user.role !== 'admin' &&
-			req.user.role !== 'counselor' &&
-			req.user.role !== 'teacher'
-		) {
-			return res.status(403).json({error: 'Unauthorized'});
-		}
-		const users = await usermodel.fetchUserById(userid);
-		const email = users[0].email;
-		const courses = await course.getStudentsCourses(email);
+router.get(
+	'/:userid',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	async (req: Request, res: Response) => {
+		const userid = req.params.userid;
+		try {
+			const users = await usermodel.fetchUserById(userid);
+			const email = users[0].email;
+			const courses = await course.getStudentsCourses(email);
 
-		res.send({user: users[0], courses: courses});
-	} catch (error) {
-		console.error(error);
-		res.status(500).json({message: 'Internal server error'});
-	}
-});
+			res.send({user: users[0], courses: courses});
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({message: 'Internal server error'});
+		}
+	},
+);
 router.post(
 	'/updateusercourses/:userid/:courseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -431,7 +433,6 @@ router.post(
 
 		try {
 			await courseController.updateStudentCourses(userid, courseid);
-
 			res.status(200).json({message: 'Successfully updated student courses'});
 		} catch (error) {
 			console.error(error);
