@@ -132,7 +132,7 @@ const CreateCourseCustom: React.FC = () => {
 	}, [instructorEmail, user]);
 
 	return (
-		<div className="w-full m-auto">
+		<div className="w-full ">
 			{currentStep && (
 				<CreateCourseProgress currentStep={currentStep} createCourseMode="custom" />
 			)}

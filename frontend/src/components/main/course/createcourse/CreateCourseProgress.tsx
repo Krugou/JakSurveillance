@@ -50,7 +50,9 @@ const CreateCourseProgress: React.FC<ProgressProps> = ({
 				{[...Array(totalSteps)].map((_, step) => (
 					<div
 						key={step}
-						className={`absolute top-0 h-4 w-1/5 rounded-full ${
+						className={`absolute top-0 h-4 ${
+							createCourseMode === 'easy' ? 'w-1/5' : 'w-1/4'
+						}  rounded-full ${
 							step < currentStep ? 'bg-metropoliaMainOrange' : 'bg-gray-200'
 						}`}
 						style={{left: `${(step / totalSteps) * 100}%`}}
