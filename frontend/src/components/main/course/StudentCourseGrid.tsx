@@ -28,12 +28,14 @@ interface StudentCourseGridProps {
 	courses: Course[];
 	showEndedCourses: boolean;
 	updateView?: () => void;
+	handleAddStudentToCourse?: (courseid: number) => void;
 }
 
 const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 	courses,
 	showEndedCourses,
 	updateView,
+	handleAddStudentToCourse,
 }) => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
@@ -48,7 +50,6 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 
 	const [editCourseOpen, setEditCourseOpen] = useState(false);
 	const editCourses = useCourses();
-
 	const handleOpenEditCourse = () => {
 		setEditCourseOpen(true);
 	};
@@ -137,18 +138,9 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 	}
 	const handleCourseSelect = (value: string) => {
 		const selected = editCourses.find(
-			course => `${course.course_name} ${course.code}` === value,
+			course => `${course.name} ${course.code}` === value,
 		);
 		setSelectedCourse(selected || null);
-	};
-	const handleAddStudentToCourse = () => {
-		if (selectedCourse) {
-			apiHooks
-				// Add the student to the selected course
-
-				// You'll need to implement this function yourself
-				.addStudentToCourse(selectedCourse);
-		}
 	};
 
 	return (
@@ -329,7 +321,9 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 									/>
 									<button
 										className="m-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-										onClick={handleAddStudentToCourse}
+										onClick={() => {
+											handleAddStudentToCourse(selectedCourse?.courseid);
+										}}
 									>
 										Add to course
 									</button>

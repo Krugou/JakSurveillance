@@ -42,10 +42,10 @@ const TeacherStudentDetail: React.FC = () => {
 	const [student, setStudent] = useState<StudentInfo | null>(null); // Define the student state variable as a Student object
 	const [courses, setCourses] = useState<Course[]>([]); // Define the courses state variable as an array of Course objects
 	const {update, setUpdate} = useContext(UserContext);
+	const token = localStorage.getItem('userToken');
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const token = localStorage.getItem('userToken');
 				if (!token) {
 					throw new Error('No token available');
 				}
@@ -65,6 +65,26 @@ const TeacherStudentDetail: React.FC = () => {
 
 		fetchData();
 	}, [id, update]);
+
+	const handleAddStudentToCourse = async (courseid: number) => {
+		try {
+			if (!token) {
+				throw new Error('No token available');
+			}
+			const response = await apiHooks.updateStudentCourses(
+				token,
+				student?.userid,
+				courseid,
+			);
+			console.log(response);
+			// Add the student to the selected course
+			toast.success('Student added to course');
+			// You'll need to implement this function yourself
+		} catch (error) {
+			console.log(error);
+			error instanceof Error && toast.error(error.message);
+		}
+	};
 
 	// If the student state variable is null, show a loading indicator
 	if (!student) {
@@ -89,6 +109,7 @@ const TeacherStudentDetail: React.FC = () => {
 					courses={courses}
 					showEndedCourses={true}
 					updateView={updateView}
+					handleAddStudentToCourse={handleAddStudentToCourse}
 				/>
 			</div>
 		</div>

@@ -609,7 +609,21 @@ const getAttendanceThreshold = async (token: string) => {
 	};
 	return await doFetch(baseUrl + 'secure/getattendancethreshold', options);
 };
-
+const updateStudentCourses = async (
+	token: string,
+	userid: number | undefined,
+	courseid: number,
+) => {
+	const options = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	const url = `${baseUrl}courses/updateusercourses/${userid}/${courseid}`;
+	return doFetch(url, options);
+};
 const apiHooks = {
 	getRoleCounts,
 	checkStudentNumberExists,
@@ -652,5 +666,6 @@ const apiHooks = {
 	getAllCourses,
 	getDetailsByCourseId,
 	getAttendanceThreshold,
+	updateStudentCourses,
 };
 export default apiHooks;

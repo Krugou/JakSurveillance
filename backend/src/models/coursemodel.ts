@@ -484,6 +484,20 @@ const course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
+	async updateStudentCourses(courseid, studentid) {
+		try {
+			const [rows] = await pool
+				.promise()
+				.query('INSERT INTO usercourses (courseid, userid) VALUES (?, ?)', [
+					courseid,
+					studentid,
+				]);
+			return rows as Course[];
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
 };
 
 export default course;

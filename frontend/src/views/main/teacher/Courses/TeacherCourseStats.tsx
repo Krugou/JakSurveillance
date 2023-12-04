@@ -19,6 +19,7 @@ interface Course {
 	name: string;
 	code: string;
 	courseid: number;
+
 	// Include other properties of course here
 }
 
@@ -144,23 +145,24 @@ const TeacherCourseStats = () => {
 			return;
 		}
 		// Find the selected course from the courses array
-		const selectedCourse = courses.find(
-			course => `${course.name} ${course.code}` === value,
+
+		const selected: Course | undefined = courses.find(
+			(course: Course) => `${course.name} ${course.code}` === value,
 		);
 		// If the selected course is found, fetch the course details
-		if (selectedCourse) {
-			console.log(selectedCourse, 'selectedCourse');
+		if (selected) {
+			const course = selected as Course;
 			try {
-				navigate(`/${user?.role}/courses/stats/${selectedCourse.courseid}`);
+				navigate(`/${user?.role}/courses/stats/${course?.courseid}`);
 
-				setSelectedCourse(selectedCourse); // Add this line
+				setSelectedCourse(course); // Add this line
 
 				const token: string | null = localStorage.getItem('userToken');
 				if (!token) {
 					throw new Error('No token available');
 				}
 				const courseDetails = await apiHooks.getDetailsByCourseId(
-					selectedCourse.courseid.toString(),
+					course.courseid.toString(),
 					token,
 				);
 
@@ -187,11 +189,12 @@ const TeacherCourseStats = () => {
 	// This function is called when the courseid changes in the url (when a course is selected)
 	useEffect(() => {
 		if (courseid) {
-			const selectedCourse = courses.find(
-				course => course.courseid.toString() === courseid,
+			const selectedCourse: Course | undefined = courses.find(
+				(course: Course) => course.courseid?.toString() === courseid,
 			);
 			if (selectedCourse) {
-				handleCourseSelect(`${selectedCourse.name} ${selectedCourse.code}`);
+				const course = selectedCourse as Course;
+				handleCourseSelect(`${course.name} ${course.code}`);
 			}
 		}
 	}, [courseid, courses]);
@@ -225,7 +228,7 @@ const TeacherCourseStats = () => {
 					<Autocomplete
 						className="sm:w-[20em] w-1/2"
 						freeSolo
-						options={courses.map(course => `${course.name} ${course.code}`)}
+						options={courses.map((course: Course) => `${course.name} ${course.code}`)}
 						onChange={(_, value) => handleCourseSelect(value)}
 						value={
 							selectedCourse ? `${selectedCourse.name} ${selectedCourse.code}` : null

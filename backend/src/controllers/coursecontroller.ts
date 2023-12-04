@@ -290,6 +290,23 @@ const courseController = {
 			throw error;
 		}
 	},
+	updateStudentCourses: async (userid: number, courseid: number) => {
+		try {
+			const existingUserCourse = await userCourseModel.checkIfUserCourseExists(
+				userid,
+				courseid,
+			);
+			if (existingUserCourse.length === 0) {
+				// Insert the user into the course
+				await userCourseModel.insertUserCourse(userid, courseid);
+			} else {
+				throw new Error('User is already enrolled in this course');
+			}
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	},
 };
 
 export default courseController;

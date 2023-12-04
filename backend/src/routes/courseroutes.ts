@@ -480,5 +480,20 @@ router.get('/:userid', async (req: Request, res: Response) => {
 		res.status(500).json({message: 'Internal server error'});
 	}
 });
+router.post(
+	'/updateusercourses/:userid/:courseid',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	async (req: Request, res: Response) => {
+		const {userid, courseid} = req.params;
 
+		try {
+			await courseController.updateStudentCourses(userid, courseid);
+
+			res.status(200).json({message: 'Successfully updated student courses'});
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({message: error.message || 'Internal server error'});
+		}
+	},
+);
 export default router;
