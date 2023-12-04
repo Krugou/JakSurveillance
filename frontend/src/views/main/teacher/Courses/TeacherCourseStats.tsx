@@ -3,11 +3,12 @@ import PrintIcon from '@mui/icons-material/Print';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
-import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import React, {useEffect, useState, useContext} from 'react';
+import {useParams, useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import AttendanceStatsTable from '../../../../components/main/course/attendance/AttendanceStatsTable';
 import apiHooks from '../../../../hooks/ApiHooks';
+import {UserContext} from '../../../../contexts/UserContext';
 import {
 	exportStatsTableToExcel,
 	exportStatsTableToPdf,
@@ -39,6 +40,8 @@ const TeacherCourseStats = () => {
 	const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 	const [threshold, setThreshold] = useState(null);
 	const [courses, setCourses] = useState<Course[]>([]);
+	const navigate = useNavigate();
+	const {user} = useContext(UserContext);
 	const [allAttendanceCounts, setAllAttendanceCounts] = useState<
 		TopicAttendance[]
 	>([]);
@@ -131,6 +134,7 @@ const TeacherCourseStats = () => {
 				topicname,
 				percentage,
 				selectedTopics,
+				userid,
 			};
 		});
 		return attendanceCounts;
@@ -162,7 +166,10 @@ const TeacherCourseStats = () => {
 		);
 		// If the selected course is found, fetch the course details
 		if (selectedCourse) {
+			console.log(selectedCourse, 'selectedCourse');
 			try {
+				navigate(`/${user?.role}/courses/stats/${selectedCourse.courseid}`);
+
 				setSelectedCourse(selectedCourse); // Add this line
 
 				const token: string | null = localStorage.getItem('userToken');

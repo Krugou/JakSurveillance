@@ -1,4 +1,7 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {UserContext} from '../../../../contexts/UserContext';
+
 import {
 	Table,
 	TableBody,
@@ -32,6 +35,8 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 	threshold,
 }) => {
 	const topics = allAttendanceCounts.map(item => item.topicname);
+	const {user} = useContext(UserContext);
+	const navigate = useNavigate();
 	return (
 		<TableContainer className="overflow-x-auto sm:max-h-[30em] h-fit overflow-y-scroll border-gray-300 border-x border-t mt-5 mb-5 rounded-lg shadow">
 			<Table className="min-w-full divide-y divide-gray-200">
@@ -56,7 +61,12 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 				<TableBody className="bg-white divide-y divide-gray-200">
 					{allAttendanceCounts[0]?.attendanceCounts.map((student, i) => (
 						<TableRow key={i} className="border-b hover:bg-gray-50">
-							<TableCell className="px-6 py-4 whitespace-nowrap">
+							<TableCell
+								className="px-6 py-4 whitespace-nowrap cursor-pointer hover:bg-gray-200"
+								onClick={() => {
+									navigate(`/${user?.role}/students/${student.userid}`);
+								}}
+							>
 								{student.name}
 							</TableCell>
 							<TableCell className="px-6 py-4 whitespace-nowrap">
