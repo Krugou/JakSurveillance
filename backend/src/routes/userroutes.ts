@@ -35,12 +35,16 @@ const updateUsername = async (email: string, newUsername: string) => {
 	}
 };
 
-const authenticate = ({req, res, next, newUsername}: AuthenticateParams) => {
+const authenticate = (
+	req: Request,
+	res: Response,
+	next: (err?: any) => void,
+	newUsername: string,
+) => {
 	passport.authenticate(
 		'local',
 		{session: false},
-
-		({err, user}: AuthenticateCallbackParams) => {
+		(err: Error, user: User, _info: any) => {
 			if (err || !user) {
 				console.error(err);
 				return res.status(403).json({
@@ -58,7 +62,7 @@ const authenticate = ({req, res, next, newUsername}: AuthenticateParams) => {
 					updateUsername(user.email, newUsername);
 					user.username = newUsername;
 				}
-				const token = jwt.sign(user as User, process.env.JWT_SECRET!, {
+				const token = jwt.sign(user as User, process.env.JWT_SECRET as string, {
 					expiresIn: '2h',
 				});
 				res.json({user, token});
@@ -221,7 +225,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 				} else {
 					// If the staff user exists, authenticate their login
 					console.log('staff try to authenticate');
-					authenticate({req, res, next, newUsername: username});
+					authenticate(req, res, next, username);
 				}
 			} catch (error) {
 				console.error(error);
@@ -233,7 +237,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 		if (metropoliaData.staff === false) {
 			// Call the authenticate function to handle passport authentication
 			console.log('non-staff try to authenticate');
-			authenticate({req, res, next, newUsername: username});
+			authenticate(req, res, next, username);
 		}
 	} catch (error) {
 		console.error(error);
