@@ -58,9 +58,17 @@ interface CourseModel {
 const course: CourseModel = {
 	async fetchAllCourses() {
 		try {
-			const [rows] = await pool
-				.promise()
-				.query<RowDataPacket[]>('SELECT * FROM courses');
+			const [rows] = await pool.promise().query<
+				RowDataPacket[]
+			>(`SELECT courses.*, studentgroups.group_name AS studentgroup_name, 
+				GROUP_CONCAT(topics.topicname) AS topic_names
+		FROM courses
+		JOIN courseinstructors ON courses.courseid = courseinstructors.courseid
+		JOIN users ON courseinstructors.userid = users.userid
+		LEFT JOIN studentgroups ON courses.studentgroupid = studentgroups.studentgroupid
+		LEFT JOIN coursetopics ON courses.courseid = coursetopics.courseid
+		LEFT JOIN topics ON coursetopics.topicid = topics.topicid
+		GROUP BY courses.courseid`);
 			return rows;
 		} catch (error) {
 			console.error(error);
