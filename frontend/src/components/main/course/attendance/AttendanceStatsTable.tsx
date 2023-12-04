@@ -26,18 +26,30 @@ interface AttendanceStats {
 	attendanceCounts: AttendanceCount[];
 }
 
+interface AttendanceStudentData {
+	name: string;
+	attendance: {[key: string]: number};
+	topics: string | string[];
+}
+
 interface AttendanceStatsTableProps {
-	allAttendanceCounts: AttendanceStats[];
+	allAttendanceCounts?: AttendanceStats[];
 	threshold: number | null;
+	attendanceStudentData?: AttendanceStudentData;
 }
 
 const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 	allAttendanceCounts,
 	threshold,
+	attendanceStudentData,
 }) => {
-	const topics = allAttendanceCounts.map(item => item.topicname);
+	const topics = allAttendanceCounts
+		? allAttendanceCounts.map(item => item.topicname)
+		: Object.keys(attendanceStudentData?.attendance || {});
 	const {user} = useContext(UserContext);
+	console.log(topics);
 	const navigate = useNavigate();
+	console.log(attendanceStudentData);
 	return (
 		<TableContainer className="overflow-x-auto sm:max-h-[30em] h-fit overflow-y-scroll border-gray-300 border-x border-t mt-5 mb-5 rounded-lg shadow">
 			<Table className="min-w-full divide-y divide-gray-200">
@@ -60,61 +72,106 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 					</TableRow>
 				</TableHead>
 				<TableBody className="bg-white divide-y divide-gray-200">
-					{allAttendanceCounts[0]?.attendanceCounts.map((student, i) => (
-						<TableRow key={i} className="border-b hover:bg-gray-50">
-							<TableCell
-								className="px-6 py-4 whitespace-nowrap cursor-pointer hover:bg-gray-200"
-								onClick={() => {
-									navigate(`/${user?.role}/students/${student.userid}`);
-								}}
-							>
-								{student.name}
+					{allAttendanceCounts &&
+						allAttendanceCounts[0]?.attendanceCounts.map((student, i) => (
+							<TableRow key={i} className="border-b hover:bg-gray-50">
+								<TableCell
+									className="px-6 py-4 whitespace-nowrap cursor-pointer hover:bg-gray-200"
+									onClick={() => {
+										navigate(`/${user?.role}/students/${student.userid}`);
+									}}
+								>
+									{student.name}
+								</TableCell>
+								<TableCell className="px-6 py-4 whitespace-nowrap">
+									{Array.isArray(student.selectedTopics)
+										? student.selectedTopics.join(', ')
+										: student.selectedTopics}
+								</TableCell>
+								{allAttendanceCounts.map((item, index) => (
+									<TableCell key={index}>
+										{Array.isArray(student.selectedTopics) &&
+										!student.selectedTopics.includes(item.topicname) ? (
+											'N/A'
+										) : item.attendanceCounts[i]?.percentage.toString() ===
+										  'No lectures' ? (
+											<Tooltip title="No lectures available for this topic">
+												<InfoIcon />
+											</Tooltip>
+										) : (
+											<div className="w-full h-4 rounded bg-gray-200 relative">
+												<div
+													className={`h-full rounded ${
+														item.attendanceCounts[i]?.percentage === 0
+															? 'bg-metropoliaSupportRed'
+															: threshold !== null
+															? Number(item.attendanceCounts[i]?.percentage) <= threshold
+																? 'bg-red-200'
+																: 'bg-metropoliaSupportBlue'
+															: Number(item.attendanceCounts[i]?.percentage) < 80
+															? 'bg-red-200'
+															: 'bg-metropoliaSupportBlue'
+													}`}
+													style={{
+														width:
+															item.attendanceCounts[i]?.percentage === 0
+																? '100%'
+																: `${item.attendanceCounts[i]?.percentage}%`,
+													}}
+												></div>
+												<span className="absolute w-full text-center text-xs text-gray-800">
+													{`${item.attendanceCounts[i]?.percentage}%`}
+												</span>
+											</div>
+										)}
+									</TableCell>
+								))}
+							</TableRow>
+						))}
+					{attendanceStudentData && (
+						<TableRow className="border-b hover:bg-gray-50">
+							<TableCell className="px-6 py-4 whitespace-nowrap">
+								{attendanceStudentData.name}
 							</TableCell>
 							<TableCell className="px-6 py-4 whitespace-nowrap">
-								{Array.isArray(student.selectedTopics)
-									? student.selectedTopics.join(', ')
-									: student.selectedTopics}
+								{Array.isArray(attendanceStudentData.topics)
+									? attendanceStudentData.topics.join(', ')
+									: attendanceStudentData.topics}
 							</TableCell>
-							{allAttendanceCounts.map((item, index) => (
+							{topics.map((topic, index) => (
 								<TableCell key={index}>
-									{Array.isArray(student.selectedTopics) &&
-									!student.selectedTopics.includes(item.topicname) ? (
+									{attendanceStudentData.attendance[topic] === undefined ? (
 										'N/A'
-									) : item.attendanceCounts[i]?.percentage.toString() ===
-									  'No lectures' ? (
-										<Tooltip title="No lectures available for this topic">
-											<InfoIcon />
-										</Tooltip>
 									) : (
 										<div className="w-full h-4 rounded bg-gray-200 relative">
 											<div
 												className={`h-full rounded ${
-													item.attendanceCounts[i]?.percentage === 0
+													attendanceStudentData.attendance[topic] === 0
 														? 'bg-metropoliaSupportRed'
 														: threshold !== null
-														? Number(item.attendanceCounts[i]?.percentage) <= threshold
+														? attendanceStudentData.attendance[topic] <= threshold
 															? 'bg-red-200'
 															: 'bg-metropoliaSupportBlue'
-														: Number(item.attendanceCounts[i]?.percentage) < 80
+														: attendanceStudentData.attendance[topic] < 80
 														? 'bg-red-200'
 														: 'bg-metropoliaSupportBlue'
 												}`}
 												style={{
 													width:
-														item.attendanceCounts[i]?.percentage === 0
+														attendanceStudentData.attendance[topic] === 0
 															? '100%'
-															: `${item.attendanceCounts[i]?.percentage}%`,
+															: `${attendanceStudentData.attendance[topic]}%`,
 												}}
 											></div>
 											<span className="absolute w-full text-center text-xs text-gray-800">
-												{`${item.attendanceCounts[i]?.percentage}%`}
+												{`${attendanceStudentData.attendance[topic]}%`}
 											</span>
 										</div>
 									)}
 								</TableCell>
 							))}
 						</TableRow>
-					))}
+					)}
 				</TableBody>
 			</Table>
 		</TableContainer>

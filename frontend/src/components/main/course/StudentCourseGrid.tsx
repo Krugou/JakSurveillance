@@ -67,10 +67,12 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 		null,
 	);
 
+	const [courseToDelete, setCourseToDelete] = useState<number | null>(null);
+
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
 	const [editCourseOpen, setEditCourseOpen] = useState(false);
-	const editCourses = useCourses();
+	const {courses: editCourses} = useCourses();
 	const handleOpenEditCourse = () => {
 		setEditCourseOpen(true);
 	};
@@ -163,11 +165,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 		);
 		setSelectedCourse(selected || null);
 	};
-	const handleDeleteCourse = usercourseid => {
-		handleRemoveStudentFromCourse && handleRemoveStudentFromCourse(usercourseid);
-		// Your delete logic here...
-		setIsDeleteModalOpen(false); // Close the modal
-	};
+
 	console.log(selectedCourse, 'SELECTED COURSE');
 	return (
 		<div className={`grid ${additionalClasses} gap-4 mt-4`}>
@@ -279,6 +277,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 												<IconButton
 													onClick={() => {
 														setIsDeleteModalOpen(true);
+														setCourseToDelete(course.usercourseid); // Set the course to delete
 													}}
 													aria-label="remove student"
 												>
@@ -288,7 +287,13 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 										</Tooltip>
 										<DeleteModal
 											isOpen={isDeleteModalOpen}
-											onDelete={() => handleDeleteCourse(course.usercourseid)}
+											onDelete={() => {
+												if (courseToDelete !== null) {
+													handleRemoveStudentFromCourse &&
+														handleRemoveStudentFromCourse(courseToDelete);
+													setIsDeleteModalOpen(false); // Close the modal
+												}
+											}}
 											student={true}
 											onClose={() => setIsDeleteModalOpen(false)}
 										/>

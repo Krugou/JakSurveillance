@@ -41,33 +41,16 @@ const TeacherCourseStats = () => {
 	const [showTable, setShowTable] = useState(false);
 	const {courseid} = useParams<{courseid: string}>();
 	const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-	const [threshold, setThreshold] = useState(null);
-	const courses = useCourses();
+	const {threshold} = useCourses();
+
+	const {courses} = useCourses();
+
 	const navigate = useNavigate();
 	const {user} = useContext(UserContext);
 	const [allAttendanceCounts, setAllAttendanceCounts] = useState<
 		TopicAttendance[]
 	>([]);
 
-	// Get the attendance threshold % from the database
-	const getThreshold = async () => {
-		try {
-			const token: string | null = localStorage.getItem('userToken');
-			if (!token) {
-				throw new Error('No token available');
-			}
-			const response = await apiHooks.getAttendanceThreshold(token);
-			console.log(response, 'treshholdresponse');
-			setThreshold(response.attendancethreshold);
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
-	// This function is called when the component is first rendered
-	useEffect(() => {
-		getThreshold();
-	}, []);
 	console.log(courses, 'courses');
 
 	// This function calculates the attendance for a single user on a single topic

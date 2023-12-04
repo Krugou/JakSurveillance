@@ -2,10 +2,12 @@ import React from 'react';
 import {useEffect, useState, ChangeEvent} from 'react';
 import {useParams} from 'react-router-dom';
 import apiHooks from '../../../hooks/ApiHooks';
-import {FormControl, MenuItem, Select} from '@mui/material';
+import {FormControl, MenuItem, Select, Button} from '@mui/material';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
 import AttendanceTable from '../../../components/main/course/attendance/AttendanceTable';
-
+import AttendanceStatsTable from '../../../components/main/course/attendance/AttendanceStatsTable';
+import {useCourses} from '../../../hooks/courseHooks';
 // Interface for the attendance data
 interface Attendance {
 	date: string;
@@ -29,8 +31,12 @@ const StudentCourseAttendance: React.FC = () => {
 		null,
 	);
 
+	const [showTable, setShowTable] = useState(true);
+
 	// State to keep track of the search term
 	const [searchTerm, setSearchTerm] = useState('');
+
+	const {threshold} = useCourses();
 
 	// Function to handle search term change
 	const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -81,12 +87,46 @@ const StudentCourseAttendance: React.FC = () => {
 		),
 	);
 
+	// Step 1: Create an object to hold the attendance counts for each topic
+	const topicAttendanceCounts = {};
+
+	// Step 2: Iterate over `attendanceData`
+	attendanceData.forEach(item => {
+		// If the `topicname` is not already a key in the object, add it
+		if (!topicAttendanceCounts[item.topicname]) {
+			topicAttendanceCounts[item.topicname] = {total: 0, attended: 0};
+		}
+
+		// Increment the `total` count for the topic
+		topicAttendanceCounts[item.topicname].total += 1;
+
+		// If the `status` is 1, increment the `attended` count for the topic
+		if (item.status === 1) {
+			topicAttendanceCounts[item.topicname].attended += 1;
+		}
+	});
+
+	// Step 5: Calculate the attendance percentage for each topic
+	const topicAttendancePercentages = {};
+	for (const topic in topicAttendanceCounts) {
+		const counts = topicAttendanceCounts[topic];
+		topicAttendancePercentages[topic] = (counts.attended / counts.total) * 100;
+	}
+
+	console.log(topicAttendanceCounts, 'firstTopicAttendanceCounts');
+	console.log(topicAttendancePercentages, 'firstTopicAttendancePercentages');
+	const attendanceStudentData = {
+		name: 'Test Name', // TODO: Replace with the student's name
+		topics: uniqueTopics,
+		attendance: topicAttendancePercentages,
+	};
 	// Filter the attendance data based on the search term and the selected sort option
 	const filteredAttendanceData = attendanceData.filter(
 		attendance =>
 			new Date(attendance.start_date).toLocaleDateString().includes(searchTerm) &&
 			(sortOption === 'All' || attendance.topicname === sortOption),
 	);
+	console.log(filteredAttendanceData, 'filteredAttendanceData');
 	if (attendanceData.length > 0) {
 		return (
 			<div className="overflow-x-auto flex flex-col border-x border-t">
@@ -125,7 +165,24 @@ const StudentCourseAttendance: React.FC = () => {
 						</Select>
 					</FormControl>
 				</div>
-				<AttendanceTable filteredAttendanceData={filteredAttendanceData} />
+				<Button
+					variant="contained"
+					color="primary"
+					startIcon={<ShowChartIcon />}
+					className="mt-4 sm:mt-0"
+					onClick={() => setShowTable(!showTable)}
+				>
+					Attendance statistics
+				</Button>
+				{showTable && (
+					<AttendanceTable filteredAttendanceData={filteredAttendanceData} />
+				)}
+				{!showTable && (
+					<AttendanceStatsTable
+						attendanceStudentData={attendanceStudentData}
+						threshold={threshold}
+					/>
+				)}
 			</div>
 		);
 	} else {
