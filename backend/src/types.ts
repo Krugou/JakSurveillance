@@ -1,4 +1,4 @@
-import {Request, Response, NextFunction} from 'express';
+import {NextFunction, Request, Response} from 'express';
 
 /**
  * User interface for the user object.
@@ -45,4 +45,53 @@ export interface UserData {
 	last_name: string;
 	email: string;
 	roleid: number;
+}
+export interface Item {
+	__EMPTY: string;
+	__EMPTY_1: string;
+	__EMPTY_2: string;
+	__EMPTY_3: string;
+	__EMPTY_4: string;
+	__EMPTY_5: string;
+	__EMPTY_6: string;
+	__EMPTY_7: string;
+	__EMPTY_8: string;
+	__EMPTY_9: string;
+	[key: string]: string;
+}
+export interface Student {
+	first_name: string;
+	last_name: string;
+	name: string;
+	email: string;
+	studentnumber: string;
+	arrivalgroup: string;
+	admingroups: string;
+	program: string;
+	educationform: string;
+	registration: string;
+	evaluation: string;
+}
+export interface CourseDetails {
+	instructorEmail: string;
+	startDate: Date;
+	endDate: Date;
+	studentGroup: string;
+	courseName: string;
+	courseCode: string;
+	studentList: Student[];
+}
+export interface IData {
+	realizations: {
+		startDate: string;
+		endDate: string;
+		studentGroups: {
+			code: string;
+		}[];
+	}[];
+}
+export interface CourseUser {
+	role: string;
+	email: string;
+	userrole: number;
 }

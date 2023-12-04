@@ -31,7 +31,6 @@ interface Student {
 interface CourseModel {
 	findCourseIdUsingCourseCode(coursecode: string): Promise<RowDataPacket[]>;
 	getStudentsCourses(email: string): unknown;
-	fetchAllCourses: () => Promise<RowDataPacket[]>;
 	findByCourseId: (id: number) => Promise<Course | null>;
 	insertIntoCourse: (
 		name: string,
@@ -65,20 +64,20 @@ interface CourseModel {
 		code: string,
 		studentGroupId: number,
 	): Promise<ResultSetHeader>;
-	// Add other methods here...
+	deleteCourse(courseId: number): Promise<string>;
+	updateCourseInfo(
+		courseid: number,
+		name: string,
+		start_date: Date,
+		end_date: Date,
+		code: string,
+		studentgroupname: string,
+		instructors: string[],
+		topic_names: string[],
+	): Promise<void>;
+	
 }
 const course: CourseModel = {
-	async fetchAllCourses() {
-		try {
-			const [rows] = await pool
-				.promise()
-				.query<RowDataPacket[]>('SELECT * FROM courses');
-			return rows;
-		} catch (error) {
-			console.error(error);
-			return Promise.reject(error);
-		}
-	},
 
 	async findByCourseId(id) {
 		try {
@@ -266,7 +265,7 @@ const course: CourseModel = {
 		}
 	},
 
-	async deleteCourse(courseId: number): Promise<string> {
+	async deleteCourse(courseId: number):  Promise<string>{
 		try {
 			// Disable foreign key checks
 
@@ -275,18 +274,14 @@ const course: CourseModel = {
 				.promise()
 				.query('DELETE FROM courses WHERE courseid = ?', [courseId]);
 
-			// Enable foreign key checks again
-
-			// Return a success message
-			return result.affectedRows > 0;
+			if ('affectedRows' in result) {
+				// Return a success message
+				return result.affectedRows > 0;
+			}
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
 		}
-	},
-
-	checkIfCourseExists: function (code: string): Promise<boolean> {
-		throw new Error('Function not implemented.');
 	},
 
 	// Function for updating course info

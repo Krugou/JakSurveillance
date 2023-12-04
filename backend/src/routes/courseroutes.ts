@@ -5,24 +5,16 @@ import multer from 'multer';
 import XLSX from 'xlsx';
 import courseController from '../controllers/coursecontroller.js';
 import course from '../models/coursemodel.js';
-import UserModel from '../models/usermodel.js';
+import usermodel from '../models/usermodel.js';
+import {CourseDetails, CourseUser, IData, Item} from '../types.js';
+import checkUserRole from '../utils/checkRole.js';
 import openData from '../utils/opendata.js';
 import attendanceRoutes from './course/attendanceRoutes.js';
 import topicRoutes from './course/topicRoutes.js';
-import usermodel from '../models/usermodel.js';
-import checkUserRole from '../utils/checkRole.js';
 config();
 const upload = multer();
 const router: Router = express.Router();
-router.get('/', async (_req: Request, res: Response) => {
-	try {
-		const [rows] = await course.fetchAllCourses();
-		res.send(rows);
-	} catch (err) {
-		console.error(err);
-		res.status(500).send('Server error');
-	}
-});
+
 router.use('/attendance', attendanceRoutes);
 router.use('/topics', topicRoutes);
 
@@ -98,19 +90,22 @@ router.post('/create', async (req: Request, res: Response) => {
 			topics,
 			topicGroup,
 		);
-		console.log(
-			'🚀 ~ file: courseroutes.ts:90 ~ router.post ~ response:',
-			response,
-		);
+
 		res.status(200).send({
 			message: 'File uploaded and data logged successfully',
 			courseId: response,
 		});
 	} catch (error) {
 		console.error(error);
-		res.status(500).json({
-			message: error.message,
-		});
+		if (error instanceof Error) {
+			res.status(500).json({
+				message: error.message,
+			});
+		} else {
+			res.status(500).json({
+				message: 'An unknown error occurred',
+			});
+		}
 	}
 });
 router.post('/excelinput', upload.single('file'), async (req, res) => {
@@ -134,56 +129,9 @@ router.post('/excelinput', upload.single('file'), async (req, res) => {
 		return;
 	}
 	const jsonData = XLSX.utils.sheet_to_json(worksheet);
-	interface Item {
-		__EMPTY: string;
-		__EMPTY_1: string;
-		__EMPTY_2: string;
-		__EMPTY_3: string;
-		__EMPTY_4: string;
-		__EMPTY_5: string;
-		__EMPTY_6: string;
-		__EMPTY_7: string;
-		__EMPTY_8: string;
-		__EMPTY_9: string;
-		[key: string]: string;
-	}
-
-	interface Student {
-		first_name: string;
-		last_name: string;
-		name: string;
-		email: string;
-		studentnumber: string;
-		arrivalgroup: string;
-		admingroups: string;
-		program: string;
-		educationform: string;
-		registration: string;
-		evaluation: string;
-	}
-
-	interface CourseDetails {
-		instructorEmail: string;
-		startDate: Date;
-		endDate: Date;
-		studentGroup: string;
-		courseName: string;
-		courseCode: string;
-		studentList: Student[];
-	}
-	interface IData {
-		realizations: {
-			startDate: string;
-			endDate: string;
-			studentGroups: {
-				code: string;
-			}[];
-		}[];
-	}
 	const createCourse = (data: Item[]): CourseDetails => {
 		const fullCourseName = Object.keys(data[0])[0]; // get the first key
 		const [courseName, courseCode] = fullCourseName.split(' (');
-
 		const studentList = data
 			.filter(item => item.__EMPTY !== 'Etunimi')
 			.map(item => {
@@ -268,14 +216,10 @@ router.get('/coursesbyid/:id', async (req: Request, res: Response) => {
 		res.status(500).send('Server error');
 	}
 });
-interface User {
-	email: string;
-	userrole: number;
-}
 
 declare module 'express-serve-static-core' {
 	interface Request {
-		user?: User;
+		user?: CourseUser;
 	}
 }
 router.get('/user/all', async (req: Request, res: Response) => {
@@ -293,7 +237,6 @@ router.get('/user/all', async (req: Request, res: Response) => {
 		if (req.user.userrole !== 0 && req.user.email !== email) {
 			return res.status(403).json({error: 'Access denied'});
 		}
-
 		// Get the courses for the user
 		const courses = await course.getStudentsCourses(email);
 		res.json(courses);
@@ -333,7 +276,7 @@ router.get('/students/:userid', async (req: Request, res: Response) => {
 
 	try {
 		// Get the students for the instructor
-		const students = await UserModel.getStudentsByInstructorId(userid);
+		const students = await usermodel.getStudentsByInstructorId(userid);
 		res.json(students);
 	} catch (err) {
 		console.error(err);

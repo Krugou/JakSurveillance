@@ -1,12 +1,20 @@
 import express, {Request, Response, Router} from 'express';
 import passport from 'passport';
 import usermodel from '../models/usermodel.js';
+import {
+	AuthenticateCallbackParams,
+	AuthenticateParams,
+	ResponseData,
+	UserData,
+} from '../types.js';
 import doFetch from '../utils/doFetch.js';
 //import { body, validationResult } from 'express-validator'; FOR VALIDATION
 import jwt from 'jsonwebtoken';
-import UserModel from '../models/usermodel.js';
-import {User} from '../utils/pass.js';
-import Usermodel from '../models/usermodel.js';
+import {
+	default as UserModel,
+	default as Usermodel,
+} from '../models/usermodel.js';
+import {User} from '../types.js';
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
 
 const router: Router = express.Router();
@@ -27,16 +35,12 @@ const updateUsername = async (email: string, newUsername: string) => {
 	}
 };
 
-const authenticate = (
-	req: Request,
-	res: Response,
-	next: (err?: any) => void,
-	newUsername: string,
-) => {
+const authenticate = ({req, res, next, newUsername}: AuthenticateParams) => {
 	passport.authenticate(
 		'local',
 		{session: false},
-		(err: Error, user: User, _info: any) => {
+
+		({err, user}: AuthenticateCallbackParams) => {
 			if (err || !user) {
 				console.error(err);
 				return res.status(403).json({
@@ -54,7 +58,7 @@ const authenticate = (
 					updateUsername(user.email, newUsername);
 					user.username = newUsername;
 				}
-				const token = jwt.sign(user as User, process.env.JWT_SECRET as string, {
+				const token = jwt.sign(user as User, process.env.JWT_SECRET!, {
 					expiresIn: '2h',
 				});
 				res.json({user, token});
@@ -62,15 +66,27 @@ const authenticate = (
 		},
 	)(req, res, next);
 };
-interface ResponseData {
-	message: string;
-	staff: boolean;
-	user: string;
-	firstname: string;
-	lastname: string;
-	email: string;
-}
+
 router.post('/', async (req: Request, res: Response, next) => {
+	// Check if the environment variables are not undefined
+	if (!process.env.JWT_SECRET) {
+		throw new Error('JWT_SECRET environment variable is not set');
+	}
+
+	if (
+		!process.env.devaccount ||
+		!process.env.devpass ||
+		!process.env.devteacheraccount ||
+		!process.env.devteacherpass ||
+		!process.env.devstudentaccount ||
+		!process.env.devstudentpass ||
+		!process.env.devstudent2account ||
+		!process.env.devstudent2pass ||
+		!process.env.devcounseloraccount ||
+		!process.env.devcounselorpass
+	) {
+		throw new Error('One or more environment variables are not set');
+	}
 	let metropoliaData: ResponseData;
 	// Get username and password from the request body
 	const {username, password} = req.body;
@@ -78,7 +94,10 @@ router.post('/', async (req: Request, res: Response, next) => {
 	// if the user is admin, return the admin account
 
 	// create tokens for dev accounts and return them
-	if (username === process.env.devaccount && password === process.env.devpass) {
+	if (
+		username === process.env.devaccount! &&
+		password === process.env.devpass!
+	) {
 		metropoliaData = {
 			staff: true,
 			user: process.env.devaccount,
@@ -87,8 +106,8 @@ router.post('/', async (req: Request, res: Response, next) => {
 			email: 'admin@metropolia.fi',
 		};
 	} else if (
-		username === process.env.devteacheraccount &&
-		password === process.env.devteacherpass
+		username === process.env.devteacheraccount! &&
+		password === process.env.devteacherpass!
 	) {
 		metropoliaData = {
 			staff: true,
@@ -98,8 +117,8 @@ router.post('/', async (req: Request, res: Response, next) => {
 			email: 'teacher@metropolia.fi',
 		};
 	} else if (
-		username === process.env.devstudentaccount &&
-		password === process.env.devstudentpass
+		username === process.env.devstudentaccount! &&
+		password === process.env.devstudentpass!
 	) {
 		metropoliaData = {
 			staff: false,
@@ -109,8 +128,8 @@ router.post('/', async (req: Request, res: Response, next) => {
 			email: 'student@metropolia.fi',
 		};
 	} else if (
-		username === process.env.devstudent2account &&
-		password === process.env.devstudent2pass
+		username === process.env.devstudent2account! &&
+		password === process.env.devstudent2pass!
 	) {
 		metropoliaData = {
 			staff: false,
@@ -120,8 +139,8 @@ router.post('/', async (req: Request, res: Response, next) => {
 			email: 'student2@metropolia.fi',
 		};
 	} else if (
-		username === process.env.devcounseloraccount &&
-		password === process.env.devcounselorpass
+		username === process.env.devcounseloraccount! &&
+		password === process.env.devcounselorpass!
 	) {
 		metropoliaData = {
 			staff: true,
@@ -169,7 +188,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 					default:
 						roleid = 3; // default to teacher
 				}
-				const userData = {
+				const userData: UserData = {
 					username: metropoliaData.user,
 					staff: 1,
 					first_name: metropoliaData.firstname,
@@ -202,7 +221,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 				} else {
 					// If the staff user exists, authenticate their login
 					console.log('staff try to authenticate');
-					authenticate(req, res, next, username);
+					authenticate({req, res, next, newUsername: username});
 				}
 			} catch (error) {
 				console.error(error);
@@ -214,7 +233,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 		if (metropoliaData.staff === false) {
 			// Call the authenticate function to handle passport authentication
 			console.log('non-staff try to authenticate');
-			authenticate(req, res, next, username);
+			authenticate({req, res, next, newUsername: username});
 		}
 	} catch (error) {
 		console.error(error);
@@ -223,7 +242,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 });
 
 router.put('/accept-gdpr/:userid', async (req, res) => {
-	const userId = req.params.userid;
+	const userId = Number(req.params.userid);
 	console.log(userId, 'jotatjdkfgfdfd');
 	try {
 		await Usermodel.updateUserGDPRStatus(userId);
