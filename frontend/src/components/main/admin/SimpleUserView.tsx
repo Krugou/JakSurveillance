@@ -27,8 +27,8 @@ const SimpleUserView: React.FC<SimpleUserViewProps> = ({user}) => {
 		<Card className="m-4">
 			<CardContent>
 				<Grid container spacing={2}>
-					<Grid item xs={12} sm={6}>
-						<Typography variant="h5" component="div">
+					<Grid item xs={12} sm={12}>
+						<Typography variant="h5" component="div" className="flex justify-between" gutterBottom>
 							{user.role}
 							<Tooltip title="Modify this course">
 								<EditIcon
@@ -38,15 +38,13 @@ const SimpleUserView: React.FC<SimpleUserViewProps> = ({user}) => {
 								/>
 							</Tooltip>
 						</Typography>
-						<Typography variant="body1">First Name: {user.first_name}</Typography>
-						<Typography variant="body1">Last Name: {user.last_name}</Typography>
-						<Typography variant="body1">Email: {user.email}</Typography>
-					</Grid>
-					<Grid item xs={12} sm={6}>
-						<Typography variant="body1">
+						<Typography variant="body1" gutterBottom>First Name: {user.first_name}</Typography>
+						<Typography variant="body1" gutterBottom>Last Name: {user.last_name}</Typography>
+						<Typography variant="body1" gutterBottom>Email: {user.email}</Typography>
+						<Typography variant="body1" gutterBottom>
 							Student Number: {user.studentnumber}
 						</Typography>
-						<Typography variant="body1">User ID: {user.userid}</Typography>
+						<Typography variant="body1" gutterBottom>User ID: {user.userid}</Typography>
 					</Grid>
 				</Grid>
 			</CardContent>

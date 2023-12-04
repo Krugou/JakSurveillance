@@ -33,7 +33,7 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 }) => {
 	const topics = allAttendanceCounts.map(item => item.topicname);
 	return (
-		<TableContainer className="overflow-x-auto border-gray-300 border-x border-t mt-5 mb-5 rounded-lg shadow">
+		<TableContainer className="overflow-x-auto sm:max-h-[30em] h-fit overflow-y-scroll border-gray-300 border-x border-t mt-5 mb-5 rounded-lg shadow">
 			<Table className="min-w-full divide-y divide-gray-200">
 				<TableHead className="bg-gray-50">
 					<TableRow>

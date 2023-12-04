@@ -164,71 +164,71 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 
 	// render the component
 	return (
-		<div className="flex flex-col md:space-x-4 justify-center items-center">
+		<div className="flex bg-white w-fit flex-col p-5 rounded-lg justify-center items-center">
 			<h1 className="text-2xl font-bold mb-4">Edit User {editedUser.userid}</h1>
-			<div className="w-full md:w-1/2 p-4">
+			<div className="w-full w-full p-4">
 				{editedUser.last_name && (
 					<label className="block mt-4">
-						<span className="text-gray-700">Last Name</span>
+						<span className="text-gray-700 font-bold">Last Name</span>
 						<input
 							required={!!editedUser.last_name}
 							type="text"
 							name="last_name"
 							value={editedUser.last_name}
 							onChange={handleInputChange}
-							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+							className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
 						/>
 					</label>
 				)}
 				{editedUser.first_name && (
-					<label className="block">
-						<span className="text-gray-700">First Name</span>
+					<label className="block mt-4">
+						<span className="text-gray-700 font-bold">First Name</span>
 						<input
 							required={!!editedUser.first_name}
 							type="text"
 							name="first_name"
 							value={editedUser.first_name}
 							onChange={handleInputChange}
-							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+							className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
 						/>
 					</label>
 				)}
 
 				{editedUser.email && (
 					<label className="block mt-4">
-						<span className="text-gray-700">Email</span>
+						<span className="text-gray-700 font-bold">Email</span>
 						<input
 							required={!!editedUser.email}
 							type="email"
 							name="email"
 							value={editedUser.email}
 							onChange={handleInputChange}
-							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+							className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
 						/>
 					</label>
 				)}
 				{editedUser.username && (
 					<label className="block mt-4">
-						<span className="text-gray-700">Username</span>
+						<span className="text-gray-700 font-bold">Username</span>
 						<input
 							required={!!editedUser.username}
 							type="text"
 							name="username"
 							value={editedUser.username}
 							onChange={handleInputChange}
-							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+							className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
 						/>
 					</label>
 				)}
 				{roles.length > 0 && (
 					<label className="block mt-4">
-						<span className="text-gray-700">Role</span>
+						<span className="text-gray-700 font-bold">Role</span>
 						<select
 							required={!!editedUser.roleid}
 							name="roleid"
 							value={editedUser.roleid}
 							onChange={handleInputChange}
-							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+							className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
 						>
 							{roles.map(role => (
 								<option key={role.roleid} value={role.roleid}>
@@ -241,13 +241,13 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 
 				{editedUser.GDPR !== undefined && (
 					<label className="block mt-4">
-						<span className="text-gray-700">GDPR</span>
+						<span className="text-gray-700 font-bold">GDPR</span>
 						<select
 							required={editedUser.GDPR !== undefined}
 							name="GDPR"
 							value={editedUser.GDPR}
 							onChange={handleInputChange}
-							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+							className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
 						>
 							<option value={0}>Not Accepted</option>
 							<option value={1}>Accepted</option>
@@ -257,14 +257,14 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 
 				{editedUser.studentnumber !== undefined &&
 					editedUser.studentnumber !== null && (
-						<label className="block">
-							<span className="text-gray-700">Student Number</span>
+						<label className="block mt-4">
+							<span className="text-gray-700 font-bold">Student Number</span>
 							<input
 								type="number"
 								name="studentnumber"
 								value={editedUser.studentnumber}
 								onChange={handleInputChange}
-								className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+								className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
 							/>
 							{isStudentNumberTaken && (
 								<span className="text-red-500">Student number taken</span>
@@ -275,13 +275,13 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 				{editedUser.studentgroupid !== undefined &&
 					editedUser.studentgroupid !== null && (
 						<label className="block mt-4">
-							<span className="text-gray-700">Student Group</span>
+							<span className="text-gray-700 font-bold">Student Group</span>
 							<select
 								required={!!editedUser.studentgroupid}
 								name="studentgroupid"
 								value={editedUser.studentgroupid}
 								onChange={handleInputChange}
-								className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+								className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
 							>
 								{studentGroups.map(studentGroup => (
 									<option
@@ -294,12 +294,14 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 							</select>
 						</label>
 					)}
+				<div className="text-center">
 				<button
 					onClick={handleSaveClick}
-					className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
+					className="mt-4 px-4 w-[10em] py-2 bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange text-white rounded-md"
 				>
 					Save
 				</button>
+				</div>
 			</div>
 		</div>
 	);

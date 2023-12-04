@@ -94,6 +94,12 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 			<p className="flex items-center gap-2">
 				<strong>Email:</strong> <span className="profileStat">{user.email}</span>
 			</p>
+			<p className="flex items-center gap-2 mt-5">
+				<strong>Account created:</strong>{' '}
+				<span className="profileStat">
+					{new Date(user.created_at).toLocaleDateString()}
+				</span>
+			</p>
 			<p className="flex items-center gap-2">
 				<strong>Role:</strong> <span className="profileStat">{user.role}</span>
 				{['counselor', 'teacher'].includes(user.role) && (
@@ -105,15 +111,9 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 					</button>
 				)}
 			</p>
-			<p className="flex items-center gap-2">
-				<strong>Account created:</strong>{' '}
-				<span className="profileStat">
-					{new Date(user.created_at).toLocaleDateString()}
-				</span>
-			</p>
 
 			{open && ['counselor', 'teacher'].includes(user.role) && (
-				<div className="mt-5">
+				<div className="mt-5 border-y-4 border-metropoliaMainOrange pt-7 pb-10">
 					<h2 className="text-2xl font-bold mb-3">Change Role</h2>
 					<select
 						title="Role Selection" // Add title attribute here
@@ -125,17 +125,17 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 							<option value={role.roleid}>{role.name}</option>
 						))}
 					</select>
-					<div className="mt-5 flex gap-10">
+					<div className="mt-5 flex justify-between gap-10">
 						<button
 							type="button" // Add type attribute here
-							className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+							className="bg-red-500 hover:bg-red-700 sm:text-lg text-sm text-white font-bold sm:py-2 sm:px-4 py-1 px-2 rounded"
 							onClick={handleClose}
 						>
 							Cancel
 						</button>
 						<button
 							type="button" // Add type attribute here
-							className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+							className="bg-green-500 hover:bg-green-700 sm:text-lg text-sm text-white font-bold sm:py-2 sm:px-4 py-1 px-2 rounded"
 							onClick={handleRoleChange}
 						>
 							Change Role

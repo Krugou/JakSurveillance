@@ -222,9 +222,18 @@ const TeacherCourseStats = () => {
 				{' '}
 				Attendance Statistics per course{' '}
 			</h1>
-			<div className="w-full bg-white p-4 ">
-				<div className="w-1/3 m-auto">
+			<div className="2xl:w-2/3 w-full bg-white p-4 ">
+				<div className="flex justify-between sm:justify-around">
+					<Tooltip title="Print to pdf">
+						<button
+							onClick={handlePdfExport}
+							className="bg-metropoliaMainOrange text-white p-2 rounded"
+						>
+							<PrintIcon fontSize="large" />
+						</button>
+					</Tooltip>
 					<Autocomplete
+						className="sm:w-[20em] w-1/2"
 						freeSolo
 						options={courses.map(course => `${course.name} ${course.code}`)}
 						onChange={(_, value) => handleCourseSelect(value)}
@@ -240,17 +249,6 @@ const TeacherCourseStats = () => {
 							/>
 						)}
 					/>
-				</div>
-				<div className=" flex justify-between">
-					<Tooltip title="Print to pdf">
-						<button
-							onClick={handlePdfExport}
-							className="bg-metropoliaMainOrange text-white p-2 rounded"
-						>
-							<PrintIcon fontSize="large" />
-						</button>
-					</Tooltip>
-
 					<Tooltip title="Export to Excel">
 						<button
 							onClick={handleExcelExport}

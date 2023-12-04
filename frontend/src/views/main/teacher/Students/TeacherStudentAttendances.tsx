@@ -131,15 +131,15 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 					{student?.first_name + ' ' + student?.last_name}'s attendance in course:{' '}
 					{attendanceData[0].name}
 				</h1>
-				<div className="flex items-center justify-around flex-wrap">
+				<div className="flex md:flex-row flex-col items-center justify-around md:gap-0 gap-5 flex-wrap">
 					<input
 						type="text"
 						placeholder="Search by date"
 						value={searchTerm}
 						onChange={handleSearchChange}
-						className="w-1/6 mt-10 p-4 m-2 border border-black rounded"
+						className="md:w-[10em] p-4 m-2 border border-black rounded"
 					/>
-					<div className="flex gap-2">
+					<div className="flex md:gap-2 gap-10">
 					<Tooltip title="Print to pdf">
 						<button
 							onClick={handleExportToPDF}
@@ -158,6 +158,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 					</Tooltip>
 					</div>
 					<FormControl className="md:w-1/4 mt-2 md:mt-0">
+						<div className="md:flex-none gap-3 flex md:items-none items-center">
 						<label>Sort Topics:</label>
 						<Select
 							className="favorite-selector"
@@ -179,6 +180,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 								</MenuItem>
 							))}
 						</Select>
+						</div>
 					</FormControl>
 				</div>
 				<AttendanceTable
