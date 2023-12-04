@@ -2,17 +2,27 @@ import express, {Request, Response} from 'express';
 import {Server, createServer} from 'http';
 
 /**
- * Initialize Express application
+ * Express application instance
+ * @type {express.Express}
  */
 const app = express();
 
 /**
- * Create HTTP server
+ * HTTP server instance
+ * @type {http.Server}
  */
 const http: Server = createServer(app);
 
-// Server's adjustable settings
+/**
+ * Port number for the server to listen on
+ * @type {number}
+ */
 const port: number = 3001;
+
+/**
+ * Server start time
+ * @type {Date}
+ */
 const startTime: Date = new Date();
 
 /**
@@ -22,6 +32,8 @@ app.use(express.static('jaksec'));
 
 /**
  * Setup route to serve index.html for all unmatched routes
+ * @param {express.Request} _req - The request object
+ * @param {express.Response} res - The response object
  */
 app.get('*', (_req: Request, res: Response) => {
 	res.sendFile('index.html', {root: 'jaksec'});

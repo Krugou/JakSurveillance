@@ -4,7 +4,12 @@ import mysql, {Pool} from 'mysql2';
 config();
 
 type UserRole = 'ADMIN' | 'TEACHER' | 'COUNSELOR' | 'STUDENT';
-
+/**
+ * Creates a new MySQL connection pool with the given user role.
+ * @param {UserRole} userRole - The role of the user for the database connection.
+ * @returns {mysql.Pool} The created MySQL connection pool.
+ * @throws {Error} Will throw an error if the user role is invalid.
+ */
 const createPool = (userRole: UserRole): Pool => {
 	let user: string;
 	let password: string;
