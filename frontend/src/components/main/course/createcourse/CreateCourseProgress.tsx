@@ -56,10 +56,9 @@ const CreateCourseProgress: React.FC<ProgressProps> = ({
 						style={{left: `${(step / totalSteps) * 100}%`}}
 					>
 						<div
-							className={`absolute top-0 left-0 transform -translate-x-1/2 -translate-y-1/2 bg-white text-black rounded text-xs leading-none px-2 py-1 sm:px-3 sm:py-1.5 ${
+							className={`absolute top-0  transform -translate-x-1/2 -translate-y-1/2 bg-white text-black rounded border border-black text-xs leading-none px-2 py-1 sm:px-3 sm:py-1.5 left-2/4	 ${
 								step === currentStep - 1 ? 'block' : 'hidden'
 							}`}
-							style={{left: '50%'}}
 						>
 							{step + 1}
 						</div>

@@ -3,14 +3,14 @@ import HideSourceIcon from '@mui/icons-material/HideSource';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import SortIcon from '@mui/icons-material/Sort';
-import { IconButton } from '@mui/material';
+import {IconButton} from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import InputField from './coursedetails/InputField';
 
 /**
@@ -20,7 +20,7 @@ import InputField from './coursedetails/InputField';
  * @param {Array} props.studentList - List of students
  * @param {Function} props.setStudentList - Setter for the student list
  */
-const StudentList = ({ studentList, setStudentList }) => {
+const StudentList = ({studentList, setStudentList}) => {
 	// State for various component features
 	const [lastStudentNumber, setLastStudentNumber] = useState(777);
 	const [lastEmailNumber, setLastEmailNumber] = useState(1);
@@ -114,14 +114,14 @@ const StudentList = ({ studentList, setStudentList }) => {
 			hideExtraColumns
 				? {}
 				: ({
-					admingroups: true,
-					arrivalgroup: true,
-					educationform: true,
-					evaluation: true,
-					program: true,
-					registration: true,
-					name: true,
-				} as Record<string, boolean>),
+						admingroups: true,
+						arrivalgroup: true,
+						educationform: true,
+						evaluation: true,
+						program: true,
+						registration: true,
+						name: true,
+				  } as Record<string, boolean>),
 		);
 		setHideExtraColumns(!hideExtraColumns);
 	};
@@ -158,20 +158,6 @@ const StudentList = ({ studentList, setStudentList }) => {
 															<SortIcon />
 														</button>
 													)}
-													<button
-														aria-label="Hide Column"
-														className="ml-2 bg-metropoliaMainOrange text-sm text-white font-bold rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark p-1"
-														onClick={() =>
-															setHiddenColumns(
-																(prevHiddenColumns: Record<string, boolean>) => ({
-																	...prevHiddenColumns,
-																	[key]: true,
-																}),
-															)
-														}
-													>
-														<HideSourceIcon />
-													</button>
 												</th>
 											),
 									)}
@@ -183,8 +169,9 @@ const StudentList = ({ studentList, setStudentList }) => {
 								(student: Record<string, string | number>, index: number) => (
 									<tr
 										key={index}
-										className={`border ${lockedFields[index] ? '' : 'bg-metropoliaMainGrey bg-opacity-50  '
-											}`}
+										className={`border ${
+											lockedFields[index] ? '' : 'bg-metropoliaMainGrey bg-opacity-50  '
+										}`}
 									>
 										{Object.entries(student).map(
 											([key, value], innerIndex) =>
