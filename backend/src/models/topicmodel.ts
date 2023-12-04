@@ -1,4 +1,4 @@
-import { Connection, FieldPacket, ResultSetHeader, RowDataPacket } from 'mysql2';
+import {Connection, FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
 const pool = createPool('ADMIN');
 /**
@@ -18,13 +18,15 @@ interface TopicModel {
 	fetchAllTopics(): Promise<[RowDataPacket[], FieldPacket[]]>;
 	findByTopicId(id: number): Promise<Topic | null>;
 	insertIntoTopic(topicname: string): Promise<void>;
-	checkifTopicExists(topic: string, connection?: Connection): Promise<void>;
-
 	updateTopicName(id: number, topicname: string): Promise<void>;
 	deleteByTopicId(id: number): Promise<void>;
 	countTopics(): Promise<number>;
 	findTopicIdUsingTopicName(topic: string): Promise<RowDataPacket[] | null>;
 	insertTopic(topic: string): Promise<ResultSetHeader>;
+	checkIfTopicExists(
+		topic: string,
+		connection: Connection,
+	): Promise<RowDataPacket[] | null>;
 
 	// other methods...
 }
@@ -130,7 +132,7 @@ const topicModel: TopicModel = {
 			return Promise.reject(error);
 		}
 	},
-	async checkifTopicExists(topic: string, connection?: Connection) {
+	async checkIfTopicExists(topic: string, connection: any) {
 		let existingCourseTopic;
 		if (connection) {
 			[existingCourseTopic] = await connection.query<RowDataPacket[]>(

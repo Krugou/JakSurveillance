@@ -1,5 +1,6 @@
 'use strict';
 import {config} from 'dotenv';
+import {DoneFunction, DoneJwtFunction, JwtPayload, User} from '../types.js';
 config();
 
 // Import necessary modules and dependencies
@@ -12,20 +13,20 @@ const ExtractJWT = passportJWT.ExtractJwt;
 
 // Define a local strategy for email and password login
 passport.use(
-	new Strategy(async (email: string, _password, done: any) => {
+	new Strategy(async (email: string, _password: string, done: DoneFunction) => {
 		try {
 			// Find a user in the database with the provided email
-			const user: any = await UserModel.getAllUserInfo(email);
+			const user: User | null = await UserModel.getAllUserInfo(email);
 
 			// Check if the user exists
 			console.log(email, 'IAWJDUOIAWDIOJAWD ');
-			if (user === undefined) {
+			if (user === null || user === undefined) {
 				return done(null, false, {message: 'Incorrect username.'});
 			}
 
 			return done(null, user, {message: 'Logged In Successfully'});
 		} catch (err) {
-			return done(err);
+			return done(err instanceof Error ? err : new Error(String(err)));
 		}
 	}),
 );
@@ -37,19 +38,11 @@ passport.use(
 			jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
 			secretOrKey: process.env.JWT_SECRET as string, // Assert process.env.JWT_SECRET as a string
 		},
-		(jwtPayload: any, done: Function) => {
+		(jwtPayload: JwtPayload, done: DoneJwtFunction) => {
 			//console.log('JWTStrategy', jwtPayload); // Log the JWT payload
 			done(null, jwtPayload); // Pass the JWT payload as the authenticated user
 		},
 	),
 );
-
-export interface User {
-	username: string;
-	email: string;
-	staff: number;
-	first_name: string;
-	last_name: string;
-}
 
 export default passport; // Export passport as the default export
