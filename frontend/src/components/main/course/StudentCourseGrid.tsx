@@ -31,6 +31,12 @@ interface SelectedCourse {
 	name: string;
 	code: string;
 	courseid: number;
+	start_date: string;
+	end_date: string;
+	studentgroup_name: string;
+	topic_names: string;
+	selected_topics: string;
+	created_at: string;
 }
 
 interface StudentCourseGridProps {
@@ -162,6 +168,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 		// Your delete logic here...
 		setIsDeleteModalOpen(false); // Close the modal
 	};
+	console.log(selectedCourse, 'SELECTED COURSE');
 	return (
 		<div className={`grid ${additionalClasses} gap-4 mt-4`}>
 			{courses
@@ -336,7 +343,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 					<Modal open={editCourseOpen} onClose={handleCloseEditCourse}>
 						<div className="flex items-center justify-center">
 							<div className="bg-white rounded-lg p-8 m-4 max-w-xl mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-								<div className="flex justify-between sm:justify-around">
+								<div>
 									<Autocomplete
 										className="sm:w-[20em] w-1/2"
 										freeSolo
@@ -358,15 +365,40 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 											/>
 										)}
 									/>
+									{selectedCourse && (
+										<div>
+											<p className="mt-2">
+												{selectedCourse?.name} {selectedCourse?.code}
+											</p>
+											<p className="mt-2">
+												Topics: {selectedCourse?.topic_names.split(',').join(', ')}
+											</p>
+											<p className="mt-2">
+												Course Started:{' '}
+												{new Date(selectedCourse?.start_date).toLocaleDateString()}
+											</p>
+											<p className="mt-2">
+												Course ends:{' '}
+												{new Date(selectedCourse?.end_date).toLocaleDateString()}
+											</p>
+											<p className="mt-2">
+												Student group: {selectedCourse?.studentgroup_name}
+											</p>
+											<p className="mt-2">
+												Course created:{' '}
+												{new Date(selectedCourse?.created_at).toLocaleDateString()}
+											</p>
+										</div>
+									)}
 									<button
-										className="m-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+										className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 										onClick={() => {
 											handleAddStudentToCourse &&
 												handleAddStudentToCourse(selectedCourse?.courseid);
 											handleCloseEditCourse();
 										}}
 									>
-										Add to course
+										Add Student to course
 									</button>
 								</div>
 							</div>
