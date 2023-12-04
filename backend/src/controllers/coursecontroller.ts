@@ -247,11 +247,13 @@ const courseController = {
 	},
 	getDetailsByCourseId: async (courseId: string) => {
 		try {
-			let usersOnCourse = await attendanceModel.getAttendaceByCourseId(courseId);
+			let allUsersOnCourse = await course.getAllStudentsOnCourse(courseId);
 
-			// Assuming usersOnCourse is an array of objects
+			let usersAttendance = await attendanceModel.getAttendaceByCourseId(courseId);
+
+			// Assuming usersAttendance is an array of objects
 			const distinctUserCourseIds = [
-				...new Set(usersOnCourse.map(user => user.usercourseid)),
+				...new Set(allUsersOnCourse.map(user => user.usercourseid)),
 			];
 
 			for (const usercourseid of distinctUserCourseIds) {
@@ -260,8 +262,15 @@ const courseController = {
 						usercourseid,
 					);
 
-				// Add userCourseTopic to each usersOnCourse object with the same usercourseid
-				usersOnCourse = usersOnCourse.map(user => {
+				// Add userCourseTopic to each usersAttendance object with the same usercourseid
+				allUsersOnCourse = allUsersOnCourse.map(user => {
+					if (user.usercourseid === usercourseid) {
+						return {...user, selectedParts};
+					} else {
+						return user;
+					}
+				});
+				usersAttendance = usersAttendance.map(user => {
 					if (user.usercourseid === usercourseid) {
 						return {...user, selectedParts};
 					} else {
@@ -271,7 +280,11 @@ const courseController = {
 			}
 
 			const lectureCount = await attendanceModel.getLectureCountByTopic(courseId);
-			return {users: [...usersOnCourse], lectures: [...lectureCount]};
+			return {
+				users: [...usersAttendance],
+				lectures: [...lectureCount],
+				allUsers: [...allUsersOnCourse],
+			};
 		} catch (error) {
 			console.error(error);
 			throw error;

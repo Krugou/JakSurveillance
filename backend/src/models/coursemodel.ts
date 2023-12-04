@@ -464,7 +464,8 @@ const course: CourseModel = {
 								users.first_name,
 								users.last_name,
 								users.studentnumber,
-								usercourses.usercourseid
+								usercourses.usercourseid,
+								users.userid
 						FROM 
 								users
 						JOIN

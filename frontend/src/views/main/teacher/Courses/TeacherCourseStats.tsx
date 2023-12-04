@@ -98,15 +98,23 @@ const TeacherCourseStats = () => {
 	};
 
 	// This function calculates the attendance for all users on a single topic
-	const calculateAttendanceForAllUsers = (users, lectures, topicname) => {
-		const uniqueUserIds = [...new Set(users.map(user => user.userid))];
+	const calculateAttendanceForAllUsers = (
+		users,
+		allUsers,
+		lectures,
+		topicname,
+	) => {
+		const uniqueUserIds = [...new Set(allUsers.map(user => user.userid))];
 		const lecture = lectures.find(lecture => lecture.topicname === topicname);
 		const lecture_count = lecture ? lecture.lecture_count : 0;
 
 		// Calculate the attendance for each user
 		const attendanceCounts = uniqueUserIds.map(userid => {
 			const count = sumUserAttendanceOnTopic(users, userid, topicname);
-			const user = users.find(user => user.userid === userid);
+			let user = users.find(user => user.userid === userid);
+			if (!user) {
+				user = allUsers.find(user => user.userid === userid);
+			}
 			const name = user ? `${user.last_name} ${user.first_name}` : 'Unknown User';
 			// Get the selected topics for the user
 			const selectedTopics =
@@ -128,10 +136,11 @@ const TeacherCourseStats = () => {
 		return attendanceCounts;
 	};
 	// This function calculates the attendance for all users on all topics
-	const calculateAttendanceForAllTopics = (users, lectures) => {
+	const calculateAttendanceForAllTopics = (users, allUsers, lectures) => {
 		return lectures.map(lecture => {
 			const attendanceCounts = calculateAttendanceForAllUsers(
 				users,
+				allUsers,
 				lectures,
 				lecture.topicname,
 			);
@@ -170,9 +179,12 @@ const TeacherCourseStats = () => {
 				// Calculate the attendance for all users on all topics for the selected course
 				const allAttendanceCounts = calculateAttendanceForAllTopics(
 					courseDetails.users,
+					courseDetails.allUsers,
 					courseDetails.lectures,
 				);
+
 				setAllAttendanceCounts(allAttendanceCounts);
+
 				setShowTable(true);
 				console.log(allAttendanceCounts, 'all attendancescounts');
 			} catch (error) {
