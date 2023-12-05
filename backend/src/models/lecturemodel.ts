@@ -17,30 +17,32 @@ interface Lecture {
 }
 
 interface LectureModel {
-	fetchAllLecturees(): Promise<[RowDataPacket[], FieldPacket[]]>;
-	findByLectureId(id: number): Promise<Lecture | null>;
-	insertIntoLecture(
-		start_date: Date,
-		end_date: Date,
-		topicname: string,
-		coursecode: string,
-		timeofday: 'am' | 'pm',
-		state: 'open' | 'closed',
-	): Promise<void>;
-	updateLectureDates(
-		id: number,
-		start_date: Date,
-		end_date: Date,
-	): Promise<void>;
+	fetchAllLecturees(): Promise<RowDataPacket[]>;
+	findByLectureIdAndGetAllUserInLinkedCourse(
+		lectureid: number,
+	): Promise<RowDataPacket[]>;
+	getStudentsByLectureId(lectureid: number): Promise<RowDataPacket[]>;
 	deleteByLectureId(id: number): Promise<void>;
 	countAllLecturees(): Promise<number>;
 	findByTopicId(topicid: number): Promise<Lecture[]>;
+	getCourseidByLectureid(lectureid: number): Promise<number>;
 	insertIntoLecture(
 		start_date: Date,
 		end_date: Date,
-		topicname: string,
-		coursecode: string,
-		timeofday: 'am' | 'pm',
+		timeofday: string,
+		topicid: number,
+		courseid: number,
+		state: string,
+	): Promise<unknown>;
+	getLectureWithCourseAndTopic(lectureid: number): Promise<RowDataPacket | null>;
+	updateLectureState(lectureid: number, state: string): Promise<unknown>;
+	getLecturesByCourseId(courseid: number): Promise<RowDataPacket[] | null>;
+	getCourseIDByLectureID(lectureid: number): Promise<number | null>;
+	fetchAllLecturees(): Promise<
+		RowDataPacket[] | [RowDataPacket[], FieldPacket[]]
+	>;
+	findByLectureIdAndGetAllUserInLinkedCourse(
+		lectureid: number,
 	): Promise<
 		| OkPacket
 		| RowDataPacket[]
@@ -49,15 +51,15 @@ interface LectureModel {
 		| OkPacket[]
 		| ProcedureCallPacket
 	>;
-	getLectureWithCourseAndTopic(lectureid: string): Promise<any>;
-	getCourseIDByLectureID(lectureid: number): Promise<any>;
-	getStudentsByLectureId(lectureid: number): Promise<any>;
 }
 
 const lectureModel: LectureModel = {
 	async fetchAllLecturees() {
 		try {
-			return await pool.promise().query<RowDataPacket[]>('SELECT * FROM lecture');
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT * FROM lecture');
+			return rows;
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
@@ -69,7 +71,7 @@ const lectureModel: LectureModel = {
 			const [lectureRows] = await pool
 				.promise()
 				.query('SELECT * FROM lecture WHERE lectureid = ?', [lectureid]);
-			const lectureData = lectureRows[0];
+			const lectureData = (lectureRows as RowDataPacket[])[0];
 			if (!lectureData) {
 				return Promise.reject(`Lecture with lectureid ${lectureid} not found`);
 			}
@@ -77,7 +79,7 @@ const lectureModel: LectureModel = {
 			const [courseRows] = await pool
 				.promise()
 				.query('SELECT * FROM courses WHERE courseid = ?', [lectureData.courseid]);
-			const courseData = courseRows[0];
+			const courseData = (courseRows as RowDataPacket[])[0];
 			if (!courseData) {
 				return Promise.reject(
 					`Course with courseid ${lectureData.courseid} not found`,
@@ -100,12 +102,12 @@ const lectureModel: LectureModel = {
 		try {
 			const [userRows] = await pool.promise().query<RowDataPacket[]>(
 				`SELECT u.*, c.topicid, uc.usercourseid FROM users u  
-				JOIN usercourses uc ON u.userid = uc.userid 
-				JOIN lecture c ON uc.courseid = c.courseid 
-				WHERE c.lectureid = ? AND u.roleid = 1;`, // Assuming roleid 1 is for students
+            JOIN usercourses uc ON u.userid = uc.userid 
+            JOIN lecture c ON uc.courseid = c.courseid 
+            WHERE c.lectureid = ? AND u.roleid = 1;`, // Assuming roleid 1 is for students
 				[lectureid],
 			);
-			const uniqueUserRows = userRows.reduce((unique, o) => {
+			const uniqueUserRows = userRows.reduce<RowDataPacket[]>((unique, o) => {
 				if (!unique.some(obj => obj.userid === o.userid)) {
 					unique.push(o);
 				}
@@ -119,53 +121,7 @@ const lectureModel: LectureModel = {
 		}
 	},
 
-	// async insertIntoLecture(
-	// 	topicname: string,
-	// 	coursecode: string,
-	// 	start_date: Date,
-	// 	end_date: Date,
-	// 	timeofday: 'am' | 'pm',
-	// ) {
-	// 	try {
-	// 		const [topicRows] = await pool
-	// 			.promise()
-	// 			.query<RowDataPacket[]>('SELECT topicid FROM topics WHERE topicname = ?', [
-	// 				topicname,
-	// 			]);
-	// 		console.log('🚀 ~ file: lecturemodel.ts:63 ~ topicRows:', topicRows);
-
-	// 		const [courseRows] = await pool
-	// 			.promise()
-	// 			.query<RowDataPacket[]>('SELECT courseid FROM courses WHERE code = ?', [
-	// 				coursecode,
-	// 			]);
-	// 		console.log('🚀 ~ file: lecturemodel.ts:70 ~ courseRows:', courseRows);
-
-	// 		if (topicRows.length === 0 || courseRows.length === 0) {
-	// 			console.error(`Topic or course does not exist`);
-	// 			return;
-	// 		}
-
-	// 		const topicid = topicRows[0].topicid;
-	// 		console.log('🚀 ~ file: lecturemodel.ts:78 ~ topicid:', topicid);
-	// 		const courseid = courseRows[0].courseid;
-	// 		console.log('🚀 ~ file: lecturemodel.ts:80 ~ courseid:', courseid);
-
-	// 		const [result] = await pool
-	// 			.promise()
-	// 			.query(
-	// 				'INSERT INTO lecture (start_date, end_date, timeofday, topicid, courseid) VALUES (?, ?, ?, ?, ?)',
-	// 				[start_date, end_date, timeofday, topicid, courseid],
-	// 			);
-	// 		const lectureid = result.insertId;
-	// 		console.log('🚀 ~ file: lecturemodel.ts:88 ~ lectureid:', lectureid);
-	// 		return lectureid;
-	// 	} catch (error) {
-	// 		console.error(error);
-	// 	}
-	// },
-
-	async deleteByLectureId(id) {
+	async deleteByLectureId(id: number): Promise<void> {
 		try {
 			await pool.promise().query('DELETE FROM lecture WHERE lectureid = ?', [id]);
 		} catch (error) {
@@ -173,7 +129,7 @@ const lectureModel: LectureModel = {
 		}
 	},
 
-	async countAllLecturees() {
+	async countAllLecturees(): Promise<number> {
 		try {
 			const [rows] = await pool
 				.promise()
@@ -181,6 +137,7 @@ const lectureModel: LectureModel = {
 			return rows[0].count;
 		} catch (error) {
 			console.error(error);
+			return 0;
 		}
 	},
 
@@ -213,13 +170,13 @@ const lectureModel: LectureModel = {
 		}
 	},
 	async insertIntoLecture(
-		start_date,
-		end_date,
-		timeofday,
-		topicid,
-		courseid,
-		state,
-	) {
+		start_date: Date,
+		end_date: Date,
+		timeofday: string,
+		topicid: number,
+		courseid: number,
+		state: string,
+	): Promise<unknown> {
 		const [result] = await pool
 			.promise()
 			.query(
@@ -228,7 +185,7 @@ const lectureModel: LectureModel = {
 			);
 		return result;
 	},
-	async getLectureWithCourseAndTopic(lectureid: string) {
+	async getLectureWithCourseAndTopic(lectureid: number) {
 		try {
 			const [rows] = await pool
 				.promise()
