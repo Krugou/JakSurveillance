@@ -10,7 +10,7 @@ const AdminProfile: React.FC = () => {
 	}
 
 	return (
-		<div className="flex flex-col items-center justify-center h-fit p-10 bg-gray-100 font-sans">
+		<div className="flex flex-col items-center justify-center h-fit p-5 sm:p-10 rounded-lg bg-white font-sans">
 			<h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">Admin Profile</h1>
 			<div className="text-md sm:text-xl mb-4">
 				<ProfileInfo user={user} />

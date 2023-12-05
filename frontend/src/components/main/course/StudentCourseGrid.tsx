@@ -216,7 +216,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 										<ReportIcon style={{color: 'red'}} />
 									</div>
 								)}
-								<h2 className="text-2xl underline underline-offset-8 decoration-metropoliaMainOrange font-bold mb-2 text-black">
+								<h2 className="sm:text-2xl text-lg underline underline-offset-8 decoration-metropoliaMainOrange font-bold mb-2 text-black">
 									{course.course_name + ' ' + course.code}
 								</h2>
 								<p className="mb-1">

@@ -114,7 +114,7 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 
 			{open && ['counselor', 'teacher'].includes(user.role) && (
 				<div className="mt-5 border-y-4 border-metropoliaMainOrange pt-7 pb-10">
-					<h2 className="text-2xl font-bold mb-3">Change Role</h2>
+					<h2 className="sm:text-2xl text-lg font-bold mb-3">Change Role</h2>
 					<select
 						title="Role Selection" // Add title attribute here
 						className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
