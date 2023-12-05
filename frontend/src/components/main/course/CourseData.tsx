@@ -86,93 +86,103 @@ const CourseData: React.FC<CourseDataProps> = ({courseData, updateView}) => {
 	return (
 		<>
 			{Array.isArray(courseData) &&
-				courseData.map((course: Course) => (
-					<div
-						key={course.courseid}
-						className="mt-4 bg-white p-5 rounded-lg mb-4 relative"
-					>
-						{/* Add a relative position to the card container */}
-						<Tooltip title="Modify this course">
-							<EditIcon
-								fontSize="large"
-								className="absolute top-0 right-0 m-4 mr-16 cursor-pointer text-black bg-gray-300 rounded-full p-1 hover:text-gray-700"
-								onClick={() => navigate(`/teacher/courses/${course.courseid}/modify`)}
-							/>
-						</Tooltip>
-						<Tooltip title="Delete this course">
-							<DeleteIcon
-								fontSize="large"
-								className="absolute top-0 right-0 m-4 cursor-pointer text-red-500 bg-gray-300 rounded-full p-1 hover:text-red-700"
-								onClick={() => openDeleteModal(course.courseid)}
-							/>
-						</Tooltip>
-						{/* Position the DeleteIcon at the top right corner */}
-						<p className="font-bold text-lg">{course.name}</p>
-						<p className="text-gray-700 text-base">{course.description}</p>
-						<div className="mt-2">
-							<div className="flex justify-between">
-								<p className="text-gray-700">Start date:</p>
-								<p>{new Date(course.start_date).toLocaleDateString()}</p>
-							</div>
-							<div className="flex justify-between">
-								<p className="text-gray-700">End date:</p>
-								<p>{new Date(course.end_date).toLocaleDateString()}</p>
-							</div>
-							<div className="flex justify-between">
-								<div className="text-gray-700">Code:</div>
-								<div>{course.code}</div>
-							</div>
-							<div className="flex justify-between">
-								<p className="text-gray-700">Student group:</p>
-								<p>{course.studentgroup_name}</p>
-							</div>
-							<div className="flex justify-between mb-4">
-								<p className="text-gray-700">Topics:</p>
-								<p>{course.topic_names?.replace(/,/g, ', ')}</p>
-							</div>
-							{currentUrl.match(/courses\/\d+/) ? (
-								<>
-									<div className="w-full border-t-4 border-metropoliaMainOrange"></div>
-									<h2 className="text-lg font-bold mt-4"> Additional Info</h2>
+				courseData.map((course: Course) => {
+					const endDate = new Date(course.end_date);
+					const isCourseEnded =
+						endDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
+
+					return (
+						<Tooltip title={isCourseEnded ? 'Course has ended' : ''} placement="top">
+							<div
+								key={course.courseid}
+								className={`mt-4 p-5 rounded-lg mb-4 relative ${
+									isCourseEnded ? 'opacity-50 bg-gray-200' : 'bg-white'
+								}`}
+							>
+								{/* Add a relative position to the card container */}
+								<Tooltip title="Modify this course">
+									<EditIcon
+										fontSize="large"
+										className="absolute top-0 right-0 m-4 mr-16 cursor-pointer text-black bg-gray-300 rounded-full p-1 hover:text-gray-700"
+										onClick={() => navigate(`/teacher/courses/${course.courseid}/modify`)}
+									/>
+								</Tooltip>
+								<Tooltip title="Delete this course">
+									<DeleteIcon
+										fontSize="large"
+										className="absolute top-0 right-0 m-4 cursor-pointer text-red-500 bg-gray-300 rounded-full p-1 hover:text-red-700"
+										onClick={() => openDeleteModal(course.courseid)}
+									/>
+								</Tooltip>
+								{/* Position the DeleteIcon at the top right corner */}
+								<p className="font-bold text-lg">{course.name}</p>
+								<p className="text-gray-700 text-base">{course.description}</p>
+								<div className="mt-2">
 									<div className="flex justify-between">
-										<p className="text-gray-700">Course Created at:</p>
-										<p>{new Date(course.created_at).toLocaleDateString()}</p>
+										<p className="text-gray-700">Start date:</p>
+										<p>{new Date(course.start_date).toLocaleDateString()}</p>
+									</div>
+									<div className="flex justify-between">
+										<p className="text-gray-700">End date:</p>
+										<p>{new Date(course.end_date).toLocaleDateString()}</p>
+									</div>
+									<div className="flex justify-between">
+										<div className="text-gray-700">Code:</div>
+										<div>{course.code}</div>
+									</div>
+									<div className="flex justify-between">
+										<p className="text-gray-700">Student group:</p>
+										<p>{course.studentgroup_name}</p>
 									</div>
 									<div className="flex justify-between mb-4">
-										<p className="text-gray-700">Amount of students</p>
-										<p>{course.user_count}</p>
+										<p className="text-gray-700">Topics:</p>
+										<p>{course.topic_names?.replace(/,/g, ', ')}</p>
 									</div>
-									<div className="w-full border-t-4 border-metropoliaMainOrange"></div>
-									<div className="mb-5 mt-4">
-										<h2 className="text-gray-700 text-lg font-bold">Instructors</h2>
-										<ul>
-											{course.instructor_name.split(',').map((instructor, index) => (
-												<li key={index}>{instructor.trim()}</li>
-											))}
-										</ul>
-									</div>
-									<GeneralLinkButton
-										path={`/teacher/courses/attendances/${course.courseid}`}
-										text="View attendances"
-									/>
-								</>
-							) : (
-								<div className="flex justify-between">
-									<GeneralLinkButton
-										path={`/teacher/courses/${course.courseid}`}
-										text="View details"
-									/>
-									<div className="ml-2">
-										<GeneralLinkButton
-											path={`/teacher/courses/attendances/${course.courseid}`}
-											text="View attendances"
-										/>
-									</div>
+									{currentUrl.match(/courses\/\d+/) ? (
+										<>
+											<div className="w-full border-t-4 border-metropoliaMainOrange"></div>
+											<h2 className="text-lg font-bold mt-4"> Additional Info</h2>
+											<div className="flex justify-between">
+												<p className="text-gray-700">Course Created at:</p>
+												<p>{new Date(course.created_at).toLocaleDateString()}</p>
+											</div>
+											<div className="flex justify-between mb-4">
+												<p className="text-gray-700">Amount of students</p>
+												<p>{course.user_count}</p>
+											</div>
+											<div className="w-full border-t-4 border-metropoliaMainOrange"></div>
+											<div className="mb-5 mt-4">
+												<h2 className="text-gray-700 text-lg font-bold">Instructors</h2>
+												<ul>
+													{course.instructor_name.split(',').map((instructor, index) => (
+														<li key={index}>{instructor.trim()}</li>
+													))}
+												</ul>
+											</div>
+											<GeneralLinkButton
+												path={`/teacher/courses/attendances/${course.courseid}`}
+												text="View attendances"
+											/>
+										</>
+									) : (
+										<div className="flex justify-between">
+											<GeneralLinkButton
+												path={`/teacher/courses/${course.courseid}`}
+												text="View details"
+											/>
+											<div className="ml-2">
+												<GeneralLinkButton
+													path={`/teacher/courses/attendances/${course.courseid}`}
+													text="View attendances"
+												/>
+											</div>
+										</div>
+									)}
 								</div>
-							)}
-						</div>
-					</div>
-				))}
+							</div>
+						</Tooltip>
+					);
+				})}
 			<DeleteModal
 				isOpen={isDeleteModalOpen}
 				onDelete={handleDelete}

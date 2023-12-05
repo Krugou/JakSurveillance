@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import {toast} from 'react-toastify';
 import ApiHooks from '../../../../hooks/ApiHooks';
-import {UserContext} from "../../../../contexts/UserContext";
+import {UserContext} from '../../../../contexts/UserContext';
 
 interface Attendance {
 	date: string;
@@ -96,6 +96,11 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 								Student
 							</TableCell>
 						)}
+						{allAttendances && (
+							<TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								Student
+							</TableCell>
+						)}
 						<TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 							Teacher
 						</TableCell>
@@ -144,13 +149,17 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 								{user?.role !== 'student' && (
 									<Select
 										value={attendance.status}
-										onChange={(e) => handleStatusChange(e.target.value as number, attendance.attendanceid)}
+										onChange={e =>
+											handleStatusChange(e.target.value as number, attendance.attendanceid)
+										}
 									>
 										<MenuItem value={0}>Absent</MenuItem>
 										<MenuItem value={1}>Present</MenuItem>
 									</Select>
 								)}
-								{user?.role === 'student' && <p>{attendance.status === 0 ? 'Absent' : 'Present'}</p>}
+								{user?.role === 'student' && (
+									<p>{attendance.status === 0 ? 'Absent' : 'Present'}</p>
+								)}
 							</TableCell>
 						</TableRow>
 					))}
