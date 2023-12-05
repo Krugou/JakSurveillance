@@ -1,5 +1,4 @@
 import React from 'react';
-import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
 import Card from "../../../../components/main/cards/Card";
 
 const TeacherCreateCourse: React.FC = () => {

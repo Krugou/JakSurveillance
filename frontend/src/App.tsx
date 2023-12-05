@@ -8,8 +8,6 @@ import AdminRoutes from './routes/AdminRoutes';
 import CounselorRoutes from './routes/CounselorRoutes';
 import StudentRoutes from './routes/StudentRoutes';
 import TeacherRoutes from './routes/TeacherRoutes';
-import Footer from './views/Footer.tsx';
-import Header from './views/Header.tsx';
 import Logout from './views/Logout.tsx';
 import Login from './views/main/Login.tsx';
 import StartView from './views/main/StartView.tsx';

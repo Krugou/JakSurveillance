@@ -23,7 +23,6 @@ const TeacherStudentsView: React.FC = () => {
 	const { user } = React.useContext(UserContext);
 	const [students, setStudents] = useState<Student[]>([]);
 	const [loading, setLoading] = useState(true);
-	const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 	const [searchTerm, setSearchTerm] = useState('');
 
 	useEffect(() => {

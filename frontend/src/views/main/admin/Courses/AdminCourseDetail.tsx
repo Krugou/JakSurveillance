@@ -4,7 +4,6 @@ import Tooltip from '@mui/material/Tooltip';
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import BackgroundContainer from '../../../../components/main/background/BackgroundContainer';
 import DeleteModal from '../../../../components/main/modals/DeleteModal';
 import apiHooks from '../../../../hooks/ApiHooks';
 
