@@ -54,6 +54,10 @@ interface CourseModel {
 	): Promise<void>;
 	getCoursesWithDetails(): Promise<Course[]>;
 	getAllStudentsOnCourse(courseId: number): Promise<RowDataPacket[]>;
+	updateStudentCourses: (
+		courseid: number,
+		studentid: number,
+	) => Promise<Course[]>;
 }
 const course: CourseModel = {
 	async fetchAllCourses() {
@@ -376,7 +380,7 @@ const course: CourseModel = {
 			await connection.commit();
 
 			// q: if i return here, does the finally block still run?
-			return rows as Course[];
+			return rows;
 		} catch (error) {
 			await connection.rollback();
 			console.error(error);
@@ -467,13 +471,13 @@ const course: CourseModel = {
 				[courseId],
 			);
 
-			return rows;
+			return rows as RowDataPacket[];
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
 		}
 	},
-	async updateStudentCourses(courseid, studentid) {
+	async updateStudentCourses(courseid: number, studentid: number) {
 		try {
 			const [rows] = await pool
 				.promise()
