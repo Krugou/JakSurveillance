@@ -13,7 +13,6 @@ import {
 } from '@mui/material';
 
 import InfoIcon from '@mui/icons-material/Info';
-import {set} from 'date-fns';
 interface AttendanceCount {
 	name: string;
 	count: number;
@@ -28,7 +27,6 @@ interface AttendanceStats {
 }
 
 interface AttendanceStudentData {
-	name: string;
 	attendance: {[key: string]: number};
 	topics: string | string[];
 }
@@ -161,12 +159,12 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 					{attendanceStudentData && (
 						<TableRow className="border-b hover:bg-gray-50">
 							<TableCell className="px-6 py-4 whitespace-nowrap">
-								{`${fetchedData.last_name} ${fetchedData.first_name}`}
+								{fetchedData && `${fetchedData?.last_name} ${fetchedData?.first_name}`}
 							</TableCell>
 							<TableCell className="px-6 py-4 whitespace-nowrap">
-								{Array.isArray(fetchedData.topics)
-									? fetchedData.topics.join(', ')
-									: fetchedData.topics}
+								{fetchedData && Array.isArray(fetchedData?.topics)
+									? fetchedData?.topics.join(', ')
+									: fetchedData?.topics}
 							</TableCell>
 							{topics.map((topic, index) => (
 								<TableCell key={index}>
