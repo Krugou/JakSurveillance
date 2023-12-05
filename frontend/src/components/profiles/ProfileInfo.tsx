@@ -91,8 +91,8 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 				<strong>Username:</strong>{' '}
 				<span className="profileStat">{user.username}</span>
 			</p>
-			<p className="flex items-center gap-2">
-				<strong>Email:</strong> <span className="profileStat">{user.email}</span>
+			<p className="flex flex-wrap items-base items-center gap-1">
+				<strong>Email:</strong> <span className="profileStat w-fit">{user.email}</span>
 			</p>
 			<p className="flex items-center gap-2 mt-5">
 				<strong>Account created:</strong>{' '}
@@ -104,7 +104,7 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 				<strong>Role:</strong> <span className="profileStat">{user.role}</span>
 				{['counselor', 'teacher'].includes(user.role) && (
 					<button
-						className="bg-metropoliaMainGrey hover:bg-metropoliaTrendLightBlue text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+						className="bg-metropoliaMainGrey transition hover:bg-metropoliaTrendLightBlue text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
 						onClick={handleOpen}
 					>
 						Change
@@ -128,14 +128,14 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 					<div className="mt-5 flex justify-between gap-10">
 						<button
 							type="button" // Add type attribute here
-							className="bg-red-500 hover:bg-red-700 sm:text-lg text-sm text-white font-bold sm:py-2 sm:px-4 py-1 px-2 rounded"
+							className="bg-red-500 hover:bg-red-700 sm:text-lg transition text-sm text-white font-bold sm:py-2 sm:px-4 py-1 px-2 rounded"
 							onClick={handleClose}
 						>
 							Cancel
 						</button>
 						<button
 							type="button" // Add type attribute here
-							className="bg-green-500 hover:bg-green-700 sm:text-lg text-sm text-white font-bold sm:py-2 sm:px-4 py-1 px-2 rounded"
+							className="bg-green-500 hover:bg-green-700 transition sm:text-lg text-sm text-white font-bold sm:py-2 sm:px-4 py-1 px-2 rounded"
 							onClick={handleRoleChange}
 						>
 							Change Role

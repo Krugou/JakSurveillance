@@ -123,7 +123,7 @@ const TeacherStudentDetail: React.FC = () => {
 	}
 
 	return (
-		<div className="w-fit">
+		<div className="w-full sm:w-fit">
 			<div className="bg-white rounded-lg p-5">
 				<h2 className="text-2xl font-bold underline underline-offset-8 decoration-metropoliaMainOrange mb-5">
 					{student.first_name + ' ' + student.last_name}'s Info

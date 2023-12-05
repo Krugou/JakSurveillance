@@ -155,7 +155,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 		additionalClasses = 'grid-cols-1 md:grid-cols-2';
 	} else if (courses.length >= 3) {
 		additionalClasses =
-			'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 h-fit sm:max-h-[30em] overflow-hidden sm:overflow-y-scroll';
+			'grid-cols-1 md:grid-cols-2 xl:grid-cols-3 h-fit sm:max-h-[30em] overflow-hidden sm:overflow-y-scroll';
 	} else if (courses.length === 1) {
 		additionalClasses = 'grid-cols-1';
 	}
