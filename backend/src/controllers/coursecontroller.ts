@@ -1,7 +1,9 @@
 import attendanceModel from '../models/attendancemodel.js';
 import courseInstructorModel from '../models/courseinstructormodel.js';
-import course from '../models/coursemodel.js';
-import courseModel from '../models/coursemodel.js';
+import {
+	default as course,
+	default as courseModel,
+} from '../models/coursemodel.js';
 import courseTopicModel from '../models/coursetopicmodel.js';
 import studentGroupModel from '../models/studentgroupmodel.js';
 import topicGroupModel from '../models/topicgroupmodel.js';
@@ -10,7 +12,6 @@ import topicModel from '../models/topicmodel.js';
 import usercourse_topicsModel from '../models/usercourse_topicsmodel.js';
 import userCourseModel from '../models/usercoursemodel.js';
 import userModel from '../models/usermodel.js';
-import attendanceModel from '../models/attendancemodel.js';
 interface Student {
 	email: string;
 	first_name: string;
