@@ -112,12 +112,22 @@ const courseController = {
 				let topicId = 0;
 				if (topicgroup) {
 					try {
-						const newTopicGroup = await topicGroupModel.insertTopicGroup(
+						const ExistingTopicGroup = await topicGroupModel.checkIfTopicGroupExists(
 							topicgroup,
 							instructorUserIds[0],
 						);
 
-						topicGroupId = newTopicGroup.insertId;
+						if (ExistingTopicGroup.length > 0) {
+							console.error('Topic group already exists');
+							topicGroupId = ExistingTopicGroup[0].topicgroupid;
+						} else {
+							const newTopicGroup = await topicGroupModel.insertTopicGroup(
+								topicgroup,
+								instructorUserIds[0],
+							);
+
+							topicGroupId = newTopicGroup.insertId;
+						}
 
 						if (topics) {
 							const topicslist = JSON.parse(topics);

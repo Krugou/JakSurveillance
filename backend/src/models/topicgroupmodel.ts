@@ -23,11 +23,15 @@ interface TopicGroupModel {
 	fetchAllTopicGroupsWithTopicsByUserId(
 		userid: number,
 	): Promise<RowDataPacket[]>;
-	checkIfTopicGroupExists(topicgroup: string): Promise<RowDataPacket[]>;
+
 	insertTopicGroup(
 		topicgroup: string,
 		topicgroupowner: number,
 	): Promise<ResultSetHeader>;
+	checkIfTopicGroupExists(
+		topicgroup: string,
+		userid: number,
+	): Promise<RowDataPacket[]>;
 
 	// other methods...
 }
@@ -105,12 +109,12 @@ const topicGroupModel: TopicGroupModel = {
 		}
 	},
 
-	async checkIfTopicGroupExists(topicgroup: string) {
+	async checkIfTopicGroupExists(topicgroup: string, userid: number) {
 		const [existingTopic] = await pool
 			.promise()
 			.query<RowDataPacket[]>(
-				'SELECT * FROM topicgroups WHERE topicgroupname = ?',
-				[topicgroup],
+				'SELECT * FROM topicgroups WHERE topicgroupname = ? AND userid = ?',
+				[topicgroup, userid],
 			);
 
 		return existingTopic;
