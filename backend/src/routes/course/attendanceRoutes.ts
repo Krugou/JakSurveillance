@@ -2,19 +2,15 @@
 import express, {Request, Response, Router} from 'express';
 import attendanceController from '../../controllers/attendancecontroller.js';
 import lectureController from '../../controllers/lecturecontroller.js';
-import {
-	default as Attendance,
-	default as attendanceModel,
-} from '../../models/attendancemodel.js'; // Adjust the path according to your project structure
+import attendanceModel from '../../models/attendancemodel.js';
 import lectureModel from '../../models/lecturemodel.js';
-import Usermodel from '../../models/usermodel';
 import checkUserRole from '../../utils/checkRole.js';
 
 const router: Router = express.Router();
 
 router.get('/', async (res: Response) => {
 	try {
-		const attendanceData = await Attendance.fetchAllAttendances();
+		const attendanceData = await attendanceModel.fetchAllAttendances();
 		res.json(attendanceData);
 	} catch (err) {
 		console.error(err);
@@ -24,7 +20,7 @@ router.get('/', async (res: Response) => {
 router.get('/:id', async (req: Request, res: Response) => {
 	try {
 		const id = Number(req.params.id);
-		const attendanceData = await Attendance.findByAttendanceId(id);
+		const attendanceData = await attendanceModel.findByAttendanceId(id);
 		if (attendanceData) {
 			res.json(attendanceData);
 		} else {
@@ -38,17 +34,17 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.get('/usercourse/:id', async (req: Request, res: Response) => {
 	try {
 		const id = Number(req.params.id);
-		let userid = req.user.userid;
+		let userid = req.user?.userid;
 		let userinfo;
 		if (
-			req.user.role === 'teacher' ||
-			req.user.role === 'admin' ||
-			req.user.role === 'counselor'
+			req.user?.role === 'teacher' ||
+			req.user?.role === 'admin' ||
+			req.user?.role === 'counselor'
 		) {
-			userinfo = await Attendance.getUserInfoByUserCourseId(id);
-			userid = userinfo.userid;
+			userinfo = await attendanceModel.getUserInfoByUserCourseId(id);
+			userid = userinfo?.userid;
 		}
-		const attendanceData = await Attendance.findAllAttendancesByUserCourseId(
+		const attendanceData = await attendanceModel.findAllAttendancesByUserCourseId(
 			id,
 			userid,
 		);
@@ -58,7 +54,11 @@ router.get('/usercourse/:id', async (req: Request, res: Response) => {
 		res.json(attendanceData);
 	} catch (err) {
 		console.error(err);
-		res.status(500).send('Server error');
+		if (err instanceof Error) {
+			res.status(500).send(`Server error: ${err.message}`);
+		} else {
+			res.status(500).send('Server error');
+		}
 	}
 });
 
@@ -178,16 +178,18 @@ router.get('/lectureinfo/:lectureid', async (req: Request, res: Response) => {
 	}
 });
 
-router.get('/studentsattendance', async (req: Request, res: Response) => {
-	try {
-		const id = Number(req.params.id);
-		const attendanceData = await Attendance.findAllAttendancesByUserCourseId(id);
-		res.json(attendanceData);
-	} catch (err) {
-		console.error(err);
-		res.status(500).send('Server error');
-	}
-});
+// router.get('/studentsattendance', async (req: Request, res: Response) => {
+// 	try {
+// 		const id = Number(req.params.id);
+// 		const attendanceData = await attendanceModel.findAllAttendancesByUserCourseId(
+// 			id,
+// 		);
+// 		res.json(attendanceData);
+// 	} catch (err) {
+// 		console.error(err);
+// 		res.status(500).send('Server error');
+// 	}
+// });
 
 router.put(
 	'/update',
