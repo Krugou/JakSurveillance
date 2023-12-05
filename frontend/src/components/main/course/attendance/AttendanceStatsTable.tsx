@@ -1,7 +1,7 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {UserContext} from '../../../../contexts/UserContext';
-
+import apiHooks from '../../../../hooks/ApiHooks';
 import {
 	Table,
 	TableBody,
@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 
 import InfoIcon from '@mui/icons-material/Info';
+import {set} from 'date-fns';
 interface AttendanceCount {
 	name: string;
 	count: number;
@@ -36,20 +37,49 @@ interface AttendanceStatsTableProps {
 	allAttendanceCounts?: AttendanceStats[];
 	threshold: number | null;
 	attendanceStudentData?: AttendanceStudentData;
+	usercourseid?: number;
 }
 
 const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 	allAttendanceCounts,
 	threshold,
 	attendanceStudentData,
+	usercourseid,
 }) => {
 	const topics = allAttendanceCounts
 		? allAttendanceCounts.map(item => item.topicname)
 		: Object.keys(attendanceStudentData?.attendance || {});
+	const [fetchedData, setFetchedData] = useState<[] | null>(null);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			if (usercourseid) {
+				try {
+					const token = localStorage.getItem('userToken');
+					if (!token) {
+						throw new Error('No token available');
+					}
+
+					const response = await apiHooks.getStudentAndTopicsByUsercourseid(
+						token,
+						usercourseid,
+					);
+					setFetchedData(response);
+
+					return response;
+				} catch (error) {
+					console.error('Error:', error);
+				}
+			}
+		};
+
+		fetchData();
+	}, [usercourseid]);
 	const {user} = useContext(UserContext);
 	console.log(topics);
 	const navigate = useNavigate();
-	console.log(attendanceStudentData);
+
+	console.log(fetchedData, 'FETCHED DATA');
 	return (
 		<TableContainer className="overflow-x-auto sm:max-h-[30em] h-fit overflow-y-scroll border-gray-300 border-x border-t mt-5 mb-5 rounded-lg shadow">
 			<Table className="min-w-full divide-y divide-gray-200">
@@ -131,12 +161,12 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 					{attendanceStudentData && (
 						<TableRow className="border-b hover:bg-gray-50">
 							<TableCell className="px-6 py-4 whitespace-nowrap">
-								{attendanceStudentData.name}
+								{`${fetchedData.last_name} ${fetchedData.first_name}`}
 							</TableCell>
 							<TableCell className="px-6 py-4 whitespace-nowrap">
-								{Array.isArray(attendanceStudentData.topics)
-									? attendanceStudentData.topics.join(', ')
-									: attendanceStudentData.topics}
+								{Array.isArray(fetchedData.topics)
+									? fetchedData.topics.join(', ')
+									: fetchedData.topics}
 							</TableCell>
 							{topics.map((topic, index) => (
 								<TableCell key={index}>

@@ -166,15 +166,15 @@ const StudentCourseAttendance: React.FC = () => {
 					</FormControl>
 				</div>
 				<div className="text-center">
-				<Button
-					variant="contained"
-					color="primary"
-					startIcon={<ShowChartIcon />}
-					className="mt-4 sm:mt-0 w-1/3"
-					onClick={() => setShowTable(!showTable)}
-				>
-					Attendance statistics
-				</Button>
+					<Button
+						variant="contained"
+						color="primary"
+						startIcon={<ShowChartIcon />}
+						className="mt-4 sm:mt-0 w-1/3"
+						onClick={() => setShowTable(!showTable)}
+					>
+						Attendance statistics
+					</Button>
 				</div>
 				{showTable && (
 					<AttendanceTable filteredAttendanceData={filteredAttendanceData} />
@@ -183,6 +183,7 @@ const StudentCourseAttendance: React.FC = () => {
 					<AttendanceStatsTable
 						attendanceStudentData={attendanceStudentData}
 						threshold={threshold}
+						usercourseid={usercourseid}
 					/>
 				)}
 			</div>

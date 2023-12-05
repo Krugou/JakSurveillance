@@ -414,24 +414,6 @@ router.get(
 		}
 	},
 );
-router.get(
-	'/:userid',
-	checkUserRole(['admin', 'counselor', 'teacher']),
-	async (req: Request, res: Response) => {
-		const userid = req.params.userid;
-		try {
-			const useridNumber = parseInt(userid, 10);
-			const users = await usermodel.fetchUserById(useridNumber);
-			const email = users[0].email;
-			const courses = await course.getStudentsCourses(email);
-
-			res.send({user: users[0], courses: courses});
-		} catch (error) {
-			console.error(error);
-			res.status(500).json({message: 'Internal server error'});
-		}
-	},
-);
 router.post(
 	'/updateusercourses/:userid/:courseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -469,6 +451,41 @@ router.delete(
 			} else {
 				res.status(500).json({message: 'Internal server error'});
 			}
+		}
+	},
+);
+router.get(
+	'/studentandtopics/:usercourseid',
+	async (req: Request, res: Response) => {
+		try {
+			const usercourseid = Number(req.params.usercourseid);
+			const courses =
+				await courseController.getStudentAndSelectedTopicsByUsercourseId(
+					usercourseid,
+				);
+			res.json(courses);
+		} catch (error) {
+			console.error(error);
+			res.status(500).send('Server error');
+		}
+	},
+);
+
+router.get(
+	'/:userid',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	async (req: Request, res: Response) => {
+		const userid = req.params.userid;
+		try {
+			const useridNumber = parseInt(userid, 10);
+			const users = await usermodel.fetchUserById(useridNumber);
+			const email = users[0].email;
+			const courses = await course.getStudentsCourses(email);
+
+			res.send({user: users[0], courses: courses});
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({message: 'Internal server error'});
 		}
 	},
 );

@@ -637,6 +637,22 @@ const deleteStudentFromCourse = async (
 	const url = `${baseUrl}courses/deleteusercourse/${usercourseid}`;
 	return doFetch(url, options);
 };
+const getStudentAndTopicsByUsercourseid = async (
+	token: string,
+	usercourseid: number,
+) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+
+	return await doFetch(
+		baseUrl + `courses/studentandtopics/${usercourseid}`,
+		options,
+	);
+};
 
 const apiHooks = {
 	getRoleCounts,
@@ -682,5 +698,6 @@ const apiHooks = {
 	getAttendanceThreshold,
 	updateStudentCourses,
 	deleteStudentFromCourse,
+	getStudentAndTopicsByUsercourseid,
 };
 export default apiHooks;

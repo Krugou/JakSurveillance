@@ -335,6 +335,35 @@ const courseController = {
 			throw error;
 		}
 	},
+	getStudentAndSelectedTopicsByUsercourseId: async (usercourseid: number) => {
+		try {
+			let topicNames;
+			const selectedParts =
+				await usercourse_topicsModel.findUserCourseTopicByUserCourseId(
+					usercourseid,
+				);
+			const studentInfo = await userCourseModel.getStudentInfoByUsercourseid(
+				usercourseid,
+			);
+			const studentInfoObject = studentInfo[0];
+			if (!studentInfoObject) {
+				throw new Error('Student not found');
+			}
+
+			if (selectedParts && selectedParts.length > 0) {
+				topicNames = selectedParts.map(part => part.topicname);
+			}
+
+			const studentAndSelectedParts = {
+				...studentInfoObject,
+				...{topics: topicNames},
+			};
+			return studentAndSelectedParts;
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	},
 };
 
 export default courseController;

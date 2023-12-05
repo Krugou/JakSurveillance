@@ -55,6 +55,27 @@ const usercoursesModel = {
 			.query('DELETE FROM usercourses WHERE usercourseid = ?', usercourseid);
 		return result;
 	},
+	async getStudentInfoByUsercourseid(usercourseid: number) {
+		try {
+			const [rows] = await pool.promise().query<RowDataPacket[]>(
+				`SELECT 
+					users.first_name,
+					users.last_name,
+					users.userid
+				FROM users
+				JOIN usercourses ON users.userid = usercourses.userid
+				WHERE usercourses.usercourseid = ?
+			`,
+				[usercourseid],
+			);
+
+			const data: StudentAndTopics[] = JSON.parse(JSON.stringify(rows));
+			return data;
+		} catch (error) {
+			console.error('Error:', error);
+			throw error;
+		}
+	},
 };
 
 export default usercoursesModel;
