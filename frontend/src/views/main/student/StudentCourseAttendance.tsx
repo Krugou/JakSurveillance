@@ -116,7 +116,6 @@ const StudentCourseAttendance: React.FC = () => {
 	console.log(topicAttendanceCounts, 'firstTopicAttendanceCounts');
 	console.log(topicAttendancePercentages, 'firstTopicAttendancePercentages');
 	const attendanceStudentData = {
-		name: 'Test Name', // TODO: Replace with the student's name
 		topics: uniqueTopics,
 		attendance: topicAttendancePercentages,
 	};

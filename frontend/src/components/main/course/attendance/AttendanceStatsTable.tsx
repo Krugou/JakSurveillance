@@ -166,38 +166,40 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 									? fetchedData?.topics.join(', ')
 									: fetchedData?.topics}
 							</TableCell>
-							{topics.map((topic, index) => (
-								<TableCell key={index}>
-									{attendanceStudentData.attendance[topic] === undefined ? (
-										'N/A'
-									) : (
-										<div className="w-full h-4 rounded bg-gray-200 relative">
-											<div
-												className={`h-full rounded ${
-													attendanceStudentData.attendance[topic] === 0
-														? 'bg-metropoliaSupportRed'
-														: threshold !== null
-														? attendanceStudentData.attendance[topic] <= threshold
+							{topics &&
+								topics.map((topic, index) => (
+									<TableCell key={index}>
+										{attendanceStudentData.attendance &&
+										attendanceStudentData.attendance[topic] === undefined ? (
+											'N/A'
+										) : (
+											<div className="w-full h-4 rounded bg-gray-200 relative">
+												<div
+													className={`h-full rounded ${
+														attendanceStudentData.attendance[topic] === 0
+															? 'bg-metropoliaSupportRed'
+															: threshold !== null
+															? attendanceStudentData.attendance[topic] <= threshold
+																? 'bg-red-200'
+																: 'bg-metropoliaSupportBlue'
+															: attendanceStudentData.attendance[topic] < 80
 															? 'bg-red-200'
 															: 'bg-metropoliaSupportBlue'
-														: attendanceStudentData.attendance[topic] < 80
-														? 'bg-red-200'
-														: 'bg-metropoliaSupportBlue'
-												}`}
-												style={{
-													width:
-														attendanceStudentData.attendance[topic] === 0
-															? '100%'
-															: `${attendanceStudentData.attendance[topic]}%`,
-												}}
-											></div>
-											<span className="absolute w-full text-center text-xs text-gray-800">
-												{`${attendanceStudentData.attendance[topic]}%`}
-											</span>
-										</div>
-									)}
-								</TableCell>
-							))}
+													}`}
+													style={{
+														width:
+															attendanceStudentData.attendance[topic] === 0
+																? '100%'
+																: `${attendanceStudentData.attendance[topic]}%`,
+													}}
+												></div>
+												<span className="absolute w-full text-center text-xs text-gray-800">
+													{`${attendanceStudentData.attendance[topic]}%`}
+												</span>
+											</div>
+										)}
+									</TableCell>
+								))}
 						</TableRow>
 					)}
 				</TableBody>
