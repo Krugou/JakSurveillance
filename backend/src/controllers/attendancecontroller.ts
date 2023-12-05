@@ -13,6 +13,9 @@ interface AttendanceController {
 		studentnumbers: string[],
 		lectureid: string,
 	) => Promise<any>;
+	getLecturesAndAttendancesByCourseId: (courseid: number) => Promise<any>;
+	updateAttendanceStatus: (attendanceid: number, status: number) => Promise<any>;
+	deleteAttendance: (studentnumber: string, lectureid: number) => Promise<any>;
 }
 const attendanceController: AttendanceController = {
 	async insertIntoAttendance(
@@ -142,7 +145,7 @@ const attendanceController: AttendanceController = {
 			return Promise.reject(error);
 		}
 	},
-	async deleteAttendance(studentnumber:string, lectureid: number) {
+	async deleteAttendance(studentnumber: string, lectureid: number) {
 		try {
 			const courseId = await lectureModel.getCourseIDByLectureID(lectureid);
 			const usercourseResult = await usercoursesModel.getUserCourseId(
