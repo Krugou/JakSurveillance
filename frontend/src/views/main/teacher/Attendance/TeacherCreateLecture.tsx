@@ -305,7 +305,7 @@ const CreateLecture: React.FC = () => {
 					<button
 						aria-label="Open Attendance"
 						title="Open Attendance"
-						className="bg-metropoliaMainOrange w-2/4 hover:hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 m-4 rounded focus:outline-none focus:shadow-outline"
+						className="bg-metropoliaMainOrange w-2/4 hover:hover:bg-metropoliaSecondaryOrange transition text-white font-bold py-2 px-4 m-4 rounded focus:outline-none focus:shadow-outline"
 						onClick={handleOpenAttendance}
 					>
 						Open

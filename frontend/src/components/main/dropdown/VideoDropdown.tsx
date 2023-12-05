@@ -16,7 +16,7 @@ const VideoDropdown: React.FC<VideoDropdownProps> = ({ title, src }) => {
         <div className="m-auto w-full sm:w-full md:w-3/4 xl:w-3/4 2xl:w-2/4">
             <button
                 onClick={toggleDropdown}
-                className={`border p-2 rounded-md flex items-center hover:bg-metropoliaSecondaryOrange text-white gap-4 m-auto ${
+                className={`border p-2 rounded-md flex items-center transition hover:bg-metropoliaSecondaryOrange text-white gap-4 m-auto ${
                     isOpen ? 'bg-metropoliaSecondaryOrange' : 'bg-metropoliaMainOrange'
                 }`}
             >
@@ -46,7 +46,7 @@ const VideoDropdown: React.FC<VideoDropdownProps> = ({ title, src }) => {
         </span>
             </button>
             {isOpen && (
-                <div className="w-full h-full m-auto mt-4">
+                <div className="w-full h-full m-auto  mt-4">
                     <video controls src={src} className="w-full rounded h-full" />
                 </div>
             )}

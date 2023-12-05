@@ -10,7 +10,7 @@ const GeneralLinkButton: React.FC<GeneralLinkButtonProps> = ({path, text}) => {
 	const navigate = useNavigate();
 	return (
 		<button
-			className="bg-metropoliaMainOrange hover:hover:bg-metropoliaSecondaryOrange text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+			className="bg-metropoliaMainOrange transition hover:hover:bg-metropoliaSecondaryOrange text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
 			onClick={() => navigate(path)}
 		>
 			{text}

@@ -130,7 +130,7 @@ const StudentList = ({studentList, setStudentList}) => {
 			<div className="h-1/2 relative overflow-x-scroll">
 				<button
 					aria-label={hideExtraColumns ? 'Show All Columns' : 'Hide Extra Columns'}
-					className="p-1 bg-metropoliaMainOrange text-sm text-white font-bold rounded-xl hover:bg-metropoliaSecondaryOrange focus:outline-none mb-4 sticky top-0 left-0"
+					className="p-1 bg-metropoliaMainOrange text-sm text-white transition font-bold rounded-xl hover:bg-metropoliaSecondaryOrange focus:outline-none mb-4 sticky top-0 left-0"
 					onClick={event => {
 						event.preventDefault();
 						toggleExtraColumns();
@@ -151,7 +151,7 @@ const StudentList = ({studentList, setStudentList}) => {
 													{key === 'last_name' && (
 														<button
 															aria-label="Sort Column"
-															className="ml-2 bg-metropoliaMainOrange text-sm text-white font-bold rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark p-1"
+															className="ml-2 bg-metropoliaMainOrange text-sm text-white font-bold transition rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark p-1"
 															onClick={sortStudents}
 														>
 															<SortIcon />
