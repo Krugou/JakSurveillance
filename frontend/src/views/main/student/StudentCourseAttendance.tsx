@@ -129,7 +129,7 @@ const StudentCourseAttendance: React.FC = () => {
 	console.log(filteredAttendanceData, 'filteredAttendanceData');
 	if (attendanceData.length > 0) {
 		return (
-			<div className="overflow-x-auto flex flex-col border-x border-t">
+			<div className="overflow-x-auto w-full bg-gray-100 p-10 flex flex-col border-x border-t">
 				<h1 className="text-xl sm:text-4xl font-bold mt-2 mb-8 text-center">
 					Attendance for Course {attendanceData[0].name}
 				</h1>
@@ -165,15 +165,17 @@ const StudentCourseAttendance: React.FC = () => {
 						</Select>
 					</FormControl>
 				</div>
+				<div className="text-center">
 				<Button
 					variant="contained"
 					color="primary"
 					startIcon={<ShowChartIcon />}
-					className="mt-4 sm:mt-0"
+					className="mt-4 sm:mt-0 w-1/3"
 					onClick={() => setShowTable(!showTable)}
 				>
 					Attendance statistics
 				</Button>
+				</div>
 				{showTable && (
 					<AttendanceTable filteredAttendanceData={filteredAttendanceData} />
 				)}
