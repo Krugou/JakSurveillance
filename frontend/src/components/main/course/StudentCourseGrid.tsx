@@ -155,7 +155,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 		additionalClasses = 'grid-cols-1 md:grid-cols-2';
 	} else if (courses.length >= 3) {
 		additionalClasses =
-			'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 h-fit sm:max-h-[30em] overflow-hidden sm:overflow-y-scroll';
+			'grid-cols-1 md:grid-cols-2 xl:grid-cols-3 h-fit sm:max-h-[30em] overflow-hidden sm:overflow-y-scroll';
 	} else if (courses.length === 1) {
 		additionalClasses = 'grid-cols-1';
 	}
@@ -216,7 +216,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 										<ReportIcon style={{color: 'red'}} />
 									</div>
 								)}
-								<h2 className="text-2xl underline underline-offset-8 decoration-metropoliaMainOrange font-bold mb-2 text-black">
+								<h2 className="sm:text-2xl text-lg underline underline-offset-8 decoration-metropoliaMainOrange font-bold mb-2 text-black">
 									{course.course_name + ' ' + course.code}
 								</h2>
 								<p className="mb-1">
