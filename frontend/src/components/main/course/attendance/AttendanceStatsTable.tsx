@@ -47,14 +47,17 @@ interface FetchedDataItem {
 const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 	allAttendanceCounts,
 	threshold,
-	attendanceStudentData,
-	usercourseid,
+	attendanceStudentData, // from  student view
+	usercourseid, // from student view url param
 }) => {
 	const topics = allAttendanceCounts
 		? allAttendanceCounts.map(item => item.topicname)
 		: Object.keys(attendanceStudentData?.attendance || {});
+
+	// State to keep track of the fetched data
 	const [fetchedData, setFetchedData] = useState<FetchedDataItem | null>(null);
 
+	// Fetch the student data for the course if the usercourseid is available (i.e. if the component is used in the student view)
 	useEffect(() => {
 		const fetchData = async () => {
 			if (usercourseid) {
@@ -64,6 +67,7 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 						throw new Error('No token available');
 					}
 
+					// Fetch the student data for the course
 					const response = await apiHooks.getStudentAndTopicsByUsercourseid(
 						token,
 						usercourseid,
