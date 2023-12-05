@@ -49,9 +49,9 @@ interface LectureModel {
 		| OkPacket[]
 		| ProcedureCallPacket
 	>;
-	getLectureWithCourseAndTopic(lectureid: number): Promise<any>;
+	getLectureWithCourseAndTopic(lectureid: string): Promise<any>;
 	getCourseIDByLectureID(lectureid: number): Promise<any>;
-	// other methods...
+	getStudentsByLectureId(lectureid: number): Promise<any>;
 }
 
 const lectureModel: LectureModel = {
@@ -228,7 +228,7 @@ const lectureModel: LectureModel = {
 			);
 		return result;
 	},
-	async getLectureWithCourseAndTopic(lectureid: number) {
+	async getLectureWithCourseAndTopic(lectureid: string) {
 		try {
 			const [rows] = await pool
 				.promise()
