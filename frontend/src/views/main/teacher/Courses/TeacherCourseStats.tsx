@@ -210,7 +210,7 @@ const TeacherCourseStats = () => {
 						</button>
 					</Tooltip>
 					<Autocomplete
-						className="sm:w-[20em] w-1/2"
+						className="sm:w-[30em] w-1/2"
 						freeSolo
 						options={courses.map((course: Course) => `${course.name} ${course.code}`)}
 						onChange={(_, value) => handleCourseSelect(value)}

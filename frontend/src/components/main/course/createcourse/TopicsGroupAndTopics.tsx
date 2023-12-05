@@ -268,7 +268,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 							<div
 								key={index}
 								className={`p-4 text-metropoliaSupportWhite ${
-									index % 2 === 0 ? 'bg-metropoliaMainOrange' : 'bg-metropoliaSupportRed'
+									index % 2 === 0 ? 'bg-metropoliaMainOrange' : 'bg-metropoliaSecondaryOrange'
 								}`}
 							>
 								{topic}

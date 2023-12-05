@@ -124,7 +124,7 @@ const TeacherStudentDetail: React.FC = () => {
 
 	return (
 		<div className="w-fit">
-			<div className="bg-gray-100 rounded-lg p-5">
+			<div className="bg-white rounded-lg p-5">
 				<h2 className="text-2xl font-bold underline underline-offset-8 decoration-metropoliaMainOrange mb-5">
 					{student.first_name + ' ' + student.last_name}'s Info
 				</h2>
@@ -133,6 +133,7 @@ const TeacherStudentDetail: React.FC = () => {
 				<h2 className="text-2xl font-bold mt-10 underline underline-offset-8 decoration-metropoliaMainOrange mb-5">
 					{student.first_name + ' ' + student.last_name}'s Courses
 				</h2>
+				<div className="bg-gray-100 pl-5 pt-1 pb-5 pr-5">
 				<StudentCourseGrid
 					courses={courses}
 					showEndedCourses={true}
@@ -140,6 +141,7 @@ const TeacherStudentDetail: React.FC = () => {
 					handleAddStudentToCourse={handleAddStudentToCourse}
 					handleRemoveStudentFromCourse={handleRemoveStudentFromCourse}
 				/>
+				</div>
 			</div>
 		</div>
 	);

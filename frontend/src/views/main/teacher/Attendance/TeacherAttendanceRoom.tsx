@@ -285,7 +285,7 @@ const AttendanceRoom: React.FC = () => {
 			{loading ? (
 				<CircularProgress />
 			) : (
-				<div className="flex flex-col m-auto w-full xl:w-4/5 2xl:w-1/2 h-full p-5 bg-gray-100">
+				<div className="flex flex-col m-auto w-full xl:w-4/5 2xl:w-2/3 h-full p-5 bg-gray-100">
 					<div>
 						<h1 className="text-2xl pb-5 font-bold">
 							{courseName} - {courseCode} - {topicname} -{' '}
@@ -305,7 +305,7 @@ const AttendanceRoom: React.FC = () => {
 									size={256}
 									value={hashValue}
 									viewBox={`0 0 256 256`}
-									className="md:w-[30em] w-full h-full"
+									className="w-full 2xl:w-[50em] sm:w-[20em] lg:w-full h-full"
 								/>
 							)}
 
