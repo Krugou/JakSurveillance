@@ -84,7 +84,7 @@ const TeacherStudentsView: React.FC = () => {
 							className="mb-4 mx-1 lg:mx-2 xl:mx-4 bg-white rounded shadow-lg max-w-full w-12/12 hover:bg-gray-200 transition duration-300"
 						>
 							<div className="px-4 flex flex-col lg:px-4 py-2 lg:py-4 text-sm md:text-base">
-								<div className="font-bold text-lg mb-2">
+								<div className="font-bold text-lg mb-2 underline underline-offset-8 decoration-metropoliaMainOrange">
 									{student.first_name} {student.last_name}
 								</div>
 								{student.email && <p>Email: </p>}

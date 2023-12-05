@@ -155,7 +155,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 		additionalClasses = 'grid-cols-1 md:grid-cols-2';
 	} else if (courses.length >= 3) {
 		additionalClasses =
-			'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 h-fit sm:max-h-[20em] overflow-hidden sm:overflow-y-scroll';
+			'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 h-fit sm:max-h-[30em] overflow-hidden sm:overflow-y-scroll';
 	} else if (courses.length === 1) {
 		additionalClasses = 'grid-cols-1';
 	}
@@ -207,7 +207,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 							key={index}
 						>
 							<div
-								className={`p-6 bg-white shadow-md rounded-lg relative ${
+								className={`p-5 bg-white shadow-md rounded-lg relative ${
 									isCourseEnded ? 'opacity-50' : ''
 								}`}
 							>
@@ -216,7 +216,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 										<ReportIcon style={{color: 'red'}} />
 									</div>
 								)}
-								<h2 className="text-2xl underline font-bold mb-2 text-black">
+								<h2 className="text-2xl underline underline-offset-8 decoration-metropoliaMainOrange font-bold mb-2 text-black">
 									{course.course_name + ' ' + course.code}
 								</h2>
 								<p className="mb-1">
@@ -234,14 +234,18 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 								<p className="mb-1">
 									<strong>End Date:</strong> {endDateString}
 								</p>
-								<p className="mb-1">
-									<strong>Course Instructors:</strong> {course.instructor_name}
-								</p>
+								<h2 className="text-gray-700 mt-2 text-lg font-bold">Instructors</h2>
+								<ul>
+									{course.instructor_name.split(',').map((instructor, index) => (
+										<li key={index}>{instructor.trim()}</li>
+									))}
+								</ul>
+								<div className="flex justify-between items-center flex-wrap">
 								<button
-									className={`mt-4 mr-4 font-bold py-2 px-4 rounded ${
+									className={`mt-4 mr-4 font-bold md:text-base text-sm py-2 px-4 rounded ${
 										isCourseEnded
 											? 'bg-metropoliaSupportRed hover:bg-red-900'
-											: 'bg-metropoliaTrendGreen hover:bg-green-700'
+											: 'bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange'
 									} text-white`}
 									onClick={() =>
 										user?.role === 'student'
@@ -256,10 +260,10 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 								{user?.role !== 'student' && (
 									<>
 										<button
-											className={`mt-4 font-bold py-2 px-4 rounded ${
+											className={`mt-4 mr-2 md:text-base text-sm md:mr-4 font-bold py-2 px-4 rounded ${
 												isCourseEnded
 													? 'bg-metropoliaSupportRed hover:bg-red-900'
-													: 'bg-metropoliaTrendGreen hover:bg-green-700'
+													: 'bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange'
 											} text-white`}
 											onClick={() =>
 												handleOpen(
@@ -273,7 +277,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 											Edit Topics for Student
 										</button>
 										<Tooltip title="Remove student from course">
-											<div className="absolute bottom-5 right-5 bg-gray-100 rounded-lg">
+											<div className="w-[2.5em] mt-5 right-5 bg-gray-100 rounded-lg">
 												<IconButton
 													onClick={() => {
 														setIsDeleteModalOpen(true);
@@ -315,6 +319,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 										/>
 									</>
 								)}
+								</div>
 							</div>
 						</Tooltip>
 					);

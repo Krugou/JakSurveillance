@@ -129,11 +129,11 @@ const TeacherStudentDetail: React.FC = () => {
 					{student.first_name + ' ' + student.last_name}'s Info
 				</h2>
 				<ProfileInfo user={student} />
-				<div className="w-full mt-10 h-1 bg-metropoliaMainOrange rounded-md"></div>
-				<h2 className="text-2xl font-bold mt-10 underline underline-offset-8 decoration-metropoliaMainOrange mb-5">
+				<div className="w-full mt-5 h-1 bg-metropoliaMainOrange rounded-md"></div>
+				<h2 className="text-2xl font-bold mt-5 underline underline-offset-8 decoration-metropoliaMainOrange mb-5">
 					{student.first_name + ' ' + student.last_name}'s Courses
 				</h2>
-				<div className="bg-gray-100 pl-5 pt-1 pb-5 pr-5">
+				<div className="bg-gray-100 pl-2 pt-1 pb-2 pr-2">
 				<StudentCourseGrid
 					courses={courses}
 					showEndedCourses={true}
