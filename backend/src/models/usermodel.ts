@@ -1,5 +1,5 @@
 import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
-
+import * as mysql from 'mysql2/promise';
 import createPool from '../config/createPool.js';
 
 const pool = createPool('ADMIN'); // Adjust the path to your pool file
@@ -37,6 +37,18 @@ interface User {
 	userid?: number;
 	studentnumber?: string;
 	roleid: number;
+}
+interface UpdateUser {
+	userid: number;
+	first_name: string;
+	last_name: string;
+	email: string;
+	username: string;
+	GDPR: number;
+	roleid: number;
+	staff: number;
+	studentgroupid: number;
+	studentnumber: string;
 }
 /**
  * @description Creates a User Model object literal.
@@ -141,15 +153,15 @@ const UserModel = {
 					[username, email, staff, first_name, last_name, roleid],
 				);
 
-			const insertId = result[0].insertId;
+			const insertId = (result[0] as mysql.OkPacket).insertId;
 			const [rows] = await pool
 				.promise()
 				.query(
 					`SELECT users.userid, users.username, users.email, users.first_name, users.last_name, users.created_at, users.studentnumber, users.gdpr AS gdpr, roles.name AS role FROM users JOIN roles ON users.roleid = roles.roleid WHERE users.userid = ?;`,
 					[insertId],
 				);
-			if (rows.length > 0) {
-				return rows[0] as User;
+			if ((rows as mysql.RowDataPacket[]).length > 0) {
+				return (rows as mysql.RowDataPacket[])[0] as User;
 			} else {
 				return null;
 			}
@@ -392,7 +404,8 @@ const UserModel = {
 			return Promise.reject(error);
 		}
 	},
-	updateUser: async user => {
+
+	updateUser: async (user: UpdateUser) => {
 		const {
 			userid,
 			first_name,
