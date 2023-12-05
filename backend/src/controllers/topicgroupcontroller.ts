@@ -10,7 +10,13 @@ const TopicGroupController = {
 	async getAllUserTopicGroupsAndTopics(email: string) {
 		try {
 			const user = await UserModel.getAllUserInfo(email);
+			if (!user) {
+				throw new Error('User not found');
+			}
 			const userid = user.userid;
+			if (userid === undefined) {
+				throw new Error('User id is undefined');
+			}
 			const topicGroups =
 				await TopicGroupModel.fetchAllTopicGroupsWithTopicsByUserId(userid);
 			return topicGroups;
