@@ -9,9 +9,11 @@ const router: Router = express.Router();
 router.get(
 	'/',
 	checkUserRole(['admin', 'counselor', 'teacher']),
-	async (req: Request, res: Response) => {
+	async (_req: Request, res: Response) => {
 		try {
-			return await adminController.getServerSettings(req as any, res as any);
+			const serverSettings = await adminController.getServerSettings();
+			console.log("🚀 ~ file: adminroutes.ts:15 ~ serverSettings:", serverSettings)
+			res.status(200).send(serverSettings[0][0]);
 		} catch (error) {
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
@@ -22,8 +24,15 @@ router.post(
 	'/',
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	async (req: Request, res: Response) => {
+		const {speedofhash, leewayspeed, timeouttime, attendancethreshold} = req.body;
 		try {
-			return await adminController.updateServerSettings(req as any, res as any);
+			return await adminController.updateServerSettings(
+				speedofhash,
+				leewayspeed,
+				timeouttime,
+				attendancethreshold,
+			);
+			res.status(200).send({message: 'Server settings updated successfully'});
 		} catch (error) {
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
@@ -33,7 +42,7 @@ router.post(
 router.get(
 	'/rolesspecial',
 	checkUserRole(['admin', 'counselor', 'teacher']),
-	async (req: Request, res: Response) => {
+	async (_req: Request, res: Response) => {
 		try {
 			const roles = await rolemodel.fetchTeacherAndCounselorRoles();
 			res.send(roles);
@@ -46,7 +55,7 @@ router.get(
 router.get(
 	'/roles',
 	checkUserRole(['admin', 'counselor', 'teacher']),
-	async (req: Request, res: Response) => {
+	async (_req: Request, res: Response) => {
 		try {
 			const roles = await rolemodel.fetchAllRoles();
 			res.send(roles);
@@ -74,7 +83,7 @@ router.post(
 router.get(
 	'/getusers',
 	checkUserRole(['admin', 'counselor', 'teacher']),
-	async (req: Request, res: Response) => {
+	async (_req: Request, res: Response) => {
 		try {
 			const users = await usermodel.fetchUsers();
 			res.send(users);
@@ -101,7 +110,7 @@ router.get(
 router.get(
 	'/getcourses',
 	checkUserRole(['admin', 'counselor', 'teacher']),
-	async (req: Request, res: Response) => {
+	async (_req: Request, res: Response) => {
 		try {
 			const courses = await course.getCoursesWithDetails();
 			res.send(courses);
@@ -128,7 +137,7 @@ router.put(
 router.get(
 	'/studentgroups',
 	checkUserRole(['admin', 'counselor', 'teacher']),
-	async (req: Request, res: Response) => {
+	async (_req: Request, res: Response) => {
 		try {
 			const groups = await studentgroupmodel.fetchAllStudentGroups();
 			res.send(groups);
@@ -157,15 +166,18 @@ router.get(
 			res.status(500).json({message: 'Internal server error'});
 		}
 	},
-	
 );
-router.get('/getrolecounts', checkUserRole(['admin', 'counselor', 'teacher']), async (req: Request, res: Response) => {
-	try {
-		const roleCounts = await usermodel.getRoleCounts();
-		res.send(roleCounts);
-	} catch (error) {
-		console.error(error);
-		res.status(500).json({message: 'Internal server error'});
-	}
-});
+router.get(
+	'/getrolecounts',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	async (_req: Request, res: Response) => {
+		try {
+			const roleCounts = await usermodel.getRoleCounts();
+			res.send(roleCounts);
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({message: 'Internal server error'});
+		}
+	},
+);
 export default router;
