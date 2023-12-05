@@ -149,44 +149,64 @@
                         }
                     }
                 } );
-                const fetchLinks = async () => {
-                    const response = await fetch( 'links.json' );
-                    const links = await response.json();
-                    return links;
-                };
 
-                const createLinkElement = ( link ) => {
-                    const a = document.createElement( 'a' );
-                    a.href = link;
-                    a.className = "text-lg rounded-lg shadow bg-white hover:bg-blue-500 hover:text-white transition-colors duration-200 border-2 border-blue-500 bg-green-200 font-bold block h-full flex items-center justify-center";
-
-                    const row = document.createElement( 'div' );
-                    row.className = '';
-
-                    a.textContent = link;
-                    a.appendChild( row );
-
-                    return a;
-                };
-
-                const populateLinks = async () => {
-                    try {
-                        const dataContainer = document.getElementById( 'dataContainer2' );
-                        dataContainer.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4';
-
-                        const links = await fetchLinks();
-
-                        for ( const link of links ) {
-                            const linkElement = createLinkElement( link );
-                            dataContainer.appendChild( linkElement );
-                        }
-                    } catch ( error ) {
-                        console.error( 'Error:', error );
-                    }
-                };
-
-                populateLinks();
             } );
+        const fetchLinks = async () => {
+            const response = await fetch( 'links.json' );
+            const links = await response.json();
+            return links;
+        };
+
+        const createLinkElement = ( link ) => {
+            const a = document.createElement( 'a' );
+            a.href = link;
+            a.className = "text-lg rounded-lg shadow bg-white hover:bg-blue-500 hover:text-white transition-colors duration-200 border-2 border-blue-500 bg-green-200 font-bold block  flex items-center justify-center";
+
+            const row = document.createElement( 'div' );
+            row.className = '';
+
+            a.textContent = link;
+            a.appendChild( row );
+
+            return a;
+        };
+
+        const populateLinks = async () => {
+            try {
+                const dataContainer = document.getElementById( 'dataContainer2' );
+                dataContainer.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4';
+
+                const links = await fetchLinks();
+
+                // Group links by file extension
+                const linksByFileType = links.reduce( ( groups, link ) => {
+                    const fileExtension = link.split( '.' ).pop();
+                    if ( !groups[ fileExtension ] ) {
+                        groups[ fileExtension ] = [];
+                    }
+                    groups[ fileExtension ].push( link );
+                    return groups;
+                }, {} );
+
+                // Create a section for each file type
+                for ( const fileType in linksByFileType ) {
+                    const fileTypeContainer = document.createElement( 'div' );
+                    fileTypeContainer.className = 'file-type-container';
+                    fileTypeContainer.innerHTML = `<h2>${ fileType }</h2>`;
+                    dataContainer.appendChild( fileTypeContainer );
+
+                    // Add each link to the appropriate section
+                    for ( const link of linksByFileType[ fileType ] ) {
+                        const linkElement = createLinkElement( link );
+                        fileTypeContainer.appendChild( linkElement );
+                    }
+                }
+            } catch ( error ) {
+                console.error( 'Error:', error );
+            }
+        };
+
+        populateLinks();
         document.getElementById( 'scoresContainerButton' ).addEventListener( 'click', () => {
             const scoresContainer = document.getElementById( 'scorescontainer' );
             const linksContainer = document.getElementById( 'linkscontainer' );
