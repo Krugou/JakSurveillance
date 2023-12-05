@@ -113,8 +113,6 @@ const StudentCourseAttendance: React.FC = () => {
 		topicAttendancePercentages[topic] = (counts.attended / counts.total) * 100;
 	}
 
-	console.log(topicAttendanceCounts, 'firstTopicAttendanceCounts');
-	console.log(topicAttendancePercentages, 'firstTopicAttendancePercentages');
 	const attendanceStudentData = {
 		topics: uniqueTopics,
 		attendance: topicAttendancePercentages,

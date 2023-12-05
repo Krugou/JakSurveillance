@@ -38,6 +38,12 @@ interface AttendanceStatsTableProps {
 	usercourseid?: number;
 }
 
+interface FetchedDataItem {
+	last_name: string;
+	first_name: string;
+	topics: string[];
+}
+
 const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 	allAttendanceCounts,
 	threshold,
@@ -47,7 +53,7 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 	const topics = allAttendanceCounts
 		? allAttendanceCounts.map(item => item.topicname)
 		: Object.keys(attendanceStudentData?.attendance || {});
-	const [fetchedData, setFetchedData] = useState<[] | null>(null);
+	const [fetchedData, setFetchedData] = useState<FetchedDataItem | null>(null);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -74,10 +80,8 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 		fetchData();
 	}, [usercourseid]);
 	const {user} = useContext(UserContext);
-	console.log(topics);
 	const navigate = useNavigate();
 
-	console.log(fetchedData, 'FETCHED DATA');
 	return (
 		<TableContainer className="overflow-x-auto sm:max-h-[30em] h-fit overflow-y-scroll border-gray-300 border-x border-t mt-5 mb-5 rounded-lg shadow">
 			<Table className="min-w-full divide-y divide-gray-200">
