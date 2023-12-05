@@ -1,4 +1,3 @@
-import {match} from 'assert';
 import course from '../models/coursemodel.js';
 import lectureModel from '../models/lecturemodel.js';
 import topicModel from '../models/topicmodel.js';
@@ -20,10 +19,15 @@ const lectureController = {
 			const courseRows = await course.findCourseIdUsingCourseCode(coursecode);
 			// console.log('🚀 ~ file: lecturemodel.ts:70 ~ courseRows:', courseRows);
 
-			if (topicId.length === 0 || courseRows.length === 0) {
-				console.error(`Topic or course does not exist`);
-				return;
-			}
+			if (
+					!topicId ||
+					topicId.length === 0 ||
+					!courseRows ||
+					courseRows.length === 0
+				) {
+					console.error(`Topic or course does not exist`);
+					return;
+				}
 
 			const topicid = topicId[0].topicid;
 			// console.log('🚀 ~ file: lecturemodel.ts:78 ~ topicid:', topicid);
@@ -38,6 +42,10 @@ const lectureController = {
 				courseid,
 				state,
 			);
+			if (!result) {
+				console.error('Failed to insert into lecture');
+				return;
+			}
 			const lectureid = result.insertId;
 			console.log('🚀 ~ file: lecturemodel.ts:88 ~ lectureid:', lectureid);
 			return lectureid;
