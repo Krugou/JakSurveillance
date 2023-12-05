@@ -328,7 +328,7 @@ const AttendanceRoom: React.FC = () => {
 					<div className="flex sm:flex-row-reverse flex-col gap-5 items-center justify-end">
 						<button
 							onClick={handleLectureFinished}
-							className="bg-metropoliaMainOrange sm:w-fit h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSecondaryOrange text-white font-bold rounded"
+							className="bg-metropoliaMainOrange sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSecondaryOrange text-white font-bold rounded"
 						>
 							Finish Lecture
 						</button>

@@ -242,7 +242,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 								</ul>
 								<div className="flex justify-between items-center flex-wrap">
 								<button
-									className={`mt-4 mr-4 font-bold md:text-base text-sm py-2 px-4 rounded ${
+									className={`mt-4 mr-4 transition font-bold md:text-base text-sm py-2 px-4 rounded ${
 										isCourseEnded
 											? 'bg-metropoliaSupportRed hover:bg-red-900'
 											: 'bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange'
@@ -260,7 +260,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 								{user?.role !== 'student' && (
 									<>
 										<button
-											className={`mt-4 mr-2 md:text-base text-sm md:mr-4 font-bold py-2 px-4 rounded ${
+											className={`mt-4 mr-2 transition md:text-base text-sm md:mr-4 font-bold py-2 px-4 rounded ${
 												isCourseEnded
 													? 'bg-metropoliaSupportRed hover:bg-red-900'
 													: 'bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange'
@@ -277,7 +277,7 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 											Edit Topics for Student
 										</button>
 										<Tooltip title="Remove student from course">
-											<div className="w-[2.5em] mt-5 right-5 bg-gray-100 rounded-lg">
+											<div className="w-[2.5em] mt-5  right-5 bg-gray-100 rounded-lg">
 												<IconButton
 													onClick={() => {
 														setIsDeleteModalOpen(true);

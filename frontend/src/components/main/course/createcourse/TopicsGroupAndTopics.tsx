@@ -159,7 +159,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 					<button
 						type="button"
 						onClick={() => setIsCustomGroup(prev => !prev)}
-						className="mb-3 w-fit text-sm p-2 bg-metropoliaMainOrange text-white rounded-3xl hover:bg-metropoliaSecondaryOrange"
+						className="mb-3 w-fit text-sm p-2 bg-metropoliaMainOrange transition text-white rounded-3xl hover:bg-metropoliaSecondaryOrange"
 					>
 						{isCustomGroup ? 'Select Existing Group' : 'Create Custom Group'}
 					</button>
@@ -184,7 +184,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 								title='add custom topic group here example: "customGroup"'
 							/>
 							<button
-								className="mb-3 w-fit p-2 bg-metropoliaMainOrange text-white text-sm rounded-3xl hover:bg-metropoliaSecondaryOrange"
+								className="mb-3 w-fit p-2 bg-metropoliaMainOrange transition text-white text-sm rounded-3xl hover:bg-metropoliaSecondaryOrange"
 								onClick={handleApply}
 							>
 								Apply
@@ -240,7 +240,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 										setCustomTopics(prevTopics => [...prevTopics, customTopic]);
 										setCustomTopic('');
 									}}
-									className="mb-3 w-fit p-2 bg-metropoliaMainOrange text-white text-sm rounded-3xl hover:bg-metropoliaSecondaryOrange"
+									className="mb-3 w-fit p-2 bg-metropoliaMainOrange transition text-white text-sm rounded-3xl hover:bg-metropoliaSecondaryOrange"
 								>
 									Add Custom Topic
 								</button>

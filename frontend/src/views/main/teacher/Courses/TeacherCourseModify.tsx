@@ -218,7 +218,7 @@ const TeacherCourseModify: React.FC = () => {
 				/>
 				<div className="flex w-full justify-center">
 					<button
-						className=" bg-metropoliaTrendGreen w-1/2  hover:bg-green-600 text-white font-bold py-2 rounded-xl px-4 focus:outline-none focus:shadow-outline"
+						className=" bg-metropoliaTrendGreen w-1/2 transition hover:bg-green-600 text-white font-bold py-2 rounded-xl px-4 focus:outline-none focus:shadow-outline"
 						type="button"
 						onClick={handleSubmit}
 					>
