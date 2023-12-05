@@ -458,13 +458,17 @@ router.delete(
 	'/deleteusercourse/:usercourseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	async (req: Request, res: Response) => {
-		const {usercourseid} = req.params;
+		const usercourseid = Number(req.params.usercourseid);
 		try {
 			await courseController.removeStudentCourses(usercourseid);
 			res.status(200).json({message: 'Successfully deleted student courses'});
-		} catch (error) {
+		} catch (error: unknown) {
 			console.error(error);
-			res.status(500).json({message: error.message || 'Internal server error'});
+			if (error instanceof Error) {
+				res.status(500).json({message: error.message});
+			} else {
+				res.status(500).json({message: 'Internal server error'});
+			}
 		}
 	},
 );
