@@ -1,5 +1,5 @@
 import * as mysql2 from 'mysql2';
-import {Connection, FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
+import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
 const pool = createPool('ADMIN');
 /**
@@ -27,7 +27,7 @@ interface TopicModel {
 	checkIfTopicExists(topic: string): Promise<RowDataPacket[] | null>;
 	checkIfTopicExistsWithConnection(
 		topic: string,
-		connection: Connection,
+		connection: mysql2.PoolConnection,
 	): Promise<RowDataPacket[] | null>;
 
 	// other methods...
@@ -137,7 +137,7 @@ const topicModel: TopicModel = {
 	async checkIfTopicExistsWithConnection(
 		topic: string,
 		connection: mysql2.PoolConnection,
-	) {
+	): Promise<RowDataPacket[] | null> {
 		const [existingCourseTopic] = await connection.query<RowDataPacket[]>(
 			'SELECT * FROM topics WHERE topicname = ?',
 			[topic],

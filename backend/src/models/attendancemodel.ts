@@ -1,8 +1,4 @@
-import {
-	FieldPacket,
-	
-	RowDataPacket,
-} from 'mysql2';
+import {FieldPacket, RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
 
 const pool = createPool('ADMIN');
@@ -29,7 +25,7 @@ interface AttendanceModel {
 	getAttendanceByUserCourseIdDateLectureId: (
 		usercourseid: number,
 		date: string,
-		lectureid: number,
+		lectureid: string,
 	) => Promise<any>;
 	checkAttendance: (usercourseid: number, lectureid: number) => Promise<any>;
 	getLectureCountByTopic: (courseid: string) => Promise<any>;
@@ -37,8 +33,8 @@ interface AttendanceModel {
 	insertAttendance: (
 		status: number,
 		date: string,
-		usercourseid: number,
-		lectureid: number,
+		usercourseid: string,
+		lectureid: string,
 	) => Promise<any>;
 }
 
@@ -115,7 +111,7 @@ const attendanceModel: AttendanceModel = {
 	async getAttendanceByUserCourseIdDateLectureId(
 		usercourseid: number,
 		date: string,
-		lectureid: number,
+		lectureid: string,
 	) {
 		const [attendanceResult] = await pool
 			.promise()
@@ -129,8 +125,8 @@ const attendanceModel: AttendanceModel = {
 	async insertAttendance(
 		status: number,
 		date: string,
-		usercourseid: number,
-		lectureid: number,
+		usercourseid: string,
+		lectureid: string,
 	) {
 		if (!date || !usercourseid || !lectureid) {
 			throw new Error('Invalid parameters');
@@ -172,7 +168,7 @@ const attendanceModel: AttendanceModel = {
 			)) as RowDataPacket[];
 		return userResult[0];
 	},
-	async getAttendaceByCourseId(courseid: number) {
+	async getAttendaceByCourseId(courseid: string) {
 		const [attendanceResult] = await pool.promise().query(
 			`SELECT attendance.status, attendance.attendanceid, usercourses.usercourseid, lecture.start_date, lecture.timeofday, topics.topicname, courses.name, users.email AS teacher, attendingUsers.first_name, attendingUsers.last_name, attendingUsers.studentnumber, attendingUsers.email, attendingUsers.userid
 			FROM attendance 
@@ -188,7 +184,7 @@ const attendanceModel: AttendanceModel = {
 		);
 		return attendanceResult;
 	},
-	async getLectureCountByTopic(courseid: number) {
+	async getLectureCountByTopic(courseid: string) {
 		const [result] = await pool.promise().query(
 			`SELECT topics.topicname, COUNT(lecture.lectureid) AS lecture_count
 			FROM coursetopics

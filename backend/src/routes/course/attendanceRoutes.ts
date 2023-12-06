@@ -82,8 +82,12 @@ router.post('/', async (req: Request, res: Response) => {
 	} catch (err) {
 		console.error(err);
 
-		// Send more specific error message
-		res.status(500).send(`Server error: ${err.message}`);
+		if (err instanceof Error) {
+			// Now TypeScript knows that err is an Error object
+			res.status(500).send(`Server error: ${err.message}`);
+		} else {
+			res.status(500).send('Server error');
+		}
 	}
 });
 router.post('/lecturefinished/', async (req: Request, res: Response) => {

@@ -46,9 +46,8 @@ const lectureController = {
 				console.error('Failed to insert into lecture');
 				return;
 			}
-			
-			
-			const lectureid = result.insertId;
+
+			const lectureid = (result as { insertId: number }).insertId;
 			console.log('🚀 ~ file: lecturemodel.ts:88 ~ lectureid:', lectureid);
 			return lectureid;
 		} catch (error) {
