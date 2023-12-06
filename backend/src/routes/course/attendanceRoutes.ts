@@ -34,7 +34,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.get('/usercourse/:id', async (req: Request, res: Response) => {
 	try {
 		const id = Number(req.params.id);
-		let userid = req.user?.userid;
+		let userid = Number(req.user?.userid);
 		let userinfo;
 		if (
 			req.user?.role === 'teacher' ||
@@ -125,7 +125,7 @@ router.post(
 router.post('/delete/', async (req: Request, res: Response) => {
 	try {
 		const {studentnumber} = req.body;
-		const lectureid = Number(req.body.lectureid);
+		const lectureid = req.body.lectureid;
 		await attendanceController.deleteAttendance(studentnumber, lectureid);
 		res.status(201).send(true);
 	} catch (err) {
@@ -220,7 +220,7 @@ router.get(
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	async (req: Request, res: Response) => {
 		try {
-			const courseid = Number(req.params.courseid);
+			const courseid = req.params.courseid;
 
 			const lecturesAndAttendancesData =
 				await attendanceController.getLecturesAndAttendancesByCourseId(courseid);
