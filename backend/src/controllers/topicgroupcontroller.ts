@@ -36,11 +36,16 @@ const TopicGroupController = {
 				instructorUserId = user.userid;
 			}
 			if (topicGroup) {
-				const newTopicGroup = await TopicGroupModel.insertTopicGroup(
-					topicGroup,
-					instructorUserId,
-				);
-				const topicGroupId = newTopicGroup.insertId;
+				let topicGroupId;
+				if (instructorUserId !== undefined) {
+					const newTopicGroup = await TopicGroupModel.insertTopicGroup(
+						topicGroup,
+						instructorUserId,
+					);
+					topicGroupId = newTopicGroup.insertId;
+				} else {
+					throw new Error('Instructor user ID is undefined');
+				}
 
 				if (topics) {
 					for (const topic of topics) {
@@ -104,7 +109,7 @@ const TopicGroupController = {
 					connection,
 				);
 				// If the topic exists, get the topicid
-				if (existingTopic.length > 0) {
+				if (existingTopic && existingTopic.length > 0) {
 					topicId = existingTopic[0].topicid;
 				} else {
 					throw new Error('Topic does not exist');

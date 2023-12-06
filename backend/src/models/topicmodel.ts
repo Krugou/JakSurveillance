@@ -138,7 +138,7 @@ const topicModel: TopicModel = {
 		topic: string,
 		connection: mysql2.PoolConnection,
 	) {
-		const [existingCourseTopic, fields] = await connection.query<RowDataPacket[]>(
+		const [existingCourseTopic] = await connection.query<RowDataPacket[]>(
 			'SELECT * FROM topics WHERE topicname = ?',
 			[topic],
 		);

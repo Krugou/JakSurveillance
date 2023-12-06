@@ -458,7 +458,7 @@ const course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
-	async getAllStudentsOnCourse(courseId: number): Promise<RowDataPacket[]> {
+	async getAllStudentsOnCourse(courseId: string): Promise<RowDataPacket[]> {
 		try {
 			const [rows] = await pool.promise().query(
 				`SELECT 
