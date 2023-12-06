@@ -1,6 +1,10 @@
 import {RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
-
+interface StudentAndTopics {
+	first_name: string;
+	last_name: string;
+	userid: number;
+}
 const pool = createPool('ADMIN');
 const usercoursesModel = {
 	async checkIfUserCourseExists(userId: number, courseId: number) {

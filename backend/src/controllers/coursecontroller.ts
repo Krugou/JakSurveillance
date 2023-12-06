@@ -1,3 +1,4 @@
+import { RowDataPacket } from 'mysql2';
 import attendanceModel from '../models/attendancemodel.js';
 import courseInstructorModel from '../models/courseinstructormodel.js';
 import {
@@ -17,7 +18,7 @@ interface Student {
 	first_name: string;
 	name: string;
 	last_name: string;
-	studentnumber: number;
+	studentnumber: string;
 	'Arrival Group': string;
 	'Admin Groups': string;
 	Program: string;
@@ -27,6 +28,16 @@ interface Student {
 }
 interface Instructor {
 	email: string;
+}
+interface UserMapResults {
+	usercourseid: number;
+	userid: number;
+	first_name: string;
+	last_name: string;
+	email: string;
+	studentnumber: string;
+	group_name: string;
+	topics: string;
 }
 const courseController = {
 	async insertIntoCourse(
@@ -133,13 +144,14 @@ const courseController = {
 							const topicslist = JSON.parse(topics);
 							for (const topic of topicslist) {
 								const ExistingTopic = await topicModel.checkIfTopicExists(topic);
-
-								if (ExistingTopic.length > 0) {
-									console.error('Topic already exists');
-									topicId = ExistingTopic[0].topicid;
-								} else {
-									const newTopic = await topicModel.insertTopic(topic);
-									topicId = newTopic.insertId;
+								if (ExistingTopic) {
+									if (ExistingTopic.length > 0) {
+										console.error('Topic already exists');
+										topicId = ExistingTopic[0].topicid;
+									} else {
+										const newTopic = await topicModel.insertTopic(topic);
+										topicId = newTopic.insertId;
+									}
 								}
 
 								const topicGroupTopicRelationExists =
@@ -178,14 +190,14 @@ const courseController = {
 							await userModel.checkIfUserExistsByStudentNumber(student.studentnumber);
 
 						let userId: number = 0;
-						let usercourseid: number = 0;
+						// let usercourseid: number = 0;
 						if (existingUserByNumber.length > 0) {
 							console.error('User with this student number already exists');
 							// If the user already exists, insert them into the course
 							userId = existingUserByNumber[0].userid;
-							const result = await userCourseModel.insertUserCourse(userId, courseId);
+							await userCourseModel.insertUserCourse(userId, courseId);
 
-							usercourseid = (result as ResultSetHeader).insertId;
+							// usercourseid = result.insertId;
 						} else {
 							const existingUserByEmail = await userModel.checkIfUserExistsByEmail(
 								student.email,
@@ -198,12 +210,12 @@ const courseController = {
 									student.email,
 								);
 								userId = existingUserByEmail[0].userid;
-								const [result] = await userCourseModel.insertUserCourse(
+								await userCourseModel.insertUserCourse(
 									userId,
 									courseId,
 								);
 
-								usercourseid = (result as ResultSetHeader).insertId;
+								// usercourseid = (result as ResultSetHeader).insertId;
 							} else {
 								// Insert the user if they don't exist
 								const userResult = await userModel.insertStudentUser(
@@ -281,7 +293,7 @@ const courseController = {
 						return user;
 					}
 				});
-				usersAttendance = usersAttendance.map(user => {
+				usersAttendance = usersAttendance.map((user:UserMapResults) => {
 					if (user.usercourseid === usercourseid) {
 						return {...user, selectedParts};
 					} else {
@@ -320,9 +332,10 @@ const courseController = {
 	},
 	removeStudentCourses: async (usercourseid: number) => {
 		try {
-			const existingUserCourse = await userCourseModel.getUserCourseByUsercourseid(
-				usercourseid,
-			);
+			const existingUserCourse =
+				(await userCourseModel.getUserCourseByUsercourseid(
+					usercourseid,
+				)) as RowDataPacket[];
 
 			if (existingUserCourse.length > 0) {
 				// Insert the user into the course

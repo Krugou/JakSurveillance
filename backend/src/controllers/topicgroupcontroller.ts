@@ -30,6 +30,9 @@ const TopicGroupController = {
 			let instructorUserId;
 			if (email) {
 				const user = await UserModel.getAllUserInfo(email);
+				if (!user) {
+					throw new Error('User not found');
+				}
 				instructorUserId = user.userid;
 			}
 			if (topicGroup) {
@@ -44,18 +47,24 @@ const TopicGroupController = {
 						let topicId;
 						const existingTopic = await TopicModel.checkIfTopicExists(topic);
 
-						if (existingTopic.length > 0) {
+						if (existingTopic && existingTopic.length > 0) {
 							console.error('Topic already exists');
 							topicId = existingTopic[0].topicid;
 						} else {
 							const newTopic = await TopicModel.insertTopic(topic);
+							if (!newTopic) {
+								throw new Error('Failed to insert new topic');
+							}
 							topicId = newTopic.insertId;
 						}
 
 						const topicGroupTopicRelationExists =
 							await TopicInGroupModel.checkIfTopicInGroupExists(topicGroupId, topicId);
 
-						if (topicGroupTopicRelationExists.length > 0) {
+						if (
+							topicGroupTopicRelationExists &&
+							topicGroupTopicRelationExists.length > 0
+						) {
 							console.error('Topic group relation exists');
 						} else {
 							await TopicInGroupModel.insertTopicInGroup(topicGroupId, topicId);
@@ -90,7 +99,7 @@ const TopicGroupController = {
 			// Insert the new topics for the usercourseid
 			for (const topic of topics) {
 				let topicId;
-				const existingTopic = await TopicModel.checkIfTopicExists(
+				const existingTopic = await TopicModel.checkIfTopicExistsWithConnection(
 					topic,
 					connection,
 				);

@@ -20,14 +20,14 @@ const lectureController = {
 			// console.log('🚀 ~ file: lecturemodel.ts:70 ~ courseRows:', courseRows);
 
 			if (
-					!topicId ||
-					topicId.length === 0 ||
-					!courseRows ||
-					courseRows.length === 0
-				) {
-					console.error(`Topic or course does not exist`);
-					return;
-				}
+				!topicId ||
+				topicId.length === 0 ||
+				!courseRows ||
+				courseRows.length === 0
+			) {
+				console.error(`Topic or course does not exist`);
+				return;
+			}
 
 			const topicid = topicId[0].topicid;
 			// console.log('🚀 ~ file: lecturemodel.ts:78 ~ topicid:', topicid);
@@ -46,6 +46,8 @@ const lectureController = {
 				console.error('Failed to insert into lecture');
 				return;
 			}
+			
+			
 			const lectureid = result.insertId;
 			console.log('🚀 ~ file: lecturemodel.ts:88 ~ lectureid:', lectureid);
 			return lectureid;

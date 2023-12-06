@@ -1,3 +1,4 @@
+import * as mysql2 from 'mysql2';
 import {Connection, FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
 const pool = createPool('ADMIN');
@@ -23,7 +24,8 @@ interface TopicModel {
 	countTopics(): Promise<number>;
 	findTopicIdUsingTopicName(topic: string): Promise<RowDataPacket[] | null>;
 	insertTopic(topic: string): Promise<ResultSetHeader>;
-	checkIfTopicExists(
+	checkIfTopicExists(topic: string): Promise<RowDataPacket[] | null>;
+	checkIfTopicExistsWithConnection(
 		topic: string,
 		connection: Connection,
 	): Promise<RowDataPacket[] | null>;
@@ -132,20 +134,21 @@ const topicModel: TopicModel = {
 			return Promise.reject(error);
 		}
 	},
-	async checkIfTopicExists(topic: string, connection: any) {
-		let existingCourseTopic;
-		if (connection) {
-			[existingCourseTopic] = await connection.query<RowDataPacket[]>(
-				'SELECT * FROM topics WHERE topicname = ?',
-				[topic],
-			);
-		} else {
-			[existingCourseTopic] = await pool
-				.promise()
-				.query<RowDataPacket[]>('SELECT * FROM topics WHERE topicname = ?', [
-					topic,
-				]);
-		}
+	async checkIfTopicExistsWithConnection(
+		topic: string,
+		connection: mysql2.PoolConnection,
+	) {
+		const [existingCourseTopic, fields] = await connection.query<RowDataPacket[]>(
+			'SELECT * FROM topics WHERE topicname = ?',
+			[topic],
+		);
+		return existingCourseTopic;
+	},
+
+	async checkIfTopicExists(topic: string) {
+		const [existingCourseTopic] = await pool
+			.promise()
+			.query<RowDataPacket[]>('SELECT * FROM topics WHERE topicname = ?', [topic]);
 		return existingCourseTopic;
 	},
 	async insertTopic(topic: string) {

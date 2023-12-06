@@ -1,10 +1,8 @@
-import {ResultSetHeader, RowDataPacket} from 'mysql2';
+import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
 
 const pool = createPool('ADMIN');
 interface Course {
-	// Define the properties of a Course here
-	// For example:
 	courseid?: number;
 	name: string;
 	start_date: Date;
@@ -12,6 +10,16 @@ interface Course {
 	code: string;
 	studentgroupid: number;
 	instructoremail: string;
+}
+interface CourseResults {
+	courseid?: number;
+	name: string;
+	start_date: Date;
+	end_date: Date;
+	code: string;
+	student_group: string;
+	topics: string[];
+	instructors: string[];
 }
 
 interface CourseModel {
@@ -51,9 +59,9 @@ interface CourseModel {
 		studentgroupname: string,
 		instructors: string[],
 		topic_names: string[],
-	): Promise<void>;
-	getCoursesWithDetails(): Promise<Course[]>;
-	getAllStudentsOnCourse(courseId: number): Promise<RowDataPacket[]>;
+	): Promise<RowDataPacket[]>;
+	getCoursesWithDetails(): Promise<CourseResults[]>;
+	getAllStudentsOnCourse(courseId: string): Promise<RowDataPacket[]>;
 	updateStudentCourses: (
 		courseid: number,
 		studentid: number,
@@ -294,7 +302,7 @@ const course: CourseModel = {
 		studentgroupname: string,
 		instructors: string[],
 		topic_names: string[],
-	): Promise<void> {
+	): Promise<RowDataPacket[]> {
 		let studentgroupid: string | undefined = '';
 		const connection = await pool.promise().getConnection();
 		await connection.beginTransaction();
@@ -389,9 +397,9 @@ const course: CourseModel = {
 			connection.release();
 		}
 	},
-	async getCoursesWithDetails(): Promise<Course[]> {
+	async getCoursesWithDetails(): Promise<CourseResults[]> {
 		try {
-			const [rows]: RowDataPacket[][] = await pool.promise().query<
+			const [rows]: [RowDataPacket[], FieldPacket[]] = await pool.promise().query<
 				RowDataPacket[]
 			>(`
         SELECT 
@@ -418,9 +426,9 @@ const course: CourseModel = {
     `);
 
 			// Transform the flat data structure into a nested one
-			const courses = rows.reduce((acc, row) => {
+			const courses = rows.reduce((acc: CourseResults[], row) => {
 				const courseIndex = acc.findIndex(
-					course => course.courseid === row.courseid,
+					(course: CourseResults) => course.courseid === row.courseid,
 				);
 
 				if (courseIndex === -1) {

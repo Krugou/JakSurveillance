@@ -1,8 +1,4 @@
-import {
-	FieldPacket,
-	
-	RowDataPacket,
-} from 'mysql2';
+import {FieldPacket, RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
 
 const pool = createPool('ADMIN');
@@ -24,7 +20,7 @@ interface AttendanceModel {
 	updateAttendanceStatus: (usercourseid: number, status: number) => Promise<any>;
 
 	getUserInfoByUserCourseId: (usercourseid: number) => Promise<any>;
-	getAttendaceByCourseId: (courseid: number) => Promise<any>;
+	getAttendaceByCourseId: (courseid: string) => Promise<any>;
 	getAttendanceById: (insertid: number) => Promise<any>;
 	getAttendanceByUserCourseIdDateLectureId: (
 		usercourseid: number,
@@ -32,7 +28,7 @@ interface AttendanceModel {
 		lectureid: number,
 	) => Promise<any>;
 	checkAttendance: (usercourseid: number, lectureid: number) => Promise<any>;
-	getLectureCountByTopic: (courseid: number) => Promise<any>;
+	getLectureCountByTopic: (courseid: string) => Promise<any>;
 	deleteAttendance: (usercourseid: number, lectureid: number) => Promise<any>;
 	insertAttendance: (
 		status: number,
