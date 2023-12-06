@@ -7,78 +7,91 @@ interface AttendanceController {
 		date: Date,
 		studentnumber: string,
 		lectureid: string,
-	) => Promise<any>;
+	) => Promise<unknown>;
 	checkAndInsertStatusNotPresentAttendance: (
 		date: Date,
 		studentnumbers: string[],
 		lectureid: string,
-	) => Promise<any>;
-	getLecturesAndAttendancesByCourseId: (courseid: number) => Promise<any>;
-	updateAttendanceStatus: (attendanceid: number, status: number) => Promise<any>;
-	deleteAttendance: (studentnumber: string, lectureid: number) => Promise<any>;
+	) => Promise<unknown>;
+	getLecturesAndAttendancesByCourseId: (courseid: string) => Promise<unknown>;
+	updateAttendanceStatus: (
+		attendanceid: number,
+		status: number,
+	) => Promise<unknown>;
+	deleteAttendance: (
+		studentnumber: string,
+		lectureid: string,
+	) => Promise<unknown>;
 }
 const attendanceController: AttendanceController = {
 	async insertIntoAttendance(
-		status: string,
-		date: Date,
-		studentnumber: string,
-		lectureid: string,
-	) {
-		try {
-			if (!status || !date || !studentnumber || !lectureid) {
-				throw new Error('Invalid parameters');
-			}
-			const courseId = await lectureModel.getCourseIDByLectureID(lectureid);
-			const usercourseResult = await usercoursesModel.getUserCourseId(
-				studentnumber,
-				courseId,
-			);
+    status: string,
+    date: Date,
+    studentnumber: string,
+    lectureid: string,
+): Promise<unknown> {
+    try {
+        if (!status || !date || !studentnumber || !lectureid) {
+            throw new Error('Invalid parameters');
+        }
+        const courseId = await lectureModel.getCourseIDByLectureID(lectureid);
+        if (courseId === null) {
+            throw new Error('Course ID is null');
+        }
+        const usercourseResult = await usercoursesModel.getUserCourseId(
+            studentnumber,
+            courseId,
+        );
 
-			if (!usercourseResult || usercourseResult.length === 0) {
-				throw new Error(
-					`Usercourse not found for the studentnumber: ${studentnumber}`,
-				);
-			}
+        if (!Array.isArray(usercourseResult) || usercourseResult.length === 0) {
+            throw new Error(
+                `Usercourse not found for the studentnumber: ${studentnumber}`,
+            );
+        }
 
-			const usercourseid = usercourseResult[0].usercourseid;
-			const attendanceResultCheck = await attendanceModel.checkAttendance(
-				usercourseid,
-				lectureid,
-			);
+        if ('usercourseid' in usercourseResult[0]) {
+            const usercourseid = usercourseResult[0].usercourseid;
+            const attendanceResultCheck = await attendanceModel.checkAttendance(
+                usercourseid,
+                Number(lectureid),
+            );
 
-			if (!attendanceResultCheck || attendanceResultCheck.length > 0) {
-				throw new Error(
-					`Attendance already exists for the usercourseid: ${usercourseid}`,
-				);
-			}
+            if (!attendanceResultCheck || attendanceResultCheck.length > 0) {
+                throw new Error(
+                    `Attendance already exists for the usercourseid: ${usercourseid}`,
+                );
+            }
 
-			const insertResult = await attendanceModel.insertAttendance(
-				status,
-				date,
-				usercourseid,
-				lectureid,
-			);
+            const insertResult = await attendanceModel.insertAttendance(
+                status,
+                date,
+                usercourseid,
+                Number(lectureid),
+            );
 
-			if (!insertResult || !insertResult[0] || !insertResult[0].insertId) {
-				throw new Error('Failed to insert attendance');
-			}
+            if (!insertResult || !insertResult[0] || !insertResult[0].insertId) {
+                throw new Error('Failed to insert attendance');
+            }
 
-			const attendanceResult = await attendanceModel.getAttendanceById(
-				insertResult[0].insertId,
-			);
+            const attendanceResult = await attendanceModel.getAttendanceById(
+                insertResult[0].insertId,
+            );
 
-			if (!attendanceResult || attendanceResult.length === 0) {
-				throw new Error(`Failed to get attendance by id: ${insertResult.insertId}`);
-			}
+            if (!attendanceResult || attendanceResult.length === 0) {
+                throw new Error(`Failed to get attendance by id: ${insertResult.insertId}`);
+            }
 
-			console.log('insertIntoAttendance ~ attendanceResult:', attendanceResult);
+            console.log('insertIntoAttendance ~ attendanceResult:', attendanceResult);
 
-			return attendanceResult[0];
-		} catch (error) {
-			console.error(error);
-			throw error;
-		}
-	},
+            return attendanceResult[0];
+        } else {
+            throw new Error('Invalid result: usercourseid property not found');
+        }
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+},
 
 	async checkAndInsertStatusNotPresentAttendance(
 		date,
@@ -136,7 +149,7 @@ const attendanceController: AttendanceController = {
 		}
 	},
 
-	async getLecturesAndAttendancesByCourseId(courseid: number) {
+	async getLecturesAndAttendancesByCourseId(courseid: string) {
 		try {
 			const lectures = await attendanceModel.getAttendaceByCourseId(courseid);
 			return lectures;
@@ -145,32 +158,41 @@ const attendanceController: AttendanceController = {
 			return Promise.reject(error);
 		}
 	},
-	async deleteAttendance(studentnumber: string, lectureid: number) {
+	async deleteAttendance(
+		studentnumber: string,
+		lectureid: string,
+	): Promise<boolean> {
 		try {
 			const courseId = await lectureModel.getCourseIDByLectureID(lectureid);
+			if (courseId === null) {
+				throw new Error('Course ID is null');
+			}
 			const usercourseResult = await usercoursesModel.getUserCourseId(
 				studentnumber,
 				courseId,
 			);
 
-			if (!usercourseResult || usercourseResult.length === 0) {
+			if (!Array.isArray(usercourseResult) || usercourseResult.length === 0) {
 				throw new Error(
 					`Usercourse not found for the studentnumber: ${studentnumber}`,
 				);
 			}
+			if ('usercourseid' in usercourseResult[0]) {
+				const usercourseid = usercourseResult[0].usercourseid;
 
-			const usercourseid = usercourseResult[0].usercourseid;
+				const deleteResult = await attendanceModel.deleteAttendance(
+					usercourseid,
+					Number(lectureid),
+				);
 
-			const deleteResult = await attendanceModel.deleteAttendance(
-				usercourseid,
-				lectureid,
-			);
+				if (!deleteResult || deleteResult.affectedRows === 0) {
+					throw new Error('Failed to delete attendance');
+				}
 
-			if (!deleteResult || deleteResult.affectedRows === 0) {
-				throw new Error('Failed to delete attendance');
+				return true;
+			} else {
+				throw new Error('Invalid result: usercourseid property not found');
 			}
-
-			return true;
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);

@@ -1,4 +1,8 @@
-import {FieldPacket, RowDataPacket} from 'mysql2';
+import {
+	FieldPacket,
+	
+	RowDataPacket,
+} from 'mysql2';
 import createPool from '../config/createPool.js';
 
 const pool = createPool('ADMIN');

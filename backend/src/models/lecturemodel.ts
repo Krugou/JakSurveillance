@@ -28,10 +28,10 @@ interface LectureModel {
 		courseid: number,
 		state: string,
 	): Promise<unknown>;
-	getLectureWithCourseAndTopic(lectureid: number): Promise<RowDataPacket | null>;
+	getLectureWithCourseAndTopic(lectureid: string): Promise<RowDataPacket | null>;
 	updateLectureState(lectureid: number, state: string): Promise<unknown>;
 	getLecturesByCourseId(courseid: number): Promise<RowDataPacket[] | null>;
-	getCourseIDByLectureID(lectureid: number): Promise<number | null>;
+	getCourseIDByLectureID(lectureid: string): Promise<number | null>;
 	fetchAllLecturees(): Promise<
 		RowDataPacket[] | [RowDataPacket[], FieldPacket[]]
 	>;
@@ -172,7 +172,7 @@ const lectureModel: LectureModel = {
 			);
 		return result;
 	},
-	async getLectureWithCourseAndTopic(lectureid: number) {
+	async getLectureWithCourseAndTopic(lectureid: string) {
 		try {
 			const [rows] = await pool
 				.promise()
@@ -222,7 +222,7 @@ const lectureModel: LectureModel = {
 			return Promise.reject(error);
 		}
 	},
-	async getCourseIDByLectureID(lectureid: number) {
+	async getCourseIDByLectureID(lectureid: string) {
 		try {
 			const [rows] = await pool
 				.promise()
