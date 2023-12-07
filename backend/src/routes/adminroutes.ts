@@ -1,4 +1,5 @@
 import express, {Request, Response, Router} from 'express';
+import {body, validationResult} from 'express-validator';
 import adminController from '../controllers/admincontroller.js';
 import course from '../models/coursemodel.js';
 import rolemodel from '../models/rolemodel.js';
@@ -12,7 +13,10 @@ router.get(
 	async (_req: Request, res: Response) => {
 		try {
 			const serverSettings = await adminController.getServerSettings();
-			console.log("🚀 ~ file: adminroutes.ts:15 ~ serverSettings:", serverSettings)
+			console.log(
+				'🚀 ~ file: adminroutes.ts:15 ~ serverSettings:',
+				serverSettings,
+			);
 			res.status(200).send(serverSettings[0][0]);
 		} catch (error) {
 			console.error(error);
@@ -23,10 +27,21 @@ router.get(
 router.post(
 	'/',
 	checkUserRole(['admin', 'counselor', 'teacher']),
+	[
+		body('speedofhash').isNumeric(),
+		body('leewayspeed').isNumeric(),
+		body('timeouttime').isNumeric(),
+		body('attendancethreshold').isNumeric(),
+	],
 	async (req: Request, res: Response) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(400).json({errors: errors.array()});
+		}
+
 		const {speedofhash, leewayspeed, timeouttime, attendancethreshold} = req.body;
 		try {
-			return await adminController.updateServerSettings(
+			await adminController.updateServerSettings(
 				speedofhash,
 				leewayspeed,
 				timeouttime,
@@ -69,9 +84,15 @@ router.get(
 router.post(
 	'/change-role',
 	checkUserRole(['admin', 'counselor', 'teacher']),
+	[body('email').isEmail(), body('roleId').isNumeric()],
 	async (req: Request, res: Response) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(400).json({errors: errors.array()});
+		}
+
+		const {email, roleId} = req.body;
 		try {
-			const {email, roleId} = req.body;
 			await usermodel.changeRoleId(email, roleId);
 			res.send({message: 'Role changed successfully'});
 		} catch (error) {
