@@ -84,12 +84,12 @@ const TeacherCourseAttendances: React.FC = () => {
 	};
 
 	return (
-		<div className="w-full p-4 bg-gray-100">
-			<h1 className="text-center text-3xl font-bold">
+		<div className="w-fit p-4 bg-gray-100 rounded-lg">
+			<h1 className="text-center text-3xl font-bold mb-5">
 				Teacher Course Attendances
 			</h1>
 			<div className="flex justify-center m-4 ">
-				<div className="flex flex-col sm:flex-row items-center justify-center sm:space-x-4">
+				<div className="flex flex-col sm:flex-row items-center justify-around sm:space-x-4">
 					<div className="w-full sm:w-1/2 lg:w-1/3">
 						<h2 className="text-center bg-metropoliaSecondaryOrange text-white p-2">
 							Find attendances based on day
@@ -107,20 +107,21 @@ const TeacherCourseAttendances: React.FC = () => {
 							}}
 						/>
 					</div>
-
+					<div className="flex items-center">
 					<Button
 						variant="contained"
 						color="primary"
 						startIcon={<ShowChartIcon />}
-						className="mt-4 sm:mt-0"
+						className="mt-4 h-fit sm:mt-0"
 						onClick={() => navigate(`/teacher/courses/stats/${courseId}`)}
 					>
 						Attendance statistics
 					</Button>
+					</div>
 				</div>
 			</div>
 			{selectedDate && (
-				<div className="bg-white p-5 w-full 2xl:w-2/3 m-auto">
+				<div className="bg-white p-5 w-full m-auto">
 					{filteredAttendances.length > 0 ? (
 						<>
 							<div className="flex justify-around mt-4 ">

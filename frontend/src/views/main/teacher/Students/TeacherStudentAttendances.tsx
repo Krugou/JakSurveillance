@@ -126,8 +126,8 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 
 	if (attendanceData.length > 0) {
 		return (
-			<div className="flex w-11/12 2xl:w-10/12 flex-col bg-gray-100 p-10 rounded-lg">
-				<h1 className="text-xl sm:text-4xl font-bold mt-2 mb-8 text-center">
+			<div className="flex w-full 2xl:w-10/12 flex-col bg-gray-100 p-5 rounded-lg">
+				<h1 className="text-xl sm:text-3xl font-bold mt-2 mb-8 text-center">
 					{student?.first_name + ' ' + student?.last_name}'s attendance in course:{' '}
 					{attendanceData[0].name}
 				</h1>
