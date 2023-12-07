@@ -51,7 +51,7 @@ const TeacherCourses: React.FC = () => {
 				My courses
 			</h2>
 			<div className="grid 2xl:w-3/4 md:w-full bg-gray-100 p-5 max-h-[30em] 2xl:max-h-[50em] overflow-y-scroll rounded-lg mt-5 sm:w-3/4 w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-4 m-auto">
-				{courses.length > 1 && (
+				{courses.length > 0 && (
 					<CourseData courseData={courses} updateView={updateView} />
 				)}
 			</div>
