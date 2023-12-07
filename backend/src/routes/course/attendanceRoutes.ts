@@ -8,29 +8,37 @@ import checkUserRole from '../../utils/checkRole.js';
 
 const router: Router = express.Router();
 
-router.get('/', async (res: Response) => {
-	try {
-		const attendanceData = await attendanceModel.fetchAllAttendances();
-		res.json(attendanceData);
-	} catch (err) {
-		console.error(err);
-		res.status(500).send('Server error');
-	}
-});
-router.get('/:id', async (req: Request, res: Response) => {
-	try {
-		const id = Number(req.params.id);
-		const attendanceData = await attendanceModel.findByAttendanceId(id);
-		if (attendanceData) {
+router.get(
+	'/',
+	checkUserRole(['admin', 'teacher', 'counselor']),
+	async (res: Response) => {
+		try {
+			const attendanceData = await attendanceModel.fetchAllAttendances();
 			res.json(attendanceData);
-		} else {
-			res.status(404).send('Attendance not found');
+		} catch (err) {
+			console.error(err);
+			res.status(500).send('Server error');
 		}
-	} catch (err) {
-		console.error(err);
-		res.status(500).send('Server error');
-	}
-});
+	},
+);
+router.get(
+	'/:id',
+	checkUserRole(['admin', 'teacher', 'counselor']),
+	async (req: Request, res: Response) => {
+		try {
+			const id = Number(req.params.id);
+			const attendanceData = await attendanceModel.findByAttendanceId(id);
+			if (attendanceData) {
+				res.json(attendanceData);
+			} else {
+				res.status(404).send('Attendance not found');
+			}
+		} catch (err) {
+			console.error(err);
+			res.status(500).send('Server error');
+		}
+	},
+);
 router.get('/usercourse/:id', async (req: Request, res: Response) => {
 	try {
 		const id = Number(req.params.id);
@@ -62,57 +70,66 @@ router.get('/usercourse/:id', async (req: Request, res: Response) => {
 	}
 });
 
-router.post('/', async (req: Request, res: Response) => {
-	try {
-		const {status, date, studentnumber, lectureid} = req.body;
+router.post(
+	'/',
+	checkUserRole(['admin', 'teacher', 'counselor']),
+	async (req: Request, res: Response) => {
+		try {
+			const {status, date, studentnumber, lectureid} = req.body;
 
-		// Validate request body
-		if (!status || !date || !studentnumber || !lectureid) {
-			return res.status(400).send('Missing required fields');
+			// Validate request body
+			if (!status || !date || !studentnumber || !lectureid) {
+				return res.status(400).send('Missing required fields');
+			}
+
+			const insertedData = await attendanceController.insertIntoAttendance(
+				status,
+				date,
+				studentnumber,
+				lectureid,
+			);
+			// Send response back to client
+			res.status(200).send(insertedData);
+		} catch (err) {
+			console.error(err);
+
+			if (err instanceof Error) {
+				// Now TypeScript knows that err is an Error object
+				res.status(500).send(`Server error: ${err.message}`);
+			} else {
+				res.status(500).send('Server error');
+			}
 		}
-
-		const insertedData = await attendanceController.insertIntoAttendance(
-			status,
-			date,
-			studentnumber,
-			lectureid,
-		);
-		// Send response back to client
-		res.status(200).send(insertedData);
-	} catch (err) {
-		console.error(err);
-
-		if (err instanceof Error) {
-			// Now TypeScript knows that err is an Error object
-			res.status(500).send(`Server error: ${err.message}`);
-		} else {
+	},
+);
+router.post(
+	'/lecturefinished/',
+	checkUserRole(['admin', 'teacher', 'counselor']),
+	async (req: Request, res: Response) => {
+		try {
+			const {date, studentnumbers, lectureid} = req.body;
+			console.log(
+				'🚀 ~ file: attendanceRoutes.ts:75 ~ router.post ~ req.body:',
+				req.body,
+			);
+			await attendanceController.checkAndInsertStatusNotPresentAttendance(
+				date,
+				studentnumbers,
+				lectureid,
+			);
+			await lectureModel.updateLectureState(lectureid, 'closed');
+			res
+				.status(201)
+				.send('Attendance put as not present for rest of students not present');
+		} catch (err) {
+			console.error(err);
 			res.status(500).send('Server error');
 		}
-	}
-});
-router.post('/lecturefinished/', async (req: Request, res: Response) => {
-	try {
-		const {date, studentnumbers, lectureid} = req.body;
-		console.log(
-			'🚀 ~ file: attendanceRoutes.ts:75 ~ router.post ~ req.body:',
-			req.body,
-		);
-		await attendanceController.checkAndInsertStatusNotPresentAttendance(
-			date,
-			studentnumbers,
-			lectureid,
-		);
-		await lectureModel.updateLectureState(lectureid, 'closed');
-		res
-			.status(201)
-			.send('Attendance put as not present for rest of students not present');
-	} catch (err) {
-		console.error(err);
-		res.status(500).send('Server error');
-	}
-});
+	},
+);
 router.post(
 	'/getallstudentsinlecture/',
+	checkUserRole(['admin', 'teacher', 'counselor']),
 	async (req: Request, res: Response) => {
 		try {
 			const {lectureid} = req.body;
@@ -126,28 +143,36 @@ router.post(
 		}
 	},
 );
-router.post('/delete/', async (req: Request, res: Response) => {
-	try {
-		const {studentnumber} = req.body;
-		const lectureid = req.body.lectureid;
-		await attendanceController.deleteAttendance(studentnumber, lectureid);
-		res.status(201).send(true);
-	} catch (err) {
-		console.error(err);
-		res.status(500).send(false);
-	}
-});
+router.post(
+	'/delete/',
+	checkUserRole(['admin', 'teacher', 'counselor']),
+	async (req: Request, res: Response) => {
+		try {
+			const {studentnumber} = req.body;
+			const lectureid = req.body.lectureid;
+			await attendanceController.deleteAttendance(studentnumber, lectureid);
+			res.status(201).send(true);
+		} catch (err) {
+			console.error(err);
+			res.status(500).send(false);
+		}
+	},
+);
 
-router.post('/deletelecture/', async (req: Request, res: Response) => {
-	try {
-		const {lectureid} = req.body;
-		await lectureModel.deleteByLectureId(lectureid);
-		res.status(201).send('Lecture deleted');
-	} catch (err) {
-		console.error(err);
-		res.status(500).send('Server error');
-	}
-});
+router.post(
+	'/deletelecture/',
+	checkUserRole(['admin', 'teacher', 'counselor']),
+	async (req: Request, res: Response) => {
+		try {
+			const {lectureid} = req.body;
+			await lectureModel.deleteByLectureId(lectureid);
+			res.status(201).send('Lecture deleted');
+		} catch (err) {
+			console.error(err);
+			res.status(500).send('Server error');
+		}
+	},
+);
 router.post(
 	'/lecture/',
 	checkUserRole(['admin', 'teacher', 'counselor']),
@@ -173,20 +198,24 @@ router.post(
 		}
 	},
 );
-router.get('/lectureinfo/:lectureid', async (req: Request, res: Response) => {
-	try {
-		const {lectureid} = req.params;
+router.get(
+	'/lectureinfo/:lectureid',
+	checkUserRole(['admin', 'teacher', 'counselor']),
+	async (req: Request, res: Response) => {
+		try {
+			const {lectureid} = req.params;
 
-		const lectureInfo = await lectureModel.getLectureWithCourseAndTopic(
-			lectureid,
-		);
+			const lectureInfo = await lectureModel.getLectureWithCourseAndTopic(
+				lectureid,
+			);
 
-		res.status(200).json(lectureInfo);
-	} catch (err) {
-		console.error(err);
-		res.status(500).send('Server error');
-	}
-});
+			res.status(200).json(lectureInfo);
+		} catch (err) {
+			console.error(err);
+			res.status(500).send('Server error');
+		}
+	},
+);
 
 // router.get('/studentsattendance', async (req: Request, res: Response) => {
 // 	try {
