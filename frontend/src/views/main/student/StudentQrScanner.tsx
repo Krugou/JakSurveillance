@@ -85,7 +85,7 @@ const StudentQrScanner: React.FC = () => {
 					onDecode={onNewScanResult}
 					onError={handleError}
 					scanDelay={2000}
-					hideCount={false}
+					hideCount={true}
 				/>
 			)}
 		</>
