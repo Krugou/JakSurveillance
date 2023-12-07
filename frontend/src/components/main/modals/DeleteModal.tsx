@@ -34,7 +34,8 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
 				<div className="mt-2">
 					{student ? (
 						<p className="text-base text-gray-500">
-							Are you sure you want to delete student from this course?
+							Are you sure you want to delete student from this course? This will also
+							delete all attendance data for this student.
 						</p>
 					) : (
 						<p className="text-base text-gray-500">
