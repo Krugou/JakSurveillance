@@ -120,7 +120,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 						<TableRow
 							key={index}
 							className={`border-b hover:bg-gray-50 ${
-								attendance.status === 0 ? 'bg-red-200' : 'bg-green-200'
+								attendance.status === 0 ? 'bg-red-200' : attendance.status === 1 ? 'bg-green-200' : 'bg-orange-200'
 							}`}
 						>
 							<TableCell className="px-6 py-4 whitespace-nowrap">
@@ -155,6 +155,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 									>
 										<MenuItem value={0}>Absent</MenuItem>
 										<MenuItem value={1}>Present</MenuItem>
+										<MenuItem value={2}>Accepted Absense</MenuItem>
 									</Select>
 								)}
 								{user?.role === 'student' && (
