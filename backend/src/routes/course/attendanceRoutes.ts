@@ -1,11 +1,12 @@
 // attendanceRoutes.ts
 import express, {Request, Response, Router} from 'express';
-import {body, validationResult} from 'express-validator';
+import {body} from 'express-validator';
 import attendanceController from '../../controllers/attendancecontroller.js';
 import lectureController from '../../controllers/lecturecontroller.js';
 import attendanceModel from '../../models/attendancemodel.js';
 import lectureModel from '../../models/lecturemodel.js';
 import checkUserRole from '../../utils/checkRole.js';
+import validate from '../../utils/validate.js';
 
 const router: Router = express.Router();
 
@@ -80,11 +81,9 @@ router.post(
 		body('studentnumber').isNumeric(),
 		body('lectureid').isNumeric(),
 	],
+	validate,
 	async (req: Request, res: Response) => {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(400).json({errors: errors.array()});
-		}
+		
 
 		const {status, date, studentnumber, lectureid} = req.body;
 		try {

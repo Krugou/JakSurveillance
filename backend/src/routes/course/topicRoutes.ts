@@ -1,9 +1,10 @@
 import express, {Request, Response, Router} from 'express';
 
-import {body, validationResult} from 'express-validator';
+import {body} from 'express-validator';
 import TopicGroupController from '../../controllers/topicgroupcontroller.js';
 import TopicGroup from '../../models/topicgroupmodel.js';
 import checkUserRole from '../../utils/checkRole.js';
+import validate from '../../utils/validate.js';
 const router: Router = express.Router();
 
 router.get(
@@ -24,11 +25,9 @@ router.post(
 	'/',
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	[body('email').isEmail()],
+	validate,
 	async (req: Request, res: Response) => {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(400).json({errors: errors.array()});
-		}
+		
 		try {
 			const {email} = req.body;
 			const topicGroupData =
@@ -48,11 +47,8 @@ router.post(
 		body('topics.*').notEmpty(),
 		body('email').isEmail(),
 	],
+	validate,
 	async (req: Request, res: Response) => {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(400).json({errors: errors.array()});
-		}
 		try {
 			const {topicGroup, topics, email} = req.body;
 
@@ -82,6 +78,7 @@ router.post(
 	'/update/:usercourseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	[body('modifiedTopics.*').notEmpty()],
+	validate,
 	async (req: Request, res: Response) => {
 		try {
 			const usercourseid = parseInt(req.params.usercourseid);
@@ -105,6 +102,7 @@ router.post(
 	'/topicgroupcheck/',
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	[body('topicGroup').notEmpty(), body('email').isEmail()],
+	validate,
 	async (req: Request, res: Response) => {
 		try {
 			const {topicGroup, email} = req.body;
@@ -117,10 +115,7 @@ router.post(
 					topicGroup as string,
 					email as string,
 				);
-			console.log(
-				'🚀 ~ file: topicRoutes.ts:92 ~ topicGroupResult:',
-				topicGroupResult,
-			);
+			
 			res.status(200).send(topicGroupResult);
 		} catch (err) {
 			console.error(err);

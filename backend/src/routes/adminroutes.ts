@@ -6,6 +6,7 @@ import rolemodel from '../models/rolemodel.js';
 import studentgroupmodel from '../models/studentgroupmodel.js';
 import usermodel from '../models/usermodel.js';
 import checkUserRole from '../utils/checkRole.js';
+import validate from '../utils/validate.js';
 const router: Router = express.Router();
 router.get(
 	'/',
@@ -33,6 +34,7 @@ router.post(
 		body('timeouttime').isNumeric(),
 		body('attendancethreshold').isNumeric(),
 	],
+	validate,
 	async (req: Request, res: Response) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
@@ -57,6 +59,7 @@ router.post(
 router.get(
 	'/rolesspecial',
 	checkUserRole(['admin', 'counselor', 'teacher']),
+	validate,
 	async (_req: Request, res: Response) => {
 		try {
 			const roles = await rolemodel.fetchTeacherAndCounselorRoles();
@@ -85,6 +88,7 @@ router.post(
 	'/change-role',
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	[body('email').isEmail(), body('roleId').isNumeric()],
+	validate,
 	async (req: Request, res: Response) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
