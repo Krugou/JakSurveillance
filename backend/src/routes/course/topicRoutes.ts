@@ -40,7 +40,7 @@ router.post(
 			if (
 				!topics ||
 				topics.length === 0 ||
-				topics.every(topic => topic.trim() === '')
+				topics.every((topic: string) => topic.trim() === '')
 			) {
 				return res.status(400).send({message: 'Topics are required'});
 			}
