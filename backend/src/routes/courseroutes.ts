@@ -1,6 +1,6 @@
 import {config} from 'dotenv';
 import express, {Request, Response, Router} from 'express';
-import {body, validationResult} from 'express-validator';
+import {body, validationResult, param} from 'express-validator';
 import multer from 'multer';
 import XLSX from 'xlsx';
 import courseController from '../controllers/coursecontroller.js';
@@ -48,10 +48,17 @@ router.post(
 router.post(
 	'/checkcode/:code',
 	checkUserRole(['admin', 'counselor', 'teacher']),
+	param('code')
+		.isString()
+		.notEmpty()
+		.withMessage('Code must be a non-empty string'),
 	async (req: Request, res: Response) => {
-		const {code} = req.params;
-
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(400).json({errors: errors.array()});
+		}
 		try {
+			const {code} = req.params;
 			const exists = await course.findByCode(code);
 			res.status(200).json({exists});
 		} catch (error) {
@@ -81,7 +88,43 @@ router.post(
 router.post(
 	'/create',
 	checkUserRole(['admin', 'counselor', 'teacher']),
+	body('courseName')
+		.isString()
+		.notEmpty()
+		.escape()
+		.withMessage('Course name must be a non-empty string'),
+	body('courseCode')
+		.isString()
+		.notEmpty()
+		.escape()
+		.withMessage('Course code must be a non-empty string'),
+	body('studentGroup')
+		.isString()
+		.notEmpty()
+		.optional()
+		.escape()
+		.withMessage('Student group must be a non-empty string'),
+	body('startDate')
+		.trim()
+		.escape()
+		.notEmpty()
+		.withMessage('Start date is required'),
+	body('endDate')
+		.trim()
+		.escape()
+		.notEmpty()
+		.withMessage('Start date is required'),
+	body('topicGroup')
+		.isString()
+		.notEmpty()
+		.optional()
+		.escape()
+		.withMessage('Topic group must be a non-empty string'),
 	async (req: Request, res: Response) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(400).json({errors: errors.array()});
+		}
 		const {
 			courseName,
 			courseCode,
