@@ -183,9 +183,12 @@ const CreateCourseEasy: React.FC = () => {
 	};
 
 	const incrementStep = () => {
-		if (courseExists) {
+		if (currentStep === 2 && courseExists) {
 			alert('A course with this code already exists.');
-		} else if (!instructors.every(instructor => instructor.exists)) {
+		} else if (
+			currentStep === 4 &&
+			!instructors.every(instructor => instructor.exists)
+		) {
 			alert('One or more instructors do not exist in the database.');
 		} else if (validateFields()) {
 			setCurrentStep(prevStep => prevStep + 1);
@@ -204,7 +207,7 @@ const CreateCourseEasy: React.FC = () => {
 			{currentStep && (
 				<CreateCourseProgress currentStep={currentStep} createCourseMode="easy" />
 			)}
-			
+
 			<form onSubmit={handleSubmit} className={getFormClassName()}>
 				{currentStep === 1 && (
 					<fieldset>
