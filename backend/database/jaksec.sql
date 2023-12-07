@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS `lecture` (
   `lectureid` int(11) NOT NULL AUTO_INCREMENT,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
+  `teacherid` int(11) NOT NULL,
   `timeofday` enum('am', 'pm') NOT NULL,
   `topicid` int(11) NOT NULL,
   `courseid` int(11) NOT NULL,
@@ -47,8 +48,10 @@ CREATE TABLE IF NOT EXISTS `lecture` (
   PRIMARY KEY (`lectureid`),
   KEY `topicid` (`topicid`),
   KEY `courseid` (`courseid`),
+  KEY `teacherid` (`teacherid`),
   CONSTRAINT `lecture_ibfk_1` FOREIGN KEY (`topicid`) REFERENCES `topics` (`topicid`),
-  CONSTRAINT `lecture_ibfk_2` FOREIGN KEY (`courseid`) REFERENCES `courses` (`courseid`) ON DELETE CASCADE
+  CONSTRAINT `lecture_ibfk_2` FOREIGN KEY (`courseid`) REFERENCES `courses` (`courseid`) ON DELETE CASCADE,
+  CONSTRAINT `lecture_ibfk_3` FOREIGN KEY (`teacherid`) REFERENCES `users` (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
