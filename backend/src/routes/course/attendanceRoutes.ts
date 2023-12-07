@@ -1,5 +1,6 @@
 // attendanceRoutes.ts
 import express, {Request, Response, Router} from 'express';
+import {body, validationResult} from 'express-validator';
 import attendanceController from '../../controllers/attendancecontroller.js';
 import lectureController from '../../controllers/lecturecontroller.js';
 import attendanceModel from '../../models/attendancemodel.js';
@@ -73,28 +74,30 @@ router.get('/usercourse/:id', async (req: Request, res: Response) => {
 router.post(
 	'/',
 	checkUserRole(['admin', 'teacher', 'counselor']),
+	[
+		body('status').notEmpty(),
+		body('date').isISO8601(),
+		body('studentnumber').isNumeric(),
+		body('lectureid').isNumeric(),
+	],
 	async (req: Request, res: Response) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(400).json({errors: errors.array()});
+		}
+
+		const {status, date, studentnumber, lectureid} = req.body;
 		try {
-			const {status, date, studentnumber, lectureid} = req.body;
-
-			// Validate request body
-			if (!status || !date || !studentnumber || !lectureid) {
-				return res.status(400).send('Missing required fields');
-			}
-
 			const insertedData = await attendanceController.insertIntoAttendance(
 				status,
 				date,
 				studentnumber,
 				lectureid,
 			);
-			// Send response back to client
 			res.status(200).send(insertedData);
 		} catch (err) {
 			console.error(err);
-
 			if (err instanceof Error) {
-				// Now TypeScript knows that err is an Error object
 				res.status(500).send(`Server error: ${err.message}`);
 			} else {
 				res.status(500).send('Server error');
@@ -105,6 +108,11 @@ router.post(
 router.post(
 	'/lecturefinished/',
 	checkUserRole(['admin', 'teacher', 'counselor']),
+	[
+		body('date').isISO8601(),
+		body('studentnumbers.*').isNumeric(),
+		body('lectureid').isNumeric(),
+	],
 	async (req: Request, res: Response) => {
 		try {
 			const {date, studentnumbers, lectureid} = req.body;
@@ -130,6 +138,7 @@ router.post(
 router.post(
 	'/getallstudentsinlecture/',
 	checkUserRole(['admin', 'teacher', 'counselor']),
+	[body('lectureid').isNumeric()],
 	async (req: Request, res: Response) => {
 		try {
 			const {lectureid} = req.body;
@@ -146,6 +155,7 @@ router.post(
 router.post(
 	'/delete/',
 	checkUserRole(['admin', 'teacher', 'counselor']),
+	[body('studentnumber').isNumeric(), body('lectureid').isNumeric()],
 	async (req: Request, res: Response) => {
 		try {
 			const {studentnumber} = req.body;
@@ -162,6 +172,7 @@ router.post(
 router.post(
 	'/deletelecture/',
 	checkUserRole(['admin', 'teacher', 'counselor']),
+	[body('lectureid').isNumeric()],
 	async (req: Request, res: Response) => {
 		try {
 			const {lectureid} = req.body;
@@ -176,6 +187,14 @@ router.post(
 router.post(
 	'/lecture/',
 	checkUserRole(['admin', 'teacher', 'counselor']),
+	[
+		body('topicname').notEmpty(),
+		body('coursecode').notEmpty(),
+		body('start_date').isISO8601(),
+		body('end_date').isISO8601(),
+		body('timeofday').notEmpty(),
+		body('state').notEmpty(),
+	],
 	async (req: Request, res: Response) => {
 		try {
 			const {topicname, coursecode, start_date, end_date, timeofday, state} =
