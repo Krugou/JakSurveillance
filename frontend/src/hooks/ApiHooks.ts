@@ -653,8 +653,25 @@ const getStudentAndTopicsByUsercourseid = async (
 		options,
 	);
 };
+const checkIfTopicGroupWithEmailExists = async (
+	token: string,
+	email: string,
+	topicGroup: string,
+) => {
+	const options = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+		body: JSON.stringify({topicGroup, email}),
+	};
+
+	return await doFetch(baseUrl + 'courses/topics/topicgroupcheck/', options);
+};
 
 const apiHooks = {
+	checkIfTopicGroupWithEmailExists,
 	getRoleCounts,
 	checkStudentNumberExists,
 	fetchStudentGroups,

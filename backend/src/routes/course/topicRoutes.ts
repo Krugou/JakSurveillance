@@ -78,5 +78,31 @@ router.post(
 		}
 	},
 );
+router.post(
+	'/topicgroupcheck/',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	async (req: Request, res: Response) => {
+		try {
+			const {topicGroup, email} = req.body;
+
+			if (!topicGroup) {
+				return res.status(400).send({message: 'Topic group is required'});
+			}
+			const topicGroupResult =
+				await TopicGroupController.checkIfTopicGroupExistsWithEmail(
+					topicGroup as string,
+					email as string,
+				);
+			console.log(
+				'🚀 ~ file: topicRoutes.ts:92 ~ topicGroupResult:',
+				topicGroupResult,
+			);
+			res.status(200).send(topicGroupResult);
+		} catch (err) {
+			console.error(err);
+			res.status(500).send('Server error: ' + err);
+		}
+	},
+);
 
 export default router;

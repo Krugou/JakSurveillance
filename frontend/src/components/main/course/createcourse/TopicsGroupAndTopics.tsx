@@ -1,7 +1,7 @@
-import { CircularProgress } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import { UserContext } from '../../../../contexts/UserContext';
+import {CircularProgress} from '@mui/material';
+import React, {useContext, useEffect, useState} from 'react';
+import {toast} from 'react-toastify';
+import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
 
 interface Props {
@@ -18,42 +18,38 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 	const [topicData, setTopicData] = useState<TopicGroup[]>([]);
 	const [courseTopicGroup, setCourseTopicGroup] = useState('');
 	const [selectedGroupTopics, setSelectedGroupTopics] = useState<string[]>([]);
-	// const [courseTopics, setCourseTopics] = useState<string[]>([]);
 	const [customTopics, setCustomTopics] = useState<string[]>(['']);
 	const [customTopicGroup, setCustomTopicGroup] = useState('');
 	const [customTopic, setCustomTopic] = useState('');
 	const [isCustomGroup, setIsCustomGroup] = useState(false);
 	const [loading, setLoading] = useState(true);
-	// const handleTopicChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-	// 	const selectedTopics = Array.from(
-	// 		e.target.selectedOptions,
-	// 		option => option.value,
-	// 	);
-	// 	setCourseTopics(selectedTopics);
+	const [topicGroupExists, setTopicGroupExists] = useState(false);
+	useEffect(() => {
+		const token: string | null = localStorage.getItem('userToken');
+		if (!token) {
+			throw new Error('No token available');
+		}
+		if (user && customTopicGroup) {
+			// Introduce a delay of 1 second before making the API call
+			const timeoutId = setTimeout(() => {
+				apiHooks
+					.checkIfTopicGroupWithEmailExists(token, user.email, customTopicGroup)
+					.then(data => {
+						setTopicGroupExists(data);
+						if (data) {
+							toast.error('Topic group with this name already exists.');
+						}
+					})
+					.catch(error => {
+						console.error(error);
+						toast.error('Error checking topic group existence');
+					});
+			}, 1000);
 
-	// 	let topicGroup = '';
-	// 	let topics = '';
-	// 	if (isCustomGroup) {
-	// 		topicGroup = customTopicGroup;
-	// 		topics = JSON.stringify(customTopics);
-	// 	} else {
-	// 		topicGroup = courseTopicGroup;
-	// 		topics = JSON.stringify(selectedTopics);
-	// 	}
-
-	// 	interface FormData {
-	// 		topicgroup: string;
-	// 		topics: string;
-	// 		// include other properties of form data here
-	// 	}
-
-	// 	setTopicsFormData((prevFormData: FormData) => ({
-	// 		...prevFormData,
-	// 		topicgroup: topicGroup,
-	// 		topics: topics,
-	// 	}));
-	// };
-
+			// Clear the timeout when the component unmounts or when user or customTopicGroup changes
+			return () => clearTimeout(timeoutId);
+		}
+	}, [user, customTopicGroup]);
 	const handleCustomTopicChange = (index: number, value: string) => {
 		const newTopics = [...customTopics];
 		newTopics[index] = value;
@@ -150,6 +146,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 	if (loading) {
 		return <CircularProgress />;
 	}
+
 	return (
 		<fieldset>
 			<div className="flex justify-between items-center">
@@ -183,9 +180,13 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 								className="w-full mb-3 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange"
 								title='add custom topic group here example: "customGroup"'
 							/>
+							{topicGroupExists && (
+								<p className="text-red-500">This topic group already exists.</p>
+							)}
 							<button
 								className="mb-3 w-fit p-2 bg-metropoliaMainOrange transition text-white text-sm rounded-3xl hover:bg-metropoliaSecondaryOrange"
 								onClick={handleApply}
+								disabled={topicGroupExists}
 							>
 								Apply
 							</button>
@@ -268,7 +269,9 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 							<div
 								key={index}
 								className={`p-4 text-metropoliaSupportWhite ${
-									index % 2 === 0 ? 'bg-metropoliaMainOrange' : 'bg-metropoliaSecondaryOrange'
+									index % 2 === 0
+										? 'bg-metropoliaMainOrange'
+										: 'bg-metropoliaSecondaryOrange'
 								}`}
 							>
 								{topic}
