@@ -18,6 +18,7 @@ const CreateLecture: React.FC = () => {
 	const [selectedTimeOfDay, setSelectedTimeOfDay] = useState<string>(
 		timeOfDay[0],
 	);
+
 	const [selectedSession, setSelectedSession] = useState<string>(
 		courses.length > 0 ? courses[0].courseid : '',
 	);
@@ -65,10 +66,14 @@ const CreateLecture: React.FC = () => {
 				throw new Error('No token available');
 			}
 			apihooks.getAllCoursesByInstructorEmail(user.email, token).then(data => {
-				setCourses(data);
+				const currentCourses = data.filter(
+					course => new Date(course.end_date) > new Date(),
+				);
+
+				setCourses(currentCourses);
 				setLoading(false);
-				setSelectedCourse(data[0]);
-				setSelectedTopic(data[0].topic_names.split(',')[0]);
+				setSelectedCourse(currentCourses[0]);
+				setSelectedTopic(currentCourses[0].topic_names.split(',')[0]);
 			});
 		}
 	}, [user]);
@@ -200,7 +205,7 @@ const CreateLecture: React.FC = () => {
 								value={selectedSession}
 								onClick={() => {
 									if (courses.length === 0) {
-										toast.error('You have no courses');
+										toast.error('You have no courses or all your courses have ended');
 									}
 								}}
 								onChange={e => {
