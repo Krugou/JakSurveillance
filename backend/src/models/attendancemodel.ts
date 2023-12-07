@@ -90,15 +90,28 @@ const attendanceModel: AttendanceModel = {
 		try {
 			//console.log(userid, 'USERIDDD');
 			const [rows] = await pool.promise().query<RowDataPacket[]>(
-				`SELECT attendance.status, attendance.attendanceid, lecture.start_date, lecture.timeofday, topics.topicname, courses.name, users.email AS teacher
-            FROM attendance 
-            JOIN lecture ON attendance.lectureid = lecture.lectureid
-            JOIN topics ON lecture.topicid = topics.topicid
-            JOIN courses ON lecture.courseid = courses.courseid
-            JOIN usercourses ON attendance.usercourseid = usercourses.usercourseid
-						JOIN courseinstructors ON usercourses.courseid = courseinstructors.courseid
-						JOIN users ON courseinstructors.userid = users.userid
-            WHERE attendance.usercourseid = ? AND usercourses.userid = ?;`,
+				`SELECT 
+				attendance.status, 
+				attendance.attendanceid, 
+				lecture.start_date, 
+				lecture.timeofday, 
+				topics.topicname, 
+				courses.name, 
+				teachers.email AS teacher
+			FROM 
+				attendance 
+			JOIN 
+				lecture ON attendance.lectureid = lecture.lectureid
+			JOIN 
+				topics ON lecture.topicid = topics.topicid
+			JOIN 
+				courses ON lecture.courseid = courses.courseid
+			JOIN 
+				usercourses ON attendance.usercourseid = usercourses.usercourseid
+			JOIN 
+				users AS teachers ON lecture.teacherid = teachers.userid
+			WHERE 
+				attendance.usercourseid = ? AND usercourses.userid = ?;`,
 				[usercourseId, userid],
 			);
 			return rows;
