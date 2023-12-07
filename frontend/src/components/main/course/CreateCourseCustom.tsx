@@ -72,9 +72,12 @@ const CreateCourseCustom: React.FC = () => {
 	};
 
 	const incrementStep = () => {
-		if (courseExists) {
+		if (currentStep === 1 && courseExists) {
 			alert('A course with this code already exists.');
-		} else if (!instructors.every(instructor => instructor.exists)) {
+		} else if (
+			currentStep === 3 &&
+			!instructors.every(instructor => instructor.exists)
+		) {
 			alert('One or more instructors do not exist in the database.');
 		} else if (validateFields()) {
 			setCurrentStep(prevStep => prevStep + 1);
