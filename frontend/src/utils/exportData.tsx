@@ -164,11 +164,13 @@ export const exportStatsTableToPdf = (allAttendanceCounts, selectedCourse) => {
 	const doc = new jsPDF();
 	const topics = allAttendanceCounts.map(item => item.topicname);
 
+	// Define the Metropolia logo
 	const imgWidth = 90;
 	const imgHeight = (imgWidth * 1267) / 4961;
 	const imgX = 15;
 	const imgY = 10;
 
+	// Add the course name to the PDF
 	doc.text(
 		`Attendance statistics for: ${
 			selectedCourse
@@ -179,6 +181,7 @@ export const exportStatsTableToPdf = (allAttendanceCounts, selectedCourse) => {
 		45,
 	);
 
+	// Add the Metropolia logo to the PDF
 	doc.addImage(metropolia_logo, 'PNG', imgX, imgY, imgWidth, imgHeight);
 	// Define the columns for the table. It includes 'Student', 'Selected Topics', and all the topics.
 	const columns = ['Student', 'Selected Topics', ...topics];
