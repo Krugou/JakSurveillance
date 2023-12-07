@@ -170,16 +170,36 @@ const attendanceModel: AttendanceModel = {
 	},
 	async getAttendaceByCourseId(courseid: string) {
 		const [attendanceResult] = await pool.promise().query(
-			`SELECT attendance.status, attendance.attendanceid, usercourses.usercourseid, lecture.start_date, lecture.timeofday, topics.topicname, courses.name, users.email AS teacher, attendingUsers.first_name, attendingUsers.last_name, attendingUsers.studentnumber, attendingUsers.email, attendingUsers.userid
-			FROM attendance 
-			JOIN lecture ON attendance.lectureid = lecture.lectureid
-			JOIN topics ON lecture.topicid = topics.topicid
-			JOIN courses ON lecture.courseid = courses.courseid
-			JOIN usercourses ON attendance.usercourseid = usercourses.usercourseid
-			JOIN courseinstructors ON courses.courseid = courseinstructors.courseid
-			JOIN users ON courseinstructors.userid = users.userid
-			JOIN users AS attendingUsers ON usercourses.userid = attendingUsers.userid
-			WHERE lecture.courseid = ?`,
+			`SELECT 
+			attendance.status, 
+			attendance.attendanceid, 
+			usercourses.usercourseid, 
+			lecture.start_date, 
+			lecture.timeofday, 
+			topics.topicname, 
+			courses.name, 
+			teachers.email AS teacher, 
+			attendingUsers.first_name, 
+			attendingUsers.last_name, 
+			attendingUsers.studentnumber, 
+			attendingUsers.email, 
+			attendingUsers.userid
+		FROM 
+			attendance 
+		JOIN 
+			lecture ON attendance.lectureid = lecture.lectureid
+		JOIN 
+			topics ON lecture.topicid = topics.topicid
+		JOIN 
+			courses ON lecture.courseid = courses.courseid
+		JOIN 
+			usercourses ON attendance.usercourseid = usercourses.usercourseid
+		JOIN 
+			users AS teachers ON lecture.teacherid = teachers.userid
+		JOIN 
+			users AS attendingUsers ON usercourses.userid = attendingUsers.userid
+		WHERE 
+			lecture.courseid = ?;`,
 			[courseid],
 		);
 		return attendanceResult;
