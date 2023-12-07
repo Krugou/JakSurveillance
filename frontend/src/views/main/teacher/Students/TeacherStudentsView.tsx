@@ -8,6 +8,8 @@ import apiHooks from '../../../../hooks/ApiHooks';
 import {useCourses} from '../../../../hooks/courseHooks';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import WarningIcon from '@mui/icons-material/Warning';
+
 interface Student {
 	first_name: string;
 	last_name: string;
@@ -162,10 +164,13 @@ const TeacherStudentsView: React.FC = () => {
 						)}
 					/>
 
-					<p className="text-sm text-red-400">
-						{selectedCourse
-							? 'Searching only from students on the selected course.'
-							: 'Searching from all students.'}
+					<p className="text-lg text-yellow-600 flex items-center">
+						<WarningIcon fontSize="large" />
+						<span className="ml-2">
+							{selectedCourse
+								? 'Searching only from students on the selected course.'
+								: 'Searching from all students.'}
+						</span>
 					</p>
 				</div>
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
