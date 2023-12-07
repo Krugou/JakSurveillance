@@ -34,4 +34,35 @@ router.get('/getattendancethreshold', async (_req: Request, res: Response) => {
 		res.status(500).json({message: 'Internal server error'});
 	}
 });
+
+router.put('/accept-gdpr/:userid', async (req, res) => {
+	const userId = Number(req.params.userid);
+	console.log(userId, 'jotatjdkfgfdfd');
+	try {
+		const userId = req.user?.userid;
+		await usermodel.updateUserGDPRStatus(userId);
+		res.json({success: true});
+	} catch (error) {
+		console.error(error);
+		res.status(500).send('Internal Server Error');
+	}
+});
+router.get(
+	'/check-staff/:email',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	async (req: Request, res: Response) => {
+		const email = req.params.email;
+		try {
+			const user = await usermodel.checkIfUserExistsByEmailAndisStaff(email);
+			if (user.length > 0) {
+				res.json({exists: true, user: user[0]});
+			} else {
+				res.json({exists: false});
+			}
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({message: 'Internal server error'});
+		}
+	},
+);
 export default router;

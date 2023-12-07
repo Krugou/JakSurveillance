@@ -318,7 +318,7 @@ const updateGdprStatus = async (userid: number, token: string) => {
 			Authorization: 'Bearer ' + token,
 		},
 	};
-	const url = `${baseUrl}users/accept-gdpr/${userid}`;
+	const url = `${baseUrl}secure/accept-gdpr/${userid}`;
 	return doFetch(url, options);
 };
 
@@ -471,7 +471,7 @@ const checkStaffByEmail = async (email: string, token: string) => {
 			Authorization: 'Bearer ' + token,
 		},
 	};
-	return await doFetch(`${baseUrl}users/check-staff/${email}`, options);
+	return await doFetch(`${baseUrl}secure/check-staff/${email}`, options);
 };
 
 const fetchAllStudents = async (token: string) => {
