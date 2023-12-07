@@ -11,6 +11,7 @@ import checkUserRole from '../utils/checkRole.js';
 import openData from '../utils/opendata.js';
 import attendanceRoutes from './course/attendanceRoutes.js';
 import topicRoutes from './course/topicRoutes.js';
+import validate from '../utils/validate.js';
 config();
 const upload = multer();
 const router: Router = express.Router();
@@ -125,11 +126,8 @@ router.post(
 		.escape()
 		.withMessage('Each topic must be a string'),
 	body('instructors').isArray().withMessage('Instructors must be an array'),
+	validate,
 	async (req: Request, res: Response) => {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(400).json({errors: errors.array()});
-		}
 		const {
 			courseName,
 			courseCode,
@@ -264,6 +262,8 @@ router.post(
 router.get(
 	'/instructor/:email',
 	checkUserRole(['admin', 'counselor', 'teacher']),
+	param('email').isEmail().withMessage('Email must be a valid email address'),
+	validate,
 	async (req: Request, res: Response) => {
 		try {
 			const courses = await course.getCoursesByInstructorEmail(req.params.email);
@@ -279,6 +279,8 @@ router.get(
 router.get(
 	'/coursesbyid/:id',
 	checkUserRole(['admin', 'counselor', 'teacher']),
+	param('id').isNumeric().withMessage('ID must be a number'),
+	validate,
 	async (req: Request, res: Response) => {
 		try {
 			const courseId = Number(req.params.id);
@@ -398,12 +400,8 @@ router.put(
 			.escape()
 			.withMessage('Each topic must be a string'),
 	],
+	validate,
 	async (req: Request, res: Response) => {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			console.log(errors.array());
-			return res.status(400).json({errors: errors.array()});
-		}
 		// Validate that the user is logged in
 		try {
 			// Check if the user's role is either 'teacher' or 'admin'
