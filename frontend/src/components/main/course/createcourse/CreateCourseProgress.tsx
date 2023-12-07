@@ -10,39 +10,39 @@ const CreateCourseProgress: React.FC<ProgressProps> = ({
 	createCourseMode,
 }) => {
 	const totalSteps = createCourseMode === 'easy' ? 5 : 4;
-	const progressPercentage = (currentStep / totalSteps) * 100;
-	const getStepName = () => {
-		if (createCourseMode === 'easy') {
-			switch (currentStep) {
-				case 1:
-					return 'Insert Course Students Data File';
-				case 2:
-					return 'Course Details';
-				case 3:
-					return 'Student List';
-				case 4:
-					return 'Add Teachers';
-				case 5:
-					return 'Topic Group and Topics Selector';
-				default:
-					return '';
-			}
-		} else {
-			// custom mode
-			switch (currentStep) {
-				case 1:
-					return 'Course Details';
-				case 2:
-					return 'Student List';
-				case 3:
-					return 'Add Teachers';
-				case 4:
-					return 'Topic Group and Topics Selector';
-				default:
-					return '';
-			}
-		}
-	};
+	// const progressPercentage = (currentStep / totalSteps) * 100;
+	// const getStepName = () => {
+	// 	if (createCourseMode === 'easy') {
+	// 		switch (currentStep) {
+	// 			case 1:
+	// 				return 'Insert Course Students Data File';
+	// 			case 2:
+	// 				return 'Course Details';
+	// 			case 3:
+	// 				return 'Student List';
+	// 			case 4:
+	// 				return 'Add Teachers';
+	// 			case 5:
+	// 				return 'Topic Group and Topics Selector';
+	// 			default:
+	// 				return '';
+	// 		}
+	// 	} else {
+	// 		// custom mode
+	// 		switch (currentStep) {
+	// 			case 1:
+	// 				return 'Course Details';
+	// 			case 2:
+	// 				return 'Student List';
+	// 			case 3:
+	// 				return 'Add Teachers';
+	// 			case 4:
+	// 				return 'Topic Group and Topics Selector';
+	// 			default:
+	// 				return '';
+	// 		}
+	// 	}
+	// };
 	return (
 		<>
 			<div className="relative w-full h-4 mb-6  bg-gray-200 rounded-full">

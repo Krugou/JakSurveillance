@@ -18,41 +18,41 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 	const [topicData, setTopicData] = useState<TopicGroup[]>([]);
 	const [courseTopicGroup, setCourseTopicGroup] = useState('');
 	const [selectedGroupTopics, setSelectedGroupTopics] = useState<string[]>([]);
-	const [courseTopics, setCourseTopics] = useState<string[]>([]);
+	// const [courseTopics, setCourseTopics] = useState<string[]>([]);
 	const [customTopics, setCustomTopics] = useState<string[]>(['']);
 	const [customTopicGroup, setCustomTopicGroup] = useState('');
 	const [customTopic, setCustomTopic] = useState('');
 	const [isCustomGroup, setIsCustomGroup] = useState(false);
 	const [loading, setLoading] = useState(true);
-	const handleTopicChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		const selectedTopics = Array.from(
-			e.target.selectedOptions,
-			option => option.value,
-		);
-		setCourseTopics(selectedTopics);
+	// const handleTopicChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+	// 	const selectedTopics = Array.from(
+	// 		e.target.selectedOptions,
+	// 		option => option.value,
+	// 	);
+	// 	setCourseTopics(selectedTopics);
 
-		let topicGroup = '';
-		let topics = '';
-		if (isCustomGroup) {
-			topicGroup = customTopicGroup;
-			topics = JSON.stringify(customTopics);
-		} else {
-			topicGroup = courseTopicGroup;
-			topics = JSON.stringify(selectedTopics);
-		}
+	// 	let topicGroup = '';
+	// 	let topics = '';
+	// 	if (isCustomGroup) {
+	// 		topicGroup = customTopicGroup;
+	// 		topics = JSON.stringify(customTopics);
+	// 	} else {
+	// 		topicGroup = courseTopicGroup;
+	// 		topics = JSON.stringify(selectedTopics);
+	// 	}
 
-		interface FormData {
-			topicgroup: string;
-			topics: string;
-			// include other properties of form data here
-		}
+	// 	interface FormData {
+	// 		topicgroup: string;
+	// 		topics: string;
+	// 		// include other properties of form data here
+	// 	}
 
-		setTopicsFormData((prevFormData: FormData) => ({
-			...prevFormData,
-			topicgroup: topicGroup,
-			topics: topics,
-		}));
-	};
+	// 	setTopicsFormData((prevFormData: FormData) => ({
+	// 		...prevFormData,
+	// 		topicgroup: topicGroup,
+	// 		topics: topics,
+	// 	}));
+	// };
 
 	const handleCustomTopicChange = (index: number, value: string) => {
 		const newTopics = [...customTopics];

@@ -26,7 +26,7 @@ const AttendanceRoom: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const {lectureid} = useParams<{lectureid: string}>();
 	const [socket, setSocket] = useState<Socket | null>(null);
-	const [arrayOfStudents, setArrayOfStudents] = useState<string[]>([]);
+	const [arrayOfStudents, setArrayOfStudents] = useState<Student[]>([]);
 	const [courseStudents, setCourseStudents] = useState<Student[]>([]);
 	const [countdown, setCountdown] = useState<null | number>(null);
 	const [courseName, setCourseName] = useState('');
@@ -312,7 +312,7 @@ const AttendanceRoom: React.FC = () => {
 							<Attendees
 								arrayOfStudents={arrayOfStudents}
 								socket={socket}
-								lectureid={lectureid}
+								lectureid={lectureid || ''}
 							/>
 						</div>
 						<h2 className="text-2xl ml-2">
