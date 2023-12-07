@@ -1,6 +1,6 @@
 // attendanceRoutes.ts
 import express, {Request, Response, Router} from 'express';
-import {body} from 'express-validator';
+import {body, param} from 'express-validator';
 import attendanceController from '../../controllers/attendancecontroller.js';
 import lectureController from '../../controllers/lecturecontroller.js';
 import attendanceModel from '../../models/attendancemodel.js';
@@ -26,6 +26,8 @@ router.get(
 router.get(
 	'/:id',
 	checkUserRole(['admin', 'teacher', 'counselor']),
+	[param('id').isNumeric().withMessage('ID must be a number')],
+	validate,
 	async (req: Request, res: Response) => {
 		try {
 			const id = Number(req.params.id);
@@ -41,50 +43,53 @@ router.get(
 		}
 	},
 );
-router.get('/usercourse/:id', async (req: Request, res: Response) => {
-	try {
-		const id = Number(req.params.id);
-		let userid = Number(req.user?.userid);
-		let userinfo;
-		if (
-			req.user?.role === 'teacher' ||
-			req.user?.role === 'admin' ||
-			req.user?.role === 'counselor'
-		) {
-			userinfo = await attendanceModel.getUserInfoByUserCourseId(id);
-			userid = userinfo?.userid;
+router.get(
+	'/usercourse/:id',
+	[param('id').isNumeric().withMessage('ID must be a number')],
+	validate,
+	async (req: Request, res: Response) => {
+		try {
+			const id = Number(req.params.id);
+			let userid = Number(req.user?.userid);
+			let userinfo;
+			if (
+				req.user?.role === 'teacher' ||
+				req.user?.role === 'admin' ||
+				req.user?.role === 'counselor'
+			) {
+				userinfo = await attendanceModel.getUserInfoByUserCourseId(id);
+				userid = userinfo?.userid;
+			}
+			const attendanceData =
+				await attendanceModel.findAllAttendancesByUserCourseId(id, userid);
+			attendanceData[0] && userinfo
+				? (attendanceData[0].userinfo = userinfo)
+				: null;
+			res.json(attendanceData);
+		} catch (err) {
+			console.error(err);
+			if (err instanceof Error) {
+				res.status(500).send(`Server error: ${err.message}`);
+			} else {
+				res.status(500).send('Server error');
+			}
 		}
-		const attendanceData = await attendanceModel.findAllAttendancesByUserCourseId(
-			id,
-			userid,
-		);
-		attendanceData[0] && userinfo
-			? (attendanceData[0].userinfo = userinfo)
-			: null;
-		res.json(attendanceData);
-	} catch (err) {
-		console.error(err);
-		if (err instanceof Error) {
-			res.status(500).send(`Server error: ${err.message}`);
-		} else {
-			res.status(500).send('Server error');
-		}
-	}
-});
+	},
+);
 
 router.post(
 	'/',
 	checkUserRole(['admin', 'teacher', 'counselor']),
 	[
-		body('status').notEmpty(),
-		body('date').isISO8601(),
-		body('studentnumber').isNumeric(),
-		body('lectureid').isNumeric(),
+		body('status').notEmpty().withMessage('Status is required'),
+		body('date').isISO8601().withMessage('Date must be in ISO 8601 format'),
+		body('studentnumber')
+			.isNumeric()
+			.withMessage('Student number must be a number'),
+		body('lectureid').isNumeric().withMessage('Lecture ID must be a number'),
 	],
 	validate,
 	async (req: Request, res: Response) => {
-		
-
 		const {status, date, studentnumber, lectureid} = req.body;
 		try {
 			const insertedData = await attendanceController.insertIntoAttendance(
@@ -108,9 +113,11 @@ router.post(
 	'/lecturefinished/',
 	checkUserRole(['admin', 'teacher', 'counselor']),
 	[
-		body('date').isISO8601(),
-		body('studentnumbers.*').isNumeric(),
-		body('lectureid').isNumeric(),
+		body('date').isISO8601().withMessage('Date must be in ISO 8601 format'),
+		body('studentnumbers.*')
+			.isNumeric()
+			.withMessage('All student numbers must be numbers'),
+		body('lectureid').isNumeric().withMessage('Lecture ID must be a number'),
 	],
 	async (req: Request, res: Response) => {
 		try {
@@ -219,6 +226,8 @@ router.post(
 router.get(
 	'/lectureinfo/:lectureid',
 	checkUserRole(['admin', 'teacher', 'counselor']),
+	[param('lectureid').isNumeric().withMessage('Lecture ID must be a number')],
+	validate,
 	async (req: Request, res: Response) => {
 		try {
 			const {lectureid} = req.params;
@@ -271,10 +280,11 @@ router.put(
 		}
 	},
 );
-
 router.get(
 	'/course/:courseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
+	[param('courseid').isNumeric().withMessage('Course ID must be a number')],
+	validate,
 	async (req: Request, res: Response) => {
 		try {
 			const courseid = req.params.courseid;
