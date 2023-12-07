@@ -7,7 +7,7 @@ const AdminMainView: React.FC = () => {
 		<>
 			<MainViewTitle role={'Admin'} />
 
-			<div className="flex 2xl:w-2/5 xl:w-5/6 lg:w-11/12 w-full flex-wrap p-5 justify-center gap-4">
+			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-fit mr-auto ml-auto p-5 gap-4">
 				<Card
 					path="/admin/courses/"
 					title="Courses"
