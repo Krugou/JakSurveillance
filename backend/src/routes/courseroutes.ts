@@ -559,7 +559,22 @@ router.get(
 		}
 	},
 );
-
+router.get(
+	'/studentsbycourse/:courseid',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	param('courseid').isNumeric().withMessage('Course ID must be a number'),
+	validate,
+	async (req: Request, res: Response) => {
+		try {
+			const courseid = Number(req.params.courseid);
+			const students = await course.getAllStudentsOnCourse(courseid.toString());
+			res.json(students);
+		} catch (error) {
+			console.error(error);
+			res.status(500).send('Server error');
+		}
+	},
+);
 router.get(
 	'/:userid',
 	checkUserRole(['admin', 'counselor', 'teacher']),

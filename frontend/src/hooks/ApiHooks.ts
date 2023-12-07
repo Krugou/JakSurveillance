@@ -669,7 +669,19 @@ const checkIfTopicGroupWithEmailExists = async (
 
 	return await doFetch(baseUrl + 'courses/topics/topicgroupcheck/', options);
 };
+const getStudentsByCourseId = async (courseId: string, token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
 
+	return await doFetch(
+		baseUrl + `courses/studentsbycourse/${courseId}`,
+		options,
+	);
+};
 const apiHooks = {
 	checkIfTopicGroupWithEmailExists,
 	getRoleCounts,
@@ -716,5 +728,6 @@ const apiHooks = {
 	updateStudentCourses,
 	deleteStudentFromCourse,
 	getStudentAndTopicsByUsercourseid,
+	getStudentsByCourseId,
 };
 export default apiHooks;

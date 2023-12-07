@@ -241,84 +241,84 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 									))}
 								</ul>
 								<div className="flex justify-between items-center flex-wrap">
-								<button
-									className={`mt-4 mr-4 transition font-bold md:text-base text-sm py-2 px-4 rounded ${
-										isCourseEnded
-											? 'bg-metropoliaSupportRed hover:bg-red-900'
-											: 'bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange'
-									} text-white`}
-									onClick={() =>
-										user?.role === 'student'
-											? navigate(`/student/courses/attendance/${course.usercourseid}`)
-											: navigate(
-													`/${user?.role}/students/attendance/${course.usercourseid}`,
-											  )
-									}
-								>
-									Attendance
-								</button>
-								{user?.role !== 'student' && (
-									<>
-										<button
-											className={`mt-4 mr-2 transition md:text-base text-sm md:mr-4 font-bold py-2 px-4 rounded ${
-												isCourseEnded
-													? 'bg-metropoliaSupportRed hover:bg-red-900'
-													: 'bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange'
-											} text-white`}
-											onClick={() =>
-												handleOpen(
-													course.course_name,
-													studentsTopicsArray,
-													course.usercourseid,
-													allTopicsArray,
-												)
-											}
-										>
-											Edit Topics for Student
-										</button>
-										<Tooltip title="Remove student from course">
-											<div className="w-[2.5em] mt-5  right-5 bg-gray-100 rounded-lg">
-												<IconButton
-													onClick={() => {
-														setIsDeleteModalOpen(true);
-														setCourseToDelete(course.usercourseid); // Set the course to delete
-													}}
-													aria-label="remove student"
-												>
-													<Delete style={{color: 'red'}} />
-												</IconButton>
-											</div>
-										</Tooltip>
-										<DeleteModal
-											isOpen={isDeleteModalOpen}
-											onDelete={() => {
-												if (courseToDelete !== null) {
-													handleRemoveStudentFromCourse &&
-														handleRemoveStudentFromCourse(courseToDelete);
-													setIsDeleteModalOpen(false); // Close the modal
+									<button
+										className={`mt-4 mr-4 transition font-bold md:text-base text-sm py-2 px-4 rounded ${
+											isCourseEnded
+												? 'bg-metropoliaSupportRed hover:bg-red-900'
+												: 'bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange'
+										} text-white`}
+										onClick={() =>
+											user?.role === 'student'
+												? navigate(`/student/courses/attendance/${course.usercourseid}`)
+												: navigate(
+														`/${user?.role}/students/attendance/${course.usercourseid}`,
+												  )
+										}
+									>
+										Attendance
+									</button>
+									{user?.role !== 'student' && (
+										<>
+											<button
+												className={`mt-4 mr-2 transition md:text-base text-sm md:mr-4 font-bold py-2 px-4 rounded ${
+													isCourseEnded
+														? 'bg-metropoliaSupportRed hover:bg-red-900'
+														: 'bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange'
+												} text-white`}
+												onClick={() =>
+													handleOpen(
+														course.course_name,
+														studentsTopicsArray,
+														course.usercourseid,
+														allTopicsArray,
+													)
 												}
-											}}
-											student={true}
-											onClose={() => setIsDeleteModalOpen(false)}
-										/>
-										<EditTopicsModal
-											open={open}
-											setOpen={setOpen}
-											courseName={courseName} // replace 'courseName' with the actual course name
-											newTopic={newTopic}
-											setNewTopic={setNewTopic}
-											courseTopics={courseTopics}
-											setCourseTopics={setCourseTopics}
-											modifiedTopics={modifiedTopics}
-											handleTopicChange={handleTopicChange}
-											handleDeleteTopic={handleDeleteTopic}
-											resetData={resetData}
-											counselor={true}
-											usercourseid={usercourseid}
-											handleSave={handleSave}
-										/>
-									</>
-								)}
+											>
+												Edit Topics for Student
+											</button>
+											<Tooltip title="Remove student from course">
+												<div className="w-[2.5em] mt-5  right-5 bg-gray-100 rounded-lg">
+													<IconButton
+														onClick={() => {
+															setIsDeleteModalOpen(true);
+															setCourseToDelete(course.usercourseid); // Set the course to delete
+														}}
+														aria-label="remove student"
+													>
+														<Delete style={{color: 'red'}} />
+													</IconButton>
+												</div>
+											</Tooltip>
+											<DeleteModal
+												isOpen={isDeleteModalOpen}
+												onDelete={() => {
+													if (courseToDelete !== null) {
+														handleRemoveStudentFromCourse &&
+															handleRemoveStudentFromCourse(courseToDelete);
+														setIsDeleteModalOpen(false); // Close the modal
+													}
+												}}
+												student={true}
+												onClose={() => setIsDeleteModalOpen(false)}
+											/>
+											<EditTopicsModal
+												open={open}
+												setOpen={setOpen}
+												courseName={courseName} // replace 'courseName' with the actual course name
+												newTopic={newTopic}
+												setNewTopic={setNewTopic}
+												courseTopics={courseTopics}
+												setCourseTopics={setCourseTopics}
+												modifiedTopics={modifiedTopics}
+												handleTopicChange={handleTopicChange}
+												handleDeleteTopic={handleDeleteTopic}
+												resetData={resetData}
+												counselor={true}
+												usercourseid={usercourseid}
+												handleSave={handleSave}
+											/>
+										</>
+									)}
 								</div>
 							</div>
 						</Tooltip>

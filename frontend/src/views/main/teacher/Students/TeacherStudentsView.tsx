@@ -5,7 +5,9 @@ import {Link} from 'react-router-dom';
 import InputField from '../../../../components/main/course/createcourse/coursedetails/InputField';
 import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
-
+import {useCourses} from '../../../../hooks/courseHooks';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 interface Student {
 	first_name: string;
 	last_name: string;
@@ -19,11 +21,29 @@ interface Student {
 	group_name: string;
 }
 
+interface SelectedCourse {
+	name: string;
+	code: string;
+	courseid: string;
+	start_date: string;
+	end_date: string;
+	studentgroup_name: string;
+	topic_names: string;
+	selected_topics: string;
+	created_at: string;
+}
+
 const TeacherStudentsView: React.FC = () => {
 	const {user} = React.useContext(UserContext);
+	const [allStudents, setAllStudents] = useState<Student[]>([]);
 	const [students, setStudents] = useState<Student[]>([]);
+
 	const [loading, setLoading] = useState(true);
 	const [searchTerm, setSearchTerm] = useState('');
+	const {courses} = useCourses();
+	const [selectedCourse, setSelectedCourse] = useState<SelectedCourse | null>(
+		null,
+	);
 
 	useEffect(() => {
 		const token: string | null = localStorage.getItem('userToken');
@@ -39,13 +59,13 @@ const TeacherStudentsView: React.FC = () => {
 					user?.userid,
 					token,
 				);
-				setStudents(students);
+				setAllStudents(students);
 				setLoading(false);
 			}
 
 			if (user?.role === 'counselor') {
 				const students = await apiHooks.fetchAllStudents(token);
-				setStudents(students);
+				setAllStudents(students);
 				setLoading(false);
 			}
 		};
@@ -57,13 +77,48 @@ const TeacherStudentsView: React.FC = () => {
 		return <CircularProgress />;
 	}
 
-	const filteredStudents = students.filter(student =>
-		Object.values(student).some(
-			value =>
-				typeof value === 'string' &&
-				value.toLowerCase().includes(searchTerm.toLowerCase()),
-		),
+	const filteredStudents = (selectedCourse ? students : allStudents).filter(
+		student =>
+			Object.values(student).some(
+				value =>
+					typeof value === 'string' &&
+					value.toLowerCase().includes(searchTerm.toLowerCase()),
+			),
 	);
+	console.log(
+		'🚀 ~ file: TeacherStudentsView.tsx:67 ~ filteredStudents:',
+		filteredStudents,
+	);
+	const handleCourseSelect = async (value: string) => {
+		if (!courses) {
+			toast.error('Courses not loaded');
+			return;
+		}
+
+		const selected = courses.find(
+			(course: SelectedCourse) => `${course.name} ${course.code}` === value,
+		) as SelectedCourse | undefined;
+
+		setSelectedCourse(selected || null);
+
+		if (selected) {
+			try {
+				const token: string | null = localStorage.getItem('userToken');
+				if (!token) {
+					throw new Error('No token available');
+				}
+				const students = await apiHooks.getStudentsByCourseId(
+					selected.courseid,
+					token,
+				);
+				console.log(students, 'students');
+				setStudents(students);
+			} catch (error) {
+				toast.error('Error fetching course details');
+				console.log(error);
+			}
+		}
+	};
 
 	return (
 		<div className="2xl:w-9/12 w-full mx-auto">
@@ -80,6 +135,32 @@ const TeacherStudentsView: React.FC = () => {
 						placeholder="Search..."
 						label="Search by name"
 					/>
+
+					<Autocomplete
+						className="sm:w-[20em] w-1/2"
+						freeSolo
+						options={courses.map(
+							(course: SelectedCourse) => `${course.name} ${course.code}`,
+						)}
+						onChange={(_, value) => handleCourseSelect(value as string)}
+						value={
+							selectedCourse ? `${selectedCourse.name} ${selectedCourse.code}` : null
+						}
+						renderInput={params => (
+							<TextField
+								{...params}
+								label="Search By course"
+								margin="normal"
+								variant="outlined"
+							/>
+						)}
+					/>
+
+					<p className="text-sm text-red-400">
+						{selectedCourse
+							? 'Searching only from students on the selected course.'
+							: 'Searching from all students.'}
+					</p>
 				</div>
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 					{filteredStudents.map(student => (
