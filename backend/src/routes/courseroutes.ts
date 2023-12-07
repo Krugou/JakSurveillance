@@ -459,10 +459,10 @@ router.get(
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	async (req: Request, res: Response) => {
 		try {
-			if (req.user.role === 'counselor' || req.user.role === 'admin') {
+			if (req.user?.role === 'counselor' || req.user?.role === 'admin') {
 				const courses = await course.fetchAllCourses();
 				res.send(courses);
-			} else if (req.user.role === 'teacher') {
+			} else if (req.user?.role === 'teacher') {
 				const courses = await course.getCoursesByInstructorEmail(req.user.email);
 				res.send(courses);
 			} else {
