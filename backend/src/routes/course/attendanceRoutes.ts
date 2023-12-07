@@ -148,25 +148,31 @@ router.post('/deletelecture/', async (req: Request, res: Response) => {
 		res.status(500).send('Server error');
 	}
 });
-router.post('/lecture/', async (req: Request, res: Response) => {
-	try {
-		const {topicname, coursecode, start_date, end_date, timeofday, state} =
-			req.body;
-		console.log(req.body);
-		const lectureid = await lectureController.insertIntoLecture(
-			topicname,
-			coursecode,
-			start_date,
-			end_date,
-			timeofday,
-			state,
-		);
-		res.status(201).json({message: 'lecture created', lectureid});
-	} catch (err) {
-		console.error(err);
-		res.status(500).send('Server error');
-	}
-});
+router.post(
+	'/lecture/',
+	checkUserRole(['admin', 'teacher', 'counselor']),
+	async (req: Request, res: Response) => {
+		try {
+			const {topicname, coursecode, start_date, end_date, timeofday, state} =
+				req.body;
+			console.log(req.body);
+			const teacherid = req.user?.userid;
+			const lectureid = await lectureController.insertIntoLecture(
+				topicname,
+				coursecode,
+				start_date,
+				end_date,
+				timeofday,
+				state,
+				teacherid,
+			);
+			res.status(201).json({message: 'lecture created', lectureid});
+		} catch (err) {
+			console.error(err);
+			res.status(500).send('Server error');
+		}
+	},
+);
 router.get('/lectureinfo/:lectureid', async (req: Request, res: Response) => {
 	try {
 		const {lectureid} = req.params;

@@ -27,6 +27,7 @@ interface LectureModel {
 		topicid: number,
 		courseid: number,
 		state: string,
+		teacherid: number | undefined,
 	): Promise<unknown>;
 	getLectureWithCourseAndTopic(lectureid: string): Promise<RowDataPacket | null>;
 	updateLectureState(lectureid: number, state: string): Promise<unknown>;
@@ -163,12 +164,13 @@ const lectureModel: LectureModel = {
 		topicid: number,
 		courseid: number,
 		state: string,
+		teacherid: number | undefined,
 	): Promise<ResultSetHeader> {
 		const [result] = await pool
 			.promise()
 			.query<ResultSetHeader>(
-				'INSERT INTO lecture (start_date, end_date, timeofday, topicid, courseid, state) VALUES (?, ?, ?, ?, ?, ?)',
-				[start_date, end_date, timeofday, topicid, courseid, state],
+				'INSERT INTO lecture (start_date, end_date, timeofday, topicid, courseid, state, teacherid) VALUES (?, ?, ?, ?, ?, ?, ?)',
+				[start_date, end_date, timeofday, topicid, courseid, state, teacherid],
 			);
 		return result;
 	},

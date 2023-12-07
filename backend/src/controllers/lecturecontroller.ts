@@ -11,6 +11,7 @@ const lectureController = {
 		end_date: Date,
 		timeofday: 'am' | 'pm',
 		state: 'open' | 'closed',
+		teacherid: number | undefined,
 	) {
 		try {
 			const topicId = await topicModel.findTopicIdUsingTopicName(topicname);
@@ -41,13 +42,14 @@ const lectureController = {
 				topicid,
 				courseid,
 				state,
+				teacherid,
 			);
 			if (!result) {
 				console.error('Failed to insert into lecture');
 				return;
 			}
 
-			const lectureid = (result as { insertId: number }).insertId;
+			const lectureid = (result as {insertId: number}).insertId;
 			console.log('🚀 ~ file: lecturemodel.ts:88 ~ lectureid:', lectureid);
 			return lectureid;
 		} catch (error) {
