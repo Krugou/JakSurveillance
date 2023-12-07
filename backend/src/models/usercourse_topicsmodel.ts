@@ -60,7 +60,7 @@ const usercourse_topicsModel = {
 		const [rows] = await pool
 			.promise()
 			.query<RowDataPacket[]>(
-				'SELECT topics.topicname, topics.topicid from TOPICS JOIN usercourse_topics ON usercourse_topics.topicid = topics.topicid WHERE usercourseid = ?',
+				'SELECT topics.topicname, topics.topicid from topics JOIN usercourse_topics ON usercourse_topics.topicid = topics.topicid WHERE usercourseid = ?',
 				[usercourseid],
 			);
 
