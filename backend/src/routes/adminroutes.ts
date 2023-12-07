@@ -1,5 +1,5 @@
 import express, {Request, Response, Router} from 'express';
-import {body, validationResult} from 'express-validator';
+import {body, param} from 'express-validator';
 import adminController from '../controllers/admincontroller.js';
 import course from '../models/coursemodel.js';
 import rolemodel from '../models/rolemodel.js';
@@ -29,18 +29,15 @@ router.post(
 	'/',
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	[
-		body('speedofhash').isNumeric(),
-		body('leewayspeed').isNumeric(),
-		body('timeouttime').isNumeric(),
-		body('attendancethreshold').isNumeric(),
+		body('speedofhash').isNumeric().withMessage('Speed of hash must be a number'),
+		body('leewayspeed').isNumeric().withMessage('Leeway speed must be a number'),
+		body('timeouttime').isNumeric().withMessage('Timeout time must be a number'),
+		body('attendancethreshold')
+			.isNumeric()
+			.withMessage('Attendance threshold must be a number'),
 	],
 	validate,
 	async (req: Request, res: Response) => {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(400).json({errors: errors.array()});
-		}
-
 		const {speedofhash, leewayspeed, timeouttime, attendancethreshold} = req.body;
 		try {
 			await adminController.updateServerSettings(
@@ -87,14 +84,12 @@ router.get(
 router.post(
 	'/change-role',
 	checkUserRole(['admin', 'counselor', 'teacher']),
-	[body('email').isEmail(), body('roleId').isNumeric()],
+	[
+		body('email').isEmail().withMessage('Email must be valid'),
+		body('roleId').isNumeric().withMessage('Role ID must be a number'),
+	],
 	validate,
 	async (req: Request, res: Response) => {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(400).json({errors: errors.array()});
-		}
-
 		const {email, roleId} = req.body;
 		try {
 			await usermodel.changeRoleId(email, roleId);
@@ -121,6 +116,8 @@ router.get(
 router.get(
 	'/getuser/:userid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
+	[param('userid').isNumeric().withMessage('User ID must be a number')],
+	validate,
 	async (req: Request, res: Response) => {
 		try {
 			const {userid} = req.params;
@@ -175,6 +172,12 @@ router.get(
 router.get(
 	'/checkstudentnumber/:studentnumber',
 	checkUserRole(['admin', 'counselor', 'teacher']),
+	[
+		param('studentnumber')
+			.isNumeric()
+			.withMessage('Student number must be a number'),
+	],
+	validate,
 	async (req: Request, res: Response) => {
 		try {
 			const {studentnumber} = req.params;

@@ -1,6 +1,6 @@
 import express, {Request, Response, Router} from 'express';
 
-import {body} from 'express-validator';
+import {body, param} from 'express-validator';
 import TopicGroupController from '../../controllers/topicgroupcontroller.js';
 import TopicGroup from '../../models/topicgroupmodel.js';
 import checkUserRole from '../../utils/checkRole.js';
@@ -24,10 +24,9 @@ router.get(
 router.post(
 	'/',
 	checkUserRole(['admin', 'counselor', 'teacher']),
-	[body('email').isEmail()],
+	[body('email').isEmail().withMessage('Email must be a valid email address')],
 	validate,
 	async (req: Request, res: Response) => {
-		
 		try {
 			const {email} = req.body;
 			const topicGroupData =
@@ -43,9 +42,9 @@ router.post(
 	'/update',
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	[
-		body('topicGroup').notEmpty(),
-		body('topics.*').notEmpty(),
-		body('email').isEmail(),
+		body('topicGroup').notEmpty().withMessage('Topic group is required'),
+		body('topics.*').notEmpty().withMessage('All topics must not be empty'),
+		body('email').isEmail().withMessage('Email must be a valid email address'),
 	],
 	validate,
 	async (req: Request, res: Response) => {
@@ -77,7 +76,14 @@ router.post(
 router.post(
 	'/update/:usercourseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
-	[body('modifiedTopics.*').notEmpty()],
+	[
+		param('usercourseid')
+			.isNumeric()
+			.withMessage('User course ID must be a number'),
+		body('modifiedTopics.*')
+			.notEmpty()
+			.withMessage('All modified topics must not be empty'),
+	],
 	validate,
 	async (req: Request, res: Response) => {
 		try {
@@ -101,7 +107,10 @@ router.post(
 router.post(
 	'/topicgroupcheck/',
 	checkUserRole(['admin', 'counselor', 'teacher']),
-	[body('topicGroup').notEmpty(), body('email').isEmail()],
+	[
+		body('topicGroup').notEmpty().withMessage('Topic group is required'),
+		body('email').isEmail().withMessage('Email must be a valid email address'),
+	],
 	validate,
 	async (req: Request, res: Response) => {
 		try {
@@ -115,7 +124,7 @@ router.post(
 					topicGroup as string,
 					email as string,
 				);
-			
+
 			res.status(200).send(topicGroupResult);
 		} catch (err) {
 			console.error(err);
