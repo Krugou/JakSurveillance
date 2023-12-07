@@ -147,11 +147,12 @@ const AdminCourseDetail: React.FC = () => {
 										<p className="text-gray-700">Student group:</p>
 										<p>{course.studentgroup_name}</p>
 									</div>
-									<div className="flex justify-between mb-2">
+									<div className="flex justify-between mb-4">
 										<p className="text-gray-700">Topics:</p>
 										<p>{course.topic_names?.replace(/,/g, ', ')}</p>
 									</div>
-									<h2 className="text-xl mt-4"> Additional Info</h2>
+									<div className="w-full border-t-4 border-metropoliaMainOrange"></div>
+									<h2 className="text-lg font-bold mt-4 mb-2"> Additional Info</h2>
 									<div className="flex justify-between">
 										<p className="text-gray-700">Course Created at:</p>
 										<p>{new Date(course.created_at).toLocaleDateString()}</p>
@@ -160,10 +161,15 @@ const AdminCourseDetail: React.FC = () => {
 										<p className="text-gray-700">Amount of students</p>
 										<p>{course.user_count}</p>
 									</div>
-									<div className="flex justify-between mb-2">
-										<p className="text-gray-700">Instructors: </p>
-										<p>{course.instructor_name}</p>
-									</div>
+									<div className="w-full border-t-4 mb-4 mt-4 border-metropoliaMainOrange"></div>
+									<div className="mt-4">
+									<h2 className="text-gray-700 text-lg font-bold">Instructors</h2>
+									<ul>
+										{course.instructor_name.split(',').map((instructor, index) => (
+											<li key={index}>{instructor.trim()}</li>
+										))}
+									</ul>
+								</div>
 								</div>
 							</div>
 						))}
