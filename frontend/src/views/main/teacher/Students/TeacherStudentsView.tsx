@@ -1,9 +1,9 @@
-import { CircularProgress } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import {CircularProgress} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {toast} from 'react-toastify';
+import {Link} from 'react-router-dom';
 import InputField from '../../../../components/main/course/createcourse/coursedetails/InputField';
-import { UserContext } from '../../../../contexts/UserContext';
+import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
 
 interface Student {
@@ -20,7 +20,7 @@ interface Student {
 }
 
 const TeacherStudentsView: React.FC = () => {
-	const { user } = React.useContext(UserContext);
+	const {user} = React.useContext(UserContext);
 	const [students, setStudents] = useState<Student[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [searchTerm, setSearchTerm] = useState('');
@@ -35,7 +35,10 @@ const TeacherStudentsView: React.FC = () => {
 
 		const fetchStudents = async () => {
 			if (user?.role === 'teacher') {
-				const students = await apiHooks.getStudentsByInstructorId(user?.userid, token);
+				const students = await apiHooks.getStudentsByInstructorId(
+					user?.userid,
+					token,
+				);
 				setStudents(students);
 				setLoading(false);
 			}
@@ -54,30 +57,32 @@ const TeacherStudentsView: React.FC = () => {
 		return <CircularProgress />;
 	}
 
-	const filteredStudents = students.filter((student) =>
+	const filteredStudents = students.filter(student =>
 		Object.values(student).some(
-			(value) =>
+			value =>
 				typeof value === 'string' &&
-				value.toLowerCase().includes(searchTerm.toLowerCase())
-		)
+				value.toLowerCase().includes(searchTerm.toLowerCase()),
+		),
 	);
 
 	return (
 		<div className="2xl:w-9/12 w-full mx-auto">
-			<h1 className="text-2xl text-center p-3 bg-white rounded-lg w-fit ml-auto mr-auto font-bold mb-4">Your Students</h1>
+			<h1 className="text-2xl text-center p-3 bg-white rounded-lg w-fit ml-auto mr-auto font-bold mb-4">
+				Your Students
+			</h1>
 			<div className="w-full max-h-[40em] 2xl:max-h-[60em] overflow-y-scroll rounded-xl bg-gray-100 p-2 sm:p-5">
 				<div className="w-11/12 sm:w-[20em] lg:ml-4 ml-2 mb-4">
 					<InputField
 						type="text"
 						name="search"
 						value={searchTerm}
-						onChange={(e) => setSearchTerm(e.target.value)}
+						onChange={e => setSearchTerm(e.target.value)}
 						placeholder="Search..."
 						label="Search by name"
 					/>
 				</div>
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-					{filteredStudents.map((student) => (
+					{filteredStudents.map(student => (
 						<Link
 							key={student.userid}
 							to={`/${user?.role}/students/${student.userid}`}

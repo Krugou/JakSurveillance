@@ -36,10 +36,8 @@ router.get('/getattendancethreshold', async (_req: Request, res: Response) => {
 });
 
 router.put('/accept-gdpr/:userid', async (req, res) => {
-	const userId = Number(req.params.userid);
-	console.log(userId, 'jotatjdkfgfdfd');
 	try {
-		const userId = req.user?.userid;
+		const userId: number | undefined = req.user?.userid;
 		await usermodel.updateUserGDPRStatus(userId);
 		res.json({success: true});
 	} catch (error) {

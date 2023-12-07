@@ -353,7 +353,7 @@ const UserModel = {
 	 * @param {number} gdprStatus - The new GDPR status to set for the user (0 or 1).
 	 * @returns {Promise<boolean>} A promise that resolves to a boolean indicating whether the update was successful.
 	 */
-	updateUserGDPRStatus: async (userId: number): Promise<boolean> => {
+	updateUserGDPRStatus: async (userId: number | undefined): Promise<boolean> => {
 		try {
 			const [rows] = (await UserModel.pool
 				.promise()
