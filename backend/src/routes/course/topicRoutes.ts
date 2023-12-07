@@ -1,6 +1,6 @@
 import express, {Request, Response, Router} from 'express';
 
-import {body} from 'express-validator';
+import {body, param} from 'express-validator';
 import TopicGroupController from '../../controllers/topicgroupcontroller.js';
 import TopicGroup from '../../models/topicgroupmodel.js';
 import checkUserRole from '../../utils/checkRole.js';
@@ -77,6 +77,9 @@ router.post(
 	'/update/:usercourseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	[
+		param('usercourseid')
+			.isNumeric()
+			.withMessage('User course ID must be a number'),
 		body('modifiedTopics.*')
 			.notEmpty()
 			.withMessage('All modified topics must not be empty'),
