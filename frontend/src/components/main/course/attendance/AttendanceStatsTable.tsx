@@ -50,13 +50,12 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 	attendanceStudentData, // from  student view
 	usercourseid, // from student view url param
 }) => {
-	const topics = allAttendanceCounts
-		? allAttendanceCounts.map(item => item.topicname)
-		: Object.keys(attendanceStudentData?.attendance || {});
-
 	// State to keep track of the fetched data
 	const [fetchedData, setFetchedData] = useState<FetchedDataItem | null>(null);
 
+	const topics = allAttendanceCounts
+		? allAttendanceCounts.map(item => item.topicname)
+		: fetchedData?.topics || [];
 	// Fetch the student data for the course if the usercourseid is available (i.e. if the component is used in the student view)
 	useEffect(() => {
 		const fetchData = async () => {
