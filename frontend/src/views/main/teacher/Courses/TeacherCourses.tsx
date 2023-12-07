@@ -47,9 +47,13 @@ const TeacherCourses: React.FC = () => {
 
 	return (
 		<div className="w-full">
-			<h2 className="font-bold text-3xl p-3 bg-white w-fit ml-auto mr-auto rounded-lg text-center xl:text-4xl">My courses</h2>
+			<h2 className="font-bold text-3xl p-3 bg-white w-fit ml-auto mr-auto rounded-lg text-center xl:text-4xl">
+				My courses
+			</h2>
 			<div className="grid 2xl:w-3/4 md:w-full bg-gray-100 p-5 max-h-[30em] 2xl:max-h-[50em] overflow-y-scroll rounded-lg mt-5 sm:w-3/4 w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-4 m-auto">
-				<CourseData courseData={courses} updateView={updateView} />
+				{courses.length > 1 && (
+					<CourseData courseData={courses} updateView={updateView} />
+				)}
 			</div>
 		</div>
 	);
