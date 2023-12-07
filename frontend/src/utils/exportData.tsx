@@ -180,31 +180,48 @@ export const exportStatsTableToPdf = (allAttendanceCounts, selectedCourse) => {
 	);
 
 	doc.addImage(metropolia_logo, 'PNG', imgX, imgY, imgWidth, imgHeight);
+	// Define the columns for the table. It includes 'Student', 'Selected Topics', and all the topics.
 	const columns = ['Student', 'Selected Topics', ...topics];
+
+	// Map over the attendance counts to create the data for each student.
 	const data = allAttendanceCounts[0]?.attendanceCounts.map((student, i) => {
+		// Start with the student's name and selected topics.
 		const studentData = [
 			student.name,
+			// If selectedTopics is an array, join them with a comma. Otherwise, use the value directly.
 			Array.isArray(student.selectedTopics)
 				? student.selectedTopics.join(', ')
 				: student.selectedTopics,
 		];
+
+		// For each attendance count...
 		allAttendanceCounts.forEach(item => {
+			// If the student did not select this topic, add 'N/A'.
 			if (
 				Array.isArray(student.selectedTopics) &&
 				!student.selectedTopics.includes(item.topicname)
 			) {
 				studentData.push('N/A');
-			} else if (item.attendanceCounts[i]?.percentage === 'No lectures') {
+			}
+			// If there were no lectures for this topic, add 'No lectures'.
+			else if (item.attendanceCounts[i]?.percentage === 'No lectures') {
 				studentData.push('No lectures');
-			} else {
+			}
+			// Otherwise, add the student's attendance percentage for this topic.
+			else {
 				studentData.push(`${item.attendanceCounts[i]?.percentage}%`);
 			}
 		});
+
+		// Return the data for the students.
 		return studentData;
 	});
 
+	// Generate the table in the PDF document.
 	autoTable(doc, {columns, body: data, startY: 50});
-	doc.save('table.pdf');
+	doc.save(
+		`${selectedCourse?.name}_${selectedCourse?.code}_attendancestatistics.pdf`,
+	);
 };
 export const exportStatsTableToExcel = (
 	allAttendanceCounts,
