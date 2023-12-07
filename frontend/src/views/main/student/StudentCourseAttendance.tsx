@@ -117,6 +117,7 @@ const StudentCourseAttendance: React.FC = () => {
 		topics: uniqueTopics,
 		attendance: topicAttendancePercentages,
 	};
+
 	// Filter the attendance data based on the search term and the selected sort option
 	const filteredAttendanceData = attendanceData.filter(
 		attendance =>

@@ -24,18 +24,14 @@ router.get(
 		}
 	},
 );
-router.get(
-	'/getattendancethreshold',
-	checkUserRole(['admin', 'counselor', 'teacher']), // replace with your actual middleware if needed
-	async (_req: Request, res: Response) => {
-		try {
-			const result = await serverSettingsModel.getAttentanceThreshold(pool); // replace with your actual function to get the threshold
-			const threshold = result[0][0].attendancethreshold;
-			res.send({attendancethreshold: threshold});
-		} catch (error) {
-			console.error(error);
-			res.status(500).json({message: 'Internal server error'});
-		}
-	},
-);
+router.get('/getattendancethreshold', async (_req: Request, res: Response) => {
+	try {
+		const result = await serverSettingsModel.getAttentanceThreshold(pool); // replace with your actual function to get the threshold
+		const threshold = result[0][0].attendancethreshold;
+		res.send({attendancethreshold: threshold});
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({message: 'Internal server error'});
+	}
+});
 export default router;

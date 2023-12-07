@@ -29,6 +29,7 @@ interface TopicModel {
 		topic: string,
 		connection: mysql2.PoolConnection,
 	): Promise<RowDataPacket[] | null>;
+	getTopicNamesByUsercourseid(usercourseid: number): Promise<RowDataPacket[]>;
 
 	// other methods...
 }
@@ -168,7 +169,25 @@ const topicModel: TopicModel = {
 			]);
 		return topicResult;
 	},
-
+	async getTopicNamesByUsercourseid(usercourseid: number) {
+		const [topicResult] = await pool.promise().query<RowDataPacket[]>(
+			`SELECT 
+				topics.topicid, 
+				topics.topicname
+			FROM 
+				usercourses
+			JOIN 
+				courses ON usercourses.courseid = courses.courseid
+			JOIN 
+				coursetopics ON coursetopics.courseid = courses.courseid
+			JOIN 
+				topics ON coursetopics.topicid = topics.topicid
+			WHERE 
+				usercourses.usercourseid = ?;`,
+			[usercourseid],
+		);
+		return topicResult;
+	},
 	// other methods...
 };
 

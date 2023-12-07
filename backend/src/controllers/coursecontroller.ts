@@ -1,4 +1,4 @@
-import { RowDataPacket } from 'mysql2';
+import {RowDataPacket} from 'mysql2';
 import attendanceModel from '../models/attendancemodel.js';
 import courseInstructorModel from '../models/courseinstructormodel.js';
 import {
@@ -210,10 +210,7 @@ const courseController = {
 									student.email,
 								);
 								userId = existingUserByEmail[0].userid;
-								await userCourseModel.insertUserCourse(
-									userId,
-									courseId,
-								);
+								await userCourseModel.insertUserCourse(userId, courseId);
 
 								// usercourseid = (result as ResultSetHeader).insertId;
 							} else {
@@ -293,7 +290,7 @@ const courseController = {
 						return user;
 					}
 				});
-				usersAttendance = usersAttendance.map((user:UserMapResults) => {
+				usersAttendance = usersAttendance.map((user: UserMapResults) => {
 					if (user.usercourseid === usercourseid) {
 						return {...user, selectedParts};
 					} else {
@@ -364,6 +361,13 @@ const courseController = {
 			}
 
 			if (selectedParts && selectedParts.length > 0) {
+				topicNames = selectedParts.map(part => part.topicname);
+			}
+
+			if (!topicNames) {
+				const selectedParts = await topicModel.getTopicNamesByUsercourseid(
+					usercourseid,
+				);
 				topicNames = selectedParts.map(part => part.topicname);
 			}
 
