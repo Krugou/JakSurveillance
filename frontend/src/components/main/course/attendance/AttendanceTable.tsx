@@ -155,7 +155,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 									>
 										<MenuItem value={0}>Absent</MenuItem>
 										<MenuItem value={1}>Present</MenuItem>
-										<MenuItem value={2}>Accepted Absense</MenuItem>
+										<MenuItem value={2}>Accepted Absence</MenuItem>
 									</Select>
 								)}
 								{user?.role === 'student' && (
