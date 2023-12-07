@@ -459,11 +459,6 @@ router.get(
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	async (req: Request, res: Response) => {
 		try {
-			if (!req.user) {
-				res.status(403).json({error: 'Unauthorized'});
-				return;
-			}
-
 			if (req.user.role === 'counselor' || req.user.role === 'admin') {
 				const courses = await course.fetchAllCourses();
 				res.send(courses);
@@ -487,6 +482,8 @@ router.get(
 router.get(
 	'/getdetailsbycourseid/:courseId',
 	checkUserRole(['admin', 'counselor', 'teacher']),
+	param('courseId').isNumeric().withMessage('Course ID must be a number'),
+	validate,
 	async (req: Request, res: Response) => {
 		try {
 			const courseId = req.params.courseId;
@@ -501,6 +498,8 @@ router.get(
 router.post(
 	'/updateusercourses/:userid/:courseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
+	param('courseId').isNumeric().withMessage('Course ID must be a number'),
+	validate,
 	async (req: Request, res: Response) => {
 		const {userid, courseid} = req.params;
 
@@ -523,6 +522,8 @@ router.post(
 router.delete(
 	'/deleteusercourse/:usercourseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
+	param('courseId').isNumeric().withMessage('Course ID must be a number'),
+	validate,
 	async (req: Request, res: Response) => {
 		const usercourseid = Number(req.params.usercourseid);
 		try {
@@ -540,6 +541,10 @@ router.delete(
 );
 router.get(
 	'/studentandtopics/:usercourseid',
+	param('usercourseid')
+		.isNumeric()
+		.withMessage('User Course ID must be a number'),
+	validate,
 	async (req: Request, res: Response) => {
 		try {
 			const usercourseid = Number(req.params.usercourseid);
@@ -558,6 +563,8 @@ router.get(
 router.get(
 	'/:userid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
+	param('userid').isNumeric().withMessage('User ID must be a number'),
+	validate,
 	async (req: Request, res: Response) => {
 		const userid = req.params.userid;
 		try {
