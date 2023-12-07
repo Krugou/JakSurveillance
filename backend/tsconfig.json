@@ -13,7 +13,8 @@
 		"resolveJsonModule": true,
 		"noImplicitAny": true,
 		"noUnusedLocals": true,
-		"noUnusedParameters": true
+		"noUnusedParameters": true,
+		"alwaysStrict": true,
 	},
 	"include": ["src/**/*.ts"]
 }
