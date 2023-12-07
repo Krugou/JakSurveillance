@@ -45,17 +45,6 @@ const TeacherCourses: React.FC = () => {
 		setUpdate(!update);
 	};
 
-	let className = '';
-
-	if (courses.length === 2) {
-		className = 'grid-cols-1 md:grid-cols-2';
-	} else if (courses.length >= 3) {
-		className =
-			'grid-cols-1 md:grid-cols-2 xl:grid-cols-3 h-fit sm:max-h-[30em] overflow-hidden sm:overflow-y-scroll';
-	} else if (courses.length === 1) {
-		className = 'grid-cols-1';
-	}
-
 	return (
 		<div className="w-full">
 			<h2 className="font-bold text-3xl text-center xl:text-4xl">My courses</h2>
