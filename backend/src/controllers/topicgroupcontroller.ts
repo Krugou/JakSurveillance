@@ -1,3 +1,4 @@
+import {RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
 import TopicGroupModel from '../models/topicgroupmodel.js';
 import TopicInGroupModel from '../models/topicingroupmodel.js';
@@ -104,9 +105,9 @@ const TopicGroupController = {
 			// Insert the new topics for the usercourseid
 			for (const topic of topics) {
 				let topicId;
-				const existingTopic = await TopicModel.checkIfTopicExistsWithConnection(
-					topic,
-					connection,
+				const [existingTopic] = await connection.query<RowDataPacket[]>(
+					'SELECT * FROM topics WHERE topicname = ?',
+					[topic],
 				);
 				// If the topic exists, get the topicid
 				if (existingTopic && existingTopic.length > 0) {
