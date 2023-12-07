@@ -522,7 +522,9 @@ router.post(
 router.delete(
 	'/deleteusercourse/:usercourseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
-	param('courseId').isNumeric().withMessage('Course ID must be a number'),
+	param('usercourseid')
+		.isNumeric()
+		.withMessage('User Course ID must be a number'),
 	validate,
 	async (req: Request, res: Response) => {
 		const usercourseid = Number(req.params.usercourseid);
