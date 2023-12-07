@@ -498,7 +498,8 @@ router.get(
 router.post(
 	'/updateusercourses/:userid/:courseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
-	param('courseId').isNumeric().withMessage('Course ID must be a number'),
+	param('courseid').isNumeric().withMessage('Course ID must be a number'),
+	param('userid').isNumeric().withMessage('User ID must be a number'),
 	validate,
 	async (req: Request, res: Response) => {
 		const {userid, courseid} = req.params;
