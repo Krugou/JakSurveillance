@@ -3,7 +3,7 @@ import VideoDropdown from '../../../components/main/dropdown/VideoDropdown';
 const CounselorHelpVideos: React.FC = () => {
 	return (
 		<div className="w-full p-5">
-			<h1 className="text-2xl font-semibold mb-10 text-center">
+			<h1 className="text-2xl font-bold w-fit p-3 bg-white ml-auto mr-auto rounded-lg mb-10 text-center">
 				Counselor Help Videos
 			</h1>
 			<div className="space-y-6 flex flex-col">

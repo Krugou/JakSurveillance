@@ -64,7 +64,7 @@ const TeacherStudentsView: React.FC = () => {
 
 	return (
 		<div className="2xl:w-9/12 w-full mx-auto">
-			<h1 className="text-2xl text-center font-bold mb-4">Your Students</h1>
+			<h1 className="text-2xl text-center p-3 bg-white rounded-lg w-fit ml-auto mr-auto font-bold mb-4">Your Students</h1>
 			<div className="w-full max-h-[40em] 2xl:max-h-[60em] overflow-y-scroll rounded-xl bg-gray-100 p-2 sm:p-5">
 				<div className="w-11/12 sm:w-[20em] lg:ml-4 ml-2 mb-4">
 					<InputField
