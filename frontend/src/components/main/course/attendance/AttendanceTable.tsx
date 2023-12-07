@@ -159,7 +159,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 									</Select>
 								)}
 								{user?.role === 'student' && (
-									<p>{attendance.status === 0 ? 'Absent' : 'Present'}</p>
+									<p>{attendance.status === 0 ? 'Absent' : attendance.status === 1 ? 'Present' : 'Accepted absence'}</p>
 								)}
 							</TableCell>
 						</TableRow>
