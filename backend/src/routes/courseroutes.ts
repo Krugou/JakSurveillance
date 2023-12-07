@@ -120,6 +120,8 @@ router.post(
 		.optional()
 		.escape()
 		.withMessage('Topic group must be a non-empty string'),
+	body('topics.*').isString().withMessage('Each topic must be a string'),
+	body('instructors').isArray().withMessage('Instructors must be an array'),
 	async (req: Request, res: Response) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
