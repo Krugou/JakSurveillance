@@ -101,7 +101,7 @@ const StudentCourseAttendance: React.FC = () => {
 		topicAttendanceCounts[item.topicname].total += 1;
 
 		// If the `status` is 1, increment the `attended` count for the topic
-		if (item.status === 1) {
+		if (item.status === 1 || item.status === 2) {
 			topicAttendanceCounts[item.topicname].attended += 1;
 		}
 	});

@@ -25,7 +25,11 @@ const createTables = (mode?, filteredAttendanceData?, student?) => {
 			attendance.teacher,
 			attendance.timeofday,
 			attendance.topicname,
-			attendance.status === 1 ? 'Present' : 'Absent',
+			attendance.status === 1
+				? 'Present'
+				: attendance.status === 2
+				? 'Accepted Absence'
+				: 'Absent',
 		]);
 	} else if (mode === 'excel') {
 		// If mode is 'excel', set the table headers and data accordingly
@@ -37,7 +41,12 @@ const createTables = (mode?, filteredAttendanceData?, student?) => {
 			Teacher: attendance.teacher,
 			'Time of Day': attendance.timeofday,
 			Topic: attendance.topicname,
-			Status: attendance.status === 1 ? 'Present' : 'Absent',
+			Status:
+				attendance.status === 1
+					? 'Present'
+					: attendance.status === 2
+					? 'Accepted Absence'
+					: 'Absent',
 		}));
 	}
 

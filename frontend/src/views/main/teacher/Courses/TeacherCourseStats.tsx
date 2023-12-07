@@ -58,7 +58,7 @@ const TeacherCourseStats = () => {
 		return users.filter(
 			user =>
 				user.userid === userid &&
-				user.status === 1 &&
+				(user.status === 1 || user.status === 2) &&
 				(user.selectedParts && user.selectedParts.length > 0
 					? user.selectedParts.some(
 							part => part.topicname === topicname && user.topicname === topicname,
