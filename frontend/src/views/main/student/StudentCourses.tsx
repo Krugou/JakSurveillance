@@ -61,7 +61,7 @@ const StudentCourses: React.FC = () => {
 		return <div>Error: {error}</div>;
 	}
 	return (
-		<div className="flex flex-col items-center justify-center rounded-lg h-fit p-8 bg-gray-100">
+		<div className="flex flex-col items-center justify-center rounded-lg h-fit p-5 bg-gray-100">
 			<h1 className="text-2xl sm:text-4xl font-bold mb-8 text-center">
 				Your Courses
 			</h1>

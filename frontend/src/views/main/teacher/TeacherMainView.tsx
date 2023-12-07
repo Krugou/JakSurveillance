@@ -32,7 +32,7 @@ const MainView: React.FC = () => {
 	}, [user]);
 
 	return (
-		<div className="w-full">
+		<>
 			<MainViewTitle role={'Teacher'} />
 			{isLoading ? (
 				<div className="flex justify-center items-center">
@@ -40,7 +40,7 @@ const MainView: React.FC = () => {
 				</div>
 			) : (
 				<>
-					<div className="flex flex-col md:flex-row flex-wrap p-5 justify-center items-center gap-4">
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-fit p-5 mr-auto ml-auto gap-4">
 						{courses.length === 0 && (
 							<div>
 								<div className="animate-bounce p-2 rounded-md bg-metropoliaMainOrange gap-1 flex md:flex-row flex-col items-center">
@@ -93,7 +93,7 @@ const MainView: React.FC = () => {
 					<WelcomeModal />
 				</>
 			)}
-		</div>
+		</>
 	);
 };
 

@@ -6,7 +6,7 @@ const MainView: React.FC = () => {
 	return (
 		<div className="w-full">
 			<MainViewTitle role={'Student'} />
-			<div className="flex flex-wrap w-full items-center justify-center h-1/2">
+			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-fit m-auto p-5 justify-center items-center gap-4">
 				<Card
 					path="/student/qr"
 					title="Attendance Qr Scanner"
