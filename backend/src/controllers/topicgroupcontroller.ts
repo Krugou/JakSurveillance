@@ -138,6 +138,31 @@ const TopicGroupController = {
 			connection.release();
 		}
 	},
+	async checkIfTopicGroupExistsWithEmail(topicGroup: string, email: string) {
+		try {
+			let instructorUserId;
+			if (email) {
+				const user = await UserModel.getAllUserInfo(email);
+				if (!user) {
+					throw new Error('User not found');
+				}
+				instructorUserId = user.userid;
+			}
+			if (topicGroup && instructorUserId) {
+				const existingTopicGroup = await TopicGroupModel.checkIfTopicGroupExists(
+					topicGroup,
+					instructorUserId,
+				);
+				if (existingTopicGroup && existingTopicGroup.length > 0) {
+					return true;
+				}
+			}
+			return false;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
 };
 
 export default TopicGroupController;
