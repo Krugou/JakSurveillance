@@ -14,11 +14,9 @@ const CreateLecture: React.FC = () => {
 	const [date, setDate] = useState<Date | Date[]>(new Date());
 	const [calendarOpen, setCalendarOpen] = useState(false);
 	const timeOfDay = ['am', 'pm'];
-
 	const [selectedTimeOfDay, setSelectedTimeOfDay] = useState<string>(
 		timeOfDay[0],
 	);
-
 	const [selectedSession, setSelectedSession] = useState<string>(
 		courses.length > 0 ? courses[0].courseid : '',
 	);
@@ -26,16 +24,13 @@ const CreateLecture: React.FC = () => {
 	const [selectedTopic, setSelectedTopic] = useState<string>('');
 	const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 	const [highlightedDates, setHighlightedDates] = useState<Date[]>([]);
-
 	const inputRef = useRef<HTMLInputElement | null>(null);
-	// test data
 
 	interface Reservation {
 		startDate: string;
 	}
 	interface Course {
-		// existing properties...
-		codes: string; // replace CodeType with the actual type of `codes`
+		codes: string;
 		email: string;
 	}
 	useEffect(() => {
