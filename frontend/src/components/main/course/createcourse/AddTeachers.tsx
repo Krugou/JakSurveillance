@@ -65,7 +65,7 @@ const AddTeachers = ({
 				newErrorMessages[index] = '';
 			}
 			setErrorMessages(newErrorMessages);
-		}, 2000);
+		}, 500);
 	};
 
 	return (
