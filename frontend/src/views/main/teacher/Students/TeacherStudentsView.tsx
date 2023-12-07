@@ -45,6 +45,7 @@ const TeacherStudentsView: React.FC = () => {
 		null,
 	);
 
+	// Fetch all students on mount
 	useEffect(() => {
 		const token: string | null = localStorage.getItem('userToken');
 
@@ -73,10 +74,12 @@ const TeacherStudentsView: React.FC = () => {
 		fetchStudents();
 	}, []);
 
+	// If loading, show loading spinner
 	if (loading) {
 		return <CircularProgress />;
 	}
 
+	// Filter students based on search term and selected course
 	const filteredStudents = (selectedCourse ? students : allStudents).filter(
 		student =>
 			Object.values(student).some(
@@ -89,18 +92,21 @@ const TeacherStudentsView: React.FC = () => {
 		'🚀 ~ file: TeacherStudentsView.tsx:67 ~ filteredStudents:',
 		filteredStudents,
 	);
+
+	// This function is called when a course is selected
 	const handleCourseSelect = async (value: string) => {
 		if (!courses) {
 			toast.error('Courses not loaded');
 			return;
 		}
-
+		// Find the selected course from the courses array
 		const selected = courses.find(
 			(course: SelectedCourse) => `${course.name} ${course.code}` === value,
 		) as SelectedCourse | undefined;
 
 		setSelectedCourse(selected || null);
 
+		// If the selected course is found, fetch the course details
 		if (selected) {
 			try {
 				const token: string | null = localStorage.getItem('userToken');
