@@ -44,7 +44,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 						console.error(error);
 						toast.error('Error checking topic group existence');
 					});
-			}, 1000);
+			}, 500);
 
 			// Clear the timeout when the component unmounts or when user or customTopicGroup changes
 			return () => clearTimeout(timeoutId);
