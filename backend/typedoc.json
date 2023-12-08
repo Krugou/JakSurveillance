@@ -1,0 +1,11 @@
+{
+	"includes": ["src"],
+	"exclude": ["**/_*.ts"],
+	"out": "../extra/backend",
+	"name": "JakSec Backend",
+	"theme": "default",
+	"includeVersion": true,
+	"entryPointStrategy": "expand",
+	"plugin": ["typedoc-material-theme"],
+	"themeColor": "#ff5000"
+}
