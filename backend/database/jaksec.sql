@@ -251,3 +251,5 @@ CREATE TABLE `serversettings` (
 
 -- Insert the values into the serversettings table
 INSERT INTO `serversettings` (`speedofhash`, `leewayspeed`, `timeouttime`, `attendancethreshold`) VALUES (5000, 4, 3600000 , 80 );
+
+CREATE INDEX idx_users_email ON users(email);
