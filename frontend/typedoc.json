@@ -1,0 +1,12 @@
+{
+	"entryPoints": ["src"],
+	"exclude": ["**/_*.ts", "**/_*.tsx"],
+	"out": "../extra/frontend",
+	"name": "JakSec Frontend",
+	"theme": "default",
+	"excludePrivate": true,
+	"excludeProtected": true,
+	"excludeExternals": true,
+	"plugin": ["typedoc-material-theme"],
+	"themeColor": "#ff5000"
+}
