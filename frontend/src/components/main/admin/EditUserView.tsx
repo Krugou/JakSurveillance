@@ -166,7 +166,7 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 	return (
 		<div className="flex bg-white w-fit flex-col p-5 rounded-lg justify-center items-center">
 			<h1 className="text-2xl font-bold mb-4">Edit User {editedUser.userid}</h1>
-			<div className="w-full w-full p-4">
+			<div className="w-full p-4">
 				{editedUser.last_name && (
 					<label className="block mt-4">
 						<span className="text-gray-700 font-bold">Last Name</span>
@@ -295,12 +295,12 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 						</label>
 					)}
 				<div className="text-center">
-				<button
-					onClick={handleSaveClick}
-					className="mt-4 px-4 w-[10em] py-2 bg-metropoliaMainOrange transition hover:bg-metropoliaSecondaryOrange text-white rounded-md"
-				>
-					Save
-				</button>
+					<button
+						onClick={handleSaveClick}
+						className="mt-4 px-4 w-[10em] py-2 bg-metropoliaMainOrange transition hover:bg-metropoliaSecondaryOrange text-white rounded-md"
+					>
+						Save
+					</button>
 				</div>
 			</div>
 		</div>
