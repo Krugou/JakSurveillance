@@ -86,6 +86,7 @@ const StudentQrScanner: React.FC = () => {
 
 	const handleError = (error: any) => {
 		console.log('error', error);
+		toast.error('Error scanning QR code');
 	};
 	return (
 		<>
