@@ -4,13 +4,46 @@ import {Server, Socket} from 'socket.io';
 import doFetch from '../utils/doFetch.js';
 
 config();
+/**
+ * The current hash value.
+ * @type {string}
+ */
 let hash = '';
-const timestamps: {start: number; end: number; hash: string}[] = [];
-let speedOfHashChange = 6000; // milliseconds
-let leewaytimes = 5;
-let timeout = 3600000; // 1 hour
 
+/**
+ * An array of timestamps and their associated hashes.
+ * @type {Array<{start: number; end: number; hash: string}>}
+ */
+const timestamps: {start: number; end: number; hash: string}[] = [];
+
+/**
+ * The speed at which the hash changes, in milliseconds.
+ * @type {number}
+ */
+let speedOfHashChange = 6000;
+
+/**
+ * The number of times leeway is allowed.
+ * @type {number}
+ */
+let leewaytimes = 5;
+
+/**
+ * The timeout duration, in milliseconds.
+ * @type {number}
+ */
+let timeout = 3600000;
+
+/**
+ * The amount of leeway allowed.
+ * @type {number}
+ */
 let howMuchLeeWay = 0;
+
+/**
+ * The Student interface.
+ * @interface
+ */
 interface Student {
 	studentnumber: number;
 	GDPR: number;
@@ -18,7 +51,10 @@ interface Student {
 	last_name: string;
 	// add other properties as needed
 }
-// this defines how often the hash changes or how fast student need to be in lecture while doing attendance
+/**
+ * Retrieves a token by making a POST request with the dev account credentials.
+ * @returns {Promise<string>} A promise that resolves to the token string.
+ */
 const getToken = async () => {
 	try {
 		// admin login to get token use dev account from .env file
@@ -39,6 +75,10 @@ const getToken = async () => {
 		console.error(error);
 	}
 };
+/**
+ * Fetches data and updates the `speedOfHashChange`, `leewaytimes`, and `timeout` variables.
+ * @returns {Promise<void>} A promise that resolves when the data has been fetched and the variables have been updated.
+ */
 const fetchDataAndUpdate = async () => {
 	try {
 		const token = await getToken();
@@ -59,7 +99,11 @@ const fetchDataAndUpdate = async () => {
 	}
 };
 
-// Update the hash and timestamps
+/**
+ * Updates the hash and timestamps.
+ * Generates a new random hash, calculates the start and end times, and adds them to the timestamps array.
+ * If the timestamps array exceeds a certain length, the oldest hash and timestamp are removed.
+ */
 const updateHash = () => {
 	// Generate a random hash
 	const start = Date.now();
@@ -114,9 +158,16 @@ const notYetPresentStudents: {[lectureid: string]: Student[]} = {};
 // The timeout id for the lecture
 let lectureTimeoutId: NodeJS.Timeout;
 /**
- * Sets up the socket handlers for the server.
- * 
- * @param io - The server instance.
+ * Sets up socket event handlers for a given Socket.IO server.
+ *
+ * @param {Server} io - The Socket.IO server.
+ *
+ * The function handles the following events:
+ * - 'connection': Logs when a user connects and disconnects.
+ * - 'createAttendanceCollection': Handles the creation of an attendance collection for a lecture.
+ * - 'inputThatStudentHasArrivedToLecture': Handles the event when a student inputs the secure hash and unixtime.
+ * - 'manualstudentinsert': Handles the event when the teacher manually inputs the student id.
+ * - 'manualStudentRemove': Handles the event when the teacher manually removes a student.
  */
 const setupSocketHandlers = (io: Server) => {
 	io.on('connection', (socket: Socket) => {
@@ -194,7 +245,6 @@ const setupSocketHandlers = (io: Server) => {
 								lectureid,
 								presentStudents[lectureid],
 								notYetPresentStudents[lectureid],
-								
 							);
 					}, speedOfHashChange);
 
@@ -205,24 +255,6 @@ const setupSocketHandlers = (io: Server) => {
 					lectureTimeoutId = setTimeout(() => {
 						finishLecture(lectureid, io);
 					}, timeout);
-					// Set a timeout to delete the lecture from the database after 'timeout' milliseconds if no students have arrived
-					// setTimeout(async () => {
-					// 	// Check if presentStudents is empty
-					// 	if (presentStudents[lectureid].length === 0) {
-					// 		// Delete lecture from database
-					// 		const token = await getToken();
-					// 		doFetch('http://localhost:3002/courses/attendance/deletelecture/', {
-					// 			method: 'POST',
-					// 			headers: {
-					// 				'Content-Type': 'application/json',
-					// 				Authorization: 'Bearer ' + token,
-					// 			},
-					// 			body: JSON.stringify({
-					// 				lectureid: lectureid,
-					// 			}),
-					// 		});
-					// 	}
-					// }, timeout);
 
 					// Handle the 'lecturefinishedwithbutton' event
 					socket.on('lecturefinishedwithbutton', async (lectureid: string) => {
