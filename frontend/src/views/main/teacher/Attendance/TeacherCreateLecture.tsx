@@ -196,7 +196,7 @@ const CreateLecture: React.FC = () => {
 							<select
 								title="Course"
 								id="course"
-								className="block h-8 sm:ml-5 ml-1 mr-3"
+								className="block h-8 cursor-pointer sm:ml-5 ml-1 mr-3"
 								value={selectedSession}
 								onClick={() => {
 									if (courses.length === 0) {
@@ -245,7 +245,7 @@ const CreateLecture: React.FC = () => {
 							<select
 								title="Topic"
 								id="topic"
-								className="block h-8 mr-3 sm:ml-5 ml-1 sm:mt-1 mt-none"
+								className="block h-8 cursor-pointer mr-3 sm:ml-5 ml-1 sm:mt-1 mt-none"
 								value={selectedTopic}
 								onChange={e => {
 									setSelectedTopic(e.target.value);
@@ -270,7 +270,7 @@ const CreateLecture: React.FC = () => {
 								ref={inputRef}
 								type="text"
 								aria-label="Date"
-								className="py-2 text-center pl-4 pr-4 rounded-xl border focus:ring focus:ring-metropoliaSecondaryOrange focus:outline-none"
+								className="py-2 text-center pl-4 pr-4 rounded-xl cursor-pointer border focus:ring focus:ring-metropoliaSecondaryOrange focus:outline-none"
 								value={Array.isArray(date) ? 'Multiple Dates' : date.toDateString()}
 								onClick={toggleCalendar}
 								onChange={e => setDate(new Date(e.target.value))}
@@ -292,7 +292,7 @@ const CreateLecture: React.FC = () => {
 								title="Time of Day"
 								value={selectedTimeOfDay}
 								onChange={e => setSelectedTimeOfDay(e.target.value)}
-								className="block text-center appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 shadow leading-tight focus:outline-none focus:shadow-outline"
+								className="block text-center cursor-pointer appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 shadow leading-tight focus:outline-none focus:shadow-outline"
 							>
 								{timeOfDay.map(option => (
 									<option key={option} value={option}>

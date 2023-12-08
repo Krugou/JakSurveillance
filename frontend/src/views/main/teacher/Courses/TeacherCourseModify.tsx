@@ -168,7 +168,7 @@ const TeacherCourseModify: React.FC = () => {
 
 	return (
 		<div className="w-full">
-			<h2 className="text-gray-800 text-center font-semibold mb-6 text-md sm:text-2xl">
+			<h2 className="text-gray-800 p-3 bg-white rounded-lg w-fit m-auto text-center font-bold mb-6 text-md sm:text-2xl">
 				Modify Course
 			</h2>
 
