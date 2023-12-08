@@ -135,12 +135,12 @@ router.post(
 router.delete(
 	'/delete/:topicgroupname',
 	checkUserRole(['admin', 'counselor', 'teacher']),
-	validate,
 	[
 		param('topicgroupname')
 			.notEmpty()
 			.withMessage('Topic group name is required'),
 	],
+	validate,
 	async (req: Request, res: Response) => {
 		try {
 			const topicgroupname = req.params.topicgroupname;
