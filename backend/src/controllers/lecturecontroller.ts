@@ -118,6 +118,12 @@ const lectureController = {
 			console.error(error);
 		}
 	},
+
+	/**
+	 * Closes a lecture.
+	 * @param {string} lectureid - The ID of the lecture to close.
+	 * @returns {Promise<any>} A promise that resolves to the result of the lecture closing operation.
+	 */
 	async closeLecture(lectureid: string) {
 		try {
 			const students = await this.getStudentsInLecture(Number(lectureid));
