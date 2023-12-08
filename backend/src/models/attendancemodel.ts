@@ -56,6 +56,13 @@ interface AttendanceModel {
 }
 
 const attendanceModel: AttendanceModel = {
+	/**
+	 * Updates the attendance status for a user course.
+	 *
+	 * @param {number} usercourseid - The ID of the user course.
+	 * @param {number} status - The new attendance status.
+	 * @returns {Promise<any>} A promise that resolves when the update is complete.
+	 */
 	async updateAttendanceStatus(attendanceid: number, status: number) {
 		try {
 			if (attendanceid === 0) {
@@ -151,7 +158,15 @@ const attendanceModel: AttendanceModel = {
 			);
 		return attendanceResult;
 	},
-
+	/**
+	 * Inserts a new attendance.
+	 *
+	 * @param {number} status - The attendance status.
+	 * @param {string} date - The date of the attendance.
+	 * @param {string} usercourseid - The ID of the user course.
+	 * @param {string} lectureid - The ID of the lecture.
+	 * @returns {Promise<any>} A promise that resolves when the insertion is complete.
+	 */
 	async insertAttendance(
 		status: number,
 		date: string,
@@ -174,6 +189,13 @@ const attendanceModel: AttendanceModel = {
 			throw new Error('Failed to insert attendance');
 		}
 	},
+	/**
+	 * Checks the attendance for a user course and lecture.
+	 *
+	 * @param {number} usercourseid - The ID of the user course.
+	 * @param {number} lectureid - The ID of the lecture.
+	 * @returns {Promise<any>} A promise that resolves with the attendance check result.
+	 */
 	async checkAttendance(usercourseid: number, lectureid: number) {
 		const [attendanceResultCheck] = await pool
 			.promise()
@@ -189,6 +211,12 @@ const attendanceModel: AttendanceModel = {
 			.query('SELECT * FROM attendance WHERE attendanceid = ?', [insertid]);
 		return attendanceResult;
 	},
+	/**
+	 * Gets the user info for a user course.
+	 *
+	 * @param {number} usercourseid - The ID of the user course.
+	 * @returns {Promise<any>} A promise that resolves with the user info.
+	 */
 	async getUserInfoByUserCourseId(usercourseid: number) {
 		const [userResult] = (await pool
 			.promise()
@@ -234,6 +262,12 @@ const attendanceModel: AttendanceModel = {
 		);
 		return attendanceResult;
 	},
+	/**
+	 * Gets the lecture count by topic for a course.
+	 *
+	 * @param {string} courseid - The ID of the course.
+	 * @returns {Promise<any>} A promise that resolves with the lecture count by topic.
+	 */
 	async getLectureCountByTopic(courseid: string) {
 		const [result] = await pool.promise().query(
 			`SELECT topics.topicname, COUNT(lecture.lectureid) AS lecture_count
@@ -246,6 +280,13 @@ const attendanceModel: AttendanceModel = {
 		);
 		return result;
 	},
+	/**
+	 * Deletes the attendance for a user course and lecture.
+	 *
+	 * @param {number} usercourseid - The ID of the user course.
+	 * @param {number} lectureid - The ID of the lecture.
+	 * @returns {Promise<any>} A promise that resolves when the deletion is complete.
+	 */
 	async deleteAttendance(usercourseid: number, lectureid: number) {
 		const [result] = await pool
 			.promise()

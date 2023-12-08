@@ -289,6 +289,13 @@ const courseController = {
 		}
 		return courseId;
 	},
+	/**
+	 * Gets the details of a course by its ID.
+	 *
+	 * @param {string} courseId - The ID of the course.
+	 * @returns {Promise<any>} The details of the course.
+	 * @throws {Error} If there is an error fetching the course details.
+	 */
 	getDetailsByCourseId: async (courseId: string) => {
 		try {
 			let allUsersOnCourse = await course.getAllStudentsOnCourse(courseId);
@@ -334,6 +341,13 @@ const courseController = {
 			throw error;
 		}
 	},
+	/**
+	 * Updates the courses for a student.
+	 *
+	 * @param {number} userid - The ID of the user.
+	 * @param {number} courseid - The ID of the course.
+	 * @throws {Error} If the user is already enrolled in the course.
+	 */
 	updateStudentCourses: async (userid: number, courseid: number) => {
 		try {
 			const existingUserCourse = await userCourseModel.checkIfUserCourseExists(
@@ -351,6 +365,12 @@ const courseController = {
 			throw error;
 		}
 	},
+	/**
+	 * Removes a student from a course.
+	 *
+	 * @param {number} usercourseid - The ID of the user course.
+	 * @throws {Error} If the user is not enrolled in the course.
+	 */
 	removeStudentCourses: async (usercourseid: number) => {
 		try {
 			const existingUserCourse =
@@ -369,6 +389,11 @@ const courseController = {
 			throw error;
 		}
 	},
+	/**
+	 * Gets a student and their selected topics by the user course ID.
+	 *
+	 * @param {number} usercourseid - The ID of the user course.
+	 */
 	getStudentAndSelectedTopicsByUsercourseId: async (usercourseid: number) => {
 		try {
 			let topicNames;
