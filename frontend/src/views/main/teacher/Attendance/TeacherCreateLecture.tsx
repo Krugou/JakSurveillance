@@ -7,6 +7,7 @@ import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
+import DeleteLectureModal from '../../../../components/main/modals/DeleteLectureModal';
 const CreateLecture: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
@@ -20,12 +21,20 @@ const CreateLecture: React.FC = () => {
 	const [selectedSession, setSelectedSession] = useState<string>(
 		courses.length > 0 ? courses[0].courseid : '',
 	);
+	interface OpenLecture {
+		id: string;
+		lectureid: string;
+		courseid: string;
+		teacher: string;
+	}
 	const [loading, setLoading] = useState(false);
 	const [selectedTopic, setSelectedTopic] = useState<string>('');
 	const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 	const [highlightedDates, setHighlightedDates] = useState<Date[]>([]);
 	const inputRef = useRef<HTMLInputElement | null>(null);
-
+	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+	const [openLectures, setOpenLectures] = useState<OpenLecture[]>([]);
+	const [createdLectureid, setCreatedLectureid] = useState<string>('');
 	interface Reservation {
 		startDate: string;
 	}
@@ -152,13 +161,23 @@ const CreateLecture: React.FC = () => {
 				state,
 				token,
 			);
+			console.log(
+				'🚀 ~ file: TeacherCreateLecture.tsx:155 ~ handleOpenAttendance ~ response:',
+				response,
+			);
 
-			if (!response || !response.lectureid) {
+			if (!response || !response.lectureInfo) {
 				toast.error('Error creating lecture');
 				throw new Error('Error creating lecture');
 			}
 
-			const {lectureid} = response;
+			const lectureid = response.lectureInfo.lectureid;
+			if (response.lectureInfo.openLectures.length > 0) {
+				setCreatedLectureid(lectureid);
+				setOpenLectures(response.lectureInfo.openLectures);
+				setDeleteModalOpen(true);
+				return;
+			}
 			navigate(`/teacher/attendance/${lectureid}`);
 			toast.success(`Lecture created successfully with lectureid ${lectureid}`);
 			console.log(`Lecture created successfully with lectureid ${lectureid}`);
@@ -174,143 +193,194 @@ const CreateLecture: React.FC = () => {
 		topic_names: string;
 	}
 
+	const handleDelete = (lectureid: string) => {
+		// Delete the open lecture here
+		const token: string | null = localStorage.getItem('userToken');
+		if (!token) {
+			toast.error('No token available');
+			throw new Error('No token available');
+		}
+		try {
+			apihooks.deleteLectureByLectureId(lectureid, token);
+			navigate(`/teacher/attendance/${createdLectureid}`);
+			toast.success(
+				`Lecture created successfully with lectureid ${createdLectureid}`,
+			);
+		} catch (error) {
+			toast.error(`Error deleting lecture: ${error}`);
+			console.error(`Error deleting lecture: ${error}`);
+		}
+		setDeleteModalOpen(false);
+	};
+
+	const closeLecture = async (lectureid: string) => {
+		// Close the open lecture here
+		const token: string | null = localStorage.getItem('userToken');
+		if (!token) {
+			toast.error('No token available');
+			throw new Error('No token available');
+		}
+		try {
+			await apihooks.closeLectureByLectureId(lectureid, token);
+			navigate(`/teacher/attendance/${createdLectureid}`);
+			toast.success(
+				`Lecture created successfully with lectureid ${createdLectureid}`,
+			);
+		} catch (error) {
+			toast.error(`Error closing lecture: ${error}`);
+			console.error(`Error closing lecture: ${error}`);
+		}
+		setDeleteModalOpen(false);
+	};
+
 	return (
 		<div className="w-full">
 			{loading ? (
 				<CircularProgress />
 			) : (
-				<div className="flex m-auto flex-col 2xl:w-2/6 sm:w-4/5 lg:w-3/5 md:w-4/6 w-full items-center rounded-lg justify-center sm:p-5 p-1 bg-gray-100">
-					<h1 className="text-lg sm:text-2xl font-bold p-2 mb-8 mt-5">
-						Create new lecture
-					</h1>
-					<div className="flex w-full justify-center">
-						<div className="flex w-1/4 flex-col gap-5">
-							<label className="sm:text-xl text-md flex justify-end" htmlFor="course">
-								Course :
-							</label>
-							<label className="sm:text-xl text-md flex justify-end" htmlFor="topic">
-								Topic :
-							</label>
-						</div>
-						<div className="w-3/4 sm:w-4/5 lg:w-11/12 flex flex-col gap-3">
-							<select
-								title="Course"
-								id="course"
-								className="block h-8 cursor-pointer sm:ml-5 ml-1 mr-3"
-								value={selectedSession}
-								onClick={() => {
-									if (courses.length === 0) {
-										toast.error('You have no courses or all your courses have ended');
-									}
-								}}
-								onChange={e => {
-									const selectedIndex = e.target.value;
-									console.log(
-										'🚀 ~ file: TeacherCreateLecture.tsx:205 ~ selectedIndex:',
-										selectedIndex,
-									);
-									setSelectedSession(selectedIndex);
-									setSelectedCourse(courses[selectedIndex] || null);
-									console.log(
-										'🚀 ~ file: TeacherCreateLecture.tsx:208 ~ courses[selectedIndex]:',
-										courses[selectedIndex],
-									);
-								}}
-							>
-								{Array.isArray(courses) &&
-									courses.map((course, index) => {
-										// Ensure courseid is a string or number
-										const courseId =
-											typeof course.courseid === 'function'
-												? course.courseid()
-												: course.courseid;
-
-										// Ensure course has name and code properties
-										const courseName = course.name || 'No Name';
-										const courseCode = course.code || 'No Code';
-
-										// Ensure courseId, courseName, and courseCode are not empty
-										if (!courseId || !courseName || !courseCode) {
-											console.error('Invalid course data:', course);
-											return null; // Skip this course
+				<>
+					{openLectures.map(lecture => (
+						<DeleteLectureModal
+							key={lecture.id}
+							open={deleteModalOpen}
+							lecture={lecture}
+							onCloseLecture={() => closeLecture(lecture.lectureid)}
+							onDelete={() => handleDelete(lecture.lectureid)}
+						/>
+					))}
+					<div className="flex m-auto flex-col 2xl:w-2/6 sm:w-4/5 lg:w-3/5 md:w-4/6 w-full items-center rounded-lg justify-center sm:p-5 p-1 bg-gray-100">
+						<h1 className="text-lg sm:text-2xl font-bold p-2 mb-8 mt-5">
+							Create new lecture
+						</h1>
+						<div className="flex w-full justify-center">
+							<div className="flex w-1/4 flex-col gap-5">
+								<label className="sm:text-xl text-md flex justify-end" htmlFor="course">
+									Course :
+								</label>
+								<label className="sm:text-xl text-md flex justify-end" htmlFor="topic">
+									Topic :
+								</label>
+							</div>
+							<div className="w-3/4 sm:w-4/5 lg:w-11/12 flex flex-col gap-3">
+								<select
+									title="Course"
+									id="course"
+									className="block h-8 cursor-pointer sm:ml-5 ml-1 mr-3"
+									value={selectedSession}
+									onClick={() => {
+										if (courses.length === 0) {
+											toast.error('You have no courses or all your courses have ended');
 										}
-
-										return (
-											<option key={index} value={index}>
-												{courseName + ' | ' + courseCode}
-											</option>
+									}}
+									onChange={e => {
+										const selectedIndex = e.target.value;
+										console.log(
+											'🚀 ~ file: TeacherCreateLecture.tsx:205 ~ selectedIndex:',
+											selectedIndex,
 										);
-									})}
-							</select>
-							<select
-								title="Topic"
-								id="topic"
-								className="block h-8 cursor-pointer mr-3 sm:ml-5 ml-1 sm:mt-1 mt-none"
-								value={selectedTopic}
-								onChange={e => {
-									setSelectedTopic(e.target.value);
-								}}
-							>
-								{selectedCourse &&
-									selectedCourse.topic_names &&
-									selectedCourse.topic_names.split(',').map((topic: string) => (
-										<option key={topic} value={topic}>
-											{topic}
+										setSelectedSession(selectedIndex);
+										setSelectedCourse(courses[selectedIndex] || null);
+										console.log(
+											'🚀 ~ file: TeacherCreateLecture.tsx:208 ~ courses[selectedIndex]:',
+											courses[selectedIndex],
+										);
+									}}
+								>
+									{Array.isArray(courses) &&
+										courses.map((course, index) => {
+											// Ensure courseid is a string or number
+											const courseId =
+												typeof course.courseid === 'function'
+													? course.courseid()
+													: course.courseid;
+
+											// Ensure course has name and code properties
+											const courseName = course.name || 'No Name';
+											const courseCode = course.code || 'No Code';
+
+											// Ensure courseId, courseName, and courseCode are not empty
+											if (!courseId || !courseName || !courseCode) {
+												console.error('Invalid course data:', course);
+												return null; // Skip this course
+											}
+
+											return (
+												<option key={index} value={index}>
+													{courseName + ' | ' + courseCode}
+												</option>
+											);
+										})}
+								</select>
+								<select
+									title="Topic"
+									id="topic"
+									className="block h-8 cursor-pointer mr-3 sm:ml-5 ml-1 sm:mt-1 mt-none"
+									value={selectedTopic}
+									onChange={e => {
+										setSelectedTopic(e.target.value);
+									}}
+								>
+									{selectedCourse &&
+										selectedCourse.topic_names &&
+										selectedCourse.topic_names.split(',').map((topic: string) => (
+											<option key={topic} value={topic}>
+												{topic}
+											</option>
+										))}
+								</select>
+							</div>
+						</div>
+						<div className="w-4/5 mt-10 h-1 bg-metropoliaMainOrange rounded-md"></div>
+						<h2 className="mt-2 text-xl p-4">Select desired date and time of day</h2>
+						<div className="text-md sm:text-xl mb-5">
+							<div className="relative">
+								<input
+									title="Date"
+									ref={inputRef}
+									type="text"
+									aria-label="Date"
+									className="py-2 text-center pl-4 pr-4 rounded-xl cursor-pointer border focus:ring focus:ring-metropoliaSecondaryOrange focus:outline-none"
+									value={Array.isArray(date) ? 'Multiple Dates' : date.toDateString()}
+									onClick={toggleCalendar}
+									onChange={e => setDate(new Date(e.target.value))}
+								/>
+								{calendarOpen && (
+									<div className="absolute top-12 right-0 sm:text-sm text-lg left-0 z-10">
+										<Calendar
+											onChange={handleDateChangeCalendar}
+											tileClassName={tileClassName}
+											onClickDay={date => setDate(date)}
+										/>
+									</div>
+								)}
+							</div>
+
+							<div className="relative mt-5">
+								<select
+									aria-label="Time of Day"
+									title="Time of Day"
+									value={selectedTimeOfDay}
+									onChange={e => setSelectedTimeOfDay(e.target.value)}
+									className="block text-center cursor-pointer appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 shadow leading-tight focus:outline-none focus:shadow-outline"
+								>
+									{timeOfDay.map(option => (
+										<option key={option} value={option}>
+											{option}
 										</option>
 									))}
-							</select>
+								</select>
+							</div>
 						</div>
+						<button
+							aria-label="Open Attendance"
+							title="Open Attendance"
+							className="bg-metropoliaMainOrange w-2/4 hover:hover:bg-metropoliaSecondaryOrange transition text-white font-bold py-2 px-4 m-4 rounded focus:outline-none focus:shadow-outline"
+							onClick={handleOpenAttendance}
+						>
+							Open
+						</button>
 					</div>
-					<div className="w-4/5 mt-10 h-1 bg-metropoliaMainOrange rounded-md"></div>
-					<h2 className="mt-2 text-xl p-4">Select desired date and time of day</h2>
-					<div className="text-md sm:text-xl mb-5">
-						<div className="relative">
-							<input
-								title="Date"
-								ref={inputRef}
-								type="text"
-								aria-label="Date"
-								className="py-2 text-center pl-4 pr-4 rounded-xl cursor-pointer border focus:ring focus:ring-metropoliaSecondaryOrange focus:outline-none"
-								value={Array.isArray(date) ? 'Multiple Dates' : date.toDateString()}
-								onClick={toggleCalendar}
-								onChange={e => setDate(new Date(e.target.value))}
-							/>
-							{calendarOpen && (
-								<div className="absolute top-12 right-0 sm:text-sm text-lg left-0 z-10">
-									<Calendar
-										onChange={handleDateChangeCalendar}
-										tileClassName={tileClassName}
-										onClickDay={date => setDate(date)}
-									/>
-								</div>
-							)}
-						</div>
-
-						<div className="relative mt-5">
-							<select
-								aria-label="Time of Day"
-								title="Time of Day"
-								value={selectedTimeOfDay}
-								onChange={e => setSelectedTimeOfDay(e.target.value)}
-								className="block text-center cursor-pointer appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 shadow leading-tight focus:outline-none focus:shadow-outline"
-							>
-								{timeOfDay.map(option => (
-									<option key={option} value={option}>
-										{option}
-									</option>
-								))}
-							</select>
-						</div>
-					</div>
-					<button
-						aria-label="Open Attendance"
-						title="Open Attendance"
-						className="bg-metropoliaMainOrange w-2/4 hover:hover:bg-metropoliaSecondaryOrange transition text-white font-bold py-2 px-4 m-4 rounded focus:outline-none focus:shadow-outline"
-						onClick={handleOpenAttendance}
-					>
-						Open
-					</button>
-				</div>
+				</>
 			)}
 		</div>
 	);

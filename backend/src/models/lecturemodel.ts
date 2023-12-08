@@ -16,7 +16,7 @@ interface LectureModel {
 		lectureid: number,
 	): Promise<RowDataPacket[]>;
 	getStudentsByLectureId(lectureid: number): Promise<RowDataPacket[]>;
-	deleteByLectureId(id: number): Promise<void>;
+	deleteByLectureId(id: string): Promise<void>;
 	countAllLecturees(): Promise<number>;
 	findByTopicId(topicid: number): Promise<Lecture[]>;
 	getCourseidByLectureid(lectureid: number): Promise<number>;
@@ -30,7 +30,7 @@ interface LectureModel {
 		teacherid: number | undefined,
 	): Promise<unknown>;
 	getLectureWithCourseAndTopic(lectureid: string): Promise<RowDataPacket | null>;
-	updateLectureState(lectureid: number, state: string): Promise<unknown>;
+	updateLectureState(lectureid: string, state: string): Promise<unknown>;
 	getLecturesByCourseId(courseid: number): Promise<RowDataPacket[] | null>;
 	getCourseIDByLectureID(lectureid: string): Promise<number | null>;
 	fetchAllLecturees(): Promise<
@@ -39,6 +39,8 @@ interface LectureModel {
 	findByLectureIdAndGetAllUserInLinkedCourse(
 		lectureid: number,
 	): Promise<RowDataPacket[]>;
+	findOpenLecturesBycourseid(courseid: number): Promise<RowDataPacket[] | null>;
+	getLectureByLectureId(lectureid: number): Promise<RowDataPacket[] | null>;
 }
 
 const lectureModel: LectureModel = {
@@ -109,7 +111,7 @@ const lectureModel: LectureModel = {
 		}
 	},
 
-	async deleteByLectureId(id: number): Promise<void> {
+	async deleteByLectureId(id: string): Promise<void> {
 		try {
 			await pool.promise().query('DELETE FROM lecture WHERE lectureid = ?', [id]);
 		} catch (error) {
@@ -192,7 +194,7 @@ const lectureModel: LectureModel = {
 			return Promise.reject(error);
 		}
 	},
-	async updateLectureState(lectureid: number, state: string) {
+	async updateLectureState(lectureid: string, state: string) {
 		try {
 			const [result] = await pool
 				.promise()
@@ -234,6 +236,36 @@ const lectureModel: LectureModel = {
 				);
 
 			return rows[0].courseid ?? null;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
+
+	async findOpenLecturesBycourseid(courseid: number) {
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					'SELECT lecture.*, users.email as teacher FROM lecture JOIN users on lecture.teacherid = users.userid WHERE courseid = ? AND state = "open"',
+					[courseid],
+				);
+
+			return rows ?? null;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
+	async getLectureByLectureId(lectureid: number) {
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT * FROM lecture WHERE lectureid = ?', [
+					lectureid,
+				]);
+
+			return rows ?? null;
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);

@@ -2,6 +2,7 @@ import course from '../models/coursemodel.js';
 import lectureModel from '../models/lecturemodel.js';
 import topicModel from '../models/topicmodel.js';
 import usercourse_topicsModel from '../models/usercourse_topicsmodel.js';
+import attendanceController from './attendancecontroller.js';
 
 const lectureController = {
 	/**
@@ -47,6 +48,8 @@ const lectureController = {
 			const courseid = courseRows[0].courseid;
 			// console.log('🚀 ~ file: lecturemodel.ts:80 ~ courseid:', courseid);
 
+			const openLectures = await lectureModel.findOpenLecturesBycourseid(courseid);
+
 			const result = await lectureModel.insertIntoLecture(
 				start_date,
 				end_date,
@@ -63,7 +66,7 @@ const lectureController = {
 
 			const lectureid = (result as {insertId: number}).insertId;
 			console.log('🚀 ~ file: lecturemodel.ts:88 ~ lectureid:', lectureid);
-			return lectureid;
+			return {lectureid: lectureid, openLectures};
 		} catch (error) {
 			console.error(error);
 		}
@@ -113,6 +116,38 @@ const lectureController = {
 			return finalStudents;
 		} catch (error) {
 			console.error(error);
+		}
+	},
+	async closeLecture(lectureid: string) {
+		try {
+			const students = await this.getStudentsInLecture(Number(lectureid));
+
+			const lecture = await lectureModel.getLectureByLectureId(Number(lectureid));
+			console.log(
+				'🚀 ~ file: lecturecontroller.ts:126 ~ closeLecture ~ lecture:',
+				lecture,
+			);
+			const lectureDate = lecture?.[0].start_date;
+			console.log('Students:', students);
+			students?.forEach(async student => {
+				try {
+					await attendanceController.insertIntoAttendance(
+						'0',
+						lectureDate,
+						student?.studentnumber,
+						lectureid,
+					);
+				} catch (error) {
+					console.error(error);
+				}
+			});
+
+			const result = await lectureModel.updateLectureState(lectureid, 'closed');
+			console.log('Update result:', result);
+			return result;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
 		}
 	},
 };

@@ -216,7 +216,7 @@ router.post(
 				state,
 				teacherid,
 			);
-			res.status(201).json({message: 'lecture created', lectureid});
+			res.status(201).json({message: 'lecture created', lectureInfo: lectureid});
 		} catch (err) {
 			console.error(err);
 			res.status(500).send('Server error');
@@ -295,6 +295,42 @@ router.get(
 			res.json(lecturesAndAttendancesData);
 		} catch (err) {
 			console.error(err);
+			res.status(500).send('Server error');
+		}
+	},
+);
+router.delete(
+	'/lecture/:lectureid',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	[param('lectureid').isNumeric().withMessage('Lecture ID must be a number')],
+	validate,
+	async (req: Request, res: Response) => {
+		try {
+			const lectureid = req.params.lectureid;
+
+			await lectureModel.deleteByLectureId(lectureid);
+			console.log('Lecture deleted successfully');
+			res.status(200).json({message: 'Lecture deleted successfully'});
+		} catch (error) {
+			console.error(error);
+			res.status(500).send('Server error');
+		}
+	},
+);
+router.put(
+	'/lecture/close/:lectureid',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	[param('lectureid').isNumeric().withMessage('Lecture ID must be a number')],
+	validate,
+	async (req: Request, res: Response) => {
+		try {
+			const lectureid = req.params.lectureid;
+
+			await lectureController.closeLecture(lectureid);
+			console.log('Lecture closed successfully');
+			res.status(200).json({message: 'Lecture closed successfully'});
+		} catch (error) {
+			console.error(error);
 			res.status(500).send('Server error');
 		}
 	},

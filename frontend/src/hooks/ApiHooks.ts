@@ -695,6 +695,34 @@ const deleteTopicGroupAndTopicsByUserid = async (selectedGroup, token) => {
 		options,
 	);
 };
+const deleteLectureByLectureId = async (lectureid: string, token: string) => {
+	alert(lectureid);
+	const options = {
+		method: 'DELETE',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+
+	return await doFetch(
+		baseUrl + `courses/attendance/lecture/${lectureid}`,
+		options,
+	);
+};
+const closeLectureByLectureId = async (lectureid: string, token: string) => {
+	alert(lectureid);
+	const options = {
+		method: 'PUT',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+
+	return await doFetch(
+		baseUrl + `courses/attendance/lecture/close/${lectureid}`,
+		options,
+	);
+};
 
 const apiHooks = {
 	checkIfTopicGroupWithEmailExists,
@@ -744,5 +772,7 @@ const apiHooks = {
 	getStudentAndTopicsByUsercourseid,
 	getStudentsByCourseId,
 	deleteTopicGroupAndTopicsByUserid,
+	deleteLectureByLectureId,
+	closeLectureByLectureId,
 };
 export default apiHooks;
