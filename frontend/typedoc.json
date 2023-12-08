@@ -1,9 +1,10 @@
 {
 	"includes": ["src"],
-	"exclude": ["**/_*.ts", "**/_*.tsx"],
+	"exclude": ["**/_*.ts", "**/_*.tsx", "**/*.test.ts", "**/*.test.tsx"],
 	"out": "../extra/frontend",
 	"name": "JakSec Frontend",
 	"theme": "default",
+	"includeVersion": true,
 	"excludePrivate": true,
 	"excludeProtected": true,
 	"excludeExternals": true,
