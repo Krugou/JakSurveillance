@@ -141,7 +141,8 @@ const TeacherStudentsView: React.FC = () => {
 					path={`/teacher/mainview`}
 					text="Back to mainview"
 				/>
-				<div className="w-11/12 sm:w-[20em] mt-5 lg:ml-4 ml-2 mb-4">
+				<div className="flex flex-col md:flex-row items-center justify-between">
+				<div className="w-8/12 sm:w-[15em] mt-5 lg:ml-4 ml-0 mb-4">
 					<InputField
 						type="text"
 						name="search"
@@ -150,9 +151,10 @@ const TeacherStudentsView: React.FC = () => {
 						placeholder="Search..."
 						label="Search by name"
 					/>
+				</div>
 
 					<Autocomplete
-						className="sm:w-[20em] w-full"
+						className="sm:w-[15em] w-10/12 mr-0 md:mr-4"
 						freeSolo
 						options={courses.map(
 							(course: SelectedCourse) => `${course.name} ${course.code}`,
@@ -170,8 +172,8 @@ const TeacherStudentsView: React.FC = () => {
 							/>
 						)}
 					/>
-
-					<p className="text-lg text-yellow-600 flex items-center">
+				</div>
+					<p className="text-lg p-4 text-yellow-600 flex items-center">
 						<WarningIcon fontSize="large" />
 						<span className="ml-2">
 							{selectedCourse
@@ -179,7 +181,6 @@ const TeacherStudentsView: React.FC = () => {
 								: 'Searching from all students.'}
 						</span>
 					</p>
-				</div>
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 					{filteredStudents.map(student => (
 						<Link

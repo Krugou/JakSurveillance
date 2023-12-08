@@ -195,7 +195,7 @@ const TeacherCourseStats = () => {
 	};
 	return (
 		<>
-			<h1 className="text-center text-2xl mb-2 bg-white p-3 rounded-md">
+			<h1 className="text-center font-bold text-2xl mb-2 bg-white p-3 rounded-md">
 				{' '}
 				Attendance Statistics per course{' '}
 			</h1>

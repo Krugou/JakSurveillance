@@ -191,7 +191,7 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 			</div>
 		);
 	} else {
-		return <div className="text-center text-3xl m-10">No Data available</div>;
+		return <div className="text-center font-bold bg-white p-3 rounded-lg text-3xl m-10">No Data available</div>;
 	}
 };
 
