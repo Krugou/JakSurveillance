@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import CourseData from '../../../../components/main/course/CourseData';
 import apihooks from '../../../../hooks/ApiHooks';
+import GeneralLinkButton from "../../../../components/main/buttons/GeneralLinkButton";
 
 // Define your course detail structure here
 interface CourseDetail {
@@ -45,7 +46,13 @@ const TeacherCourseDetail: React.FC = () => {
 	return (
 		<div className="w-full">
 			<h2 className="font-bold text-center text-2xl p-3 bg-white w-fit rounded-lg ml-auto mr-auto">My single course</h2>
-			<div className="m-4 bg-white rounded-lg shadow-lg mx-auto w-full sm:w-3/4 md:w-2/4 lg:w-2/5 2xl:w-1/5">
+			<div className="mt-4 bg-white rounded-lg shadow-lg mx-auto w-full sm:w-3/4 md:w-2/4 lg:w-2/5 2xl:w-1/5">
+				<div className="pl-5 pt-5">
+				<GeneralLinkButton
+					path={`/teacher/courses`}
+					text="Back to courses"
+				/>
+				</div>
 				{courseData && <CourseData courseData={courseData} />}
 			</div>
 		</div>
