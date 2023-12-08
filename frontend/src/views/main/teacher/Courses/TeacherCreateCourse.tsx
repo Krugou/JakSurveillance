@@ -1,18 +1,14 @@
 import React from 'react';
 import Card from "../../../../components/main/cards/Card";
 
+
 const TeacherCreateCourse: React.FC = () => {
 	return (
 		<div>
 			<div className="w-full pt-10 pb-10">
 				<h1 className="text-4xl text-center p-3 bg-white w-fit mr-auto ml-auto rounded-lg font-bold mb-8">Create Course</h1>
 				<p className="text-center p-2 bg-white w-fit ml-auto rounded-lg mr-auto mb-4">Choose between routes</p>
-				<div className="flex justify-center space-x-4">
-					<Card
-						path="/teacher/mainview"
-						title="Main view"
-						description="Back to mainview"
-					/>
+				<div className="flex justify-center flex-wrap space-x-4">
 					<Card
 						path="/teacher/courses/create/easy"
 						title="Easy mode"
