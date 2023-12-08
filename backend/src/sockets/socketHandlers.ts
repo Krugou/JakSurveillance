@@ -122,10 +122,14 @@ const setupSocketHandlers = (io: Server) => {
 		});
 
 		socket.on('createAttendanceCollection', async lectureid => {
+			const oldSpeedOfHashChange = speedOfHashChange;
 			// Fetch and update data when a new lecture is started
 			fetchDataAndUpdate()
 				.then(() => {
-					console.log('settings updated');
+					if (oldSpeedOfHashChange !== speedOfHashChange) {
+						// If the speedOfHashChange has changed, console.log it
+						console.log('speedOfHashChange changed');
+					}
 					howMuchLeeWay = speedOfHashChange * leewaytimes;
 				})
 				.catch(error => {
