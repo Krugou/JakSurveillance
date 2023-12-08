@@ -338,7 +338,7 @@ router.put(
 router.get(
 	'/lecture/open/:courseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
-	[param('courseid').isNumeric().withMessage('Lecture ID must be a number')],
+	[param('courseid').isNumeric().withMessage('course ID must be a number')],
 	validate,
 	async (req: Request, res: Response) => {
 		try {
