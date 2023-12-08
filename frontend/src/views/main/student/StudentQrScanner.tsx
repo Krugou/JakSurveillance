@@ -59,10 +59,8 @@ const StudentQrScanner: React.FC = () => {
 
 					setScanned(true);
 				}
-				newSocket.on('youhavebeensavedintolecture', studentId => {
-					toast.success(
-						`You ${studentId} have been saved into ${lectureid} lecture`,
-					);
+				newSocket.on('youhavebeensavedintolecture', lectureid => {
+					toast.success(`You have been saved into ${lectureid} lecture`);
 					navigate('/student/mainview');
 				});
 				newSocket.on('inputThatStudentHasArrivedToLectureTooSlow', studentId2 => {
