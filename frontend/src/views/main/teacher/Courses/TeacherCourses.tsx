@@ -57,10 +57,6 @@ const TeacherCourses: React.FC = () => {
 						path={`/${user?.role}/mainview`}
 						text="Back to mainview"
 					/>
-					<GeneralLinkButton
-						path={`/teacher/courses/create`}
-						text="Create another course"
-					/>
 				</div>
 				<div className="grid max-h-[30em] mt-5 2xl:max-h-[50em] overflow-y-scroll w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-4 m-auto">
 					{courses.length > 0 && (
