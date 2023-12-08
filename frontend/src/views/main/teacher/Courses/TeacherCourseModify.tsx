@@ -69,6 +69,23 @@ const TeacherCourseModify: React.FC = () => {
 		fetchCourses();
 	}, [id]);
 
+	const toLocalDate = dateString => {
+		if (!dateString) {
+			return '';
+		}
+
+		const date = new Date(dateString);
+
+		if (isNaN(date.getTime())) {
+			return '';
+		}
+
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0'); // months are 0-indexed in JavaScript
+		const day = String(date.getDate()).padStart(2, '0');
+
+		return `${year}-${month}-${day}`;
+	};
 	useEffect(() => {
 		if (courseData) {
 			setCourseCode(courseData.code);
@@ -77,13 +94,11 @@ const TeacherCourseModify: React.FC = () => {
 			setStudentGroup(
 				courseData.studentgroup_name ? courseData.studentgroup_name : '',
 			);
-			const startDate = new Date(courseData.start_date || '')
-				.toISOString()
-				.slice(0, 16);
+
+			const startDate = toLocalDate(courseData.start_date);
+
 			setStartDate(startDate);
-			const endDate = new Date(courseData.end_date || '')
-				.toISOString()
-				.slice(0, 16);
+			const endDate = toLocalDate(courseData.end_date);
 			setEndDate(endDate);
 			if (courseData.instructor_name) {
 				setInstructors(
