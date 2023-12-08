@@ -95,7 +95,7 @@ const CourseData: React.FC<CourseDataProps> = ({courseData, updateView}) => {
 						<Tooltip title={isCourseEnded ? 'Course has ended' : ''} placement="top">
 							<div
 								key={course.courseid}
-								className={`p-5 rounded-lg mb-4 relative ${
+								className={`p-5 rounded-lg mt-4 mb-4 relative ${
 									isCourseEnded ? 'opacity-50 bg-gray-200' : 'bg-white'
 								}`}
 							>

@@ -193,7 +193,7 @@ const TeacherStudentsView: React.FC = () => {
 									{student.first_name} {student.last_name}
 								</div>
 								{student.email && <p>Email: </p>}
-								<p>{student.email}</p>
+								<p className="break-all">{student.email}</p>
 								<div className="flex flex-col gap-3 mt-3">
 									{student.username && <p>Username: {student.username}</p>}
 									{student.studentnumber && (

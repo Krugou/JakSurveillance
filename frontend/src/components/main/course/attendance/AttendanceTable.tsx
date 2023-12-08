@@ -86,7 +86,7 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 	return (
 		<TableContainer className="overflow-x-auto border-gray-300 border-x border-t max-h-[20em] mt-5 mb-5 rounded-lg shadow">
 			<Table className="min-w-full divide-y divide-gray-200">
-				<TableHead className="bg-gray-50">
+				<TableHead className="bg-white sticky top-0 z-10">
 					<TableRow>
 						<TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 							Date

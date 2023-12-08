@@ -88,7 +88,7 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 	return (
 		<TableContainer className="overflow-x-auto sm:max-h-[30em] h-fit overflow-y-scroll border-gray-300 border-x border-t mt-5 mb-5 rounded-lg shadow">
 			<Table className="min-w-full divide-y divide-gray-200">
-				<TableHead className="bg-gray-50">
+				<TableHead className="bg-gray-50 sticky top-0 z-10">
 					<TableRow>
 						<TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 							Student
@@ -134,7 +134,7 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 												<InfoIcon />
 											</Tooltip>
 										) : (
-											<div className="w-full h-4 rounded bg-gray-200 relative">
+											<div className="w-[8em] h-4 rounded bg-gray-200 relative">
 												<div
 													className={`h-full rounded ${
 														item.attendanceCounts[i]?.percentage === 0
