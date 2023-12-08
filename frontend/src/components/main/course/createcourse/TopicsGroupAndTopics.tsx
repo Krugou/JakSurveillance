@@ -49,6 +49,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 			// Clear the timeout when the component unmounts or when user or customTopicGroup changes
 			return () => clearTimeout(timeoutId);
 		}
+		return;
 	}, [user, customTopicGroup]);
 	const handleCustomTopicChange = (index: number, value: string) => {
 		const newTopics = [...customTopics];
