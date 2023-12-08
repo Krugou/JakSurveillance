@@ -138,7 +138,8 @@ const AttendanceRoom: React.FC = () => {
 			// When the attendance collection data is updated, update the state
 			newSocket.on(
 				'updateAttendanceCollectionData',
-				(hash, lectureid, arrayOfStudents, courseStudents) => {
+				(hash, lectureid, arrayOfStudents, courseStudents, speedOfHashChange) => {
+					toast.success(speedOfHashChange);
 					setHashDataReceived(true);
 					setHashValue(hash + '/' + lectureid);
 					setArrayOfStudents(arrayOfStudents);

@@ -195,6 +195,7 @@ const setupSocketHandlers = (io: Server) => {
 								lectureid,
 								presentStudents[lectureid],
 								notYetPresentStudents[lectureid],
+								speedOfHashChange,
 							);
 					}, speedOfHashChange);
 					console.log(
