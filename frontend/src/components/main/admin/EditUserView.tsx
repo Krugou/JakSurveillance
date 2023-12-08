@@ -164,9 +164,9 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 
 	// render the component
 	return (
-		<div className="flex bg-white w-fit flex-col p-5 rounded-lg justify-center items-center">
-			<h1 className="text-2xl font-bold mb-4">Edit User {editedUser.userid}</h1>
-			<div className="w-full p-4">
+		<div className="flex w-fit flex-col justify-center items-center">
+			<h1 className="text-2xl p-3 bg-white rounded-lg font-bold mb-4">Edit User {editedUser.userid}</h1>
+			<div className="w-full bg-white p-5 rounded-lg">
 				{editedUser.created_at && (
 					<div>
 						<span className="text-gray-700 font-bold">Created At</span>
