@@ -122,16 +122,10 @@ const setupSocketHandlers = (io: Server) => {
 		});
 
 		socket.on('createAttendanceCollection', async lectureid => {
-			const oldSpeedOfHashChange = speedOfHashChange;
 			// Fetch and update data when a new lecture is started
 			fetchDataAndUpdate()
 				.then(async () => {
-					if (oldSpeedOfHashChange !== speedOfHashChange) {
-						// If the speedOfHashChange has changed, console.log it
-						console.log('speedOfHashChange changed');
-					}
 					howMuchLeeWay = speedOfHashChange * leewaytimes;
-
 					// Join the room with the lectureid
 					socket.join(lectureid);
 					// Emit the 'lecturestarted' event to the room with the lectureid
@@ -195,13 +189,10 @@ const setupSocketHandlers = (io: Server) => {
 								lectureid,
 								presentStudents[lectureid],
 								notYetPresentStudents[lectureid],
-								speedOfHashChange,
+								
 							);
 					}, speedOfHashChange);
-					console.log(
-						'🚀 ~ file: socketHandlers.ts:199 ~ io.on ~ speedOfHashChange:',
-						speedOfHashChange,
-					);
+
 					if (lectureTimeoutId) {
 						clearTimeout(lectureTimeoutId);
 					}
