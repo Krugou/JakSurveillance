@@ -127,7 +127,7 @@ const StudentCourseAttendance: React.FC = () => {
 	console.log(filteredAttendanceData, 'filteredAttendanceData');
 	if (attendanceData.length > 0) {
 		return (
-			<div className="overflow-x-auto lg:w-fit w-full rounded-lg bg-gray-100 p-5 sm:p-10 flex flex-col border-x border-t">
+			<div className="overflow-x-auto 2xl:w-3/4 w-full rounded-lg bg-gray-100 p-5 flex flex-col border-x border-t">
 				<h1 className="text-xl sm:text-4xl font-bold mt-2 mb-8 text-center">
 					Attendance for Course {attendanceData[0].name}
 				</h1>

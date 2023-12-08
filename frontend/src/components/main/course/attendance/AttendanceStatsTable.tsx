@@ -134,7 +134,7 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 												<InfoIcon />
 											</Tooltip>
 										) : (
-											<div className="w-[8em] h-4 rounded bg-gray-200 relative">
+											<div className="w-[10em] h-4 rounded bg-gray-200 relative">
 												<div
 													className={`h-full rounded ${
 														item.attendanceCounts[i]?.percentage === 0
@@ -180,7 +180,7 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 										attendanceStudentData.attendance[topic] === undefined ? (
 											'N/A'
 										) : (
-											<div className="w-full h-4 rounded bg-gray-200 relative">
+											<div className="w-[10em] h-4 rounded bg-gray-200 relative">
 												<div
 													className={`h-full rounded ${
 														attendanceStudentData.attendance[topic] === 0

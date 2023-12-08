@@ -199,7 +199,7 @@ const TeacherCourseStats = () => {
 				{' '}
 				Attendance Statistics per course{' '}
 			</h1>
-			<div className="2xl:w-2/3 w-full bg-white p-4 rounded-lg">
+			<div className="2xl:w-3/4 w-full bg-white p-4 rounded-lg">
 				<div className="flex justify-between sm:justify-around">
 					<Tooltip title="Print to pdf">
 						<button
