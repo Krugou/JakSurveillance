@@ -12,7 +12,7 @@ const TeacherCreateCourse: React.FC = () => {
 					<Card
 						path="/teacher/courses/create/easy"
 						title="Easy mode"
-						description="Create a course easily with an excel sheet"
+						description="Create a course easily with your own student data file"
 					/>
 
 					<Card
