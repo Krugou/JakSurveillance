@@ -132,5 +132,34 @@ router.post(
 		}
 	},
 );
+router.delete(
+	'/delete/:topicgroupname',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	[
+		param('topicgroupname')
+			.notEmpty()
+			.withMessage('Topic group name is required'),
+	],
+	async (req: Request, res: Response) => {
+		try {
+			const topicgroupname = req.params.topicgroupname;
+			if (!topicgroupname) {
+				return res.status(400).send({message: 'Topic group is required'});
+			}
+			const userid = req.user?.userid;
+			console.log('🚀 ~ file: topicRoutes.ts:150 ~ userid:', userid);
+
+			const topicGroupResult = await TopicGroupController.deleteTopicGroupByName(
+				topicgroupname,
+				userid,
+			);
+
+			res.status(200).send(topicGroupResult);
+		} catch (err) {
+			console.error(err);
+			res.status(500).send({message: 'Server error: ' + err});
+		}
+	},
+);
 
 export default router;

@@ -33,6 +33,10 @@ interface TopicGroupModel {
 		userid: number,
 	): Promise<RowDataPacket[]>;
 
+	deleteTopicGroupByName(
+		topicgroup: string,
+		userid: number | undefined,
+	): Promise<ResultSetHeader>;
 	// other methods...
 }
 /**
@@ -129,7 +133,16 @@ const topicGroupModel: TopicGroupModel = {
 
 		return topicResult;
 	},
+	async deleteTopicGroupByName(topicgroup: string, userid: number | undefined) {
+		const [topicResult] = await pool
+			.promise()
+			.query<ResultSetHeader>(
+				'DELETE FROM topicgroups WHERE topicgroupname = ? AND userid = ?',
+				[topicgroup, userid],
+			);
 
+		return topicResult;
+	},
 	// other methods...
 };
 

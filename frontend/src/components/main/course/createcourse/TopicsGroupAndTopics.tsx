@@ -21,6 +21,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 	const [topicData, setTopicData] = useState<TopicGroup[]>([]);
 	const [courseTopicGroup, setCourseTopicGroup] = useState('');
 	const [selectedGroupTopics, setSelectedGroupTopics] = useState<string[]>([]);
+	const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
 	const [customTopics, setCustomTopics] = useState<string[]>(['']);
 	const [customTopicGroup, setCustomTopicGroup] = useState('');
 	const [customTopic, setCustomTopic] = useState('');
@@ -152,6 +153,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 			(group: TopicGroup) => group.topicgroupname === courseTopicGroup,
 		);
 		const selectedTopics = selectedGroup ? selectedGroup.topics.split(',') : [];
+		setSelectedGroup(selectedGroup ? selectedGroup.topicgroupname : null);
 		setSelectedGroupTopics(selectedTopics);
 		setCourseTopics(selectedTopics);
 		let topicGroup = '';
@@ -186,19 +188,51 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 		return <CircularProgress />;
 	}
 
+	const handleDeleteGroup = async () => {
+		if (user) {
+			try {
+				const token: string | null = localStorage.getItem('userToken');
+				if (!token) {
+					throw new Error('No token available');
+				}
+				await apiHooks.deleteTopicGroupAndTopicsByUserid(selectedGroup, token);
+
+				toast.success('Topic group deleted successfully');
+				setIsCustomGroup(true);
+				setCustomTopics(['']);
+				setCustomTopicGroup('');
+			} catch (error) {
+				if (error instanceof Error) {
+					error.message
+						? toast.error(error.message)
+						: toast.error('Error deleting topic group');
+				}
+			}
+		}
+	};
+
 	return (
 		<fieldset>
 			<div className="flex justify-between items-center">
 				<h2 className="text-xl mb-3 ">Topic Details</h2>
 
 				{topicData.length > 0 && (
-					<button
-						type="button"
-						onClick={() => setIsCustomGroup(prev => !prev)}
-						className="mb-3 w-fit text-sm p-2 bg-metropoliaMainOrange transition text-white rounded-3xl hover:bg-metropoliaSecondaryOrange"
-					>
-						{isCustomGroup ? 'Select Existing Group' : 'Create Custom Group'}
-					</button>
+					<>
+						<button
+							type="button"
+							onClick={() => setIsCustomGroup(prev => !prev)}
+							className="mb-3 w-fit text-sm p-2 bg-metropoliaMainOrange transition text-white rounded-3xl hover:bg-metropoliaSecondaryOrange mr-2"
+						>
+							{isCustomGroup ? 'Select Existing Group' : 'Create Custom Group'}
+						</button>
+						<button
+							type="button"
+							onClick={handleDeleteGroup}
+							className="mb-3 w-fit text-sm p-2 bg-red-500 transition text-white rounded-3xl hover:bg-red-700"
+						>
+							Delete selected group
+						</button>
+					</>
 				)}
 			</div>
 

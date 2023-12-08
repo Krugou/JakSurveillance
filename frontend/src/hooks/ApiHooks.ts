@@ -682,6 +682,20 @@ const getStudentsByCourseId = async (courseId: string, token: string) => {
 		options,
 	);
 };
+const deleteTopicGroupAndTopicsByUserid = async (selectedGroup, token) => {
+	const options = {
+		method: 'DELETE',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+
+	return await doFetch(
+		baseUrl + `courses/topics/delete/${selectedGroup}`,
+		options,
+	);
+};
+
 const apiHooks = {
 	checkIfTopicGroupWithEmailExists,
 	getRoleCounts,
@@ -729,5 +743,6 @@ const apiHooks = {
 	deleteStudentFromCourse,
 	getStudentAndTopicsByUsercourseid,
 	getStudentsByCourseId,
+	deleteTopicGroupAndTopicsByUserid,
 };
 export default apiHooks;

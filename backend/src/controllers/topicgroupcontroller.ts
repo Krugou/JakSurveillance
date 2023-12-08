@@ -163,6 +163,27 @@ const TopicGroupController = {
 			return Promise.reject(error);
 		}
 	},
+	async deleteTopicGroupByName(topicGroup: string, userid: number | undefined) {
+		try {
+			const topicGroupData = await TopicGroupModel.deleteTopicGroupByName(
+				topicGroup,
+				userid,
+			);
+			console.log(
+				'🚀 ~ file: topicgroupcontroller.ts:172 ~ deleteTopicGroupByName ~ topicGroupData:',
+				topicGroupData,
+			);
+			if (topicGroupData.affectedRows === 0) {
+				throw new Error('Topic group not found');
+			}
+
+			console.log('scucessfully deleted topic group');
+			return topicGroupData;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
 };
 
 export default TopicGroupController;

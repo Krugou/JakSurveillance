@@ -165,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `topicsingroup` (
   `topicid` int(11) NOT NULL,
   KEY `topicgroupid` (`topicgroupid`),
   KEY `topicid` (`topicid`),
-  CONSTRAINT `topicsingroup_ibfk_1` FOREIGN KEY (`topicgroupid`) REFERENCES `topicgroups` (`topicgroupid`),
+  CONSTRAINT `topicsingroup_ibfk_1` FOREIGN KEY (`topicgroupid`) REFERENCES `topicgroups` (`topicgroupid`) ON DELETE CASCADE, 
   CONSTRAINT `topicsingroup_ibfk_2` FOREIGN KEY (`topicid`) REFERENCES `topics` (`topicid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
