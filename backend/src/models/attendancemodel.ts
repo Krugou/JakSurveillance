@@ -84,7 +84,11 @@ const attendanceModel: AttendanceModel = {
 			return false;
 		}
 	},
-
+	/**
+	 * Fetches all attendance records.
+	 *
+	 * @returns {Promise<[RowDataPacket[], FieldPacket[]]>} A promise that resolves with all attendance records.
+	 */
 	async fetchAllAttendances() {
 		try {
 			return await pool
@@ -95,7 +99,12 @@ const attendanceModel: AttendanceModel = {
 			return Promise.reject(error);
 		}
 	},
-
+	/**
+	 * Finds an attendance record by its ID.
+	 *
+	 * @param {number} id - The ID of the attendance record.
+	 * @returns {Promise<Attendance | null>} A promise that resolves with the attendance record or null if not found.
+	 */
 	async findByAttendanceId(id) {
 		try {
 			const [rows] = await pool
@@ -109,7 +118,13 @@ const attendanceModel: AttendanceModel = {
 			return Promise.reject(error);
 		}
 	},
-
+	/**
+	 * Finds all attendance records for a specific user course.
+	 *
+	 * @param {number} usercourseId - The ID of the user course.
+	 * @param {number} userid - The ID of the user.
+	 * @returns {Promise<any>} A promise that resolves with the attendance records for the user course.
+	 */
 	async findAllAttendancesByUserCourseId(usercourseId, userid) {
 		try {
 			//console.log(userid, 'USERIDDD');
@@ -144,7 +159,14 @@ const attendanceModel: AttendanceModel = {
 			return Promise.reject(error);
 		}
 	},
-
+	/**
+	 * Gets the attendance by user course ID, date, and lecture ID.
+	 *
+	 * @param {number} usercourseid - The ID of the user course.
+	 * @param {string} date - The date of the attendance.
+	 * @param {string} lectureid - The ID of the lecture.
+	 * @returns {Promise<any>} The attendance details.
+	 */
 	async getAttendanceByUserCourseIdDateLectureId(
 		usercourseid: number,
 		date: string,
@@ -205,6 +227,12 @@ const attendanceModel: AttendanceModel = {
 			]);
 		return attendanceResultCheck;
 	},
+	/**
+	 * Gets the attendance by its ID.
+	 *
+	 * @param {number} insertid - The ID of the attendance.
+	 * @returns {Promise<any>} The attendance details.
+	 */
 	async getAttendanceById(insertid: number) {
 		const [attendanceResult] = await pool
 			.promise()
@@ -226,6 +254,13 @@ const attendanceModel: AttendanceModel = {
 			)) as RowDataPacket[];
 		return userResult[0];
 	},
+
+	/**
+	 * Gets the attendance by course ID.
+	 *
+	 * @param {string} courseid - The ID of the course.
+	 * @returns {Promise<any>} The attendance details for the course.
+	 */
 	async getAttendaceByCourseId(courseid: string) {
 		const [attendanceResult] = await pool.promise().query(
 			`SELECT 
