@@ -3,7 +3,10 @@ import React, {useContext, useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
-
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 interface Props {
 	setTopicsFormData: React.Dispatch<React.SetStateAction<unknown>>;
 }
@@ -21,16 +24,51 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 	const [customTopics, setCustomTopics] = useState<string[]>(['']);
 	const [customTopicGroup, setCustomTopicGroup] = useState('');
 	const [customTopic, setCustomTopic] = useState('');
+	const [courseTopics, setCourseTopics] = useState<string[]>([]);
+
 	const [isCustomGroup, setIsCustomGroup] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const [topicGroupExists, setTopicGroupExists] = useState(false);
+
+	const handleTopicChange = (topic: string, isChecked: boolean) => {
+		let updatedTopics;
+		if (isChecked) {
+			updatedTopics = [...courseTopics, topic];
+		} else {
+			updatedTopics = courseTopics.filter(t => t !== topic);
+		}
+		setCourseTopics(updatedTopics);
+
+		let topicGroup = '';
+		let topics = '';
+		if (isCustomGroup) {
+			topicGroup = customTopicGroup;
+			topics = JSON.stringify(customTopics);
+		} else {
+			topicGroup = courseTopicGroup;
+			topics = JSON.stringify(updatedTopics);
+		}
+
+		interface FormData {
+			topicgroup: string;
+			topics: string;
+			//include other properties of form data here
+		}
+
+		setTopicsFormData((prevFormData: FormData) => ({
+			...prevFormData,
+			topicgroup: topicGroup,
+			topics: topics,
+		}));
+	};
+
 	useEffect(() => {
 		const token: string | null = localStorage.getItem('userToken');
 		if (!token) {
 			throw new Error('No token available');
 		}
 		if (user && customTopicGroup) {
-			// Introduce a delay of 1 second before making the API call
+			// Introduce a delay of 0.5 seconds before making the API call
 			const timeoutId = setTimeout(() => {
 				apiHooks
 					.checkIfTopicGroupWithEmailExists(token, user.email, customTopicGroup)
@@ -115,7 +153,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 		);
 		const selectedTopics = selectedGroup ? selectedGroup.topics.split(',') : [];
 		setSelectedGroupTopics(selectedTopics);
-
+		setCourseTopics(selectedTopics);
 		let topicGroup = '';
 		let topics = '';
 		if (isCustomGroup) {
@@ -266,18 +304,21 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 						))}
 					</select>
 					<div className="border border-gray-200 ">
-						{selectedGroupTopics.map((topic, index) => (
-							<div
-								key={index}
-								className={`p-4 text-metropoliaSupportWhite ${
-									index % 2 === 0
-										? 'bg-metropoliaMainOrange'
-										: 'bg-metropoliaSecondaryOrange'
-								}`}
-							>
-								{topic}
-							</div>
-						))}
+						<List>
+							{selectedGroupTopics.map((topic, index) => (
+								<ListItem key={index}>
+									<FormControlLabel
+										control={
+											<Checkbox
+												checked={courseTopics.includes(topic)}
+												onChange={e => handleTopicChange(topic, e.target.checked)}
+											/>
+										}
+										label={topic}
+									/>
+								</ListItem>
+							))}
+						</List>
 					</div>
 				</>
 			)}
