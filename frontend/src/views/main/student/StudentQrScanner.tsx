@@ -59,6 +59,7 @@ const StudentQrScanner: React.FC = () => {
 				});
 				newSocket.on('inputThatStudentHasArrivedToLectureTooSlow', studentId2 => {
 					toast.error('You were too slow, try again');
+					setScanned(false);
 					console.log('inputThatStudentHasArrivedToLectureTooSlow', studentId2);
 				});
 			}
