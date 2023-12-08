@@ -3,6 +3,13 @@ import createPool from '../config/createPool.js';
 
 const pool = createPool('ADMIN');
 const courseinstructorsModel = {
+	/**
+	 * Inserts a new course instructor.
+	 *
+	 * @param {number} instructoruserid - The ID of the instructor.
+	 * @param {number} courseId - The ID of the course.
+	 * @returns {Promise<ResultSetHeader>} A promise that resolves with the result of the insertion.
+	 */
 	async insertCourseInstructor(instructoruserid: number, courseId: number) {
 		const [instructorResult] = await pool
 			.promise()
