@@ -135,6 +135,7 @@ router.post(
 router.delete(
 	'/delete/:topicgroupname',
 	checkUserRole(['admin', 'counselor', 'teacher']),
+	validate,
 	[
 		param('topicgroupname')
 			.notEmpty()
