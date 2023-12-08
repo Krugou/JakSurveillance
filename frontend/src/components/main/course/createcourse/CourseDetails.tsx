@@ -89,16 +89,16 @@ const CourseDetails = ({
 			/>
 			<InputField
 				label="Start Date"
-				type="datetime-local"
+				type="date"
 				name="startDate"
-				value={startDate}
+				value={startDate ? startDate.split('T')[0] : ''}
 				onChange={e => setStartDate(e.target.value)}
 			/>
 			<InputField
 				label="End Date"
-				type="datetime-local"
+				type="date"
 				name="endDate"
-				value={endDate}
+				value={endDate ? endDate.split('T')[0] : ''}
 				onChange={e => setEndDate(e.target.value)}
 			/>
 		</fieldset>
