@@ -47,6 +47,7 @@ const AdminUsers: React.FC = () => {
 					fetchedUser => fetchedUser.userid !== user.userid,
 				);
 				setUsers(otherUsers);
+
 				setIsLoading(false);
 			};
 
@@ -88,6 +89,7 @@ const AdminUsers: React.FC = () => {
 											'first_name',
 											'role',
 											'studentnumber',
+											'created_at',
 										].map((key, index) => (
 											<th key={index} className="px-4 py-2">
 												{key}
@@ -117,6 +119,7 @@ const AdminUsers: React.FC = () => {
 													'first_name',
 													'role',
 													'studentnumber',
+													'created_at',
 												].map((key, innerIndex) => (
 													<td key={innerIndex} className="border px-2 py-2">
 														{user[key]}
