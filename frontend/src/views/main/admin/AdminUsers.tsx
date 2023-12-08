@@ -107,7 +107,7 @@ const AdminUsers: React.FC = () => {
 										(user: Record<string, string | number>, index: number) => (
 											<tr
 												key={index}
-												onClick={() => navigate(`/admin/users/${user.userid}`)}
+												onClick={() => navigate(`/admin/users/${user.userid}/modify`)}
 												className="cursor-pointer hover:bg-gray-200"
 											>
 												{[
