@@ -31,18 +31,21 @@ const DeleteLectureModal: React.FC<DeleteLectureModalProps> = ({
 		aria-labelledby="alert-dialog-title"
 		aria-describedby="alert-dialog-description"
 	>
-		<DialogTitle id="alert-dialog-title">{'Delete Open Lecture'}</DialogTitle>
+		<DialogTitle id="alert-dialog-title">
+			{'Deal with previous lecture first'}
+		</DialogTitle>
 		<DialogContent>
 			<DialogContentText id="alert-dialog-description">
-				{`There is already an open lecture for this course by ${lecture?.teacher}. Do you want to delete it or close it?`}
+				{`There is already an open lecture for this course by ${lecture?.teacher}. Do you want to delete it or close it? 
+      \n Closing means counting it's attendance and deleting means deleting it's attendance.`}
 			</DialogContentText>
 		</DialogContent>
 		<DialogActions>
 			<Button onClick={onDelete} autoFocus>
-				Delete
+				Delete Previous
 			</Button>
 			<Button onClick={onCloseLecture} autoFocus>
-				CLOSE LECTURE
+				CLOSE Previous
 			</Button>
 		</DialogActions>
 	</Dialog>

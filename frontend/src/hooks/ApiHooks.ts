@@ -696,7 +696,6 @@ const deleteTopicGroupAndTopicsByUserid = async (selectedGroup, token) => {
 	);
 };
 const deleteLectureByLectureId = async (lectureid: string, token: string) => {
-	alert(lectureid);
 	const options = {
 		method: 'DELETE',
 		headers: {
