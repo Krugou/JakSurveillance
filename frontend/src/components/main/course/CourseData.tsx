@@ -136,8 +136,8 @@ const CourseData: React.FC<CourseDataProps> = ({courseData, updateView}) => {
 										<p className="text-gray-700">Student group:</p>
 										<p>{course.studentgroup_name}</p>
 									</div>
-									<div className="flex justify-between mb-4">
-										<p className="text-gray-700">Topics:</p>
+									<div className="flex flex-col justify-between mb-4">
+										<h2 className="text-lg font-bold mt-4">Topics:</h2>
 										<p>{course.topic_names?.replace(/,/g, ', ')}</p>
 									</div>
 									{currentUrl.match(/courses\/\d+/) ? (
