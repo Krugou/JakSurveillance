@@ -2,16 +2,33 @@ import {FieldPacket, RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
 
 const pool = createPool('ADMIN');
+/**
+ * Interface for Attendance
+ */
 interface Attendance {
 	attendanceid: number;
 	studentid: number;
 	courseid: number;
 	attended: boolean;
 }
-
+/**
+ * Interface for AttendanceModel
+ */
 interface AttendanceModel {
+	/**
+	 * Fetch all attendances
+	 */
 	fetchAllAttendances(): Promise<[RowDataPacket[], FieldPacket[]]>;
+	/**
+	 * Find attendance by attendance id
+	 * @param id - The id of the attendance
+	 */
 	findByAttendanceId(id: number): Promise<Attendance | null>;
+	/**
+	 * Find all attendances by user course id
+	 * @param usercourseId - The id of the user course
+	 * @param userid - The id of the user
+	 */
 	findAllAttendancesByUserCourseId(
 		usercourseId: number,
 		userid: number,
