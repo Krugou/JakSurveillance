@@ -127,17 +127,17 @@ const StudentCourseAttendance: React.FC = () => {
 	console.log(filteredAttendanceData, 'filteredAttendanceData');
 	if (attendanceData.length > 0) {
 		return (
-			<div className="overflow-x-auto w-full bg-gray-100 p-10 flex flex-col border-x border-t">
+			<div className="overflow-x-auto lg:w-fit w-full rounded-lg bg-gray-100 p-5 sm:p-10 flex flex-col border-x border-t">
 				<h1 className="text-xl sm:text-4xl font-bold mt-2 mb-8 text-center">
 					Attendance for Course {attendanceData[0].name}
 				</h1>
-				<div className="flex items-center justify-around flex-wrap">
+				<div className="flex flex-col gap-5 sm:flex-row items-center mb-5 justify-around flex-wrap">
 					<input
 						type="text"
 						placeholder="Search by date"
 						value={searchTerm}
 						onChange={handleSearchChange}
-						className="w-1/6 mt-10 p-4 m-2 border border-black rounded"
+						className="w-[20em] mt-10 p-4 m-2 border border-black rounded"
 					/>
 					<FormControl className="md:w-1/4 mt-2 md:mt-0">
 						<label>Sort Topics:</label>
@@ -168,7 +168,7 @@ const StudentCourseAttendance: React.FC = () => {
 						variant="contained"
 						color="primary"
 						startIcon={<ShowChartIcon />}
-						className="mt-4 sm:mt-0 w-1/3"
+						className="w-fit"
 						onClick={() => setShowTable(!showTable)}
 					>
 						Attendance statistics
