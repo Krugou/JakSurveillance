@@ -211,7 +211,9 @@ const CreateCourseEasy: React.FC = () => {
 			<form onSubmit={handleSubmit} className={getFormClassName()}>
 				{currentStep === 1 && (
 					<fieldset>
-						<legend className="text-xl mb-3">Insert Course Students Data File</legend>
+						<legend className="text-xl mb-3">
+							Insert course by Metropolia Excel file
+						</legend>
 						<label className="w-full mb-2 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white transition-colors duration-300 ease-in-out">
 							<svg className="w-8 h-8 fill-current" viewBox="0 0 20 20">
 								<path d="M10 4a2 2 0 00-2 2v4a2 2 0 104 0V6a2 2 0 00-2-2zm0 12a6 6 0 100-12 6 6 0 000 12z" />
@@ -219,7 +221,12 @@ const CreateCourseEasy: React.FC = () => {
 							<span className="mt-2 text-base font-medium leading-normal">
 								{uploadFile}
 							</span>
-							<input type="file" className="hidden" onChange={handleFileChange} />
+							<input
+								type="file"
+								accept=".xlsx, .xls"
+								className="hidden"
+								onChange={handleFileChange}
+							/>
 							<div className="w-full p-2 mt-2 bg-gray-100 text-gray-500 rounded-lg">
 								{selectedFile}
 							</div>
@@ -232,7 +239,7 @@ const CreateCourseEasy: React.FC = () => {
 								className="form-checkbox h-5 w-5 text-blue-600"
 							/>
 							<span className="text-gray-900 font-medium">
-								Check Course Details from Open Data
+								Check course details from open data
 							</span>
 						</label>
 						<div className="flex justify-end">
