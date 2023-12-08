@@ -5,7 +5,7 @@ const pool = createPool('ADMIN');
 /**
  * AdminController interface represents the structure of the admin controller.
  */
-interface AdminController {
+export interface AdminController {
 	/**
 	 * Gets the server settings.
 	 *
@@ -35,6 +35,11 @@ interface AdminController {
  * @type {AdminController}
  */
 const adminController: AdminController = {
+	/**
+	 * Gets the server settings.
+	 *
+	 * @returns {Promise<any>} A promise that resolves to the server settings.
+	 */
 	async getServerSettings() {
 		try {
 			const serverSettings = await ServerSettingsModel.getServerSettings(pool);
@@ -44,6 +49,15 @@ const adminController: AdminController = {
 			throw error;
 		}
 	},
+	/**
+	 * Updates the server settings.
+	 *
+	 * @param {any} speedofhash - The speed of hash.
+	 * @param {any} leewayspeed - The leeway speed.
+	 * @param {any} timeouttime - The timeout time.
+	 * @param {any} attendancethreshold - The attendance threshold.
+	 * @returns {Promise<any>} A promise that resolves when the server settings have been updated.
+	 */
 	async updateServerSettings(
 		speedofhash,
 		leewayspeed,

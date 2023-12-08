@@ -1,6 +1,6 @@
 {
 	"includes": ["src"],
-	"exclude": ["**/_*.ts"],
+	"exclude": ["**/_*.ts", "**/*.test.ts", "**/*.spec.ts"],
 	"out": "../extra/backend",
 	"name": "JakSec Backend",
 	"theme": "default",

@@ -5,7 +5,7 @@ import usercoursesModel from '../models/usercoursemodel.js';
 /**
  * AttendanceController interface represents the structure of the attendance controller.
  */
-interface AttendanceController {
+export interface AttendanceController {
 	/**
 	 * Inserts a new attendance record.
 	 *
@@ -72,6 +72,15 @@ interface AttendanceController {
  * @type {AttendanceController}
  */
 const attendanceController: AttendanceController = {
+	/**
+	 * Inserts a new attendance record.
+	 *
+	 * @param {string} status - The attendance status.
+	 * @param {string} date - The date of the lecture.
+	 * @param {string} studentnumber - The student number.
+	 * @param {string} lectureid - The lecture ID.
+	 * @returns {Promise<unknown>} A promise that resolves when the attendance record has been inserted.
+	 */
 	async insertIntoAttendance(
 		status: string,
 		date: string,
@@ -142,7 +151,14 @@ const attendanceController: AttendanceController = {
 			throw error;
 		}
 	},
-
+	/**
+	 * Checks and inserts attendance records for students not present.
+	 *
+	 * @param {string} date - The date of the lecture.
+	 * @param {string[]} studentnumbers - The student numbers.
+	 * @param {string} lectureid - The lecture ID.
+	 * @returns {Promise<unknown>} A promise that resolves when the attendance records have been inserted.
+	 */
 	async checkAndInsertStatusNotPresentAttendance(
 		date: string,
 		studentnumbers: string[],
@@ -194,7 +210,13 @@ const attendanceController: AttendanceController = {
 			return Promise.reject(error);
 		}
 	},
-
+	/**
+	 * Updates the attendance status.
+	 *
+	 * @param {number} attendanceid - The attendance ID.
+	 * @param {number} status - The new attendance status.
+	 * @returns {Promise<unknown>} A promise that resolves when the attendance status has been updated.
+	 */
 	async updateAttendanceStatus(attendanceid: number, status: number) {
 		try {
 			await attendanceModel.updateAttendanceStatus(attendanceid, status);
@@ -204,7 +226,12 @@ const attendanceController: AttendanceController = {
 			return false;
 		}
 	},
-
+	/**
+	 * Gets lectures and attendances by course ID.
+	 *
+	 * @param {string} courseid - The course ID.
+	 * @returns {Promise<unknown>} A promise that resolves to the lectures and attendances.
+	 */
 	async getLecturesAndAttendancesByCourseId(courseid: string) {
 		try {
 			const lectures = await attendanceModel.getAttendaceByCourseId(courseid);
@@ -214,6 +241,13 @@ const attendanceController: AttendanceController = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Deletes an attendance record.
+	 *
+	 * @param {string} studentnumber - The student number.
+	 * @param {string} lectureid - The lecture ID.
+	 * @returns {Promise<unknown>} A promise that resolves when the attendance record has been deleted.
+	 */
 	async deleteAttendance(
 		studentnumber: string,
 		lectureid: string,
