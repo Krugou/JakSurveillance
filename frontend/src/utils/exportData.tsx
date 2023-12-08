@@ -75,27 +75,29 @@ export const exportToPDF = (filteredAttendanceData, student?, sortOption?) => {
 		startY: student ? 60 : 50, // start the table below the title
 
 		didDrawPage: data => {
-			// Add header
-			doc.setFontSize(20);
-			doc.setTextColor(40); // Set text color to black
-			doc.setFont('helvetica', 'normal'); // Set font
-			// Add the course name and student name to the PDF
+			// Add header only on the first page
+			if (data.pageCount === 1) {
+				doc.setFontSize(20);
+				doc.setTextColor(40); // Set text color to black
+				doc.setFont('helvetica', 'normal'); // Set font
+				// Add the course name and student name to the PDF
 
-			if (!student) {
-				doc.text(
-					`${filteredAttendanceData[0].name} attendance for ${new Date(
-						filteredAttendanceData[0].start_date,
-					).toLocaleDateString()}`,
-					data.settings.margin.left,
-					45,
-				);
-			} else {
-				doc.text(
-					`${filteredAttendanceData[0].name} attendance for ${student?.first_name} ${student?.last_name}`,
-					data.settings.margin.left,
-					45,
-				);
-				doc.text(`Topics: ${sortOption}`, data.settings.margin.left, 55);
+				if (!student) {
+					doc.text(
+						`${filteredAttendanceData[0].name} attendance for ${new Date(
+							filteredAttendanceData[0].start_date,
+						).toLocaleDateString()}`,
+						data.settings.margin.left,
+						45,
+					);
+				} else {
+					doc.text(
+						`${filteredAttendanceData[0].name} attendance for ${student?.first_name} ${student?.last_name}`,
+						data.settings.margin.left,
+						45,
+					);
+					doc.text(`Topics: ${sortOption}`, data.settings.margin.left, 55);
+				}
 			}
 		},
 	});
