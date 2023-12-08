@@ -3,7 +3,7 @@ import React, {Dispatch, SetStateAction, createContext, useState} from 'react';
 /**
  * User interface represents the structure of a user object.
  */
-interface User {
+export interface User {
 	role: string;
 	username: string;
 	first_name: string;
