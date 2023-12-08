@@ -83,6 +83,7 @@ const Login: React.FC = () => {
 						ref={usernameRef}
 						placeholder="Metropolia username"
 						aria-label="Metropolia username"
+						autoCapitalize="none"
 					/>
 				</div>
 				<div className="mb-6">
