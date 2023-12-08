@@ -4,6 +4,18 @@ import topicModel from '../models/topicmodel.js';
 import usercourse_topicsModel from '../models/usercourse_topicsmodel.js';
 
 const lectureController = {
+	/**
+	 * Inserts a new lecture into the database.
+	 *
+	 * @param {string} topicname - The name of the topic.
+	 * @param {string} coursecode - The code of the course.
+	 * @param {Date} start_date - The start date of the lecture.
+	 * @param {Date} end_date - The end date of the lecture.
+	 * @param {'am' | 'pm'} timeofday - The time of day of the lecture.
+	 * @param {'open' | 'closed'} state - The state of the lecture.
+	 * @param {number | undefined} teacherid - The ID of the teacher.
+	 * @returns {Promise<number | undefined>} The ID of the inserted lecture, or undefined if the insertion failed.
+	 */
 	async insertIntoLecture(
 		topicname: string,
 		coursecode: string,
@@ -56,6 +68,12 @@ const lectureController = {
 			console.error(error);
 		}
 	},
+	/**
+	 * Gets the students in a lecture.
+	 *
+	 * @param {number} lectureid - The ID of the lecture.
+	 * @returns {Promise<any[]>} An array of students in the lecture.
+	 */
 	async getStudentsInLecture(lectureid: number) {
 		try {
 			// Fetch all students in the lecture with the given ID
