@@ -8,6 +8,8 @@ import Button from '@mui/material/Button';
 
 interface lecture {
 	teacher: string;
+	start_date: string;
+	timeofday: string;
 }
 
 interface DeleteLectureModalProps {
@@ -36,8 +38,18 @@ const DeleteLectureModal: React.FC<DeleteLectureModalProps> = ({
 		</DialogTitle>
 		<DialogContent>
 			<DialogContentText id="alert-dialog-description">
-				{`There is already an open lecture for this course by ${lecture?.teacher}. Do you want to delete it or close it? 
-      \n Closing means counting it's attendance and deleting means deleting it's attendance.`}
+				{`There is already an open lecture for this course by ${
+					lecture?.teacher
+				} at ${
+					lecture?.start_date
+						? new Date(lecture?.start_date).toLocaleDateString()
+						: ''
+				} time of day:  ${
+					lecture?.timeofday
+				}.  Do you want to delete it or close it?`}
+				<br />
+				<br />
+				{`Closing means counting the lecture's attendance and deleting means completely deleting it's attendance.`}
 			</DialogContentText>
 		</DialogContent>
 		<DialogActions>
