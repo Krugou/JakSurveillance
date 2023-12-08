@@ -1,5 +1,5 @@
 import {CircularProgress} from '@mui/material';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import QRCode from 'react-qr-code';
 import {useNavigate, useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
@@ -37,6 +37,8 @@ const AttendanceRoom: React.FC = () => {
 	const [courseId, setCourseId] = useState('');
 	const [dataLoaded, setDataLoaded] = useState(false);
 	const [hashDataReceived, setHashDataReceived] = useState(false);
+	const toastDisplayed = useRef(false);
+
 	/**
 	 * useEffect hook for fetching lecture info.
 	 * This hook is run when the component mounts and whenever the lectureid changes.
@@ -86,7 +88,10 @@ const AttendanceRoom: React.FC = () => {
 				setCourseName(info.name);
 				setTopicname(info.topicname);
 				// Display a success message
-				toast.success('Lecture info retrieved successfully');
+				if (!toastDisplayed.current) {
+					toast.success('Lecture info retrieved successfully');
+					toastDisplayed.current = true;
+				}
 
 				// Set loading to false when the data fetch is done
 				setLoading(false);
@@ -139,7 +144,6 @@ const AttendanceRoom: React.FC = () => {
 			newSocket.on(
 				'updateAttendanceCollectionData',
 				(hash, lectureid, arrayOfStudents, courseStudents) => {
-					
 					setHashDataReceived(true);
 					setHashValue(hash + '/' + lectureid);
 					setArrayOfStudents(arrayOfStudents);
