@@ -125,119 +125,120 @@ const setupSocketHandlers = (io: Server) => {
 			const oldSpeedOfHashChange = speedOfHashChange;
 			// Fetch and update data when a new lecture is started
 			fetchDataAndUpdate()
-				.then(() => {
+				.then(async () => {
 					if (oldSpeedOfHashChange !== speedOfHashChange) {
 						// If the speedOfHashChange has changed, console.log it
 						console.log('speedOfHashChange changed');
 					}
 					howMuchLeeWay = speedOfHashChange * leewaytimes;
+
+					// Join the room with the lectureid
+					socket.join(lectureid);
+					// Emit the 'lecturestarted' event to the room with the lectureid
+					io.to(lectureid).emit('lecturestarted', lectureid, timeout);
+					// Get the list of students who have arrived and who have not yet arrived
+					const token = await getToken();
+					if (presentStudents[lectureid] && notYetPresentStudents[lectureid]) {
+						// If the lists already exist, emit them to the room with the lectureid
+						io
+							.to(lectureid)
+							.emit('getallstudentsinlecture', notYetPresentStudents[lectureid]);
+					} else {
+						// If the lists do not exist, fetch them from the server and emit them to the room with the lectureid
+						doFetch(
+							'http://localhost:3002/courses/attendance/getallstudentsinlecture/',
+							{
+								method: 'POST', // or 'GET'
+								headers: {
+									'Content-Type': 'application/json',
+									Authorization: 'Bearer ' + token,
+								},
+								body: JSON.stringify({
+									lectureid: lectureid,
+								}),
+							},
+						)
+							.then(response => {
+								// Handle the response here
+								notYetPresentStudents[lectureid] = response;
+								presentStudents[lectureid] = [];
+								// Emit the lists to the room with the lectureid
+								io
+									.to(lectureid)
+									.emit('getallstudentsinlecture', notYetPresentStudents[lectureid]);
+							})
+							.catch(error => {
+								console.error('Error:', error);
+							});
+					}
+					// Update the hash every `speedOfHashChange` milliseconds
+					updateHash();
+					setTimeout(() => {
+						io
+							.to(lectureid)
+							.emit(
+								'updateAttendanceCollectionData',
+								hash,
+								lectureid,
+								presentStudents[lectureid],
+								notYetPresentStudents[lectureid],
+							);
+					}, 1000);
+					setInterval(updateHash, speedOfHashChange);
+					// Emit the hash to the room with the lectureid
+					const intervalId = setInterval(() => {
+						io
+							.to(lectureid)
+							.emit(
+								'updateAttendanceCollectionData',
+								hash,
+								lectureid,
+								presentStudents[lectureid],
+								notYetPresentStudents[lectureid],
+							);
+					}, speedOfHashChange);
+					console.log(
+						'🚀 ~ file: socketHandlers.ts:199 ~ io.on ~ speedOfHashChange:',
+						speedOfHashChange,
+					);
+					if (lectureTimeoutId) {
+						clearTimeout(lectureTimeoutId);
+					}
+					// Set a timeout to emit 'classfinished' event after 'timeout' milliseconds
+					lectureTimeoutId = setTimeout(() => {
+						finishLecture(lectureid, io);
+					}, timeout);
+					// Set a timeout to delete the lecture from the database after 'timeout' milliseconds if no students have arrived
+					// setTimeout(async () => {
+					// 	// Check if presentStudents is empty
+					// 	if (presentStudents[lectureid].length === 0) {
+					// 		// Delete lecture from database
+					// 		const token = await getToken();
+					// 		doFetch('http://localhost:3002/courses/attendance/deletelecture/', {
+					// 			method: 'POST',
+					// 			headers: {
+					// 				'Content-Type': 'application/json',
+					// 				Authorization: 'Bearer ' + token,
+					// 			},
+					// 			body: JSON.stringify({
+					// 				lectureid: lectureid,
+					// 			}),
+					// 		});
+					// 	}
+					// }, timeout);
+
+					// Handle the 'lecturefinishedwithbutton' event
+					socket.on('lecturefinishedwithbutton', async (lectureid: string) => {
+						finishLecture(lectureid, io);
+					});
+					// Clear the interval when the socket disconnects
+					socket.on('disconnect', () => {
+						clearInterval(intervalId);
+					});
 				})
 				.catch(error => {
 					console.error(error);
 				});
-			// Join the room with the lectureid
-			socket.join(lectureid);
-			// Emit the 'lecturestarted' event to the room with the lectureid
-			io.to(lectureid).emit('lecturestarted', lectureid, timeout);
-			// Get the list of students who have arrived and who have not yet arrived
-			const token = await getToken();
-			if (presentStudents[lectureid] && notYetPresentStudents[lectureid]) {
-				// If the lists already exist, emit them to the room with the lectureid
-				io
-					.to(lectureid)
-					.emit('getallstudentsinlecture', notYetPresentStudents[lectureid]);
-			} else {
-				// If the lists do not exist, fetch them from the server and emit them to the room with the lectureid
-				doFetch(
-					'http://localhost:3002/courses/attendance/getallstudentsinlecture/',
-					{
-						method: 'POST', // or 'GET'
-						headers: {
-							'Content-Type': 'application/json',
-							Authorization: 'Bearer ' + token,
-						},
-						body: JSON.stringify({
-							lectureid: lectureid,
-						}),
-					},
-				)
-					.then(response => {
-						// Handle the response here
-						notYetPresentStudents[lectureid] = response;
-						presentStudents[lectureid] = [];
-						// Emit the lists to the room with the lectureid
-						io
-							.to(lectureid)
-							.emit('getallstudentsinlecture', notYetPresentStudents[lectureid]);
-					})
-					.catch(error => {
-						console.error('Error:', error);
-					});
-			}
-			// Update the hash every `speedOfHashChange` milliseconds
-			updateHash();
-			setTimeout(() => {
-				io
-					.to(lectureid)
-					.emit(
-						'updateAttendanceCollectionData',
-						hash,
-						lectureid,
-						presentStudents[lectureid],
-						notYetPresentStudents[lectureid],
-					);
-			}, 1000);
-			setInterval(updateHash, speedOfHashChange);
-			// Emit the hash to the room with the lectureid
-			const intervalId = setInterval(() => {
-				io
-					.to(lectureid)
-					.emit(
-						'updateAttendanceCollectionData',
-						hash,
-						lectureid,
-						presentStudents[lectureid],
-						notYetPresentStudents[lectureid],
-					);
-			}, speedOfHashChange);
-			console.log(
-				'🚀 ~ file: socketHandlers.ts:199 ~ io.on ~ speedOfHashChange:',
-				speedOfHashChange,
-			);
-			if (lectureTimeoutId) {
-				clearTimeout(lectureTimeoutId);
-			}
-			// Set a timeout to emit 'classfinished' event after 'timeout' milliseconds
-			lectureTimeoutId = setTimeout(() => {
-				finishLecture(lectureid, io);
-			}, timeout);
-			// Set a timeout to delete the lecture from the database after 'timeout' milliseconds if no students have arrived
-			// setTimeout(async () => {
-			// 	// Check if presentStudents is empty
-			// 	if (presentStudents[lectureid].length === 0) {
-			// 		// Delete lecture from database
-			// 		const token = await getToken();
-			// 		doFetch('http://localhost:3002/courses/attendance/deletelecture/', {
-			// 			method: 'POST',
-			// 			headers: {
-			// 				'Content-Type': 'application/json',
-			// 				Authorization: 'Bearer ' + token,
-			// 			},
-			// 			body: JSON.stringify({
-			// 				lectureid: lectureid,
-			// 			}),
-			// 		});
-			// 	}
-			// }, timeout);
-
-			// Handle the 'lecturefinishedwithbutton' event
-			socket.on('lecturefinishedwithbutton', async (lectureid: string) => {
-				finishLecture(lectureid, io);
-			});
-			// Clear the interval when the socket disconnects
-			socket.on('disconnect', () => {
-				clearInterval(intervalId);
-			});
 		});
 		// Handle the 'inputThatStudentHasArrivedToLecture' event
 		// This event is emitted when the student inputs the secure hash and unixtime
