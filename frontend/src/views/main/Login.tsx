@@ -25,10 +25,9 @@ const Login: React.FC = () => {
 		event.preventDefault();
 
 		const inputs = {
-			username: (usernameRef.current?.value || '').toLowerCase(), // Convert to lowercase
+			username: usernameRef.current?.value || '',
 			password: passwordRef.current?.value || '',
 		};
-
 		try {
 			const response = await apiHooks.postLogin(inputs);
 			console.log(
