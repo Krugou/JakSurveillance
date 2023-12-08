@@ -1,5 +1,5 @@
 {
-	"entryPoints": ["src"],
+	"includes": ["src"],
 	"exclude": ["**/_*.ts", "**/_*.tsx"],
 	"out": "../extra/frontend",
 	"name": "JakSec Frontend",
