@@ -11,8 +11,8 @@ import TeacherRoutes from './routes/TeacherRoutes';
 import Logout from './views/Logout.tsx';
 import Login from './views/main/Login.tsx';
 import StartView from './views/main/StartView.tsx';
-import Gdpr from "./views/main/Gdpr";
-import BackgroundContainer from "./components/main/background/BackgroundContainer";
+import Gdpr from './views/main/Gdpr';
+import BackgroundContainer from './components/main/background/BackgroundContainer';
 const intervalMS = 60 * 60 * 1000;
 const App = () => {
 	useRegisterSW({
@@ -34,9 +34,9 @@ const App = () => {
 
 	return (
 		<UserProvider>
-			<ToastContainer />
+			<ToastContainer hideProgressBar={true} />
 			<Router basename={import.meta.env.BASE_URL}>
-					<BackgroundContainer>
+				<BackgroundContainer>
 					<Routes>
 						<Route path="/" element={<StartView />} />
 						<Route path="student/*" element={<StudentRoutes />} />
@@ -47,7 +47,7 @@ const App = () => {
 						<Route path="login" element={<Login />} />
 						<Route path="gdpr" element={<Gdpr />} />
 					</Routes>
-					</BackgroundContainer>
+				</BackgroundContainer>
 			</Router>
 		</UserProvider>
 	);
