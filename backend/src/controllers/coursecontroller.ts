@@ -13,7 +13,10 @@ import topicModel from '../models/topicmodel.js';
 import usercourse_topicsModel from '../models/usercourse_topicsmodel.js';
 import userCourseModel from '../models/usercoursemodel.js';
 import userModel from '../models/usermodel.js';
-interface Student {
+/**
+ * Interface for Student
+ */
+export interface Student {
 	email: string;
 	first_name: string;
 	name: string;
@@ -26,10 +29,16 @@ interface Student {
 	Registration: string;
 	Assessment: string;
 }
-interface Instructor {
+/**
+ * Interface for Instructor
+ */
+export interface Instructor {
 	email: string;
 }
-interface UserMapResults {
+/**
+ * Interface for UserMapResults
+ */
+export interface UserMapResults {
 	usercourseid: number;
 	userid: number;
 	first_name: string;
@@ -39,7 +48,22 @@ interface UserMapResults {
 	group_name: string;
 	topics: string;
 }
+/**
+ * Course Controller
+ */
 const courseController = {
+	/**
+	 * Insert a new course
+	 * @param name - The name of the course
+	 * @param start_date - The start date of the course
+	 * @param end_date - The end date of the course
+	 * @param code - The code of the course
+	 * @param group_name - The group name of the course
+	 * @param students - The students of the course
+	 * @param instructors - The instructors of the course
+	 * @param topics - The topics of the course
+	 * @param topicgroup - The topic group of the course
+	 */
 	async insertIntoCourse(
 		name: string,
 		start_date: Date,
