@@ -9,6 +9,11 @@ const TeacherCreateCourse: React.FC = () => {
 				<p className="text-center p-2 bg-white w-fit ml-auto rounded-lg mr-auto mb-4">Choose between routes</p>
 				<div className="flex justify-center space-x-4">
 					<Card
+						path="/teacher/mainview"
+						title="Main view"
+						description="Back to mainview"
+					/>
+					<Card
 						path="/teacher/courses/create/easy"
 						title="Easy mode"
 						description="Create a course easily with an excel sheet"

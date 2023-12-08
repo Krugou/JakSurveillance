@@ -95,28 +95,30 @@ const CourseData: React.FC<CourseDataProps> = ({courseData, updateView}) => {
 						<Tooltip title={isCourseEnded ? 'Course has ended' : ''} placement="top">
 							<div
 								key={course.courseid}
-								className={`mt-4 p-5 rounded-lg mb-4 relative ${
+								className={`p-5 rounded-lg mb-4 relative ${
 									isCourseEnded ? 'opacity-50 bg-gray-200' : 'bg-white'
 								}`}
 							>
-								{/* Add a relative position to the card container */}
+								<div className="flex items-center justify-between">
+									<p className="font-bold text-lg">{course.name}</p>
+									<p className="text-gray-700 text-base">{course.description}</p>
+									<div className="flex gap-5">
 								<Tooltip title="Modify this course">
 									<EditIcon
 										fontSize="large"
-										className="absolute top-0 right-0 m-4 mr-16 cursor-pointer text-black bg-gray-300 rounded-full p-1 hover:text-gray-700"
+										className="cursor-pointer text-black bg-gray-300 rounded-full p-1 hover:text-gray-700"
 										onClick={() => navigate(`/teacher/courses/${course.courseid}/modify`)}
 									/>
 								</Tooltip>
 								<Tooltip title="Delete this course">
 									<DeleteIcon
 										fontSize="large"
-										className="absolute top-0 right-0 m-4 cursor-pointer text-red-500 bg-gray-300 rounded-full p-1 hover:text-red-700"
+										className="cursor-pointer text-red-500 bg-gray-300 rounded-full p-1 hover:text-red-700"
 										onClick={() => openDeleteModal(course.courseid)}
 									/>
 								</Tooltip>
-								{/* Position the DeleteIcon at the top right corner */}
-								<p className="font-bold text-lg">{course.name}</p>
-								<p className="text-gray-700 text-base">{course.description}</p>
+									</div>
+								</div>
 								<div className="mt-2">
 									<div className="flex justify-between">
 										<p className="text-gray-700">Start date:</p>

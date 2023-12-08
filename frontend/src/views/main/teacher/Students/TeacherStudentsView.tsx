@@ -9,6 +9,7 @@ import {useCourses} from '../../../../hooks/courseHooks';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import WarningIcon from '@mui/icons-material/Warning';
+import GeneralLinkButton from "../../../../components/main/buttons/GeneralLinkButton";
 
 interface Student {
 	first_name: string;
@@ -130,11 +131,17 @@ const TeacherStudentsView: React.FC = () => {
 
 	return (
 		<div className="2xl:w-9/12 w-full mx-auto">
+			<div className="flex flex-col gap-5 sm:gap-0 sm:flex-row items-center">
 			<h1 className="text-2xl text-center p-3 bg-white rounded-lg w-fit ml-auto mr-auto font-bold mb-4">
 				Your Students
 			</h1>
+			</div>
 			<div className="w-full max-h-[40em] 2xl:max-h-[60em] overflow-y-scroll rounded-xl bg-gray-100 p-2 sm:p-5">
-				<div className="w-11/12 sm:w-[20em] lg:ml-4 ml-2 mb-4">
+				<GeneralLinkButton
+					path={`/teacher/mainview`}
+					text="Back to mainview"
+				/>
+				<div className="w-11/12 sm:w-[20em] mt-5 lg:ml-4 ml-2 mb-4">
 					<InputField
 						type="text"
 						name="search"
@@ -145,7 +152,7 @@ const TeacherStudentsView: React.FC = () => {
 					/>
 
 					<Autocomplete
-						className="sm:w-[20em] w-1/2"
+						className="sm:w-[20em] w-full"
 						freeSolo
 						options={courses.map(
 							(course: SelectedCourse) => `${course.name} ${course.code}`,

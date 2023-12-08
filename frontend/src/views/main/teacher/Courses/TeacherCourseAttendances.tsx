@@ -84,7 +84,7 @@ const TeacherCourseAttendances: React.FC = () => {
 	};
 
 	return (
-		<div className="w-fit p-4 bg-gray-100 rounded-lg">
+		<div className="lg:w-fit w-full p-4 bg-gray-100 rounded-lg">
 			<h1 className="text-center text-3xl font-bold mb-5">
 				Teacher Course Attendances
 			</h1>
@@ -95,7 +95,7 @@ const TeacherCourseAttendances: React.FC = () => {
 							Find attendances based on day
 						</h2>
 						<Calendar
-							className="w-full"
+							className="w-full sm:mb-0 mb-4"
 							onChange={handleDateChange}
 							value={selectedDate}
 							tileContent={({date}) => {

@@ -5,6 +5,7 @@ import apiHooks from '../../../../hooks/ApiHooks';
 import ProfileInfo from '../../../../components/profiles/ProfileInfo';
 import StudentCourseGrid from '../../../../components/main/course/StudentCourseGrid';
 import {UserContext} from '../../../../contexts/UserContext';
+import GeneralLinkButton from "../../../../components/main/buttons/GeneralLinkButton";
 interface StudentInfo {
 	email: string;
 	first_name: string;
@@ -125,12 +126,16 @@ const TeacherStudentDetail: React.FC = () => {
 	return (
 		<div className="w-full sm:w-fit">
 			<div className="bg-white rounded-lg p-5">
-				<h2 className="text-2xl font-bold underline underline-offset-8 decoration-metropoliaMainOrange mb-5">
+				<GeneralLinkButton
+					path={`/teacher/students`}
+					text="Back to students"
+				/>
+				<h2 className="text-2xl font-bold mt-5 mb-5">
 					{student.first_name + ' ' + student.last_name}'s Info
 				</h2>
 				<ProfileInfo user={student} />
 				<div className="w-full mt-5 h-1 bg-metropoliaMainOrange rounded-md"></div>
-				<h2 className="text-2xl font-bold mt-5 underline underline-offset-8 decoration-metropoliaMainOrange mb-5">
+				<h2 className="text-2xl font-bold mt-5 mb-5">
 					{student.first_name + ' ' + student.last_name}'s Courses
 				</h2>
 				<div className="bg-gray-100 pl-2 pt-1 pb-2 pr-2">
