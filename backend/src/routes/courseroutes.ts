@@ -176,87 +176,92 @@ router.post(
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	upload.single('file'),
 	async (req, res) => {
-		if (!req.file) {
-			console.error('No file uploaded');
-			res.status(400).send('No file uploaded');
-			return;
-		}
-		const {checkCourseDetails, instructorEmail} = req.body;
-		// Read the Excel file from the buffer
-		const workbook = XLSX.read(req.file.buffer, {type: 'buffer'});
-		console.log('Loaded workbook'); // Debugging line
+		try {
+			if (!req.file) {
+				console.error('No file uploaded');
+				res.status(400).send('No file uploaded');
+				return;
+			}
+			const {checkCourseDetails, instructorEmail} = req.body;
+			// Read the Excel file from the buffer
+			const workbook = XLSX.read(req.file.buffer, {type: 'buffer'});
+			console.log('Loaded workbook'); // Debugging line
 
-		// Get the first worksheet
-		const worksheetName = workbook.SheetNames[0];
-		const worksheet = workbook.Sheets[worksheetName];
+			// Get the first worksheet
+			const worksheetName = workbook.SheetNames[0];
+			const worksheet = workbook.Sheets[worksheetName];
 
-		if (!worksheet) {
-			console.error('Worksheet not found');
-			res.status(500).send('Internal server error');
-			return;
-		}
-		const jsonData = XLSX.utils.sheet_to_json(worksheet);
-		const createCourse = (data: Item[]): CourseDetails => {
-			const fullCourseName = Object.keys(data[0])[0]; // get the first key
-			const [courseName, courseCode] = fullCourseName.split(' (');
-			const studentList = data
-				.filter(item => item.__EMPTY !== 'Etunimi')
-				.map(item => {
-					const last_name = item[fullCourseName];
-					const first_name = item.__EMPTY;
-					const name = item.__EMPTY_1;
-					const email = item.__EMPTY_2;
-					const studentnumber = item.__EMPTY_3;
-					const arrivalgroup = item.__EMPTY_4;
-					const admingroups = item.__EMPTY_5;
-					const program = item.__EMPTY_6;
-					const educationform = item.__EMPTY_7;
-					const registration = item.__EMPTY_8;
-					const evaluation = item.__EMPTY_9;
+			if (!worksheet) {
+				console.error('Worksheet not found');
+				res.status(500).send('Internal server error');
+				return;
+			}
+			const jsonData = XLSX.utils.sheet_to_json(worksheet);
+			const createCourse = (data: Item[]): CourseDetails => {
+				const fullCourseName = Object.keys(data[0])[0]; // get the first key
+				const [courseName, courseCode] = fullCourseName.split(' (');
+				const studentList = data
+					.filter(item => item.__EMPTY !== 'Etunimi')
+					.map(item => {
+						const last_name = item[fullCourseName];
+						const first_name = item.__EMPTY;
+						const name = item.__EMPTY_1;
+						const email = item.__EMPTY_2;
+						const studentnumber = item.__EMPTY_3;
+						const arrivalgroup = item.__EMPTY_4;
+						const admingroups = item.__EMPTY_5;
+						const program = item.__EMPTY_6;
+						const educationform = item.__EMPTY_7;
+						const registration = item.__EMPTY_8;
+						const evaluation = item.__EMPTY_9;
 
-					return {
-						last_name,
-						first_name,
-						name,
-						email,
-						studentnumber,
-						arrivalgroup,
-						admingroups,
-						program,
-						educationform,
-						registration,
-						evaluation,
-					};
-				});
+						return {
+							last_name,
+							first_name,
+							name,
+							email,
+							studentnumber,
+							arrivalgroup,
+							admingroups,
+							program,
+							educationform,
+							registration,
+							evaluation,
+						};
+					});
 
-			return {
-				courseName,
-				courseCode: courseCode.replace('(', '').replace(')', ''),
-				studentList,
-				instructorEmail: '', // default value
-				startDate: new Date(), // default value
-				endDate: new Date(), // default value
-				studentGroup: '', // default value
+				return {
+					courseName,
+					courseCode: courseCode.replace('(', '').replace(')', ''),
+					studentList,
+					instructorEmail: '', // default value
+					startDate: new Date(), // default value
+					endDate: new Date(), // default value
+					studentGroup: '', // default value
+				};
 			};
-		};
 
-		const courseDetails = createCourse(jsonData as Item[]);
-		courseDetails.instructorEmail = instructorEmail;
-		if (checkCourseDetails === 'true') {
-			const data = (await openData.checkOpenDataRealization(
-				courseDetails.courseCode,
-			)) as IData;
-			// Extract startDate and endDate from data and convert them to Date objects
-			courseDetails.startDate = new Date(data.realizations[0].startDate);
-			courseDetails.endDate = new Date(data.realizations[0].endDate);
-			const studentGroup = data.realizations[0].studentGroups[0];
-			courseDetails.studentGroup = studentGroup ? studentGroup.code : '';
-		} else {
-			courseDetails.studentGroup = 'please enter student group';
-			courseDetails.startDate = new Date();
-			courseDetails.endDate = new Date();
+			const courseDetails = createCourse(jsonData as Item[]);
+			courseDetails.instructorEmail = instructorEmail;
+			if (checkCourseDetails === 'true') {
+				const data = (await openData.checkOpenDataRealization(
+					courseDetails.courseCode,
+				)) as IData;
+				// Extract startDate and endDate from data and convert them to Date objects
+				courseDetails.startDate = new Date(data.realizations[0].startDate);
+				courseDetails.endDate = new Date(data.realizations[0].endDate);
+				const studentGroup = data.realizations[0].studentGroups[0];
+				courseDetails.studentGroup = studentGroup ? studentGroup.code : '';
+			} else {
+				courseDetails.studentGroup = 'please enter student group';
+				courseDetails.startDate = new Date();
+				courseDetails.endDate = new Date();
+			}
+			res.send(courseDetails);
+		} catch (error) {
+			console.error(error);
+			res.status(500).send('Internal server error');
 		}
-		res.send(courseDetails);
 	},
 );
 router.get(
@@ -289,6 +294,7 @@ router.get(
 				return;
 			}
 			const courses = await course.getCoursesByCourseId(courseId);
+			console.log('🚀 ~ file: courseroutes.ts:292 ~ courses:', courses);
 			res.json(courses);
 		} catch (err) {
 			console.error(err);
