@@ -7,6 +7,7 @@
 	"excludePrivate": true,
 	"excludeProtected": true,
 	"excludeExternals": true,
+	"entryPointStrategy": "expand",
 	"plugin": ["typedoc-material-theme"],
 	"themeColor": "#ff5000"
 }
