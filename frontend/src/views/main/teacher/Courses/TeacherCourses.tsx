@@ -3,7 +3,7 @@ import CourseData from '../../../../components/main/course/CourseData';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
 import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
-
+import {useNavigate} from 'react-router-dom';
 interface Course {
 	courseid: number;
 	name: string;
@@ -20,7 +20,7 @@ const TeacherCourses: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const [courses, setCourses] = useState<Course[]>([]); // Specify the type for courses
 	const {update, setUpdate} = useContext(UserContext);
-
+	const navigate = useNavigate();
 	useEffect(() => {
 		const fetchCourses = async () => {
 			if (user) {
@@ -64,8 +64,34 @@ const TeacherCourses: React.FC = () => {
 				</div>
 				<div className="grid max-h-[30em] mt-5 2xl:max-h-[50em] overflow-y-scroll w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-4 m-auto">
 					{courses.length > 0 && (
-						<CourseData courseData={courses} updateView={updateView} />
+						<CourseData
+							courseData={courses}
+							updateView={updateView}
+							allCourses={true}
+						/>
 					)}
+					<div
+						className="p-5 rounded-lg mt-4 mb-4 bg-gray-200 cursor-pointer hover:bg-gray-300 relative flex justify-center items-center"
+						onClick={() => navigate('/teacher/courses/create')}
+					>
+						<button className="flex flex-col items-center">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								className="h-8 w-8 mb-2"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+								/>
+							</svg>
+							Add new course
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>

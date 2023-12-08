@@ -26,9 +26,14 @@ interface Course {
 interface CourseDataProps {
 	courseData: object;
 	updateView?: () => void;
+	allCourses?: boolean;
 }
 
-const CourseData: React.FC<CourseDataProps> = ({courseData, updateView}) => {
+const CourseData: React.FC<CourseDataProps> = ({
+	courseData,
+	updateView,
+	allCourses,
+}) => {
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 	const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
 
@@ -44,7 +49,7 @@ const CourseData: React.FC<CourseDataProps> = ({courseData, updateView}) => {
 
 			toast.success('Course deleted');
 			// Check if we are in the TeacherCourseDetail route
-			if (location.pathname.includes('/teacher/courses/')) {
+			if (!allCourses) {
 				// If so, navigate to TeacherCourses
 				navigate('/teacher/courses');
 			} else {
@@ -81,7 +86,6 @@ const CourseData: React.FC<CourseDataProps> = ({courseData, updateView}) => {
 		}
 	};
 
-	const currentUrl = window.location.href;
 	console.log(courseData);
 	return (
 		<>
@@ -103,20 +107,22 @@ const CourseData: React.FC<CourseDataProps> = ({courseData, updateView}) => {
 									<p className="font-bold text-lg">{course.name}</p>
 									<p className="text-gray-700 text-base">{course.description}</p>
 									<div className="flex gap-5">
-								<Tooltip title="Modify this course">
-									<EditIcon
-										fontSize="large"
-										className="cursor-pointer text-black bg-gray-300 rounded-full p-1 hover:text-gray-700"
-										onClick={() => navigate(`/teacher/courses/${course.courseid}/modify`)}
-									/>
-								</Tooltip>
-								<Tooltip title="Delete this course">
-									<DeleteIcon
-										fontSize="large"
-										className="cursor-pointer text-red-500 bg-gray-300 rounded-full p-1 hover:text-red-700"
-										onClick={() => openDeleteModal(course.courseid)}
-									/>
-								</Tooltip>
+										<Tooltip title="Modify this course">
+											<EditIcon
+												fontSize="large"
+												className="cursor-pointer text-black bg-gray-300 rounded-full p-1 hover:text-gray-700"
+												onClick={() =>
+													navigate(`/teacher/courses/${course.courseid}/modify`)
+												}
+											/>
+										</Tooltip>
+										<Tooltip title="Delete this course">
+											<DeleteIcon
+												fontSize="large"
+												className="cursor-pointer text-red-500 bg-gray-300 rounded-full p-1 hover:text-red-700"
+												onClick={() => openDeleteModal(course.courseid)}
+											/>
+										</Tooltip>
 									</div>
 								</div>
 								<div className="mt-2">
@@ -140,7 +146,7 @@ const CourseData: React.FC<CourseDataProps> = ({courseData, updateView}) => {
 										<h2 className="text-lg font-bold mt-4">Topics:</h2>
 										<p>{course.topic_names?.replace(/,/g, ', ')}</p>
 									</div>
-									{currentUrl.match(/courses\/\d+/) ? (
+									{!allCourses ? (
 										<>
 											<div className="w-full border-t-4 border-metropoliaMainOrange"></div>
 											<h2 className="text-lg font-bold mt-4"> Additional Info</h2>
