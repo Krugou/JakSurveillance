@@ -71,23 +71,29 @@ const CreateCourseEasy: React.FC = () => {
 			if (!token) {
 				throw new Error('No token available');
 			}
-			const response = await apiHooks.excelInput({formDataFile}, token);
+			try {
+				const response = await apiHooks.excelInput({formDataFile}, token);
 
-			if (response) {
-				toast.success('Excel file uploaded');
-				setCourseName(response.courseName);
-				setStudentGroup(response.studentGroup);
-				setCourseCode(response.courseCode);
+				if (response) {
+					toast.success('Excel file uploaded');
+					setCourseName(response.courseName);
+					setStudentGroup(response.studentGroup);
+					setCourseCode(response.courseCode);
 
-				setStartDate(changeDateToBetterFormat(response.startDate));
-				setEndDate(changeDateToBetterFormat(response.endDate));
-				setInstructorEmail(response.instructorEmail);
-				setStudentList(response.studentList);
+					setStartDate(changeDateToBetterFormat(response.startDate));
+					setEndDate(changeDateToBetterFormat(response.endDate));
+					setInstructorEmail(response.instructorEmail);
+					setStudentList(response.studentList);
 
-				setCurrentStep(prevStep => prevStep + 1);
-			} else {
-				toast.error('Excel file upload failed');
-				console.error('Excel file upload failed');
+					setCurrentStep(prevStep => prevStep + 1);
+				} else {
+					toast.error('Excel file upload failed');
+					console.error('Excel file upload failed');
+				}
+			} catch (error) {
+				if (error instanceof Error) {
+					toast.error('Excel file upload failed, check your file');
+				}
 			}
 		}
 	};
