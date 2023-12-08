@@ -10,7 +10,7 @@ import validate from '../utils/validate.js';
 const router: Router = express.Router();
 router.get(
 	'/',
-	checkUserRole(['admin', 'counselor', 'teacher']),
+	checkUserRole(['admin']),
 	async (_req: Request, res: Response) => {
 		try {
 			const serverSettings = await adminController.getServerSettings();
@@ -27,7 +27,7 @@ router.get(
 );
 router.post(
 	'/',
-	checkUserRole(['admin', 'counselor', 'teacher']),
+	checkUserRole(['admin']),
 	[
 		body('speedofhash').isNumeric().withMessage('Speed of hash must be a number'),
 		body('leewayspeed').isNumeric().withMessage('Leeway speed must be a number'),
@@ -55,7 +55,7 @@ router.post(
 );
 router.get(
 	'/rolesspecial',
-	checkUserRole(['admin', 'counselor', 'teacher']),
+	checkUserRole(['admin']),
 	validate,
 	async (_req: Request, res: Response) => {
 		try {
@@ -69,7 +69,7 @@ router.get(
 );
 router.get(
 	'/roles',
-	checkUserRole(['admin', 'counselor', 'teacher']),
+	checkUserRole(['admin']),
 	async (_req: Request, res: Response) => {
 		try {
 			const roles = await rolemodel.fetchAllRoles();
@@ -83,7 +83,7 @@ router.get(
 
 router.post(
 	'/change-role',
-	checkUserRole(['admin', 'counselor', 'teacher']),
+	checkUserRole(['admin']),
 	[
 		body('email').isEmail().withMessage('Email must be valid'),
 		body('roleId').isNumeric().withMessage('Role ID must be a number'),
@@ -102,7 +102,7 @@ router.post(
 );
 router.get(
 	'/getusers',
-	checkUserRole(['admin', 'counselor', 'teacher']),
+	checkUserRole(['admin']),
 	async (_req: Request, res: Response) => {
 		try {
 			const users = await usermodel.fetchUsers();
@@ -115,7 +115,7 @@ router.get(
 );
 router.get(
 	'/getuser/:userid',
-	checkUserRole(['admin', 'counselor', 'teacher']),
+	checkUserRole(['admin']),
 	[param('userid').isNumeric().withMessage('User ID must be a number')],
 	validate,
 	async (req: Request, res: Response) => {
@@ -131,7 +131,7 @@ router.get(
 );
 router.get(
 	'/getcourses',
-	checkUserRole(['admin', 'counselor', 'teacher']),
+	checkUserRole(['admin']),
 	async (_req: Request, res: Response) => {
 		try {
 			const courses = await course.getCoursesWithDetails();
@@ -144,7 +144,7 @@ router.get(
 );
 router.put(
 	'/updateuser',
-	checkUserRole(['admin', 'counselor', 'teacher']),
+	checkUserRole(['admin']),
 	async (req: Request, res: Response) => {
 		try {
 			const user = req.body;
@@ -158,7 +158,7 @@ router.put(
 );
 router.get(
 	'/studentgroups',
-	checkUserRole(['admin', 'counselor', 'teacher']),
+	checkUserRole(['admin']),
 	async (_req: Request, res: Response) => {
 		try {
 			const groups = await studentgroupmodel.fetchAllStudentGroups();
@@ -171,7 +171,7 @@ router.get(
 );
 router.get(
 	'/checkstudentnumber/:studentnumber',
-	checkUserRole(['admin', 'counselor', 'teacher']),
+	checkUserRole(['admin']),
 	[
 		param('studentnumber')
 			.isNumeric()
@@ -197,7 +197,7 @@ router.get(
 );
 router.get(
 	'/getrolecounts',
-	checkUserRole(['admin', 'counselor', 'teacher']),
+	checkUserRole(['admin']),
 	async (_req: Request, res: Response) => {
 		try {
 			const roleCounts = await usermodel.getRoleCounts();
