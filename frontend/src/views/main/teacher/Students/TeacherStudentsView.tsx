@@ -1,5 +1,5 @@
 import {CircularProgress} from '@mui/material';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {toast} from 'react-toastify';
 import {Link} from 'react-router-dom';
 import InputField from '../../../../components/main/course/createcourse/coursedetails/InputField';
@@ -9,7 +9,7 @@ import {useCourses} from '../../../../hooks/courseHooks';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import WarningIcon from '@mui/icons-material/Warning';
-import GeneralLinkButton from "../../../../components/main/buttons/GeneralLinkButton";
+import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
 
 interface Student {
 	first_name: string;
@@ -37,7 +37,7 @@ interface SelectedCourse {
 }
 
 const TeacherStudentsView: React.FC = () => {
-	const {user} = React.useContext(UserContext);
+	const {user} = useContext(UserContext);
 	const [allStudents, setAllStudents] = useState<Student[]>([]);
 	const [students, setStudents] = useState<Student[]>([]);
 
@@ -132,26 +132,26 @@ const TeacherStudentsView: React.FC = () => {
 	return (
 		<div className="2xl:w-9/12 w-full mx-auto">
 			<div className="flex flex-col gap-5 sm:gap-0 sm:flex-row items-center">
-			<h1 className="text-2xl text-center p-3 bg-white rounded-lg w-fit ml-auto mr-auto font-bold mb-4">
-				Your Students
-			</h1>
+				<h1 className="text-2xl text-center p-3 bg-white rounded-lg w-fit ml-auto mr-auto font-bold mb-4">
+					Your Students
+				</h1>
 			</div>
 			<div className="w-full max-h-[40em] 2xl:max-h-[60em] overflow-y-scroll rounded-xl bg-gray-100 p-2 sm:p-5">
 				<GeneralLinkButton
-					path={`/teacher/mainview`}
+					path={`/${user?.role}/mainview`}
 					text="Back to mainview"
 				/>
 				<div className="flex flex-col md:flex-row items-center justify-between">
-				<div className="w-8/12 sm:w-[15em] mt-5 lg:ml-4 ml-0 mb-4">
-					<InputField
-						type="text"
-						name="search"
-						value={searchTerm}
-						onChange={e => setSearchTerm(e.target.value)}
-						placeholder="Search..."
-						label="Search by name"
-					/>
-				</div>
+					<div className="w-8/12 sm:w-[15em] mt-5 lg:ml-4 ml-0 mb-4">
+						<InputField
+							type="text"
+							name="search"
+							value={searchTerm}
+							onChange={e => setSearchTerm(e.target.value)}
+							placeholder="Search..."
+							label="Search by name"
+						/>
+					</div>
 
 					<Autocomplete
 						className="sm:w-[15em] w-10/12 mr-0 md:mr-4"
@@ -173,14 +173,14 @@ const TeacherStudentsView: React.FC = () => {
 						)}
 					/>
 				</div>
-					<p className="text-lg p-4 text-yellow-600 flex items-center">
-						<WarningIcon fontSize="large" />
-						<span className="ml-2">
-							{selectedCourse
-								? 'Searching only from students on the selected course.'
-								: 'Searching from all students.'}
-						</span>
-					</p>
+				<p className="text-lg p-4 text-yellow-600 flex items-center">
+					<WarningIcon fontSize="large" />
+					<span className="ml-2">
+						{selectedCourse
+							? 'Searching only from students on the selected course.'
+							: 'Searching from all students.'}
+					</span>
+				</p>
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 					{filteredStudents.map(student => (
 						<Link

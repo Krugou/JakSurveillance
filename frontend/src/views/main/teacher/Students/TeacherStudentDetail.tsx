@@ -5,7 +5,8 @@ import apiHooks from '../../../../hooks/ApiHooks';
 import ProfileInfo from '../../../../components/profiles/ProfileInfo';
 import StudentCourseGrid from '../../../../components/main/course/StudentCourseGrid';
 import {UserContext} from '../../../../contexts/UserContext';
-import GeneralLinkButton from "../../../../components/main/buttons/GeneralLinkButton";
+import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
+
 interface StudentInfo {
 	email: string;
 	first_name: string;
@@ -42,7 +43,7 @@ const TeacherStudentDetail: React.FC = () => {
 	const {id} = useParams<{id: string}>();
 	const [student, setStudent] = useState<StudentInfo | null>(null); // Define the student state variable as a Student object
 	const [courses, setCourses] = useState<Course[]>([]); // Define the courses state variable as an array of Course objects
-	const {update, setUpdate} = useContext(UserContext);
+	const {user, update, setUpdate} = useContext(UserContext);
 	const token = localStorage.getItem('userToken');
 	useEffect(() => {
 		const fetchData = async () => {
@@ -127,7 +128,7 @@ const TeacherStudentDetail: React.FC = () => {
 		<div className="w-full sm:w-fit">
 			<div className="bg-white rounded-lg p-5">
 				<GeneralLinkButton
-					path={`/teacher/students`}
+					path={`/${user?.role}/students`}
 					text="Back to students"
 				/>
 				<h2 className="text-2xl font-bold mt-5 mb-5">
@@ -139,13 +140,13 @@ const TeacherStudentDetail: React.FC = () => {
 					{student.first_name + ' ' + student.last_name}'s Courses
 				</h2>
 				<div className="bg-gray-100 pl-2 pt-1 pb-2 pr-2">
-				<StudentCourseGrid
-					courses={courses}
-					showEndedCourses={true}
-					updateView={updateView}
-					handleAddStudentToCourse={handleAddStudentToCourse}
-					handleRemoveStudentFromCourse={handleRemoveStudentFromCourse}
-				/>
+					<StudentCourseGrid
+						courses={courses}
+						showEndedCourses={true}
+						updateView={updateView}
+						handleAddStudentToCourse={handleAddStudentToCourse}
+						handleRemoveStudentFromCourse={handleRemoveStudentFromCourse}
+					/>
 				</div>
 			</div>
 		</div>

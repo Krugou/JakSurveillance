@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import CourseData from '../../../../components/main/course/CourseData';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
-import GeneralLinkButton from "../../../../components/main/buttons/GeneralLinkButton";
+import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
 
 interface Course {
 	courseid: number;
@@ -53,20 +53,20 @@ const TeacherCourses: React.FC = () => {
 			</h2>
 			<div className="2xl:w-3/4 bg-gray-100 mt-5 w-full p-5 m-auto rounded-lg">
 				<div className="flex flex-col gap-5 sm:gap-0 sm:flex-row justify-between">
-				<GeneralLinkButton
-					path={`/teacher/mainview`}
-					text="Back to mainview"
-				/>
-				<GeneralLinkButton
-					path={`/teacher/courses/create`}
-					text="Create another course"
-				/>
+					<GeneralLinkButton
+						path={`/${user?.role}/mainview`}
+						text="Back to mainview"
+					/>
+					<GeneralLinkButton
+						path={`/teacher/courses/create`}
+						text="Create another course"
+					/>
 				</div>
-			<div className="grid max-h-[30em] mt-5 2xl:max-h-[50em] overflow-y-scroll w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-4 m-auto">
-				{courses.length > 0 && (
-					<CourseData courseData={courses} updateView={updateView} />
-				)}
-			</div>
+				<div className="grid max-h-[30em] mt-5 2xl:max-h-[50em] overflow-y-scroll w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-4 m-auto">
+					{courses.length > 0 && (
+						<CourseData courseData={courses} updateView={updateView} />
+					)}
+				</div>
 			</div>
 		</div>
 	);
