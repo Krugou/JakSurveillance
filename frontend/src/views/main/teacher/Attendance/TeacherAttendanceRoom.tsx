@@ -48,6 +48,7 @@ const AttendanceRoom: React.FC = () => {
 		if (!user) {
 			// If not, display an error message and exit the function
 			toast.error('No user information available');
+			navigate('/');
 			return;
 		}
 
@@ -99,19 +100,6 @@ const AttendanceRoom: React.FC = () => {
 				// Set loading to false even if there was an error
 				setLoading(false);
 			});
-	}, [lectureid]); // This effect depends on the lectureid variable
-	useEffect(() => {
-		console.log('courseId:', courseId);
-	}, [courseId]);
-	/**
-	 * useEffect hook for managing socket connections.
-	 * This hook is run when the component mounts and whenever the lectureid changes.
-	 * It creates a new socket connection and sets up various event listeners for the socket.
-	 * It also emits a 'createAttendanceCollection' event with the lectureid.
-	 */
-	useEffect(() => {
-		// If the socket is not already connected
-
 		if (!socket) {
 			// Determine the socket URL and path based on the environment
 
@@ -196,7 +184,7 @@ const AttendanceRoom: React.FC = () => {
 				console.log('Disconnected from the server');
 			});
 		}
-	}, [lectureid]); // This effect depends on the lectureid variable
+	}, [lectureid, user]); // This effect depends on the lectureid variable
 
 	/**
 	 * useEffect hook for disconnecting the socket when the component unmounts.
