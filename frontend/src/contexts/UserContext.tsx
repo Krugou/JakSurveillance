@@ -18,7 +18,7 @@ interface User {
 /**
  * UserContextProps interface represents the structure of the UserContext.
  */
-interface UserContextProps {
+export interface UserContextProps {
 	user: User | null;
 	setUser: Dispatch<SetStateAction<User | null>>;
 	update: boolean;
@@ -27,7 +27,7 @@ interface UserContextProps {
 /**
  * UserProviderProps interface represents the structure of the UserProvider props.
  */
-interface UserProviderProps {
+export interface UserProviderProps {
 	children: React.ReactNode;
 }
 /**
