@@ -196,6 +196,10 @@ const setupSocketHandlers = (io: Server) => {
 						notYetPresentStudents[lectureid],
 					);
 			}, speedOfHashChange);
+			console.log(
+				'🚀 ~ file: socketHandlers.ts:199 ~ io.on ~ speedOfHashChange:',
+				speedOfHashChange,
+			);
 			if (lectureTimeoutId) {
 				clearTimeout(lectureTimeoutId);
 			}
@@ -241,6 +245,10 @@ const setupSocketHandlers = (io: Server) => {
 				unixtime: number,
 				lectureid: number,
 			) => {
+				console.log(
+					'🚀 ~ file: socketHandlers.ts:248 ~ io.on ~ studentId:',
+					studentId,
+				);
 				if (studentId === '') {
 					io
 						.to(socket.id)
@@ -249,6 +257,10 @@ const setupSocketHandlers = (io: Server) => {
 				// find the timestamp that matches the secureHash and unixtime
 				const timestamp = timestamps.find(
 					t => t.hash === secureHash && unixtime >= t.start && unixtime <= t.end,
+				);
+				console.log(
+					'🚀 ~ file: socketHandlers.ts:257 ~ io.on ~ timestamp:',
+					timestamp,
 				);
 				if (timestamp) {
 					// Emit the 'youhavebeensavedintolecture' event only to the client who sent the event
