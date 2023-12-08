@@ -15,7 +15,8 @@
 		"preview": "vite preview",
 		"all": " npm i & tsc --watch & vite build --outDir ../backend/jaksec --emptyOutDir --minify  --base / --watch",
 		"alldev": "npm i &  vite --port 8080",
-		"docs": "typedoc src"
+		"docs": "typedoc src",
+		"docs:watch": "nodemon --watch 'src/**/*.ts*' --exec npm run docs"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.11.1",
