@@ -335,5 +335,25 @@ router.put(
 		}
 	},
 );
+router.get(
+	'/lecture/open/:courseid',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	[param('courseid').isNumeric().withMessage('Lecture ID must be a number')],
+	validate,
+	async (req: Request, res: Response) => {
+		try {
+			const courseid = req.params.courseid;
+
+			const openLectures = await lectureModel.findOpenLecturesBycourseid(
+				Number(courseid),
+			);
+
+			res.status(200).json(openLectures);
+		} catch (error) {
+			console.error(error);
+			res.status(500).send('Server error');
+		}
+	},
+);
 
 export default router;

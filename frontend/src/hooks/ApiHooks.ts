@@ -709,7 +709,6 @@ const deleteLectureByLectureId = async (lectureid: string, token: string) => {
 	);
 };
 const closeLectureByLectureId = async (lectureid: string, token: string) => {
-	alert(lectureid);
 	const options = {
 		method: 'PUT',
 		headers: {
@@ -719,6 +718,22 @@ const closeLectureByLectureId = async (lectureid: string, token: string) => {
 
 	return await doFetch(
 		baseUrl + `courses/attendance/lecture/close/${lectureid}`,
+		options,
+	);
+};
+const getOpenLecturesByCourseid = async (
+	courseid: string | (() => string) | undefined,
+	token: string,
+) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+
+	return await doFetch(
+		baseUrl + `courses/attendance/lecture/open/${courseid}`,
 		options,
 	);
 };
@@ -773,5 +788,6 @@ const apiHooks = {
 	deleteTopicGroupAndTopicsByUserid,
 	deleteLectureByLectureId,
 	closeLectureByLectureId,
+	getOpenLecturesByCourseid,
 };
 export default apiHooks;

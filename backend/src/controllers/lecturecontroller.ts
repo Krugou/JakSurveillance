@@ -48,8 +48,6 @@ const lectureController = {
 			const courseid = courseRows[0].courseid;
 			// console.log('🚀 ~ file: lecturemodel.ts:80 ~ courseid:', courseid);
 
-			const openLectures = await lectureModel.findOpenLecturesBycourseid(courseid);
-
 			const result = await lectureModel.insertIntoLecture(
 				start_date,
 				end_date,
@@ -66,7 +64,7 @@ const lectureController = {
 
 			const lectureid = (result as {insertId: number}).insertId;
 			console.log('🚀 ~ file: lecturemodel.ts:88 ~ lectureid:', lectureid);
-			return {lectureid: lectureid, openLectures};
+			return {lectureid: lectureid};
 		} catch (error) {
 			console.error(error);
 		}

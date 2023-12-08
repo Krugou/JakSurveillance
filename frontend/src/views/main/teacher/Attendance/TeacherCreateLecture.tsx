@@ -36,7 +36,6 @@ const CreateLecture: React.FC = () => {
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [openLectures, setOpenLectures] = useState<OpenLecture[]>([]);
-	const [createdLectureid, setCreatedLectureid] = useState<string>('');
 	interface Reservation {
 		startDate: string;
 	}
@@ -126,33 +125,47 @@ const CreateLecture: React.FC = () => {
 	const handleOpenAttendance = async () => {
 		const state = 'open';
 
-		if (Array.isArray(date)) {
-			toast.error(`Cannot create attendance for multiple dates`);
-			return;
-		}
-
-		if (!selectedTimeOfDay) {
-			toast.error(`Time of day not selected`);
-			return;
-		}
-
-		if (!selectedTopic || !selectedCourse) {
-			toast.error(`Topic or course not selected`);
-			return;
-		}
-
-		const start_date = new Date(date);
-		start_date.setHours(selectedTimeOfDay === 'am' ? 10 : 14, 30, 0, 0);
-
-		const end_date = new Date(date);
-		end_date.setHours(selectedTimeOfDay === 'am' ? 13 : 17, 30, 0, 0);
-
 		try {
 			const token: string | null = localStorage.getItem('userToken');
 			if (!token) {
 				toast.error('No token available');
 				throw new Error('No token available');
 			}
+			const responseOpenLectures = await apihooks.getOpenLecturesByCourseid(
+				selectedCourse?.courseid,
+
+				token,
+			);
+			console.log(
+				'🚀 ~ file: TeacherCreateLecture.tsx:139 ~ handleOpenAttendance ~ responseOpenLectures:',
+				responseOpenLectures,
+			);
+
+			if (responseOpenLectures.length > 0) {
+				setOpenLectures(responseOpenLectures);
+				setDeleteModalOpen(true);
+				return;
+			}
+			if (Array.isArray(date)) {
+				toast.error(`Cannot create attendance for multiple dates`);
+				return;
+			}
+
+			if (!selectedTimeOfDay) {
+				toast.error(`Time of day not selected`);
+				return;
+			}
+
+			if (!selectedTopic || !selectedCourse) {
+				toast.error(`Topic or course not selected`);
+				return;
+			}
+
+			const start_date = new Date(date);
+			start_date.setHours(selectedTimeOfDay === 'am' ? 10 : 14, 30, 0, 0);
+
+			const end_date = new Date(date);
+			end_date.setHours(selectedTimeOfDay === 'am' ? 13 : 17, 30, 0, 0);
 
 			const response = await apihooks.CreateLecture(
 				selectedTopic,
@@ -174,12 +187,6 @@ const CreateLecture: React.FC = () => {
 			}
 
 			const lectureid = response.lectureInfo.lectureid;
-			if (response.lectureInfo.openLectures.length > 0) {
-				setCreatedLectureid(lectureid);
-				setOpenLectures(response.lectureInfo.openLectures);
-				setDeleteModalOpen(true);
-				return;
-			}
 			navigate(`/teacher/attendance/${lectureid}`);
 			toast.success(`Lecture created successfully with lectureid ${lectureid}`);
 			console.log(`Lecture created successfully with lectureid ${lectureid}`);
@@ -204,10 +211,6 @@ const CreateLecture: React.FC = () => {
 		}
 		try {
 			apihooks.deleteLectureByLectureId(lectureid, token);
-			navigate(`/teacher/attendance/${createdLectureid}`);
-			toast.success(
-				`Lecture created successfully with lectureid ${createdLectureid}`,
-			);
 		} catch (error) {
 			toast.error(`Error deleting lecture: ${error}`);
 			console.error(`Error deleting lecture: ${error}`);
@@ -224,10 +227,6 @@ const CreateLecture: React.FC = () => {
 		}
 		try {
 			await apihooks.closeLectureByLectureId(lectureid, token);
-			navigate(`/teacher/attendance/${createdLectureid}`);
-			toast.success(
-				`Lecture created successfully with lectureid ${createdLectureid}`,
-			);
 		} catch (error) {
 			toast.error(`Error closing lecture: ${error}`);
 			console.error(`Error closing lecture: ${error}`);
@@ -243,9 +242,10 @@ const CreateLecture: React.FC = () => {
 				<>
 					{openLectures.map(lecture => (
 						<DeleteLectureModal
-							key={lecture.id}
+							key={lecture.lectureid}
 							open={deleteModalOpen}
 							lecture={lecture}
+							onClose={() => setDeleteModalOpen(false)}
 							onCloseLecture={() => closeLecture(lecture.lectureid)}
 							onDelete={() => handleDelete(lecture.lectureid)}
 						/>
