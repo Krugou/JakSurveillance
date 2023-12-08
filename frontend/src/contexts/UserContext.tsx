@@ -26,7 +26,12 @@ interface UserContextProps {
 interface UserProviderProps {
 	children: React.ReactNode;
 }
-
+/**
+ * UserContext is a React context that provides and manages user data throughout the application.
+ * It includes the current user and functions to update the user and the update state.
+ *
+ * @type {React.Context<UserContextProps>}
+ */
 export const UserContext = createContext<UserContextProps>({
 	user: null, // Default value is an empty User object
 	setUser: () => {},
