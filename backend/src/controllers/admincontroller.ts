@@ -5,7 +5,7 @@ const pool = createPool('ADMIN');
 /**
  * AdminController interface represents the structure of the admin controller.
  */
-interface AdminController {
+export interface AdminController {
 	/**
 	 * Gets the server settings.
 	 *
