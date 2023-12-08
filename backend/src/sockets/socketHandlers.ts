@@ -113,6 +113,11 @@ const presentStudents: {[lectureid: string]: any[]} = {};
 const notYetPresentStudents: {[lectureid: string]: Student[]} = {};
 // The timeout id for the lecture
 let lectureTimeoutId: NodeJS.Timeout;
+/**
+ * Sets up the socket handlers for the server.
+ * 
+ * @param io - The server instance.
+ */
 const setupSocketHandlers = (io: Server) => {
 	io.on('connection', (socket: Socket) => {
 		console.log('user joined: ' + socket.id);
