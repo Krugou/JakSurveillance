@@ -246,6 +246,10 @@ const setupSocketHandlers = (io: Server) => {
 				lectureid: number,
 			) => {
 				console.log(
+					'🚀 ~ file: socketHandlers.ts:248 ~ io.on ~ unixtime:',
+					unixtime,
+				);
+				console.log(
 					'🚀 ~ file: socketHandlers.ts:248 ~ io.on ~ studentId:',
 					studentId,
 				);
