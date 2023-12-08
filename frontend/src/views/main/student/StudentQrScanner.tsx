@@ -89,13 +89,18 @@ const StudentQrScanner: React.FC = () => {
 	};
 	return (
 		<>
-			{user && user.studentnumber && (
-				<QrScanner
-					onDecode={onNewScanResult}
-					onError={handleError}
-					scanDelay={200}
-					hideCount={false}
-				/>
+			{loading ? (
+				<p>Loading...</p>
+			) : (
+				user &&
+				user.studentnumber && (
+					<QrScanner
+						onDecode={onNewScanResult}
+						onError={handleError}
+						scanDelay={200}
+						hideCount={false}
+					/>
+				)
 			)}
 		</>
 	);
