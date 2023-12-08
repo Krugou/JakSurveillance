@@ -3,7 +3,8 @@ import createPool from '../config/createPool.js';
 import serverSettingsModel from '../models/serversettingsmodel.js';
 import usermodel from '../models/usermodel.js';
 import checkUserRole from '../utils/checkRole.js';
-
+import {param} from 'express-validator';
+import validate from '../utils/validate.js';
 const pool = createPool('ADMIN');
 const router: Router = express.Router();
 
@@ -35,19 +36,26 @@ router.get('/getattendancethreshold', async (_req: Request, res: Response) => {
 	}
 });
 
-router.put('/accept-gdpr/:userid', async (req, res) => {
-	try {
-		const userId: number | undefined = req.user?.userid;
-		await usermodel.updateUserGDPRStatus(userId);
-		res.json({success: true});
-	} catch (error) {
-		console.error(error);
-		res.status(500).send('Internal Server Error');
-	}
-});
+router.put(
+	'/accept-gdpr/:userid',
+	param('userid').isNumeric().withMessage('User ID must be a number'),
+	validate,
+	async (req, res) => {
+		try {
+			const userId: number | undefined = req.user?.userid;
+			await usermodel.updateUserGDPRStatus(userId);
+			res.json({success: true});
+		} catch (error) {
+			console.error(error);
+			res.status(500).send('Internal Server Error');
+		}
+	},
+);
 router.get(
 	'/check-staff/:email',
 	checkUserRole(['admin', 'counselor', 'teacher']),
+	param('email').isEmail().withMessage('Email must be a valid email address'),
+	validate,
 	async (req: Request, res: Response) => {
 		const email = req.params.email;
 		try {
