@@ -8,6 +8,12 @@ import UserModel from '../models/usermodel.js';
 
 const pool = createPool('ADMIN');
 const TopicGroupController = {
+	/**
+	 * Fetches all topic groups and topics for a user.
+	 *
+	 * @param {string} email - The email of the user.
+	 * @returns {Promise<any>} The topic groups and topics of the user.
+	 */
 	async getAllUserTopicGroupsAndTopics(email: string) {
 		try {
 			const user = await UserModel.getAllUserInfo(email);
@@ -26,6 +32,14 @@ const TopicGroupController = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Updates a topic group.
+	 *
+	 * @param {string} topicGroup - The name of the topic group.
+	 * @param {string[]} topics - The topics in the topic group.
+	 * @param {string} email - The email of the user.
+	 * @returns {Promise<any>} The result of the update operation.
+	 */
 	async updateTopicGroup(topicGroup: string, topics: string[], email: string) {
 		try {
 			let instructorUserId;
@@ -92,7 +106,13 @@ const TopicGroupController = {
 			return Promise.reject(error);
 		}
 	},
-
+	/**
+	 * Updates the topics for a user course.
+	 *
+	 * @param {number} usercourseid - The ID of the user course.
+	 * @param {string[]} topics - The topics for the user course.
+	 * @returns {Promise<any>} The result of the update operation.
+	 */
 	async updateUserCourseTopics(usercourseid: number, topics: string[]) {
 		// Get a connection from the pool
 		const connection = await pool.promise().getConnection();
@@ -138,6 +158,13 @@ const TopicGroupController = {
 			connection.release();
 		}
 	},
+	/**
+	 * Checks if a topic group exists for a user.
+	 *
+	 * @param {string} topicGroup - The name of the topic group.
+	 * @param {string} email - The email of the user.
+	 * @returns {Promise<boolean>} Whether the topic group exists for the user.
+	 */
 	async checkIfTopicGroupExistsWithEmail(topicGroup: string, email: string) {
 		try {
 			let instructorUserId;
@@ -163,6 +190,13 @@ const TopicGroupController = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Deletes a topic group by its name.
+	 *
+	 * @param {string} topicGroup - The name of the topic group.
+	 * @param {number | undefined} userid - The ID of the user.
+	 * @returns {Promise<any>} The result of the delete operation.
+	 */
 	async deleteTopicGroupByName(topicGroup: string, userid: number | undefined) {
 		try {
 			const topicGroupData = await TopicGroupModel.deleteTopicGroupByName(
