@@ -103,7 +103,7 @@ const AdminCourseDetail: React.FC = () => {
 
 	return (
 		<>
-			<h2 className="font-bold text-lg">CourseId {id}</h2>
+			<h2 className="font-bold bg-white p-3 rounded-lg text-lg">CourseId {id}</h2>
 			<div className="m-4 bg-white rounded-lg shadow-lg mx-auto w-full sm:w-3/4 md:w-2/4 lg:w-2/5 2xl:w-1/5">
 				<>
 					{Array.isArray(courseData) &&
@@ -147,8 +147,8 @@ const AdminCourseDetail: React.FC = () => {
 										<p className="text-gray-700">Student group:</p>
 										<p>{course.studentgroup_name}</p>
 									</div>
-									<div className="flex justify-between mb-4">
-										<p className="text-gray-700">Topics:</p>
+									<div className="flex flex-col justify-between mb-4">
+										<h2 className="text-lg font-bold mt-4">Topics:</h2>
 										<p>{course.topic_names?.replace(/,/g, ', ')}</p>
 									</div>
 									<div className="w-full border-t-4 border-metropoliaMainOrange"></div>
