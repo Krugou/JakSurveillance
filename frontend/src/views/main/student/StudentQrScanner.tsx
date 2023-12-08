@@ -4,16 +4,22 @@ import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import io, {Socket} from 'socket.io-client';
 import {UserContext} from '../../../contexts/UserContext.tsx';
+
 const StudentQrScanner: React.FC = () => {
 	const navigate = useNavigate();
 	const {user} = useContext(UserContext);
 	const [scanned, setScanned] = useState(false);
 	const [socket, setSocket] = useState<Socket | null>(null);
+	const [loading, setLoading] = useState(false);
 	const onNewScanResult = useCallback(
 		(decodedText: string) => {
-			// Handle the scan result here
+			setLoading(true);
 			const [secureHash, lectureid] = decodedText.split('/');
-			// Create a new socket connection if one does not already exist
+			if (!secureHash || !lectureid) {
+				toast.error('Invalid QR code');
+				setLoading(false);
+				return;
+			}
 			if (!socket) {
 				const socketURL =
 					import.meta.env.MODE === 'development' ? 'http://localhost:3002' : '/';
@@ -29,7 +35,6 @@ const StudentQrScanner: React.FC = () => {
 					console.log('Socket connected');
 				});
 
-				// Emit the 'inputThatStudentHasArrivedToLecture' event to the server
 				if (!scanned) {
 					console.log('scanned');
 					console.log('secureHash', secureHash);
@@ -37,8 +42,11 @@ const StudentQrScanner: React.FC = () => {
 					let studentId;
 					if (user && user.studentnumber) {
 						studentId = user.studentnumber;
+					} else {
+						toast.error('No student number available');
+						setLoading(false);
+						return;
 					}
-					console.log('🚀 ~ file: StudentQrScanner.tsx:41 ~ studentId:', studentId);
 
 					const unixtime = Date.now();
 					newSocket.emit(
@@ -52,17 +60,17 @@ const StudentQrScanner: React.FC = () => {
 					setScanned(true);
 				}
 				newSocket.on('youhavebeensavedintolecture', studentId => {
-					toast.success(`You have been saved into ${lectureid} lecture`);
-					console.log('You have been saved into lecture', studentId);
-					toast.success('redirecting to mainview');
+					toast.success(
+						`You ${studentId} have been saved into ${lectureid} lecture`,
+					);
 					navigate('/student/mainview');
 				});
 				newSocket.on('inputThatStudentHasArrivedToLectureTooSlow', studentId2 => {
-					toast.error('You were too slow, try again');
+					toast.error('You were too slow, try again' + studentId2);
 					setScanned(false);
-					console.log('inputThatStudentHasArrivedToLectureTooSlow', studentId2);
 				});
 			}
+			setLoading(false);
 		},
 		[scanned],
 	);
