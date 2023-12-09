@@ -50,7 +50,9 @@ const MainView: React.FC = () => {
 				</div>
 			) : (
 				<>
-					<div className="flex flex-col md:flex-row flex-wrap p-5 justify-center items-center gap-4">
+					<div className={`${
+						courses.length === 0 ? 'flex flex-col md:flex-row flex-wrap' : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+					} p-5 justify-center items-center gap-4`}>
 						{courses.length === 0 && (
 							<div>
 								<div className="animate-bounce p-2 rounded-md bg-metropoliaMainOrange gap-1 flex md:flex-row flex-col items-center">
@@ -78,7 +80,7 @@ const MainView: React.FC = () => {
 								<Card
 									path="/teacher/students"
 									title="Manage Students"
-									description="Manage your students details"
+									description="Manage your students' details"
 								/>
 
 								<Card
@@ -94,7 +96,7 @@ const MainView: React.FC = () => {
 								/>
 								<Card
 									path="/teacher/courses/stats"
-									title="Show Attendances stats"
+									title="Show Attendance stats"
 									description="Open attendance stats page"
 								/>
 							</>

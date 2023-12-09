@@ -162,7 +162,7 @@ const StudentCourseAttendance: React.FC = () => {
 						placeholder="Search by date"
 						value={searchTerm}
 						onChange={handleSearchChange}
-						className="w-[20em] mt-10 p-4 m-2 border border-black rounded"
+						className="w-10/12 sm:w-[20em] mt-10 p-4 m-2 border border-black rounded"
 					/>
 					<FormControl className="md:w-1/4 mt-2 md:mt-0">
 						<label>Sort Topics:</label>
