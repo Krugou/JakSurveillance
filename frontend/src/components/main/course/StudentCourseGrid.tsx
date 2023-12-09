@@ -1,19 +1,22 @@
+import Delete from '@mui/icons-material/Delete';
+import ReportIcon from '@mui/icons-material/Report';
+import {Modal} from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
 import React, {useContext, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import ReportIcon from '@mui/icons-material/Report';
-import Tooltip from '@mui/material/Tooltip';
-import {UserContext} from '../../../contexts/UserContext';
-import EditTopicsModal from '../modals/EditTopicsModal';
 import {toast} from 'react-toastify';
+import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/ApiHooks';
-import {Modal} from '@mui/material';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import {useCourses} from '../../../hooks/courseHooks';
-import Delete from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
 import DeleteModal from '../modals/DeleteModal';
-
+import EditTopicsModal from '../modals/EditTopicsModal';
+/**
+ * Course interface represents the structure of a course.
+ * It includes properties for the course's name, code, start date, end date, student group name, topic names, selected topics, creation date, instructor's name, and user course id.
+ */
 interface Course {
 	courseid: number;
 	course_name: string;
@@ -26,7 +29,10 @@ interface Course {
 	instructor_name: string;
 	usercourseid: number;
 }
-
+/**
+ * SelectedCourse interface represents the structure of a selected course.
+ * It includes properties for the course's name, code, id, start date, end date, student group name, topic names, selected topics, and creation date.
+ */
 interface SelectedCourse {
 	name: string;
 	code: string;
@@ -38,7 +44,10 @@ interface SelectedCourse {
 	selected_topics: string;
 	created_at: string;
 }
-
+/**
+ * StudentCourseGridProps interface represents the structure of the StudentCourseGrid props.
+ * It includes properties for the courses, show ended courses state, update view function, add student to course function, and remove student from course function.
+ */
 interface StudentCourseGridProps {
 	courses: Course[];
 	showEndedCourses: boolean;
@@ -46,7 +55,16 @@ interface StudentCourseGridProps {
 	handleAddStudentToCourse?: (courseid: number | undefined) => void;
 	handleRemoveStudentFromCourse?: (usercourseid: number) => void;
 }
-
+/**
+ * StudentCourseGrid component.
+ * This component is responsible for displaying a grid of courses for a student.
+ * It uses the courses, showEndedCourses, updateView, handleAddStudentToCourse, and handleRemoveStudentFromCourse props to determine the current state of the grid and to handle user interactions.
+ * The component uses the useState hook from React to manage the state of the course name, course topics, modified topics, initial course topics, user course id, open state, new topic, selected course, course to delete, and delete modal open state.
+ * The component also uses the useContext hook from React to access the user context, and the useNavigate hook from React Router to navigate between pages.
+ *
+ * @param {StudentCourseGridProps} props The props that define the state and behavior of the grid.
+ * @returns {JSX.Element} The rendered StudentCourseGrid component.
+ */
 const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 	courses,
 	showEndedCourses,
