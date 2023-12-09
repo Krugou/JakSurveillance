@@ -7,7 +7,11 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+/**
+ * EditTopicsModalProps interface represents the structure of the EditTopicsModal props.
+ * It includes properties for the modal's open state, course name, new topic, course topics, modified topics, 
+ * functions to handle topic change, delete topic, reset data, save changes, and user's role and course id.
+ */
 interface EditTopicsModalProps {
 	open: boolean;
 	setOpen: (open: boolean) => void;
@@ -24,7 +28,17 @@ interface EditTopicsModalProps {
 	counselor?: boolean;
 	usercourseid?: number;
 }
-
+/**
+ * EditTopicsModal component.
+ * This component is responsible for displaying a modal that allows users to edit the topics of a course.
+ * It uses the props to determine the current state of the modal and the course, and to handle user interactions.
+ * The modal contains a form that allows users to add new topics, check or uncheck existing topics, and delete topics.
+ * The form also includes a reset button to reset the form to its initial state, and a save button to save the changes.
+ * The visibility and functionality of some elements in the form depend on the user's role.
+ *
+ * @param {EditTopicsModalProps} props The props that define the state and behavior of the modal.
+ * @returns {JSX.Element} The rendered EditTopicsModal component.
+ */
 const EditTopicsModal: React.FC<EditTopicsModalProps> = ({
 	open,
 	setOpen,

@@ -1,5 +1,14 @@
 import React from 'react';
 import '../css/logo.css';
+/**
+ * Logo component.
+ * This component is responsible for rendering the logo of the application.
+ * It includes a div with class "logo" that contains the logo design, and a paragraph that contains the name of the application.
+ * The logo design is made up of nested divs with various classes to apply the necessary CSS styles.
+ * The name of the application is styled with various Tailwind CSS classes.
+ *
+ * @returns {JSX.Element} The rendered Logo component.
+ */
 const Logo = () => {
 	return (
 		<>

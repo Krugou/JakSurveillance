@@ -10,6 +10,14 @@ import {toast} from 'react-toastify';
 
 import React, {useEffect, useState} from 'react';
 import apiHooks from '../../../hooks/ApiHooks';
+/**
+ * AdminSettings component.
+ * This component is responsible for rendering and managing server settings for an admin.
+ * It fetches the server settings from the API, and allows the admin to update them.
+ * If the data is loading, it renders a loading spinner.
+ *
+ * @returns {JSX.Element} The rendered AdminSettings component.
+ */
 const AdminSettings = () => {
 	const [settings, setSettings] = useState(null);
 	const [speedofhash, setSpeedofhash] = useState(0);

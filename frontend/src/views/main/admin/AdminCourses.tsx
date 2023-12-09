@@ -5,7 +5,20 @@ import {useNavigate} from 'react-router-dom';
 import InputField from '../../../components/main/course/createcourse/coursedetails/InputField';
 import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/ApiHooks';
-
+/**
+ * Course interface.
+ * This interface defines the structure of a course object.
+ *
+ * @interface
+ * @property {string} courseid - The ID of the course.
+ * @property {string} name - The name of the course.
+ * @property {string} code - The code of the course.
+ * @property {string} start_date - The start date of the course.
+ * @property {string} end_date - The end date of the course.
+ * @property {string[]} student_group - The student groups of the course.
+ * @property {string[]} topics - The topics of the course.
+ * @property {string[]} instructors - The instructors of the course.
+ */
 interface Course {
 	courseid: string;
 	name: string;
@@ -16,6 +29,15 @@ interface Course {
 	topics: string[];
 	instructors: string[];
 }
+/**
+ * AdminCourses component.
+ * This component is responsible for rendering a list of courses for an admin.
+ * It fetches the courses from the API, and allows the admin to sort and filter them.
+ * If the data is loading, it renders a loading spinner.
+ * If no courses are available, it renders an error message.
+ *
+ * @returns {JSX.Element} The rendered AdminCourses component.
+ */
 const AdminCourses: React.FC = () => {
 	const navigate = useNavigate();
 

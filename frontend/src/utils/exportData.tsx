@@ -1,10 +1,16 @@
 import {jsPDF} from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import {toast} from 'react-toastify';
 import * as XLSX from 'xlsx';
 import {utils, writeFile} from 'xlsx';
-import {toast} from 'react-toastify';
 import metropolia_logo from '../assets/images/metropolia_s_oranssi_en.png';
-// Function to create tables for PDF or Excel
+/**
+ * Function to create tables for PDF or Excel
+ * @param {string} mode - The mode of the table, either 'pdf' or 'excel'.
+ * @param {Array} filteredAttendanceData - The attendance data to be included in the table.
+ * @param {Object} student - The student for whom the table is being created.
+ * @returns {Object} An object containing the table headers and data.
+ */
 const createTables = (mode?, filteredAttendanceData?, student?) => {
 	let tableData;
 	const tableHeaders = [
@@ -52,7 +58,12 @@ const createTables = (mode?, filteredAttendanceData?, student?) => {
 
 	return {tableHeaders, tableData};
 };
-
+/**
+ * Function to export the attendance data to a PDF file.
+ * @param {Array} filteredAttendanceData - The attendance data to be included in the PDF.
+ * @param {Object} student - The student for whom the PDF is being created.
+ * @param {string} sortOption - The option by which the data should be sorted.
+ */
 export const exportToPDF = (filteredAttendanceData, student?, sortOption?) => {
 	const doc = new jsPDF();
 	const imgWidth = 90;
@@ -125,7 +136,12 @@ export const exportToPDF = (filteredAttendanceData, student?, sortOption?) => {
 		);
 	}
 };
-// Function to export the attendance data to Excel
+/**
+ * Function to export the attendance data to an Excel file.
+ * @param {Array} filteredAttendanceData - The attendance data to be included in the Excel file.
+ * @param {Object} student - The student for whom the Excel file is being created.
+ * @param {string} sortOption - The option by which the data should be sorted.
+ */
 export const exportToExcel = (
 	filteredAttendanceData,
 	student?,
@@ -171,6 +187,11 @@ export const exportToExcel = (
 	}
 	// Display a toast message
 };
+/**
+ * Function to export the attendance statistics to a PDF file.
+ * @param {Array} allAttendanceCounts - The attendance counts for all students.
+ * @param {Object} selectedCourse - The course for which the statistics are being exported.
+ */
 export const exportStatsTableToPdf = (allAttendanceCounts, selectedCourse) => {
 	const doc = new jsPDF();
 	const topics = allAttendanceCounts.map(item => item.topicname);
@@ -237,6 +258,11 @@ export const exportStatsTableToPdf = (allAttendanceCounts, selectedCourse) => {
 		`${selectedCourse?.name}_${selectedCourse?.code}_attendancestatistics.pdf`,
 	);
 };
+/**
+ * Function to export the attendance statistics to an Excel file.
+ * @param {Array} allAttendanceCounts - The attendance counts for all students.
+ * @param {Object} selectedCourse - The course for which the statistics are being exported.
+ */
 export const exportStatsTableToExcel = (
 	allAttendanceCounts,
 	selectedCourse,

@@ -1,7 +1,14 @@
 import React from 'react';
 import Card from '../../../components/main/cards/Card';
 import MainViewTitle from '../../../components/main/titles/MainViewTitle';
-
+/**
+ * AdminMainView component.
+ * This component is responsible for rendering the main view for an admin.
+ * It displays a grid of cards, each of which represents a different admin task.
+ * Each card includes a path to the task, a title, and a description.
+ *
+ * @returns {JSX.Element} The rendered AdminMainView component.
+ */
 const AdminMainView: React.FC = () => {
 	return (
 		<>

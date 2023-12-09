@@ -9,7 +9,10 @@ import AddTeachers from '../../../../components/main/course/createcourse/AddTeac
 import CourseDetails from '../../../../components/main/course/createcourse/CourseDetails';
 import EditTopicsModal from '../../../../components/main/modals/EditTopicsModal';
 import apiHooks from '../../../../hooks/ApiHooks';
-
+/**
+ * CourseDetail interface.
+ * This interface defines the shape of a course detail object.
+ */
 interface CourseDetail {
 	courseid: string;
 	name: string;
@@ -22,7 +25,14 @@ interface CourseDetail {
 	user_count: number;
 	instructor_name: string;
 }
-
+/**
+ * AdminCourseModify component.
+ * This component is responsible for rendering the course modification view for an admin.
+ * It includes form fields for modifying various aspects of a course, including its name, code, student group, start and end dates, topics, and instructors.
+ * It also includes logic for handling changes to these fields and submitting the modified course data to the server.
+ *
+ * @returns {JSX.Element} The rendered AdminCourseModify component.
+ */
 const AdminCourseModify: React.FC = () => {
 	const [courseData, setCourseData] = useState<CourseDetail | null>(null);
 	const [courseName, setCourseName] = useState(

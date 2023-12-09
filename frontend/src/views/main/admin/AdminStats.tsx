@@ -13,6 +13,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import {Line} from 'react-chartjs-2';
 import apiHooks from '../../../hooks/ApiHooks';
+// Register the components needed for the chart
 ChartJS.register(
 	CategoryScale,
 	LinearScale,
@@ -22,6 +23,14 @@ ChartJS.register(
 	Tooltip,
 	Legend,
 );
+/**
+ * AdminStats component.
+ * This component is responsible for rendering a chart of user counts by role for an admin.
+ * It fetches the user data from the API, and allows the admin to toggle the display of the chart.
+ * If the data is loading, it renders a loading spinner.
+ *
+ * @returns {JSX.Element} The rendered AdminStats component.
+ */
 const AdminStats = () => {
 	const [chartData, setChartData] = useState({
 		labels: [],

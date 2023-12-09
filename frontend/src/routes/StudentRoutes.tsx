@@ -6,7 +6,15 @@ import StudentMainView from '../views/main/student/StudentMainView.tsx';
 import StudentProfile from '../views/main/student/StudentProfile.tsx';
 import StudentQrScanner from '../views/main/student/StudentQrScanner.tsx';
 import StudentCourseAttendance from '../views/main/student/StudentCourseAttendance.tsx';
-
+/**
+ * StudentRoutes component.
+ * This component is responsible for defining the routes for the student section of the application.
+ * It includes routes for the main view, courses, profile, attendance, QR scanner, and course attendance.
+ * Each route is associated with a specific component that will be rendered when the route is accessed.
+ * The '*' route is a catch-all route that will render the StudentMainView component if no other routes match.
+ *
+ * @returns {JSX.Element} The rendered StudentRoutes component.
+ */
 const StudentRoutes = () => {
 	return (
 		<Routes>

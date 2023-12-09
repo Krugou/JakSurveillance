@@ -5,7 +5,15 @@ import {useNavigate} from 'react-router-dom';
 import InputField from '../../../components/main/course/createcourse/coursedetails/InputField';
 import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/ApiHooks';
-
+/**
+ * AdminUsers component.
+ * This component is responsible for rendering a list of users for an admin.
+ * It fetches the user data from the UserContext and the API, and allows the admin to sort and filter the users.
+ * If no user data is available, it renders an error message.
+ * If the data is loading, it renders a loading spinner.
+ *
+ * @returns {JSX.Element} The rendered AdminUsers component.
+ */
 const AdminUsers: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const [users, setUsers] = useState<any[]>([]);

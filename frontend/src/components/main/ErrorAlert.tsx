@@ -1,10 +1,24 @@
 import React from 'react';
-
+/**
+ * ErrorAlertProps interface represents the structure of the ErrorAlert props.
+ * It includes properties for the error alert message and a function to close the alert.
+ */
 interface ErrorAlertProps {
   alert: string | null;
   onClose: () => void;
 }
-
+/**
+ * ErrorAlert component.
+ * This component is responsible for displaying an error alert message.
+ * It uses the alert and onClose props to determine the message and what happens when the alert is closed.
+ * The alert is displayed in a modal that is centered on the screen.
+ * The modal contains a title, the error message, and a close button.
+ * The visibility of the modal is controlled by the alert prop.
+ * If the alert prop is truthy, the modal is displayed; otherwise, it is hidden.
+ *
+ * @param {ErrorAlertProps} props The props that define the error alert message and the close function.
+ * @returns {JSX.Element} The rendered ErrorAlert component.
+ */
 const ErrorAlert: React.FC<ErrorAlertProps> = ({ alert, onClose }) => {
   return (
     <div

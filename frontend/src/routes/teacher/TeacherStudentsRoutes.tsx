@@ -6,7 +6,15 @@ import TeacherStudentDetail from '../../views/main/teacher/Students/TeacherStude
 import TeacherStudentModify from '../../views/main/teacher/Students/TeacherStudentModify.tsx';
 import TeacherStudentsView from '../../views/main/teacher/Students/TeacherStudentsView.tsx';
 import TeacherMainView from '../../views/main/teacher/TeacherMainView.tsx';
-
+/**
+ * TeacherStudentsRoutes component.
+ * This component is responsible for defining the routes for the teacher's students section of the application.
+ * It includes routes for the students view, student detail, student modify, student attendances, and the main view.
+ * Each route is associated with a specific component that will be rendered when the route is accessed.
+ * The '*' route is a catch-all route that will render the TeacherMainView component if no other routes match.
+ *
+ * @returns {JSX.Element} The rendered TeacherStudentsRoutes component.
+ */
 const TeacherStudentsRoutes: React.FC = () => {
 	return (
 		<Routes>

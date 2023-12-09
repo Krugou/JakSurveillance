@@ -1,13 +1,25 @@
 // DeleteModal.tsx
 import React from 'react';
-
+/**
+ * DeleteModalProps interface represents the structure of the DeleteModal props.
+ * It includes properties for the modal's open state, delete function, close function, and a boolean to check if the user is a student.
+ */
 interface DeleteModalProps {
 	isOpen: boolean;
 	onDelete: () => void;
 	onClose: () => void;
 	student?: boolean;
 }
-
+/**
+ * DeleteModal component.
+ * This component is responsible for displaying a modal that allows users to confirm a delete action.
+ * It uses the isOpen, onDelete, onClose, and student props to determine the current state of the modal and to handle user interactions.
+ * The modal contains a confirmation message and two buttons: one to cancel the delete action and close the modal, and one to confirm the delete action.
+ * The confirmation message and the color of the delete button depend on whether the user is a student.
+ *
+ * @param {DeleteModalProps} props The props that define the state and behavior of the modal.
+ * @returns {JSX.Element | null} The rendered DeleteModal component, or null if the modal is not open.
+ */
 const DeleteModal: React.FC<DeleteModalProps> = ({
 	isOpen,
 	onDelete,

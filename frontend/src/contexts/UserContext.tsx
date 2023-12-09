@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, {Dispatch, SetStateAction, createContext, useState} from 'react';
 /**
  * User interface represents the structure of a user object.
+ * It includes properties for the user's role, username, first name, last name, email, group name, creation date, user ID, student number, and GDPR consent.
  */
 export interface User {
 	role: string;
@@ -17,6 +18,7 @@ export interface User {
 }
 /**
  * UserContextProps interface represents the structure of the UserContext.
+ * It includes properties for the current user, a function to update the user, the update state, and a function to update the update state.
  */
 export interface UserContextProps {
 	user: User | null;
@@ -26,6 +28,7 @@ export interface UserContextProps {
 }
 /**
  * UserProviderProps interface represents the structure of the UserProvider props.
+ * It includes a property for the children of the UserProvider.
  */
 export interface UserProviderProps {
 	children: React.ReactNode;
@@ -44,6 +47,7 @@ export const UserContext = createContext<UserContextProps>({
 });
 /**
  * UserProvider is a React component that provides the UserContext to its children.
+ * It uses the useState hook to manage the user and update state.
  *
  * @param {UserProviderProps} props The props that define the children of the UserProvider.
  * @returns {React.FC<UserProviderProps>} A React functional component.

@@ -7,7 +7,10 @@ import {toast} from 'react-toastify';
 import DeleteModal from '../../../../components/main/modals/DeleteModal';
 import apiHooks from '../../../../hooks/ApiHooks';
 
-// Define your course detail structure here
+/**
+ * CourseDetail interface.
+ * This interface defines the shape of a course detail object.
+ */
 interface CourseDetail {
 	courseid: number;
 	name: string;
@@ -21,6 +24,10 @@ interface CourseDetail {
 	user_count: number;
 	instructor_name: string;
 }
+/**
+ * Course interface.
+ * This interface defines the shape of a course object.
+ */
 interface Course {
 	courseid: number;
 	name: string;
@@ -36,6 +43,14 @@ interface Course {
 
 	// Include other properties of course here
 }
+/**
+ * AdminCourseDetail component.
+ * This component is responsible for rendering the course detail view for an admin.
+ * It includes information about the course such as its name, description, start and end dates, code, student group, topics, instructors, and creation date.
+ * It also includes buttons for editing and deleting the course, and a modal for confirming the deletion.
+ *
+ * @returns {JSX.Element} The rendered AdminCourseDetail component.
+ */
 const AdminCourseDetail: React.FC = () => {
 	const {id} = useParams<{id: string}>();
 	const [courseData, setCourseData] = useState<CourseDetail | null>(null);
@@ -163,13 +178,13 @@ const AdminCourseDetail: React.FC = () => {
 									</div>
 									<div className="w-full border-t-4 mb-4 mt-4 border-metropoliaMainOrange"></div>
 									<div className="mt-4">
-									<h2 className="text-gray-700 text-lg font-bold">Instructors</h2>
-									<ul>
-										{course.instructor_name.split(',').map((instructor, index) => (
-											<li key={index}>{instructor.trim()}</li>
-										))}
-									</ul>
-								</div>
+										<h2 className="text-gray-700 text-lg font-bold">Instructors</h2>
+										<ul>
+											{course.instructor_name.split(',').map((instructor, index) => (
+												<li key={index}>{instructor.trim()}</li>
+											))}
+										</ul>
+									</div>
 								</div>
 							</div>
 						))}

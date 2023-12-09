@@ -6,12 +6,19 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 
+/**
+ * lecture interface represents the structure of a lecture.
+ * It includes properties for the teacher's name, start date, and time of day.
+ */
 interface lecture {
 	teacher: string;
 	start_date: string;
 	timeofday: string;
 }
-
+/**
+ * DeleteLectureModalProps interface represents the structure of the DeleteLectureModal props.
+ * It includes properties for the modal's open state, close function, delete function, close lecture function, and the lecture to be deleted.
+ */
 interface DeleteLectureModalProps {
 	open: boolean;
 	onClose?: () => void;
@@ -19,7 +26,15 @@ interface DeleteLectureModalProps {
 	onCloseLecture?: () => void;
 	lecture?: lecture;
 }
-
+/**
+ * DeleteLectureModal component.
+ * This component is responsible for displaying a modal that allows users to delete a lecture.
+ * It uses the open, onClose, onDelete, onCloseLecture, and lecture props to determine the current state of the modal and to handle user interactions.
+ * The modal contains a title, a description of the lecture to be deleted, and two buttons: one to delete the lecture and one to close the lecture.
+ *
+ * @param {DeleteLectureModalProps} props The props that define the state and behavior of the modal.
+ * @returns {JSX.Element} The rendered DeleteLectureModal component.
+ */
 const DeleteLectureModal: React.FC<DeleteLectureModalProps> = ({
 	open,
 	onClose,

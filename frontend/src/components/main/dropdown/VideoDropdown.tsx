@@ -1,10 +1,23 @@
 import React, { useState } from 'react';
-
+/**
+ * VideoDropdownProps interface represents the structure of the VideoDropdown props.
+ * It includes properties for the title of the dropdown and the source of the video.
+ */
 interface VideoDropdownProps {
     title: string;
     src: string;
 }
-
+/**
+ * VideoDropdown component.
+ * This component is responsible for displaying a dropdown that contains a video.
+ * It uses the title and src props to determine the title of the dropdown and the source of the video.
+ * The component uses the useState hook from React to manage the open state of the dropdown.
+ * The dropdown can be toggled by clicking on the button that displays the title.
+ * When the dropdown is open, it displays a video player that plays the video from the provided source.
+ *
+ * @param {VideoDropdownProps} props The props that define the title and source of the video.
+ * @returns {JSX.Element} The rendered VideoDropdown component.
+ */
 const VideoDropdown: React.FC<VideoDropdownProps> = ({ title, src }) => {
     const [isOpen, setIsOpen] = useState(false);
 

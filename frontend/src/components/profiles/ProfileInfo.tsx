@@ -2,7 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import apiHooks from '../../hooks/ApiHooks'; // Replace with the correct path to your ApiHooks file
-
+/**
+ * ProfileInfoPros interface represents the structure of the ProfileInfo props.
+ * It includes a property for the user's information.
+ */
 interface ProfileInfoPros {
 	user: {
 		username: string;
@@ -14,12 +17,25 @@ interface ProfileInfoPros {
 	};
 }
 
-// Define Role interface
+/**
+ * Role interface represents the structure of a role object.
+ * It includes properties for the role's ID and name.
+ */
 interface Role {
 	roleid: string;
 	name: string;
 }
-
+/**
+ * ProfileInfo component.
+ * This component is responsible for displaying the user's profile information and allowing the user to change their role.
+ * It uses the useState and useEffect hooks from React to manage state and side effects.
+ * The user's information is passed in as a prop.
+ * The component fetches the roles from the API when it is mounted and stores them in a state variable.
+ * The user can open a modal to change their role, and the component will call the API to make the change.
+ *
+ * @param {ProfileInfoPros} props The props that define the user's information.
+ * @returns {JSX.Element} The rendered ProfileInfo component.
+ */
 const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 	// Define navigate
 	const Navigate = useNavigate();
