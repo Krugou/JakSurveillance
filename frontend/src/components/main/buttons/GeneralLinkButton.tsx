@@ -1,11 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
+/**
+ * Props for the GeneralLinkButton component.
+ */
 interface GeneralLinkButtonProps {
 	path: string;
 	text: string;
 }
-
+/**
+ * A button component that navigates to a specified path when clicked.
+ */
 const GeneralLinkButton: React.FC<GeneralLinkButtonProps> = ({path, text}) => {
 	const navigate = useNavigate();
 	return (

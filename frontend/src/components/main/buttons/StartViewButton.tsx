@@ -1,6 +1,8 @@
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
-
+/**
+ * A button component that navigates to the login page when clicked.
+ */
 const StartViewButton: React.FC = () => {
 	const navigate = useNavigate();
 

@@ -1,11 +1,17 @@
 import React from 'react';
+/**
+ * Props for the StepButton component.
+ */
 interface StepButtonProps {
 	text: string;
 	type: 'button' | 'submit';
 	onClick: () => void;
 	marginTop?: string;
 }
-
+/**
+ * A button component that triggers a specified onClick function when clicked.
+ * The button's text, type, and top margin can be customized.
+ */
 const StepButton: React.FC<StepButtonProps> = ({
 	text,
 	type,

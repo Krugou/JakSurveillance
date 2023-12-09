@@ -1,5 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import apihooks from '../../../hooks/ApiHooks';
+/**
+ * Represents a user in the system.
+ */
 interface User {
 	userid: string;
 	username: string | null;
@@ -14,38 +17,29 @@ interface User {
 	GDPR: number;
 	role: string;
 }
+/**
+ * Represents the props for the `EditUserView` component.
+ */
 interface EditUserViewProps {
 	user: User;
 	onSave: (user: User) => void;
 }
+/**
+ * Represents a student group in the system.
+ */
 interface StudentGroup {
 	studentgroupid: number;
 	group_name: string;
 	// include other properties if they exist
 }
+/**
+ * Represents a role in the system.
+ */
 interface Role {
 	roleid: number;
 	name: string;
 	// include other properties if they exist
 }
-
-/**
- * @typedef {Object} EditUserViewProps
- * @property {Object} user - The user object.
- * @property {Function} onSave - The function to call when the save button is clicked.
- */
-
-/**
- * @typedef {Object} StudentGroup
- * @property {number} studentgroupid - The ID of the student group.
- * @property {string} group_name - The name of the student group.
- */
-
-/**
- * @typedef {Object} Role
- * @property {number} roleid - The ID of the role.
- * @property {string} name - The name of the role.
- */
 /**
  * The EditUserView component allows the user to edit a user's details.
  * @param {EditUserViewProps} props - The props.
@@ -162,10 +156,14 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 		getStudentGroups();
 	}, []);
 
-	// render the component
+	/**
+	 * Renders the component.
+	 */
 	return (
 		<div className="flex w-fit flex-col justify-center items-center">
-			<h1 className="text-2xl p-3 bg-white rounded-lg font-bold mb-4">Edit User {editedUser.userid}</h1>
+			<h1 className="text-2xl p-3 bg-white rounded-lg font-bold mb-4">
+				Edit User {editedUser.userid}
+			</h1>
 			<div className="w-full bg-white p-5 rounded-lg">
 				{editedUser.created_at && (
 					<div>

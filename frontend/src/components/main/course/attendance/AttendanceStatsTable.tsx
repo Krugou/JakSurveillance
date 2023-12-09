@@ -1,7 +1,3 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {UserContext} from '../../../../contexts/UserContext';
-import apiHooks from '../../../../hooks/ApiHooks';
 import {
 	Table,
 	TableBody,
@@ -11,44 +7,67 @@ import {
 	TableRow,
 	Tooltip,
 } from '@mui/material';
+import React, {useContext, useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {UserContext} from '../../../../contexts/UserContext';
+import apiHooks from '../../../../hooks/ApiHooks';
 
 import InfoIcon from '@mui/icons-material/Info';
+/**
+ * Represents the attendance count for a specific topic.
+ */
 interface AttendanceCount {
-	name: string;
-	count: number;
-	topicname: string;
-	userid: number;
-	percentage: number;
-	selectedTopics: string | string[]; // Add this line
+	name: string; // The name of the student
+	count: number; // The attendance count
+	topicname: string; // The name of the topic
+	userid: number; // The ID of the user
+	percentage: number; // The attendance percentage
+	selectedTopics: string | string[]; // The selected topics
 }
+
+/**
+ * Represents the attendance statistics for a specific topic.
+ */
 interface AttendanceStats {
-	topicname: string;
-	attendanceCounts: AttendanceCount[];
+	topicname: string; // The name of the topic
+	attendanceCounts: AttendanceCount[]; // The attendance counts for the topic
 }
 
+/**
+ * Represents the attendance data for a specific student.
+ */
 interface AttendanceStudentData {
-	attendance: {[key: string]: number};
-	topics: string | string[];
+	attendance: {[key: string]: number}; // The attendance counts, keyed by topic name
+	topics: string | string[]; // The topics
 }
 
+/**
+ * Props for the AttendanceStatsTable component.
+ */
 interface AttendanceStatsTableProps {
-	allAttendanceCounts?: AttendanceStats[];
-	threshold: number | null;
-	attendanceStudentData?: AttendanceStudentData;
-	usercourseid?: number;
+	allAttendanceCounts?: AttendanceStats[]; // The attendance statistics for all topics
+	threshold: number | null; // The attendance threshold
+	attendanceStudentData?: AttendanceStudentData; // The attendance data for a specific student
+	usercourseid?: number; // The ID of the user course
 }
 
+/**
+ * Represents a fetched data item.
+ */
 interface FetchedDataItem {
-	last_name: string;
-	first_name: string;
-	topics: string[];
+	last_name: string; // The last name of the student
+	first_name: string; // The first name of the student
+	topics: string[]; // The topics
 }
-
+/**
+ * A table component that displays attendance statistics for a course.
+ * It can be used in both the teacher view (to display statistics for all students) and the student view (to display statistics for a single student).
+ */
 const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 	allAttendanceCounts,
 	threshold,
-	attendanceStudentData, // from  student view
-	usercourseid, // from student view url param
+	attendanceStudentData,
+	usercourseid,
 }) => {
 	// State to keep track of the fetched data
 	const [fetchedData, setFetchedData] = useState<FetchedDataItem | null>(null);
@@ -58,6 +77,9 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 		: fetchedData?.topics || [];
 	// Fetch the student data for the course if the usercourseid is available (i.e. if the component is used in the student view)
 	useEffect(() => {
+		/**
+		 * Fetches the student data for the course.
+		 */
 		const fetchData = async () => {
 			if (usercourseid) {
 				try {

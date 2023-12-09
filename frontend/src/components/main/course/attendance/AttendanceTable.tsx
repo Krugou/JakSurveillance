@@ -11,54 +11,64 @@ import {
 	TableRow,
 } from '@mui/material';
 import {toast} from 'react-toastify';
-import ApiHooks from '../../../../hooks/ApiHooks';
 import {UserContext} from '../../../../contexts/UserContext';
+import ApiHooks from '../../../../hooks/ApiHooks';
 
+/**
+ * Represents the attendance of a student for a specific class.
+ */
 interface Attendance {
-	date: string;
-	name: string;
-	start_date: string;
-	timeofday: string;
-	topicname: string;
-	teacher: string;
-	status: number;
+	date: string; // The date of the class
+	name: string; // The name of the student
+	start_date: string; // The start date of the class
+	timeofday: string; // The time of day of the class
+	topicname: string; // The name of the topic
+	teacher: string; // The name of the teacher
+	status: number; // The attendance status
 }
 
+/**
+ * Represents the attendance of a student for a specific class, with additional information for teachers.
+ */
 interface AttendanceFromTeacher {
-	date: string;
-	name: string;
-	start_date: string;
-	timeofday: string;
-	topicname: string;
-	teacher: string;
-	status: number;
-	usercourseid: number;
-	email: string;
-	first_name: string;
-	last_name: string;
-	studentnumber: string;
+	usercourseid: number; // The ID of the user course
+	email: string; // The email of the student
+	first_name: string; // The first name of the student
+	last_name: string; // The last name of the student
+	studentnumber: string; // The student number
 }
+
+/**
+ * Represents the information of a student.
+ */
 interface StudentInfo {
-	email: string;
-	first_name: string;
-	last_name: string;
-	role: string;
-	roleid: number;
-	staff: number;
-	studentnumber: string;
-	userid: number;
-	username: string;
-	created_at: string;
+	email: string; // The email of the student
+	first_name: string; // The first name of the student
+	last_name: string; // The last name of the student
+	role: string; // The role of the user
+	roleid: number; // The ID of the role
+	staff: number; // Whether the user is a staff member
+	studentnumber: string; // The student number
+	userid: number; // The ID of the user
+	username: string; // The username of the user
+	created_at: string; // The creation date of the user
 	// Include other properties of student here
 }
+
+/**
+ * Props for the AttendanceTable component.
+ */
 interface AttendanceTableProps {
-	filteredAttendanceData: Attendance[] | AttendanceFromTeacher[];
-	student?: StudentInfo | null;
-	allAttendances?: boolean;
-	usercourseId?: number;
-	updateView?: () => void;
+	filteredAttendanceData: Attendance[] | AttendanceFromTeacher[]; // The filtered attendance data
+	student?: StudentInfo | null; // The information of the student
+	allAttendances?: boolean; // Whether to show all attendances
+	usercourseId?: number; // The ID of the user course
+	updateView?: () => void; // A function to update the view
 }
 
+/**
+ * A table component that displays the attendance of students for specific classes.
+ */
 const AttendanceTable: React.FC<AttendanceTableProps> = ({
 	filteredAttendanceData,
 	student,
@@ -120,7 +130,11 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 						<TableRow
 							key={index}
 							className={`border-b hover:bg-gray-50 ${
-								attendance.status === 0 ? 'bg-red-200' : attendance.status === 1 ? 'bg-green-200' : 'bg-orange-200'
+								attendance.status === 0
+									? 'bg-red-200'
+									: attendance.status === 1
+									? 'bg-green-200'
+									: 'bg-orange-200'
 							}`}
 						>
 							<TableCell className="px-6 py-4 whitespace-nowrap">
@@ -159,7 +173,13 @@ const AttendanceTable: React.FC<AttendanceTableProps> = ({
 									</Select>
 								)}
 								{user?.role === 'student' && (
-									<p>{attendance.status === 0 ? 'Absent' : attendance.status === 1 ? 'Present' : 'Accepted absence'}</p>
+									<p>
+										{attendance.status === 0
+											? 'Absent'
+											: attendance.status === 1
+											? 'Present'
+											: 'Accepted absence'}
+									</p>
 								)}
 							</TableCell>
 						</TableRow>
