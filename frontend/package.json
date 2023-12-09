@@ -60,6 +60,9 @@
 		"postcss": "^8.4.31",
 		"tailwindcss": "^3.3.3",
 		"typedoc": "^0.25.4",
+		"typedoc-comments": "^1.0.1",
+		"typedoc-plugin-coverage": "^2.2.0",
+		"typedoc-plugin-extras": "^3.0.0",
 		"typescript": "^5.0.2",
 		"vite": "^5.0.0",
 		"vite-plugin-pwa": "^0.17.0"

@@ -52,6 +52,9 @@
 		"supertest": "^6.3.3",
 		"ts-jest": "^29.1.1",
 		"typedoc": "^0.25.4",
+		"typedoc-comments": "^1.0.1",
+		"typedoc-plugin-coverage": "^2.2.0",
+		"typedoc-plugin-extras": "^3.0.0",
 		"typedoc-plugin-markdown": "^3.17.1"
 	},
 	"jest": {

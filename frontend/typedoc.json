@@ -9,6 +9,9 @@
 	"excludeProtected": false,
 	"excludeExternals": false,
 	"entryPointStrategy": "expand",
-	"plugin": ["typedoc-material-theme"],
-	"themeColor": "#ff5000"
+	"plugin": [
+		"typedoc-plugin-coverage",
+		"typedoc-plugin-extras",
+		"typedoc-comments"
+	]
 }
