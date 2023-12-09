@@ -5,9 +5,15 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
+import DeleteLectureModal from '../../../../components/main/modals/DeleteLectureModal';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
-import DeleteLectureModal from '../../../../components/main/modals/DeleteLectureModal';
+/**
+ * CreateLecture component.
+ * This component is responsible for rendering the lecture creation view for a teacher.
+ * It provides functionality for the teacher to select a course, select a topic, select a date and time, and create a lecture.
+ * Additionally, it provides functionality for the teacher to delete a lecture.
+ */
 const CreateLecture: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
@@ -21,6 +27,10 @@ const CreateLecture: React.FC = () => {
 	const [selectedSession, setSelectedSession] = useState<string>(
 		courses.length > 0 ? courses[0].courseid : '',
 	);
+	/**
+	 * OpenLecture interface.
+	 * This interface defines the shape of an OpenLecture object.
+	 */
 	interface OpenLecture {
 		id: string;
 		lectureid: string;
@@ -36,9 +46,17 @@ const CreateLecture: React.FC = () => {
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [openLectures, setOpenLectures] = useState<OpenLecture[]>([]);
+	/**
+	 * Reservation interface.
+	 * This interface defines the shape of a Reservation object.
+	 */
 	interface Reservation {
 		startDate: string;
 	}
+	/**
+	 * Course interface.
+	 * This interface defines the shape of a Course object.
+	 */
 	interface Course {
 		codes: string;
 		email: string;
