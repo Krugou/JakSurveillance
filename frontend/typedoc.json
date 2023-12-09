@@ -5,9 +5,9 @@
 	"name": "JakSec Frontend",
 	"theme": "default",
 	"includeVersion": true,
-	"excludePrivate": true,
-	"excludeProtected": true,
-	"excludeExternals": true,
+	"excludePrivate": false,
+	"excludeProtected": false,
+	"excludeExternals": false,
 	"entryPointStrategy": "expand",
 	"plugin": ["typedoc-material-theme"],
 	"themeColor": "#ff5000"
