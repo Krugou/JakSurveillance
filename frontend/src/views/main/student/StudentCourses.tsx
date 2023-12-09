@@ -1,9 +1,38 @@
-import React, {useEffect, useState, useContext} from 'react';
-import {UserContext} from '../../../contexts/UserContext';
-import apiHooks from '../../../hooks/ApiHooks';
+import React, { useContext, useEffect, useState } from 'react';
 import StudentCourseGrid from '../../../components/main/course/StudentCourseGrid';
+import { UserContext } from '../../../contexts/UserContext';
+import apiHooks from '../../../hooks/ApiHooks';
+/**
+ * StudentCourses component.
+ *
+ * This component is responsible for rendering the courses for a student. It performs the following operations:
+ *
+ * 1. Fetches the user data from the UserContext.
+ * 2. Fetches the course data for the user from the API.
+ * 3. Renders the courses using the StudentCourseGrid component.
+ * 4. Provides an option to show or hide ended courses.
+ *
+ * If an error occurs while fetching the course data, it renders an error message.
+ *
+ * @returns A JSX element representing the student courses component.
+ */
 const StudentCourses: React.FC = () => {
-	// Interface for the course data
+	/**
+	 * Interface for the course data.
+	 *
+	 * This interface represents the structure of a course object in the application. It includes the following properties:
+	 *
+	 * @property {number} courseid - The unique identifier for the course.
+	 * @property {string} course_name - The name of the course.
+	 * @property {string} startDate - The start date of the course, represented as a string.
+	 * @property {string} endDate - The end date of the course, represented as a string.
+	 * @property {string} code - The code of the course.
+	 * @property {number | null} student_group - The student group associated with the course. If no student group is associated, this property is null.
+	 * @property {string} topic_names - The names of the topics covered in the course, represented as a string.
+	 * @property {string} selected_topics - The topics selected for the course, represented as a string.
+	 * @property {string} instructor_name - The name of the instructor for the course.
+	 * @property {number} usercourseid - The unique identifier for the user-course relationship.
+	 */
 	interface Course {
 		courseid: number;
 		course_name: string;
@@ -46,17 +75,6 @@ const StudentCourses: React.FC = () => {
 		fetchCourses();
 	}, [user]);
 
-	/*
-	const getAttendanceColorClass = (attendance: number) => {
-		if (attendance >= 90) {
-			return 'bg-metropoliaTrendGreen';
-		} else if (attendance >= 50) {
-			return 'bg-metropoliaMainOrange';
-		} else {
-			return 'bg-metropoliaSupportRed';
-		}
-	};
-*/
 	if (error) {
 		return <div>Error: {error}</div>;
 	}

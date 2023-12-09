@@ -1,14 +1,25 @@
-import React from 'react';
-import {useEffect, useState, ChangeEvent} from 'react';
-import {useParams} from 'react-router-dom';
-import apiHooks from '../../../hooks/ApiHooks';
-import {FormControl, MenuItem, Select, Button} from '@mui/material';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
-import AttendanceTable from '../../../components/main/course/attendance/AttendanceTable';
+import {Button, FormControl, MenuItem, Select} from '@mui/material';
+import React, {ChangeEvent, useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
 import AttendanceStatsTable from '../../../components/main/course/attendance/AttendanceStatsTable';
+import AttendanceTable from '../../../components/main/course/attendance/AttendanceTable';
+import apiHooks from '../../../hooks/ApiHooks';
 import {useCourses} from '../../../hooks/courseHooks';
-// Interface for the attendance data
+/**
+ * Interface for the attendance data.
+ *
+ * This interface represents the structure of an attendance object in the application. It includes the following properties:
+ *
+ * @property {string} date - The date of the attendance record.
+ * @property {string} name - The name of the course.
+ * @property {string} start_date - The start date of the course.
+ * @property {string} timeofday - The time of day of the attendance record.
+ * @property {string} topicname - The name of the topic for the attendance record.
+ * @property {string} teacher - The name of the teacher for the course.
+ * @property {number} status - The attendance status (0 = absent, 1 = present, 2 = late).
+ */
 interface Attendance {
 	date: string;
 	name: string;
@@ -18,7 +29,21 @@ interface Attendance {
 	teacher: string;
 	status: number;
 }
-
+/**
+ * StudentCourseAttendance component.
+ *
+ * This component is responsible for rendering the attendance records for a student in a specific course. It performs the following operations:
+ *
+ * 1. Fetches the usercourseid from the URL.
+ * 2. Fetches the attendance data for the course from the API.
+ * 3. Renders the attendance records in a table using the AttendanceTable component.
+ * 4. Provides an option to view attendance statistics using the AttendanceStatsTable component.
+ * 5. Provides an option to filter the attendance records by date and topic.
+ *
+ * If an error occurs while fetching the attendance data, it renders an error message.
+ *
+ * @returns A JSX element representing the student course attendance component.
+ */
 const StudentCourseAttendance: React.FC = () => {
 	// Get the usercourseid from the url
 	const {usercourseid} = useParams<{usercourseid}>();

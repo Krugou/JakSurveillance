@@ -4,6 +4,14 @@ import lectureModel from '../models/lecturemodel.js';
 import usercoursesModel from '../models/usercoursemodel.js';
 /**
  * AttendanceController interface represents the structure of the attendance controller.
+ *
+ * This interface provides the following methods:
+ *
+ * @method insertIntoAttendance - Inserts a new attendance record.
+ * @method checkAndInsertStatusNotPresentAttendance - Checks and inserts attendance records for students not present.
+ * @method getLecturesAndAttendancesByCourseId - Gets lectures and attendances by course ID.
+ * @method updateAttendanceStatus - Updates the attendance status.
+ * @method deleteAttendance - Deletes an attendance record.
  */
 export interface AttendanceController {
 	/**
@@ -65,8 +73,9 @@ export interface AttendanceController {
 		lectureid: string,
 	) => Promise<unknown>;
 }
+
 /**
- * attendanceController is an object that implements the AttendanceController interface.
+ * `attendanceController` is an object that implements the AttendanceController interface.
  * It provides methods to manage attendance records.
  *
  * @type {AttendanceController}

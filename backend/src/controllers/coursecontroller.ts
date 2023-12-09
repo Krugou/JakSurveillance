@@ -49,9 +49,40 @@ export interface UserMapResults {
 	topics: string;
 }
 /**
- * Course Controller
+ * CourseController interface represents the structure of the course controller.
+ *
+ * This interface provides the following methods:
+ *
+ * @method getCoursesByUserId - Fetches the courses for a specific user.
+ * @method getCourseById - Fetches a specific course by its ID.
+ * @method insertIntoCourses - Inserts a new course.
  */
-const courseController = {
+export interface CourseController {
+	insertIntoCourse: (
+		name: string,
+		start_date: Date,
+		end_date: Date,
+		code: string,
+		group_name: string,
+		students: Student[],
+		instructors: Instructor[],
+		topics?: string,
+		topicgroup?: string,
+	) => Promise<number>;
+	getDetailsByCourseId: (courseId: string) => Promise<any>;
+	updateStudentCourses: (userid: number, courseid: number) => Promise<void>;
+	removeStudentCourses: (usercourseid: number) => Promise<void>;
+	getStudentAndSelectedTopicsByUsercourseId: (
+		usercourseid: number,
+	) => Promise<any>;
+}
+/**
+ * `courseController` is an object that implements the CourseController interface.
+ * It provides methods to manage courses.
+ *
+ * @type {CourseController}
+ */
+const courseController: CourseController = {
 	/**
 	 * Insert a new course
 	 * @param name - The name of the course

@@ -1,19 +1,22 @@
 import React, {useContext} from 'react';
-import {UserContext} from '../../../contexts/UserContext';
 import ProfileInfo from '../../../components/profiles/ProfileInfo';
-/*
-const getAttendanceColorClass = (attendance: number): string => {
-	if (attendance >= 90) {
-		return 'bg-metropoliaTrendGreen';
-	} else if (attendance >= 50) {
-		return 'bg-metropoliaMainOrange';
-	} else {
-		return 'bg-metropoliaSupportRed';
-	}
-};
-*/
-import {useNavigate} from 'react-router-dom'; // Import useNavigate
+import {UserContext} from '../../../contexts/UserContext';
 
+import {useNavigate} from 'react-router-dom'; // Import useNavigate
+/**
+ * StudentProfile component.
+ *
+ * This component is responsible for rendering the profile of a student. It performs the following operations:
+ *
+ * 1. Fetches the user data from the UserContext.
+ * 2. Renders the user's profile information using the ProfileInfo component.
+ * 3. Renders the user's student group.
+ * 4. Provides a button to navigate to the student's courses.
+ *
+ * If no user data is available, it renders a message indicating that no user data is available.
+ *
+ * @returns A JSX element representing the student profile component.
+ */
 const StudentProfile: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate(); // Initialize useNavigate
