@@ -9,7 +9,10 @@ import PrintIcon from '@mui/icons-material/Print';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import {exportToExcel, exportToPDF} from '../../../../utils/exportData';
 import {UserContext} from "../../../../contexts/UserContext";
-// Interface for the attendance data
+/**
+ * Attendance interface.
+ * This interface defines the shape of an Attendance object.
+ */
 interface Attendance {
 	date: string;
 	name: string;
@@ -18,7 +21,10 @@ interface Attendance {
 	topicname: string;
 	teacher: string;
 	status: number;
-}
+}/**
+ * StudentInfo interface.
+ * This interface defines the shape of a StudentInfo object.
+ */
 interface StudentInfo {
 	email: string;
 	first_name: string;
@@ -32,7 +38,13 @@ interface StudentInfo {
 	created_at: string;
 	// Include other properties of student here
 }
-
+/**
+ * TeacherStudentCourseAttendance component.
+ * This component is responsible for rendering the attendance view for a single student in a course for a teacher.
+ * It fetches the attendance data for the course and the student's information.
+ * It also provides functionality for the teacher to sort the attendance data by topic and search by date.
+ * Additionally, it provides functionality for the teacher to export the attendance data to PDF or Excel.
+ */
 const TeacherStudentCourseAttendance: React.FC = () => {
 	// Get the usercourseid from the url
 	const {usercourseid} = useParams<{usercourseid}>();

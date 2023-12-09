@@ -1,7 +1,13 @@
 import React from 'react';
 import Card from "../../../../components/main/cards/Card";
 
-
+/**
+ * TeacherCreateCourse component.
+ * This component is responsible for rendering the view for a teacher to create a new course.
+ * It provides two options for the teacher to create a course: Easy mode and Custom mode.
+ * In Easy mode, the teacher can create a course easily with their own student data file.
+ * In Custom mode, the teacher can create a course with their custom details.
+ */
 const TeacherCreateCourse: React.FC = () => {
 	return (
 		<div>

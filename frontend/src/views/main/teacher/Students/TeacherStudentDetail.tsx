@@ -6,7 +6,10 @@ import ProfileInfo from '../../../../components/profiles/ProfileInfo';
 import StudentCourseGrid from '../../../../components/main/course/StudentCourseGrid';
 import {UserContext} from '../../../../contexts/UserContext';
 import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
-
+/**
+ * StudentInfo interface.
+ * This interface defines the shape of a StudentInfo object.
+ */
 interface StudentInfo {
 	email: string;
 	first_name: string;
@@ -20,7 +23,10 @@ interface StudentInfo {
 	created_at: string;
 	// Include other properties of student here
 }
-
+/**
+ * Course interface.
+ * This interface defines the shape of a Course object.
+ */
 interface Course {
 	courseid: number;
 	course_name: string;
@@ -32,13 +38,21 @@ interface Course {
 	selected_topics: string;
 	instructor_name: string;
 	usercourseid: number;
-}
+}/**
+ * Student interface.
+ * This interface defines the shape of a Student object.
+ */
 interface Student {
 	// Existing properties...
 
 	user: StudentInfo; // Replace 'any' with the actual type of 'user'
 	courses: Course[];
-}
+}/**
+ * TeacherStudentDetail component.
+ * This component is responsible for rendering the detailed view of a single student for a teacher.
+ * It fetches the student's information and the courses they are enrolled in.
+ * It also provides functionality for the teacher to add or remove the student from a course.
+ */
 const TeacherStudentDetail: React.FC = () => {
 	const {id} = useParams<{id: string}>();
 	const [student, setStudent] = useState<StudentInfo | null>(null); // Define the student state variable as a Student object

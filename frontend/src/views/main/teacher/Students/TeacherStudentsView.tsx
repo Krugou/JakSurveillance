@@ -10,7 +10,10 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import WarningIcon from '@mui/icons-material/Warning';
 import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
-
+/**
+ * Student interface.
+ * This interface defines the shape of a Student object.
+ */
 interface Student {
 	first_name: string;
 	last_name: string;
@@ -23,7 +26,10 @@ interface Student {
 	userid: number;
 	group_name: string;
 }
-
+/**
+ * SelectedCourse interface.
+ * This interface defines the shape of a SelectedCourse object.
+ */
 interface SelectedCourse {
 	name: string;
 	code: string;
@@ -35,7 +41,11 @@ interface SelectedCourse {
 	selected_topics: string;
 	created_at: string;
 }
-
+/**
+ * TeacherStudentsView component.
+ * This component is responsible for rendering the view for a teacher to see their students.
+ * It fetches the students taught by the teacher and allows the teacher to filter the students by course and search term.
+ */
 const TeacherStudentsView: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const [allStudents, setAllStudents] = useState<Student[]>([]);

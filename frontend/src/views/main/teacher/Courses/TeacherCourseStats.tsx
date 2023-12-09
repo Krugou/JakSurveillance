@@ -14,7 +14,10 @@ import {
 	exportStatsTableToExcel,
 	exportStatsTableToPdf,
 } from '../../../../utils/exportData';
-
+/**
+ * Course interface.
+ * This interface defines the shape of a Course object.
+ */
 interface Course {
 	name: string;
 	code: string;
@@ -22,7 +25,10 @@ interface Course {
 
 	// Include other properties of course here
 }
-
+/**
+ * AttendanceCount interface.
+ * This interface defines the shape of an AttendanceCount object.
+ */
 interface AttendanceCount {
 	name: string;
 	selectedTopics: string | string[];
@@ -31,12 +37,20 @@ interface AttendanceCount {
 	topicname: string;
 	userid: number;
 }
-
+/**
+ * TopicAttendance interface.
+ * This interface defines the shape of a TopicAttendance object.
+ */
 interface TopicAttendance {
 	topicname: string;
 	attendanceCounts: AttendanceCount[];
 }
-
+/**
+ * TeacherCourseStats component.
+ * This component is responsible for rendering the attendance statistics for a course for a teacher.
+ * It fetches the attendance data for the course and provides functionality for the teacher to sort the attendance data by topic and search by date.
+ * Additionally, it provides functionality for the teacher to export the attendance data to PDF or Excel.
+ */
 const TeacherCourseStats = () => {
 	const [showTable, setShowTable] = useState(false);
 	const {courseid} = useParams<{courseid: string}>();

@@ -1,16 +1,20 @@
-import React, {useEffect, useState, useContext} from 'react';
-import Calendar from 'react-calendar';
-import {useParams, useNavigate} from 'react-router-dom';
-import apiHooks from '../../../../hooks/ApiHooks';
-import AttendanceTable from '../../../../components/main/course/attendance/AttendanceTable';
-import Tooltip from '@mui/material/Tooltip';
-import PrintIcon from '@mui/icons-material/Print';
 import GetAppIcon from '@mui/icons-material/GetApp';
-import {UserContext} from '../../../../contexts/UserContext';
-import {exportToExcel, exportToPDF} from '../../../../utils/exportData';
-import Button from '@mui/material/Button';
+import PrintIcon from '@mui/icons-material/Print';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
-
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import React, {useContext, useEffect, useState} from 'react';
+import Calendar from 'react-calendar';
+import {useNavigate, useParams} from 'react-router-dom';
+import AttendanceTable from '../../../../components/main/course/attendance/AttendanceTable';
+import {UserContext} from '../../../../contexts/UserContext';
+import apiHooks from '../../../../hooks/ApiHooks';
+import {exportToExcel, exportToPDF} from '../../../../utils/exportData';
+/**
+ * TeacherCourseAttendances component.
+ * This component is responsible for rendering the attendance view for a course for a teacher.
+ * It fetches the lectures and their attendances and provides functionality for the teacher to filter the attendances based on a selected date, print the attendances to a PDF, export the attendances to an Excel file, and navigate to the attendance statistics view.
+ */
 const TeacherCourseAttendances: React.FC = () => {
 	const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 	const [lecturesAndTheirAttendances, setLecturesAndTheirAttendances] = useState<
@@ -108,15 +112,15 @@ const TeacherCourseAttendances: React.FC = () => {
 						/>
 					</div>
 					<div className="flex items-center">
-					<Button
-						variant="contained"
-						color="primary"
-						startIcon={<ShowChartIcon />}
-						className="mt-4 h-fit sm:mt-0"
-						onClick={() => navigate(`/teacher/courses/stats/${courseId}`)}
-					>
-						Attendance statistics
-					</Button>
+						<Button
+							variant="contained"
+							color="primary"
+							startIcon={<ShowChartIcon />}
+							className="mt-4 h-fit sm:mt-0"
+							onClick={() => navigate(`/teacher/courses/stats/${courseId}`)}
+						>
+							Attendance statistics
+						</Button>
 					</div>
 				</div>
 			</div>

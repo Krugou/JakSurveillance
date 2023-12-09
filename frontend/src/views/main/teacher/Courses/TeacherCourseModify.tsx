@@ -10,8 +10,10 @@ import CourseDetails from '../../../../components/main/course/createcourse/Cours
 import EditTopicsModal from '../../../../components/main/modals/EditTopicsModal';
 import apiHooks from '../../../../hooks/ApiHooks';
 
-// this is view for teacher to modify the single course details
-
+/**
+ * CourseDetail interface.
+ * This interface defines the shape of a CourseDetail object.
+ */
 interface CourseDetail {
 	courseid: string;
 	name: string;
@@ -24,7 +26,11 @@ interface CourseDetail {
 	user_count: number;
 	instructor_name: string;
 }
-
+/**
+ * TeacherCourseModify component.
+ * This component is responsible for rendering the course modification view for a teacher.
+ * It fetches the course details and provides functionality for the teacher to modify the course details, including the course name, code, student group, start and end dates, topics, and instructors.
+ */
 const TeacherCourseModify: React.FC = () => {
 	const [courseData, setCourseData] = useState<CourseDetail | null>(null);
 	const [courseName, setCourseName] = useState(

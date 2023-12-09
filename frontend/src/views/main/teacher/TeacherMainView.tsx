@@ -5,12 +5,22 @@ import WelcomeModal from '../../../components/main/modals/WelcomeModal';
 import MainViewTitle from '../../../components/main/titles/MainViewTitle';
 import {UserContext} from '../../../contexts/UserContext';
 import apihooks from '../../../hooks/ApiHooks';
-
+/**
+ * MainView component.
+ * This component is responsible for rendering the main view for a teacher.
+ * It uses the UserContext to get the current user and displays a loading spinner until the user data is available.
+ * It also fetches the courses taught by the teacher and displays them in cards.
+ */
 const MainView: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const [courses, setCourses] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	useEffect(() => {
+		/**
+		 * Fetches the courses taught by the teacher.
+		 * It sends a GET request to the courses endpoint with the teacher's email,
+		 * and updates the state with the fetched courses.
+		 */
 		const fetchCourses = async () => {
 			setIsLoading(true);
 			if (user) {

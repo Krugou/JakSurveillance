@@ -1,10 +1,13 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
-import CourseData from '../../../../components/main/course/CourseData';
-import apihooks from '../../../../hooks/ApiHooks';
 import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
+import CourseData from '../../../../components/main/course/CourseData';
 import {UserContext} from '../../../../contexts/UserContext';
-// Define your course detail structure here
+import apihooks from '../../../../hooks/ApiHooks';
+/**
+ * CourseDetail interface.
+ * This interface defines the shape of a CourseDetail object.
+ */
 interface CourseDetail {
 	courseid: string;
 	name: string;
@@ -18,7 +21,11 @@ interface CourseDetail {
 	user_count: number;
 	instructor_name: string;
 }
-
+/**
+ * TeacherCourseDetail component.
+ * This component is responsible for rendering the detailed view of a single course for a teacher.
+ * It fetches the course details and provides functionality for the teacher to navigate back to the list of courses.
+ */
 const TeacherCourseDetail: React.FC = () => {
 	const {id} = useParams<{id: string}>();
 	const [courseData, setCourseData] = useState<CourseDetail | null>(null);

@@ -1,9 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
 import CourseData from '../../../../components/main/course/CourseData';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
-import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
-import {useNavigate} from 'react-router-dom';
+/**
+ * Course interface.
+ * This interface defines the shape of a Course object.
+ */
 interface Course {
 	courseid: number;
 	name: string;
@@ -15,7 +19,11 @@ interface Course {
 	topic_names: string;
 	// Include other properties of course here
 }
-
+/**
+ * TeacherCourses component.
+ * This component is responsible for rendering the list of courses for a teacher.
+ * It fetches the courses that the teacher is instructing and provides functionality for the teacher to navigate to the course creation view.
+ */
 const TeacherCourses: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const [courses, setCourses] = useState<Course[]>([]); // Specify the type for courses

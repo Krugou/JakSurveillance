@@ -1,6 +1,10 @@
 import React from 'react';
 import VideoDropdown from '../../../components/main/dropdown/VideoDropdown'; // Import the VideoDropdown component
-
+/**
+ * TeacherHelpVideos component.
+ * This component is responsible for rendering the help videos for teachers.
+ * It uses the VideoDropdown component to display each video with a title.
+ */
 const TeacherHelpVideos: React.FC = () => {
 	return (
 		<div className="w-full p-5">
