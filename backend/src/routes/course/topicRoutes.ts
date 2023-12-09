@@ -5,6 +5,7 @@ import TopicGroupController from '../../controllers/topicgroupcontroller.js';
 import TopicGroup from '../../models/topicgroupmodel.js';
 import checkUserRole from '../../utils/checkRole.js';
 import validate from '../../utils/validate.js';
+
 const router: Router = express.Router();
 /**
  * Route that fetches all topic groups with their topics.

@@ -6,30 +6,30 @@ const pool = createPool('ADMIN');
  * AdminController interface represents the structure of the admin controller.
  */
 export interface AdminController {
-	/**
-	 * Gets the server settings.
-	 *
-	 * @returns {Promise<any>} A promise that resolves to the server settings.
-	 */
-	getServerSettings: () => Promise<any>;
-	/**
-	 * Updates the server settings.
-	 *
-	 * @param {any} speedofhash - The speed of hash.
-	 * @param {any} leewayspeed - The leeway speed.
-	 * @param {any} timeouttime - The timeout time.
-	 * @param {any} attendancethreshold - The attendance threshold.
-	 * @returns {Promise<any>} A promise that resolves when the server settings have been updated.
-	 */
-	updateServerSettings: (
-		speedofhash: any,
-		leewayspeed: any,
-		timeouttime: any,
-		attendancethreshold: any,
-	) => Promise<any>;
+   /**
+    * Gets the server settings.
+    *
+    * @returns {Promise<any>} A promise that resolves to the server settings.
+    */
+   getServerSettings: () => Promise<any>;
+   /**
+    * Updates the server settings.
+    *
+    * @param {any} speedofhash - The speed of hash.
+    * @param {any} leewayspeed - The leeway speed.
+    * @param {any} timeouttime - The timeout time.
+    * @param {any} attendancethreshold - The attendance threshold.
+    * @returns {Promise<any>} A promise that resolves when the server settings have been updated.
+    */
+   updateServerSettings: (
+      speedofhash: any,
+      leewayspeed: any,
+      timeouttime: any,
+      attendancethreshold: any,
+   ) => Promise<any>;
 }
 /**
- * adminController is an object that implements the AdminController interface.
+ * `adminController` is an object that implements the AdminController interface.
  * It provides methods to get and update the server settings.
  *
  * @type {AdminController}

@@ -56,29 +56,33 @@ const port = 3002;
  * @type {Date}
  */
 const startTime = new Date();
-
 /**
  * Use JSON middleware for Express to parse JSON bodies
+ * This middleware enables Express to parse incoming JSON requests.
  */
 app.use(express.json());
 
 /**
  * Use CORS middleware to enable CORS
+ * This middleware enables Cross-Origin Resource Sharing (CORS) for the Express application.
  */
 app.use(cors());
 
 /**
  * Initialize Passport middleware
+ * This middleware initializes Passport for handling authentication in the Express application.
  */
 app.use(passport.initialize());
 
 /**
  * Use user routes for /users path
+ * This sets up the routes related to user management under the /users path.
  */
 app.use('/users', userRoutes);
 
 /**
  * Use secure routes for /secure path with JWT authentication
+ * This sets up secure routes that require JWT authentication under the /secure path.
  */
 app.use(
 	'/secure',
@@ -88,6 +92,7 @@ app.use(
 
 /**
  * Use course routes for /courses path with JWT authentication
+ * This sets up routes related to courses that require JWT authentication under the /courses path.
  */
 app.use(
 	'/courses',
@@ -97,11 +102,13 @@ app.use(
 
 /**
  * Use admin routes for /admin path with JWT authentication
+ * This sets up admin-specific routes that require JWT authentication under the /admin path.
  */
 app.use('/admin', passport.authenticate('jwt', {session: false}), adminRoutes);
 
 /**
  * Start the server
+ * This section starts the HTTP server and listens on the specified port.
  */
 http.listen(port, () => {
 	console.log(

@@ -17,6 +17,11 @@ const router: Router = express.Router();
  * If the user is a staff member and doesn't exist in the database, they are added.
  * If the user is a staff member and exists in the database, their login is authenticated.
  * If the user is not a staff member, their login is authenticated.
+ *
+ * @param {Request} req - The request object.
+ * @param {Response} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Promise<void>} A promise that resolves when the operation is finished.
  */
 router.post('/', async (req: Request, res: Response, next) => {
 	// Check if the environment variables are not undefined
