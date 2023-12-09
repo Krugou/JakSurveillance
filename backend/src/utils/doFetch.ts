@@ -10,7 +10,6 @@ import fetch, {RequestInit, Response} from 'node-fetch';
 const doFetch = async (
 	url: string,
 	options: RequestInit = {},
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> => {
 	// Check if the URL is provided
 	if (!url) {
