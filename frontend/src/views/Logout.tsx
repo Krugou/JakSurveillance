@@ -9,15 +9,30 @@ import {UserContext} from '../contexts/UserContext';
  * This component is responsible for logging out the user.
  * It removes the user token from local storage, sets the user context to null,
  * and then navigates back to the home page.
+ *
+ * @returns {JSX.Element} The rendered Logout component.
  */
 const Logout = () => {
-	// Hook to navigate programmatically
+	/**
+	 * Hook to navigate programmatically.
+	 *
+	 * @type {NavigateFunction}
+	 */
 	const navigate = useNavigate();
 
-	// User context
+	/**
+	 * User context.
+	 *
+	 * @type {React.Context<UserContext>}
+	 */
 	const {setUser} = useContext(UserContext);
 
-	// Effect hook to perform the logout operation
+	/**
+	 * Effect hook to perform the logout operation.
+	 *
+	 * This effect runs once when the component mounts. It removes the user token from local storage,
+	 * sets the user context to null, and then navigates back to the home page after a delay of 1.2 seconds.
+	 */
 	useEffect(() => {
 		// Remove the user token from local storage
 		localStorage.removeItem('userToken');
@@ -35,7 +50,11 @@ const Logout = () => {
 		}, 1200);
 	}, [navigate, setUser]);
 
-	// Render a circular progress indicator while the logout operation is in progress
+	/**
+	 * Render a circular progress indicator while the logout operation is in progress.
+	 *
+	 * @returns {JSX.Element} The rendered JSX element.
+	 */
 	return (
 		<div className="flex justify-center items-center h-full">
 			<CircularProgress color="primary" />
