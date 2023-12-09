@@ -6,10 +6,18 @@ import NavigationButton from '../components/main/buttons/NavigationButton';
 import {UserContext} from '../contexts/UserContext';
 import apiHooks from '../hooks/ApiHooks';
 
-// Define the props for the Header component
+/**
+ * Define the props for the Header component.
+ */
 interface HeaderProps {
 	title: string;
 }
+
+/**
+ * Header component.
+ * This component is responsible for rendering the header of the application.
+ * It also handles user authentication based on the token stored in localStorage.
+ */
 const Header: React.FC<HeaderProps> = () => {
 	// Get the current location and navigation function from react-router
 	const location = useLocation();
@@ -21,7 +29,9 @@ const Header: React.FC<HeaderProps> = () => {
 	// Get the current user and the setUser function from the UserContext
 	const {user, setUser} = useContext(UserContext);
 
-	// Function to get the user info based on the token stored in localStorage
+	/**
+	 * Function to get the user info based on the token stored in localStorage.
+	 */
 	const getUserInfo = async () => {
 		// If the current path is '/logout', don't try to get the user info
 		if (location.pathname === '/logout') return;
@@ -56,10 +66,13 @@ const Header: React.FC<HeaderProps> = () => {
 			}
 		}
 	};
+
+	// Call the getUserInfo function when the location changes
 	useEffect(() => {
 		getUserInfo();
-	}, [location]); // jos taulukko tyhjä, ajetaan vain kerran
+	}, [location]);
 
+	// Render the header
 	return (
 		<header
 			className={`flex items-center ${

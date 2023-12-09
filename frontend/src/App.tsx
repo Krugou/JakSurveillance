@@ -3,22 +3,29 @@ import {Route, BrowserRouter as Router, Routes} from 'react-router-dom';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useRegisterSW} from 'virtual:pwa-register/react';
+import BackgroundContainer from './components/main/background/BackgroundContainer';
 import {UserProvider} from './contexts/UserContext.tsx';
 import AdminRoutes from './routes/AdminRoutes';
 import CounselorRoutes from './routes/CounselorRoutes';
 import StudentRoutes from './routes/StudentRoutes';
 import TeacherRoutes from './routes/TeacherRoutes';
 import Logout from './views/Logout.tsx';
+import Gdpr from './views/main/Gdpr';
 import Login from './views/main/Login.tsx';
 import StartView from './views/main/StartView.tsx';
-import Gdpr from './views/main/Gdpr';
-import BackgroundContainer from './components/main/background/BackgroundContainer';
+// Interval for service worker updates
 const intervalMS = 60 * 60 * 1000;
+
+/**
+ * Main application component.
+ */
 const App = () => {
+	// Register service worker
 	useRegisterSW({
 		onRegistered(r) {
 			if (r) {
 				console.log('Service worker registered successfully');
+				// Update service worker every hour
 				setInterval(() => {
 					r.update();
 				}, intervalMS);
@@ -27,6 +34,8 @@ const App = () => {
 			}
 		},
 	});
+
+	// Update document title based on current path
 	useEffect(() => {
 		const title = window.location.pathname.split('/').filter(Boolean).join(' - ');
 		document.title = title ? `JakSec - ${title}` : 'JakSec';
