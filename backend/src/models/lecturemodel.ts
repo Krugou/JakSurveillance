@@ -1,8 +1,11 @@
-import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
+import { FieldPacket, ResultSetHeader, RowDataPacket } from 'mysql2';
 import createPool from '../config/createPool.js';
 
 const pool = createPool('ADMIN');
-interface Lecture {
+/**
+ * Interface for Lecture.
+ */
+export interface Lecture {
 	lectureid: number;
 	start_date: Date;
 	end_date: Date;
@@ -10,16 +13,58 @@ interface Lecture {
 	courseid: number;
 }
 
-interface LectureModel {
-	fetchAllLecturees(): Promise<RowDataPacket[]>;
+/**
+ * Interface for LectureModel.
+ */ 
+export interface LectureModel {
+	/**
+	 * Finds a lecture by its ID and gets all users in the linked course.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves to an array of RowDataPacket.
+	 */
 	findByLectureIdAndGetAllUserInLinkedCourse(
 		lectureid: number,
 	): Promise<RowDataPacket[]>;
+	/**
+	 * Gets students by lecture ID.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves to an array of RowDataPacket.
+	 */
 	getStudentsByLectureId(lectureid: number): Promise<RowDataPacket[]>;
+	/**
+	 * Deletes a lecture by its ID.
+	 * @param id - The ID of the lecture.
+	 * @returns A promise that resolves when the deletion is complete.
+	 */
 	deleteByLectureId(id: string): Promise<void>;
+	/**
+	 * Counts all lectures.
+	 * @returns A promise that resolves to the number of lectures.
+	 */
 	countAllLecturees(): Promise<number>;
+	/**
+	 * Finds lectures by topic ID.
+	 * @param topicid - The ID of the topic.
+	 * @returns A promise that resolves to an array of lectures.
+	 */
 	findByTopicId(topicid: number): Promise<Lecture[]>;
+	/**
+	 * Gets the course ID by lecture ID.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves to the ID of the course linked to the lecture.
+	 */
 	getCourseidByLectureid(lectureid: number): Promise<number>;
+	/**
+	 * Inserts a lecture.
+	 * @param start_date - The start date of the lecture.
+	 * @param end_date - The end date of the lecture.
+	 * @param timeofday - The time of day of the lecture.
+	 * @param topicid - The ID of the topic.
+	 * @param courseid - The ID of the course.
+	 * @param state - The state of the lecture.
+	 * @param teacherid - The ID of the teacher.
+	 * @returns A promise that resolves when the insertion is complete.
+	 */
 	insertIntoLecture(
 		start_date: Date,
 		end_date: Date,
@@ -29,21 +74,64 @@ interface LectureModel {
 		state: string,
 		teacherid: number | undefined,
 	): Promise<unknown>;
+	/**
+	 * Gets a lecture with its course and topic.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves to the lecture with its course and topic, if found.
+	 */
 	getLectureWithCourseAndTopic(lectureid: string): Promise<RowDataPacket | null>;
+	/**
+	 * Updates the state of a lecture.
+	 * @param lectureid - The ID of the lecture.
+	 * @param state - The new state of the lecture.
+	 * @returns A promise that resolves when the update is complete.
+	 */
 	updateLectureState(lectureid: string, state: string): Promise<unknown>;
+	/**
+	 * Gets lectures by course ID.
+	 * @param courseid - The ID of the course.
+	 * @returns A promise that resolves to an array of lectures for the course, if found.
+	 */
 	getLecturesByCourseId(courseid: number): Promise<RowDataPacket[] | null>;
+	/**
+	 * Gets the course ID by lecture ID.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves to the ID of the course linked to the lecture.
+	 */
 	getCourseIDByLectureID(lectureid: string): Promise<number | null>;
+	/**
+	 * Fetches all lectures.
+	 * @returns A promise that resolves to an array of lectures.
+	 */
 	fetchAllLecturees(): Promise<
 		RowDataPacket[] | [RowDataPacket[], FieldPacket[]]
 	>;
+
 	findByLectureIdAndGetAllUserInLinkedCourse(
 		lectureid: number,
 	): Promise<RowDataPacket[]>;
+	/**
+	 * Finds open lectures by course ID.
+	 * @param courseid - The ID of the course.
+	 * @returns A promise that resolves to an array of open lectures for the course, if found.
+	 */
 	findOpenLecturesBycourseid(courseid: number): Promise<RowDataPacket[] | null>;
+	/**
+	 * Gets a lecture by its ID.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves to the lecture, if found.
+	 */
 	getLectureByLectureId(lectureid: number): Promise<RowDataPacket[] | null>;
 }
 
+/**
+ * Represents a lecture model.
+ */
 const lectureModel: LectureModel = {
+	/**
+	 * Fetches all lectures.
+	 * @returns A promise that resolves to an array of lectures.
+	 */
 	async fetchAllLecturees() {
 		try {
 			const [rows] = await pool
@@ -55,7 +143,11 @@ const lectureModel: LectureModel = {
 			return Promise.reject(error);
 		}
 	},
-
+	/**
+	 * Finds a lecture by its ID and gets all users in the linked course.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves to an array of users in the linked course.
+	 */
 	async findByLectureIdAndGetAllUserInLinkedCourse(
 		lectureid: number,
 	): Promise<RowDataPacket[]> {
@@ -88,6 +180,11 @@ const lectureModel: LectureModel = {
 			throw error;
 		}
 	},
+	/**
+	 * Gets students by lecture ID.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves to an array of students in the lecture.
+	 */
 	async getStudentsByLectureId(lectureid: number) {
 		try {
 			const [userRows] = await pool.promise().query<RowDataPacket[]>(
@@ -110,7 +207,11 @@ const lectureModel: LectureModel = {
 			return [];
 		}
 	},
-
+	/**
+	 * Deletes a lecture by its ID.
+	 * @param id - The ID of the lecture.
+	 * @returns A promise that resolves when the deletion is complete.
+	 */
 	async deleteByLectureId(id: string): Promise<void> {
 		try {
 			await pool.promise().query('DELETE FROM lecture WHERE lectureid = ?', [id]);
@@ -118,7 +219,10 @@ const lectureModel: LectureModel = {
 			console.error(error);
 		}
 	},
-
+	/**
+	 * Counts all lectures.
+	 * @returns A promise that resolves to the number of lectures.
+	 */
 	async countAllLecturees(): Promise<number> {
 		try {
 			const [rows] = await pool
@@ -130,7 +234,11 @@ const lectureModel: LectureModel = {
 			return 0;
 		}
 	},
-
+	/**
+	 * Finds a lecture by its topic ID.
+	 * @param topicid - The ID of the topic.
+	 * @returns A promise that resolves to the lectures with the given topic ID.
+	 */
 	async findByTopicId(topicid) {
 		try {
 			const [rows] = await pool
@@ -144,6 +252,11 @@ const lectureModel: LectureModel = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Gets the course ID by lecture ID.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves to the ID of the course linked to the lecture.
+	 */
 	async getCourseidByLectureid(lectureid) {
 		try {
 			const [rows] = await pool
@@ -159,6 +272,17 @@ const lectureModel: LectureModel = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Inserts a new lecture.
+	 * @param start_date - The start date of the lecture.
+	 * @param end_date - The end date of the lecture.
+	 * @param timeofday - The time of day of the lecture.
+	 * @param topicid - The ID of the topic.
+	 * @param courseid - The ID of the course.
+	 * @param state - The state of the lecture.
+	 * @param teacherid - The ID of the teacher.
+	 * @returns A promise that resolves to the result of the insertion.
+	 */
 	async insertIntoLecture(
 		start_date: Date,
 		end_date: Date,
@@ -176,6 +300,12 @@ const lectureModel: LectureModel = {
 			);
 		return result;
 	},
+	/**
+	 * Gets a lecture with its course and topic.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves to the lecture with its course and topic, if found.
+	 * If an error occurs, the promise is rejected.
+	 */
 	async getLectureWithCourseAndTopic(lectureid: string) {
 		try {
 			const [rows] = await pool
@@ -194,6 +324,13 @@ const lectureModel: LectureModel = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Updates the state of a lecture.
+	 * @param lectureid - The ID of the lecture.
+	 * @param state - The new state of the lecture.
+	 * @returns A promise that resolves when the update is complete.
+	 * If an error occurs, the promise is rejected.
+	 */
 	async updateLectureState(lectureid: string, state: string) {
 		try {
 			const [result] = await pool
@@ -209,6 +346,12 @@ const lectureModel: LectureModel = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Gets lectures by course ID.
+	 * @param courseid - The ID of the course.
+	 * @returns A promise that resolves to an array of lectures for the course, if found.
+	 * If an error occurs, the promise is rejected.
+	 */
 	async getLecturesByCourseId(courseid: number) {
 		try {
 			const [rows] = await pool
@@ -226,6 +369,12 @@ const lectureModel: LectureModel = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Gets the course ID by lecture ID.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves to the ID of the course linked to the lecture.
+	 * If an error occurs, the promise is rejected.
+	 */
 	async getCourseIDByLectureID(lectureid: string) {
 		try {
 			const [rows] = await pool
@@ -241,7 +390,12 @@ const lectureModel: LectureModel = {
 			return Promise.reject(error);
 		}
 	},
-
+	/**
+	 * Finds open lectures by course ID.
+	 * @param courseid - The ID of the course.
+	 * @returns A promise that resolves to an array of open lectures for the course, if found.
+	 * If an error occurs, the promise is rejected.
+	 */
 	async findOpenLecturesBycourseid(courseid: number) {
 		try {
 			const [rows] = await pool
@@ -257,6 +411,12 @@ const lectureModel: LectureModel = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Gets a lecture by its ID.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves to the lecture, if found.
+	 * If an error occurs, the promise is rejected.
+	 */
 	async getLectureByLectureId(lectureid: number) {
 		try {
 			const [rows] = await pool

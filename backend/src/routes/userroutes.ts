@@ -8,9 +8,16 @@ import jwt from 'jsonwebtoken';
 import {User} from '../types.js';
 import {authenticate} from '../utils/auth.js';
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
-
+/**
+ * Router for user routes.
+ */
 const router: Router = express.Router();
-
+/**
+ * Route that handles user login.
+ * If the user is a staff member and doesn't exist in the database, they are added.
+ * If the user is a staff member and exists in the database, their login is authenticated.
+ * If the user is not a staff member, their login is authenticated.
+ */
 router.post('/', async (req: Request, res: Response, next) => {
 	// Check if the environment variables are not undefined
 	if (!process.env.JWT_SECRET) {

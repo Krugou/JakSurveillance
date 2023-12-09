@@ -17,27 +17,66 @@ interface TopicGroup {
  * @description Defines the structure of a TopicGroupModel object.
  */
 interface TopicGroupModel {
+	/**
+	 * Fetches all topic groups.
+	 * @returns A promise that resolves to an array of topic groups.
+	 */
 	fetchAllTopicGroups(): Promise<[RowDataPacket[], FieldPacket[]]>;
+
+	/**
+	 * Finds a topic group by its ID.
+	 * @param id - The ID of the topic group.
+	 * @returns A promise that resolves to the topic group, if found.
+	 */
 	findByTopicGroupId(id: number): Promise<TopicGroup | null>;
+
+	/**
+	 * Fetches all topic groups with their topics.
+	 * @returns A promise that resolves to an array of topic groups with their topics.
+	 */
 	fetchAllTopicGroupsWithTopics(): Promise<RowDataPacket[]>;
+
+	/**
+	 * Fetches all topic groups with their topics by user ID.
+	 * @param userid - The ID of the user.
+	 * @returns A promise that resolves to an array of topic groups with their topics for the user.
+	 */
 	fetchAllTopicGroupsWithTopicsByUserId(
 		userid: number,
 	): Promise<RowDataPacket[]>;
 
+	/**
+	 * Inserts a new topic group.
+	 * @param topicgroup - The name of the topic group.
+	 * @param topicgroupowner - The ID of the owner of the topic group.
+	 * @returns A promise that resolves to the result of the insertion.
+	 */
 	insertTopicGroup(
 		topicgroup: string,
 		topicgroupowner: number,
 	): Promise<ResultSetHeader>;
+
+	/**
+	 * Checks if a topic group exists.
+	 * @param topicgroup - The name of the topic group.
+	 * @param userid - The ID of the user.
+	 * @returns A promise that resolves to the existing topic group, if found.
+	 */
 	checkIfTopicGroupExists(
 		topicgroup: string,
 		userid: number,
 	): Promise<RowDataPacket[]>;
 
+	/**
+	 * Deletes a topic group by its name.
+	 * @param topicgroup - The name of the topic group.
+	 * @param userid - The ID of the user.
+	 * @returns A promise that resolves when the deletion is complete.
+	 */
 	deleteTopicGroupByName(
 		topicgroup: string,
 		userid: number | undefined,
 	): Promise<ResultSetHeader>;
-	// other methods...
 }
 /**
  * @description TopicGroupModel implementation.

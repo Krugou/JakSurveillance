@@ -9,7 +9,11 @@ import checkUserRole from '../../utils/checkRole.js';
 import validate from '../../utils/validate.js';
 
 const router: Router = express.Router();
-
+/**
+ * Route that fetches all attendance records.
+ *
+ * @returns {Promise<Attendance[]>} A promise that resolves with all attendance records.
+ */
 router.get(
 	'/',
 	checkUserRole(['admin', 'teacher', 'counselor']),
@@ -23,6 +27,12 @@ router.get(
 		}
 	},
 );
+/**
+ * Route that fetches an attendance record by its ID.
+ *
+ * @param {number} id - The ID of the attendance record.
+ * @returns {Promise<Attendance>} A promise that resolves with the attendance record, or a 404 status if not found.
+ */
 router.get(
 	'/:id',
 	checkUserRole(['admin', 'teacher', 'counselor']),
@@ -43,6 +53,12 @@ router.get(
 		}
 	},
 );
+/**
+ * Route that fetches all attendance records for a user's course.
+ *
+ * @param {number} id - The ID of the user's course.
+ * @returns {Promise<Attendance[]>} A promise that resolves with all attendance records for the user's course.
+ */
 router.get(
 	'/usercourse/:id',
 	[param('id').isNumeric().withMessage('ID must be a number')],
@@ -76,6 +92,15 @@ router.get(
 		}
 	},
 );
+/**
+ * Route that creates a new attendance record.
+ *
+ * @param {string} status - The attendance status.
+ * @param {string} date - The date of the attendance in ISO 8601 format.
+ * @param {number} studentnumber - The student number.
+ * @param {number} lectureid - The ID of the lecture.
+ * @returns {Promise<Attendance>} A promise that resolves with the created attendance record.
+ */
 
 router.post(
 	'/',
@@ -109,6 +134,14 @@ router.post(
 		}
 	},
 );
+/**
+ * Route that marks all students not present in a lecture as not present.
+ *
+ * @param {string} date - The date of the lecture in ISO 8601 format.
+ * @param {number[]} studentnumbers - The student numbers.
+ * @param {number} lectureid - The ID of the lecture.
+ * @returns {Promise<void>} A promise that resolves when the operation is complete.
+ */
 router.post(
 	'/lecturefinished/',
 	checkUserRole(['admin', 'teacher', 'counselor']),
@@ -141,6 +174,12 @@ router.post(
 		}
 	},
 );
+/**
+ * Route that fetches all students in a lecture.
+ *
+ * @param {number} lectureid - The ID of the lecture.
+ * @returns {Promise<Student[]>} A promise that resolves with all students in the lecture.
+ */
 router.post(
 	'/getallstudentsinlecture/',
 	checkUserRole(['admin', 'teacher', 'counselor']),
@@ -158,6 +197,13 @@ router.post(
 		}
 	},
 );
+/**
+ * Route that deletes an attendance record.
+ *
+ * @param {number} studentnumber - The student number.
+ * @param {number} lectureid - The ID of the lecture.
+ * @returns {Promise<boolean>} A promise that resolves with true if the deletion was successful, or false otherwise.
+ */
 router.post(
 	'/delete/',
 	checkUserRole(['admin', 'teacher', 'counselor']),
@@ -174,7 +220,12 @@ router.post(
 		}
 	},
 );
-
+/**
+ * Route that deletes a lecture by its ID.
+ *
+ * @param {number} lectureid - The ID of the lecture.
+ * @returns {Promise<void>} A promise that resolves when the deletion is complete.
+ */
 router.post(
 	'/deletelecture/',
 	checkUserRole(['admin', 'teacher', 'counselor']),
@@ -190,6 +241,17 @@ router.post(
 		}
 	},
 );
+/**
+ * Route that creates a new lecture.
+ *
+ * @param {string} topicname - The name of the topic.
+ * @param {string} coursecode - The course code.
+ * @param {string} start_date - The start date of the lecture in ISO 8601 format.
+ * @param {string} end_date - The end date of the lecture in ISO 8601 format.
+ * @param {string} timeofday - The time of day of the lecture.
+ * @param {string} state - The state of the lecture.
+ * @returns {Promise<{message: string, lectureInfo: number}>} A promise that resolves with a message and the ID of the created lecture.
+ */
 router.post(
 	'/lecture/',
 	checkUserRole(['admin', 'teacher', 'counselor']),
@@ -223,6 +285,12 @@ router.post(
 		}
 	},
 );
+/**
+ * Route that fetches a lecture by its ID with its course and topic.
+ *
+ * @param {number} lectureid - The ID of the lecture.
+ * @returns {Promise<Lecture>} A promise that resolves with the lecture, or a 404 status if not found.
+ */
 router.get(
 	'/lectureinfo/:lectureid',
 	checkUserRole(['admin', 'teacher', 'counselor']),
@@ -256,7 +324,13 @@ router.get(
 // 		res.status(500).send('Server error');
 // 	}
 // });
-
+/**
+ * Route that updates the status of an attendance record.
+ *
+ * @param {number} attendanceid - The ID of the attendance record.
+ * @param {string} status - The new status.
+ * @returns {Promise<{message: string}>} A promise that resolves with a message indicating the update was successful.
+ */
 router.put(
 	'/update',
 	checkUserRole(['admin', 'teacher', 'counselor']),
@@ -280,6 +354,12 @@ router.put(
 		}
 	},
 );
+/**
+ * Route that fetches all lectures and attendance records for a course.
+ *
+ * @param {number} courseid - The ID of the course.
+ * @returns {Promise<Lecture[]>} A promise that resolves with all lectures and attendance records for the course.
+ */
 router.get(
 	'/course/:courseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -299,6 +379,12 @@ router.get(
 		}
 	},
 );
+/**
+ * Route that deletes a lecture by its ID.
+ *
+ * @param {number} lectureid - The ID of the lecture.
+ * @returns {Promise<{message: string}>} A promise that resolves with a message indicating the deletion was successful.
+ */
 router.delete(
 	'/lecture/:lectureid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -317,6 +403,12 @@ router.delete(
 		}
 	},
 );
+/**
+ * Route that closes a lecture by its ID.
+ *
+ * @param {number} lectureid - The ID of the lecture.
+ * @returns {Promise<{message: string}>} A promise that resolves with a message indicating the lecture was closed successfully.
+ */
 router.put(
 	'/lecture/close/:lectureid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -335,6 +427,12 @@ router.put(
 		}
 	},
 );
+/**
+ * Route that fetches all open lectures for a course.
+ *
+ * @param {number} courseid - The ID of the course.
+ * @returns {Promise<Lecture[]>} A promise that resolves with all open lectures for the course.
+ */
 router.get(
 	'/lecture/open/:courseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),

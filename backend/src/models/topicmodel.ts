@@ -131,13 +131,22 @@ const topicModel: TopicModel = {
 			return Promise.reject(error);
 		}
 	},
-
+	/**
+	 * Checks if a topic exists.
+	 * @param topic - The name of the topic.
+	 * @returns A promise that resolves to the existing topic, if any.
+	 */
 	async checkIfTopicExists(topic: string) {
 		const [existingCourseTopic] = await pool
 			.promise()
 			.query<RowDataPacket[]>('SELECT * FROM topics WHERE topicname = ?', [topic]);
 		return existingCourseTopic;
 	},
+	/**
+	 * Inserts a topic.
+	 * @param topic - The name of the topic.
+	 * @returns A promise that resolves when the insertion is complete.
+	 */
 	async insertTopic(topic: string) {
 		const [topicResult] = await pool
 			.promise()
@@ -147,6 +156,11 @@ const topicModel: TopicModel = {
 
 		return topicResult;
 	},
+	/**
+	 * Finds a topic ID using the topic name.
+	 * @param topic - The name of the topic.
+	 * @returns A promise that resolves to the topic ID.
+	 */
 	async findTopicIdUsingTopicName(topic: string) {
 		const [topicResult] = await pool
 			.promise()
@@ -155,6 +169,11 @@ const topicModel: TopicModel = {
 			]);
 		return topicResult;
 	},
+	/**
+	 * Gets topic names by user course ID.
+	 * @param usercourseid - The ID of the user course.
+	 * @returns A promise that resolves to the topic names.
+	 */
 	async getTopicNamesByUsercourseid(usercourseid: number) {
 		const [topicResult] = await pool.promise().query<RowDataPacket[]>(
 			`SELECT 

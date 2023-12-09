@@ -2,7 +2,13 @@ import crypto from 'crypto';
 import {config} from 'dotenv';
 import {Server, Socket} from 'socket.io';
 import doFetch from '../utils/doFetch.js';
-
+/**
+ * Socket event handlers for managing attendance in lectures.
+ * This module sets up Socket.IO server event handlers for various actions related to lecture attendance,
+ * including starting and finishing lectures, handling student arrivals, and manual operations by teachers.
+ *
+ * @module setupSocketHandlers
+ */
 config();
 /**
  * The current hash value.
@@ -53,6 +59,7 @@ interface Student {
 }
 /**
  * Retrieves a token by making a POST request with the dev account credentials.
+ *
  * @returns {Promise<string>} A promise that resolves to the token string.
  */
 const getToken = async () => {
@@ -77,6 +84,7 @@ const getToken = async () => {
 };
 /**
  * Fetches data and updates the `speedOfHashChange`, `leewaytimes`, and `timeout` variables.
+ *
  * @returns {Promise<void>} A promise that resolves when the data has been fetched and the variables have been updated.
  */
 const fetchDataAndUpdate = async () => {
@@ -117,7 +125,12 @@ const updateHash = () => {
 		timestamps.shift();
 	}
 };
-// Send a POST request to the '/lecturefinished/' route
+/**
+ * Sends a POST request to the '/lecturefinished/' route and emits 'lecturefinished' event to connected sockets.
+ *
+ * @param {string} lectureid - The ID of the finished lecture.
+ * @param {Server} io - The Socket.IO server.
+ */
 const finishLecture = async (lectureid: string, io: Server) => {
 	// Prepare the data to be sent
 	const data = {
@@ -158,7 +171,7 @@ const notYetPresentStudents: {[lectureid: string]: Student[]} = {};
 // The timeout id for the lecture
 let lectureTimeoutId: NodeJS.Timeout;
 /**
- * Sets up socket event handlers for a given Socket.IO server.
+ * Sets up Socket event handlers for a given Socket.IO server.
  *
  * @param {Server} io - The Socket.IO server.
  *

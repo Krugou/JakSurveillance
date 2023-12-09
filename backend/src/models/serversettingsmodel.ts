@@ -2,6 +2,11 @@ import {Pool, RowDataPacket} from 'mysql2';
 
 // server settings model
 const serverSettingsModel = {
+	/**
+	 * Fetches server settings.
+	 * @param pool - The MySQL connection pool.
+	 * @returns A promise that resolves to an array of server settings.
+	 */
 	async getServerSettings(pool: Pool) {
 		try {
 			return await pool
@@ -12,6 +17,15 @@ const serverSettingsModel = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Updates server settings.
+	 * @param pool - The MySQL connection pool.
+	 * @param speedofhash - The speed of hash.
+	 * @param leewayspeed - The leeway speed.
+	 * @param timeouttime - The timeout time.
+	 * @param attendancethreshold - The attendance threshold.
+	 * @returns A promise that resolves to the result of the update.
+	 */
 	async updateServerSettings(
 		pool: Pool,
 		speedofhash: number,
@@ -31,6 +45,11 @@ const serverSettingsModel = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Fetches the attendance threshold.
+	 * @param pool - The MySQL connection pool.
+	 * @returns A promise that resolves to the attendance threshold.
+	 */
 	async getAttentanceThreshold(pool: Pool) {
 		try {
 			return await pool

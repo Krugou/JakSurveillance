@@ -23,12 +23,45 @@ interface CourseResults {
 }
 
 interface CourseModel {
+	/**
+	 * Fetches the course ID using the course code.
+	 *
+	 * @param {string} coursecode - The code of the course.
+	 * @returns {Promise<RowDataPacket[]>} A promise that resolves with the course ID.
+	 */
 	findCourseIdUsingCourseCode(coursecode: string): Promise<RowDataPacket[]>;
 	getStudentsCourses(email: string): unknown;
+	/**
+	 * Fetches all courses.
+	 *
+	 * @returns {Promise<RowDataPacket[]>} A promise that resolves with all courses.
+	 */
 	fetchAllCourses: () => Promise<RowDataPacket[]>;
+	/**
+	 * Fetches a course by its ID.
+	 *
+	 * @param {number} id - The ID of the course.
+	 * @returns {Promise<Course | null>} A promise that resolves with the course or null if not found.
+	 */
 	findByCourseId: (id: number) => Promise<Course | null>;
-
+	/**
+	 * Deletes a course by its ID.
+	 *
+	 * @param {number} id - The ID of the course.
+	 * @returns {Promise<void>} A promise that resolves when the deletion is complete.
+	 */
 	deleteByCourseId: (id: number) => Promise<void>;
+	/**
+	 * Updates the details of a course.
+	 *
+	 * @param {number} id - The ID of the course.
+	 * @param {string} name - The new name of the course.
+	 * @param {Date} start_date - The new start date of the course.
+	 * @param {Date} end_date - The new end date of the course.
+	 * @param {string} code - The new code of the course.
+	 * @param {number} studentgroupid - The new student group ID of the course.
+	 * @returns {Promise<void>} A promise that resolves when the update is complete.
+	 */
 	updateCourseDetails: (
 		id: number,
 		name: string,
@@ -37,10 +70,43 @@ interface CourseModel {
 		code: string,
 		studentgroupid: number,
 	) => Promise<void>;
+	/**
+	 * Fetches a course by its code.
+	 *
+	 * @param {string} code - The code of the course.
+	 * @returns {Promise<Course | null>} A promise that resolves with the course or null if not found.
+	 */
 	findByCode: (code: string) => Promise<Course | null>;
+	/**
+	 * Fetches all courses by the instructor's email.
+	 *
+	 * @param {string} email - The email of the instructor.
+	 * @returns {Promise<Course[]>} A promise that resolves with all courses taught by the instructor.
+	 */
 	getCoursesByInstructorEmail(email: string): Promise<Course[]>;
+	/**
+	 * Counts all courses.
+	 *
+	 * @returns {Promise<number>} A promise that resolves with the number of courses.
+	 */
 	countCourses(): Promise<number>;
+	/**
+	 * Fetches the courses by course ID.
+	 *
+	 * @param {number} courseId - The ID of the course.
+	 * @returns {Promise<Course[]>} A promise that resolves with the courses.
+	 */
 	getCoursesByCourseId(courseId: number): Promise<Course[]>;
+	/**
+	 * Inserts a new course.
+	 *
+	 * @param {string} name - The name of the course.
+	 * @param {string} startDateString - The start date of the course.
+	 * @param {string} endDateString - The end date of the course.
+	 * @param {string} code - The code of the course.
+	 * @param {number} studentGroupId - The ID of the student group.
+	 * @returns {Promise<ResultSetHeader>} A promise that resolves with the result of the insertion.
+	 */
 	insertCourse(
 		name: string,
 		startDateString: string,
@@ -48,8 +114,33 @@ interface CourseModel {
 		code: string,
 		studentGroupId: number,
 	): Promise<ResultSetHeader>;
+	/**
+	 * Fetches the courses of a student.
+	 *
+	 * @param {string} email - The email of the student.
+	 * @returns {Promise<Course[]>} A promise that resolves with the courses of the student.
+	 */
 	getStudentsCourses(email: string): Promise<Course[]>;
+	/**
+	 * Deletes a course.
+	 *
+	 * @param {number} courseId - The ID of the course.
+	 * @returns {Promise<string | undefined>} A promise that resolves with a success message or undefined.
+	 */
 	deleteCourse(courseId: number): Promise<string | undefined>;
+	/**
+	 * Updates the information of a course.
+	 *
+	 * @param {number} courseid - The ID of the course.
+	 * @param {string} name - The new name of the course.
+	 * @param {Date} start_date - The new start date of the course.
+	 * @param {Date} end_date - The new end date of the course.
+	 * @param {string} code - The new code of the course.
+	 * @param {string} studentgroupname - The new name of the student group.
+	 * @param {string[]} instructors - The new instructors of the course.
+	 * @param {string[]} topic_names - The new topics of the course.
+	 * @returns {Promise<RowDataPacket[]>} A promise that resolves when the update is complete.
+	 */
 	updateCourseInfo(
 		courseid: number,
 		name: string,
@@ -60,14 +151,37 @@ interface CourseModel {
 		instructors: string[],
 		topic_names: string[],
 	): Promise<RowDataPacket[]>;
+	/**
+	 * Fetches all courses with their details.
+	 *
+	 * @returns {Promise<CourseResults[]>} A promise that resolves with all courses and their details.
+	 */
 	getCoursesWithDetails(): Promise<CourseResults[]>;
+	/**
+	 * Fetches all students enrolled in a specific course.
+	 *
+	 * @param {string} courseId - The ID of the course.
+	 * @returns {Promise<RowDataPacket[]>} A promise that resolves with all students in the course.
+	 */
 	getAllStudentsOnCourse(courseId: string): Promise<RowDataPacket[]>;
+	/**
+	 * Updates the courses for a student.
+	 *
+	 * @param {number} courseid - The ID of the course.
+	 * @param {number} studentid - The ID of the student.
+	 * @returns {Promise<Course[]>} A promise that resolves when the update is complete.
+	 */
 	updateStudentCourses: (
 		courseid: number,
 		studentid: number,
 	) => Promise<Course[]>;
 }
 const course: CourseModel = {
+	/**
+	 * Fetches all courses.
+	 *
+	 * @returns {Promise<RowDataPacket[]>} A promise that resolves with all courses.
+	 */
 	async fetchAllCourses() {
 		try {
 			const [rows] = await pool.promise().query<
@@ -87,7 +201,12 @@ const course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
-
+	/**
+	 * Fetches a course by its ID.
+	 *
+	 * @param {number} id - The ID of the course.
+	 * @returns {Promise<Course | null>} A promise that resolves with the course or null if not found.
+	 */
 	async findByCourseId(id) {
 		try {
 			const [rows] = await pool
@@ -99,6 +218,12 @@ const course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Fetches all courses by the instructor's email.
+	 *
+	 * @param {string} email - The email of the instructor.
+	 * @returns {Promise<Course[]>} A promise that resolves with all courses taught by the instructor.
+	 */
 	async getCoursesByInstructorEmail(email) {
 		try {
 			const [rows] = await pool.promise().query<RowDataPacket[]>(
@@ -121,7 +246,12 @@ const course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
-
+	/**
+	 * Deletes a course by its ID.
+	 *
+	 * @param {number} id - The ID of the course.
+	 * @returns {Promise<void>} A promise that resolves when the deletion is complete.
+	 */
 	async deleteByCourseId(id) {
 		try {
 			await pool.promise().query('DELETE FROM courses WHERE courseid = ?', [id]);
@@ -130,7 +260,17 @@ const course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
-
+	/**
+	 * Updates the details of a course.
+	 *
+	 * @param {number} id - The ID of the course.
+	 * @param {string} name - The new name of the course.
+	 * @param {Date} start_date - The new start date of the course.
+	 * @param {Date} end_date - The new end date of the course.
+	 * @param {string} code - The new code of the course.
+	 * @param {number} studentgroupid - The new student group ID of the course.
+	 * @returns {Promise<void>} A promise that resolves when the update is complete.
+	 */
 	async updateCourseDetails(
 		id,
 		name,
@@ -151,7 +291,11 @@ const course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
-
+	/**
+	 * Counts all courses.
+	 *
+	 * @returns {Promise<number>} A promise that resolves with the number of courses.
+	 */
 	async countCourses() {
 		try {
 			const [rows] = await pool
@@ -163,7 +307,12 @@ const course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
-
+	/**
+	 * Fetches a course by its code.
+	 *
+	 * @param {string} code - The code of the course.
+	 * @returns {Promise<Course | null>} A promise that resolves with the course or null if not found.
+	 */
 	async findByCode(code: string): Promise<Course | null> {
 		try {
 			const [rows] = await pool
@@ -175,7 +324,12 @@ const course: CourseModel = {
 			throw new Error('Database query failed');
 		}
 	},
-
+	/**
+	 * Fetches the course ID using the course code.
+	 *
+	 * @param {string} coursecode - The code of the course.
+	 * @returns {Promise<RowDataPacket[]>} A promise that resolves with the course ID.
+	 */
 	async findCourseIdUsingCourseCode(coursecode) {
 		const [courseResult] = await pool
 			.promise()
@@ -184,6 +338,12 @@ const course: CourseModel = {
 			]);
 		return courseResult;
 	},
+	/**
+	 * Fetches the courses by course ID.
+	 *
+	 * @param {number} courseId - The ID of the course.
+	 * @returns {Promise<Course[]>} A promise that resolves with the courses.
+	 */
 	async getCoursesByCourseId(courseId) {
 		try {
 			const [rows] = await pool.promise().query<RowDataPacket[]>(
@@ -208,7 +368,16 @@ const course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
-
+	/**
+	 * Inserts a new course.
+	 *
+	 * @param {string} name - The name of the course.
+	 * @param {string} startDateString - The start date of the course.
+	 * @param {string} endDateString - The end date of the course.
+	 * @param {string} code - The code of the course.
+	 * @param {number} studentGroupId - The ID of the student group.
+	 * @returns {Promise<ResultSetHeader>} A promise that resolves with the result of the insertion.
+	 */
 	async insertCourse(
 		name: string,
 		startDateString: string,
@@ -225,7 +394,12 @@ const course: CourseModel = {
 
 		return courseResult;
 	},
-	// other methods...
+	/**
+	 * Fetches the courses of a student.
+	 *
+	 * @param {string} email - The email of the student.
+	 * @returns {Promise<Course[]>} A promise that resolves with the courses of the student.
+	 */
 	async getStudentsCourses(email: string) {
 		try {
 			const [rows] = await pool.promise().query<RowDataPacket[]>(
@@ -273,7 +447,12 @@ const course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
-
+	/**
+	 * Deletes a course.
+	 *
+	 * @param {number} courseId - The ID of the course.
+	 * @returns {Promise<string | undefined>} A promise that resolves with a success message or undefined.
+	 */
 	async deleteCourse(courseId: number): Promise<string | undefined> {
 		try {
 			// Disable foreign key checks
@@ -292,7 +471,19 @@ const course: CourseModel = {
 		}
 	},
 
-	// Function for updating course info
+	/**
+	 * Updates the information of a course.
+	 *
+	 * @param {number} courseid - The ID of the course.
+	 * @param {string} name - The new name of the course.
+	 * @param {Date} start_date - The new start date of the course.
+	 * @param {Date} end_date - The new end date of the course.
+	 * @param {string} code - The new code of the course.
+	 * @param {string} studentgroupname - The new name of the student group.
+	 * @param {string[]} instructors - The new instructors of the course.
+	 * @param {string[]} topic_names - The new topics of the course.
+	 * @returns {Promise<RowDataPacket[]>} A promise that resolves when the update is complete.
+	 */
 	async updateCourseInfo(
 		courseid: number,
 		name: string,
@@ -397,6 +588,11 @@ const course: CourseModel = {
 			connection.release();
 		}
 	},
+	/**
+	 * Fetches all courses with their details.
+	 *
+	 * @returns {Promise<CourseResults[]>} A promise that resolves with all courses and their details.
+	 */
 	async getCoursesWithDetails(): Promise<CourseResults[]> {
 		try {
 			const [rows]: [RowDataPacket[], FieldPacket[]] = await pool.promise().query<
@@ -458,6 +654,12 @@ const course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Fetches all students enrolled in a specific course.
+	 *
+	 * @param {string} courseId - The ID of the course.
+	 * @returns {Promise<RowDataPacket[]>} A promise that resolves with all students in the course.
+	 */
 	async getAllStudentsOnCourse(courseId: string): Promise<RowDataPacket[]> {
 		try {
 			const [rows] = await pool.promise().query(
@@ -486,6 +688,13 @@ const course: CourseModel = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Updates the courses for a student.
+	 *
+	 * @param {number} courseid - The ID of the course.
+	 * @param {number} studentid - The ID of the student.
+	 * @returns {Promise<Course[]>} A promise that resolves when the update is complete.
+	 */
 	async updateStudentCourses(courseid: number, studentid: number) {
 		try {
 			const [rows] = await pool

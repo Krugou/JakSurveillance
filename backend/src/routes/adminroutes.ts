@@ -8,6 +8,11 @@ import usermodel from '../models/usermodel.js';
 import checkUserRole from '../utils/checkRole.js';
 import validate from '../utils/validate.js';
 const router: Router = express.Router();
+/**
+ * Route that fetches the server settings.
+ *
+ * @returns {Promise<ServerSettings>} A promise that resolves with the server settings.
+ */
 router.get(
 	'/',
 	checkUserRole(['admin']),
@@ -25,6 +30,15 @@ router.get(
 		}
 	},
 );
+/**
+ * Route that updates the server settings.
+ *
+ * @param {number} speedofhash - The speed of hash.
+ * @param {number} leewayspeed - The leeway speed.
+ * @param {number} timeouttime - The timeout time.
+ * @param {number} attendancethreshold - The attendance threshold.
+ * @returns {Promise<void>} A promise that resolves when the update is complete.
+ */
 router.post(
 	'/',
 	checkUserRole(['admin']),
@@ -53,6 +67,11 @@ router.post(
 		}
 	},
 );
+/**
+ * Route that fetches the teacher and counselor roles.
+ *
+ * @returns {Promise<Role[]>} A promise that resolves with the teacher and counselor roles.
+ */
 router.get(
 	'/rolesspecial',
 	checkUserRole(['admin']),
@@ -67,6 +86,11 @@ router.get(
 		}
 	},
 );
+/**
+ * Route that fetches all roles.
+ *
+ * @returns {Promise<Role[]>} A promise that resolves with all roles.
+ */
 router.get(
 	'/roles',
 	checkUserRole(['admin']),
@@ -80,7 +104,13 @@ router.get(
 		}
 	},
 );
-
+/**
+ * Route that changes the role of a user.
+ *
+ * @param {string} email - The email of the user.
+ * @param {number} roleId - The new role ID.
+ * @returns {Promise<void>} A promise that resolves when the role change is complete.
+ */
 router.post(
 	'/change-role',
 	checkUserRole(['admin']),
@@ -100,6 +130,11 @@ router.post(
 		}
 	},
 );
+/**
+ * Route that fetches all users.
+ *
+ * @returns {Promise<User[]>} A promise that resolves with all users.
+ */
 router.get(
 	'/getusers',
 	checkUserRole(['admin']),
@@ -113,6 +148,12 @@ router.get(
 		}
 	},
 );
+/**
+ * Route that fetches a user by their ID.
+ *
+ * @param {number} userid - The ID of the user.
+ * @returns {Promise<User>} A promise that resolves with the user.
+ */
 router.get(
 	'/getuser/:userid',
 	checkUserRole(['admin']),
@@ -129,6 +170,11 @@ router.get(
 		}
 	},
 );
+/**
+ * Route that fetches all courses with their details.
+ *
+ * @returns {Promise<Course[]>} A promise that resolves with all courses.
+ */
 router.get(
 	'/getcourses',
 	checkUserRole(['admin']),
@@ -142,6 +188,12 @@ router.get(
 		}
 	},
 );
+/**
+ * Route that updates a user.
+ *
+ * @param {User} user - The updated user data.
+ * @returns {Promise<void>} A promise that resolves when the update is complete.
+ */
 router.put(
 	'/updateuser',
 	checkUserRole(['admin']),
@@ -156,6 +208,11 @@ router.put(
 		}
 	},
 );
+/**
+ * Route that fetches all student groups.
+ *
+ * @returns {Promise<StudentGroup[]>} A promise that resolves with all student groups.
+ */
 router.get(
 	'/studentgroups',
 	checkUserRole(['admin']),
@@ -169,6 +226,12 @@ router.get(
 		}
 	},
 );
+/**
+ * Route that checks if a student number exists.
+ *
+ * @param {number} studentnumber - The student number to check.
+ * @returns {Promise<{exists: boolean}>} A promise that resolves with a boolean indicating if the student number exists.
+ */
 router.get(
 	'/checkstudentnumber/:studentnumber',
 	checkUserRole(['admin']),
@@ -195,6 +258,11 @@ router.get(
 		}
 	},
 );
+/**
+ * Route that fetches the counts of users for each role.
+ *
+ * @returns {Promise<{[role: string]: number}>} A promise that resolves with an object where the keys are role names and the values are the counts of users with that role.
+ */
 router.get(
 	'/getrolecounts',
 	checkUserRole(['admin']),

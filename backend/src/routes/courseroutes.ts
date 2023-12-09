@@ -1,6 +1,6 @@
 import {config} from 'dotenv';
 import express, {Request, Response, Router} from 'express';
-import {body, validationResult, param} from 'express-validator';
+import {body, param, validationResult} from 'express-validator';
 import multer from 'multer';
 import XLSX from 'xlsx';
 import courseController from '../controllers/coursecontroller.js';
@@ -9,16 +9,24 @@ import usermodel from '../models/usermodel.js';
 import {CourseDetails, CourseUser, IData, Item} from '../types.js';
 import checkUserRole from '../utils/checkRole.js';
 import openData from '../utils/opendata.js';
+import validate from '../utils/validate.js';
 import attendanceRoutes from './course/attendanceRoutes.js';
 import topicRoutes from './course/topicRoutes.js';
-import validate from '../utils/validate.js';
 config();
 const upload = multer();
+/**
+ * Router for course routes.
+ */
 const router: Router = express.Router();
 
 router.use('/attendance', attendanceRoutes);
 router.use('/topics', topicRoutes);
-
+/**
+ * Route that checks if a course exists in the database.
+ *
+ * @param {string} code - The course code.
+ * @returns {Promise<boolean>} A promise that resolves with a boolean.
+ */
 router.post(
 	'/check',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -46,6 +54,12 @@ router.post(
 		}
 	},
 );
+/**
+ * Route that checks if a course exists in the database.
+ *
+ * @param {string} code - The course code.
+ * @returns {Promise<boolean>} A promise that resolves with a boolean.
+ */
 router.post(
 	'/checkcode/:code',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -68,6 +82,13 @@ router.post(
 		}
 	},
 );
+/**
+ * Route that checks reservations for a course.
+ *
+ * @param {string} code - The code of the course.
+ * @param {string} studentGroup - The student group.
+ * @returns {Promise<Reservation[]>} A promise that resolves with the reservations for the course.
+ */
 router.post(
 	'/checkreservations/',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -86,6 +107,19 @@ router.post(
 		}
 	},
 );
+/**
+ * Route that creates a new course.
+ *
+ * @param {string} courseName - The name of the course.
+ * @param {string} courseCode - The code of the course.
+ * @param {string} studentGroup - The student group.
+ * @param {string} startDate - The start date of the course.
+ * @param {string} endDate - The end date of the course.
+ * @param {string} topicGroup - The topic group of the course.
+ * @param {string[]} topics - The topics of the course.
+ * @param {string[]} instructors - The instructors of the course.
+ * @returns {Promise<Course>} A promise that resolves with the created course.
+ */
 router.post(
 	'/create',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -171,6 +205,14 @@ router.post(
 		}
 	},
 );
+/**
+ * Route that creates a new course from an Excel file.
+ *
+ * @param {Buffer} file - The Excel file.
+ * @param {string} checkCourseDetails - Whether to check the course details.
+ * @param {string} instructorEmail - The email of the instructor.
+ * @returns {Promise<CourseDetails>} A promise that resolves with the created course details.
+ */
 router.post(
 	'/excelinput',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -264,6 +306,12 @@ router.post(
 		}
 	},
 );
+/**
+ * Route that fetches all courses by the instructor's email.
+ *
+ * @param {string} email - The email of the instructor.
+ * @returns {Promise<Course[]>} A promise that resolves with all courses taught by the instructor.
+ */
 router.get(
 	'/instructor/:email',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -281,6 +329,12 @@ router.get(
 		}
 	},
 );
+/**
+ * Route that fetches the courses by course ID.
+ *
+ * @param {number} id - The ID of the course.
+ * @returns {Promise<Course[]>} A promise that resolves with the courses.
+ */
 router.get(
 	'/coursesbyid/:id',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -308,6 +362,11 @@ declare module 'express-serve-static-core' {
 		user?: CourseUser;
 	}
 }
+/**
+ * Route that fetches all courses for a user.
+ *
+ * @returns {Promise<Course[]>} A promise that resolves with all courses for the user.
+ */
 router.get('/user/all', async (req: Request, res: Response) => {
 	try {
 		// Validate that the user is logged in
@@ -331,7 +390,12 @@ router.get('/user/all', async (req: Request, res: Response) => {
 		res.status(500).send('Server error');
 	}
 });
-
+/**
+ * Route that deletes a course by its ID.
+ *
+ * @param {number} id - The ID of the course.
+ * @returns {Promise<void>} A promise that resolves when the deletion is complete.
+ */
 router.delete(
 	'/delete/:id',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -351,6 +415,12 @@ router.delete(
 		}
 	},
 );
+/**
+ * Route that fetches all students for an instructor by the instructor's ID.
+ *
+ * @param {number} userid - The ID of the instructor.
+ * @returns {Promise<Student[]>} A promise that resolves with all students for the instructor.
+ */
 router.get(
 	'/students/:userid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -373,7 +443,13 @@ router.get(
 		}
 	},
 );
-
+/**
+ * Route that updates a course by its ID.
+ *
+ * @param {number} courseid - The ID of the course.
+ * @param {CourseData} modifiedData - The modified data of the course.
+ * @returns {Promise<Course>} A promise that resolves with the updated course.
+ */
 router.put(
 	'/update/:courseid',
 	[
@@ -459,7 +535,11 @@ router.put(
 		}
 	},
 );
-
+/**
+ * Route that fetches all courses.
+ *
+ * @returns {Promise<Course[]>} A promise that resolves with all courses.
+ */
 router.get(
 	'/getallcourses',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -484,7 +564,12 @@ router.get(
 		}
 	},
 );
-
+/**
+ * Route that fetches the details of a course by its ID.
+ *
+ * @param {number} courseId - The ID of the course.
+ * @returns {Promise<CourseDetails>} A promise that resolves with the details of the course.
+ */
 router.get(
 	'/getdetailsbycourseid/:courseId',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -501,6 +586,13 @@ router.get(
 		}
 	},
 );
+/**
+ * Route that updates the courses of a user by the user's ID and the course's ID.
+ *
+ * @param {number} userid - The ID of the user.
+ * @param {number} courseid - The ID of the course.
+ * @returns {Promise<void>} A promise that resolves when the update is complete.
+ */
 router.post(
 	'/updateusercourses/:userid/:courseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -526,6 +618,12 @@ router.post(
 		}
 	},
 );
+/**
+ * Route that deletes a course from a user by the user's course ID.
+ *
+ * @param {number} usercourseid - The ID of the user's course.
+ * @returns {Promise<void>} A promise that resolves when the deletion is complete.
+ */
 router.delete(
 	'/deleteusercourse/:usercourseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -548,6 +646,12 @@ router.delete(
 		}
 	},
 );
+/**
+ * Route that fetches the student and selected topics by the user's course ID.
+ *
+ * @param {number} usercourseid - The ID of the user's course.
+ * @returns {Promise<Course[]>} A promise that resolves with the student and selected topics.
+ */
 router.get(
 	'/studentandtopics/:usercourseid',
 	param('usercourseid')
@@ -568,6 +672,12 @@ router.get(
 		}
 	},
 );
+/**
+ * Route that fetches all students for a course by the course's ID.
+ *
+ * @param {number} courseid - The ID of the course.
+ * @returns {Promise<Student[]>} A promise that resolves with all students for the course.
+ */
 router.get(
 	'/studentsbycourse/:courseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -584,6 +694,12 @@ router.get(
 		}
 	},
 );
+/**
+ * Route that fetches a user and their courses by the user's ID.
+ *
+ * @param {number} userid - The ID of the user.
+ * @returns {Promise<{user: User, courses: Course[]}>} A promise that resolves with the user and their courses.
+ */
 router.get(
 	'/:userid',
 	checkUserRole(['admin', 'counselor', 'teacher']),

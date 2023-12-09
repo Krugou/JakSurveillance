@@ -2,7 +2,16 @@ import {RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
 
 const pool = createPool('ADMIN');
+/**
+ * Model for managing user course topics.
+ */
 const usercourse_topicsModel = {
+	/**
+	 * Checks if a user course topic exists.
+	 * @param usercourseid - The ID of the user course.
+	 * @param topicId - The ID of the topic.
+	 * @returns A promise that resolves to the existing user course topic, if any.
+	 */
 	async checkIfUserCourseTopicExists(usercourseid: number, topicId: number) {
 		const [existingUserCourseTopic] = await pool
 			.promise()
@@ -13,7 +22,12 @@ const usercourse_topicsModel = {
 
 		return existingUserCourseTopic;
 	},
-
+	/**
+	 * Deletes a user course topic.
+	 * @param usercourseid - The ID of the user course.
+	 * @param connection - The database connection.
+	 * @returns A promise that resolves when the deletion is complete.
+	 */
 	async deleteUserCourseTopic(usercourseid: number, connection: any) {
 		let result;
 
@@ -32,6 +46,13 @@ const usercourse_topicsModel = {
 
 		return result;
 	},
+	/**
+	 * Inserts a user course topic.
+	 * @param usercourseid - The ID of the user course.
+	 * @param topicId - The ID of the topic.
+	 * @param connection - The database connection.
+	 * @returns A promise that resolves when the insertion is complete.
+	 */
 
 	async insertUserCourseTopic(
 		usercourseid: number,
@@ -56,6 +77,11 @@ const usercourse_topicsModel = {
 
 		return result;
 	},
+	/**
+	 * Finds a user course topic by user course ID.
+	 * @param usercourseid - The ID of the user course.
+	 * @returns A promise that resolves to the user course topic, if found.
+	 */
 	async findUserCourseTopicByUserCourseId(usercourseid: number) {
 		const [rows] = await pool
 			.promise()

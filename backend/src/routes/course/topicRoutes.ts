@@ -6,7 +6,11 @@ import TopicGroup from '../../models/topicgroupmodel.js';
 import checkUserRole from '../../utils/checkRole.js';
 import validate from '../../utils/validate.js';
 const router: Router = express.Router();
-
+/**
+ * Route that fetches all topic groups with their topics.
+ *
+ * @returns {Promise<TopicGroup[]>} A promise that resolves with all topic groups and their topics.
+ */
 router.get(
 	'/',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -21,6 +25,12 @@ router.get(
 		}
 	},
 );
+/**
+ * Route that fetches all topic groups and topics for a user.
+ *
+ * @param {string} email - The email of the user.
+ * @returns {Promise<TopicGroup[]>} A promise that resolves with all topic groups and topics for the user.
+ */
 router.post(
 	'/',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -38,6 +48,14 @@ router.post(
 		}
 	},
 );
+/**
+ * Route that updates a topic group.
+ *
+ * @param {string} topicGroup - The name of the topic group.
+ * @param {string[]} topics - The topics for the topic group.
+ * @param {string} email - The email of the user.
+ * @returns {Promise<TopicGroup>} A promise that resolves with the updated topic group.
+ */
 router.post(
 	'/update',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -73,6 +91,13 @@ router.post(
 		}
 	},
 );
+/**
+ * Route that updates the topics for a user's course.
+ *
+ * @param {number} usercourseid - The ID of the user's course.
+ * @param {string[]} modifiedTopics - The updated topics.
+ * @returns {Promise<TopicGroup>} A promise that resolves with the updated topics for the user's course.
+ */
 router.post(
 	'/update/:usercourseid',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -104,6 +129,13 @@ router.post(
 		}
 	},
 );
+/**
+ * Route that checks if a topic group exists for a user.
+ *
+ * @param {string} topicGroup - The name of the topic group.
+ * @param {string} email - The email of the user.
+ * @returns {Promise<boolean>} A promise that resolves with a boolean indicating if the topic group exists for the user.
+ */
 router.post(
 	'/topicgroupcheck/',
 	checkUserRole(['admin', 'counselor', 'teacher']),
@@ -132,6 +164,12 @@ router.post(
 		}
 	},
 );
+/**
+ * Route that deletes a topic group by its name.
+ *
+ * @param {string} topicgroupname - The name of the topic group.
+ * @returns {Promise<void>} A promise that resolves when the deletion is complete.
+ */
 router.delete(
 	'/delete/:topicgroupname',
 	checkUserRole(['admin', 'counselor', 'teacher']),

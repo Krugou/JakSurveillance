@@ -224,6 +224,11 @@ const UserModel = {
 			throw new Error('Database error');
 		}
 	},
+	/**
+	 * Checks if an email matches a staff member.
+	 * @param instructoremail - The email to check.
+	 * @returns A promise that resolves to the staff member, if found.
+	 */
 	async checkIfEmailMatchesStaff(instructoremail: string) {
 		const [existingInstructor] = await pool
 			.promise()
@@ -234,6 +239,11 @@ const UserModel = {
 
 		return existingInstructor;
 	},
+	/**
+	 * Checks if a user exists by their student number.
+	 * @param studentnumber - The student number to check.
+	 * @returns A promise that resolves to the user, if found.
+	 */
 	async checkIfUserExistsByStudentNumber(studentnumber: string) {
 		const [existingUserByNumber] = await this.pool
 			.promise()
@@ -243,6 +253,11 @@ const UserModel = {
 
 		return existingUserByNumber;
 	},
+	/**
+	 * Checks if a user exists by their email.
+	 * @param email - The email to check.
+	 * @returns A promise that resolves to the user, if found.
+	 */
 	async checkIfUserExistsByEmail(email: string) {
 		const [existingUserByEmail] = await this.pool
 			.promise()
@@ -250,6 +265,11 @@ const UserModel = {
 
 		return existingUserByEmail;
 	},
+	/**
+	 * Checks if a user exists by their email and if they are staff.
+	 * @param email - The email of the user.
+	 * @returns A promise that resolves to the user, if found.
+	 */
 	async checkIfUserExistsByEmailAndisStaff(email: string) {
 		const [existingUserByEmail] = await pool
 			.promise()
@@ -260,6 +280,12 @@ const UserModel = {
 
 		return existingUserByEmail;
 	},
+	/**
+	 * Updates a user's student number.
+	 * @param studentnumber - The new student number.
+	 * @param email - The email of the user.
+	 * @returns A promise that resolves to the result of the update.
+	 */
 	async updateUserStudentNumber(studentnumber: string, email: string) {
 		const result = await this.pool
 			.promise()
@@ -270,6 +296,15 @@ const UserModel = {
 
 		return result;
 	},
+	/**
+	 * Inserts a new student user.
+	 * @param email - The email of the user.
+	 * @param first_name - The first name of the user.
+	 * @param last_name - The last name of the user.
+	 * @param studentnumber - The student number of the user.
+	 * @param studentGroupId - The student group ID of the user.
+	 * @returns A promise that resolves to the result of the insertion.
+	 */
 	async insertStudentUser(
 		email: string,
 		first_name: string,
@@ -286,6 +321,11 @@ const UserModel = {
 
 		return userResult;
 	},
+	/**
+	 * Gets students by their instructor's ID.
+	 * @param userid - The ID of the instructor.
+	 * @returns A promise that resolves to an array of students.
+	 */
 	getStudentsByInstructorId: async (userid: number): Promise<UserInfo[]> => {
 		try {
 			const [rows] = await UserModel.pool.promise().query<RowDataPacket[]>(
@@ -305,6 +345,12 @@ const UserModel = {
 			throw new Error('Database error');
 		}
 	},
+	/**
+	 * Changes the role ID of a user.
+	 * @param email - The email of the user.
+	 * @param roleId - The new role ID.
+	 * @returns A promise that resolves to the result of the update.
+	 */
 	changeRoleId: async (email: string, roleId: number) => {
 		try {
 			const [result] = await pool
@@ -320,6 +366,10 @@ const UserModel = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Fetches all users.
+	 * @returns A promise that resolves to an array of users.
+	 */
 	fetchUsers: async () => {
 		try {
 			const [result] = await pool
@@ -333,6 +383,11 @@ const UserModel = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Fetches a user by their ID.
+	 * @param userid - The ID of the user.
+	 * @returns A promise that resolves to the user, if found.
+	 */
 	fetchUserById: async (userid: number) => {
 		try {
 			const [result] = await pool
@@ -391,6 +446,10 @@ const UserModel = {
 			throw new Error('Database error');
 		}
 	},
+	/**
+	 * Fetches all students.
+	 * @returns A promise that resolves to an array of students.
+	 */
 	fetchAllStudents: async () => {
 		try {
 			const [result] = await pool
@@ -404,7 +463,11 @@ const UserModel = {
 			return Promise.reject(error);
 		}
 	},
-
+	/**
+	 * Updates a user.
+	 * @param user - The user to update.
+	 * @returns A promise that resolves to the result of the update.
+	 */
 	updateUser: async (user: UpdateUser) => {
 		const {
 			userid,
@@ -443,6 +506,11 @@ const UserModel = {
 			return Promise.reject(error);
 		}
 	},
+	/**
+	 * Checks if a student number exists.
+	 * @param studentnumber - The student number to check.
+	 * @returns A promise that resolves to the existing student number, if found.
+	 */
 	checkIfStudentNumberExists: async (studentnumber: string) => {
 		const [existingStudentNumber] = await pool
 			.promise()
@@ -452,6 +520,10 @@ const UserModel = {
 
 		return existingStudentNumber;
 	},
+	/**
+	 * Gets the counts of each role.
+	 * @returns A promise that resolves to an array of role counts.
+	 */
 	getRoleCounts: async () => {
 		const [rows] = await pool.promise().query<RowDataPacket[]>(
 			`SELECT r.name AS role_name, COUNT(*) AS user_count

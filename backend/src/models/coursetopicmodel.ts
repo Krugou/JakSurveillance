@@ -3,6 +3,12 @@ import createPool from '../config/createPool.js';
 
 const pool = createPool('ADMIN');
 const coursetopicsModel = {
+	/**
+	 * Checks if a course-topic relation exists.
+	 * @param courseId - The ID of the course.
+	 * @param topicId - The ID of the topic.
+	 * @returns A promise that resolves to the existing course-topic relation, if found.
+	 */
 	async checkIfCourseTopicRelationExists(courseId: number, topicId: number) {
 		const [existingCourseTopicRelation] = await pool
 			.promise()
@@ -13,7 +19,12 @@ const coursetopicsModel = {
 
 		return existingCourseTopicRelation;
 	},
-
+	/**
+	 * Inserts a new course-topic relation.
+	 * @param courseId - The ID of the course.
+	 * @param topicId - The ID of the topic.
+	 * @returns A promise that resolves to the result of the insertion.
+	 */
 	async insertCourseTopic(courseId: number, topicId: number) {
 		const result = await pool
 			.promise()
