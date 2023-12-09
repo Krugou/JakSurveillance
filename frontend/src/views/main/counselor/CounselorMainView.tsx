@@ -1,7 +1,14 @@
 import React from 'react';
 import Card from '../../../components/main/cards/Card';
 import MainViewTitle from '../../../components/main/titles/MainViewTitle';
-
+/**
+ * CounselorMainView component.
+ * This component is responsible for rendering the main view for counselors.
+ * It renders a MainViewTitle component and a grid of Card components.
+ * Each Card component represents a different functionality available to counselors.
+ *
+ * @returns {JSX.Element} The rendered CounselorMainView component.
+ */
 const CounselorMainView: React.FC = () => {
 	return (
 		<>
