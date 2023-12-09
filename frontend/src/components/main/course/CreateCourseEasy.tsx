@@ -10,7 +10,23 @@ import StepButtons from './createcourse/StepButtons';
 import StudentList from './createcourse/StudentList';
 import TopicGroupAndTopicsSelector from './createcourse/TopicsGroupAndTopics';
 
-// this is view for teacher to create the course
+/**
+ * CreateCourseEasy component.
+ * This component is responsible for displaying a form that allows teachers to create a course.
+ * It uses the useState hook from React to manage the state of the current step, course name, file, course code, student group, start date, selected file, upload file, instructor email, instructors, student list, end date, topics form data, and course exists.
+ * The component also uses the useContext hook from React to access the user context, and the useNavigate hook from React Router to navigate between pages.
+ * The handleFileChange function is used to handle the change event of the file input.
+ * The changeDateToBetterFormat function is used to format the date string to a more readable format.
+ * The handleExcelInput function is used to handle the submission of the excel file.
+ * The handleSubmit function is used to submit the form and create the course.
+ * The handleSubmitWrapper function is used to wrap the handleSubmit function.
+ * The validateFields function is used to validate the fields of the form based on the current step.
+ * The getFormClassName function is used to get the class name for the form based on the current step.
+ * The incrementStep function is used to increment the current step if the fields are valid and the course does not exist.
+ * The useEffect hook is used to set the instructors when the instructor email changes.
+ *
+ * @returns {JSX.Element} The rendered CreateCourseEasy component.
+ */
 const CreateCourseEasy: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
@@ -24,6 +40,10 @@ const CreateCourseEasy: React.FC = () => {
 	const [uploadFile, setUploadFile] = useState<string>(
 		'Click here to upload a file',
 	);
+	/**
+	 * Instructor interface represents the structure of an instructor.
+	 * It includes properties for the instructor's email and a boolean to check if the instructor exists.
+	 */
 	type Instructor = {
 		email: string;
 		exists?: boolean;

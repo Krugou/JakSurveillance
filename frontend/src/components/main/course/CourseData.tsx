@@ -7,6 +7,11 @@ import {toast} from 'react-toastify';
 import apiHooks from '../../../hooks/ApiHooks';
 import GeneralLinkButton from '../buttons/GeneralLinkButton';
 import DeleteModal from '../modals/DeleteModal';
+
+/**
+ * Course interface represents the structure of a course.
+ * It includes properties for the course id, name, description, start date, end date, code, student group name, topic names, created at date, user count, and instructor name.
+ */
 interface Course {
 	courseid: number;
 	name: string;
@@ -22,13 +27,29 @@ interface Course {
 
 	// Include other properties of course here
 }
-
+/**
+ * CourseDataProps interface represents the properties of the CourseData component.
+ * It includes properties for the course data, update view function, and a boolean to check if all courses are being displayed.
+ */
 interface CourseDataProps {
 	courseData: object;
 	updateView?: () => void;
 	allCourses?: boolean;
 }
-
+/**
+ * CourseData component.
+ * This component is responsible for displaying the data of a course.
+ * It uses the useState hook from React to manage the state of the delete modal and selected course id.
+ * The component also uses the useNavigate hook from React Router to navigate between pages.
+ * The handleDeleteCourse function is used to delete a course.
+ * The openDeleteModal function is used to open the delete modal.
+ * The closeDeleteModal function is used to close the delete modal.
+ * The useEffect hook is used to add or remove the 'overflow-hidden' class from the body based on the state of the delete modal.
+ * The handleDelete function is used to delete a course if a course id is selected.
+ *
+ * @param {CourseDataProps} props The properties of the CourseData component.
+ * @returns {JSX.Element} The rendered CourseData component.
+ */
 const CourseData: React.FC<CourseDataProps> = ({
 	courseData,
 	updateView,
