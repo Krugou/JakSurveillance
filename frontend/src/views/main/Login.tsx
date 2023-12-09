@@ -6,8 +6,8 @@ import {UserContext} from '../../contexts/UserContext.tsx';
 import apiHooks from '../../hooks/ApiHooks.ts';
 /**
  * Login component.
- *
- * @component
+ * This component is responsible for rendering the login form and handling the login process.
+ * It uses the UserContext to set the user after a successful login.
  */
 const Login: React.FC = () => {
 	const usernameRef = useRef<HTMLInputElement>(null);
@@ -18,6 +18,8 @@ const Login: React.FC = () => {
 	const navigate = useNavigate();
 	/**
 	 * Handles the form submission.
+	 * It sends a POST request to the login endpoint with the username and password,
+	 * and handles the response or any errors that occur.
 	 *
 	 * @param {React.FormEvent} event - The form event.
 	 */

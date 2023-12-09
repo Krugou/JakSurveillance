@@ -4,12 +4,21 @@ import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {UserContext} from '../../contexts/UserContext.tsx';
 import apiHooks from '../../hooks/ApiHooks.ts';
-
+/**
+ * Gdpr component.
+ * This component is responsible for rendering the GDPR acceptance form and handling the user's response.
+ * It uses the UserContext to get and set the user.
+ */
 const Gdpr = () => {
 	const {user, setUser} = useContext(UserContext);
 
 	const navigate = useNavigate();
-
+	/**
+	 * Handles the acceptance of the GDPR terms.
+	 * If the user is logged in and has a valid token, it sends a request to update the GDPR status.
+	 * If the request is successful, it navigates to the main view for the user's role.
+	 * If the request fails, it shows an error message.
+	 */
 	const handleAccept = async () => {
 		if (user) {
 			// Get token from local storage
@@ -27,6 +36,10 @@ const Gdpr = () => {
 			}
 		}
 	};
+	/**
+	 * Handles the decline of the GDPR terms.
+	 * It removes the user token from local storage, sets the user to null, and navigates to the home page.
+	 */
 	const handleDecline = () => {
 		toast.success('GDPR declined bye!');
 		localStorage.removeItem('userToken');
