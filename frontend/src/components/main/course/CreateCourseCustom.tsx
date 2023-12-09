@@ -47,7 +47,16 @@ const CreateCourseCustom: React.FC = () => {
 	const [endDate, setEndDate] = useState('');
 	const [topicsFormData, setTopicsFormData] = useState<any>([]);
 	const [courseExists, setCourseExists] = useState(false);
-
+	/**
+	 * validateFields function.
+	 * This function is used to validate the fields of the form based on the current step.
+	 * It checks if the course code, course name, student group, start date, and end date are empty.
+	 * It also checks if the student list is empty.
+	 * It also checks if all instructors exist.
+	 * It also checks if the topic group and topics are empty.
+	 *
+	 * @returns {boolean} A boolean that represents whether all the fields are valid.
+	 */
 	const validateFields = () => {
 		switch (currentStep) {
 			case 1:
@@ -72,7 +81,12 @@ const CreateCourseCustom: React.FC = () => {
 				return false;
 		}
 	};
-
+	/**
+	 * getFormClassName function.
+	 * This function is used to get the class name for the form based on the current step.
+	 *
+	 * @returns {string} The class name for the form.
+	 */
 	const getFormClassName = () => {
 		switch (currentStep) {
 			case 1:
@@ -87,7 +101,11 @@ const CreateCourseCustom: React.FC = () => {
 				return 'w-full md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/3 mx-auto bg-white p-4 rounded shadow-md';
 		}
 	};
-
+	/**
+	 * incrementStep function.
+	 * This function is used to increment the current step if the fields are valid and the course does not exist.
+	 * It also displays an alert if the course exists or if one or more instructors do not exist.
+	 */
 	const incrementStep = () => {
 		if (currentStep === 1 && courseExists) {
 			alert('A course with this code already exists.');
@@ -102,6 +120,17 @@ const CreateCourseCustom: React.FC = () => {
 			alert('Please fill all required fields.');
 		}
 	};
+	/**
+	 * handleSubmit function.
+	 * This function is used to submit the form and create the course.
+	 * It uses the createCourse function from the apiHooks file to create the course.
+	 * It also uses the toast.success and toast.error functions from the react-toastify library to display a success or error message.
+	 * It also uses the navigate function from the React Router useNavigate hook to navigate to the course page.
+	 * It also uses the useEffect hook from React to update the instructor email and instructors when the component mounts or the instructor email or user changes.
+	 *
+	 * @param {React.FormEvent} event The form event.
+	 * @returns {Promise<void>} A promise that resolves when the course is created.
+	 */
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 		let email = '';
@@ -135,11 +164,19 @@ const CreateCourseCustom: React.FC = () => {
 			console.error('Course creation failed');
 		}
 	};
-
+	/**
+	 * handleSubmitWrapper function.
+	 * This function is used to wrap the handleSubmit function.
+	 *
+	 * @returns {Promise<void>} A promise that resolves when the handleSubmit function is called.
+	 */
 	const handleSubmitWrapper = async () => {
 		await handleSubmit({} as React.FormEvent);
 	};
-
+	/**
+	 * useEffect hook.
+	 * This hook is used to set the instructor email and instructors when the component mounts or the instructor email or user changes.
+	 */
 	useEffect(() => {
 		let email = '';
 		if (user) {

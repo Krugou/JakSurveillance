@@ -1,21 +1,38 @@
 import {CircularProgress} from '@mui/material';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import React, {useContext, useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
+
+/**
+ * Props interface represents the properties of the TopicGroupAndTopicsSelector component.
+ * It includes a function to set the topics form data.
+ */
 interface Props {
 	setTopicsFormData: React.Dispatch<React.SetStateAction<unknown>>;
 }
+/**
+ * TopicGroup interface represents the structure of a topic group.
+ * It includes properties for the topics and topic group name.
+ */
 interface TopicGroup {
 	topics: string;
 	// define the properties of TopicGroup here
 	topicgroupname: string;
 	// other properties...
 }
+/**
+ * TopicGroupAndTopicsSelector component.
+ * This component is used for selecting topic groups and topics.
+ *
+ * @component
+ * @param {Props} props - The component props.
+ * @param {React.Dispatch<React.SetStateAction<unknown>>} props.setTopicsFormData - The function to set the topics form data.
+ */
 const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 	const {user} = useContext(UserContext);
 	const [topicData, setTopicData] = useState<TopicGroup[]>([]);
@@ -30,7 +47,12 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 	const [isCustomGroup, setIsCustomGroup] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const [topicGroupExists, setTopicGroupExists] = useState(false);
-
+	/**
+	 * Handles the change of a topic.
+	 *
+	 * @param {string} topic - The topic that changed.
+	 * @param {boolean} isChecked - Whether the topic is checked.
+	 */
 	const handleTopicChange = (topic: string, isChecked: boolean) => {
 		let updatedTopics;
 		if (isChecked) {
@@ -90,6 +112,12 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 		}
 		return;
 	}, [user, customTopicGroup]);
+	/**
+	 * Handles the change of a custom topic.
+	 *
+	 * @param {number} index - The index of the custom topic that changed.
+	 * @param {string} value - The new value of the custom topic.
+	 */
 	const handleCustomTopicChange = (index: number, value: string) => {
 		const newTopics = [...customTopics];
 		newTopics[index] = value;
@@ -114,6 +142,10 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 				});
 		}
 	}, [user, isCustomGroup]);
+	/**
+	 * Handles the apply action.
+	 * This function is called when the user clicks the apply button.
+	 */
 	const handleApply = () => {
 		event?.preventDefault();
 		const topics = customTopics;
@@ -187,7 +219,10 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 	if (loading) {
 		return <CircularProgress />;
 	}
-
+	/**
+	 * Handles the deletion of a group.
+	 * This function is called when the user clicks the delete button.
+	 */
 	const handleDeleteGroup = async () => {
 		if (user) {
 			try {
