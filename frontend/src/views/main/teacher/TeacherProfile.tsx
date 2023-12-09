@@ -4,7 +4,12 @@ import {UserContext} from '../../../contexts/UserContext';
 
 import {CircularProgress} from '@mui/material';
 import {useNavigate} from 'react-router-dom'; // Import useNavigate
-
+/**
+ * TeacherProfile component.
+ * This component is responsible for rendering the profile of a teacher.
+ * It uses the UserContext to get the current user and displays a loading spinner until the user data is available.
+ * It also provides a button to navigate to the teacher's courses.
+ */
 const TeacherProfile: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate(); // Initialize useNavigate
