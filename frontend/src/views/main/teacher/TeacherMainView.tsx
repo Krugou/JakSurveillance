@@ -80,7 +80,7 @@ const MainView: React.FC = () => {
 								<Card
 									path="/teacher/students"
 									title="Manage Students"
-									description="Manage your students' details"
+									description="Manage your students details"
 								/>
 
 								<Card
