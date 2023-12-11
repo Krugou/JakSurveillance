@@ -45,15 +45,11 @@ export default defineConfig({
 			},
 		}),
 	],
+
 	build: {
-		minify: 'terser',
-		terserOptions: {
-			output: {
-				comments: false,
-			},
-			compress: {
-				drop_console: true,
-			},
-		},
+		minify: 'esbuild',
+	},
+	esbuild: {
+		drop: ['console', 'debugger'],
 	},
 });
