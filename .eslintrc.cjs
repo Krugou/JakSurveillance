@@ -16,13 +16,11 @@ module.exports = {
 		'ecosystem.config.cjs',
 		'package-lock.json',
 		'package.json',
+		'build-date.cjs',
 	],
 	parser: '@typescript-eslint/parser',
 	plugins: ['react-refresh'],
 	rules: {
-		'react-refresh/only-export-components': [
-			'warn',
-			{allowConstantExport: true},
-		],
+		'react-refresh/only-export-components': ['warn', {allowConstantExport: true}],
 	},
 };
