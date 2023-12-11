@@ -212,9 +212,7 @@ const TeacherStudentsView: React.FC = () => {
 										</p>
 									)}
 									<div className="flex flex-wrap items-center justify-between">
-										<p className="text-gray-500 hover:text-blue-500 transition duration-300">
-											Click for details
-										</p>
+										<p className="text-blue-500">Click for details</p>
 									</div>
 								</div>
 							</div>
