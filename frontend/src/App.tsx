@@ -27,6 +27,7 @@ const App = () => {
 				console.log('Service worker registered successfully');
 				// Update service worker every hour
 				setInterval(() => {
+					console.log('Updating service worker');
 					r.update();
 				}, intervalMS);
 			} else {
