@@ -1,5 +1,6 @@
 {
 	"type": "module",
+	"version": "1.0.0",
 	"module": "commonjs",
 	"scripts": {
 		"sW": "concurrently \"tsc --watch\" \"nodemon --delay 1s nodejs/jaksecfileserver.js\" \"nodemon nodejs/jaksecserver.js\"",
