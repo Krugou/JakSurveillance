@@ -85,7 +85,7 @@ const TeacherStudentsView: React.FC = () => {
 		};
 
 		fetchStudents();
-	}, []);
+	}, [user]);
 
 	// If loading, show loading spinner
 	if (loading) {
