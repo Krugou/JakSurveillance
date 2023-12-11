@@ -15,7 +15,7 @@ const TeacherHelpVideos: React.FC = () => {
 				<VideoDropdown title="How do I create a course?" src="video-url-1.mp4" />
 				<VideoDropdown
 					title="How do I create an attendance?"
-					src="https://www.youtube.com/watch?v=5lcRtzE53Xo"
+					src="video-url-2.mp4"
 				/>
 				<VideoDropdown
 					title="How do I access attendance data on my course?"
