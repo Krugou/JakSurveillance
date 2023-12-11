@@ -67,6 +67,8 @@
 >Project stayed on schedule always
 >
 >Communication
+>
+>Client was satisfied with the project
 
 ### Cons
 
