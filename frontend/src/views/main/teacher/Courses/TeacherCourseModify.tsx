@@ -9,6 +9,7 @@ import AddTeachers from '../../../../components/main/course/createcourse/AddTeac
 import CourseDetails from '../../../../components/main/course/createcourse/CourseDetails';
 import EditTopicsModal from '../../../../components/main/modals/EditTopicsModal';
 import apiHooks from '../../../../hooks/ApiHooks';
+import GeneralLinkButton from "../../../../components/main/buttons/GeneralLinkButton";
 
 /**
  * CourseDetail interface.
@@ -184,6 +185,12 @@ const TeacherCourseModify: React.FC = () => {
 				}}
 				className="bg-white md:w-2/4 xl:w-1/4 w-full sm:w-2/3 shadow-md rounded-xl px-8 pt-6 pb-8 mb-4 mx-auto"
 			>
+				<div className="mt-2 mb-4">
+				<GeneralLinkButton
+					path={`/teacher/courses`}
+					text="Back to courses"
+				/>
+				</div>
 				<CourseDetails
 					courseCode={courseCode}
 					setCourseCode={setCourseCode}
