@@ -76,37 +76,37 @@ interface AttendanceModel {
 		date: string,
 		lectureid: string,
 	) => Promise<any>;
+
 	/**
-	 * Checks the attendance for a user course and lecture.
-	 *
-	 * @param {number} usercourseid - The ID of the user course.
-	 * @param {number} lectureid - The ID of the lecture.
-	 * @returns {Promise<any>} A promise that resolves with the attendance check result.
+	 * Checks if an attendance record exists for a specific user course and lecture.
+	 * @param usercourseid - The ID of the user course.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves to the attendance record if it exists, null otherwise.
 	 */
 	checkAttendance: (usercourseid: number, lectureid: number) => Promise<any>;
+
 	/**
-	 * Gets the lecture count by topic for a course.
-	 *
-	 * @param {string} courseid - The ID of the course.
-	 * @returns {Promise<any>} A promise that resolves with the lecture count by topic.
+	 * Retrieves the count of lectures for each topic in a specific course.
+	 * @param courseid - The ID of the course.
+	 * @returns A promise that resolves to the count of lectures for each topic.
 	 */
 	getLectureCountByTopic: (courseid: string) => Promise<any>;
+
 	/**
-	 * Deletes the attendance for a user course and lecture.
-	 *
-	 * @param {number} usercourseid - The ID of the user course.
-	 * @param {number} lectureid - The ID of the lecture.
-	 * @returns {Promise<any>} A promise that resolves when the deletion is complete.
+	 * Deletes an attendance record for a specific user course and lecture.
+	 * @param usercourseid - The ID of the user course.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves when the deletion is complete.
 	 */
 	deleteAttendance: (usercourseid: number, lectureid: number) => Promise<any>;
+
 	/**
-	 * Inserts a new attendance.
-	 *
-	 * @param {number} status - The attendance status.
-	 * @param {string} date - The date of the attendance.
-	 * @param {string} usercourseid - The ID of the user course.
-	 * @param {string} lectureid - The ID of the lecture.
-	 * @returns {Promise<any>} A promise that resolves when the insertion is complete.
+	 * Inserts a new attendance record.
+	 * @param status - The status of the attendance.
+	 * @param date - The date of the attendance.
+	 * @param usercourseid - The ID of the user course.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves when the insertion is complete.
 	 */
 	insertAttendance: (
 		status: number,
@@ -116,6 +116,9 @@ interface AttendanceModel {
 	) => Promise<any>;
 }
 
+/**
+ * The implementation of the AttendanceModel interface.
+ */
 const attendanceModel: AttendanceModel = {
 	async updateAttendanceStatus(attendanceid: number, status: number) {
 		try {
