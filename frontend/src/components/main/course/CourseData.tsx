@@ -35,6 +35,7 @@ interface CourseDataProps {
 	courseData: object;
 	updateView?: () => void;
 	allCourses?: boolean;
+	showEndedCourses?: boolean;
 }
 /**
  * CourseData component.
@@ -54,6 +55,7 @@ const CourseData: React.FC<CourseDataProps> = ({
 	courseData,
 	updateView,
 	allCourses,
+	showEndedCourses,
 }) => {
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 	const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
@@ -107,7 +109,12 @@ const CourseData: React.FC<CourseDataProps> = ({
 		}
 	};
 
-	console.log(courseData);
+	if (Array.isArray(courseData) && showEndedCourses === false) {
+		courseData = courseData.filter(
+			course => new Date(course.end_date) > new Date(),
+		);
+	}
+
 	return (
 		<>
 			{Array.isArray(courseData) &&
@@ -115,9 +122,12 @@ const CourseData: React.FC<CourseDataProps> = ({
 					const endDate = new Date(course.end_date);
 					const isCourseEnded =
 						endDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
-
 					return (
-						<Tooltip title={isCourseEnded ? 'Course has ended' : ''} placement="top">
+						<Tooltip
+							key={course.courseid}
+							title={isCourseEnded ? 'Course has ended' : ''}
+							placement="top"
+						>
 							<div
 								key={course.courseid}
 								className={`p-5 rounded-lg mt-4 mb-4 relative ${

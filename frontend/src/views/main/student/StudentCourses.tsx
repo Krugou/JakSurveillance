@@ -2,6 +2,9 @@ import React, {useContext, useEffect, useState} from 'react';
 import StudentCourseGrid from '../../../components/main/course/StudentCourseGrid';
 import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/ApiHooks';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+
 /**
  * StudentCourses component.
  *
@@ -83,26 +86,17 @@ const StudentCourses: React.FC = () => {
 			<h1 className="text-2xl sm:text-4xl font-bold mb-8 text-center">
 				Your Courses
 			</h1>
-			<label className="flex items-center relative w-max cursor-pointer select-none">
-				<span className="text-lg font-bold mr-3">Show ended courses</span>
-				<input
-					type="checkbox"
-					className="appearance-none transition-colors cursor-pointer w-14 h-7 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-blue-500 bg-white"
-					checked={showEndedCourses}
-					onChange={() => setShowEndedCourses(!showEndedCourses)}
-				/>
-				<span className="absolute font-medium text-xs uppercase right-1 text-white">
-					{' '}
-				</span>
-				<span className="absolute font-medium text-xs uppercase right-8 text-white">
-					{' '}
-				</span>
-				<span
-					className={`w-7 h-7 right-7 absolute rounded-full transform transition-transform ${
-						showEndedCourses ? ' bg-green-400 translate-x-7' : 'bg-red-500'
-					}`}
-				/>
-			</label>
+			<FormControlLabel
+				control={
+					<Switch
+						checked={showEndedCourses}
+						onChange={() => setShowEndedCourses(!showEndedCourses)}
+						name="showEndedCourses"
+						color="primary"
+					/>
+				}
+				label="Show ended courses"
+			/>
 			<StudentCourseGrid courses={courses} showEndedCourses={showEndedCourses} />
 		</div>
 	);

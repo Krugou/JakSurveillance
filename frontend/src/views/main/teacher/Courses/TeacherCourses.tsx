@@ -4,6 +4,9 @@ import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkBu
 import CourseData from '../../../../components/main/course/CourseData';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+
 /**
  * Course interface.
  * This interface defines the shape of a Course object.
@@ -28,6 +31,8 @@ const TeacherCourses: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const [courses, setCourses] = useState<Course[]>([]); // Specify the type for courses
 	const {update, setUpdate} = useContext(UserContext);
+	const [showEndedCourses, setShowEndedCourses] = useState(false);
+
 	const navigate = useNavigate();
 	useEffect(() => {
 		const fetchCourses = async () => {
@@ -53,7 +58,6 @@ const TeacherCourses: React.FC = () => {
 	const updateView = () => {
 		setUpdate(!update);
 	};
-
 	return (
 		<div className="w-full">
 			<h2 className="font-bold text-3xl p-3 bg-white w-fit ml-auto mr-auto rounded-lg text-center xl:text-4xl">
@@ -65,6 +69,17 @@ const TeacherCourses: React.FC = () => {
 						path={`/${user?.role}/mainview`}
 						text="Back to mainview"
 					/>
+					<FormControlLabel
+						control={
+							<Switch
+								checked={showEndedCourses}
+								onChange={() => setShowEndedCourses(!showEndedCourses)}
+								name="showEndedCourses"
+								color="primary"
+							/>
+						}
+						label="Show ended courses"
+					/>
 				</div>
 				<div className="grid max-h-[30em] mt-5 2xl:max-h-[50em] overflow-y-scroll w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-4 m-auto">
 					{courses.length > 0 && (
@@ -72,6 +87,7 @@ const TeacherCourses: React.FC = () => {
 							courseData={courses}
 							updateView={updateView}
 							allCourses={true}
+							showEndedCourses={showEndedCourses}
 						/>
 					)}
 					<div
