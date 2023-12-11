@@ -44,16 +44,18 @@ const TeacherCourseDetail: React.FC = () => {
 					courseData,
 				);
 				setCourseData(courseData);
+				console.log(courseData[0].name)
 			}
 		};
 
 		fetchCourses();
 	}, [id]);
 
+
 	return (
 		<div className="w-full">
 			<h2 className="font-bold text-center text-2xl p-3 bg-white w-fit rounded-lg ml-auto mr-auto">
-				My single course
+				{courseData && courseData[0].name} - {courseData && courseData[0].code}
 			</h2>
 			<div className="mt-4 bg-white rounded-lg shadow-lg mx-auto w-full sm:w-3/4 md:w-2/4 lg:w-2/5 2xl:w-1/5">
 				<div className="pl-5 pt-5">
