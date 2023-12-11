@@ -36,6 +36,11 @@ const MainView: React.FC = () => {
 					title="Your Courses"
 					description="View your own courses"
 				/>
+				<Card
+					path="/student/helpvideos"
+					title="Instructions"
+					description="See instructions for all available tasks"
+				/>
 			</div>
 		</div>
 	);
