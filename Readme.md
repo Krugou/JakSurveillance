@@ -68,7 +68,7 @@
 >
 >Communication
 >
->Client was satisfied with the project
+>Client was happy with the end result
 
 ### Cons
 
