@@ -19,40 +19,42 @@
 <!-- Write about what works and what doesn't here -->
 
 -Every user has instructional videos
-
+>
 -Every user has their own profile
-
-
+>
+>
 -Teachers can create courses and lectures
-
+>
 -Teachers can gather attendance of the students from a lecture
-
+>
 -Teachers can view and modify course details
-
+>
 -Teachers can view and modify students attendance
-
+>
 -Teachers can view the statistics of students attendance on a course
-
+>
 -Teachers can add and delete students on a course
-
+>
 -Teachers can modify students topics on a course
-
+>
 -Teachers can change their role
-
+>
+>
 -Counselor can view and modify students attendance
-
+>
 -Counselor can view and modify course details
-
+>
 -Counselor can modify students topics on a course
-
+>
 -Counselor can view the statistics of students attendance on a course
-
+>
 -Counselor can change their role
-
+>
+>
 -Students can attend a lecture by scanning a qr code
-
+>
 -Students can view their own attendance on a course
-
+>
 -Students can view their own attendance statistics
 
 ## The pros and cons of the project
