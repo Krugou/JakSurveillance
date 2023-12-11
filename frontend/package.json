@@ -9,7 +9,7 @@
 		"dev2": "  vite --port 8080",
 		"devBrutal": "  vite --port 8080 --open -d --force --host",
 		"devDebug": "  vite --port 8080 --open -d --host",
-		"build": "tsc && vite build --outDir ../backend/jaksec --minify --emptyOutDir --base /",
+		"build": "tsc && vite build --outDir ../backend/jaksec --emptyOutDir --base /",
 		"buildWatch": "tsc --watch & vite build --outDir ../backend/jaksec --emptyOutDir --base / --watch",
 		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 		"preview": "vite preview",
