@@ -8,22 +8,47 @@
 <!-- Write about what you found out here -->
 
 >you can import excel files to sql easily using nodejs npm package called xlsx
+>we learned what it's like to work with a real client
+>we learned to work with typescript
+>we learned how to communicate and associate with a real client
 
 ## What works and what doesn't
 <!-- Write about what works and what doesn't here -->
 
->hopefully everything works
+>Every user has instructional videos
+>Every user has their own profile
+
+>Teachers can create courses and lectures
+>Teachers can gather attendance of the students from a lecture
+>Teachers can view and modify course details
+>Teachers can view and modify students attendance
+>Teachers can view the statistics of students attendance on a course
+>Teachers can add and delete students on a course
+>Teachers can modify students topics on a course
+>Teachers can change their role
+
+>Counselor can view and modify students attendance
+>Counselor can view and modify course details
+>Counselor can modify students topics on a course
+>Counselor can view the statistics of students attendance on a course
+>Counselor can change their role
+
+>Students can attend a lecture by scanning a qr code
+>Students can view their own attendance on a course
+>Students can view their own attendance statistics
 
 ## The pros and cons of the project
 <!-- Write about the pros and cons here -->
 
 ### Pros
 
->Too much time spent on this project
+>Good amount of functionalities
+>Project stayed on schedule always
+>Communication
 
 ### Cons
 
->Too much time spent on this project
+>Not that responsive on some pages with mobile
 
 ## Our Team Members
 
