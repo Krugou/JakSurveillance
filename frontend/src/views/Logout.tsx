@@ -41,14 +41,19 @@ const Logout = () => {
 		setUser(null);
 
 		// Delay the navigation by 1 second
-		setTimeout(() => {
+		const timeoutId = setTimeout(() => {
 			// Display a success toast message
 			toast.success('Logged out successfully!');
 
 			// Navigate back to the home page
 			navigate('/');
 		}, 1200);
-	}, [navigate, setUser]);
+
+		// Cleanup function
+		return () => {
+			clearTimeout(timeoutId);
+		};
+	}, [setUser, navigate]);
 
 	/**
 	 * Render a circular progress indicator while the logout operation is in progress.
