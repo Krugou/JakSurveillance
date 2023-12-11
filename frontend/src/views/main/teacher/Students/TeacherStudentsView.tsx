@@ -146,10 +146,12 @@ const TeacherStudentsView: React.FC = () => {
 				</h1>
 			</div>
 			<div className="w-full max-h-[40em] 2xl:max-h-[60em] overflow-y-scroll rounded-xl bg-gray-100 p-2 sm:p-5">
-				<GeneralLinkButton
-					path={`/${user?.role}/mainview`}
-					text="Back to mainview"
-				/>
+				<div className="lg:ml-4 ml-0">
+					<GeneralLinkButton
+						path={`/${user?.role}/mainview`}
+						text="Back to mainview"
+					/>
+				</div>
 				<div className="flex flex-col md:flex-row items-center justify-between">
 					<div className="w-8/12 sm:w-[15em] mt-5 lg:ml-4 ml-0 mb-4">
 						<TextField
