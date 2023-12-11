@@ -2,7 +2,6 @@ import {CircularProgress} from '@mui/material';
 import React, {useEffect, useState, useContext} from 'react';
 import {toast} from 'react-toastify';
 import {Link} from 'react-router-dom';
-import InputField from '../../../../components/main/course/createcourse/coursedetails/InputField';
 import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
 import {useCourses} from '../../../../hooks/courseHooks';
@@ -153,12 +152,9 @@ const TeacherStudentsView: React.FC = () => {
 				/>
 				<div className="flex flex-col md:flex-row items-center justify-between">
 					<div className="w-8/12 sm:w-[15em] mt-5 lg:ml-4 ml-0 mb-4">
-						<InputField
-							type="text"
-							name="search"
+						<TextField
 							value={searchTerm}
 							onChange={e => setSearchTerm(e.target.value)}
-							placeholder="Search..."
 							label="Search by name"
 						/>
 					</div>
