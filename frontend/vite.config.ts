@@ -47,9 +47,11 @@ export default defineConfig({
 	],
 
 	build: {
+		// Use esbuild for minification during the build process
 		minify: 'esbuild',
 	},
 	esbuild: {
+		// Remove console and debugger statements during the build process
 		drop: ['console', 'debugger'],
 	},
 });
