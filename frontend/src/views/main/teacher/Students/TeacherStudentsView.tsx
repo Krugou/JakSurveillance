@@ -156,6 +156,11 @@ const TeacherStudentsView: React.FC = () => {
 							value={searchTerm}
 							onChange={e => setSearchTerm(e.target.value)}
 							label="Search by name"
+							InputProps={{
+								style: {
+									backgroundColor: 'white',
+								},
+							}}
 						/>
 					</div>
 
@@ -175,6 +180,11 @@ const TeacherStudentsView: React.FC = () => {
 								label="Search By course"
 								margin="normal"
 								variant="outlined"
+								InputProps={{
+									style: {
+										backgroundColor: 'white',
+									},
+								}}
 							/>
 						)}
 					/>
@@ -211,7 +221,7 @@ const TeacherStudentsView: React.FC = () => {
 											Account created: {new Date(student.created_at).toLocaleString()}
 										</p>
 									)}
-									<div className="flex flex-wrap items-center justify-between">
+									<div className="flex flex-wrap items-center p-2 justify-between">
 										<p className="text-blue-500">Click for details</p>
 									</div>
 								</div>
