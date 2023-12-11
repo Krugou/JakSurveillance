@@ -159,7 +159,7 @@ const TeacherStudentDetail: React.FC = () => {
 				</h2>
 				<div className="bg-gray-100 pl-2 pt-1 pb-2 pr-2">
 					<label className="flex items-center md:mb-0 mb-5 relative w-max cursor-pointer select-none">
-						<span className="text-lg font-bold p-2 mr-3">Show old courses</span>
+						<span className="text-lg font-bold p-2 mr-3">Show ended courses</span>
 						<input
 							type="checkbox"
 							className="appearance-none transition-colors cursor-pointer w-14 h-7 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-blue-500 bg-white"

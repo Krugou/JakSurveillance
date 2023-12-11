@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import StudentCourseGrid from '../../../components/main/course/StudentCourseGrid';
-import { UserContext } from '../../../contexts/UserContext';
+import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/ApiHooks';
 /**
  * StudentCourses component.
@@ -56,7 +56,7 @@ const StudentCourses: React.FC = () => {
 	const [courses, setCourses] = useState<Course[]>([]);
 
 	// State to keep track of the show ended courses option
-	const [showEndedCourses, setShowEndedCourses] = useState(true);
+	const [showEndedCourses, setShowEndedCourses] = useState(false);
 
 	// Fetch courses for the user
 	useEffect(() => {
@@ -84,7 +84,7 @@ const StudentCourses: React.FC = () => {
 				Your Courses
 			</h1>
 			<label className="flex items-center relative w-max cursor-pointer select-none">
-				<span className="text-lg font-bold mr-3">Show old courses</span>
+				<span className="text-lg font-bold mr-3">Show ended courses</span>
 				<input
 					type="checkbox"
 					className="appearance-none transition-colors cursor-pointer w-14 h-7 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-blue-500 bg-white"
