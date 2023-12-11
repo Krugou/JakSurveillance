@@ -2,7 +2,33 @@
 import React, {useEffect, useState} from 'react';
 import apihooks from '../../../../hooks/ApiHooks';
 import InputField from './coursedetails/InputField';
-const CourseDetails = ({
+/**
+ * CourseDetails component properties
+ */
+interface CourseDetailsProps {
+	courseCode: string;
+	setCourseCode: (value: string) => void;
+	courseName: string;
+	setCourseName: (value: string) => void;
+	studentGroup: string;
+	setStudentGroup: (value: string) => void;
+	startDate: string;
+	setStartDate: (value: string) => void;
+	endDate: string;
+	setEndDate: (value: string) => void;
+	modify?: boolean;
+	courseExists: boolean;
+	setCourseExists: (value: boolean) => void;
+}
+
+/**
+ * CourseDetails is a functional component that renders a form for course details.
+ * It checks if the course code already exists and displays appropriate messages.
+ *
+ * @param props - The properties of the course details form.
+ * @returns A JSX element.
+ */
+const CourseDetails: React.FC<CourseDetailsProps> = ({
 	courseCode,
 	setCourseCode,
 	courseName,

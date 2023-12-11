@@ -1,5 +1,7 @@
 import React from 'react';
-
+/**
+ * InputField component properties
+ */
 interface InputFieldProps {
 	label?: string;
 	type: string;
@@ -9,7 +11,12 @@ interface InputFieldProps {
 	disabled?: boolean;
 	placeholder?: string;
 }
-
+/**
+ * InputField is a functional component that renders an input field with a label.
+ *
+ * @param props - The properties of the input field.
+ * @returns A JSX element.
+ */
 const InputField: React.FC<InputFieldProps> = ({
 	label = '',
 	type,
@@ -33,7 +40,7 @@ const InputField: React.FC<InputFieldProps> = ({
 			aria-label={label}
 			required
 			disabled={disabled}
-			placeholder={placeholder} 
+			placeholder={placeholder}
 		/>
 	</>
 );
