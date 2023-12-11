@@ -258,13 +258,6 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({
 
 				{topicData.length > 0 && (
 					<>
-						<button
-							type="button"
-							onClick={() => setIsCustomGroup(prev => !prev)}
-							className="mb-3 w-fit text-sm p-2 bg-metropoliaMainOrange transition text-white rounded-3xl hover:bg-metropoliaSecondaryOrange mr-2"
-						>
-							{isCustomGroup ? 'Select Existing Group' : 'Create Custom Group'}
-						</button>
 						{!isCustomGroup && (
 							<button
 								type="button"
@@ -274,6 +267,13 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({
 								Delete selected group
 							</button>
 						)}
+						<button
+							type="button"
+							onClick={() => setIsCustomGroup(!isCustomGroup)}
+							className="mb-3 w-fit text-sm p-2 bg-metropoliaMainOrange transition text-white rounded-3xl hover:bg-metropoliaSecondaryOrange mr-2"
+						>
+							{isCustomGroup ? 'Select Existing Group' : 'Create Custom Group'}
+						</button>
 					</>
 				)}
 			</div>
