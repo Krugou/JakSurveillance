@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+ import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import apiHooks from '../../hooks/ApiHooks'; // Replace with the correct path to your ApiHooks file
@@ -133,7 +133,7 @@ const ProfileInfo: React.FC<ProfileInfoPros> = ({user}) => {
 					<h2 className="sm:text-2xl text-lg font-bold mb-3">Change Role</h2>
 					<select
 						title="Role Selection" // Add title attribute here
-						className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+						className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 cursor-pointer py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
 						value={selectedRole}
 						onChange={e => setSelectedRole(e.target.value)}
 					>

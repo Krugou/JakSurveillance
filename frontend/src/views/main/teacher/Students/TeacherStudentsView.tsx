@@ -196,7 +196,7 @@ const TeacherStudentsView: React.FC = () => {
 						<Link
 							key={student.userid}
 							to={`/${user?.role}/students/${student.userid}`}
-							className="mb-4 mx-1 transition lg:mx-2 xl:mx-4 bg-white rounded shadow-lg max-w-full w-12/12 hover:bg-gray-200 transition duration-300"
+							className="mb-4 mx-1 transition lg:mx-2 xl:mx-4 bg-white rounded shadow-lg max-w-full w-12/12 hover:bg-gray-200 duration-300"
 						>
 							<div className="px-4 flex flex-col lg:px-4 py-2 lg:py-4 text-sm md:text-base">
 								<div className="font-bold text-lg mb-2 underline underline-offset-8 decoration-metropoliaMainOrange">
