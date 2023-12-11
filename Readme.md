@@ -7,13 +7,13 @@
 ## What we found out
 <!-- Write about what you found out here -->
 
->you can import excel files to sql easily using nodejs npm package called xlsx
+>You can import excel files to sql easily using nodejs npm package called xlsx
 >
->we learned what it's like to work with a real client
+>We learned what it's like to work with a real client
 >
->we learned to work with typescript
+>We learned to work with typescript
 >
->we learned how to communicate and associate with a real client
+>We learned how to communicate and associate with a real client
 
 ## What works and what doesn't
 <!-- Write about what works and what doesn't here -->
