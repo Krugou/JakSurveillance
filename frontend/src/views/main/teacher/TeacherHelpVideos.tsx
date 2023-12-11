@@ -15,10 +15,22 @@ const TeacherHelpVideos: React.FC = () => {
 				<VideoDropdown title="How do I create a course?" src="video-url-1.mp4" />
 				<VideoDropdown
 					title="How do I create an attendance?"
-					src="video-url-2.mp4"
+					src="https://www.youtube.com/watch?v=5lcRtzE53Xo"
 				/>
 				<VideoDropdown
 					title="How do I access attendance data on my course?"
+					src="video-url-2.mp4"
+				/>
+				<VideoDropdown
+					title="How do I access my students details?"
+					src="video-url-2.mp4"
+				/>
+				<VideoDropdown
+					title="How do I access and modify my course details?"
+					src="video-url-2.mp4"
+				/>
+				<VideoDropdown
+					title="How do I access my students attendance?"
 					src="video-url-2.mp4"
 				/>
 			</div>
