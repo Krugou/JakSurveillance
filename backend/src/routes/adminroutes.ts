@@ -74,7 +74,7 @@ router.post(
  */
 router.get(
 	'/rolesspecial',
-	checkUserRole(['admin']),
+	checkUserRole(['admin', 'teacher', 'counselor']),
 	validate,
 	async (_req: Request, res: Response) => {
 		try {
