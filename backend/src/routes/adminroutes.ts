@@ -113,7 +113,7 @@ router.get(
  */
 router.post(
 	'/change-role',
-	checkUserRole(['admin']),
+	checkUserRole(['admin', 'teacher', 'counselor']),
 	[
 		body('email').isEmail().withMessage('Email must be valid'),
 		body('roleId').isNumeric().withMessage('Role ID must be a number'),
