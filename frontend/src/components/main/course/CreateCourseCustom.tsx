@@ -42,7 +42,7 @@ const CreateCourseCustom: React.FC = () => {
 
 	const [instructorEmail, setInstructorEmail] = useState('');
 	const [instructors, setInstructors] = useState<Instructor[]>([{email: ''}]);
-
+	const [isCustomGroup, setIsCustomGroup] = useState(false);
 	const [studentList, setStudentList] = useState<string[]>([]);
 	const [endDate, setEndDate] = useState('');
 	const [topicsFormData, setTopicsFormData] = useState<any>([]);
@@ -222,7 +222,11 @@ const CreateCourseCustom: React.FC = () => {
 					/>
 				)}
 				{currentStep === 4 && (
-					<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
+					<TopicGroupAndTopicsSelector
+						setTopicsFormData={setTopicsFormData}
+						isCustomGroup={isCustomGroup}
+						setIsCustomGroup={setIsCustomGroup}
+					/>
 				)}
 				<StepButtons
 					currentStep={currentStep}
@@ -230,6 +234,7 @@ const CreateCourseCustom: React.FC = () => {
 					onNextClick={incrementStep}
 					onSubmitClick={handleSubmitWrapper}
 					extrastep={false}
+					isCustomGroup={isCustomGroup}
 				/>
 			</form>
 		</div>

@@ -40,6 +40,8 @@ const CreateCourseEasy: React.FC = () => {
 	const [uploadFile, setUploadFile] = useState<string>(
 		'Click here to upload a file',
 	);
+	const [isCustomGroup, setIsCustomGroup] = useState(false);
+
 	/**
 	 * Instructor interface represents the structure of an instructor.
 	 * It includes properties for the instructor's email and a boolean to check if the instructor exists.
@@ -307,7 +309,11 @@ const CreateCourseEasy: React.FC = () => {
 					/>
 				)}
 				{currentStep === 5 && (
-					<TopicGroupAndTopicsSelector setTopicsFormData={setTopicsFormData} />
+					<TopicGroupAndTopicsSelector
+						setTopicsFormData={setTopicsFormData}
+						isCustomGroup={isCustomGroup}
+						setIsCustomGroup={setIsCustomGroup}
+					/>
 				)}
 				{currentStep >= 2 && (
 					<StepButtons
@@ -316,6 +322,7 @@ const CreateCourseEasy: React.FC = () => {
 						onNextClick={incrementStep}
 						onSubmitClick={handleSubmitWrapper} // Use the wrapper function here
 						extrastep={true}
+						isCustomGroup={isCustomGroup}
 					/>
 				)}
 			</form>

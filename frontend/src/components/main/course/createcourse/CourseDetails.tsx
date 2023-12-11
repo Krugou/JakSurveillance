@@ -50,7 +50,7 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({
 		if (!token) {
 			throw new Error('No token available');
 		}
-		const delay = 1000; // Delay in milliseconds
+		const delay = 250; // Delay in milliseconds
 
 		const checkCode = async () => {
 			const response = await apihooks.checkCourseCode(courseCode, token);

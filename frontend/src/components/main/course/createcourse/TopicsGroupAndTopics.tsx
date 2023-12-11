@@ -13,7 +13,9 @@ import apiHooks from '../../../../hooks/ApiHooks';
  * It includes a function to set the topics form data.
  */
 interface Props {
-	setTopicsFormData: React.Dispatch<React.SetStateAction<unknown>>;
+	setTopicsFormData: (data: any) => void;
+	isCustomGroup: boolean;
+	setIsCustomGroup: (isCustom: boolean) => void;
 }
 /**
  * TopicGroup interface represents the structure of a topic group.
@@ -33,7 +35,11 @@ interface TopicGroup {
  * @param {Props} props - The component props.
  * @param {React.Dispatch<React.SetStateAction<unknown>>} props.setTopicsFormData - The function to set the topics form data.
  */
-const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
+const TopicGroupAndTopicsSelector: React.FC<Props> = ({
+	setTopicsFormData,
+	isCustomGroup,
+	setIsCustomGroup,
+}) => {
 	const {user} = useContext(UserContext);
 	const [topicData, setTopicData] = useState<TopicGroup[]>([]);
 	const [courseTopicGroup, setCourseTopicGroup] = useState('');
@@ -44,7 +50,6 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 	const [customTopic, setCustomTopic] = useState('');
 	const [courseTopics, setCourseTopics] = useState<string[]>([]);
 
-	const [isCustomGroup, setIsCustomGroup] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const [topicGroupExists, setTopicGroupExists] = useState(false);
 	/**
@@ -260,13 +265,15 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 						>
 							{isCustomGroup ? 'Select Existing Group' : 'Create Custom Group'}
 						</button>
-						<button
-							type="button"
-							onClick={handleDeleteGroup}
-							className="mb-3 w-fit text-sm p-2 bg-red-500 transition text-white rounded-3xl hover:bg-red-700"
-						>
-							Delete selected group
-						</button>
+						{!isCustomGroup && (
+							<button
+								type="button"
+								onClick={handleDeleteGroup}
+								className="mb-3 w-fit text-sm p-2 bg-red-500 transition text-white rounded-3xl hover:bg-red-700"
+							>
+								Delete selected group
+							</button>
+						)}
 					</>
 				)}
 			</div>
@@ -351,7 +358,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({setTopicsFormData}) => {
 									}}
 									className="mb-3 w-fit p-2 bg-metropoliaMainOrange transition text-white text-sm rounded-3xl hover:bg-metropoliaSecondaryOrange"
 								>
-									Add Custom Topic
+									Add New Topic
 								</button>
 							</div>
 						</div>

@@ -9,6 +9,7 @@ interface StepButtonsProps {
 	onNextClick: () => void;
 	onSubmitClick: () => void;
 	extrastep?: boolean;
+	isCustomGroup?: boolean;
 }
 /**
  * StepButtons is a functional component that renders a set of buttons for navigation in a multi-step process.
@@ -25,6 +26,7 @@ const StepButtons: React.FC<StepButtonsProps> = ({
 	onNextClick,
 	onSubmitClick,
 	extrastep = false,
+	isCustomGroup = false,
 }) => {
 	return (
 		<div
@@ -38,12 +40,13 @@ const StepButtons: React.FC<StepButtonsProps> = ({
 			{currentStep >= 1 && currentStep <= (extrastep ? 4 : 3) && (
 				<StepButton text="Next" type="button" onClick={onNextClick} />
 			)}
-			{currentStep === (extrastep ? 5 : 4) && (
+			{currentStep === (extrastep ? 5 : 4) && !isCustomGroup && (
 				<StepButton
 					text="Create Course"
 					type="submit"
 					onClick={onSubmitClick}
 					marginTop="mt-2"
+					disabled={isCustomGroup}
 				/>
 			)}
 		</div>

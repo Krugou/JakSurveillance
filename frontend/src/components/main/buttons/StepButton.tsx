@@ -7,6 +7,7 @@ interface StepButtonProps {
 	type: 'button' | 'submit';
 	onClick: () => void;
 	marginTop?: string;
+	disabled?: boolean;
 }
 /**
  * A button component that triggers a specified onClick function when clicked.
@@ -17,12 +18,14 @@ const StepButton: React.FC<StepButtonProps> = ({
 	type,
 	onClick,
 	marginTop = 'mt-2',
+	disabled = false,
 }) => {
 	return (
 		<button
 			type={type}
 			onClick={onClick}
 			className={`w-40 h-fit p-2 ${marginTop} transition bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange`}
+			disabled={disabled}
 		>
 			{text}
 		</button>
