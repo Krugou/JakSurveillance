@@ -8,6 +8,10 @@ import {toast} from 'react-toastify';
 import DeleteLectureModal from '../../../../components/main/modals/DeleteLectureModal';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
+import IconButton from '@mui/material/IconButton';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import Tooltip from '@mui/material/Tooltip';
 /**
  * CreateLecture component.
  * This component is responsible for rendering the lecture creation view for a teacher.
@@ -18,6 +22,7 @@ const CreateLecture: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const navigate = useNavigate();
 	const [courses, setCourses] = useState<Course[]>([]);
+	const [allCourses, setAllCourses] = useState<Course[]>([]);
 	const [date, setDate] = useState<Date | Date[]>(new Date());
 	const [calendarOpen, setCalendarOpen] = useState(false);
 	const timeOfDay = ['am', 'pm'];
@@ -46,6 +51,8 @@ const CreateLecture: React.FC = () => {
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [openLectures, setOpenLectures] = useState<OpenLecture[]>([]);
+	const [showEndedCourses, setShowEndedCourses] = useState(false);
+
 	/**
 	 * Reservation interface.
 	 * This interface defines the shape of a Reservation object.
@@ -60,6 +67,7 @@ const CreateLecture: React.FC = () => {
 	interface Course {
 		codes: string;
 		email: string;
+		end_date: string;
 	}
 	useEffect(() => {
 		if (selectedCourse) {
@@ -88,7 +96,10 @@ const CreateLecture: React.FC = () => {
 			if (!token) {
 				throw new Error('No token available');
 			}
+
 			apihooks.getAllCoursesByInstructorEmail(user.email, token).then(data => {
+				setAllCourses(data);
+
 				const currentCourses = data.filter(
 					course => new Date(course.end_date) > new Date(),
 				);
@@ -275,7 +286,31 @@ const CreateLecture: React.FC = () => {
 						<div className="flex w-full justify-center">
 							<div className="flex w-1/4 flex-col gap-5">
 								<label className="sm:text-xl text-md flex justify-end" htmlFor="course">
-									Course :
+									<div className="flex items-center">
+										<Tooltip
+											title={
+												showEndedCourses ? 'Hide ended courses' : 'Show ended courses'
+											}
+											placement="top"
+										>
+											<IconButton
+												className="mb-4"
+												onClick={() => {
+													const filteredCourses = showEndedCourses
+														? allCourses.filter(
+																course => new Date(course.end_date) > new Date(),
+														  )
+														: allCourses;
+
+													setShowEndedCourses(!showEndedCourses);
+													setCourses(filteredCourses);
+												}}
+											>
+												{showEndedCourses ? <VisibilityOffIcon /> : <VisibilityIcon />}
+											</IconButton>
+										</Tooltip>
+										Course :
+									</div>
 								</label>
 								<label className="sm:text-xl text-md flex justify-end" htmlFor="topic">
 									Topic :
@@ -285,7 +320,7 @@ const CreateLecture: React.FC = () => {
 								<select
 									title="Course"
 									id="course"
-									className="block h-8 cursor-pointer sm:ml-5 ml-1 mr-3"
+									className="block h-8 cursor-pointer sm:ml-5 ml-1 mr-3 mt-1"
 									value={selectedSession}
 									onClick={() => {
 										if (courses.length === 0) {
@@ -301,7 +336,7 @@ const CreateLecture: React.FC = () => {
 										setSelectedSession(selectedIndex);
 										setSelectedCourse(courses[selectedIndex] || null);
 										setSelectedTopic(
-											courses[selectedIndex]
+											courses[selectedIndex] && courses[selectedIndex].topic_names
 												? courses[selectedIndex].topic_names.split(',')[0]
 												: '',
 										);
@@ -313,20 +348,17 @@ const CreateLecture: React.FC = () => {
 								>
 									{Array.isArray(courses) &&
 										courses.map((course, index) => {
-											// Ensure courseid is a string or number
 											const courseId =
 												typeof course.courseid === 'function'
 													? course.courseid()
 													: course.courseid;
 
-											// Ensure course has name and code properties
 											const courseName = course.name || 'No Name';
 											const courseCode = course.code || 'No Code';
 
-											// Ensure courseId, courseName, and courseCode are not empty
 											if (!courseId || !courseName || !courseCode) {
 												console.error('Invalid course data:', course);
-												return null; // Skip this course
+												return null;
 											}
 
 											return (
@@ -339,7 +371,7 @@ const CreateLecture: React.FC = () => {
 								<select
 									title="Topic"
 									id="topic"
-									className="block h-8 cursor-pointer mr-3 sm:ml-5 ml-1 sm:mt-1 mt-none"
+									className="block h-8 cursor-pointer mr-3 sm:ml-5 ml-1 sm:mt-2 mt-none"
 									value={selectedTopic}
 									onChange={e => {
 										setSelectedTopic(e.target.value);
