@@ -16,6 +16,7 @@
 <!-- Write about what works and what doesn't here -->
 
 -Every user has instructional videos
+
 -Every user has their own profile
 
 -Teachers can create courses and lectures
