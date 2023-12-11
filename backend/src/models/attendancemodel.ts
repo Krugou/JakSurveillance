@@ -34,19 +34,79 @@ interface AttendanceModel {
 		userid: number,
 	): Promise<any>;
 
-	updateAttendanceStatus: (usercourseid: number, status: number) => Promise<any>;
+	/**
+	 * Updates the attendance status for a specific attendance record.
+	 * @param attendanceid - The ID of the attendance record to update.
+	 * @param status - The new status to set for the attendance record.
+	 * @returns A promise that resolves to true if the update was successful, false otherwise.
+	 */
+	updateAttendanceStatus: (attendanceid: number, status: number) => Promise<any>;
 
+	/**
+	 * Retrieves user information for a specific user course.
+	 * @param usercourseid - The ID of the user course to retrieve information for.
+	 * @returns A promise that resolves to the user information.
+	 */
 	getUserInfoByUserCourseId: (usercourseid: number) => Promise<any>;
+
+	/**
+	 * Retrieves attendance records for a specific course.
+	 * @param courseid - The ID of the course to retrieve attendance records for.
+	 * @returns A promise that resolves to the attendance records.
+	 */
 	getAttendaceByCourseId: (courseid: string) => Promise<any>;
+
+	/**
+	 * Retrieves an attendance record by its ID.
+	 * @param insertid - The ID of the attendance record to retrieve.
+	 * @returns A promise that resolves to the attendance record.
+	 */
 	getAttendanceById: (insertid: number) => Promise<any>;
+
+	/**
+	 * Retrieves an attendance record for a specific user course, date, and lecture.
+	 * @param usercourseid - The ID of the user course.
+	 * @param date - The date of the attendance.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves to the attendance record.
+	 */
 	getAttendanceByUserCourseIdDateLectureId: (
 		usercourseid: number,
 		date: string,
 		lectureid: string,
 	) => Promise<any>;
+
+	/**
+	 * Checks if an attendance record exists for a specific user course and lecture.
+	 * @param usercourseid - The ID of the user course.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves to the attendance record if it exists, null otherwise.
+	 */
 	checkAttendance: (usercourseid: number, lectureid: number) => Promise<any>;
+
+	/**
+	 * Retrieves the count of lectures for each topic in a specific course.
+	 * @param courseid - The ID of the course.
+	 * @returns A promise that resolves to the count of lectures for each topic.
+	 */
 	getLectureCountByTopic: (courseid: string) => Promise<any>;
+
+	/**
+	 * Deletes an attendance record for a specific user course and lecture.
+	 * @param usercourseid - The ID of the user course.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves when the deletion is complete.
+	 */
 	deleteAttendance: (usercourseid: number, lectureid: number) => Promise<any>;
+
+	/**
+	 * Inserts a new attendance record.
+	 * @param status - The status of the attendance.
+	 * @param date - The date of the attendance.
+	 * @param usercourseid - The ID of the user course.
+	 * @param lectureid - The ID of the lecture.
+	 * @returns A promise that resolves when the insertion is complete.
+	 */
 	insertAttendance: (
 		status: number,
 		date: string,
@@ -55,6 +115,9 @@ interface AttendanceModel {
 	) => Promise<any>;
 }
 
+/**
+ * The implementation of the AttendanceModel interface.
+ */
 const attendanceModel: AttendanceModel = {
 	/**
 	 * Updates the attendance status for a user course.
