@@ -1,5 +1,7 @@
 import React from 'react';
 import VideoDropdown from '../../../components/main/dropdown/VideoDropdown'; // Import the VideoDropdown component
+import StudentLecture from '../../../assets/videos/StudentLecture.mp4';
+import StudentAttendance from '../../../assets/videos/StudentCourseAndAttendance.mp4';
 /**
  * StudentHelpVideos component.
  * This component is responsible for rendering the help videos for students.
@@ -12,26 +14,10 @@ const StudentHelpVideos: React.FC = () => {
                 Student Help Videos
             </h1>
             <div className="space-y-6 flex flex-col">
-                <VideoDropdown title="How do I create a course?" src="video-url-1.mp4" />
+                <VideoDropdown title="How do I access my course and attendance details" src={StudentAttendance} />
                 <VideoDropdown
-                    title="How do I create an attendance?"
-                    src="video-url-2.mp4"
-                />
-                <VideoDropdown
-                    title="How do I access attendance data on my course?"
-                    src="video-url-2.mp4"
-                />
-                <VideoDropdown
-                    title="How do I access my students details?"
-                    src="video-url-2.mp4"
-                />
-                <VideoDropdown
-                    title="How do I access and modify my course details?"
-                    src="video-url-2.mp4"
-                />
-                <VideoDropdown
-                    title="How do I access my students attendance?"
-                    src="video-url-2.mp4"
+                    title="How do I join a lecture?"
+                    src={StudentLecture}
                 />
             </div>
         </div>

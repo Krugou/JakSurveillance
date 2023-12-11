@@ -1,5 +1,10 @@
 import React from 'react';
 import VideoDropdown from '../../../components/main/dropdown/VideoDropdown';
+import CounselorStatistics from '../../../assets/videos/CounselorStatistics.mp4';
+import RoleChange from '../../../assets/videos/RoleChange.mp4';
+import CounselorStudentDetails from '../../../assets/videos/CounselorStudentDetails.mp4';
+import CounselorStudentAttendance from '../../../assets/videos/CounselorStudentAttendance.mp4';
+
 
 /**
  * CounselorHelpVideos component.
@@ -21,13 +26,13 @@ const CounselorHelpVideos: React.FC = () => {
 					 *
 					 * @type {string}
 					 */
-					title="How do I modify a student's topics on a course?"
+					title="How do I access students details?"
 					/**
 					 * The source URL of the video.
 					 *
 					 * @type {string}
 					 */
-					src="video-url-1.mp4"
+					src={CounselorStudentDetails}
 				/>
 				<VideoDropdown
 					/**
@@ -35,13 +40,41 @@ const CounselorHelpVideos: React.FC = () => {
 					 *
 					 * @type {string}
 					 */
-					title="How do I access attendance data on a specific course?"
+					title="How do I access students attendance details?"
 					/**
 					 * The source URL of the video.
 					 *
 					 * @type {string}
 					 */
-					src="video-url-2.mp4"
+					src={CounselorStudentAttendance}
+				/>
+				<VideoDropdown
+					/**
+					 * The title of the video.
+					 *
+					 * @type {string}
+					 */
+					title="How can I see attendance statistics?"
+					/**
+					 * The source URL of the video.
+					 *
+					 * @type {string}
+					 */
+					src={CounselorStatistics}
+				/>
+				<VideoDropdown
+					/**
+					 * The title of the video.
+					 *
+					 * @type {string}
+					 */
+					title="How can I change my role?"
+					/**
+					 * The source URL of the video.
+					 *
+					 * @type {string}
+					 */
+					src={RoleChange}
 				/>
 			</div>
 		</div>

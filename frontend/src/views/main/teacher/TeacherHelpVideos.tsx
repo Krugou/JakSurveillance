@@ -1,5 +1,15 @@
 import React from 'react';
 import VideoDropdown from '../../../components/main/dropdown/VideoDropdown'; // Import the VideoDropdown component
+import StudentDetail from '../../../assets/videos/StudentDetail.mp4';
+import TeacherAttendance from '../../../assets/videos/TeacherAttendance.mp4';
+import RoleChange from '../../../assets/videos/RoleChange.mp4';
+import CreateCourse from '../../../assets/videos/CreateCourse.mp4';
+import CreateLecture from '../../../assets/videos/CreateLecture.mp4';
+import CourseAttendance from '../../../assets/videos/CourseAttendance.mp4';
+import CourseDetail from '../../../assets/videos/CourseDetails.mp4';
+import StudentLecture from '../../../assets/videos/StudentLecture.mp4';
+
+
 /**
  * TeacherHelpVideos component.
  * This component is responsible for rendering the help videos for teachers.
@@ -12,26 +22,34 @@ const TeacherHelpVideos: React.FC = () => {
 				Teacher Help Videos
 			</h1>
 			<div className="space-y-6 flex flex-col">
-				<VideoDropdown title="How do I create a course?" src="video-url-1.mp4" />
+				<VideoDropdown title="How do I create a course?" src={CreateCourse} />
 				<VideoDropdown
 					title="How do I create an attendance?"
-					src="video-url-2.mp4"
+					src={CreateLecture}
 				/>
 				<VideoDropdown
 					title="How do I access attendance data on my course?"
-					src="video-url-2.mp4"
+					src={CourseAttendance}
 				/>
 				<VideoDropdown
 					title="How do I access my students details?"
-					src="video-url-2.mp4"
+					src={StudentDetail}
 				/>
 				<VideoDropdown
 					title="How do I access and modify my course details?"
-					src="video-url-2.mp4"
+					src={CourseDetail}
 				/>
 				<VideoDropdown
 					title="How do I access my students attendance?"
-					src="video-url-2.mp4"
+					src={TeacherAttendance}
+				/>
+				<VideoDropdown
+					title="How do I change my role?"
+					src={RoleChange}
+				/>
+				<VideoDropdown
+					title="How can my students join to my lecture?"
+					src={StudentLecture}
 				/>
 			</div>
 		</div>
