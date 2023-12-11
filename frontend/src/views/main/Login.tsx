@@ -40,7 +40,6 @@ const Login: React.FC = () => {
 			if (response) {
 				localStorage.setItem('userToken', response.token);
 				setUser(response.user); // set the user info into the context
-				toast.success('Login successful');
 				if (
 					response.user.gdpr === 0 &&
 					response.user.role.toLowerCase() === 'student'
@@ -52,7 +51,6 @@ const Login: React.FC = () => {
 			}
 		} catch (error) {
 			if (error instanceof Error) {
-				toast.error(error.message);
 				setAlert(error.message);
 			} else {
 				toast.error('Error logging in');
