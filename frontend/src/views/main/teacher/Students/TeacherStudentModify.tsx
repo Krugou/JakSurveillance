@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, {useState} from 'react';
+import {useParams} from 'react-router-dom';
 
 /**
  * TeacherStudentModify component.
@@ -36,6 +36,7 @@ const TeacherStudentModify: React.FC = () => {
 				<form onSubmit={handleSubmit} className="px-6 py-4">
 					<label className="font-bold text-xl mb-2">Student Name</label>
 					<input
+						aria-label="Student Name"
 						type="text"
 						value={name}
 						onChange={e => setName(e.target.value)}
@@ -43,6 +44,7 @@ const TeacherStudentModify: React.FC = () => {
 					/>
 					<label className="font-bold text-xl mb-2">Student Email</label>
 					<input
+						aria-label="Student Email"
 						type="email"
 						value={email}
 						onChange={e => setEmail(e.target.value)}

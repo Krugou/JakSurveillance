@@ -153,7 +153,8 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 					/>
 					<div className="flex md:gap-2 gap-10">
 					<Tooltip title="Print to pdf">
-						<button
+							<button
+								title='Print to pdf'
 							onClick={handleExportToPDF}
 							className="bg-metropoliaMainOrange text-white p-2 rounded"
 						>
@@ -161,7 +162,8 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 						</button>
 					</Tooltip>
 					<Tooltip title="Export to Excel">
-						<button
+							<button
+								title='Export to Excel'
 							onClick={handleExportToExcel}
 							className="bg-metropoliaMainOrange text-white p-2 rounded"
 						>
