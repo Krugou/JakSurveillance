@@ -59,6 +59,7 @@
 		"jsdoc": "^4.0.2",
 		"postcss": "^8.4.31",
 		"tailwindcss": "^3.3.3",
+		"terser": "^5.26.0",
 		"typedoc": "^0.25.4",
 		"typedoc-comments": "^1.0.1",
 		"typedoc-plugin-coverage": "^2.2.0",
