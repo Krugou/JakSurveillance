@@ -300,6 +300,11 @@ const CreateLecture: React.FC = () => {
 										);
 										setSelectedSession(selectedIndex);
 										setSelectedCourse(courses[selectedIndex] || null);
+										setSelectedTopic(
+											courses[selectedIndex]
+												? courses[selectedIndex].topic_names.split(',')[0]
+												: '',
+										);
 										console.log(
 											'🚀 ~ file: TeacherCreateLecture.tsx:208 ~ courses[selectedIndex]:',
 											courses[selectedIndex],
