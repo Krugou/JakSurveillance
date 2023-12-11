@@ -72,7 +72,9 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({
 			{modify ? (
 				<></>
 			) : (
-				<legend className="mb-5 ml-1 text-xl">Please check Course Details</legend>
+				<legend className="mb-5 ml-1 text-xl">
+					Please, fill in your course details
+				</legend>
 			)}
 
 			<InputField
