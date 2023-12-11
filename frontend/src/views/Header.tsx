@@ -94,7 +94,7 @@ const Header: React.FC<HeaderProps> = () => {
 					<NavigationButton
 						user={user}
 						path={`/${user.role.toLowerCase()}/profile`}
-						label={user.username}
+						label={"Profile"}
 					/>
 					<NavigationButton user={user} path="/logout" label="Logout" />
 				</div>
