@@ -38,7 +38,8 @@ interface Course {
 	selected_topics: string;
 	instructor_name: string;
 	usercourseid: number;
-}/**
+}
+/**
  * Student interface.
  * This interface defines the shape of a Student object.
  */
@@ -47,7 +48,8 @@ interface Student {
 
 	user: StudentInfo; // Replace 'any' with the actual type of 'user'
 	courses: Course[];
-}/**
+}
+/**
  * TeacherStudentDetail component.
  * This component is responsible for rendering the detailed view of a single student for a teacher.
  * It fetches the student's information and the courses they are enrolled in.
@@ -59,7 +61,7 @@ const TeacherStudentDetail: React.FC = () => {
 	const [courses, setCourses] = useState<Course[]>([]); // Define the courses state variable as an array of Course objects
 	const {user, update, setUpdate} = useContext(UserContext);
 	const token = localStorage.getItem('userToken');
-	const [showEndedCourses, setShowEndedCourses] = useState(true);
+	const [showEndedCourses, setShowEndedCourses] = useState(false);
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -165,11 +167,11 @@ const TeacherStudentDetail: React.FC = () => {
 							onChange={() => setShowEndedCourses(!showEndedCourses)}
 						/>
 						<span className="absolute font-medium text-xs uppercase right-1 text-white">
-					{' '}
-				</span>
+							{' '}
+						</span>
 						<span className="absolute font-medium text-xs uppercase right-8 text-white">
-					{' '}
-				</span>
+							{' '}
+						</span>
 						<span
 							className={`w-7 h-7 right-7 absolute rounded-full transform transition-transform ${
 								showEndedCourses ? ' bg-green-400 translate-x-7' : 'bg-red-500'
