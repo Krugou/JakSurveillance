@@ -8,7 +8,7 @@ import AttendanceTable from '../../../../components/main/course/attendance/Atten
 import PrintIcon from '@mui/icons-material/Print';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import {exportToExcel, exportToPDF} from '../../../../utils/exportData';
-import {UserContext} from "../../../../contexts/UserContext";
+import {UserContext} from '../../../../contexts/UserContext';
 /**
  * Attendance interface.
  * This interface defines the shape of an Attendance object.
@@ -21,7 +21,8 @@ interface Attendance {
 	topicname: string;
 	teacher: string;
 	status: number;
-}/**
+}
+/**
  * StudentInfo interface.
  * This interface defines the shape of a StudentInfo object.
  */
@@ -152,48 +153,46 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 						className="md:w-[10em] p-4 m-2 border border-black rounded"
 					/>
 					<div className="flex md:gap-2 gap-10">
-					<Tooltip title="Print to pdf">
+						<Tooltip title="Print to pdf">
 							<button
-								title='Print to pdf'
-							onClick={handleExportToPDF}
-							className="bg-metropoliaMainOrange text-white p-2 rounded"
-						>
-							<PrintIcon fontSize="large" />
-						</button>
-					</Tooltip>
-					<Tooltip title="Export to Excel">
+								onClick={handleExportToPDF}
+								className="bg-metropoliaMainOrange text-white p-2 rounded"
+							>
+								<PrintIcon fontSize="large" />
+							</button>
+						</Tooltip>
+						<Tooltip title="Export to Excel">
 							<button
-								title='Export to Excel'
-							onClick={handleExportToExcel}
-							className="bg-metropoliaMainOrange text-white p-2 rounded"
-						>
-							<GetAppIcon fontSize="large" />
-						</button>
-					</Tooltip>
+								onClick={handleExportToExcel}
+								className="bg-metropoliaMainOrange text-white p-2 rounded"
+							>
+								<GetAppIcon fontSize="large" />
+							</button>
+						</Tooltip>
 					</div>
 					<FormControl className="md:w-1/4 mt-2 md:mt-0">
 						<div className="md:flex-none gap-3 flex md:items-none items-center">
-						<label>Sort Topics:</label>
-						<Select
-							className="favorite-selector"
-							value={sortOption}
-							onChange={handleChange}
-						>
-							<MenuItem value="All Topics">
-								<div className="item-selector">
-									<AutorenewIcon className="highest-star-selector-icon" />
-									<span className="selector-text">All Topics</span>
-								</div>
-							</MenuItem>
-							{uniqueTopics.map((topic, index) => (
-								<MenuItem key={index} value={topic}>
+							<label>Sort Topics:</label>
+							<Select
+								className="favorite-selector"
+								value={sortOption}
+								onChange={handleChange}
+							>
+								<MenuItem value="All Topics">
 									<div className="item-selector">
 										<AutorenewIcon className="highest-star-selector-icon" />
-										<span className="selector-text">{topic}</span>
+										<span className="selector-text">All Topics</span>
 									</div>
 								</MenuItem>
-							))}
-						</Select>
+								{uniqueTopics.map((topic, index) => (
+									<MenuItem key={index} value={topic}>
+										<div className="item-selector">
+											<AutorenewIcon className="highest-star-selector-icon" />
+											<span className="selector-text">{topic}</span>
+										</div>
+									</MenuItem>
+								))}
+							</Select>
 						</div>
 					</FormControl>
 				</div>
@@ -205,7 +204,11 @@ const TeacherStudentCourseAttendance: React.FC = () => {
 			</div>
 		);
 	} else {
-		return <div className="text-center font-bold bg-white p-3 rounded-lg text-3xl m-10">No Data available</div>;
+		return (
+			<div className="text-center font-bold bg-white p-3 rounded-lg text-3xl m-10">
+				No Data available
+			</div>
+		);
 	}
 };
 
