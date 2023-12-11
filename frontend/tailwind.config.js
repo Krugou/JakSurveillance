@@ -1,7 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-	content: ['./src/**/*.{js,jsx,ts,tsx}'],
-	purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+	content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
 	theme: {
 		fontFamily: {
 			sans: ['Open Sans', 'sans-serif'],
