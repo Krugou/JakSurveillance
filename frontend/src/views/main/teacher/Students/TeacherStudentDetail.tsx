@@ -59,6 +59,7 @@ const TeacherStudentDetail: React.FC = () => {
 	const [courses, setCourses] = useState<Course[]>([]); // Define the courses state variable as an array of Course objects
 	const {user, update, setUpdate} = useContext(UserContext);
 	const token = localStorage.getItem('userToken');
+	const [showEndedCourses, setShowEndedCourses] = useState(true);
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -149,14 +150,35 @@ const TeacherStudentDetail: React.FC = () => {
 					{student.first_name + ' ' + student.last_name}'s Info
 				</h2>
 				<ProfileInfo user={student} />
+
 				<div className="w-full mt-5 h-1 bg-metropoliaMainOrange rounded-md"></div>
 				<h2 className="text-2xl font-bold mt-5 mb-5">
 					{student.first_name + ' ' + student.last_name}'s Courses
 				</h2>
 				<div className="bg-gray-100 pl-2 pt-1 pb-2 pr-2">
+					<label className="flex items-center md:mb-0 mb-5 relative w-max cursor-pointer select-none">
+						<span className="text-lg font-bold p-2 mr-3">Show old courses</span>
+						<input
+							type="checkbox"
+							className="appearance-none transition-colors cursor-pointer w-14 h-7 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-blue-500 bg-white"
+							checked={showEndedCourses}
+							onChange={() => setShowEndedCourses(!showEndedCourses)}
+						/>
+						<span className="absolute font-medium text-xs uppercase right-1 text-white">
+					{' '}
+				</span>
+						<span className="absolute font-medium text-xs uppercase right-8 text-white">
+					{' '}
+				</span>
+						<span
+							className={`w-7 h-7 right-7 absolute rounded-full transform transition-transform ${
+								showEndedCourses ? ' bg-green-400 translate-x-7' : 'bg-red-500'
+							}`}
+						/>
+					</label>
 					<StudentCourseGrid
 						courses={courses}
-						showEndedCourses={true}
+						showEndedCourses={showEndedCourses}
 						updateView={updateView}
 						handleAddStudentToCourse={handleAddStudentToCourse}
 						handleRemoveStudentFromCourse={handleRemoveStudentFromCourse}
