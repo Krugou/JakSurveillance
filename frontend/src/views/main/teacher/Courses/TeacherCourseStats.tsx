@@ -217,7 +217,6 @@ const TeacherCourseStats = () => {
 				<div className="flex justify-between sm:justify-around">
 					<Tooltip title="Print to pdf">
 						<button
-							title="Print to pdf"
 							onClick={handlePdfExport}
 							className="bg-metropoliaMainOrange text-white p-2 rounded"
 						>
@@ -243,7 +242,6 @@ const TeacherCourseStats = () => {
 					/>
 					<Tooltip title="Export to Excel">
 						<button
-							title="Export to Excel"
 							onClick={handleExcelExport}
 							className="bg-metropoliaMainOrange text-white p-2 rounded"
 						>

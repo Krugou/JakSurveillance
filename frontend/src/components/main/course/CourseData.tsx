@@ -183,8 +183,8 @@ const CourseData: React.FC<CourseDataProps> = ({
 											<div className="mb-5 mt-4">
 												<h2 className="text-gray-700 text-lg font-bold">Instructors</h2>
 												<ul>
-													{course.instructor_name.split(',').map((instructor, index) => (
-														<li key={index}>{instructor.trim()}</li>
+													{course.instructor_name.split(',').map(instructor => (
+														<li key={instructor.trim()}>{instructor.trim()}</li>
 													))}
 												</ul>
 											</div>
