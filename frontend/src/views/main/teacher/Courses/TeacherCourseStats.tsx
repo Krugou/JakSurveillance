@@ -3,12 +3,12 @@ import PrintIcon from '@mui/icons-material/Print';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
-import React, {useEffect, useState, useContext} from 'react';
-import {useParams, useNavigate} from 'react-router-dom';
+import React, {useContext, useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import AttendanceStatsTable from '../../../../components/main/course/attendance/AttendanceStatsTable';
-import apiHooks from '../../../../hooks/ApiHooks';
 import {UserContext} from '../../../../contexts/UserContext';
+import apiHooks from '../../../../hooks/ApiHooks';
 import {useCourses} from '../../../../hooks/courseHooks';
 import {
 	exportStatsTableToExcel,
@@ -217,6 +217,7 @@ const TeacherCourseStats = () => {
 				<div className="flex justify-between sm:justify-around">
 					<Tooltip title="Print to pdf">
 						<button
+							title="Print to pdf"
 							onClick={handlePdfExport}
 							className="bg-metropoliaMainOrange text-white p-2 rounded"
 						>
@@ -242,6 +243,7 @@ const TeacherCourseStats = () => {
 					/>
 					<Tooltip title="Export to Excel">
 						<button
+							title="Export to Excel"
 							onClick={handleExcelExport}
 							className="bg-metropoliaMainOrange text-white p-2 rounded"
 						>
