@@ -146,23 +146,17 @@ const TeacherStudentsView: React.FC = () => {
 				</h1>
 			</div>
 			<div className="w-full max-h-[40em] 2xl:max-h-[60em] overflow-y-scroll rounded-xl bg-gray-100 p-2 sm:p-5">
-				<div className="lg:ml-4 ml-0">
 				<GeneralLinkButton
 					path={`/${user?.role}/mainview`}
 					text="Back to mainview"
 				/>
-				</div>
 				<div className="flex flex-col md:flex-row items-center justify-between">
 					<div className="w-8/12 sm:w-[15em] mt-5 lg:ml-4 ml-0 mb-4">
 						<TextField
 							value={searchTerm}
 							onChange={e => setSearchTerm(e.target.value)}
 							label="Search by name"
-							InputProps={{
-								style: {
-									backgroundColor: 'white',
-								},
-							}}
+							className="bg-white"
 						/>
 					</div>
 
@@ -182,11 +176,7 @@ const TeacherStudentsView: React.FC = () => {
 								label="Search By course"
 								margin="normal"
 								variant="outlined"
-								InputProps={{
-									style: {
-										backgroundColor: 'white',
-									},
-								}}
+								className="bg-white"
 							/>
 						)}
 					/>
