@@ -37,7 +37,7 @@
 >
 >Teachers can modify students topics on a course
 >
->Teachers can change their role
+>Teachers can change their own role
 >
 >
 >Counselor can view and modify students attendance
@@ -48,7 +48,7 @@
 >
 >Counselor can view the statistics of students attendance on a course
 >
->Counselor can change their role
+>Counselor can change their own role
 >
 >
 >Students can attend a lecture by scanning a qr code
@@ -56,6 +56,8 @@
 >Students can view their own attendance on a course
 >
 >Students can view their own attendance statistics
+>
+>Students can view their own course details
 
 ## The pros and cons of the project
 <!-- Write about the pros and cons here -->
