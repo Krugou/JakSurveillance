@@ -279,7 +279,7 @@ const CreateLecture: React.FC = () => {
 							onDelete={() => handleDelete(lecture.lectureid)}
 						/>
 					))}
-					<div className="flex m-auto flex-col 2xl:w-2/6 sm:w-4/5 lg:w-3/5 md:w-4/6 w-full items-center rounded-lg justify-center sm:p-5 p-1 bg-gray-100">
+					<div className="flex m-auto flex-col 2xl:w-3/6 sm:w-4/5 lg:w-4/5 md:w-4/6 w-full items-center rounded-lg justify-center sm:p-5 p-1 bg-gray-100">
 						<h1 className="text-lg sm:text-2xl font-bold p-2 mb-8 mt-5">
 							Create new lecture
 						</h1>
