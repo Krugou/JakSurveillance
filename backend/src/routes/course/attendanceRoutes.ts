@@ -235,7 +235,7 @@ router.post(
 		try {
 			const {lectureid} = req.body;
 			await lectureModel.deleteByLectureId(lectureid);
-			res.status(201).send('Lecture deleted');
+			res.status(201).send({message: 'Lecture deleted'});
 		} catch (err) {
 			console.error(err);
 			res.status(500).send('Server error');
@@ -450,29 +450,6 @@ router.get(
 			res.status(200).json(openLectures);
 		} catch (error) {
 			console.error(error);
-			res.status(500).send('Server error');
-		}
-	},
-);
-/**
- * Route that deletes a lecture by its ID.
- *
- * @param {number} lectureid - The ID of the lecture.
- * @returns {Promise<{message: string}>} A promise that resolves with a message indicating the lecture was deleted successfully.
- */
-router.post(
-	'/lecturecanceled',
-	checkUserRole(['admin', 'counselor', 'teacher']),
-	[body('lectureid').isNumeric()],
-	validate,
-	async (req: Request, res: Response) => {
-		try {
-			const {lectureid} = req.body;
-			await lectureModel.deleteByLectureId(lectureid);
-			console.log('Lecture deleted successfully');
-			res.status(201).send({message: 'Lecture deleted successfully'});
-		} catch (err) {
-			console.error(err);
 			res.status(500).send('Server error');
 		}
 	},

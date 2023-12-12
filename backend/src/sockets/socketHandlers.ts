@@ -462,7 +462,7 @@ const setupSocketHandlers = (io: Server) => {
 		socket.on('lecturecanceled', async lectureid => {
 			const token = await getToken();
 			try {
-				await doFetch('http://localhost:3002/courses/attendance/lecturecanceled/', {
+				await doFetch('http://localhost:3002/courses/attendance/deletelecture/', {
 					method: 'POST', // or 'GET'
 					headers: {
 						'Content-Type': 'application/json',
