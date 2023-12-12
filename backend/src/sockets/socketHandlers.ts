@@ -273,7 +273,7 @@ const setupSocketHandlers = (io: Server) => {
 					}, timeout);
 
 					// Handle the 'lecturefinishedwithbutton' event
-					socket.on('lecturefinishedwithbutton', async (lectureid: string) => {
+					socket.on('lectureFinishedWithButton', async (lectureid: string) => {
 						finishLecture(lectureid, io);
 					});
 					// Clear the interval when the socket disconnects

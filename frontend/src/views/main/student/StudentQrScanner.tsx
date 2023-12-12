@@ -28,7 +28,8 @@ const StudentQrScanner: React.FC = () => {
 	const onNewScanResult = useCallback(
 		(decodedText: string) => {
 			setLoading(true);
-			const [secureHash, lectureid] = decodedText.split('/');
+			const url = new URL(decodedText);
+			const [secureHash, lectureid] = url.pathname.split('/').slice(1);
 			if (!secureHash || !lectureid) {
 				toast.error('Invalid QR code');
 				setLoading(false);

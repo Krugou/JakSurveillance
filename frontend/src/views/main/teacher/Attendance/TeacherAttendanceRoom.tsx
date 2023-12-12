@@ -8,7 +8,7 @@ import Attendees from '../../../../components/main/course/attendance/Attendees';
 import CourseStudents from '../../../../components/main/course/attendance/CourseStudents';
 import ConfirmDialog from '../../../../components/main/modals/ConfirmDialog';
 import {UserContext} from '../../../../contexts/UserContext';
-import apiHooks from '../../../../hooks/ApiHooks';
+import apiHooks, {baseUrl} from '../../../../hooks/ApiHooks';
 /**
  * AttendanceRoom component.
  * This component is responsible for managing the attendance room for a lecture.
@@ -149,7 +149,8 @@ const AttendanceRoom: React.FC = () => {
 				'updateAttendanceCollectionData',
 				(hash, lectureid, arrayOfStudents, courseStudents) => {
 					setHashDataReceived(true);
-					setHashValue(hash + '/' + lectureid);
+					const newBaseUrl = baseUrl.replace('api/', '');
+					setHashValue(newBaseUrl + hash + '/' + lectureid);
 					setArrayOfStudents(arrayOfStudents);
 
 					setCourseStudents(courseStudents);
@@ -225,8 +226,8 @@ const AttendanceRoom: React.FC = () => {
 			// Only start listening for the event if data has been loaded
 			if (socket) {
 				// When the lecture is finished, display a success message and navigate to the attendance view
-				socket.on('lecturefinished', checklectureid => {
-					console.log('lecturefinished');
+				socket.on('lectureFinished', checklectureid => {
+					console.log('lectureFinished');
 					if (checklectureid === lectureid) {
 						toast.success('Lecture finished');
 						if (courseId) {
@@ -252,7 +253,7 @@ const AttendanceRoom: React.FC = () => {
 		}
 
 		// If the socket is connected, emit a 'lecturefinishedwithbutton' event with the lectureid
-		socket.emit('lecturefinishedwithbutton', lectureid);
+		socket.emit('lectureFinishedWithButton', lectureid);
 	};
 
 	/**

@@ -1,6 +1,6 @@
 ('use strict');
 
-const baseUrl =
+export const baseUrl =
 	import.meta.env.MODE === 'development'
 		? 'http://localhost:3002/'
 		: 'https://jaksec.northeurope.cloudapp.azure.com/api/';
