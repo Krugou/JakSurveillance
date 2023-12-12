@@ -298,7 +298,7 @@ const AttendanceRoom: React.FC = () => {
 			{loading ? (
 				<CircularProgress />
 			) : (
-				<div className="flex flex-col m-auto w-full xl:w-4/5 2xl:w-2/3 h-full p-5 bg-gray-100">
+				<div className="flex flex-col m-auto w-full xl:w-full 2xl:w-3/4 h-full p-5 bg-gray-100">
 					<div>
 						<h1 className="text-2xl pb-5 font-bold">
 							{courseName} - {courseCode} - {topicname} -{' '}
