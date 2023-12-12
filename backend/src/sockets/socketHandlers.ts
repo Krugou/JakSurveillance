@@ -364,12 +364,12 @@ const setupSocketHandlers = (io: Server) => {
 		// Handle the 'manualstudentinsert' event
 		// This event is emitted when the teacher inputs the student id
 		socket.on(
-			'manualstudentinsert',
+			'manualStudentInsert',
 			async (studentId: string, lectureid: number) => {
-				console.log('manualstudentinsert', studentId, lectureid);
+				console.log('manualStudentInsert', studentId, lectureid);
 				// Emit the 'manualstudentinsertFailed' event only to the client who sent the event
 				if (studentId === '') {
-					io.to(socket.id).emit('manualstudentinsertFailedEmpty', lectureid);
+					io.to(socket.id).emit('manualStudentInsertFailedEmpty', lectureid);
 					return;
 				}
 
@@ -403,12 +403,12 @@ const setupSocketHandlers = (io: Server) => {
 							console.log('Student not found');
 						}
 						// Emit the 'manualstudentinsertSuccess' event only to the client who sent the event
-						io.to(socket.id).emit('manualstudentinsertSuccess', lectureid);
+						io.to(socket.id).emit('manualStudentInsertSuccess', lectureid);
 					})
 					.catch(error => {
 						console.error(error);
 						// Emit the 'manualstudentinsertError' event only to the client who sent the event
-						io.to(socket.id).emit('manualstudentinsertError', lectureid);
+						io.to(socket.id).emit('manualStudentInsertError', lectureid);
 					});
 			},
 		);
