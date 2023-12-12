@@ -80,7 +80,7 @@
 
 ### Features added after presentation
 
-> Teacher is now able to delete lectures in the attendance room, not just finishing them
+> Teacher is now able to delete the ongoing lecture in the attendance room
 
 ## Our Team Members
 
