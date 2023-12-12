@@ -457,6 +457,33 @@ const setupSocketHandlers = (io: Server) => {
 					});
 			},
 		);
+
+		// Handle the 'lecturecanceled' event
+		socket.on('lecturecanceled', async lectureid => {
+			const token = await getToken();
+
+			try {
+				const response = await doFetch(
+					'http://localhost:3002/courses/attendance/lecturecanceled/',
+					{
+						method: 'POST', // or 'GET'
+						headers: {
+							'Content-Type': 'application/json',
+							Authorization: 'Bearer ' + token,
+						},
+						body: JSON.stringify({
+							lectureid: lectureid,
+						}),
+					},
+				);
+				if (response.ok) {
+					io.to(lectureid).emit('lecturecanceled', lectureid);
+				}
+			} catch (error) {
+				// Handle the error here
+				console.error(error);
+			}
+		});
 	});
 };
 

@@ -7,6 +7,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
+import ConfirmDialog from '../../modals/ConfirmDialog';
 
 /**
  * Props interface represents the properties of the TopicGroupAndTopicsSelector component.
@@ -49,7 +50,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({
 	const [customTopicGroup, setCustomTopicGroup] = useState('');
 	const [customTopic, setCustomTopic] = useState('');
 	const [courseTopics, setCourseTopics] = useState<string[]>([]);
-
+	const [confirmOpen, setConfirmOpen] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const [topicGroupExists, setTopicGroupExists] = useState(false);
 	/**
@@ -230,12 +231,14 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({
 	 */
 	const handleDeleteGroup = async () => {
 		if (user) {
+			/*
 			const confirmDelete = window.confirm(
 				`Are you sure you want to delete the topic group: ${courseTopicGroup}?`,
 			);
 			if (!confirmDelete) {
 				return;
 			}
+			*/
 			try {
 				const token: string | null = localStorage.getItem('userToken');
 				if (!token) {
@@ -247,6 +250,7 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({
 				setIsCustomGroup(true);
 				setCustomTopics(['']);
 				setCustomTopicGroup('');
+				setConfirmOpen(false);
 			} catch (error) {
 				if (error instanceof Error) {
 					error.message
@@ -267,12 +271,22 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({
 						{!isCustomGroup && (
 							<button
 								type="button"
-								onClick={handleDeleteGroup}
+								onClick={() => setConfirmOpen(true)}
 								className="mb-3 w-fit text-sm p-2 bg-red-500 transition text-white rounded-3xl hover:bg-red-700"
 							>
 								Delete selected group
 							</button>
 						)}
+						<ConfirmDialog
+							title="Delete Topic Group"
+							open={confirmOpen}
+							setOpen={setConfirmOpen}
+							onConfirm={() => {
+								handleDeleteGroup();
+							}}
+						>
+							Are you sure you want to delete the topic group: {courseTopicGroup}?
+						</ConfirmDialog>
 						<button
 							type="button"
 							onClick={() => setIsCustomGroup(!isCustomGroup)}

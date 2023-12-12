@@ -8,6 +8,7 @@ import Attendees from '../../../../components/main/course/attendance/Attendees';
 import CourseStudents from '../../../../components/main/course/attendance/CourseStudents';
 import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
+import ConfirmDialog from '../../../../components/main/modals/ConfirmDialog';
 /**
  * AttendanceRoom component.
  * This component is responsible for managing the attendance room for a lecture.
@@ -38,7 +39,7 @@ const AttendanceRoom: React.FC = () => {
 	const [dataLoaded, setDataLoaded] = useState(false);
 	const [hashDataReceived, setHashDataReceived] = useState(false);
 	const toastDisplayed = useRef(false);
-
+	const [confirmOpen, setConfirmOpen] = useState(false);
 	/**
 	 * useEffect hook for fetching lecture info.
 	 * This hook is run when the component mounts and whenever the lectureid changes.
@@ -247,6 +248,25 @@ const AttendanceRoom: React.FC = () => {
 		socket.emit('lecturefinishedwithbutton', lectureid);
 	};
 	/**
+	 *  Function to handle the 'Cancel Lecture' button click.
+	 * This function emits a 'lecturecanceled' event with the lectureid.
+	 */
+
+	const handleLectureCanceled = () => {
+		setConfirmOpen(false);
+
+		if (!socket) {
+			// If the socket is not connected, display an error message and exit the function
+			toast.error('Socket is not connected');
+			return;
+		}
+
+		socket.emit('lecturecanceled', lectureid);
+		toast.success('Lecture canceled successfully');
+		navigate('/teacher/mainview');
+	};
+
+	/**
 	 * useEffect hook for managing the countdown.
 	 * This hook is run when the component mounts and whenever the countdown changes.
 	 * It starts a timer that decreases the countdown by 1 every second if the countdown is greater than 0.
@@ -320,11 +340,25 @@ const AttendanceRoom: React.FC = () => {
 					</div>
 					<div className="flex sm:flex-row-reverse flex-col gap-5 items-center justify-end">
 						<button
+							className="bg-metropoliaSupportRed sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSupportRed text-white font-bold rounded"
+							onClick={() => setConfirmOpen(true)}
+						>
+							Cancel Lecture
+						</button>
+						<button
 							onClick={handleLectureFinished}
 							className="bg-metropoliaMainOrange sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSecondaryOrange text-white font-bold rounded"
 						>
 							Finish Lecture
 						</button>
+						<ConfirmDialog
+							title="Cancel Lecture"
+							open={confirmOpen}
+							setOpen={setConfirmOpen}
+							onConfirm={handleLectureCanceled}
+						>
+							Are you sure you want to cancel the lecture?
+						</ConfirmDialog>
 						{lectureid && (
 							<CourseStudents
 								coursestudents={courseStudents}

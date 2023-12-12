@@ -91,24 +91,30 @@ const CreateLecture: React.FC = () => {
 	}, [calendarOpen]);
 	useEffect(() => {
 		if (user) {
-			setLoading(true);
-			const token: string | null = localStorage.getItem('userToken');
-			if (!token) {
-				throw new Error('No token available');
+			try {
+				setLoading(true);
+				const token: string | null = localStorage.getItem('userToken');
+				if (!token) {
+					throw new Error('No token available');
+				}
+
+				apihooks.getAllCoursesByInstructorEmail(user.email, token).then(data => {
+					setAllCourses(data);
+
+					const currentCourses = data.filter(
+						course =>
+							new Date(course.end_date).setHours(0, 0, 0, 0) >=
+							new Date().setHours(0, 0, 0, 0),
+					);
+
+					setCourses(currentCourses);
+					setLoading(false);
+					setSelectedCourse(currentCourses[0]);
+					setSelectedTopic(currentCourses[0].topic_names.split(',')[0]);
+				});
+			} catch (error) {
+				console.error(error);
 			}
-
-			apihooks.getAllCoursesByInstructorEmail(user.email, token).then(data => {
-				setAllCourses(data);
-
-				const currentCourses = data.filter(
-					course => new Date(course.end_date) > new Date(),
-				);
-
-				setCourses(currentCourses);
-				setLoading(false);
-				setSelectedCourse(currentCourses[0]);
-				setSelectedTopic(currentCourses[0].topic_names.split(',')[0]);
-			});
 		}
 	}, [user]);
 	const toggleCalendar = () => {
@@ -298,7 +304,9 @@ const CreateLecture: React.FC = () => {
 												onClick={() => {
 													const filteredCourses = showEndedCourses
 														? allCourses.filter(
-																course => new Date(course.end_date) > new Date(),
+																course =>
+																	new Date(course.end_date).setHours(0, 0, 0, 0) >=
+																	new Date().setHours(0, 0, 0, 0),
 														  )
 														: allCourses;
 

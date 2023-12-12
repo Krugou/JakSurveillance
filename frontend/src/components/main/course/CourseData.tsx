@@ -111,7 +111,9 @@ const CourseData: React.FC<CourseDataProps> = ({
 
 	if (Array.isArray(courseData) && showEndedCourses === false) {
 		courseData = courseData.filter(
-			course => new Date(course.end_date) > new Date(),
+			course =>
+				new Date(course.end_date).setHours(0, 0, 0, 0) >=
+				new Date().setHours(0, 0, 0, 0),
 		);
 	}
 

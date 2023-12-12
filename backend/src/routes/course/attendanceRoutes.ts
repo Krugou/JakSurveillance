@@ -152,6 +152,7 @@ router.post(
 			.withMessage('All student numbers must be numbers'),
 		body('lectureid').isNumeric().withMessage('Lecture ID must be a number'),
 	],
+	validate,
 	async (req: Request, res: Response) => {
 		try {
 			const {date, studentnumbers, lectureid} = req.body;
@@ -449,6 +450,28 @@ router.get(
 			res.status(200).json(openLectures);
 		} catch (error) {
 			console.error(error);
+			res.status(500).send('Server error');
+		}
+	},
+);
+/**
+ * Route that deletes a lecture by its ID.
+ *
+ * @param {number} lectureid - The ID of the lecture.
+ * @returns {Promise<{message: string}>} A promise that resolves with a message indicating the lecture was deleted successfully.
+ */
+router.post(
+	'/lecturecanceled',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	[body('lectureid').isNumeric()],
+	validate,
+	async (req: Request, res: Response) => {
+		try {
+			const {lectureid} = req.body;
+			await lectureModel.deleteByLectureId(lectureid);
+			res.status(201).send('Lecture canceled');
+		} catch (err) {
+			console.error(err);
 			res.status(500).send('Server error');
 		}
 	},
