@@ -270,9 +270,6 @@ const AttendanceRoom: React.FC = () => {
 		}
 
 		socket.emit('lecturecanceled', lectureid);
-
-		toast.success('Lecture canceled successfully');
-		navigate('/teacher/mainview');
 	};
 
 	/**
