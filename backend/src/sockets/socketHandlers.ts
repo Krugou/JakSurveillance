@@ -461,7 +461,6 @@ const setupSocketHandlers = (io: Server) => {
 		// Handle the 'lecturecanceled' event
 		socket.on('lecturecanceled', async lectureid => {
 			const token = await getToken();
-
 			try {
 				const response = await doFetch(
 					'http://localhost:3002/courses/attendance/lecturecanceled/',
@@ -476,10 +475,10 @@ const setupSocketHandlers = (io: Server) => {
 						}),
 					},
 				);
-				if (response.ok) {
-					io.to(lectureid).emit('lecturecanceled', lectureid);
-					socket.emit('lecturecanceledsuccess', lectureid);
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
 				}
+				io.to(lectureid).emit('lecturecanceledsuccessfull', lectureid);
 			} catch (error) {
 				// Handle the error here
 				console.error(error);
