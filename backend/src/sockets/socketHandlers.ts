@@ -478,6 +478,7 @@ const setupSocketHandlers = (io: Server) => {
 				);
 				if (response.ok) {
 					io.to(lectureid).emit('lecturecanceled', lectureid);
+					socket.emit('lecturecanceledsuccess', lectureid);
 				}
 			} catch (error) {
 				// Handle the error here

@@ -189,6 +189,13 @@ const AttendanceRoom: React.FC = () => {
 			newSocket.on('disconnect', () => {
 				console.log('Disconnected from the server');
 			});
+			// When the lecture is canceled, display a success message and navigate to the main view
+			newSocket.on('lecturecanceledsuccess', lectureid => {
+				if (lectureid === lectureid) {
+					toast.success('Lecture canceled successfully');
+					navigate('/teacher/mainview');
+				}
+			});
 		}
 	}, [lectureid, user]); // This effect depends on the lectureid variable
 
@@ -247,6 +254,7 @@ const AttendanceRoom: React.FC = () => {
 		// If the socket is connected, emit a 'lecturefinishedwithbutton' event with the lectureid
 		socket.emit('lecturefinishedwithbutton', lectureid);
 	};
+
 	/**
 	 *  Function to handle the 'Cancel Lecture' button click.
 	 * This function emits a 'lecturecanceled' event with the lectureid.
@@ -262,6 +270,7 @@ const AttendanceRoom: React.FC = () => {
 		}
 
 		socket.emit('lecturecanceled', lectureid);
+
 		toast.success('Lecture canceled successfully');
 		navigate('/teacher/mainview');
 	};
