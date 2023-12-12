@@ -159,7 +159,10 @@ const finishLecture = async (lectureid: string, io: Server) => {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		if (response.ok) {
-			io.to(lectureid).emit('lecturefinished', lectureid);
+			io.to(lectureid).emit('lectureFinished', lectureid);
+			// Purge lectureid from notYetPresentStudents and presentStudents
+			delete notYetPresentStudents[lectureid];
+			delete presentStudents[lectureid];
 		}
 	} catch (error) {
 		console.error('Error:', error);
@@ -184,7 +187,7 @@ let lectureTimeoutId: NodeJS.Timeout;
  */
 const setupSocketHandlers = (io: Server) => {
 	io.on('connection', (socket: Socket) => {
-		console.log('user joined: ' + socket.id);
+		// console.log('user joined: ' + socket.id);
 		// handle disconnect
 		socket.on('disconnect', () => {
 			console.log('user disconnected');
@@ -198,7 +201,7 @@ const setupSocketHandlers = (io: Server) => {
 					// Join the room with the lectureid
 					socket.join(lectureid);
 					// Emit the 'lecturestarted' event to the room with the lectureid
-					io.to(lectureid).emit('lecturestarted', lectureid, timeout);
+					io.to(lectureid).emit('lectureStarted', lectureid, timeout);
 					// Get the list of students who have arrived and who have not yet arrived
 					const token = await getToken();
 					if (presentStudents[lectureid] && notYetPresentStudents[lectureid]) {
@@ -292,14 +295,6 @@ const setupSocketHandlers = (io: Server) => {
 				unixtime: number,
 				lectureid: number,
 			) => {
-				console.log(
-					'🚀 ~ file: socketHandlers.ts:248 ~ io.on ~ unixtime:',
-					unixtime,
-				);
-				console.log(
-					'🚀 ~ file: socketHandlers.ts:248 ~ io.on ~ studentId:',
-					studentId,
-				);
 				if (studentId === '') {
 					io
 						.to(socket.id)
@@ -341,6 +336,9 @@ const setupSocketHandlers = (io: Server) => {
 								const student = notYetPresentStudents[lectureid][studentIndex];
 								presentStudents[lectureid].push(student);
 								notYetPresentStudents[lectureid].splice(studentIndex, 1); // Remove the student from notYetPresentStudents
+								io
+									.to(lectureid.toString())
+									.emit('updateCourseStudents', notYetPresentStudents[lectureid]);
 								io
 									.to(lectureid.toString())
 									.emit('updateAttendees', presentStudents[lectureid]);
@@ -388,8 +386,9 @@ const setupSocketHandlers = (io: Server) => {
 					}),
 				})
 					.then(response => {
-						console.log('Success:', response);
-
+						if (response) {
+							console.log('Success:', response);
+						}
 						const studentIndex = notYetPresentStudents[lectureid].findIndex(
 							(student: Student) =>
 								Number(student.studentnumber) === Number(studentId),
@@ -402,6 +401,12 @@ const setupSocketHandlers = (io: Server) => {
 						} else {
 							console.log('Student not found');
 						}
+						io
+							.to(lectureid.toString())
+							.emit('updateCourseStudents', notYetPresentStudents[lectureid]);
+						io
+							.to(lectureid.toString())
+							.emit('updateAttendees', presentStudents[lectureid]);
 						// Emit the 'manualstudentinsertSuccess' event only to the client who sent the event
 						io.to(socket.id).emit('manualStudentInsertSuccess', lectureid);
 					})
@@ -449,6 +454,12 @@ const setupSocketHandlers = (io: Server) => {
 							} else {
 								console.log('Student not found');
 							}
+							io
+								.to(lectureid.toString())
+								.emit('updateCourseStudents', notYetPresentStudents[lectureid]);
+							io
+								.to(lectureid.toString())
+								.emit('updateAttendees', presentStudents[lectureid]);
 							// Emit the 'manualStudentRemoveSuccess' event only to the client who sent the event
 							io.to(socket.id).emit('manualStudentRemoveSuccess', lectureid);
 						}
@@ -477,6 +488,9 @@ const setupSocketHandlers = (io: Server) => {
 				});
 
 				io.to(lectureid).emit('lectureCanceledSuccess', lectureid);
+				// Purge lectureid from notYetPresentStudents and presentStudents
+				delete notYetPresentStudents[lectureid];
+				delete presentStudents[lectureid];
 			} catch (error) {
 				// Handle the error here
 				console.error(error);

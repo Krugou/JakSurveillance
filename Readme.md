@@ -83,6 +83,8 @@
 > Teacher is now able to delete the ongoing lecture in the attendance room
 >
 > immediate attendees list update after student insert on the attendance room
+>
+> Purging of the attendance room student listing after the lecture has ended
 
 ## Our Team Members
 
