@@ -231,14 +231,6 @@ const TopicGroupAndTopicsSelector: React.FC<Props> = ({
 	 */
 	const handleDeleteGroup = async () => {
 		if (user) {
-			/*
-			const confirmDelete = window.confirm(
-				`Are you sure you want to delete the topic group: ${courseTopicGroup}?`,
-			);
-			if (!confirmDelete) {
-				return;
-			}
-			*/
 			try {
 				const token: string | null = localStorage.getItem('userToken');
 				if (!token) {
