@@ -473,7 +473,7 @@ const setupSocketHandlers = (io: Server) => {
 					}),
 				});
 
-				io.to(lectureid).emit('lecturecanceledsuccessfull', lectureid);
+				io.to(lectureid).emit('lectureCanceledSuccessfull', lectureid);
 			} catch (error) {
 				// Handle the error here
 				console.error(error);

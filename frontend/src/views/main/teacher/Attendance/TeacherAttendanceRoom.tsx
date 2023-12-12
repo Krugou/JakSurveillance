@@ -190,7 +190,7 @@ const AttendanceRoom: React.FC = () => {
 				console.log('Disconnected from the server');
 			});
 			// When the lecture is canceled, display a success message and navigate to the main view
-			newSocket.on('lecturecanceledsuccessfull', receivedLectureId => {
+			newSocket.on('lectureCanceledSuccessfull', receivedLectureId => {
 				if (lectureid === receivedLectureId) {
 					toast.success('Lecture canceled successfully');
 					navigate('/teacher/mainview');
