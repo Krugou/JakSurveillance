@@ -149,8 +149,9 @@ const AttendanceRoom: React.FC = () => {
 				'updateAttendanceCollectionData',
 				(hash, lectureid, arrayOfStudents, courseStudents) => {
 					setHashDataReceived(true);
-					const newBaseUrl = baseUrl.replace('api/', '');
-					setHashValue(newBaseUrl + hash + '/' + lectureid);
+					const url = new URL(baseUrl);
+					const newBaseUrl = url.origin;
+					setHashValue(newBaseUrl + '/' + hash + '/' + lectureid);
 					setArrayOfStudents(arrayOfStudents);
 
 					setCourseStudents(courseStudents);
