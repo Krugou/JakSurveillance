@@ -78,6 +78,10 @@
 
 > Not that responsive on some pages with mobile
 
+### Features added after presentation
+
+> Teacher is now able to delete lectures in the attendance room, not just finishing them
+
 ## Our Team Members
 
 ### Joonas Lamminmäki
