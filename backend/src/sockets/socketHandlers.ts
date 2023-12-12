@@ -462,22 +462,17 @@ const setupSocketHandlers = (io: Server) => {
 		socket.on('lecturecanceled', async lectureid => {
 			const token = await getToken();
 			try {
-				const response = await doFetch(
-					'http://localhost:3002/courses/attendance/lecturecanceled/',
-					{
-						method: 'POST', // or 'GET'
-						headers: {
-							'Content-Type': 'application/json',
-							Authorization: 'Bearer ' + token,
-						},
-						body: JSON.stringify({
-							lectureid: lectureid,
-						}),
+				await doFetch('http://localhost:3002/courses/attendance/lecturecanceled/', {
+					method: 'POST', // or 'GET'
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: 'Bearer ' + token,
 					},
-				);
-				if (!response.ok) {
-					throw new Error(`HTTP error! status: ${response.status}`);
-				}
+					body: JSON.stringify({
+						lectureid: lectureid,
+					}),
+				});
+
 				io.to(lectureid).emit('lecturecanceledsuccessfull', lectureid);
 			} catch (error) {
 				// Handle the error here

@@ -469,7 +469,8 @@ router.post(
 		try {
 			const {lectureid} = req.body;
 			await lectureModel.deleteByLectureId(lectureid);
-			res.send({message: 'Lecture deleted successfully'});
+			console.log('Lecture deleted successfully');
+			res.status(201).send({message: 'Lecture deleted successfully'});
 		} catch (err) {
 			console.error(err);
 			res.status(500).send('Server error');
