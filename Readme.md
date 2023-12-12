@@ -1,91 +1,92 @@
 # Metropolia Attendance app project
 
->This app is made for metropolia university of applied sciences to help teachers to take attendance in their Lectures.
+> This app is made for metropolia university of applied sciences to help teachers to take attendance in their Lectures.
 
 [Project link here!](https://JakSec.northeurope.cloudapp.azure.com/)
+[tsdocs link](https://krugou.github.io/JakSurveillance/)
 
 ## What we found out
+
 <!-- Write about what you found out here -->
 
->You can import excel files to sql easily using nodejs npm package called xlsx
+> You can import excel files to sql easily using nodejs npm package called xlsx
 >
->We learned what it's like to work with a real client
+> We learned what it's like to work with a real client
 >
->We learned to work with typescript
+> We learned to work with typescript
 >
->We learned how to communicate and associate with a real client
+> We learned how to communicate and associate with a real client
 
 ## What works and what doesn't
+
 <!-- Write about what works and what doesn't here -->
 
->Every user has instructional videos
+> Every user has instructional videos
 >
->Every user has their own profile
+> Every user has their own profile
 >
+> Teachers can create courses and lectures
 >
->Teachers can create courses and lectures
+> Teachers can gather attendance of the students from a lecture
 >
->Teachers can gather attendance of the students from a lecture
+> Teachers can view and modify course details
 >
->Teachers can view and modify course details
+> Teachers can view and modify students attendance
 >
->Teachers can view and modify students attendance
+> Teachers can view the statistics of students attendance on a course
 >
->Teachers can view the statistics of students attendance on a course
+> Teachers can add and delete students on a course
 >
->Teachers can add and delete students on a course
+> Teachers can modify students topics on a course
 >
->Teachers can modify students topics on a course
+> Teachers can change their own role
 >
->Teachers can change their own role
+> Counselor can view and modify students attendance
 >
+> Counselor can view and modify course details
 >
->Counselor can view and modify students attendance
+> Counselor can modify students topics on a course
 >
->Counselor can view and modify course details
+> Counselor can view the statistics of students attendance on a course
 >
->Counselor can modify students topics on a course
+> Counselor can change their own role
 >
->Counselor can view the statistics of students attendance on a course
+> Students can attend a lecture by scanning a qr code
 >
->Counselor can change their own role
+> Students can view their own attendance on a course
 >
+> Students can view their own attendance statistics
 >
->Students can attend a lecture by scanning a qr code
->
->Students can view their own attendance on a course
->
->Students can view their own attendance statistics
->
->Students can view their own course details
+> Students can view their own course details
 
 ## The pros and cons of the project
+
 <!-- Write about the pros and cons here -->
 
 ### Pros
 
->Good amount of functionalities
+> Good amount of functionalities
 >
->Project stayed on schedule always
+> Project stayed on schedule always
 >
->Communication
+> Communication
 >
->Client was happy with the end result
+> Client was happy with the end result
 
 ### Cons
 
->Not that responsive on some pages with mobile
+> Not that responsive on some pages with mobile
 
 ## Our Team Members
 
 ### Joonas Lamminmäki
 
->[Jonsson-123](https://github.com/Jonsson-123)
+> [Jonsson-123](https://github.com/Jonsson-123)
 
 ### Kaarle Häyhä
 
->[KaarleH](https://github.com/KaarleH)
+> [KaarleH](https://github.com/KaarleH)
 
 ### Aleksi Nokelainen
 
->[Krugou](https://github.com/Krugou)
+> [Krugou](https://github.com/Krugou)
