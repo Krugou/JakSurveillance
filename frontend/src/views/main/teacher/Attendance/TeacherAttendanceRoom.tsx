@@ -6,9 +6,9 @@ import {toast} from 'react-toastify';
 import io, {Socket} from 'socket.io-client';
 import Attendees from '../../../../components/main/course/attendance/Attendees';
 import CourseStudents from '../../../../components/main/course/attendance/CourseStudents';
+import ConfirmDialog from '../../../../components/main/modals/ConfirmDialog';
 import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
-import ConfirmDialog from '../../../../components/main/modals/ConfirmDialog';
 /**
  * AttendanceRoom component.
  * This component is responsible for managing the attendance room for a lecture.
@@ -127,19 +127,22 @@ const AttendanceRoom: React.FC = () => {
 			// Emit a 'createAttendanceCollection' event with the lectureid
 			newSocket.emit('createAttendanceCollection', lectureid);
 			// When the lecture starts, set the countdown
-			newSocket.on('lecturestarted', (checklectureid, timeout) => {
+			newSocket.on('lectureStarted', (checklectureid, timeout) => {
 				if (checklectureid === lectureid) {
 					setCountdown(timeout / 1000); // convert milliseconds to seconds
 				}
 			});
 
 			// When receiving the list of all students in the lecture, update the state
-			newSocket.on('getallstudentsinlecture', courseStudents => {
+			newSocket.on('getAllStudentsInLecture', courseStudents => {
 				setCourseStudents(courseStudents);
 			});
 			// When the list of students in the course is updated, update the state
-			newSocket.on('updatecoursestudents', courseStudents => {
+			newSocket.on('updateCourseStudents', courseStudents => {
 				setCourseStudents(courseStudents);
+			});
+			newSocket.on('updateAttendees', arrayOfStudents => {
+				setArrayOfStudents(arrayOfStudents);
 			});
 			// When the attendance collection data is updated, update the state
 			newSocket.on(
@@ -153,19 +156,19 @@ const AttendanceRoom: React.FC = () => {
 				},
 			);
 			// When a student is inserted manually, display a success message
-			newSocket.on('manualstudentinsertSuccess', lectureid => {
+			newSocket.on('manualStudentInsertSuccess', lectureid => {
 				if (lectureid === lectureid) {
 					toast.success('Student inserted successfully');
 				}
 			});
 			// When a student is inserted manually, display an error message
-			newSocket.on('manualstudentinsertError', lectureid => {
+			newSocket.on('manualStudentInsertError', lectureid => {
 				if (lectureid === lectureid) {
 					toast.error('Error inserting student');
 				}
 			});
 			// When a student is inserted manually, display an error message if the student number is empty
-			newSocket.on('manualstudentinsertFailedEmpty', lectureid => {
+			newSocket.on('manualStudentInsertFailedEmpty', lectureid => {
 				if (lectureid === lectureid) {
 					toast.error('Student number is empty');
 				}
@@ -190,7 +193,7 @@ const AttendanceRoom: React.FC = () => {
 				console.log('Disconnected from the server');
 			});
 			// When the lecture is canceled, display a success message and navigate to the main view
-			newSocket.on('lectureCanceledSuccessfull', receivedLectureId => {
+			newSocket.on('lectureCanceledSuccess', receivedLectureId => {
 				if (lectureid === receivedLectureId) {
 					toast.success('Lecture canceled successfully');
 					navigate('/teacher/mainview');
@@ -269,7 +272,7 @@ const AttendanceRoom: React.FC = () => {
 			return;
 		}
 
-		socket.emit('lecturecanceled', lectureid);
+		socket.emit('lectureCanceled', lectureid);
 	};
 
 	/**

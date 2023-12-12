@@ -81,6 +81,8 @@
 ### Features added after presentation
 
 > Teacher is now able to delete the ongoing lecture in the attendance room
+>
+> immediate attendees list update after student insert on the attendance room
 
 ## Our Team Members
 

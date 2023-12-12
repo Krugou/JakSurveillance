@@ -221,7 +221,7 @@ const CourseStudents: React.FC<Props> = ({
 								title={`${student.first_name} ${student.last_name}`}
 								onClick={() => {
 									if (socket) {
-										socket.emit('manualstudentinsert', student.studentnumber, lectureid);
+										socket.emit('manualStudentInsert', student.studentnumber, lectureid);
 									}
 								}}
 							>

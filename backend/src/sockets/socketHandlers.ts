@@ -341,11 +341,14 @@ const setupSocketHandlers = (io: Server) => {
 								const student = notYetPresentStudents[lectureid][studentIndex];
 								presentStudents[lectureid].push(student);
 								notYetPresentStudents[lectureid].splice(studentIndex, 1); // Remove the student from notYetPresentStudents
+								io
+									.to(lectureid.toString())
+									.emit('updateAttendees', presentStudents[lectureid]);
 							} else {
 								console.log('Student not found');
 							}
 
-							io.to(socket.id).emit('youhavebeensavedintolecture', lectureid);
+							io.to(socket.id).emit('youHaveBeenSavedIntoLecture', lectureid);
 						})
 						.catch(error => {
 							// Handle the error here
@@ -459,7 +462,7 @@ const setupSocketHandlers = (io: Server) => {
 		);
 
 		// Handle the 'lecturecanceled' event
-		socket.on('lecturecanceled', async lectureid => {
+		socket.on('lectureCanceled', async lectureid => {
 			const token = await getToken();
 			try {
 				await doFetch('http://localhost:3002/courses/attendance/deletelecture/', {
@@ -473,7 +476,7 @@ const setupSocketHandlers = (io: Server) => {
 					}),
 				});
 
-				io.to(lectureid).emit('lectureCanceledSuccessfull', lectureid);
+				io.to(lectureid).emit('lectureCanceledSuccess', lectureid);
 			} catch (error) {
 				// Handle the error here
 				console.error(error);
