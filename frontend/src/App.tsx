@@ -56,6 +56,7 @@ const App = () => {
 						<Route path="logout" element={<Logout />} />
 						<Route path="login" element={<Login />} />
 						<Route path="gdpr" element={<Gdpr />} />
+						<Route path="*" element={<StartView />} />
 					</Routes>
 				</BackgroundContainer>
 			</Router>
