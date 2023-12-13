@@ -4,11 +4,12 @@ import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import io, {Socket} from 'socket.io-client';
 import {UserContext} from '../../../contexts/UserContext.tsx';
+import {baseUrl} from '../../../hooks/ApiHooks.ts';
 /**
  * StudentQrScanner component.
- * 
+ *
  * This component is responsible for scanning QR codes for students. It performs the following operations:
- * 
+ *
  * 1. Sets up a QR scanner.
  * 2. Decodes the scanned QR code and splits it into a secure hash and a lecture ID.
  * 3. Validates the decoded QR code.
@@ -16,7 +17,7 @@ import {UserContext} from '../../../contexts/UserContext.tsx';
  * 5. Sends a message to the server indicating that the student has arrived at the lecture.
  * 6. Handles server responses, including successful scan and too slow scan.
  * 7. Navigates to the main view after a successful scan.
- * 
+ *
  * @returns A JSX element representing the QR scanner component.
  */
 const StudentQrScanner: React.FC = () => {
@@ -28,8 +29,10 @@ const StudentQrScanner: React.FC = () => {
 	const onNewScanResult = useCallback(
 		(decodedText: string) => {
 			setLoading(true);
-			const url = new URL(decodedText);
-			const [secureHash, lectureid] = url.pathname.split('/').slice(1);
+			const url = new URL(baseUrl);
+			const newBaseUrl = url.origin;
+			decodedText = decodedText.replace(newBaseUrl, '');
+			const [secureHash, lectureid] = decodedText.split('/');
 			if (!secureHash || !lectureid) {
 				toast.error('Invalid QR code');
 				setLoading(false);
