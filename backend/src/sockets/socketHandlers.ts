@@ -133,16 +133,16 @@ const updateHash = () => {
  */
 const finishLecture = async (lectureid: string, io: Server) => {
 	// Prepare the data to be sent
-	const data = {
-		date: new Date().toISOString().slice(0, 19).replace('T', ' '),
-		studentnumbers: notYetPresentStudents[lectureid].map(
-			student => student.studentnumber,
-		),
-		lectureid: lectureid,
-	};
-	const token = await getToken();
-	// Send a POST request to the '/lecturefinished/' route
 	try {
+		const data = {
+			date: new Date().toISOString().slice(0, 19).replace('T', ' '),
+			studentnumbers: notYetPresentStudents[lectureid].map(
+				student => student.studentnumber,
+			),
+			lectureid: lectureid,
+		};
+		const token = await getToken();
+		// Send a POST request to the '/lecturefinished/' route
 		const response = await fetch(
 			'http://localhost:3002/courses/attendance/lecturefinished/',
 			{
