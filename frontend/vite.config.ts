@@ -52,6 +52,6 @@ export default defineConfig({
 	},
 	esbuild: {
 		// Remove console and debugger statements during the build process
-		// drop: ['console', 'debugger'],
+		drop: ['console', 'debugger'],
 	},
 });
