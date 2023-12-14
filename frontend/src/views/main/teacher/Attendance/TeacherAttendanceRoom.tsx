@@ -1,14 +1,14 @@
-import {CircularProgress} from '@mui/material';
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import { CircularProgress } from '@mui/material';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import QRCode from 'react-qr-code';
-import {useNavigate, useParams} from 'react-router-dom';
-import {toast} from 'react-toastify';
-import io, {Socket} from 'socket.io-client';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import io, { Socket } from 'socket.io-client';
 import Attendees from '../../../../components/main/course/attendance/Attendees';
 import CourseStudents from '../../../../components/main/course/attendance/CourseStudents';
 import ConfirmDialog from '../../../../components/main/modals/ConfirmDialog';
-import {UserContext} from '../../../../contexts/UserContext';
-import apiHooks, {baseUrl} from '../../../../hooks/ApiHooks';
+import { UserContext } from '../../../../contexts/UserContext';
+import apiHooks, { baseUrl } from '../../../../hooks/ApiHooks';
 /**
  * AttendanceRoom component.
  * This component is responsible for managing the attendance room for a lecture.
@@ -149,23 +149,8 @@ const AttendanceRoom: React.FC = () => {
 				'updateAttendanceCollectionData',
 				(hash, lectureid, arrayOfStudents, courseStudents) => {
 					setHashDataReceived(true);
-					const url = new URL(baseUrl);
-					console.log(
-						'🚀 ~ file: TeacherAttendanceRoom.tsx:153 ~ useEffect ~ url:',
-						url,
-					);
-					const newBaseUrl = url.origin;
-					console.log(
-						'🚀 ~ file: TeacherAttendanceRoom.tsx:154 ~ useEffect ~ newBaseUrl:',
-						newBaseUrl,
-					);
-					setHashValue(newBaseUrl + '/' + hash + '/' + lectureid);
-					console.log(
-						'🚀 ~ file: TeacherAttendanceRoom.tsx:156 ~ useEffect ~ hashValue:',
-						hashValue,
-					);
+					setHashValue(baseUrl + '#' + hash + '#' + lectureid);
 					setArrayOfStudents(arrayOfStudents);
-
 					setCourseStudents(courseStudents);
 				},
 			);
@@ -214,6 +199,7 @@ const AttendanceRoom: React.FC = () => {
 				}
 			});
 		}
+		
 	}, [lectureid, user]); // This effect depends on the lectureid variable
 
 	/**

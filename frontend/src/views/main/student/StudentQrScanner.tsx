@@ -29,17 +29,13 @@ const StudentQrScanner: React.FC = () => {
 	const onNewScanResult = useCallback(
 		(decodedText: string) => {
 			setLoading(true);
-			const url = new URL(baseUrl);
-			console.log('🚀 ~ file: StudentQrScanner.tsx:33 ~ url:', url);
-			const newBaseUrl = url.origin;
-			console.log('🚀 ~ file: StudentQrScanner.tsx:35 ~ newBaseUrl:', newBaseUrl);
-			decodedText = decodedText.replace(newBaseUrl, '');
+
 			console.log(
 				'🚀 ~ file: StudentQrScanner.tsx:37 ~ decodedText:',
 				decodedText,
 			);
-			const [secureHash, lectureid] = decodedText.split('/');
-			if (!secureHash || !lectureid) {
+			const [baseUrl, secureHash, lectureid] = decodedText.split('#');
+			if (!secureHash || !lectureid || baseUrl !== baseUrl) {
 				toast.error('Invalid QR code');
 				setLoading(false);
 				return;
