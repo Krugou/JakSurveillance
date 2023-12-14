@@ -54,7 +54,7 @@ const CourseStudents: React.FC<Props> = ({
 		else if (remainingTime === 0) {
 			// If the socket is defined, emit a 'lecturefinishedwithbutton' event with the lecture ID
 			if (socket) {
-				socket.emit('lecturefinishedwithbutton', lectureid);
+				socket.emit('lectureFinishedWithButton', lectureid);
 			}
 			// Reset the remaining time to 5
 			setRemainingTime(5);
