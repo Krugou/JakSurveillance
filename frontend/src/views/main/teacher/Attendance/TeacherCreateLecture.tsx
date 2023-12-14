@@ -290,7 +290,7 @@ const CreateLecture: React.FC = () => {
 							Create new lecture
 						</h1>
 						<div className="flex w-full justify-center">
-							<div className="flex w-1/4 flex-col gap-5">
+							<div className="flex w-1/4 flex-col gap-3 sm:gap-5">
 								<label className="sm:text-xl text-md flex justify-end" htmlFor="course">
 									<div className="flex items-center">
 										<Tooltip
