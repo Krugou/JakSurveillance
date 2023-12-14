@@ -150,8 +150,20 @@ const AttendanceRoom: React.FC = () => {
 				(hash, lectureid, arrayOfStudents, courseStudents) => {
 					setHashDataReceived(true);
 					const url = new URL(baseUrl);
+					console.log(
+						'🚀 ~ file: TeacherAttendanceRoom.tsx:153 ~ useEffect ~ url:',
+						url,
+					);
 					const newBaseUrl = url.origin;
+					console.log(
+						'🚀 ~ file: TeacherAttendanceRoom.tsx:154 ~ useEffect ~ newBaseUrl:',
+						newBaseUrl,
+					);
 					setHashValue(newBaseUrl + '/' + hash + '/' + lectureid);
+					console.log(
+						'🚀 ~ file: TeacherAttendanceRoom.tsx:156 ~ useEffect ~ hashValue:',
+						hashValue,
+					);
 					setArrayOfStudents(arrayOfStudents);
 
 					setCourseStudents(courseStudents);

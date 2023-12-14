@@ -30,8 +30,14 @@ const StudentQrScanner: React.FC = () => {
 		(decodedText: string) => {
 			setLoading(true);
 			const url = new URL(baseUrl);
+			console.log('🚀 ~ file: StudentQrScanner.tsx:33 ~ url:', url);
 			const newBaseUrl = url.origin;
+			console.log('🚀 ~ file: StudentQrScanner.tsx:35 ~ newBaseUrl:', newBaseUrl);
 			decodedText = decodedText.replace(newBaseUrl, '');
+			console.log(
+				'🚀 ~ file: StudentQrScanner.tsx:37 ~ decodedText:',
+				decodedText,
+			);
 			const [secureHash, lectureid] = decodedText.split('/');
 			if (!secureHash || !lectureid) {
 				toast.error('Invalid QR code');
