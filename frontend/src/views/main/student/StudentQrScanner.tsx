@@ -4,7 +4,6 @@ import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import io, {Socket} from 'socket.io-client';
 import {UserContext} from '../../../contexts/UserContext.tsx';
-import {baseUrl} from '../../../hooks/ApiHooks.ts';
 /**
  * StudentQrScanner component.
  *
@@ -34,7 +33,7 @@ const StudentQrScanner: React.FC = () => {
 			console.log('baseUrl', baseUrl);
 			console.log('secureHash', secureHash);
 			console.log('lectureid', lectureid);
-			if (!secureHash || !lectureid || baseUrl !== baseUrl) {
+			if (!secureHash || !lectureid || !baseUrl) {
 				toast.error('Invalid QR code');
 				setLoading(false);
 				return;
