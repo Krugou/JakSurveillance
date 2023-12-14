@@ -116,22 +116,19 @@ const EditTopicsModal: React.FC<EditTopicsModalProps> = ({
 					</p>
 				)}
 				<div className="flex justify-between mt-6">
-					<Button
-						variant="outlined"
-						color="secondary"
+					<button
 						onClick={resetData}
-						className="mr-10"
+						className="p-2 text-white rounded transition hover:bg-red-700 bg-metropoliaSupportRed"
 					>
-						RESET
-					</Button>
+						Reset
+					</button>
 					{counselor && (
-						<Button
-							variant="contained"
-							color="primary"
+						<button
 							onClick={() => handleSave && handleSave(usercourseid)}
+							className="p-2 text-white rounded transition hover:bg-green-600 bg-metropoliaTrendGreen"
 						>
-							SAVE NEW TOPICS
-						</Button>
+							Save new topics
+						</button>
 					)}
 				</div>
 			</div>
