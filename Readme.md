@@ -59,6 +59,8 @@
 > Students can view their own attendance statistics
 >
 > Students can view their own course details
+>
+> Different user pools for SQL statements created, but not yet implemented
 
 ## The pros and cons of the project
 
