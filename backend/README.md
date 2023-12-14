@@ -21,6 +21,9 @@ Process requests from the routes, interact with models, and ensure the proper fl
 ## Models
 Represent data entities and the structure of the database, defining how data is stored, retrieved, and manipulated within the backend.
 
+
+
+
 Navigate through the documentation to gain a deep understanding of the backend codebase. Each module, class, interface, type, and function is meticulously documented to provide comprehensive insights into the structure and functionality of the code.
 - **Efficient Attendance Management:** Teachers can easily manage and keep track of student attendance.
 - **Easy Check-In:** Students can quickly check in to their classes with just a few taps.
