@@ -51,6 +51,16 @@ const createPool = (userRole: UserRole): Pool => {
 		default:
 			throw new Error(`Invalid user role: ${userRole}`);
 	}
+	console.log(
+		'Creating pool for user',
+		user,
+		'with password',
+		password,
+		'and database',
+		process.env.DB_NAME,
+		'...',
+		process.env.DB_HOST,
+	);
 
 	return mysql.createPool({
 		host: process.env.DB_HOST as string,
