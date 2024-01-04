@@ -79,7 +79,12 @@ app.use(passport.initialize());
  * This sets up the routes related to user management under the /users path.
  */
 app.use('/users', userRoutes);
-
+/**
+ * Simple GET route for debugging
+ */
+app.get('/metrostation/', (req, res) => {
+	res.json({message: 'API is working'});
+});
 /**
  * Use secure routes for /secure path with JWT authentication
  * This sets up secure routes that require JWT authentication under the /secure path.
