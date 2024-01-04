@@ -31,7 +31,6 @@ type UserRole = 'ADMIN' | 'TEACHER' | 'COUNSELOR' | 'STUDENT';
 const createPool = (userRole: UserRole): Pool => {
 	let user: string;
 	let password: string;
-	console.log(process.env.DB_USER_ADMIN);
 	switch (userRole) {
 		case 'ADMIN':
 			user = process.env.DB_USER_ADMIN as string;
