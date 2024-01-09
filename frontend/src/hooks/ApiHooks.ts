@@ -3,7 +3,7 @@
 export const baseUrl =
 	import.meta.env.MODE === 'development'
 		? 'http://localhost:3002/'
-		: 'https://10.120.36.68/api/';
+		: 'https://attend.metropolia.fi/api/';
 console.log(`Current mode: ${import.meta.env.MODE}`);
 const doFetch = async (url: string, options: RequestInit) => {
 	const response = await fetch(url, options);
