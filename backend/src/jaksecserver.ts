@@ -2,13 +2,13 @@
 
 import cors from 'cors';
 import {config} from 'dotenv';
+import {Request, Response} from 'express';
 import {Server} from 'socket.io';
 import adminRoutes from './routes/adminroutes.js';
 import courseRoutes from './routes/courseroutes.js';
 import secureRoutes from './routes/secureroutes.js';
 import userRoutes from './routes/userroutes.js';
 import setupSocketHandlers from './sockets/socketHandlers.js';
-
 /**
  * Load environment variables from .env file
  */
@@ -82,7 +82,7 @@ app.use('/users', userRoutes);
 /**
  * Simple GET route for debugging
  */
-app.get('/metrostation/', (req, res) => {
+app.get('/metrostation/', (_req: Request, res: Response) => {
 	res.json({message: 'API is working'});
 });
 /**
