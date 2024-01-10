@@ -135,7 +135,11 @@ const AttendanceStatsTable: React.FC<AttendanceStatsTableProps> = ({
 								<TableCell
 									className="px-6 py-4 whitespace-nowrap cursor-pointer hover:bg-gray-200"
 									onClick={() => {
-										navigate(`/${user?.role}/students/${student.userid}`);
+										const targetPath =
+											user?.role === 'admin'
+												? `/counselor/students/${student.userid}`
+												: `/${user?.role}/students/${student.userid}`;
+										navigate(targetPath);
 									}}
 								>
 									{student.name}

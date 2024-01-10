@@ -151,7 +151,15 @@ const TeacherCourseStats = () => {
 		if (selected) {
 			const course = selected as Course;
 			try {
-				navigate(`/${user?.role}/courses/stats/${course?.courseid}`);
+				if (user?.role === 'teacher') {
+					navigate(`/teacher/courses/stats/${course?.courseid}`);
+				}
+				if (user?.role === 'counselor') {
+					navigate(`/counselor/courses/stats/${course?.courseid}`);
+				}
+				if (user?.role === 'admin') {
+					navigate(`/counselor/courses/stats/${course?.courseid}`);
+				}
 
 				setSelectedCourse(course); // Add this line
 

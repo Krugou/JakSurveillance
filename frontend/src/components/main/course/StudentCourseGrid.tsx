@@ -269,7 +269,9 @@ const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
 											user?.role === 'student'
 												? navigate(`/student/courses/attendance/${course.usercourseid}`)
 												: navigate(
-														`/${user?.role}/students/attendance/${course.usercourseid}`,
+														user?.role === 'admin'
+															? `/counselor/students/attendance/${course.usercourseid}`
+															: `/${user?.role}/students/attendance/${course.usercourseid}`,
 												  )
 										}
 									>

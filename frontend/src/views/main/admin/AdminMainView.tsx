@@ -21,15 +21,21 @@ const AdminMainView: React.FC = () => {
 					description="Manage any course"
 				/>
 				<Card path="/admin/users/" title="Users" description="Manage any user" />
-				<Card
-					path="/admin/profile"
-					title="Profile"
-					description="Manage your profile"
-				/>
+
 				<Card
 					path="/admin/settings/"
 					title="Settings"
 					description="Manage your settings"
+				/>
+				<Card
+					path="/teacher/mainview"
+					title="Teacher view"
+					description="Teacher view"
+				/>
+				<Card
+					path="/counselor/mainview"
+					title="Counselor view"
+					description="Counselor view"
 				/>
 				<Card path="/admin/stats/" title="Stats" description="See statistics" />
 			</div>

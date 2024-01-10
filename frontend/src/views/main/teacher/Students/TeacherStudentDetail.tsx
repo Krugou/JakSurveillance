@@ -1,13 +1,13 @@
-import React, {useState, useEffect, useContext} from 'react';
-import {useParams} from 'react-router-dom';
-import {toast} from 'react-toastify';
-import apiHooks from '../../../../hooks/ApiHooks';
-import ProfileInfo from '../../../../components/profiles/ProfileInfo';
-import StudentCourseGrid from '../../../../components/main/course/StudentCourseGrid';
-import {UserContext} from '../../../../contexts/UserContext';
-import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import React, {useContext, useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
+import {toast} from 'react-toastify';
+import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
+import StudentCourseGrid from '../../../../components/main/course/StudentCourseGrid';
+import ProfileInfo from '../../../../components/profiles/ProfileInfo';
+import {UserContext} from '../../../../contexts/UserContext';
+import apiHooks from '../../../../hooks/ApiHooks';
 
 /**
  * StudentInfo interface.
@@ -148,7 +148,9 @@ const TeacherStudentDetail: React.FC = () => {
 		<div className="w-full sm:w-fit">
 			<div className="bg-white rounded-lg p-5">
 				<GeneralLinkButton
-					path={`/${user?.role}/students`}
+					path={
+						user?.role === 'admin' ? '/counselor/students' : `/${user?.role}/students`
+					}
 					text="Back to students"
 				/>
 				<h2 className="text-2xl font-bold mt-5 mb-5">

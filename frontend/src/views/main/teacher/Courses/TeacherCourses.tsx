@@ -1,11 +1,11 @@
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import GeneralLinkButton from '../../../../components/main/buttons/GeneralLinkButton';
 import CourseData from '../../../../components/main/course/CourseData';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 
 /**
  * Course interface.
@@ -66,7 +66,11 @@ const TeacherCourses: React.FC = () => {
 			<div className="2xl:w-3/4 bg-gray-100 mt-5 w-full p-5 m-auto rounded-lg">
 				<div className="flex flex-col gap-5 sm:gap-0 sm:flex-row justify-between">
 					<GeneralLinkButton
-						path={`/${user?.role}/mainview`}
+						path={
+							user?.role === 'admin'
+								? '/counselor/mainview'
+								: `/${user?.role}/mainview`
+						}
 						text="Back to mainview"
 					/>
 					<FormControlLabel

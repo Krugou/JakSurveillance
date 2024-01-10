@@ -44,13 +44,12 @@ const TeacherCourseDetail: React.FC = () => {
 					courseData,
 				);
 				setCourseData(courseData);
-				console.log(courseData[0].name)
+				console.log(courseData[0].name);
 			}
 		};
 
 		fetchCourses();
 	}, [id]);
-
 
 	return (
 		<div className="w-full">
@@ -60,7 +59,9 @@ const TeacherCourseDetail: React.FC = () => {
 			<div className="mt-4 bg-white rounded-lg shadow-lg mx-auto w-full sm:w-3/4 md:w-2/4 lg:w-2/5 2xl:w-1/5">
 				<div className="pl-5 pt-5">
 					<GeneralLinkButton
-						path={`/${user?.role}/courses`}
+						path={
+							user?.role === 'admin' ? '/counselor/courses' : `/${user?.role}/courses`
+						}
 						text="Back to courses"
 					/>
 				</div>
