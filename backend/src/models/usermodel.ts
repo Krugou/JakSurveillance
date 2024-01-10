@@ -39,16 +39,18 @@ interface User {
 	roleid: number;
 }
 interface UpdateUser {
-	userid: number;
-	first_name: string;
-	last_name: string;
-	email: string;
-	username: string;
-	GDPR: number;
-	roleid: number;
-	staff: number;
-	studentgroupid: number;
-	studentnumber: string;
+	user: {
+		userid: number;
+		first_name: string;
+		last_name: string;
+		email: string;
+		username: string;
+		GDPR: number;
+		roleid: number;
+		staff: number;
+		studentgroupid: number;
+		studentnumber: string;
+	};
 }
 /**
  * @description Creates a User Model object literal.
@@ -480,7 +482,7 @@ const UserModel = {
 			staff,
 			studentgroupid,
 			studentnumber,
-		} = user;
+		} = user.user;
 
 		try {
 			const [result] = await pool.promise().query<RowDataPacket[]>(
@@ -500,6 +502,7 @@ const UserModel = {
 					userid,
 				],
 			);
+			console.log('🚀 ~ updateUser: ~ result:', result);
 			return result;
 		} catch (error) {
 			console.error(error);

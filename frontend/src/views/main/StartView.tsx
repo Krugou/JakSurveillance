@@ -1,12 +1,27 @@
-import React from 'react';
+import DangerousIcon from '@mui/icons-material/Dangerous';
+import DoneIcon from '@mui/icons-material/Done';
+import React, {useEffect, useState} from 'react';
 import Logo from '../../components/Logo';
 import StartViewButton from '../../components/main/buttons/StartViewButton';
+import {baseUrl} from '../../hooks/ApiHooks';
 /**
  * StartView component.
  * This component is responsible for rendering the start view of the application.
  * It displays the application logo, a start view button, and some information about the current build.
  */
 const StartView = () => {
+	const [isServerOnline, setIsServerOnline] = useState(false);
+	useEffect(() => {
+		fetch(baseUrl + 'metrostation/')
+			.then(response => {
+				if (response.ok) {
+					setIsServerOnline(true);
+				} else {
+					setIsServerOnline(false);
+				}
+			})
+			.catch(() => setIsServerOnline(false));
+	}, []);
 	return (
 		<div className="flex flex-col items-center justify-center logo-container pt-10">
 			<Logo />
@@ -18,9 +33,13 @@ const StartView = () => {
 				<>
 					<p>Development mode</p>
 					<p> no PWA </p>
+					<p>{isServerOnline ? <DoneIcon /> : <DangerousIcon />}</p>
 				</>
 			) : (
-				<p>Build date: {import.meta.env.VITE_REACT_APP_BUILD_DATE}</p>
+				<>
+					<p>Build date: {import.meta.env.VITE_REACT_APP_BUILD_DATE}</p>
+					<p>{isServerOnline ? <DoneIcon /> : <DangerousIcon />}</p>
+				</>
 			)}
 		</div>
 	);
