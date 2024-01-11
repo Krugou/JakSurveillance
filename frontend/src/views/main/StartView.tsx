@@ -29,10 +29,14 @@ const StartView = () => {
 				if (builddate === import.meta.env.VITE_REACT_APP_BUILD_DATE) {
 					setNewestVersion(true);
 				}
-				setLoading(false);
 				setIsServerOnline(true);
 			})
-			.catch(() => setIsServerOnline(false));
+			.catch(() => {
+				setIsServerOnline(false);
+			})
+			.finally(() => {
+				setLoading(false);
+			});
 	}, []);
 
 	return (
