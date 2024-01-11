@@ -66,7 +66,7 @@ const StartView = () => {
 							{isServerOnline ? <DoneIcon /> : <DangerousIcon />}{' '}
 						</p>
 					)}
-					{!newestVersion && (
+					{!newestVersion && isServerOnline && (
 						<p>Please reload the page until this text disappears</p>
 					)}
 				</>
