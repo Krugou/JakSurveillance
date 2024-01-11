@@ -1,5 +1,6 @@
 import DangerousIcon from '@mui/icons-material/Dangerous';
 import DoneIcon from '@mui/icons-material/Done';
+import CircularProgress from '@mui/material/CircularProgress';
 import React, {useEffect, useState} from 'react';
 import Logo from '../../components/Logo';
 import StartViewButton from '../../components/main/buttons/StartViewButton';
@@ -18,6 +19,7 @@ interface ServerResponse {
 const StartView = () => {
 	const [isServerOnline, setIsServerOnline] = useState(false);
 	const [newestVersion, setNewestVersion] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		fetch(baseUrl + 'metrostation/')
@@ -27,6 +29,7 @@ const StartView = () => {
 				if (builddate === import.meta.env.VITE_REACT_APP_BUILD_DATE) {
 					setNewestVersion(true);
 				}
+				setLoading(false);
 				setIsServerOnline(true);
 			})
 			.catch(() => setIsServerOnline(false));
@@ -38,8 +41,9 @@ const StartView = () => {
 			<div className="flex flex-col md:flex-row items-center m-4 p-4">
 				<StartViewButton />
 			</div>
-
-			{import.meta.env.MODE === 'development' ? (
+			{loading === true ? (
+				<CircularProgress />
+			) : import.meta.env.MODE === 'development' ? (
 				<>
 					<p>Development mode</p>
 					<p> no PWA </p>
