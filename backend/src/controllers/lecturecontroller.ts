@@ -63,7 +63,7 @@ const lectureController = {
 			}
 
 			const lectureid = (result as {insertId: number}).insertId;
-			console.log('🚀 ~ file: lecturemodel.ts:88 ~ lectureid:', lectureid);
+			// console.log('🚀 ~ file: lecturemodel.ts:88 ~ lectureid:', lectureid);
 			return {lectureid: lectureid};
 		} catch (error) {
 			console.error(error);
@@ -127,12 +127,12 @@ const lectureController = {
 			const students = await this.getStudentsInLecture(Number(lectureid));
 
 			const lecture = await lectureModel.getLectureByLectureId(Number(lectureid));
-			console.log(
-				'🚀 ~ file: lecturecontroller.ts:126 ~ closeLecture ~ lecture:',
-				lecture,
-			);
+			// console.log(
+			// 	'🚀 ~ file: lecturecontroller.ts:126 ~ closeLecture ~ lecture:',
+			// 	lecture,
+			// );
 			const lectureDate = lecture?.[0].start_date;
-			console.log('Students:', students);
+			// console.log('Students:', students);
 			students?.forEach(async student => {
 				try {
 					await attendanceController.insertIntoAttendance(
@@ -147,7 +147,7 @@ const lectureController = {
 			});
 
 			const result = await lectureModel.updateLectureState(lectureid, 'closed');
-			console.log('Update result:', result);
+			// console.log('Update result:', result);
 			return result;
 		} catch (error) {
 			console.error(error);

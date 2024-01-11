@@ -17,7 +17,7 @@ interface ServerResponse {
  */
 const StartView = () => {
 	const [isServerOnline, setIsServerOnline] = useState(false);
-	const [newestVersion, setNewestVersion] = useState(true);
+	const [newestVersion, setNewestVersion] = useState(false);
 
 	useEffect(() => {
 		fetch(baseUrl + 'metrostation/')
@@ -43,14 +43,21 @@ const StartView = () => {
 				<>
 					<p>Development mode</p>
 					<p> no PWA </p>
-					<p>{isServerOnline ? <DoneIcon /> : <DangerousIcon />} </p>
+					<p> Api: {isServerOnline ? <DoneIcon /> : <DangerousIcon />} </p>
 				</>
 			) : (
 				<>
-					<p>
-						Version: {newestVersion ? <DoneIcon /> : <DangerousIcon />} Api:{' '}
-						{isServerOnline ? <DoneIcon /> : <DangerousIcon />}{' '}
+					<p className="animate-bounce font-medium text-xl ">
+						{isServerOnline
+							? ''
+							: 'You are not connected to Metropolia internal network'}
 					</p>
+					{isServerOnline && (
+						<p>
+							Version: {newestVersion ? <DoneIcon /> : <DangerousIcon />} Api:{' '}
+							{isServerOnline ? <DoneIcon /> : <DangerousIcon />}{' '}
+						</p>
+					)}
 				</>
 			)}
 		</div>

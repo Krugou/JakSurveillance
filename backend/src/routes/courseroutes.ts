@@ -227,7 +227,7 @@ router.post(
 			const {checkCourseDetails, instructorEmail} = req.body;
 			// Read the Excel file from the buffer
 			const workbook = XLSX.read(req.file.buffer, {type: 'buffer'});
-			console.log('Loaded workbook'); // Debugging line
+			// console.log('Loaded workbook'); // Debugging line
 
 			// Get the first worksheet
 			const worksheetName = workbook.SheetNames[0];
@@ -320,7 +320,7 @@ router.get(
 	async (req: Request, res: Response) => {
 		try {
 			const courses = await course.getCoursesByInstructorEmail(req.params.email);
-			console.log(courses);
+			// console.log(courses);
 
 			res.send(courses);
 		} catch (err) {
@@ -348,7 +348,7 @@ router.get(
 				return;
 			}
 			const courses = await course.getCoursesByCourseId(courseId);
-			console.log('🚀 ~ file: courseroutes.ts:292 ~ courses:', courses);
+			// console.log('🚀 ~ file: courseroutes.ts:292 ~ courses:', courses);
 			res.json(courses);
 		} catch (err) {
 			console.error(err);

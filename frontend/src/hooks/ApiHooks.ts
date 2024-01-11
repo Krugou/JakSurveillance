@@ -1,9 +1,15 @@
 ('use strict');
-
+// real backend
 export const baseUrl =
 	import.meta.env.MODE === 'development'
 		? 'http://localhost:3002/'
 		: 'https://attend.metropolia.fi/api/';
+
+// for local testing
+// export const baseUrl =
+// 	import.meta.env.MODE === 'development'
+// 		? 'http://localhost:3002/'
+// 		: 'http://localhost:3002/';
 console.log(`Current mode: ${import.meta.env.MODE}`);
 const doFetch = async (url: string, options: RequestInit) => {
 	const response = await fetch(url, options);

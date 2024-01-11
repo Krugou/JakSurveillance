@@ -361,7 +361,7 @@ const UserModel = {
 					roleId,
 					email,
 				]);
-			console.log('🚀 ~ file: usermodel.ts:276 ~ changeRoleId: ~ result:', result);
+			// console.log('🚀 ~ file: usermodel.ts:276 ~ changeRoleId: ~ result:', result);
 			return result;
 		} catch (error) {
 			console.error(error);
@@ -502,7 +502,7 @@ const UserModel = {
 					userid,
 				],
 			);
-			console.log('🚀 ~ updateUser: ~ result:', result);
+			// console.log('🚀 ~ updateUser: ~ result:', result);
 			return result;
 		} catch (error) {
 			console.error(error);

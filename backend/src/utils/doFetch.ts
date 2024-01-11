@@ -15,7 +15,7 @@ const doFetch = async (
 	if (!url) {
 		throw new Error('URL is required');
 	}
-	console.log('Fetching', url);
+	// console.log('Fetching', url);
 
 	let response: Response;
 	try {

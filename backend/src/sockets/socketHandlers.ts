@@ -190,7 +190,7 @@ const setupSocketHandlers = (io: Server) => {
 		// console.log('user joined: ' + socket.id);
 		// handle disconnect
 		socket.on('disconnect', () => {
-			console.log('user disconnected');
+			// console.log('user disconnected');
 		});
 
 		socket.on('createAttendanceCollection', async lectureid => {
@@ -304,10 +304,10 @@ const setupSocketHandlers = (io: Server) => {
 				const timestamp = timestamps.find(
 					t => t.hash === secureHash && unixtime >= t.start && unixtime <= t.end,
 				);
-				console.log(
-					'🚀 ~ file: socketHandlers.ts:257 ~ io.on ~ timestamp:',
-					timestamp,
-				);
+				// console.log(
+				// 	'🚀 ~ file: socketHandlers.ts:257 ~ io.on ~ timestamp:',
+				// 	timestamp,
+				// );
 				if (timestamp) {
 					// Emit the 'youhavebeensavedintolecture' event only to the client who sent the event
 					const token = await getToken();
@@ -325,7 +325,7 @@ const setupSocketHandlers = (io: Server) => {
 						}),
 					})
 						.then(response => {
-							console.log('Success:', response);
+							console.log(' inputThatStudentHasArrivedToLecture Success:', response);
 
 							const studentIndex = notYetPresentStudents[lectureid].findIndex(
 								(student: Student) =>
@@ -343,7 +343,7 @@ const setupSocketHandlers = (io: Server) => {
 									.to(lectureid.toString())
 									.emit('updateAttendees', presentStudents[lectureid]);
 							} else {
-								console.log('Student not found');
+								console.error('Student not found');
 							}
 
 							io.to(socket.id).emit('youHaveBeenSavedIntoLecture', lectureid);
@@ -387,7 +387,7 @@ const setupSocketHandlers = (io: Server) => {
 				})
 					.then(response => {
 						if (response) {
-							console.log('Success:', response);
+							console.log('manualStudentInsert Success:', response);
 						}
 						const studentIndex = notYetPresentStudents[lectureid].findIndex(
 							(student: Student) =>
@@ -399,7 +399,7 @@ const setupSocketHandlers = (io: Server) => {
 							presentStudents[lectureid].push(student);
 							notYetPresentStudents[lectureid].splice(studentIndex, 1); // Remove the student from notYetPresentStudents
 						} else {
-							console.log('Student not found');
+							console.error('Student not found');
 						}
 						io
 							.to(lectureid.toString())
@@ -452,7 +452,7 @@ const setupSocketHandlers = (io: Server) => {
 								notYetPresentStudents[lectureid].push(student);
 								presentStudents[lectureid].splice(studentIndex, 1); // Remove the student from presentStudents
 							} else {
-								console.log('Student not found');
+								console.error('Student not found');
 							}
 							io
 								.to(lectureid.toString())

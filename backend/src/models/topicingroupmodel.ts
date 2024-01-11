@@ -20,10 +20,10 @@ const topicsingroupModel = {
 				[topicGroupId, topicId],
 			);
 
-		console.log(
-			'🚀 ~ file: topicingroupmodel.ts:14 ~ checkIfTopicInGroupExists ~ existingTopicInGroup:',
-			existingTopicInGroup,
-		);
+		// console.log(
+		// 	'🚀 ~ file: topicingroupmodel.ts:14 ~ checkIfTopicInGroupExists ~ existingTopicInGroup:',
+		// 	existingTopicInGroup,
+		// );
 		return existingTopicInGroup;
 	},
 	/**
@@ -33,8 +33,8 @@ const topicsingroupModel = {
 	 * @returns A promise that resolves when the insertion is complete.
 	 */
 	async insertTopicInGroup(topicGroupId: number, topicId: number) {
-		console.log('inserting topic in group');
-		console.log(topicGroupId, topicId);
+		// console.log('inserting topic in group');
+		// console.log(topicGroupId, topicId);
 		const [result] = await pool
 			.promise()
 			.query('INSERT INTO topicsingroup (topicgroupid, topicid) VALUES (?, ?)', [

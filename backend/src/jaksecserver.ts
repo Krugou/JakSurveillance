@@ -123,7 +123,7 @@ http.listen(port, () => {
 	console.log(
 		'JakSec REST + DATABASE SERVER Started at: http://localhost:' +
 			port +
-			'/index.html ' +
+			'/ ' +
 			'start time: ' +
 			startTime.toLocaleString(),
 	);

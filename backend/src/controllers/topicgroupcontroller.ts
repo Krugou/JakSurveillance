@@ -203,15 +203,15 @@ const TopicGroupController = {
 				topicGroup,
 				userid,
 			);
-			console.log(
-				'🚀 ~ file: topicgroupcontroller.ts:172 ~ deleteTopicGroupByName ~ topicGroupData:',
-				topicGroupData,
-			);
+			// console.log(
+			// 	'🚀 ~ file: topicgroupcontroller.ts:172 ~ deleteTopicGroupByName ~ topicGroupData:',
+			// 	topicGroupData,
+			// );
 			if (topicGroupData.affectedRows === 0) {
 				throw new Error('Topic group not found');
 			}
 
-			console.log('scucessfully deleted topic group');
+			// console.log('scucessfully deleted topic group');
 			return topicGroupData;
 		} catch (error) {
 			console.error(error);

@@ -33,7 +33,7 @@ export const authenticate = (
 			}
 			if (user && !user.username) {
 				try {
-					console.log('USERNAME WAS UPDATED');
+					// console.log('USERNAME WAS UPDATED');
 					await usermodel.updateUsernameByEmail(user.email, newUsername);
 				} catch (error) {
 					console.error(error);

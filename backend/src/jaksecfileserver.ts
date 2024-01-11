@@ -46,7 +46,7 @@ http.listen(port, () => {
 	console.log(
 		'JakSec FILE SERVER started at: http://localhost:' +
 			port +
-			'/index.html start time:' +
+			'/ start time:' +
 			startTime.toLocaleString(),
 	);
 });

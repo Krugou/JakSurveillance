@@ -106,8 +106,8 @@ const courseController: CourseController = {
 		topics?: string,
 		topicgroup?: string,
 	) {
-		console.log('🚀 ~ file: coursecontroller.ts:37 ~ topics:', topics);
-		console.log('🚀 ~ file: coursecontroller.ts:37 ~ topicgroup:', topicgroup);
+		// console.log('🚀 ~ file: coursecontroller.ts:37 ~ topics:', topics);
+		// console.log('🚀 ~ file: coursecontroller.ts:37 ~ topicgroup:', topicgroup);
 		let courseId = 0;
 		try {
 			const instructorUserIds: number[] = [];

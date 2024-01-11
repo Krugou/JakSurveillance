@@ -67,7 +67,7 @@ const createPool = (userRole: UserRole): Pool => {
 			console.error('Error connecting to the database:', err);
 			process.exit(1);
 		} else {
-			console.log('Successfully connected to the database');
+			// console.log('Successfully connected to the database');
 			connection.release();
 		}
 	});

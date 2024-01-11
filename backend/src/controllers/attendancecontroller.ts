@@ -149,7 +149,7 @@ const attendanceController: AttendanceController = {
 					);
 				}
 
-				console.log('insertIntoAttendance ~ attendanceResult:', attendanceResult);
+				// console.log('insertIntoAttendance ~ attendanceResult:', attendanceResult);
 
 				return attendanceResult[0];
 			} else {

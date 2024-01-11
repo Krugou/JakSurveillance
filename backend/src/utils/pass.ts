@@ -24,7 +24,7 @@ passport.use(
 			// Find a user in the database with the provided email
 			const user: User | null = await UserModel.getAllUserInfo(email);
 			// Check if the user exists
-			console.log(email, 'IAWJDUOIAWDIOJAWD ');
+			// console.log(email, 'IAWJDUOIAWDIOJAWD ');
 			if (user === null || user === undefined) {
 				return done(null, false, {message: 'Incorrect username.'});
 			}

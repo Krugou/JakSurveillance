@@ -156,10 +156,10 @@ router.post(
 	async (req: Request, res: Response) => {
 		try {
 			const {date, studentnumbers, lectureid} = req.body;
-			console.log(
-				'🚀 ~ file: attendanceRoutes.ts:75 ~ router.post ~ req.body:',
-				req.body,
-			);
+			// console.log(
+			// 	'🚀 ~ file: attendanceRoutes.ts:75 ~ router.post ~ req.body:',
+			// 	req.body,
+			// );
 			await attendanceController.checkAndInsertStatusNotPresentAttendance(
 				date,
 				studentnumbers,
@@ -268,7 +268,7 @@ router.post(
 		try {
 			const {topicname, coursecode, start_date, end_date, timeofday, state} =
 				req.body;
-			console.log(req.body);
+			// console.log(req.body);
 			const teacherid = req.user?.userid;
 			const lectureid = await lectureController.insertIntoLecture(
 				topicname,
@@ -339,8 +339,8 @@ router.put(
 		const {attendanceid, status} = req.body;
 
 		try {
-			console.log('Received attendanceid:', attendanceid);
-			console.log('Received status:', status);
+			// console.log('Received attendanceid:', attendanceid);
+			// console.log('Received status:', status);
 
 			const result = await attendanceController.updateAttendanceStatus(
 				attendanceid,
@@ -396,7 +396,7 @@ router.delete(
 			const lectureid = req.params.lectureid;
 
 			await lectureModel.deleteByLectureId(lectureid);
-			console.log('Lecture deleted successfully');
+			// console.log('Lecture deleted successfully');
 			res.status(200).json({message: 'Lecture deleted successfully'});
 		} catch (error) {
 			console.error(error);
@@ -420,7 +420,7 @@ router.put(
 			const lectureid = req.params.lectureid;
 
 			await lectureController.closeLecture(lectureid);
-			console.log('Lecture closed successfully');
+			// console.log('Lecture closed successfully');
 			res.status(200).json({message: 'Lecture closed successfully'});
 		} catch (error) {
 			console.error(error);
