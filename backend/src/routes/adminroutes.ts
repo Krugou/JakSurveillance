@@ -1,7 +1,8 @@
-import express, {Request, Response, Router} from 'express';
-import {body, param} from 'express-validator';
+import express, { Request, Response, Router } from 'express';
+import { body, param } from 'express-validator';
 import adminController from '../controllers/admincontroller.js';
 import course from '../models/coursemodel.js';
+import lectureModel from '../models/lecturemodel.js';
 import rolemodel from '../models/rolemodel.js';
 import studentgroupmodel from '../models/studentgroupmodel.js';
 import usermodel from '../models/usermodel.js';
@@ -181,14 +182,14 @@ router.get(
  * @returns {Promise<ResultSetHeader>} A promise that resolves when the insertion is complete.
  */
 router.post(
-    '/insert-student-user',
+    '/insert-student-user/',
     checkUserRole(['admin']),
     [
         body('email').isEmail().withMessage('Email must be valid'),
         body('first_name').isString().withMessage('First name must be a string'),
         body('last_name').isString().withMessage('Last name must be a string'),
         body('studentnumber').isString().withMessage('Student number must be a string'),
-        body('studentGroupId').isNumeric().withMessage('Student group id must be a number'),
+       
     ],
     validate,
     async (req: Request, res: Response) => {
@@ -207,6 +208,21 @@ router.post(
             res.status(500).json({message: 'Internal server error'});
         }
     },
+);
+/** route that get all lectures */
+router.get(
+	'/alllectures/',
+	checkUserRole(['admin']),
+	async (_req: Request, res: Response) => {
+		
+		try {
+			const lectures = await lectureModel.fetchAllLecturees();
+			res.json(lectures);
+		} catch (err) {
+			console.error(err);
+			res.status(500).send('Server error');
+		}
+	},
 );
 /**
  * Route that fetches all courses with their details.
