@@ -15,6 +15,7 @@ import {
 import React, {useContext, useEffect, useState} from 'react';
 import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/ApiHooks';
+import {toast} from 'react-toastify';
 
 interface Lecture {
 	lectureid: number;
@@ -75,13 +76,20 @@ const AdminAllLectures: React.FC = () => {
 	const handleConfirm = async () => {
 		const token: string | null = localStorage.getItem('userToken');
 		if (!token) {
-			throw new Error('No token available');
+			toast.error('No token available');
+			return;
 		}
 		if (selectedLecture) {
-			if (action === 'close') {
-				await apiHooks.closeLectureByLectureId(selectedLecture, token);
-			} else if (action === 'delete') {
-				await apiHooks.deleteLectureByLectureId(selectedLecture, token);
+			try {
+				if (action === 'close') {
+					await apiHooks.closeLectureByLectureId(selectedLecture, token);
+					toast.success('Lecture closed successfully');
+				} else if (action === 'delete') {
+					await apiHooks.deleteLectureByLectureId(selectedLecture, token);
+					toast.success('Lecture deleted successfully');
+				}
+			} catch (error) {
+				toast.error('Failed to perform action');
 			}
 		}
 		handleDialogClose();

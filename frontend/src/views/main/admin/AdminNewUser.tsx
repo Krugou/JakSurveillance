@@ -90,7 +90,7 @@ const AdminNewUser: React.FC = () => {
 				toast.success('New student user added successfully');
 			} catch (error) {
 				console.error('Failed to add new student user', error);
-				toast.error('Failed to add new student user');
+				toast.error('Failed to add new student user ' + error);
 			}
 		} else if (isStudentNumberTaken) {
 			toast.error('The student number is already taken');
@@ -111,28 +111,28 @@ const AdminNewUser: React.FC = () => {
 								value={email}
 								onChange={e => setEmail(e.target.value)}
 								required
-								className="mb-4"
+								margin="normal"
 							/>
 							<TextField
 								label="First Name"
 								value={firstName}
 								onChange={e => setFirstName(e.target.value)}
 								required
-								className="mb-4"
+								margin="normal"
 							/>
 							<TextField
 								label="Last Name"
 								value={lastName}
 								onChange={e => setLastName(e.target.value)}
 								required
-								className="mb-4"
+								margin="normal"
 							/>
 							<TextField
 								label="Student Number"
 								value={studentNumber}
 								onChange={e => setStudentNumber(e.target.value)}
 								required
-								className="mb-4"
+								margin="normal"
 							/>
 						</div>
 						<label className="block mt-4">
@@ -143,7 +143,7 @@ const AdminNewUser: React.FC = () => {
 								onChange={e => setStudentGroupId(Number(e.target.value))}
 								className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
 							>
-								<option value="null">Not in system</option>
+								<option value="null">Not in system yet</option>
 								{studentGroups.map(studentGroup => (
 									<option
 										key={studentGroup.studentgroupid}
@@ -154,12 +154,12 @@ const AdminNewUser: React.FC = () => {
 								))}
 							</select>
 						</label>
-						<Button
+						<button
 							type="submit"
-							className="bg-metropoliaMainOrange text-sm text-white font-bold rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark p-1"
+							className="bg-metropoliaMainOrange text-md text-white font-bold rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark p-4 m-4"
 						>
 							Add New Student User
-						</Button>
+						</button>
 					</form>
 				</Container>
 			</div>
