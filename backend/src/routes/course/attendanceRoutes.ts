@@ -1,6 +1,6 @@
 // attendanceRoutes.ts
-import express, {Request, Response, Router} from 'express';
-import {body, param} from 'express-validator';
+import express, { Request, Response, Router } from 'express';
+import { body, param } from 'express-validator';
 import attendanceController from '../../controllers/attendancecontroller.js';
 import lectureController from '../../controllers/lecturecontroller.js';
 import attendanceModel from '../../models/attendancemodel.js';

@@ -1,6 +1,8 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
+import AdminAllLectures from '../views/main/admin/AdminAllLectures.tsx';
 import AdminMainView from '../views/main/admin/AdminMainView.tsx';
+import AdminNewUser from '../views/main/admin/AdminNewUser.tsx';
 import AdminProfile from '../views/main/admin/AdminProfile.tsx';
 import AdminStats from '../views/main/admin/AdminStats.tsx';
 import AdminCoursesRoutes from './admin/AdminCourseRoutes';
@@ -25,6 +27,8 @@ const AdminRoutes = () => {
 			<Route path="settings/*" element={<AdminSettingsRoutes />} />
 			<Route path="*" element={<AdminMainView />} />
 			<Route path="stats" element={<AdminStats />} />
+			<Route path="lectures" element={<AdminAllLectures />} />
+			<Route path="newuser" element={<AdminNewUser />} />
 		</Routes>
 	);
 };

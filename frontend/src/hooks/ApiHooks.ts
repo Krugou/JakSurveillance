@@ -714,6 +714,41 @@ const deleteLectureByLectureId = async (lectureid: string, token: string) => {
 		options,
 	);
 };
+const fetchAllLectures = async (token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+
+	return await doFetch(baseUrl + `admin/alllectures/`, options);
+};
+const addNewStudentUser = async (
+  token: string,
+  email: string,
+  studentnumber: string,
+  firstname: string,
+  lastname: string,
+  studentGroupId: number | undefined | null
+) => {
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    },
+    body: JSON.stringify({
+      email,
+      first_name: firstname,
+      last_name: lastname,
+      studentnumber,
+      studentGroupId
+    })
+  };
+  const url = `${baseUrl}admin/insert-student-user/`;
+  return doFetch(url, options);
+};
 const closeLectureByLectureId = async (lectureid: string, token: string) => {
 	const options = {
 		method: 'PUT',
@@ -745,6 +780,8 @@ const getOpenLecturesByCourseid = async (
 };
 
 const apiHooks = {
+	addNewStudentUser,
+	fetchAllLectures,
 	checkIfTopicGroupWithEmailExists,
 	getRoleCounts,
 	checkStudentNumberExists,

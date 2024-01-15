@@ -368,6 +368,31 @@ const UserModel = {
 			return Promise.reject(error);
 		}
 	},
+	insertUser: async (
+    username: string,
+    email: string,
+    staff: number,
+    first_name: string,
+    last_name: string,
+    studentnumber: number,
+    studentgroupid: number,
+    roleid: number,
+    GDPR: number
+) => {
+    try {
+        const [userResult] = await pool
+            .promise()
+            .query<ResultSetHeader>(
+                'INSERT INTO users (username, email, staff, first_name, last_name, studentnumber, studentgroupid, roleid, GDPR) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [username, email, staff, first_name, last_name, studentnumber, studentgroupid, roleid, GDPR],
+            );
+
+        return userResult;
+    } catch (error) {
+        console.error(error);
+        return Promise.reject(error);
+    }
+},
 	/**
 	 * Fetches all users.
 	 * @returns A promise that resolves to an array of users.
