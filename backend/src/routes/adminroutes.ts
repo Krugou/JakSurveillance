@@ -171,6 +171,44 @@ router.get(
 	},
 );
 /**
+ * Route that inserts a new student user.
+ *
+ * @param {string} email - The email of the user.
+ * @param {string} first_name - The first name of the user.
+ * @param {string} last_name - The last name of the user.
+ * @param {string} studentnumber - The student number of the user.
+ * @param {number} studentGroupId - The student group id of the user.
+ * @returns {Promise<ResultSetHeader>} A promise that resolves when the insertion is complete.
+ */
+router.post(
+    '/insert-student-user',
+    checkUserRole(['admin']),
+    [
+        body('email').isEmail().withMessage('Email must be valid'),
+        body('first_name').isString().withMessage('First name must be a string'),
+        body('last_name').isString().withMessage('Last name must be a string'),
+        body('studentnumber').isString().withMessage('Student number must be a string'),
+        body('studentGroupId').isNumeric().withMessage('Student group id must be a number'),
+    ],
+    validate,
+    async (req: Request, res: Response) => {
+        const {email, first_name, last_name, studentnumber, studentGroupId} = req.body;
+        try {
+            const userResult = await usermodel.insertStudentUser(
+                email,
+                first_name,
+                last_name,
+                studentnumber,
+                studentGroupId
+            );
+            res.status(200).send({message: 'Student user inserted successfully', userResult});
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({message: 'Internal server error'});
+        }
+    },
+);
+/**
  * Route that fetches all courses with their details.
  *
  * @returns {Promise<Course[]>} A promise that resolves with all courses.
