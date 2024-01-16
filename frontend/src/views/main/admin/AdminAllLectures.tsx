@@ -13,19 +13,21 @@ import {
 	TableRow,
 } from '@mui/material';
 import React, {useContext, useEffect, useState} from 'react';
+import {toast} from 'react-toastify';
 import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/ApiHooks';
-import {toast} from 'react-toastify';
 
 interface Lecture {
 	lectureid: number;
 	start_date: string;
-	end_date: string;
-	teacherid: number;
+	attended: number;
+	notattended: number;
+	teacheremail: string;
 	timeofday: string;
-	courseid: number;
+	coursename: string;
 	state: string;
-	topicid: number;
+	topicname: string;
+	coursecode: string;
 }
 
 const AdminAllLectures: React.FC = () => {
@@ -46,6 +48,7 @@ const AdminAllLectures: React.FC = () => {
 			}
 			const getLectures = async () => {
 				const result = await apiHooks.fetchAllLectures(token);
+				console.log('🚀 ~ getLectures ~ result:', result);
 				setLectures(result);
 				setIsLoading(false);
 			};
@@ -88,6 +91,8 @@ const AdminAllLectures: React.FC = () => {
 					await apiHooks.deleteLectureByLectureId(selectedLecture, token);
 					toast.success('Lecture deleted successfully');
 				}
+				const result = await apiHooks.fetchAllLectures(token);
+				setLectures(result);
 			} catch (error) {
 				toast.error('Failed to perform action');
 			}
@@ -100,19 +105,21 @@ const AdminAllLectures: React.FC = () => {
 			<Button variant="contained" onClick={() => setFilterOpen(!filterOpen)}>
 				{filterOpen ? 'Show All Lectures' : 'Show Open Lectures Only'}
 			</Button>
-			<TableContainer className="relative bg-gray-100">
+			<TableContainer className="relative bg-gray-100 h-[384px] overflow-auto">
 				<Table className="table-auto">
 					<TableHead className="sticky top-0 bg-white z-10">
 						<TableRow>
 							<TableCell>Lecture ID</TableCell>
-							<TableCell>Start Date</TableCell>
-							<TableCell>End Date</TableCell>
-							<TableCell>Teacher ID</TableCell>
+							<TableCell>Date</TableCell>
+
+							<TableCell>Teacher Email</TableCell>
 							<TableCell>Time of Day</TableCell>
-							<TableCell>Course ID</TableCell>
-							<TableCell>State</TableCell>
-							<TableCell>Topic ID</TableCell>
+							<TableCell>Course name</TableCell>
+							<TableCell>Course code</TableCell>
+							<TableCell>Topic name</TableCell>
+							<TableCell>Attendance ratio</TableCell>
 							<TableCell>Actions</TableCell>
+							<TableCell>State</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -122,13 +129,29 @@ const AdminAllLectures: React.FC = () => {
 								className="cursor-pointer hover:bg-gray-200"
 							>
 								<TableCell>{lecture.lectureid}</TableCell>
-								<TableCell>{lecture.start_date}</TableCell>
-								<TableCell>{lecture.end_date}</TableCell>
-								<TableCell>{lecture.teacherid}</TableCell>
+								<TableCell>{new Date(lecture.start_date).toLocaleString()}</TableCell>
+								<TableCell>{lecture.teacheremail}</TableCell>
 								<TableCell>{lecture.timeofday}</TableCell>
-								<TableCell>{lecture.courseid}</TableCell>
-								<TableCell>{lecture.state}</TableCell>
-								<TableCell>{lecture.topicid}</TableCell>
+								<TableCell>{lecture.coursename}</TableCell>
+								<TableCell>{lecture.coursecode}</TableCell>
+								<TableCell>{lecture.topicname}</TableCell>
+								<TableCell>
+									<span className="text-metropoliaTrendGreen">{lecture.attended}</span>/
+									<span className="text-metropoliaSupportRed">
+										{lecture.notattended}
+									</span>
+								</TableCell>
+								<TableCell>
+									<span
+										className={
+											lecture.state === 'open'
+												? 'text-metropoliaSupportRed'
+												: 'text-metropoliaTrendGreen'
+										}
+									>
+										{lecture.state}
+									</span>
+								</TableCell>
 								<TableCell>
 									{lecture.state === 'open' && (
 										<>

@@ -33,7 +33,7 @@ const AdminMainView: React.FC = () => {
 				<Card path="/admin/users/" title="Users" description="Manage any user" />
 				<Card
 					path="/admin/newuser/"
-					title="New student user"
+					title="New Student User"
 					description="Add new student user"
 				/>
 				<Card
@@ -47,7 +47,11 @@ const AdminMainView: React.FC = () => {
 					description="Manage your settings"
 				/>
 
-				<Card path="/admin/stats/" title="Stats" description="See statistics" />
+				<Card
+					path="/admin/stats/"
+					title="Statistics"
+					description="See statistics"
+				/>
 			</div>
 		</>
 	);

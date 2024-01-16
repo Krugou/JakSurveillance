@@ -1,4 +1,4 @@
-import {Button} from '@mui/material';
+import {Button, Stack} from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import {
 	CategoryScale,
@@ -10,7 +10,7 @@ import {
 	Title,
 	Tooltip,
 } from 'chart.js';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Line} from 'react-chartjs-2';
 import apiHooks from '../../../hooks/ApiHooks';
 // Register the components needed for the chart
@@ -32,66 +32,102 @@ ChartJS.register(
  * @returns {JSX.Element} The rendered AdminStats component.
  */
 const AdminStats = () => {
-	const [chartData, setChartData] = useState({
+	type ChartData = {
+		labels: string[];
+		datasets: {
+			label: string;
+			data: number[];
+			backgroundColor: string;
+			hidden: boolean;
+		}[];
+	};
+
+	const [chartData, setChartData] = useState<ChartData>({
 		labels: [],
-		datasets: [
-			{
-				label: '',
-				data: [],
-				backgroundColor: '',
-			},
-		],
+		datasets: [],
 	});
-	const [loading, setLoading] = useState(true);
-	const [showUserData, setShowUserData] = useState(false);
-	useEffect(() => {
-		const fetchData = async () => {
-			// Get the token
-			const token: string | null = localStorage.getItem('userToken');
-			if (!token) {
-				throw new Error('No token available');
+	const [loading, setLoading] = useState(false);
+
+	const fetchUserData = async () => {
+		setLoading(true);
+		const token: string | null = localStorage.getItem('userToken');
+		if (!token) {
+			throw new Error('No token available');
+		}
+		const rows = await apiHooks.getRoleCounts(token);
+
+		const roleNames = rows.map(row => row.role_name);
+		const userCounts = rows.map(row => row.user_count);
+
+		setChartData({
+			labels: roleNames,
+			datasets: [
+				{
+					label: 'User Counts',
+					data: userCounts,
+					backgroundColor: 'rgba(75, 192, 192, 0.6)',
+					hidden: false,
+				},
+			],
+		});
+
+		setLoading(false);
+	};
+
+	const fetchLectureAttendanceData = async () => {
+		setLoading(true);
+		const token: string | null = localStorage.getItem('userToken');
+		if (!token) {
+			throw new Error('No token available');
+		}
+		const lectureAttendanceCounts = await apiHooks.getLectureAndAttendanceCount(
+			token,
+		);
+
+		const labels = Object.keys(lectureAttendanceCounts).map(label => {
+			if (label === 'notattended') {
+				return 'Not Attended';
 			}
-			const rows = await apiHooks.getRoleCounts(token);
-			console.log('🚀 ~ file: AdminStats.tsx:16 ~ fetchData ~ rows:', rows);
+			return label.charAt(0).toUpperCase() + label.slice(1);
+		});
+		const data = Object.values(lectureAttendanceCounts) as number[];
 
-			// Extract role names and user counts from the rows
-			const roleNames = rows.map(row => row.role_name);
-			const userCounts = rows.map(row => row.user_count);
+		setChartData({
+			labels: labels,
+			datasets: [
+				{
+					label: 'Lecture and Attendance Counts',
+					data: data,
+					backgroundColor: 'rgba(255, 25, 2, 0.6)',
+					hidden: false,
+				},
+			],
+		});
 
-			// Create the chart data
-			const data = {
-				labels: roleNames,
-				datasets: [
-					{
-						label: 'User Count',
-						data: userCounts,
-						backgroundColor: 'rgba(75, 192, 192, 0.6)',
-					},
-				],
-			};
-
-			setChartData(data);
-			setLoading(false);
-		};
-
-		fetchData();
-	}, []);
+		setLoading(false);
+	};
 
 	if (loading) {
 		return <CircularProgress />;
 	}
-
 	return (
 		<div className="flex flex-col items-center justify-center bg-white p-5 w-1/2">
 			<h2 className="mb-4 text-xl">Admin Stats</h2>
-			<Button
-				variant="contained"
-				color="primary"
-				onClick={() => setShowUserData(!showUserData)}
-			>
-				Show User Count
-			</Button>
-			{showUserData && <Line data={chartData} />}
+			<div className="flex">
+				<Stack direction="row" spacing={2}>
+					<Button variant="contained" color="primary" onClick={fetchUserData}>
+						Show User Count
+					</Button>
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={fetchLectureAttendanceData}
+					>
+						Show Lecture and Attendance Count
+					</Button>
+				</Stack>
+			</div>
+			<Line data={chartData} />
 		</div>
 	);
 };

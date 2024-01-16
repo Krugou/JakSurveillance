@@ -2,6 +2,7 @@ import SortIcon from '@mui/icons-material/Sort';
 import {CircularProgress} from '@mui/material';
 import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import GeneralLinkButton from '../../../components/main/buttons/GeneralLinkButton';
 import InputField from '../../../components/main/course/createcourse/coursedetails/InputField';
 import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/ApiHooks';
@@ -75,16 +76,18 @@ const AdminUsers: React.FC = () => {
 				</div>
 			) : (
 				<>
+					<GeneralLinkButton path="/admin/newuser/" text="Create new student user" />
 					<div className="lg:w-1/4 sm:w-[20em] w-1/2 mt-4 mb-4">
 						<InputField
 							type="text"
 							name="search"
 							value={searchTerm}
 							onChange={e => setSearchTerm(e.target.value)}
-							placeholder="Search..."
+							placeholder="Search by any field.."
 							label="Search"
 						/>
 					</div>
+
 					<div className="relative bg-gray-100">
 						<div className="relative max-h-96 h-96 overflow-y-scroll">
 							<table className="table-auto w-full">

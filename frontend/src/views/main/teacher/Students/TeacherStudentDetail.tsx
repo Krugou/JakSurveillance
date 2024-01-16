@@ -147,12 +147,22 @@ const TeacherStudentDetail: React.FC = () => {
 	return (
 		<div className="w-full sm:w-fit">
 			<div className="bg-white rounded-lg p-5">
-				<GeneralLinkButton
-					path={
-						user?.role === 'admin' ? '/counselor/students' : `/${user?.role}/students`
-					}
-					text="Back to students"
-				/>
+				<div className="space-x-4">
+					<GeneralLinkButton
+						path={
+							user?.role === 'admin'
+								? '/counselor/students'
+								: `/${user?.role}/students`
+						}
+						text="Back to students"
+					/>
+					{user?.role === 'admin' && (
+						<GeneralLinkButton
+							path={`/admin/users/${id}/modify`}
+							text={`Edit ${student.first_name} ${student.last_name} details`}
+						/>
+					)}
+				</div>
 				<h2 className="text-2xl font-bold mt-5 mb-5">
 					{student.first_name + ' ' + student.last_name}'s Info
 				</h2>

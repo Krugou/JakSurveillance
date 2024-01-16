@@ -1,4 +1,4 @@
-import { FieldPacket, ResultSetHeader, RowDataPacket } from 'mysql2';
+import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
 
 const pool = createPool('ADMIN');
@@ -15,7 +15,7 @@ export interface Lecture {
 
 /**
  * Interface for LectureModel.
- */ 
+ */
 export interface LectureModel {
 	/**
 	 * Finds a lecture by its ID and gets all users in the linked course.
@@ -103,7 +103,7 @@ export interface LectureModel {
 	 * Fetches all lectures.
 	 * @returns A promise that resolves to an array of lectures.
 	 */
-	fetchAllLecturees(): Promise<
+	fetchAllLectures(): Promise<
 		RowDataPacket[] | [RowDataPacket[], FieldPacket[]]
 	>;
 
@@ -132,11 +132,17 @@ const lectureModel: LectureModel = {
 	 * Fetches all lectures.
 	 * @returns A promise that resolves to an array of lectures.
 	 */
-	async fetchAllLecturees() {
+	async fetchAllLectures() {
 		try {
-			const [rows] = await pool
-				.promise()
-				.query<RowDataPacket[]>('SELECT * FROM lecture');
+			const [rows] = await pool.promise().query<RowDataPacket[]>(
+				`SELECT lecture.*, courses.name AS coursename, courses.code AS coursecode, users.email AS teacheremail, topics.topicname,
+        (SELECT COUNT(*) FROM attendance WHERE lecture.lectureid = attendance.lectureid AND attendance.status = 0) AS notattended,
+        (SELECT COUNT(*) FROM attendance WHERE lecture.lectureid = attendance.lectureid AND attendance.status = 1) AS attended
+        FROM lecture 
+        INNER JOIN courses ON lecture.courseid = courses.courseid 
+        INNER JOIN users ON lecture.teacherid = users.userid 
+        INNER JOIN topics ON lecture.topicid = topics.topicid`,
+			);
 			return rows;
 		} catch (error) {
 			console.error(error);

@@ -1,5 +1,6 @@
 import express, {Request, Response, Router} from 'express';
 import {body, param} from 'express-validator';
+import createPool from '../config/createPool.js';
 import adminController from '../controllers/admincontroller.js';
 import course from '../models/coursemodel.js';
 import lectureModel from '../models/lecturemodel.js';
@@ -8,6 +9,8 @@ import studentgroupmodel from '../models/studentgroupmodel.js';
 import usermodel from '../models/usermodel.js';
 import checkUserRole from '../utils/checkRole.js';
 import validate from '../utils/validate.js';
+import {RowDataPacket} from 'mysql2';
+const pool = createPool('ADMIN');
 const router: Router = express.Router();
 /**
  * Route that fetches the server settings.
@@ -236,8 +239,42 @@ router.get(
 	checkUserRole(['admin']),
 	async (_req: Request, res: Response) => {
 		try {
-			const lectures = await lectureModel.fetchAllLecturees();
+			const lectures = await lectureModel.fetchAllLectures();
 			res.json(lectures);
+		} catch (err) {
+			console.error(err);
+			res.status(500).send('Server error');
+		}
+	},
+);
+router.get(
+	'/lectureandattendancecount/',
+	checkUserRole(['admin']),
+	async (_req: Request, res: Response) => {
+		try {
+			const [lectureCount] = await pool
+				.promise()
+				.query<RowDataPacket[]>('SELECT COUNT(*) AS count FROM lecture');
+
+			const [attendanceCount0] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					'SELECT COUNT(*) AS count FROM attendance WHERE status = 0',
+				);
+
+			const [attendanceCount1] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					'SELECT COUNT(*) AS count FROM attendance WHERE status = 1',
+				);
+
+			const counts = {
+				lectures: lectureCount[0].count,
+				notattended: attendanceCount0[0].count,
+				attended: attendanceCount1[0].count,
+			};
+
+			res.json(counts);
 		} catch (err) {
 			console.error(err);
 			res.status(500).send('Server error');
