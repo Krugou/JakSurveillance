@@ -153,10 +153,7 @@ const AdminAllLectures: React.FC = () => {
 					</TableHead>
 					<TableBody>
 						{filteredLectures.map(lecture => (
-							<TableRow
-								key={lecture.lectureid}
-								className="cursor-pointer hover:bg-gray-200"
-							>
+							<TableRow key={lecture.lectureid} className=" hover:bg-gray-200">
 								<TableCell>{lecture.lectureid}</TableCell>
 								<TableCell>{new Date(lecture.start_date).toLocaleString()}</TableCell>
 								<TableCell>{lecture.teacheremail}</TableCell>
@@ -173,7 +170,9 @@ const AdminAllLectures: React.FC = () => {
 								<TableCell>
 									<span
 										className={
-											lecture.state === 'open'
+											lecture.state === 'open' &&
+											new Date(lecture.start_date).getTime() <
+												Date.now() - 24 * 60 * 60 * 1000
 												? 'text-metropoliaSupportRed'
 												: 'text-metropoliaTrendGreen'
 										}
@@ -186,16 +185,17 @@ const AdminAllLectures: React.FC = () => {
 										<>
 											<Button
 												variant="contained"
-												color="primary"
+												color="success"
 												onClick={() =>
 													handleDialogOpen(lecture.lectureid.toString(), 'close')
 												}
+												className="ml-2  p-4"
 											>
 												Close
 											</Button>
 											<Button
 												variant="contained"
-												color="secondary"
+												color="error"
 												onClick={() =>
 													handleDialogOpen(lecture.lectureid.toString(), 'delete')
 												}
