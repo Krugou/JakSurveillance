@@ -38,23 +38,36 @@ const AdminAllLectures: React.FC = () => {
 	const [selectedLecture, setSelectedLecture] = useState<string | null>(null);
 	const [action, setAction] = useState<'close' | 'delete' | null>(null);
 	const {user} = useContext(UserContext);
+	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+
+	const getLectures = async () => {
+		const token: string | null = localStorage.getItem('userToken');
+		if (!token) {
+			throw new Error('No token available');
+		}
+		const result = await apiHooks.fetchAllLectures(token);
+		const sortedLectures = result.sort((a, b) => {
+			const comparison =
+				new Date(a.start_date).getTime() - new Date(b.start_date).getTime();
+			return sortOrder === 'asc' ? comparison : -comparison;
+		});
+		setLectures(sortedLectures);
+		setIsLoading(false);
+	};
 
 	useEffect(() => {
 		if (user) {
 			setIsLoading(true);
-			const token: string | null = localStorage.getItem('userToken');
-			if (!token) {
-				throw new Error('No token available');
-			}
-			const getLectures = async () => {
-				const result = await apiHooks.fetchAllLectures(token);
-				console.log('🚀 ~ getLectures ~ result:', result);
-				setLectures(result);
-				setIsLoading(false);
-			};
 			getLectures();
 		}
 	}, [user]);
+
+	useEffect(() => {
+		if (user) {
+			setIsLoading(true);
+			getLectures();
+		}
+	}, [user, sortOrder]);
 
 	if (isLoading) {
 		return 'Loading...';
@@ -92,19 +105,35 @@ const AdminAllLectures: React.FC = () => {
 					toast.success('Lecture deleted successfully');
 				}
 				const result = await apiHooks.fetchAllLectures(token);
-				setLectures(result);
+				const sortedLectures = result.sort(
+					(a, b) =>
+						new Date(b.start_date).getTime() - new Date(a.start_date).getTime(),
+				);
+				setLectures(sortedLectures);
 			} catch (error) {
 				toast.error('Failed to perform action');
 			}
 		}
 		handleDialogClose();
 	};
+	const toggleSortOrder = () => {
+		setSortOrder(prevSortOrder => (prevSortOrder === 'asc' ? 'desc' : 'asc'));
+	};
 
 	return (
 		<div className="relative lg:w-fit w-full">
-			<Button variant="contained" onClick={() => setFilterOpen(!filterOpen)}>
-				{filterOpen ? 'Show All Lectures' : 'Show Open Lectures Only'}
-			</Button>
+			<div className="space-x-2 m-4">
+				<Button variant="contained" onClick={() => setFilterOpen(!filterOpen)}>
+					{filterOpen ? 'Show All Lectures' : 'Show Open Lectures Only'}
+				</Button>
+				<Button
+					variant="contained"
+					onClick={toggleSortOrder}
+					color={sortOrder === 'asc' ? 'primary' : 'secondary'}
+				>
+					{sortOrder === 'asc' ? 'Sort by Newest' : 'Sort by Oldest'}
+				</Button>
+			</div>
 			<TableContainer className="relative bg-gray-100 h-[384px] overflow-auto">
 				<Table className="table-auto">
 					<TableHead className="sticky top-0 bg-white z-10">
@@ -118,8 +147,8 @@ const AdminAllLectures: React.FC = () => {
 							<TableCell>Course code</TableCell>
 							<TableCell>Topic name</TableCell>
 							<TableCell>Attendance ratio</TableCell>
-							<TableCell>Actions</TableCell>
 							<TableCell>State</TableCell>
+							<TableCell>Actions</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
