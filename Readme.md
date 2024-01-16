@@ -6,6 +6,10 @@
 
 [TSdocs link](https://krugou.github.io/JakSurveillance/)
 
+## How to Start the project
+
+[How to Start](HowToStart.md)
+
 ## What we found out
 
 <!-- Write about what you found out here -->
