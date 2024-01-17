@@ -65,7 +65,7 @@ const AdminUsers: React.FC = () => {
 		}
 	}, [user]);
 	return (
-		<div className="relative lg:w-fit w-full">
+		<div className="relative lg:w-fit w-full bg-white p-5 rounded-lg">
 			{isLoading ? (
 				<div className="flex justify-center items-center h-full">
 					<CircularProgress />
@@ -91,7 +91,7 @@ const AdminUsers: React.FC = () => {
 					<div className="relative bg-gray-100">
 						<div className="relative max-h-96 h-96 overflow-y-scroll">
 							<table className="table-auto w-full">
-								<thead className="sticky top-0 bg-white z-10">
+								<thead className="sticky top-0 bg-white z-10 border-t-2 border-black">
 									<tr>
 										{[
 											'last_name',

@@ -99,49 +99,62 @@ const AdminNewUser: React.FC = () => {
 
 	return (
 		<>
-			<Typography variant="h4" component="h1" gutterBottom className="text-center">
+			<h1 className="text-2xl font-bold w-fit p-3 bg-white ml-auto mr-auto rounded-lg mb-5 text-center">
 				Add New Student User
-			</Typography>
-			<div className="relative lg:w-fit w-full bg-white">
+			</h1>
+			<div className="relative w-fit bg-white rounded-lg">
 				<Container>
 					<form onSubmit={handleSubmit} className="mt-4 mb-4 ">
 						<div className="flex flex-col">
-							<TextField
-								label="Email"
-								value={email}
-								onChange={e => setEmail(e.target.value)}
-								required
-								margin="normal"
-							/>
-							<TextField
-								label="First Name"
-								value={firstName}
-								onChange={e => setFirstName(e.target.value)}
-								required
-								margin="normal"
-							/>
-							<TextField
-								label="Last Name"
-								value={lastName}
-								onChange={e => setLastName(e.target.value)}
-								required
-								margin="normal"
-							/>
-							<TextField
-								label="Student Number"
-								value={studentNumber}
-								onChange={e => setStudentNumber(e.target.value)}
-								required
-								margin="normal"
-							/>
+							<label className="block mt-4">
+								<span className="text-gray-700 font-bold">Email</span>
+								<input
+									name="Email"
+									value={email}
+									required
+									onChange={e => setEmail(e.target.value)}
+									className="shadow mt-1 appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+								/>
+							</label>
+
+							<label className="block mt-4">
+								<span className="text-gray-700 font-bold">First Name</span>
+								<input
+									name="firstname"
+									value={firstName}
+									onChange={e => setFirstName(e.target.value)}
+									className="shadow mt-1 appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+								/>
+							</label>
+							<label className="block mt-4">
+								<span className="text-gray-700 font-bold">Last Name</span>
+								<input
+									name="lastname"
+									value={lastName}
+									onChange={e => setLastName(e.target.value)}
+									className="shadow mt-1 appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+								/>
+							</label>
+							<label className="block mt-4">
+								<span className="text-gray-700 font-bold">Student Number</span>
+								<input
+									name="studentnumber"
+									value={studentNumber}
+									onChange={e => setStudentNumber(e.target.value)}
+									className="shadow mt-1 appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+								/>
+								{isStudentNumberTaken && (
+									<h2 className="text-red-500">Student number taken</h2>
+								)}
+							</label>
 						</div>
 						<label className="block mt-4">
-							<span className="text-gray-700 font-bold">Student Group</span>
+							<span className="text-gray-700 font-bold m-1">Student Group</span>
 							<select
 								required
 								value={studentGroupId || ''}
 								onChange={e => setStudentGroupId(Number(e.target.value))}
-								className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+								className="shadow appearance-none border rounded-3xl cursor-pointer w-full py-2 px-3 text-gray-700 mb-3 mt-1 leading-tight focus:outline-none focus:shadow-outline"
 							>
 								<option value="null">Not in system yet</option>
 								{studentGroups.map(studentGroup => (
@@ -154,12 +167,14 @@ const AdminNewUser: React.FC = () => {
 								))}
 							</select>
 						</label>
+						<div className="w-full flex justify-center">
 						<button
 							type="submit"
-							className="bg-metropoliaMainOrange text-md text-white font-bold rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark p-4 m-4"
+							className="mt-5 mb-2 p-2 w-fit bg-metropoliaTrendGreen hover:bg-green-600 transition text-white rounded-md"
 						>
 							Add New Student User
 						</button>
+						</div>
 					</form>
 				</Container>
 			</div>

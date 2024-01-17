@@ -121,22 +121,21 @@ const AdminAllLectures: React.FC = () => {
 	};
 
 	return (
-		<div className="relative lg:w-fit w-full">
-			<div className="space-x-2 m-4">
-				<Button variant="contained" onClick={() => setFilterOpen(!filterOpen)}>
+		<div className="relative xl:w-fit w-full bg-white p-5 rounded-lg">
+			<div className="space-x-2 mt-4 mb-4">
+				<button onClick={() => setFilterOpen(!filterOpen)} className="bg-metropoliaMainOrange h-fit transition hover:hover:bg-metropoliaSecondaryOrange text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline">
 					{filterOpen ? 'Show All Lectures' : 'Show Open Lectures Only'}
-				</Button>
-				<Button
-					variant="contained"
+				</button>
+				<button
 					onClick={toggleSortOrder}
-					color={sortOrder === 'asc' ? 'primary' : 'secondary'}
+					className="bg-metropoliaMainOrange h-fit transition hover:hover:bg-metropoliaSecondaryOrange text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
 				>
 					{sortOrder === 'asc' ? 'Sort by Newest' : 'Sort by Oldest'}
-				</Button>
+				</button>
 			</div>
 			<TableContainer className="relative bg-gray-100 h-[384px] overflow-auto">
 				<Table className="table-auto">
-					<TableHead className="sticky top-0 bg-white z-10">
+					<TableHead className="sticky border-t-2 border-black top-0 bg-white z-10">
 						<TableRow>
 							<TableCell>Lecture ID</TableCell>
 							<TableCell>Date</TableCell>
@@ -183,25 +182,26 @@ const AdminAllLectures: React.FC = () => {
 								<TableCell>
 									{lecture.state === 'open' && (
 										<>
-											<Button
-												variant="contained"
+											<div className="flex gap-1">
+											<button
 												color="success"
 												onClick={() =>
 													handleDialogOpen(lecture.lectureid.toString(), 'close')
 												}
-												className="ml-2  p-4"
+												className="bg-metropoliaTrendGreen h-fit transition hover:hover:bg-green-600 text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
 											>
 												Close
-											</Button>
-											<Button
-												variant="contained"
+											</button>
+											<button
 												color="error"
 												onClick={() =>
 													handleDialogOpen(lecture.lectureid.toString(), 'delete')
 												}
+												className="bg-metropoliaSupportRed h-fit transition hover:hover:bg-red-600 text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
 											>
 												Delete
-											</Button>
+											</button>
+											</div>
 										</>
 									)}
 								</TableCell>
