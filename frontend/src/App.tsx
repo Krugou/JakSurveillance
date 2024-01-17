@@ -13,6 +13,8 @@ import Logout from './views/Logout.tsx';
 import Gdpr from './views/main/Gdpr';
 import Login from './views/main/Login.tsx';
 import StartView from './views/main/StartView.tsx';
+import { UserContext } from './contexts/UserContext.tsx';
+import { useContext } from 'react';
 // Interval for service worker updates
 const intervalMS = 60 * 60 * 1000;
 
@@ -20,6 +22,7 @@ const intervalMS = 60 * 60 * 1000;
  * Main application component.
  */
 const App = () => {
+	const {user} = useContext(UserContext);
 	// Register service worker
 	useRegisterSW({
 		onRegistered(r) {
@@ -37,10 +40,12 @@ const App = () => {
 	});
 
 	// Update document title based on current path
-	useEffect(() => {
-		const title = window.location.pathname.split('/').filter(Boolean).join(' - ');
-		document.title = title ? `JakSec - ${title}` : 'JakSec';
-	}, []);
+useEffect(() => {
+	const title = user
+		? `Metropolia Attendance App - ${user.role}`
+		: 'Metropolia Attendance App';
+	document.title = title;
+}, [user]);
 
 	return (
 		<UserProvider>
