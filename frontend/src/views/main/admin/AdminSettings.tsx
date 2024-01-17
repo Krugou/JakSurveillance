@@ -74,7 +74,47 @@ const AdminSettings = () => {
 			<Grid container spacing={3}>
 				<Grid item xs={12}>
 					<Typography variant="h4" className="mb-4">
-						Admin Settings
+						Server Settings
+					</Typography>
+					<Typography variant="body1" className="mb-4">
+						Welcome to the settings section. Here, you can configure the parameters
+						that govern the attendance gathering page settings and set the attendance
+						requirement threshold. Adjust these settings to best suit your needs.
+					</Typography>
+				</Grid>
+				<Grid item xs={12}>
+					<Typography variant="h6" className="mb-4">
+						Current Settings:
+					</Typography>
+					<Typography variant="body1" className="mb-4">
+						Speed of Hash: {(speedofhash / 1000).toFixed(2)} seconds
+					</Typography>
+
+					<Typography variant="body1" className="mb-4">
+						Hash Speed Multiplier for Network Catch-up: {leewayspeed}
+					</Typography>
+					<Typography variant="body1" className="mb-4">
+						Leeway time:
+						{Math.floor((speedofhash * leewayspeed) / 3600000) > 0 &&
+							`${Math.floor((speedofhash * leewayspeed) / 3600000)} hours `}
+						{Math.floor(((speedofhash * leewayspeed) % 3600000) / 60000) > 0 &&
+							`${Math.floor(
+								((speedofhash * leewayspeed) % 3600000) / 60000,
+							)} minutes `}
+						{Number((((speedofhash * leewayspeed) % 60000) / 1000).toFixed(2)) > 0 &&
+							`${(((speedofhash * leewayspeed) % 60000) / 1000).toFixed(2)} seconds`}
+					</Typography>
+					<Typography variant="body1" className="mb-4">
+						Timeout Time:
+						{Math.floor(timeouttime / 3600000) > 0 &&
+							`${Math.floor(timeouttime / 3600000)} hours `}
+						{Math.floor((timeouttime % 3600000) / 60000) > 0 &&
+							`${Math.floor((timeouttime % 3600000) / 60000)} minutes `}
+						{Number(((timeouttime % 60000) / 1000).toFixed(2)) > 0 &&
+							`${((timeouttime % 60000) / 1000).toFixed(2)} seconds`}
+					</Typography>
+					<Typography variant="body1" className="mb-4">
+						Attendance Threshold: {attendancethreshold}%
 					</Typography>
 				</Grid>
 				<Grid item xs={12} sm={6}>
@@ -87,6 +127,7 @@ const AdminSettings = () => {
 						fullWidth
 						className="mb-4"
 						inputProps={{step: 100}}
+						size="medium"
 					/>
 				</Grid>
 				<Grid item xs={12} sm={6}>
@@ -98,6 +139,7 @@ const AdminSettings = () => {
 						variant="outlined"
 						fullWidth
 						className="mb-4"
+						size="medium"
 					/>
 				</Grid>
 				<Grid item xs={12} sm={6}>
@@ -110,6 +152,7 @@ const AdminSettings = () => {
 						fullWidth
 						className="mb-4"
 						inputProps={{step: 60000}}
+						size="medium"
 					/>
 				</Grid>
 				<Grid item xs={12} sm={6}>
@@ -121,6 +164,7 @@ const AdminSettings = () => {
 						variant="outlined"
 						fullWidth
 						className="mb-4"
+						size="medium"
 					/>
 				</Grid>
 				<Grid item xs={12}>
