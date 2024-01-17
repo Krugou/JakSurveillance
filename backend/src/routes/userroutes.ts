@@ -175,8 +175,10 @@ router.post('/', async (req: Request, res: Response, next) => {
 					}
 					res.json({user: addStaffUserResponse, token});
 				} else {
+					if (username !== 'admin') {
+						console.log('staff metropolia api login success for ' + username);
+					}
 					// If the staff user exists, authenticate their login
-					console.log('staff try to authenticate ' + username);
 					authenticate(req, res, next, username);
 				}
 			} catch (error) {
@@ -188,7 +190,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 		// If the logged-in user is not Metropolia staff, authenticate them
 		if (metropoliaData.staff === false) {
 			// Call the authenticate function to handle passport authentication
-			console.log('non-staff try to authenticate ' + username);
+			console.log('non-staff metropolia api login success for ' + username);
 			authenticate(req, res, next, username);
 		}
 	} catch (error) {
