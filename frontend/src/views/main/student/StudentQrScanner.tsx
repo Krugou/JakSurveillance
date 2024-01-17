@@ -25,6 +25,7 @@ const StudentQrScanner: React.FC = () => {
 	const [scanned, setScanned] = useState(false);
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [loading, setLoading] = useState(false);
+	const [successState, setSuccessState] = useState(false);
 	const onNewScanResult = useCallback(
 		(decodedText: string) => {
 			setLoading(true);
@@ -79,11 +80,12 @@ const StudentQrScanner: React.FC = () => {
 				}
 				newSocket.on('youHaveBeenSavedIntoLecture', lectureid => {
 					toast.success(`You have been saved into lecture`);
-					console.log('youHaveBeenSavedIntoLecture', lectureid);
+					setSuccessState(true);
+					console.log('youHaveBeenSavedIntoLecture ', lectureid);
 					navigate('/student/mainview');
 				});
 				newSocket.on('inputThatStudentHasArrivedToLectureTooSlow', studentId2 => {
-					toast.error('You were too slow, try again' + studentId2);
+					toast.error('You were too slow, try again ' + studentId2);
 					setScanned(false);
 				});
 			}
@@ -103,7 +105,9 @@ const StudentQrScanner: React.FC = () => {
 
 	const handleError = (error: any) => {
 		console.log('error', error);
-		toast.error('Error scanning QR code');
+		if (!successState) {
+			toast.error('Error scanning QR code');
+		}
 	};
 	return (
 		<>
