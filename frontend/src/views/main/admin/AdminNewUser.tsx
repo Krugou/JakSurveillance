@@ -108,8 +108,9 @@ const AdminNewUser: React.FC = () => {
 						<div className="flex flex-col">
 							<h2 className="font-bold text-center text-xl">Student Details</h2>
 							<label className="block mt-4">
+								<span className="text-gray-700 font-bold">Email</span>
 								<input
-									placeholder="Email"
+									placeholder="Matti.Meikäläinen@metropolia.fi"
 									name="Email"
 									value={email}
 									required
@@ -119,8 +120,9 @@ const AdminNewUser: React.FC = () => {
 							</label>
 
 							<label className="block mt-4">
+								<span className="text-gray-700 font-bold">First Name</span>
 								<input
-									placeholder="First Name"
+									placeholder="Matti"
 									name="firstname"
 									value={firstName}
 									onChange={e => setFirstName(e.target.value)}
@@ -128,8 +130,9 @@ const AdminNewUser: React.FC = () => {
 								/>
 							</label>
 							<label className="block mt-4">
+								<span className="text-gray-700 font-bold">Last Name</span>
 								<input
-									placeholder="Last Name"
+									placeholder="Meikäläinen"
 									name="lastname"
 									value={lastName}
 									onChange={e => setLastName(e.target.value)}
@@ -137,8 +140,9 @@ const AdminNewUser: React.FC = () => {
 								/>
 							</label>
 							<label className="block mt-4">
+								<span className="text-gray-700 font-bold">Student Number</span>
 								<input
-									placeholder="Student Number"
+									placeholder="123456"
 									name="studentnumber"
 									value={studentNumber}
 									onChange={e => setStudentNumber(e.target.value)}
