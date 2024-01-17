@@ -26,9 +26,10 @@ const CreateLecture: React.FC = () => {
 	const [date, setDate] = useState<Date | Date[]>(new Date());
 	const [calendarOpen, setCalendarOpen] = useState(false);
 	const timeOfDay = ['am', 'pm'];
-	const [selectedTimeOfDay, setSelectedTimeOfDay] = useState<string>(
-		timeOfDay[0],
-	);
+	const currentHour = new Date().getHours();
+	const defaultTimeOfDay = currentHour < 12 ? timeOfDay[0] : timeOfDay[1];
+	const [selectedTimeOfDay, setSelectedTimeOfDay] =
+		useState<string>(defaultTimeOfDay);
 	const [selectedSession, setSelectedSession] = useState<string>(
 		courses.length > 0 ? courses[0].courseid : '',
 	);
