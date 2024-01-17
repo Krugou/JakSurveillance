@@ -1,28 +1,36 @@
 import {Button, Stack} from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
+
 import {
+	BarElement,
 	CategoryScale,
 	Chart as ChartJS,
 	Legend,
-	LineElement,
 	LinearScale,
-	PointElement,
 	Title,
 	Tooltip,
 } from 'chart.js';
 import React, {useState} from 'react';
-import {Line} from 'react-chartjs-2';
+import {Bar} from 'react-chartjs-2';
 import apiHooks from '../../../hooks/ApiHooks';
-// Register the components needed for the chart
+
 ChartJS.register(
 	CategoryScale,
 	LinearScale,
-	PointElement,
-	LineElement,
+	BarElement,
 	Title,
 	Tooltip,
 	Legend,
 );
+
+const options = {
+	responsive: true,
+	plugins: {
+		legend: {
+			position: 'top' as const,
+		},
+	},
+};
 /**
  * AdminStats component.
  * This component is responsible for rendering a chart of user counts by role for an admin.
@@ -96,7 +104,7 @@ const AdminStats = () => {
 			labels: labels,
 			datasets: [
 				{
-					label: 'Lecture and Attendance Counts',
+					label: 'Counts',
 					data: data,
 					backgroundColor: 'rgba(255, 25, 2, 0.6)',
 					hidden: false,
@@ -127,7 +135,7 @@ const AdminStats = () => {
 					</Button>
 				</Stack>
 			</div>
-			<Line data={chartData} />
+			<Bar options={options} data={chartData} />
 		</div>
 	);
 };
