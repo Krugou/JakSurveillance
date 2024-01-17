@@ -1,4 +1,4 @@
-import {Container, TextField, Typography} from '@mui/material';
+import {Container} from '@mui/material';
 import React, {useContext, useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import {UserContext} from '../../../contexts/UserContext';
@@ -173,12 +173,12 @@ const AdminNewUser: React.FC = () => {
 							</select>
 						</label>
 						<div className="w-full flex justify-center">
-						<button
-							type="submit"
-							className="mt-5 mb-2 p-2 w-fit bg-metropoliaTrendGreen hover:bg-green-600 transition text-white rounded-md"
-						>
-							Add New Student User
-						</button>
+							<button
+								type="submit"
+								className="mt-5 mb-2 p-2 w-fit bg-metropoliaTrendGreen hover:bg-green-600 transition text-white rounded-md"
+							>
+								Add New Student User
+							</button>
 						</div>
 					</form>
 				</Container>
