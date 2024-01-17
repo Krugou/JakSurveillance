@@ -125,6 +125,8 @@ const updateHash = () => {
 		timestamps.shift();
 	}
 };
+updateHash();
+setInterval(updateHash, speedOfHashChange);
 /**
  * Sends a POST request to the '/lecturefinished/' route and emits 'lecturefinished' event to connected sockets.
  *
@@ -257,8 +259,6 @@ const setupSocketHandlers = (io: Server) => {
 								console.error('Error:', error + ' ' + new Date().toISOString());
 							});
 					}
-					// Update the hash every `speedOfHashChange` milliseconds
-					updateHash();
 					setTimeout(() => {
 						io
 							.to(lectureid)
@@ -270,7 +270,6 @@ const setupSocketHandlers = (io: Server) => {
 								notYetPresentStudents[lectureid],
 							);
 					}, 1000);
-					setInterval(updateHash, speedOfHashChange);
 					// Create an object to store interval IDs
 					const intervals: {[lectureid: string]: NodeJS.Timeout} = {};
 
