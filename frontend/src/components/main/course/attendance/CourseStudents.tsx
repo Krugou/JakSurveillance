@@ -142,7 +142,7 @@ const CourseStudents: React.FC<Props> = ({
 			scrollPositionRef.current += scrollDirectionRef.current;
 			// Apply the new scroll position to the container
 			element.scrollLeft = scrollPositionRef.current;
-		}, 70);
+		}, 80);
 	};
 
 	// Effect hook to start the slow scroll when the component mounts
