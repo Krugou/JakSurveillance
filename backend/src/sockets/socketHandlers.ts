@@ -190,7 +190,7 @@ const lectureTimeoutIds = new Map();
  */
 const setupSocketHandlers = (io: Server) => {
 	io.on('connection', (socket: Socket) => {
-		console.log('user joined: ' + socket.id);
+		// console.log('user joined: ' + socket.id);
 
 		// handle disconnect
 		socket.on('disconnect', () => {
