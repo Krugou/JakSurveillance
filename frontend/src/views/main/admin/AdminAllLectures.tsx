@@ -47,9 +47,15 @@ const AdminAllLectures: React.FC = () => {
 		}
 		const result = await apiHooks.fetchAllLectures(token);
 		const sortedLectures = result.sort((a, b) => {
-			const comparison =
+			const dateComparison =
 				new Date(a.start_date).getTime() - new Date(b.start_date).getTime();
-			return sortOrder === 'asc' ? comparison : -comparison;
+			if (dateComparison !== 0) {
+				return sortOrder === 'asc' ? dateComparison : -dateComparison;
+			} else {
+				// If dates are equal, sort by time of day (PM > AM)
+				const timeOfDayComparison = a.timeofday.localeCompare(b.timeofday);
+				return sortOrder === 'asc' ? timeOfDayComparison : -timeOfDayComparison;
+			}
 		});
 		setLectures(sortedLectures);
 		setIsLoading(false);
@@ -123,7 +129,10 @@ const AdminAllLectures: React.FC = () => {
 	return (
 		<div className="relative xl:w-fit w-full bg-white p-5 rounded-lg">
 			<div className="space-x-2 mt-4 mb-4">
-				<button onClick={() => setFilterOpen(!filterOpen)} className="bg-metropoliaMainOrange h-fit transition hover:hover:bg-metropoliaSecondaryOrange text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline">
+				<button
+					onClick={() => setFilterOpen(!filterOpen)}
+					className="bg-metropoliaMainOrange h-fit transition hover:hover:bg-metropoliaSecondaryOrange text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
+				>
 					{filterOpen ? 'Show All Lectures' : 'Show Open Lectures Only'}
 				</button>
 				<button
@@ -183,24 +192,24 @@ const AdminAllLectures: React.FC = () => {
 									{lecture.state === 'open' && (
 										<>
 											<div className="flex gap-1">
-											<button
-												color="success"
-												onClick={() =>
-													handleDialogOpen(lecture.lectureid.toString(), 'close')
-												}
-												className="bg-metropoliaTrendGreen h-fit transition hover:hover:bg-green-600 text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
-											>
-												Close
-											</button>
-											<button
-												color="error"
-												onClick={() =>
-													handleDialogOpen(lecture.lectureid.toString(), 'delete')
-												}
-												className="bg-metropoliaSupportRed h-fit transition hover:hover:bg-red-600 text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
-											>
-												Delete
-											</button>
+												<button
+													color="success"
+													onClick={() =>
+														handleDialogOpen(lecture.lectureid.toString(), 'close')
+													}
+													className="bg-metropoliaTrendGreen h-fit transition hover:hover:bg-green-600 text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
+												>
+													Close
+												</button>
+												<button
+													color="error"
+													onClick={() =>
+														handleDialogOpen(lecture.lectureid.toString(), 'delete')
+													}
+													className="bg-metropoliaSupportRed h-fit transition hover:hover:bg-red-600 text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
+												>
+													Delete
+												</button>
 											</div>
 										</>
 									)}
