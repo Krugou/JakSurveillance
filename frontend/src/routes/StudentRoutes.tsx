@@ -1,12 +1,11 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
-import StudentAttendance from '../views/main/student/StudentAttendance.tsx';
+import StudentCourseAttendance from '../views/main/student/StudentCourseAttendance.tsx';
 import StudentCourses from '../views/main/student/StudentCourses.tsx';
+import StudentHelpVideos from '../views/main/student/StudentHelpVideos.tsx';
 import StudentMainView from '../views/main/student/StudentMainView.tsx';
 import StudentProfile from '../views/main/student/StudentProfile.tsx';
 import StudentQrScanner from '../views/main/student/StudentQrScanner.tsx';
-import StudentCourseAttendance from '../views/main/student/StudentCourseAttendance.tsx';
-import StudentHelpVideos from "../views/main/student/StudentHelpVideos.tsx";
 /**
  * StudentRoutes component.
  * This component is responsible for defining the routes for the student section of the application.
@@ -22,7 +21,6 @@ const StudentRoutes = () => {
 			<Route path="mainview" element={<StudentMainView />} />
 			<Route path="courses" element={<StudentCourses />} />
 			<Route path="profile" element={<StudentProfile />} />
-			<Route path="attendance" element={<StudentAttendance />} />
 			<Route path="helpvideos" element={<StudentHelpVideos />} />
 			<Route path="qr" element={<StudentQrScanner />} />
 			<Route
