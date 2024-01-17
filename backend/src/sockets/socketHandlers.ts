@@ -10,11 +10,6 @@ import doFetch from '../utils/doFetch.js';
  * @module setupSocketHandlers
  */
 config();
-/**
- * The current hash value.
- * @type {string}
- */
-let hash = '';
 
 /**
  * An array of timestamps and their associated hashes.
@@ -45,6 +40,16 @@ let timeout = 3600000;
  * @type {number}
  */
 let howMuchLeeWay = 0;
+
+interface LectureData {
+	[lectureid: string]: {
+		timestamps: Array<{start: number; end: number; hash: string}>;
+		hash: string | null;
+	};
+}
+
+// eslint-disable-next-line prefer-const
+let lectureData: LectureData = {};
 
 /**
  * The Student interface.
@@ -112,21 +117,29 @@ const fetchDataAndUpdate = async () => {
  * Generates a new random hash, calculates the start and end times, and adds them to the timestamps array.
  * If the timestamps array exceeds a certain length, the oldest hash and timestamp are removed.
  */
-const updateHash = () => {
+
+const updateHash = (lectureid: string) => {
 	// Generate a random hash
 	const start = Date.now();
-	hash = crypto.randomBytes(20).toString('hex');
+	const hash = crypto.randomBytes(20).toString('hex');
 	const end = Date.now() + speedOfHashChange;
+
+	// Initialize the lecture data if it doesn't exist
+	if (!lectureData[lectureid]) {
+		lectureData[lectureid] = {timestamps: [], hash: null};
+	}
+
 	// Add the hash and timestamps to the timestamps array
-	timestamps.push({start, end, hash});
+	lectureData[lectureid].timestamps.push({start, end, hash});
+	lectureData[lectureid].hash = hash;
+
 	const timestampslength = howMuchLeeWay / speedOfHashChange;
+
 	// Remove the oldest hash and timestamp if the timestamps array is too long
-	if (timestamps.length > timestampslength) {
-		timestamps.shift();
+	if (lectureData[lectureid].timestamps.length > timestampslength) {
+		lectureData[lectureid].timestamps.shift();
 	}
 };
-updateHash();
-setInterval(updateHash, speedOfHashChange);
 /**
  * Sends a POST request to the '/lecturefinished/' route and emits 'lecturefinished' event to connected sockets.
  *
@@ -165,6 +178,7 @@ const finishLecture = async (lectureid: string, io: Server) => {
 			// Purge lectureid from notYetPresentStudents and presentStudents
 			delete notYetPresentStudents[lectureid];
 			delete presentStudents[lectureid];
+			delete lectureData[lectureid];
 		}
 	} catch (error) {
 		console.error('Error:', error);
@@ -201,6 +215,10 @@ const setupSocketHandlers = (io: Server) => {
 				'createAttendanceCollection ',
 				lectureid + ' ' + new Date().toISOString(),
 			);
+			// Initialize the lecture data if it doesn't exist
+			if (!lectureData[lectureid]) {
+				lectureData[lectureid] = {timestamps: [], hash: null};
+			}
 			// Fetch and update data when a new lecture is started
 			fetchDataAndUpdate()
 				.then(async () => {
@@ -259,12 +277,15 @@ const setupSocketHandlers = (io: Server) => {
 								console.error('Error:', error + ' ' + new Date().toISOString());
 							});
 					}
+					// Update the hash for this lecture
+					updateHash(lectureid);
+					setInterval(() => updateHash(lectureid), speedOfHashChange);
 					setTimeout(() => {
 						io
 							.to(lectureid)
 							.emit(
 								'updateAttendanceCollectionData',
-								hash,
+								lectureData[lectureid].hash,
 								lectureid,
 								presentStudents[lectureid],
 								notYetPresentStudents[lectureid],
@@ -284,7 +305,7 @@ const setupSocketHandlers = (io: Server) => {
 							.to(lectureid)
 							.emit(
 								'updateAttendanceCollectionData',
-								hash,
+								lectureData[lectureid].hash,
 								lectureid,
 								presentStudents[lectureid],
 								notYetPresentStudents[lectureid],
@@ -344,7 +365,7 @@ const setupSocketHandlers = (io: Server) => {
 						.emit('inputThatStudentHasArrivedToLectureTooSlow', lectureid);
 				}
 				// find the timestamp that matches the secureHash and unixtime
-				const timestamp = timestamps.find(
+				const timestamp = lectureData[lectureid].timestamps.find(
 					t => t.hash === secureHash && unixtime >= t.start && unixtime <= t.end,
 				);
 
@@ -596,6 +617,7 @@ const setupSocketHandlers = (io: Server) => {
 				// Purge lectureid from notYetPresentStudents and presentStudents
 				delete notYetPresentStudents[lectureid];
 				delete presentStudents[lectureid];
+				delete lectureData[lectureid];
 			} catch (error) {
 				// Handle the error here
 				console.error(error);
