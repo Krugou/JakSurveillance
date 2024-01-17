@@ -39,7 +39,7 @@ const AdminMainView: React.FC = () => {
 				<Card
 					path="/admin/lectures/"
 					title="Lectures"
-					description="All lectures data"
+					description="View all lectures to check if they are active or not"
 				/>
 				<Card
 					path="/admin/settings/"
