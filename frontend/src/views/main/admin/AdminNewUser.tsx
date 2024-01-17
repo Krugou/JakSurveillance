@@ -154,6 +154,7 @@ const AdminNewUser: React.FC = () => {
 							</label>
 						</div>
 						<label className="block mt-4">
+							<span className="text-gray-700 font-bold">Student Group</span>
 							<select
 								required
 								value={studentGroupId || ''}
