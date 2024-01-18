@@ -9,6 +9,7 @@ import courseRoutes from './routes/courseroutes.js';
 import secureRoutes from './routes/secureroutes.js';
 import userRoutes from './routes/userroutes.js';
 import setupSocketHandlers from './sockets/socketHandlers.js';
+import logger from './utils/logger.js';
 /**
  * Load environment variables from .env file
  */
@@ -120,8 +121,15 @@ app.use('/admin', passport.authenticate('jwt', {session: false}), adminRoutes);
  * This section starts the HTTP server and listens on the specified port.
  */
 http.listen(port, () => {
+	logger.info(
+		'Metropolia Attendance App REST + DATABASE SERVER Started at: http://localhost:' +
+			port +
+			'/ ' +
+			'start time: ' +
+			startTime.toLocaleString(),
+	);
 	console.log(
-		'JakSec REST + DATABASE SERVER Started at: http://localhost:' +
+		'Metropolia Attendance App REST + DATABASE SERVER Started at: http://localhost:' +
 			port +
 			'/ ' +
 			'start time: ' +
