@@ -215,8 +215,8 @@ const CourseStudents: React.FC<Props> = ({
 							<p
 								ref={isFirst ? firstItemRef : isLast ? lastItemRef : null}
 								key={student.userid}
-								className={`inline-block cursor-pointer p-2 m-2 text-white sm:text-sm font-semibold ${bgColorClass} ${shapeClass} ${
-									isBouncing ? 'animate-bounce' : ''
+								className={`inline-block cursor-pointer p-2 m-2 text-white text-xs sm:text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl font-semibold ${bgColorClass} ${shapeClass} ${
+									isBouncing ? 'motion-safe:animate-bounce' : ''
 								}`}
 								title={`${student.first_name} ${student.last_name}`}
 								onClick={() => {
