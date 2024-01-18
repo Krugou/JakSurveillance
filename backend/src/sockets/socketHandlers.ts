@@ -12,12 +12,6 @@ import doFetch from '../utils/doFetch.js';
 config();
 
 /**
- * An array of timestamps and their associated hashes.
- * @type {Array<{start: number; end: number; hash: string}>}
- */
-const timestamps: {start: number; end: number; hash: string}[] = [];
-
-/**
  * The speed at which the hash changes, in milliseconds.
  * @type {number}
  */
@@ -179,6 +173,7 @@ const finishLecture = async (lectureid: string, io: Server) => {
 			delete notYetPresentStudents[lectureid];
 			delete presentStudents[lectureid];
 			delete lectureData[lectureid];
+			clearTimeout(lectureTimeoutIds.get(lectureid));
 		}
 	} catch (error) {
 		console.error('Error:', error);
@@ -375,7 +370,7 @@ const setupSocketHandlers = (io: Server) => {
 					console.log('lectureid: ' + lectureid);
 					console.log(secureHash + ' ' + unixtime + ' ' + new Date().toISOString());
 					console.log('Current timestamps: ');
-					console.log(timestamps);
+					console.log(lectureData[lectureid].timestamps);
 					console.log('timestamp not found for ' + studentId + ' !');
 				}
 
@@ -618,6 +613,7 @@ const setupSocketHandlers = (io: Server) => {
 				delete notYetPresentStudents[lectureid];
 				delete presentStudents[lectureid];
 				delete lectureData[lectureid];
+				clearTimeout(lectureTimeoutIds.get(lectureid));
 			} catch (error) {
 				// Handle the error here
 				console.error(error);
