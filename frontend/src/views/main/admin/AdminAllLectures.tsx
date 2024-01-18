@@ -47,15 +47,9 @@ const AdminAllLectures: React.FC = () => {
 		}
 		const result = await apiHooks.fetchAllLectures(token);
 		const sortedLectures = result.sort((a, b) => {
-			const dateComparison =
-				new Date(a.start_date).getTime() - new Date(b.start_date).getTime();
-			if (dateComparison !== 0) {
-				return sortOrder === 'asc' ? dateComparison : -dateComparison;
-			} else {
-				// If dates are equal, sort by time of day (PM > AM)
-				const timeOfDayComparison = a.timeofday.localeCompare(b.timeofday);
-				return sortOrder === 'asc' ? timeOfDayComparison : -timeOfDayComparison;
-			}
+			return sortOrder === 'asc'
+				? a.lectureid - b.lectureid
+				: b.lectureid - a.lectureid;
 		});
 		setLectures(sortedLectures);
 		setIsLoading(false);
