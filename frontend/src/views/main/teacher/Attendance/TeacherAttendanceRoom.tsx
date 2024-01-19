@@ -40,6 +40,7 @@ const AttendanceRoom: React.FC = () => {
 	const [hashDataReceived, setHashDataReceived] = useState(false);
 	const toastDisplayed = useRef(false);
 	const [confirmOpen, setConfirmOpen] = useState(false);
+	const [isAnimationStopped, setIsAnimationStopped] = useState(false);
 	/**
 	 * useEffect hook for fetching lecture info.
 	 * This hook is run when the component mounts and whenever the lectureid changes.
@@ -305,13 +306,24 @@ const AttendanceRoom: React.FC = () => {
 				<CircularProgress />
 			) : (
 				<div className="flex flex-col m-auto w-full xl:w-full 2xl:w-3/4 h-full p-5 bg-gray-100">
-					<div>
+					<div className="flex flex-row justify-between">
 						<h1 className="text-2xl pb-5 font-bold">
-							{courseName} - {courseCode} - {topicname} -{' '}
+							{courseName} | {courseCode} | {topicname} |
 							{countdown !== null
-								? `${Math.floor(countdown / 60)} minutes ${countdown % 60} seconds`
+								? ` Attendance gathering auto finishes in ${Math.floor(
+										countdown / 60,
+								  )} minutes ${countdown % 60} seconds`
 								: 'Loading...'}
 						</h1>
+						<div className="flex flex-row justify-end">
+							<button
+								className="bg-metropoliaSupportRed sm:w-fit transition h-fit p-2 m-2 text-sm w-full hover:bg-metropoliaSupportRed text-white font-bold rounded"
+								onClick={() => setIsAnimationStopped(!isAnimationStopped)}
+								title="Stop animation of CourseStudent list"
+							>
+								{isAnimationStopped ? 'Start Animation' : 'Stop Animation'}
+							</button>
+						</div>
 					</div>
 					<div className="flex flex-col-reverse sm:flex-row justify-between items-start">
 						<div className="flex sm:flex-row items-center flex-col-reverse w-full ">
@@ -334,26 +346,35 @@ const AttendanceRoom: React.FC = () => {
 								lectureid={lectureid || ''}
 							/>
 						</div>
-						<h2 className="text-2xl ml-2">
+						<h2
+							className="text-2xl ml-2"
+							title={`${arrayOfStudents.length} Attended, ${
+								courseStudents.length - arrayOfStudents.length
+							} Not attended, Total: ${
+								arrayOfStudents.length + courseStudents.length
+							}`}
+						>
 							<label className="text-metropoliaTrendGreen">
 								{arrayOfStudents.length}
 							</label>
 							/
 							<label className="text-metropoliaSupportRed">
 								{courseStudents.length}
-							</label>
+							</label>{' '}
 						</h2>
 					</div>
 					<div className="flex sm:flex-row-reverse flex-col gap-5 items-center justify-end">
 						<button
 							className="bg-metropoliaSupportRed sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSupportRed text-white font-bold rounded"
 							onClick={() => setConfirmOpen(true)}
+							title="Delete this lecture from database"
 						>
 							Cancel Lecture
 						</button>
 						<button
 							onClick={handleLectureFinished}
 							className="bg-metropoliaMainOrange sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSecondaryOrange text-white font-bold rounded"
+							title="Set rest of bottom list of students to not attended"
 						>
 							Finish Lecture
 						</button>
@@ -370,6 +391,7 @@ const AttendanceRoom: React.FC = () => {
 								coursestudents={courseStudents}
 								socket={socket}
 								lectureid={lectureid}
+								isAnimationStopped={isAnimationStopped}
 							/>
 						)}
 					</div>
