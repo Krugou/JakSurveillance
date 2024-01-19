@@ -76,7 +76,11 @@ const Login: React.FC = () => {
 			}
 		} catch (error) {
 			if (error instanceof Error) {
-				setAlert(error.message);
+				if (error.message === '403') {
+					setAlert('No Metropolia internal network connection');
+				} else {
+					setAlert(error.message);
+				}
 			} else {
 				toast.error('Error logging in');
 				console.log(error);
