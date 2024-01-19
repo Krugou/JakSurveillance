@@ -1,4 +1,8 @@
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import {CircularProgress} from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 import {formatISO} from 'date-fns';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import Calendar from 'react-calendar';
@@ -8,10 +12,6 @@ import {toast} from 'react-toastify';
 import DeleteLectureModal from '../../../../components/main/modals/DeleteLectureModal';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
-import IconButton from '@mui/material/IconButton';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import Tooltip from '@mui/material/Tooltip';
 /**
  * CreateLecture component.
  * This component is responsible for rendering the lecture creation view for a teacher.
@@ -286,7 +286,7 @@ const CreateLecture: React.FC = () => {
 							onDelete={() => handleDelete(lecture.lectureid)}
 						/>
 					))}
-					<div className="flex m-auto flex-col 2xl:w-3/6 lg:w-full lg:w-4/6 w-full items-center rounded-lg justify-center sm:p-5 p-1 bg-gray-100">
+					<div className="flex m-auto flex-col 2xl:w-3/6  lg:w-4/6 w-full items-center rounded-lg justify-center sm:p-5 p-1 bg-gray-100">
 						<h1 className="text-lg sm:text-2xl font-bold p-2 mb-8 mt-5">
 							Create new lecture
 						</h1>
@@ -327,7 +327,7 @@ const CreateLecture: React.FC = () => {
 							</div>
 							<div className="w-3/4 sm:w-4/5 lg:w-11/12 flex flex-col gap-3">
 								<select
-									title="Course"
+									title="Click to pick course"
 									id="course"
 									className="block h-8 cursor-pointer sm:ml-5 ml-1 mr-3 mt-1"
 									value={selectedSession}
@@ -378,7 +378,7 @@ const CreateLecture: React.FC = () => {
 										})}
 								</select>
 								<select
-									title="Topic"
+									title=" Click to pick topic for the lecture"
 									id="topic"
 									className="block h-8 cursor-pointer mr-3 sm:ml-5 ml-1 sm:mt-2 mt-none"
 									value={selectedTopic}
@@ -401,7 +401,7 @@ const CreateLecture: React.FC = () => {
 						<div className="text-md sm:text-xl mb-5">
 							<div className="relative">
 								<input
-									title="Date"
+									title="Click to open calendar"
 									ref={inputRef}
 									type="text"
 									aria-label="Date"
@@ -424,7 +424,7 @@ const CreateLecture: React.FC = () => {
 							<div className="relative mt-5">
 								<select
 									aria-label="Time of Day"
-									title="Time of Day"
+									title="Select time of Day"
 									value={selectedTimeOfDay}
 									onChange={e => setSelectedTimeOfDay(e.target.value)}
 									className="block text-center cursor-pointer appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 shadow leading-tight focus:outline-none focus:shadow-outline"
@@ -439,7 +439,7 @@ const CreateLecture: React.FC = () => {
 						</div>
 						<button
 							aria-label="Open Attendance"
-							title="Open Attendance"
+							title={`Open Attendance gathering for ${selectedCourse?.name} - ${selectedCourse?.code} - ${selectedTopic} `}
 							className="bg-metropoliaMainOrange w-2/4 hover:hover:bg-metropoliaSecondaryOrange transition text-white font-bold py-2 px-4 m-4 rounded focus:outline-none focus:shadow-outline"
 							onClick={handleOpenAttendance}
 						>
