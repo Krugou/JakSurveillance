@@ -4,9 +4,9 @@ import ServerSettingsModel from '../models/serversettingsmodel.js';
 const pool = createPool('ADMIN');
 /**
  * AdminController interface represents the structure of the admin controller.
- * 
+ *
  * This interface provides the following methods:
- * 
+ *
  * @method getServerSettings - Fetches the server settings from the database.
  * @method updateServerSettings - Updates the server settings in the database.
  */
