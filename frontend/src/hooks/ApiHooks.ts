@@ -724,6 +724,23 @@ const fetchAllLectures = async (token: string) => {
 
 	return await doFetch(baseUrl + `admin/alllectures/`, options);
 };
+const fetchAttendances = async (
+	token: string,
+	courseid: string,
+	lectureid: string,
+) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+
+	return await doFetch(
+		baseUrl + `admin/allattendancedatabycourse/${courseid}/${lectureid}`,
+		options,
+	);
+};
 const getLectureAndAttendanceCount = async (token: string) => {
 	const options = {
 		method: 'GET',
@@ -790,6 +807,7 @@ const getOpenLecturesByCourseid = async (
 };
 
 const apiHooks = {
+	fetchAttendances,
 	getLectureAndAttendanceCount,
 	addNewStudentUser,
 	fetchAllLectures,
