@@ -71,7 +71,7 @@ const StartView = () => {
 							</p>
 						</div>
 					)}
-					{!newestVersion && !isServerOnline && (
+					{!newestVersion && isServerOnline && (
 						<p className=" m-2 p-2 rounded-xl">
 							<strong>Please reload the page until this text disappears</strong>
 						</p>
