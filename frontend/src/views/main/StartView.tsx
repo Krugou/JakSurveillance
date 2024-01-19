@@ -49,9 +49,11 @@ const StartView = () => {
 				<CircularProgress />
 			) : import.meta.env.MODE === 'development' ? (
 				<>
-					<p>Development mode</p>
-					<p> no PWA </p>
-					<p> Api: {isServerOnline ? <DoneIcon /> : <DangerousIcon />} </p>
+					<p className="bg-white m-2 p-2 rounded-xl">
+						{' '}
+						{isServerOnline ? <DoneIcon /> : <DangerousIcon />}{' '}
+					</p>
+					
 				</>
 			) : (
 				<>
@@ -61,13 +63,19 @@ const StartView = () => {
 							: 'You are not connected to Metropolia internal network'}
 					</p>
 					{isServerOnline && (
-						<p>
-							Version: {newestVersion ? <DoneIcon /> : <DangerousIcon />} Api:{' '}
-							{isServerOnline ? <DoneIcon /> : <DangerousIcon />}{' '}
-						</p>
+						<div className="bg-white m-2 p-2 rounded-xl">
+							<p className="m-2 p-2">
+								Version: {newestVersion ? <DoneIcon /> : <DangerousIcon />}
+							</p>
+							<p className="m-2 p-2">
+								Server Connection: {isServerOnline ? <DoneIcon /> : <DangerousIcon />}
+							</p>
+						</div>
 					)}
-					{!newestVersion && isServerOnline && (
-						<p>Please reload the page until this text disappears</p>
+					{!newestVersion && !isServerOnline && (
+						<p className="bg-white m-2 p-2 rounded-xl">
+							<strong>Please reload the page until this text disappears</strong>
+						</p>
 					)}
 				</>
 			)}
