@@ -1,5 +1,6 @@
 import express, {Request, Response, Router} from 'express';
 import {body, param} from 'express-validator';
+import {RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
 import adminController from '../controllers/admincontroller.js';
 import course from '../models/coursemodel.js';
@@ -9,7 +10,6 @@ import studentgroupmodel from '../models/studentgroupmodel.js';
 import usermodel from '../models/usermodel.js';
 import checkUserRole from '../utils/checkRole.js';
 import validate from '../utils/validate.js';
-import {RowDataPacket} from 'mysql2';
 const pool = createPool('ADMIN');
 const router: Router = express.Router();
 /**
@@ -252,29 +252,84 @@ router.get(
 	checkUserRole(['admin']),
 	async (_req: Request, res: Response) => {
 		try {
-			const [lectureCount] = await pool
+			const [lectures] = await pool
 				.promise()
-				.query<RowDataPacket[]>('SELECT COUNT(*) AS count FROM lecture');
-
-			const [attendanceCount0] = await pool
-				.promise()
-				.query<RowDataPacket[]>(
-					'SELECT COUNT(*) AS count FROM attendance WHERE status = 0',
-				);
-
-			const [attendanceCount1] = await pool
-				.promise()
-				.query<RowDataPacket[]>(
-					'SELECT COUNT(*) AS count FROM attendance WHERE status = 1',
-				);
+				.query<RowDataPacket[]>('SELECT * FROM lecture');
 
 			const counts = {
-				lectures: lectureCount[0].count,
-				notattended: attendanceCount0[0].count,
-				attended: attendanceCount1[0].count,
+				lectures: lectures.length,
+				notattended: 0,
+				attended: 0,
 			};
 
+			for (const lecture of lectures) {
+				const [attendanceCount0] = await pool
+					.promise()
+					.query<RowDataPacket[]>(
+						'SELECT COUNT(*) AS count FROM attendance WHERE status = 0 AND lectureid = ?',
+						[lecture.lectureid],
+					);
+
+				const [attendanceCount1] = await pool
+					.promise()
+					.query<RowDataPacket[]>(
+						'SELECT COUNT(*) AS count FROM attendance WHERE status = 1 AND lectureid = ?',
+						[lecture.lectureid],
+					);
+
+				counts.notattended += attendanceCount0[0].count;
+				counts.attended += attendanceCount1[0].count;
+			}
+
 			res.json(counts);
+		} catch (err) {
+			console.error(err);
+			res.status(500).send('Server error');
+		}
+	},
+);
+router.get(
+	'/allattendancedatabycourse/:courseid/:lectureid',
+	async (req: Request, res: Response) => {
+		try {
+			const courseid = req.params.courseid;
+			const lectureid = req.params.lectureid;
+			const [attendanceResult] = await pool.promise().query(
+				`SELECT 
+                attendance.status, 
+                attendance.attendanceid, 
+                usercourses.usercourseid, 
+                lecture.start_date, 
+                lecture.timeofday, 
+                lecture.lectureid,
+                topics.topicname, 
+								courses.code,
+                teachers.email AS teacher, 
+                attendingUsers.first_name, 
+                attendingUsers.last_name, 
+                attendingUsers.studentnumber, 
+                attendingUsers.email, 
+                attendingUsers.userid
+            FROM 
+                attendance 
+            JOIN 
+                lecture ON attendance.lectureid = lecture.lectureid
+            JOIN 
+                topics ON lecture.topicid = topics.topicid
+            JOIN 
+                courses ON lecture.courseid = courses.courseid
+            JOIN 
+                usercourses ON attendance.usercourseid = usercourses.usercourseid
+            JOIN 
+                users AS teachers ON lecture.teacherid = teachers.userid
+            JOIN 
+                users AS attendingUsers ON usercourses.userid = attendingUsers.userid
+            WHERE 
+                lecture.courseid = ? AND lecture.lectureid = ?;`,
+				[courseid, lectureid],
+			);
+
+			res.json(attendanceResult);
 		} catch (err) {
 			console.error(err);
 			res.status(500).send('Server error');
