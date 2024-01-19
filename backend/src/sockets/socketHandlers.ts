@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import {config} from 'dotenv';
 import {Server, Socket} from 'socket.io';
 import doFetch from '../utils/doFetch.js';
+// import logger from '../utils/logger.js';
 /**
  * Socket event handlers for managing attendance in lectures.
  * This module sets up Socket.IO server event handlers for various actions related to lecture attendance,
@@ -174,6 +175,7 @@ const finishLecture = async (lectureid: string, io: Server) => {
 			delete presentStudents[lectureid];
 			delete lectureData[lectureid];
 			clearTimeout(lectureTimeoutIds.get(lectureid));
+			console.log('lectureFinished ' + lectureid + ' ' + new Date().toISOString());
 		}
 	} catch (error) {
 		console.error('Error:', error);
@@ -210,6 +212,7 @@ const setupSocketHandlers = (io: Server) => {
 				'createAttendanceCollection ',
 				lectureid + ' ' + new Date().toISOString(),
 			);
+			// logger.info('createAttendanceCollection ' + lectureid);
 			// Initialize the lecture data if it doesn't exist
 			if (!lectureData[lectureid]) {
 				lectureData[lectureid] = {timestamps: [], hash: null};
@@ -267,6 +270,7 @@ const setupSocketHandlers = (io: Server) => {
 										' ' +
 										new Date().toISOString(),
 								);
+								// logger.info('getallstudentsinlecture ' + lectureid);
 							})
 							.catch(error => {
 								console.error('Error:', error + ' ' + new Date().toISOString());
@@ -318,12 +322,14 @@ const setupSocketHandlers = (io: Server) => {
 								' ' +
 								new Date().toISOString(),
 						);
+						// logger.info('Lecture finished with timeout ' + lectureid);
 						finishLecture(lectureid, io);
 					}, timeout);
 					console.log(
 						'setting timeout to timeoutids ' + lectureid,
 						timeoutId + ' ' + new Date().toISOString(),
 					);
+					// logger.info('setting timeout to timeoutids ' + lectureid);
 					lectureTimeoutIds.set(lectureid, timeoutId);
 					// Handle the 'lecturefinishedwithbutton' event
 					socket.on('lectureFinishedWithButton', async (lectureid: string) => {
@@ -333,11 +339,13 @@ const setupSocketHandlers = (io: Server) => {
 								' ' +
 								new Date().toISOString(),
 						);
+						// logger.info('lectureFinishedWithButton ' + lectureid);
 						finishLecture(lectureid, io);
 					});
 					// Clear the interval when the socket disconnects
 					socket.on('disconnect', () => {
 						clearInterval(intervals[lectureid]);
+						// logger.info('disconnect ' + lectureid);
 					});
 				})
 				.catch(error => {
@@ -366,12 +374,18 @@ const setupSocketHandlers = (io: Server) => {
 
 				if (timestamp) {
 					console.log('timestamp found for ' + studentId + ' !');
+					// logger.info('timestamp found for ' + studentId + ' !');
 				} else {
 					console.log('lectureid: ' + lectureid);
 					console.log(secureHash + ' ' + unixtime + ' ' + new Date().toISOString());
 					console.log('Current timestamps: ');
 					console.log(lectureData[lectureid].timestamps);
 					console.log('timestamp not found for ' + studentId + ' !');
+					// logger.info('lectureid: ' + lectureid);
+					// logger.info(secureHash + ' ' + unixtime + ' ' + new Date().toISOString());
+					// logger.info('Current timestamps: ');
+					// logger.info(lectureData[lectureid].timestamps);
+					// logger.info('timestamp not found for ' + studentId + ' !');
 				}
 
 				// console.log(
