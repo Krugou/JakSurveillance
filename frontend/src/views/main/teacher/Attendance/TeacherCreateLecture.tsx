@@ -53,6 +53,7 @@ const CreateLecture: React.FC = () => {
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 	const [openLectures, setOpenLectures] = useState<OpenLecture[]>([]);
 	const [showEndedCourses, setShowEndedCourses] = useState(false);
+	// const [openDataText, setOpenDataText] = useState('');
 
 	/**
 	 * Reservation interface.
@@ -70,17 +71,54 @@ const CreateLecture: React.FC = () => {
 		email: string;
 		end_date: string;
 	}
+	const findNextLecture = reservations => {
+		// Get current date
+		const now = new Date();
+		// Find the next upcoming lecture
+		const nextLecture = reservations.find(
+			lecture =>
+				(new Date(lecture.startDate) <= now && now <= new Date(lecture.endDate)) ||
+				new Date(lecture.startDate) > now,
+		);
+		console.log('🚀 ~ findNextLecture ~ nextLecture:', nextLecture);
+
+		// Check if the current time falls within the start and end time of the lecture
+		if (
+			nextLecture &&
+			new Date(nextLecture.startDate) <= now &&
+			now <= new Date(nextLecture.endDate)
+		) {
+			const room = nextLecture.resources.find(
+				resource => resource.type === 'room',
+			);
+
+			return ` ${nextLecture.subject}, Room: ${room?.code}`;
+		} else if (nextLecture) {
+			const room = nextLecture.resources.find(
+				resource => resource.type === 'room',
+			);
+			return `${nextLecture.subject},  Room: ${room?.code} `;
+		} else {
+			return '';
+		}
+	};
+
 	useEffect(() => {
 		if (selectedCourse) {
+			console.log('🚀 ~ useEffect ~ selectedCourse:', selectedCourse);
 			const token: string | null = localStorage.getItem('userToken');
 			if (!token) {
 				throw new Error('No token available');
 			}
+
 			apihooks.getCourseReservations(selectedCourse, token).then(data => {
 				const dates = data.reservations.map(
 					(reservation: Reservation) => new Date(reservation.startDate),
 				);
 				setHighlightedDates(dates);
+				const newText = findNextLecture(data.reservations);
+				console.log('🚀 ~ apihooks.getCourseReservations ~ newText:', newText);
+				// setOpenDataText(newText);
 			});
 		}
 	}, [selectedCourse]);
@@ -135,7 +173,7 @@ const CreateLecture: React.FC = () => {
 				return 'highlight';
 			}
 		}
-		return ''; // default return value
+		return '';
 	};
 	useEffect(() => {}, [selectedCourse]);
 	const handleDateChangeCalendar = (
@@ -290,6 +328,7 @@ const CreateLecture: React.FC = () => {
 						<h1 className="text-lg sm:text-2xl font-bold p-2 mb-8 mt-5">
 							Create new lecture
 						</h1>
+
 						<div className="flex w-full justify-center">
 							<div className="flex w-1/4 flex-col gap-3 sm:gap-5">
 								<label className="sm:text-xl text-md flex justify-end" htmlFor="course">
@@ -396,6 +435,7 @@ const CreateLecture: React.FC = () => {
 								</select>
 							</div>
 						</div>
+
 						<div className="w-4/5 mt-10 h-1 bg-metropoliaMainOrange rounded-md"></div>
 						<h2 className="mt-2 text-xl p-4">Select desired date and time of day</h2>
 						<div className="text-md sm:text-xl mb-5">
@@ -445,6 +485,18 @@ const CreateLecture: React.FC = () => {
 						>
 							Open
 						</button>
+						{/* {openDataText ? (
+							<>
+								<div className="m-1 p-1">
+									<h2 className="mt-1 text-lg  p-1">
+										Open data result selected course's current or next subject:
+									</h2>
+									<p className="p-1">{openDataText}</p>
+								</div>
+							</>
+						) : (
+							<p></p>
+						)} */}
 					</div>
 				</>
 			)}
