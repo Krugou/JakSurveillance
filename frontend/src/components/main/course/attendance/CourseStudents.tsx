@@ -10,6 +10,7 @@ interface Props {
 	}[];
 	socket: Socket | null;
 	lectureid: string;
+	isAnimationStopped: boolean;
 }
 /**
  * CourseStudents component.
@@ -24,6 +25,7 @@ const CourseStudents: React.FC<Props> = ({
 	coursestudents,
 	socket,
 	lectureid,
+	isAnimationStopped,
 }) => {
 	// Define state and refs const
 	const scrollContainerRef = useRef<HTMLDivElement | null>(null);
@@ -126,6 +128,7 @@ const CourseStudents: React.FC<Props> = ({
 
 	// Function to make the scroll container scroll slowly
 	const scrollSlowly = () => {
+		if (isAnimationStopped) return;
 		const element = scrollContainerRef.current;
 		if (!element) return;
 		// Set an interval to continuously scroll the container
@@ -142,12 +145,14 @@ const CourseStudents: React.FC<Props> = ({
 			scrollPositionRef.current += scrollDirectionRef.current;
 			// Apply the new scroll position to the container
 			element.scrollLeft = scrollPositionRef.current;
-		}, 80);
+		}, 90);
 	};
 
 	// Effect hook to start the slow scroll when the component mounts
 	useEffect(() => {
-		scrollSlowly();
+		if (!isAnimationStopped) {
+			scrollSlowly();
+		}
 		// Cleanup function to clear the interval when the component unmounts
 		return () => {
 			if (scrollInterval.current !== null) {
@@ -196,7 +201,7 @@ const CourseStudents: React.FC<Props> = ({
 						const formattedName = `${student.first_name} ${student.last_name.charAt(
 							0,
 						)}.`;
-						const isBouncing = index % 2 === bounceGroup;
+						const isBouncing = !isAnimationStopped && index % 2 === bounceGroup;
 						const isFirst = index === 0;
 						const isLast = index === coursestudents.length - 1;
 						const bgColorClass = isFirst
