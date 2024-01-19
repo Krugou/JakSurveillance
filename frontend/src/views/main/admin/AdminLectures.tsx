@@ -13,6 +13,7 @@ import {
 	TableRow,
 } from '@mui/material';
 import React, {useContext, useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/ApiHooks';
@@ -28,6 +29,7 @@ interface Lecture {
 	state: string;
 	topicname: string;
 	coursecode: string;
+	courseid: string;
 }
 
 const AdminAllLectures: React.FC = () => {
@@ -39,6 +41,7 @@ const AdminAllLectures: React.FC = () => {
 	const [action, setAction] = useState<'close' | 'delete' | null>(null);
 	const {user} = useContext(UserContext);
 	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+	const navigate = useNavigate();
 
 	const getLectures = async () => {
 		const token: string | null = localStorage.getItem('userToken');
@@ -99,16 +102,17 @@ const AdminAllLectures: React.FC = () => {
 			try {
 				if (action === 'close') {
 					await apiHooks.closeLectureByLectureId(selectedLecture, token);
-					toast.success('Lecture closed successfully');
+					toast.success('Lecture closed successfully ' + selectedLecture);
 				} else if (action === 'delete') {
 					await apiHooks.deleteLectureByLectureId(selectedLecture, token);
-					toast.success('Lecture deleted successfully');
+					toast.success('Lecture deleted successfully ' + selectedLecture);
 				}
 				const result = await apiHooks.fetchAllLectures(token);
-				const sortedLectures = result.sort(
-					(a, b) =>
-						new Date(b.start_date).getTime() - new Date(a.start_date).getTime(),
-				);
+				const sortedLectures = result.sort((a, b) => {
+					return sortOrder === 'asc'
+						? a.lectureid - b.lectureid
+						: b.lectureid - a.lectureid;
+				});
 				setLectures(sortedLectures);
 			} catch (error) {
 				toast.error('Failed to perform action');
@@ -119,7 +123,9 @@ const AdminAllLectures: React.FC = () => {
 	const toggleSortOrder = () => {
 		setSortOrder(prevSortOrder => (prevSortOrder === 'asc' ? 'desc' : 'asc'));
 	};
-
+	const handleRowClick = (courseId: string, lectureId: string) => {
+		navigate(`./${courseId}/${lectureId}`);
+	};
 	return (
 		<div className="relative xl:w-fit w-full bg-white p-5 rounded-lg">
 			<div className="space-x-2 mt-4 mb-4">
@@ -154,38 +160,49 @@ const AdminAllLectures: React.FC = () => {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{filteredLectures.map(lecture => (
-							<TableRow key={lecture.lectureid} className=" hover:bg-gray-200">
-								<TableCell>{lecture.lectureid}</TableCell>
-								<TableCell>{new Date(lecture.start_date).toLocaleString()}</TableCell>
-								<TableCell>{lecture.teacheremail}</TableCell>
-								<TableCell>{lecture.timeofday}</TableCell>
-								<TableCell>{lecture.coursename}</TableCell>
-								<TableCell>{lecture.coursecode}</TableCell>
-								<TableCell>{lecture.topicname}</TableCell>
-								<TableCell>
-									<span className="text-metropoliaTrendGreen">{lecture.attended}</span>/
-									<span className="text-metropoliaSupportRed">
-										{lecture.notattended}
-									</span>
-								</TableCell>
-								<TableCell>
-									<span
-										className={
-											lecture.state === 'open' &&
-											new Date(lecture.start_date).getTime() <
-												Date.now() - 24 * 60 * 60 * 1000
-												? 'text-metropoliaSupportRed'
-												: 'text-metropoliaTrendGreen'
-										}
-									>
-										{lecture.state}
-									</span>
-								</TableCell>
-								<TableCell>
-									{lecture.state === 'open' && (
-										<>
-											<div className="flex gap-1">
+						{filteredLectures.length > 0 ? (
+							filteredLectures.map(lecture => (
+								<TableRow key={lecture.lectureid} className=" hover:bg-gray-200">
+									<TableCell>{lecture.lectureid}</TableCell>
+									<TableCell>
+										{new Date(lecture.start_date).toLocaleDateString()}
+									</TableCell>
+									<TableCell>{lecture.teacheremail}</TableCell>
+									<TableCell>{lecture.timeofday}</TableCell>
+									<TableCell>{lecture.coursename}</TableCell>
+									<TableCell>{lecture.coursecode}</TableCell>
+									<TableCell>{lecture.topicname}</TableCell>
+									<TableCell>
+										<span className="text-metropoliaTrendGreen">{lecture.attended}</span>/
+										<span className="text-metropoliaSupportRed">
+											{lecture.notattended}
+										</span>
+									</TableCell>
+									<TableCell>
+										<span
+											className={
+												lecture.state === 'open' &&
+												new Date(lecture.start_date).getTime() <
+													Date.now() - 24 * 60 * 60 * 1000
+													? 'text-metropoliaSupportRed'
+													: 'text-metropoliaTrendGreen'
+											}
+										>
+											{lecture.state}
+										</span>
+									</TableCell>
+									<TableCell>
+										<div className="flex gap-1">
+											<button
+												color="primary"
+												onClick={() =>
+													handleRowClick(lecture.courseid, lecture.lectureid.toString())
+												}
+												className="bg-metropoliaMainOrange h-fit transition hover:hover:bg-metropoliaSecondaryOrange text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
+											>
+												Details
+											</button>
+											{lecture.state === 'open' && (
 												<button
 													color="success"
 													onClick={() =>
@@ -195,6 +212,8 @@ const AdminAllLectures: React.FC = () => {
 												>
 													Close
 												</button>
+											)}
+											{(lecture.state === 'open' || lecture.state === 'closed') && (
 												<button
 													color="error"
 													onClick={() =>
@@ -204,12 +223,18 @@ const AdminAllLectures: React.FC = () => {
 												>
 													Delete
 												</button>
-											</div>
-										</>
-									)}
+											)}
+										</div>
+									</TableCell>
+								</TableRow>
+							))
+						) : (
+							<TableRow>
+								<TableCell colSpan={10} align="center">
+									{filterOpen ? 'No data available in open state' : 'No data available'}
 								</TableCell>
 							</TableRow>
-						))}
+						)}
 					</TableBody>
 				</Table>
 			</TableContainer>
