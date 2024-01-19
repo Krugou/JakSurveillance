@@ -26,6 +26,11 @@ const StudentQrScanner: React.FC = () => {
 	const [socket, setSocket] = useState<Socket | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [successState, setSuccessState] = useState(false);
+	useEffect(() => {
+		if (!user) {
+			navigate('/login');
+		}
+	}, [user, navigate]);
 	const onNewScanResult = useCallback(
 		(decodedText: string) => {
 			setLoading(true);
@@ -62,7 +67,8 @@ const StudentQrScanner: React.FC = () => {
 					if (user && user.studentnumber) {
 						studentId = user.studentnumber;
 					} else {
-						toast.error('No student number available');
+						toast.error('No Student details available, please login again');
+						navigate('/login');
 						setLoading(false);
 						return;
 					}
