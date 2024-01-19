@@ -53,7 +53,6 @@ const StartView = () => {
 						{' '}
 						{isServerOnline ? <DoneIcon /> : <DangerousIcon />}{' '}
 					</p>
-					
 				</>
 			) : (
 				<>
@@ -63,7 +62,7 @@ const StartView = () => {
 							: 'You are not connected to Metropolia internal network'}
 					</p>
 					{isServerOnline && (
-						<div className="bg-white m-2 p-2 rounded-xl">
+						<div className=" m-2 p-2 rounded-xl">
 							<p className="m-2 p-2">
 								Version: {newestVersion ? <DoneIcon /> : <DangerousIcon />}
 							</p>
@@ -73,7 +72,7 @@ const StartView = () => {
 						</div>
 					)}
 					{!newestVersion && !isServerOnline && (
-						<p className="bg-white m-2 p-2 rounded-xl">
+						<p className=" m-2 p-2 rounded-xl">
 							<strong>Please reload the page until this text disappears</strong>
 						</p>
 					)}

@@ -147,7 +147,7 @@ const Login: React.FC = () => {
 					<CircularProgress />
 				) : import.meta.env.MODE === 'development' ? (
 					<>
-						<p className="bg-white m-2 p-2 rounded-xl">
+						<p className="m-2 p-2 rounded-xl">
 							{' '}
 							{isServerOnline ? <DoneIcon /> : <DangerousIcon />}{' '}
 						</p>
@@ -160,7 +160,7 @@ const Login: React.FC = () => {
 								: 'You are not connected to Metropolia internal network'}
 						</p>
 						{isServerOnline && (
-							<div className="bg-white m-2 p-2 rounded-xl">
+							<div className="m-2 p-2 rounded-xl">
 								<p className="m-2 p-2">
 									Version: {newestVersion ? <DoneIcon /> : <DangerousIcon />}
 								</p>
