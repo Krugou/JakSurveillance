@@ -18,7 +18,7 @@ const ServerStatus: React.FC = () => {
 	// Define the URL for the VPN test page
 	const vpnTestUrl =
 		import.meta.env.MODE === 'development'
-			? 'https://thweb.metropolia.fi/'
+			? 'http://localhost:3002'
 			: 'https://thweb.metropolia.fi/';
 	const [isServerOnline, setIsServerOnline] = useState(false);
 	const [newestVersion, setNewestVersion] = useState(false);
@@ -28,8 +28,6 @@ const ServerStatus: React.FC = () => {
 	 * Fetch the VPN test URL and set the connection status based on the response.
 	 */
 	useEffect(() => {
-		console.log('useEffect called');
-
 		fetch(vpnTestUrl, {method: 'HEAD', mode: 'no-cors'})
 			.then(() => {
 				console.log('VPN test passed');
@@ -64,7 +62,7 @@ const ServerStatus: React.FC = () => {
 		return <CircularProgress />;
 	}
 
-	if (import.meta.env.MODE === '') {
+	if (import.meta.env.MODE === 'development') {
 		return (
 			<p className="bg-white m-2 p-2 rounded-xl">
 				{isServerOnline ? <DoneIcon /> : <DangerousIcon />}
