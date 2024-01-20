@@ -228,6 +228,13 @@ const setupSocketHandlers = (io: Server) => {
 					console.log(
 						'lecture started ' + lectureid + ' ' + new Date().toISOString(),
 					);
+					io.to(lectureid).emit('pingEvent', lectureid, Date.now());
+					setInterval(() => {
+						io.to(lectureid).emit('pingEvent', lectureid, Date.now());
+					}, 5000);
+					socket.on('pongEvent', (lectureid: string, unixtime: number) => {
+						socket.emit('pongEvent', lectureid, unixtime);
+					});
 					// Get the list of students who have arrived and who have not yet arrived
 					const token = await getToken();
 					if (presentStudents[lectureid] && notYetPresentStudents[lectureid]) {
@@ -603,11 +610,7 @@ const setupSocketHandlers = (io: Server) => {
 					});
 			},
 		);
-		socket.on('pingEvent', timestamp => {
-			const latency = Date.now() - timestamp;
 
-			socket.emit('pongEvent', latency);
-		});
 		// Handle the 'lecturecanceled' event
 		socket.on('lectureCanceled', async lectureid => {
 			const token = await getToken();
