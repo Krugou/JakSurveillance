@@ -1,4 +1,8 @@
 import {CircularProgress} from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import QRCode from 'react-qr-code';
 import {useNavigate, useParams} from 'react-router-dom';
@@ -9,6 +13,7 @@ import CourseStudents from '../../../../components/main/course/attendance/Course
 import ConfirmDialog from '../../../../components/main/modals/ConfirmDialog';
 import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks, {baseUrl} from '../../../../hooks/ApiHooks';
+
 /**
  * AttendanceRoom component.
  * This component is responsible for managing the attendance room for a lecture.
@@ -41,6 +46,9 @@ const AttendanceRoom: React.FC = () => {
 	const toastDisplayed = useRef(false);
 	const [confirmOpen, setConfirmOpen] = useState(false);
 	const [isAnimationStopped, setIsAnimationStopped] = useState(false);
+	const [latency, setLatency] = useState(null);
+	const [dialogOpen, setDialogOpen] = useState(false);
+
 	/**
 	 * useEffect hook for fetching lecture info.
 	 * This hook is run when the component mounts and whenever the lectureid changes.
@@ -189,6 +197,9 @@ const AttendanceRoom: React.FC = () => {
 					toast.error('Error removing student');
 				}
 			});
+			newSocket.on('pongEvent', latency => {
+				setLatency(latency);
+			});
 			// When a student is inserted manually, display an error message if the student number is invalid
 			newSocket.on('disconnect', () => {
 				console.log('Disconnected from the server');
@@ -200,6 +211,9 @@ const AttendanceRoom: React.FC = () => {
 					navigate('/teacher/mainview');
 				}
 			});
+			setInterval(() => {
+				newSocket.emit('pingEvent', Date.now());
+			}, 5000);
 		}
 	}, [lectureid, user]); // This effect depends on the lectureid variable
 
@@ -325,6 +339,21 @@ const AttendanceRoom: React.FC = () => {
 							>
 								{isAnimationStopped ? 'Start Animation' : 'Stop Animation'}
 							</button>
+							{latency && (
+								<div className="flex justify-center items-center">
+									<button
+										className="bg-metropoliaMainOrange text-white p-2 rounded-md"
+										title={
+											latency
+												? `Click to open instructions. current latency ${latency} ms`
+												: ''
+										}
+										onClick={() => setDialogOpen(true)}
+									>
+										{latency} ms
+									</button>
+								</div>
+							)}
 						</div>
 					</div>
 					<div className="flex flex-col-reverse sm:flex-row justify-between items-start">
@@ -395,6 +424,47 @@ const AttendanceRoom: React.FC = () => {
 								lectureid={lectureid}
 								isAnimationStopped={isAnimationStopped}
 							/>
+						)}
+						{dialogOpen && (
+							<Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+								<DialogTitle className="bg-metropoliaMainOrange text-white p-4">
+									Instructions
+								</DialogTitle>
+								<DialogContent>
+									<p className="mb-4 mt-2">
+										Hey, you found the secret instructions on this page! Here are some
+										quick tips:
+									</p>
+									<ol className="list-decimal list-inside">
+										<li className="mb-2">
+											You can refresh the timer by pressing the back button of your browser
+											and then the forward button. This will reset the timer and refresh
+											the connection to the server.
+										</li>
+										<li className="mb-2">
+											You can cancel the lecture by pressing the "Cancel Lecture" button.
+											This will delete the lecture from database.
+										</li>
+										<li className="mb-2">
+											You can finish the lecture by pressing the "Finish Lecture" button.
+											This will set the rest of the students of bottom list to not
+											attended.
+										</li>
+										<li>
+											To move bottom list of student click and hold mouse button then drag
+											it sideways to find student names if needed.
+										</li>
+									</ol>
+								</DialogContent>
+								<DialogActions>
+									<button
+										className="bg-metropoliaMainOrange sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSecondaryOrange text-white font-bold rounded"
+										onClick={() => setDialogOpen(false)}
+									>
+										Close
+									</button>
+								</DialogActions>
+							</Dialog>
 						)}
 					</div>
 				</div>
