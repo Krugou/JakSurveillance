@@ -10,6 +10,9 @@ export default defineConfig({
 		react(),
 		// Use the PWA plugin
 		VitePWA({
+			
+			registerType: 'autoUpdate',
+
 			manifest: {
 				// Set the name of the PWA
 				name: 'Jak Sec',
