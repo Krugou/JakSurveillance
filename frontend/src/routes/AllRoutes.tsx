@@ -17,7 +17,7 @@ const AllRoutes = () => {
 
 	// Update document title based on current path
 	useEffect(() => {
-		const title = user ? `JakSec - ${user.role} ` : `JakSec - `;
+		const title = user ? `JakSec - ${user.role} ` : `JakSec`;
 		document.title = title;
 	}, [user, location]);
 
