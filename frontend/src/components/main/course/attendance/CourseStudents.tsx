@@ -192,8 +192,8 @@ const CourseStudents: React.FC<Props> = ({
 			{coursestudents.length === 0 ? (
 				<p className="">
 					{remainingTime > 0
-						? `All students are here. Auto closing in ${remainingTime} seconds`
-						: 'Closing lecture...'}
+						? `All students are here. Auto finishing in ${remainingTime} seconds`
+						: 'Finishing lecture...'}
 				</p>
 			) : (
 				<div className={`   whitespace-nowrap `}>
