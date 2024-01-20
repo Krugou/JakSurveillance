@@ -603,7 +603,11 @@ const setupSocketHandlers = (io: Server) => {
 					});
 			},
 		);
+		socket.on('pingEvent', timestamp => {
+			const latency = Date.now() - timestamp;
 
+			socket.emit('pongEvent', latency);
+		});
 		// Handle the 'lecturecanceled' event
 		socket.on('lectureCanceled', async lectureid => {
 			const token = await getToken();
