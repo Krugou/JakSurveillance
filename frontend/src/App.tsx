@@ -1,28 +1,18 @@
-import React, {useEffect} from 'react';
-import {Route, BrowserRouter as Router, Routes} from 'react-router-dom';
+import React from 'react';
+import {BrowserRouter as Router} from 'react-router-dom';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useRegisterSW} from 'virtual:pwa-register/react';
-import BackgroundContainer from './components/main/background/BackgroundContainer';
 import {UserProvider} from './contexts/UserContext.tsx';
-import AdminRoutes from './routes/AdminRoutes';
-import CounselorRoutes from './routes/CounselorRoutes';
-import StudentRoutes from './routes/StudentRoutes';
-import TeacherRoutes from './routes/TeacherRoutes';
-import Logout from './views/Logout.tsx';
-import Gdpr from './views/main/Gdpr';
-import Login from './views/main/Login.tsx';
-import StartView from './views/main/StartView.tsx';
-import { UserContext } from './contexts/UserContext.tsx';
-import { useContext } from 'react';
+import AllRoutes from './routes/AllRoutes.tsx';
+
 // Interval for service worker updates
-const intervalMS = 60 * 60 * 1000;
+const intervalMS = 60 * 60 * 1000; 
 
 /**
  * Main application component.
  */
 const App = () => {
-	const {user} = useContext(UserContext);
 	// Register service worker
 	useRegisterSW({
 		onRegistered(r) {
@@ -39,31 +29,11 @@ const App = () => {
 		},
 	});
 
-	// Update document title based on current path
-useEffect(() => {
-	const title = user
-		? `Metropolia Attendance App - ${user.role}`
-		: 'Metropolia Attendance App';
-	document.title = title;
-}, [user]);
-
 	return (
 		<UserProvider>
 			<ToastContainer hideProgressBar={true} />
 			<Router basename={import.meta.env.BASE_URL}>
-				<BackgroundContainer>
-					<Routes>
-						<Route path="/" element={<StartView />} />
-						<Route path="student/*" element={<StudentRoutes />} />
-						<Route path="admin/*" element={<AdminRoutes />} />
-						<Route path="counselor/*" element={<CounselorRoutes />} />
-						<Route path="teacher/*" element={<TeacherRoutes />} />
-						<Route path="logout" element={<Logout />} />
-						<Route path="login" element={<Login />} />
-						<Route path="gdpr" element={<Gdpr />} />
-						<Route path="*" element={<StartView />} />
-					</Routes>
-				</BackgroundContainer>
+				<AllRoutes />
 			</Router>
 		</UserProvider>
 	);
