@@ -319,7 +319,7 @@ const AttendanceRoom: React.FC = () => {
 							<button
 								className="bg-metropoliaSupportRed sm:w-fit transition h-fit p-2 m-2 text-sm w-full hover:bg-metropoliaSupportRed text-white font-bold rounded"
 								onClick={() => setIsAnimationStopped(!isAnimationStopped)}
-								title="Stop animation of CourseStudent list"
+								title="Stop animation of CourseStudents list"
 							>
 								{isAnimationStopped ? 'Start Animation' : 'Stop Animation'}
 							</button>
@@ -367,14 +367,14 @@ const AttendanceRoom: React.FC = () => {
 						<button
 							className="bg-metropoliaSupportRed sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSupportRed text-white font-bold rounded"
 							onClick={() => setConfirmOpen(true)}
-							title="Delete this lecture from database"
+							title="Delete this lecture"
 						>
 							Cancel Lecture
 						</button>
 						<button
 							onClick={handleLectureFinished}
 							className="bg-metropoliaMainOrange sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSecondaryOrange text-white font-bold rounded"
-							title="Set rest of bottom list of students to not attended"
+							title="Finish Lecture and set rest of bottom list of students to not attended"
 						>
 							Finish Lecture
 						</button>
