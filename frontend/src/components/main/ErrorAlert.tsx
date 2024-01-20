@@ -38,7 +38,10 @@ const ErrorAlert: React.FC<ErrorAlertProps> = ({alert, onClose}) => {
 				<div className="flex justify-end">
 					{alert === 'Your session has expired, please login again.' && (
 						<button
-							onClick={() => navigate('/login')}
+							onClick={() => {
+								navigate('/login');
+								onClose();
+							}}
 							className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded mr-2"
 						>
 							Back to Login
