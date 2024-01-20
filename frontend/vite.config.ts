@@ -10,7 +10,6 @@ export default defineConfig({
 		react(),
 		// Use the PWA plugin
 		VitePWA({
-			
 			registerType: 'autoUpdate',
 
 			manifest: {
@@ -55,6 +54,6 @@ export default defineConfig({
 	},
 	esbuild: {
 		// Remove console and debugger statements during the build process
-		drop: ['console', 'debugger'],
+		// drop: ['console', 'debugger'],
 	},
 });

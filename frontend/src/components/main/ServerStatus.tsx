@@ -15,10 +15,10 @@ interface ServerResponse {
  * @returns {JSX.Element} The rendered ServerStatus component.
  */
 const ServerStatus: React.FC = () => {
-  // Define the URL for the VPN test page 
+	// Define the URL for the VPN test page
 	const vpnTestUrl =
 		import.meta.env.MODE === 'development'
-			? 'http://localhost:3002'
+			? 'https://thweb.metropolia.fi/'
 			: 'https://thweb.metropolia.fi/';
 	const [isServerOnline, setIsServerOnline] = useState(false);
 	const [newestVersion, setNewestVersion] = useState(false);
@@ -28,11 +28,19 @@ const ServerStatus: React.FC = () => {
 	 * Fetch the VPN test URL and set the connection status based on the response.
 	 */
 	useEffect(() => {
+		console.log('useEffect called');
+
 		fetch(vpnTestUrl)
-			.then(() => {
+			.then(response => {
+				console.log('🚀 ~ useEffect ~ response:', response);
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
+				console.log('VPN test passed');
 				setConnectionStatus(true);
 			})
-			.catch(() => {
+			.catch(error => {
+				console.log('VPN test failed', error);
 				setConnectionStatus(false);
 			});
 	}, []);
@@ -60,7 +68,7 @@ const ServerStatus: React.FC = () => {
 		return <CircularProgress />;
 	}
 
-	if (import.meta.env.MODE === 'development') {
+	if (import.meta.env.MODE === '') {
 		return (
 			<p className="bg-white m-2 p-2 rounded-xl">
 				{isServerOnline ? <DoneIcon /> : <DangerousIcon />}
