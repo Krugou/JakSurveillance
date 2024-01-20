@@ -14,7 +14,7 @@ import apihooks from '../../../hooks/ApiHooks';
 const MainView: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const [courses, setCourses] = useState([]);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	useEffect(() => {
 		/**
 		 * Fetches the courses taught by the teacher.
@@ -22,7 +22,6 @@ const MainView: React.FC = () => {
 		 * and updates the state with the fetched courses.
 		 */
 		const fetchCourses = async () => {
-			setIsLoading(true);
 			if (user) {
 				// Get token from local storage
 				const token: string | null = localStorage.getItem('userToken');
@@ -50,9 +49,13 @@ const MainView: React.FC = () => {
 				</div>
 			) : (
 				<>
-					<div className={`${
-						courses.length === 0 ? 'flex flex-col md:flex-row flex-wrap' : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-					} p-5 justify-center items-center gap-4`}>
+					<div
+						className={`${
+							courses.length === 0
+								? 'flex flex-col md:flex-row flex-wrap'
+								: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+						} p-5 justify-center items-center gap-4`}
+					>
 						{courses.length === 0 && (
 							<div>
 								<div className="animate-bounce p-2 rounded-md bg-metropoliaMainOrange gap-1 flex md:flex-row flex-col items-center">
