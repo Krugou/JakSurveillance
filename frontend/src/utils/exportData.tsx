@@ -121,7 +121,7 @@ export const exportToPDF = (filteredAttendanceData, student?, sortOption?) => {
 			).toLocaleDateString()} .pdf`,
 		);
 		toast.success('Attendance PDF downloaded successfully.', {
-			position: toast.POSITION.TOP_CENTER, // position the toast at the top center
+			position: 'top-center', // position the toast at the top center
 			autoClose: 7000, // Display the toast for 7 seconds
 		});
 	} else {
@@ -130,7 +130,7 @@ export const exportToPDF = (filteredAttendanceData, student?, sortOption?) => {
 		toast.success(
 			`${student?.first_name} ${student?.last_name}'s attendance PDF for topics: ${sortOption} downloaded successfully. `,
 			{
-				position: toast.POSITION.TOP_CENTER, // position the toast at the top center
+				position: 'top-center', // position the toast at the top center
 				autoClose: 7000, // Display the toast for 7 seconds
 			},
 		);
@@ -169,7 +169,7 @@ export const exportToExcel = (
 			).toLocaleDateString()}.xlsx`,
 		);
 		toast.success('Attendance EXCEL downloaded successfully.', {
-			position: toast.POSITION.TOP_CENTER, // position the toast at the top center
+			position: 'top-center', // position the toast at the top center
 			autoClose: 7000, // Display the toast for 7 seconds
 		});
 	} else {
@@ -180,7 +180,7 @@ export const exportToExcel = (
 		toast.success(
 			`${student?.first_name} ${student?.last_name}'s attendance EXCEL for topics: ${sortOption} downloaded successfully. `,
 			{
-				position: toast.POSITION.TOP_CENTER, // position the toast at the top center
+				position: 'top-center', // position the toast at the top center
 				autoClose: 7000, // Display the toast for 7 secondss
 			},
 		);
