@@ -310,9 +310,9 @@ const AttendanceRoom: React.FC = () => {
 						<h1 className="text-2xl pb-5 font-bold">
 							{courseName} | {courseCode} | {topicname} |
 							{countdown !== null
-								? ` Attendance gathering auto finishes in ${Math.floor(
-										countdown / 60,
-								  )} minutes ${countdown % 60} seconds`
+								? ` Auto finishing in ${Math.floor(countdown / 60)} minutes ${
+										countdown % 60
+								  } seconds `
 								: 'Loading...'}
 						</h1>
 						<div className="flex flex-row justify-end">
