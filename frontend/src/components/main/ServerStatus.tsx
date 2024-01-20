@@ -30,12 +30,8 @@ const ServerStatus: React.FC = () => {
 	useEffect(() => {
 		console.log('useEffect called');
 
-		fetch(vpnTestUrl, {method: 'HEAD'})
-			.then(response => {
-				console.log('🚀 ~ useEffect ~ response:', response);
-				if (!response.ok) {
-					throw new Error(`HTTP error! status: ${response.status}`);
-				}
+		fetch(vpnTestUrl, {method: 'HEAD', mode: 'no-cors'})
+			.then(() => {
 				console.log('VPN test passed');
 				setConnectionStatus(true);
 			})
