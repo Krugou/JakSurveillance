@@ -43,6 +43,7 @@ const AdminLectureDetail = () => {
 					throw new Error('No token available');
 				}
 				if (!courseId || !lectureId) {
+					toast.error('Course ID or Lecture ID is not available');
 					throw new Error('Course ID or Lecture ID is not available');
 				}
 				const response = await apiHooks.fetchAttendances(
@@ -50,8 +51,13 @@ const AdminLectureDetail = () => {
 					courseId,
 					lectureId,
 				);
-				toast.success('Attendances of lecture fetched successfully');
-				setData(response);
+				console.log('🚀 ~ fetchData ~ response:', response);
+				if (!response || response.length === 0) {
+					toast.info('No data found for this lecture, wait until students attend');
+				} else {
+					toast.success('Attendances of lecture fetched successfully');
+					setData(response);
+				}
 				setLoading(false);
 			} catch (error) {
 				toast.error('Error fetching attendances');
