@@ -1,5 +1,5 @@
-# Get all package.json files in the current directory and its subdirectories
-$packageFiles = Get-ChildItem -Path . -Filter package.json -Recurse -File
+# Get all package.json files in the current directory and its subdirectories, excluding node_modules directories
+$packageFiles = Get-ChildItem -Path . -Filter package.json -Recurse -File | Where-Object { $_.DirectoryName -notmatch 'node_modules' }
 
 # Loop through each package.json file
 foreach ($packageFile in $packageFiles) {
