@@ -7,7 +7,7 @@ import {UserProvider} from './contexts/UserContext.tsx';
 import AllRoutes from './routes/AllRoutes.tsx';
 
 // Interval for service worker updates
-const intervalMS = 60 * 60 * 1000; 
+const intervalMS = 60 * 60 * 1000;
 
 /**
  * Main application component.
@@ -18,6 +18,7 @@ const App = () => {
 		onRegistered(r) {
 			if (r) {
 				console.log('Service worker registered successfully');
+				console.log('test line');
 				// Update service worker every hour
 				setInterval(() => {
 					console.log('Updating service worker registration');
