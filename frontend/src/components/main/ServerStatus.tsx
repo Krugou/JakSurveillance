@@ -30,7 +30,7 @@ const ServerStatus: React.FC = () => {
 	useEffect(() => {
 		console.log('useEffect called');
 
-		fetch(vpnTestUrl)
+		fetch(vpnTestUrl, {method: 'HEAD'})
 			.then(response => {
 				console.log('🚀 ~ useEffect ~ response:', response);
 				if (!response.ok) {
