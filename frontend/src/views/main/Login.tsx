@@ -1,46 +1,26 @@
-import DangerousIcon from '@mui/icons-material/Dangerous';
-import DoneIcon from '@mui/icons-material/Done';
-import CircularProgress from '@mui/material/CircularProgress';
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import ErrorAlert from '../../components/main/ErrorAlert.tsx';
 import {UserContext} from '../../contexts/UserContext.tsx';
-import apiHooks, {baseUrl} from '../../hooks/ApiHooks.ts';
+import apiHooks from '../../hooks/ApiHooks.ts';
+import ServerStatus from '../../components/main/ServerStatus.tsx';
+
 /**
  * Login component.
+ *
  * This component is responsible for rendering the login form and handling the login process.
  * It uses the UserContext to set the user after a successful login.
+ *
+ * @returns {JSX.Element} The rendered Login component.
  */
-interface ServerResponse {
-	builddate: string;
-}
 const Login: React.FC = () => {
 	const usernameRef = useRef<HTMLInputElement>(null);
 	const passwordRef = useRef<HTMLInputElement>(null);
 	const [alert, setAlert] = useState<string | null>('');
-	const [isServerOnline, setIsServerOnline] = useState(false);
-	const [newestVersion, setNewestVersion] = useState(false);
-	const [loading, setLoading] = useState(true);
 	const {setUser} = useContext(UserContext);
 	const navigate = useNavigate();
-	useEffect(() => {
-		fetch(baseUrl + 'metrostation/')
-			.then(response => response.json() as Promise<ServerResponse>)
-			.then(data => {
-				const builddate = data.builddate;
-				if (builddate === import.meta.env.VITE_REACT_APP_BUILD_DATE) {
-					setNewestVersion(true);
-				}
-				setIsServerOnline(true);
-			})
-			.catch(() => {
-				setIsServerOnline(false);
-			})
-			.finally(() => {
-				setLoading(false);
-			});
-	}, []);
+
 	/**
 	 * Handles the form submission.
 	 * It sends a POST request to the login endpoint with the username and password,
@@ -143,39 +123,7 @@ const Login: React.FC = () => {
 				</div>
 			</form>
 			<div className="flex flex-col items-center justify-center">
-				{loading === true ? (
-					<CircularProgress />
-				) : import.meta.env.MODE === 'development' ? (
-					<>
-						<p className="m-2 p-2 rounded-xl">
-							{' '}
-							{isServerOnline ? <DoneIcon /> : <DangerousIcon />}{' '}
-						</p>
-					</>
-				) : (
-					<>
-						<p className="animate-bounce font-medium text-xl ">
-							{isServerOnline
-								? ''
-								: 'You are not connected to Metropolia internal network'}
-						</p>
-						{isServerOnline && (
-							<div className="m-2 p-2 rounded-xl">
-								<p className="m-2 p-2">
-									Version: {newestVersion ? <DoneIcon /> : <DangerousIcon />}
-								</p>
-								<p className="m-2 p-2">
-									Server Connection: {isServerOnline ? <DoneIcon /> : <DangerousIcon />}
-								</p>
-							</div>
-						)}
-						{!newestVersion && isServerOnline && (
-							<p className="bg-white m-2 p-2 rounded-xl">
-								<strong>Please reload the page until this text disappears</strong>
-							</p>
-						)}
-					</>
-				)}
+				<ServerStatus />
 			</div>
 		</div>
 	);
