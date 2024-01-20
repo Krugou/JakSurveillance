@@ -165,40 +165,46 @@ const AttendanceRoom: React.FC = () => {
 				},
 			);
 			// When a student is inserted manually, display a success message
-			newSocket.on('manualStudentInsertSuccess', lectureid => {
-				if (lectureid === lectureid) {
+			newSocket.on('manualStudentInsertSuccess', receivedLectureId => {
+				if (receivedLectureId === lectureid) {
 					toast.success('Student inserted successfully');
 				}
 			});
 			// When a student is inserted manually, display an error message
-			newSocket.on('manualStudentInsertError', lectureid => {
-				if (lectureid === lectureid) {
+			newSocket.on('manualStudentInsertError', receivedLectureId => {
+				if (receivedLectureId === lectureid) {
 					toast.error('Error inserting student');
 				}
 			});
 			// When a student is inserted manually, display an error message if the student number is empty
-			newSocket.on('manualStudentInsertFailedEmpty', lectureid => {
-				if (lectureid === lectureid) {
+			newSocket.on('manualStudentInsertFailedEmpty', receivedLectureId => {
+				if (receivedLectureId === lectureid) {
 					toast.error('Student number is empty');
 				}
 			});
-			newSocket.on('manualStudentRemoveFailedEmpty', lectureid => {
-				if (lectureid === lectureid) {
+			newSocket.on('manualStudentRemoveFailedEmpty', receivedLectureId => {
+				if (receivedLectureId === lectureid) {
 					toast.error('Student number is empty');
 				}
 			});
-			newSocket.on('manualStudentRemoveSuccess', lectureid => {
-				if (lectureid === lectureid) {
+			newSocket.on('manualStudentRemoveSuccess', receivedLectureId => {
+				if (receivedLectureId === lectureid) {
 					toast.success('Student removed successfully');
 				}
 			});
-			newSocket.on('manualStudentRemoveError', lectureid => {
-				if (lectureid === lectureid) {
+			newSocket.on('manualStudentRemoveError', receivedLectureId => {
+				if (receivedLectureId === lectureid) {
 					toast.error('Error removing student');
 				}
 			});
-			newSocket.on('pongEvent', latency => {
-				setLatency(latency);
+			newSocket.on('pingEvent', lectureid => {
+				newSocket.emit('pongEvent', lectureid, Date.now());
+			});
+			newSocket.on('pongEvent', (receivedLectureId, latency) => {
+				if (receivedLectureId === lectureid) {
+					latency = Date.now() - latency;
+					setLatency(latency);
+				}
 			});
 			// When a student is inserted manually, display an error message if the student number is invalid
 			newSocket.on('disconnect', () => {
@@ -211,9 +217,6 @@ const AttendanceRoom: React.FC = () => {
 					navigate('/teacher/mainview');
 				}
 			});
-			setInterval(() => {
-				newSocket.emit('pingEvent', Date.now());
-			}, 5000);
 		}
 	}, [lectureid, user]); // This effect depends on the lectureid variable
 
