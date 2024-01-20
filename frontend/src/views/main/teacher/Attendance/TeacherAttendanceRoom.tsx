@@ -319,7 +319,9 @@ const AttendanceRoom: React.FC = () => {
 							<button
 								className="bg-metropoliaSupportRed sm:w-fit transition h-fit p-2 m-2 text-sm w-full hover:bg-metropoliaSupportRed text-white font-bold rounded"
 								onClick={() => setIsAnimationStopped(!isAnimationStopped)}
-								title="Stop animation of CourseStudents list"
+								title={`${
+									isAnimationStopped ? 'Start' : 'Stop'
+								} animation of CourseStudents list`}
 							>
 								{isAnimationStopped ? 'Start Animation' : 'Stop Animation'}
 							</button>
