@@ -207,7 +207,7 @@ const CourseStudents: React.FC<Props> = ({
 						const bgColorClass = isFirst
 							? 'bg-metropoliaSupportRed'
 							: isLast
-							? 'bg-metropoliaSupportBlue'
+							? 'bg-metropoliaTrendGreen'
 							: index % 2 === 0
 							? 'bg-metropoliaMainOrange'
 							: 'bg-metropoliaMainGrey';
