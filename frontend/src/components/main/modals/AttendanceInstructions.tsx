@@ -41,9 +41,16 @@ const AttendanceInstructions: React.FC<AttendanceInstructionsProps> = ({
 						crucial to ensure everything works as intended.
 					</li>
 					<li>
+						Manual student attendance insertion can be performed by clicking on the
+						student names on the page. Clicking on names in the bottom list marks
+						students as 'Attended.' Clicking on names in the right-side list marks
+						students as 'Not Attended,' and they will then return to the bottom list.
+					</li>
+					<li>
 						Complete the lecture by clicking the "Finish Lecture" button. This action
 						will mark the remaining students in the bottom list as "not attended."
 					</li>
+
 					<li>
 						To cancel the lecture, simply press the "Cancel Lecture" button. This
 						action will delete the lecture from the database.
