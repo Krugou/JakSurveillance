@@ -1,10 +1,9 @@
-import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
+import React from 'react';
 
 /**
  * lecture interface represents the structure of a lecture.
@@ -14,6 +13,8 @@ interface lecture {
 	teacher: string;
 	start_date: string;
 	timeofday: string;
+	code: string;
+	topicname: string;
 }
 /**
  * DeleteLectureModalProps interface represents the structure of the DeleteLectureModal props.
@@ -41,41 +42,75 @@ const DeleteLectureModal: React.FC<DeleteLectureModalProps> = ({
 	onDelete,
 	lecture,
 	onCloseLecture,
-}) => (
-	<Dialog
-		open={open}
-		onClose={onClose}
-		aria-labelledby="alert-dialog-title"
-		aria-describedby="alert-dialog-description"
-	>
-		<DialogTitle id="alert-dialog-title">
-			{'Deal with previous lecture first'}
-		</DialogTitle>
-		<DialogContent>
-			<DialogContentText id="alert-dialog-description">
-				{`There is already an open lecture for this course by ${
-					lecture?.teacher
-				} at ${
-					lecture?.start_date
-						? new Date(lecture?.start_date).toLocaleDateString()
-						: ''
-				} time of day:  ${
-					lecture?.timeofday
-				}.  Do you want to delete it or close it?`}
-				<br />
-				<br />
-				{`Closing means counting the lecture's attendance and deleting means completely deleting it's attendance.`}
-			</DialogContentText>
-		</DialogContent>
-		<DialogActions>
-			<Button onClick={onDelete} autoFocus>
-				Delete Previous
-			</Button>
-			<Button onClick={onCloseLecture} autoFocus>
-				CLOSE Previous
-			</Button>
-		</DialogActions>
-	</Dialog>
-);
+}) => {
+	console.log(lecture);
+
+	return (
+		<Dialog
+			open={open}
+			onClose={onClose}
+			aria-labelledby="alert-dialog-title"
+			aria-describedby="alert-dialog-description"
+		>
+			<DialogTitle
+				className="bg-metropoliaMainOrange text-white p-4"
+				id="alert-dialog-title"
+			>
+				{'Deal with previous lecture first'}
+			</DialogTitle>
+			<DialogContent>
+				<DialogContentText id="alert-dialog-description">
+					<strong className="text-lg pt-4 font-bold mb-4">
+						There is already an open lecture for this course.
+					</strong>
+				</DialogContentText>
+				<ul className="list-disc list-inside mb-4">
+					<li>
+						Date:{' '}
+						{lecture?.start_date
+							? new Date(lecture?.start_date).toLocaleDateString()
+							: ''}
+					</li>
+					<li>Teacher name: {lecture?.teacher} </li>
+					<li>Course Code: {lecture?.code} </li>
+					<li>Time of day: {lecture?.timeofday}</li>
+					<li>Topic Name: {lecture?.topicname} </li>
+				</ul>
+				<DialogContentText id="alert-dialog-description">
+					<strong className="text-lg font-bold mb-4">
+						Do you want to delete it or close it?
+					</strong>{' '}
+					<br />
+					Finishing the lecture involves recording attendance for all remaining
+					students who are not yet marked as attended by setting them as "not
+					attended." Deleting, on the other hand, means completely removing the
+					lecture from the database.
+				</DialogContentText>
+			</DialogContent>
+			<DialogActions>
+				<button
+					className="bg-metropoliaMainOrange sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSecondaryOrange text-white font-bold rounded"
+					onClick={onClose}
+				>
+					Close this window
+				</button>
+				<button
+					className="bg-metropoliaSupportRed sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSupportSecondaryRed text-white font-bold rounded"
+					onClick={onDelete}
+					autoFocus
+				>
+					Delete previous lecture
+				</button>
+				<button
+					className="bg-metropoliaTrendGreen sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaMainGrey text-white font-bold rounded"
+					onClick={onCloseLecture}
+					autoFocus
+				>
+					Finish previous lecture
+				</button>
+			</DialogActions>
+		</Dialog>
+	);
+};
 
 export default DeleteLectureModal;
