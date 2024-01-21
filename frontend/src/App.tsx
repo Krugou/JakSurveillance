@@ -18,7 +18,6 @@ const App = () => {
 		onRegistered(r) {
 			if (r) {
 				console.log('Service worker registered successfully');
-				console.log('test line');
 				// Update service worker every hour
 				setInterval(() => {
 					console.log('Updating service worker registration');
