@@ -1,12 +1,11 @@
-import React from 'react';
 import {
 	Dialog,
 	DialogActions,
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
-	Button,
 } from '@mui/material';
+import React from 'react';
 
 interface ConfirmDialogProps {
 	title: string;
@@ -34,19 +33,31 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
 	return (
 		<Dialog open={open} onClose={handleClose} aria-labelledby="confirm-dialog">
-			<DialogTitle id="confirm-dialog">{title}</DialogTitle>
+			<DialogTitle
+				className="bg-metropoliaMainOrange text-white p-4"
+				id="confirm-dialog"
+			>
+				{title}
+			</DialogTitle>
 			<DialogContent>
-				<DialogContentText id="confirm-dialog-description">
+				<DialogContentText className=" pt-2" id="confirm-dialog-description">
 					{children}
 				</DialogContentText>
 			</DialogContent>
 			<DialogActions>
-				<Button onClick={handleClose} color="primary">
+				<button
+					className="bg-metropoliaMainOrange sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSecondaryOrange text-white font-bold rounded"
+					onClick={handleClose}
+				>
 					No
-				</Button>
-				<Button onClick={handleConfirm} color="primary" autoFocus>
+				</button>
+				<button
+					className="bg-metropoliaSupportRed sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSupportRed text-white font-bold rounded"
+					onClick={handleConfirm}
+					autoFocus
+				>
 					Yes
-				</Button>
+				</button>
 			</DialogActions>
 		</Dialog>
 	);
