@@ -71,9 +71,10 @@ const DeleteLectureModal: React.FC<DeleteLectureModalProps> = ({
 							? new Date(lecture?.start_date).toLocaleDateString()
 							: ''}
 					</li>
-					<li>Teacher name: {lecture?.teacher} </li>
-					<li>Course Code: {lecture?.code} </li>
 					<li>Time of day: {lecture?.timeofday}</li>
+					<li>Teacher Email: {lecture?.teacher} </li>
+					<li>Course Code: {lecture?.code} </li>
+
 					<li>Topic Name: {lecture?.topicname} </li>
 				</ul>
 				<DialogContentText id="alert-dialog-description">
