@@ -77,16 +77,15 @@ const ServerStatus: React.FC = () => {
 					? ''
 					: 'You are not connected to Metropolia internal network'}
 			</p>
-			{isServerOnline && (
-				<div className=" m-2 p-2 rounded-xl">
-					<p className="m-2 p-2">
-						Version: {newestVersion ? <DoneIcon /> : <DangerousIcon />}
-					</p>
-					<p className="m-2 p-2">
-						Server Connection: {isServerOnline ? <DoneIcon /> : <DangerousIcon />}
-					</p>
-				</div>
-			)}
+
+			<div className=" m-2 p-2 rounded-xl">
+				<p className="m-2 p-2">
+					Version: {newestVersion ? <DoneIcon /> : <DangerousIcon />}
+				</p>
+				<p className="m-2 p-2">
+					Server Connection: {isServerOnline ? <DoneIcon /> : <DangerousIcon />}
+				</p>
+			</div>
 			{!newestVersion && isServerOnline && (
 				<p className=" m-2 p-2 rounded-xl">
 					<strong>Please reload the page until this text disappears</strong>
