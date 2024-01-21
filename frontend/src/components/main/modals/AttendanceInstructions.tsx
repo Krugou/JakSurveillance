@@ -30,9 +30,9 @@ const AttendanceInstructions: React.FC<AttendanceInstructionsProps> = ({
 						the timer, configured through server settings by the admin role.
 					</li>
 					<li>
-						To reposition the bottom list of students, click and hold the
-						mouse/touchpad button, then drag it sideways to reveal additional student
-						names that may be hidden from view if necessary.
+						To reposition the bottom list of students, click and hold on the names of
+						the students using the mouse/touchpad button. Then, drag it sideways to
+						reveal additional student names that may be hidden from view if necessary.
 					</li>
 					<li>
 						Avoid navigating away from this page, except when refreshing as indicated
