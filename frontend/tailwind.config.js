@@ -17,6 +17,7 @@ export default {
 				metropoliaSupportWhite: '#ffffff',
 				metropoliaSupportBlack: '#000000',
 				metropoliaSupportRed: '#cb2228',
+				metropoliaSupportSecondaryRed: '#e60000',
 				metropoliaSupportBlue: '#4046a8',
 				metropoliaSupportYellow: '#fff000',
 				metropoliaTrendPink: '#e384c4',
