@@ -44,6 +44,8 @@ const CreateLecture: React.FC = () => {
 		teacher: string;
 		start_date: string;
 		timeofday: string;
+		code: string;
+		topicname: string;
 	}
 	const [loading, setLoading] = useState(false);
 	const [selectedTopic, setSelectedTopic] = useState<string>('');
