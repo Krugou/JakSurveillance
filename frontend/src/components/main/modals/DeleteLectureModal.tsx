@@ -78,7 +78,7 @@ const DeleteLectureModal: React.FC<DeleteLectureModalProps> = ({
 				</ul>
 				<DialogContentText id="alert-dialog-description">
 					<strong className="text-lg font-bold mb-4">
-						Do you want to delete it or close it?
+						Do you want to Delete it or Finish it?
 					</strong>{' '}
 					<br />
 					Finishing the lecture involves recording attendance for all remaining
