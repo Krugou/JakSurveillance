@@ -407,7 +407,7 @@ const lectureModel: LectureModel = {
 			const [rows] = await pool
 				.promise()
 				.query<RowDataPacket[]>(
-					'SELECT lecture.*, users.email as teacher FROM lecture JOIN users on lecture.teacherid = users.userid WHERE courseid = ? AND state = "open"',
+					'SELECT lecture.*, users.email as teacher, courses.code, topics.topicname FROM lecture JOIN users ON lecture.teacherid = users.userid JOIN courses ON lecture.courseid = courses.courseid JOIN topics ON lecture.topicid = topics.topicid WHERE lecture.courseid = ? AND state = "open"',
 					[courseid],
 				);
 
