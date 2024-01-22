@@ -222,6 +222,16 @@ CREATE TABLE IF NOT EXISTS `users` (
   CONSTRAINT `users_ibfk_2` FOREIGN KEY (`roleid`) REFERENCES `roles` (`roleid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
+
+CREATE TABLE IF NOT EXISTS `user_feedback` (
+  `feedbackId` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `topic` varchar(255) NOT NULL,
+  `text` text NOT NULL,
+  PRIMARY KEY (`feedbackId`),
+  KEY `userid` (`userid`),
+  CONSTRAINT `user_feedback_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- Dumping data for table jaksec.users: ~6 rows (suunnilleen)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`userid`, `username`, `email`, `staff`, `first_name`, `last_name`, `created_at`, `studentnumber`, `studentgroupid`, `roleid`, `GDPR`) VALUES
