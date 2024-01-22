@@ -437,6 +437,7 @@ const setupSocketHandlers = (io: Server) => {
 									.to(lectureid.toString())
 									.emit('updateAttendees', presentStudents[lectureid]);
 							} else {
+								io.to(socket.id).emit('studentNotFound', lectureid);
 								console.error('Student not found');
 							}
 
