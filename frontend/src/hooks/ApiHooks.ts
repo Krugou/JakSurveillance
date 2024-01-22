@@ -155,6 +155,31 @@ const getCourseDetailByCourseId = async (courseId: string, token: string) => {
 	});
 	return response;
 };
+const postUserFeedback = async (
+	inputs: {topic: string; text: string; userId: string},
+	token: string,
+) => {
+	const response = await doFetch(baseUrl + 'users/feedback', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${token}`,
+		},
+		body: JSON.stringify(inputs),
+	});
+	return response;
+};
+const getUserFeedback = async (token: string) => {
+	const response = await doFetch(baseUrl + 'admin/feedback', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+	});
+	return response;
+};
+
 const getCourseReservations = async (inputs: getCourseReservations, token) => {
 	const {code} = inputs;
 
@@ -807,6 +832,8 @@ const getOpenLecturesByCourseid = async (
 };
 
 const apiHooks = {
+	postUserFeedback,
+	getUserFeedback,
 	fetchAttendances,
 	getLectureAndAttendanceCount,
 	addNewStudentUser,
