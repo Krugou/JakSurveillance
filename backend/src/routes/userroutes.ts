@@ -4,7 +4,7 @@ import {ResponseData, UserData} from '../types.js';
 import doFetch from '../utils/doFetch.js';
 //import { body, validationResult } from 'express-validator'; FOR VALIDATION
 import jwt from 'jsonwebtoken';
-
+import userFeedBackModel from '../models/userfeedbackmodel.js';
 import {User} from '../types.js';
 import {authenticate} from '../utils/auth.js';
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
@@ -197,6 +197,19 @@ router.post('/', async (req: Request, res: Response, next) => {
 		console.error(error);
 		res.status(500).json({error: 'Internal server error'});
 	}
+});
+router.post('/feedback', async (req: Request, res: Response) => {
+	const {topic, text, userId} = req.body;
+
+	const result = await userFeedBackModel.insertUserFeedback(userId, topic, text);
+	if (result === null) {
+		return res.status(500).json({
+			message: 'Internal server error',
+		});
+	}
+	return res.status(200).json({
+		message: 'Thanks for the feedback!',
+	});
 });
 
 export default router;
