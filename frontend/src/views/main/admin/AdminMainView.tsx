@@ -52,6 +52,11 @@ const AdminMainView: React.FC = () => {
 					title="Statistics"
 					description="See statistics"
 				/>
+				<Card
+					path="/admin/suggestions/"
+					title="Suggestions"
+					description="See suggestions" 
+				/>
 			</div>
 		</>
 	);
