@@ -3,7 +3,7 @@ import {UserContext} from '../../contexts/UserContext';
 import apiHooks from '../../hooks/ApiHooks';
 
 const Feedback: React.FC = () => {
-	const user = useContext(UserContext);
+	const {user} = useContext(UserContext);
 	const [feedback, setFeedback] = useState('');
 	const [topic, setTopic] = useState('');
 
@@ -18,7 +18,7 @@ const Feedback: React.FC = () => {
 				}
 
 				const response = await apiHooks.postUserFeedback(
-					{topic, text: feedback, userId: user.email},
+					{topic, text: feedback, userId: user.userid},
 					token,
 				);
 
@@ -30,40 +30,55 @@ const Feedback: React.FC = () => {
 		setFeedback('');
 		setTopic('');
 	};
-
+	const feedbackTopics = [
+		'User Interface',
+		'Performance',
+		'Features',
+		'Usability',
+		'Support',
+		'Bugs',
+		'Improvements',
+		'Content',
+		'Navigation',
+		'Accessibility',
+	];
 	return (
 		<div className="bg-white rounded-lg shadow-md p-4">
-			<h2 className="text-xl font-bold mb-4">Feedback</h2>
-			<form onSubmit={handleSubmit} className="mb-4">
+			<h2 className="text-xl font-bold mb-4">
+				Help us improve, {user?.username}. Share your feedback.
+			</h2>
+			<form onSubmit={handleSubmit} className="mb-4 flex flex-col">
+				<label htmlFor="feedback-topic" className="sr-only">
+					Feedback Topic
+				</label>
 				<select
+					id="feedback-topic"
 					value={topic}
 					onChange={e => setTopic(e.target.value)}
-					className="border rounded p-2 mr-2"
+					className="border rounded p-2 m-2"
 				>
 					<option value="">Select a topic</option>
-					<option value="User Interface">User Interface</option>
-					<option value="Performance">Performance</option>
-					<option value="Features">Features</option>
-					<option value="Usability">Usability</option>
-					<option value="Support">Support</option>
-					<option value="Bugs">Bugs</option>
-					<option value="Improvements">Improvements</option>
-					<option value="Content">Content</option>
-					<option value="Navigation">Navigation</option>
-					<option value="Accessibility">Accessibility</option>
+					{feedbackTopics.map((topic, index) => (
+						<option key={index} value={topic}>
+							{topic}
+						</option>
+					))}
 				</select>
-				<input
-					type="text"
+				<label htmlFor="feedback-text" className="sr-only">
+					Feedback Text
+				</label>
+				<textarea
+					id="feedback-text"
 					value={feedback}
 					onChange={e => setFeedback(e.target.value)}
-					className="border rounded p-2 mr-2"
+					className="border rounded p-2 m-2"
+					rows={8}
 					placeholder="Enter your feedback"
 				/>
 				<button type="submit" className="bg-blue-500 text-white rounded p-2">
 					Submit
 				</button>
 			</form>
-			<p>Logged in as: {user.username}</p>
 		</div>
 	);
 };
