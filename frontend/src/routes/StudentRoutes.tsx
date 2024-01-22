@@ -6,6 +6,7 @@ import StudentHelpVideos from '../views/main/student/StudentHelpVideos.tsx';
 import StudentMainView from '../views/main/student/StudentMainView.tsx';
 import StudentProfile from '../views/main/student/StudentProfile.tsx';
 import StudentQrScanner from '../views/main/student/StudentQrScanner.tsx';
+import StudentQrSelectScanner from '../views/main/student/StudentQrSelectScanner.tsx';
 /**
  * StudentRoutes component.
  * This component is responsible for defining the routes for the student section of the application.
@@ -23,6 +24,7 @@ const StudentRoutes = () => {
 			<Route path="profile" element={<StudentProfile />} />
 			<Route path="helpvideos" element={<StudentHelpVideos />} />
 			<Route path="qr" element={<StudentQrScanner />} />
+			<Route path="aqr" element={<StudentQrSelectScanner />} />
 			<Route
 				path="courses/attendance/:usercourseid"
 				element={<StudentCourseAttendance />}

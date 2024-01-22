@@ -3,17 +3,17 @@ import Card from '../../../components/main/cards/Card';
 import MainViewTitle from '../../../components/main/titles/MainViewTitle';
 /**
  * MainView component.
- * 
+ *
  * This component is responsible for rendering the main view for a student. It performs the following operations:
- * 
+ *
  * 1. Renders a title for the main view using the MainViewTitle component.
  * 2. Renders a grid of cards using the Card component. Each card represents a different feature available to the student:
  *    - Attendance QR Scanner: Allows the student to scan a QR code to mark attendance.
  *    - Your Profile: Allows the student to view their own profile.
  *    - Your Courses: Allows the student to view their own courses.
- * 
+ *
  * Each card includes a path to the corresponding feature, a title, and a description.
- * 
+ *
  * @returns A JSX element representing the main view component.
  */
 const MainView: React.FC = () => {
@@ -23,7 +23,7 @@ const MainView: React.FC = () => {
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-fit m-auto p-5 justify-center items-center gap-4">
 				<Card
 					path="/student/qr"
-					title="Attendance Qr Scanner"
+					title="Attendance QR Scanner"
 					description="Scan QR to mark attendance"
 				/>
 				<Card
@@ -40,6 +40,11 @@ const MainView: React.FC = () => {
 					path="/student/helpvideos"
 					title="Instructions"
 					description="See instructions for all available tasks"
+				/>
+				<Card
+					path="/student/aqr"
+					title="Advanced QR scanner"
+					description="Advanced QR scanner with camera selection"
 				/>
 			</div>
 		</div>
