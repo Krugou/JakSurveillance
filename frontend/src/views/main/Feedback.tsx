@@ -75,7 +75,10 @@ const Feedback: React.FC = () => {
 					rows={8}
 					placeholder="Enter your feedback"
 				/>
-				<button type="submit" className="bg-blue-500 text-white rounded p-2">
+				<button
+					type="submit"
+					className="bg-metropoliaMainOrange  hover:hover:bg-metropoliaSecondaryOrange transition text-white font-bold py-2 px-4 m-4 rounded focus:outline-none focus:shadow-outline"
+				>
 					Submit
 				</button>
 			</form>
