@@ -12,12 +12,10 @@ const userFeedBackModel = {
 	 * @param userId - The ID of the user.
 	 * @returns An array of RowDataPacket objects containing the feedback.
 	 */
-	async getUserFeedback(userId: number) {
+	async getUserFeedback() {
 		const [rows] = await pool
 			.promise()
-			.query<RowDataPacket[]>('SELECT * FROM user_feedback WHERE userid = ?', [
-				userId,
-			]);
+			.query<RowDataPacket[]>('SELECT * FROM user_feedback ', []);
 		return rows;
 	},
 
@@ -38,19 +36,22 @@ const userFeedBackModel = {
 			]);
 		return result;
 	},
+	async deleteUserFeedback(feedbackId: number) {
+		const result = await pool
+			.promise()
+			.query('DELETE FROM user_feedback WHERE feedbackId = ?', [feedbackId]);
+		return result;
+	},
 
 	/**
 	 * Count all feedback from a specific user.
 	 * @param userId - The ID of the user.
 	 * @returns The count of feedback.
 	 */
-	async countUserFeedback(userId: number) {
+	async countUserFeedback() {
 		const [rows] = await pool
 			.promise()
-			.query<RowDataPacket[]>(
-				'SELECT COUNT(*) as count FROM user_feedback WHERE userid = ?',
-				[userId],
-			);
+			.query<RowDataPacket[]>('SELECT COUNT(*) as count FROM user_feedback ', []);
 		return rows[0].count;
 	},
 };
