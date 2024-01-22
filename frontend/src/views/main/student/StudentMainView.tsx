@@ -43,7 +43,7 @@ const MainView: React.FC = () => {
 				/>
 				<Card
 					path="/student/aqr"
-					title="Attend QR Scan Select Camera"
+					title="Attendance QR Scanner with Camera Selection"
 					description="Scan QR to mark attendance with camera selection"
 				/>
 			</div>
