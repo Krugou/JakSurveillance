@@ -10,6 +10,7 @@ import studentgroupmodel from '../models/studentgroupmodel.js';
 import usermodel from '../models/usermodel.js';
 import checkUserRole from '../utils/checkRole.js';
 import validate from '../utils/validate.js';
+import userFeedBackModel from '../models/userfeedbackmodel.js';
 const pool = createPool('ADMIN');
 const router: Router = express.Router();
 /**
@@ -436,6 +437,19 @@ router.get(
 		try {
 			const roleCounts = await usermodel.getRoleCounts();
 			res.send(roleCounts);
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({message: 'Internal server error'});
+		}
+	},
+);
+router.get(
+	'/feedback',
+	checkUserRole(['admin']),
+	async (_req: Request, res: Response) => {
+		try {
+			const feedback = await userFeedBackModel.getUserFeedback();
+			res.send(feedback);
 		} catch (error) {
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
