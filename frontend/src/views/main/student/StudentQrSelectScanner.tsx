@@ -42,6 +42,9 @@ const StudentQrSelectScanner: React.FC = () => {
 		navigator.mediaDevices.enumerateDevices().then(devices => {
 			const videoDevices = devices.filter(device => device.kind === 'videoinput');
 			setDevices(videoDevices);
+			if (videoDevices.length > 0) {
+				setSelectedDevice(videoDevices[0].deviceId);
+			}
 		});
 	}, []);
 
@@ -140,20 +143,29 @@ const StudentQrSelectScanner: React.FC = () => {
 				user &&
 				user.studentnumber && (
 					<>
-						<label htmlFor="cameraSelect">Select Camera:</label>
-						<select id="cameraSelect" onChange={handleDeviceChange}>
-							{devices.map(device => (
-								<option key={device.deviceId} value={device.deviceId}>
-									{device.label}
-								</option>
-							))}
-						</select>
+						<div className="m-2 p-2">
+							<label className="m-1" htmlFor="cameraSelect">
+								Choose desired camera input:
+							</label>
+							<select
+								className="m-1"
+								id="cameraSelect"
+								onChange={handleDeviceChange}
+								value={selectedDevice || ''}
+							>
+								{devices.map(device => (
+									<option key={device.deviceId} value={device.deviceId}>
+										{device.label}
+									</option>
+								))}
+							</select>
+						</div>
 						{selectedDevice && (
 							<QrScanner
 								onDecode={onNewScanResult}
 								onError={handleError}
 								scanDelay={200}
-								hideCount={true}
+								hideCount={false}
 								constraints={{deviceId: selectedDevice}}
 							/>
 						)}
