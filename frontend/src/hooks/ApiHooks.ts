@@ -156,7 +156,7 @@ const getCourseDetailByCourseId = async (courseId: string, token: string) => {
 	return response;
 };
 const postUserFeedback = async (
-	inputs: {topic: string; text: string; userId: string},
+	inputs: {topic: string; text: string; userId: number},
 	token: string,
 ) => {
 	const response = await doFetch(baseUrl + 'users/feedback', {
