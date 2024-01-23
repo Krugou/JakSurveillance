@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from '../../../components/main/cards/Card';
+import FeedbackCard from '../../../components/main/cards/FeedbackCard';
 import MainViewTitle from '../../../components/main/titles/MainViewTitle';
 /**
  * CounselorMainView component.
@@ -30,11 +31,7 @@ const CounselorMainView: React.FC = () => {
 					title="Attendance statistics"
 					description="See attendance statistics for all courses"
 				/>
-				<Card
-					path="/counselor/feedback/"
-					title="Feedback"
-					description="Give feedback to the system"
-				/>
+				<FeedbackCard role="counselor" />
 			</div>
 		</>
 	);
