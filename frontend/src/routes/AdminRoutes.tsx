@@ -1,6 +1,6 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
-import Suggestions from '../views/main/Feedback.tsx';
+import AdminFeedback from '../views/main/admin/AdminFeedback.tsx';
 import AdminMainView from '../views/main/admin/AdminMainView.tsx';
 import AdminNewUser from '../views/main/admin/AdminNewUser.tsx';
 import AdminProfile from '../views/main/admin/AdminProfile.tsx';
@@ -30,7 +30,7 @@ const AdminRoutes = () => {
 			<Route path="stats" element={<AdminStats />} />
 			<Route path="lectures/*" element={<AdminLecturesRoutes />} />
 			<Route path="newuser" element={<AdminNewUser />} />
-			<Route path="suggestions" element={<Suggestions />} />
+			<Route path="feedback" element={<AdminFeedback />} />
 		</Routes>
 	);
 };
