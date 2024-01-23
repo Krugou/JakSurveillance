@@ -7,10 +7,10 @@ import course from '../models/coursemodel.js';
 import lectureModel from '../models/lecturemodel.js';
 import rolemodel from '../models/rolemodel.js';
 import studentgroupmodel from '../models/studentgroupmodel.js';
+import userFeedBackModel from '../models/userfeedbackmodel.js';
 import usermodel from '../models/usermodel.js';
 import checkUserRole from '../utils/checkRole.js';
 import validate from '../utils/validate.js';
-import userFeedBackModel from '../models/userfeedbackmodel.js';
 const pool = createPool('ADMIN');
 const router: Router = express.Router();
 /**
@@ -453,6 +453,30 @@ router.get(
 		} catch (error) {
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
+		}
+	},
+);
+router.delete(
+	'/feedback/:feedbackId',
+	checkUserRole(['admin']),
+	async (req: Request, res: Response) => {
+		const {feedbackId} = req.params;
+		console.log('🚀 ~ feedbackId:', feedbackId);
+		try {
+			const result = await userFeedBackModel.deleteUserFeedback(
+				Number(feedbackId),
+			);
+			if (result === null) {
+				return res.status(500).json({
+					message: 'Internal server error',
+				});
+			}
+			return res.status(200).json({
+				message: 'Feedback deleted successfully',
+			});
+		} catch (error) {
+			console.error(error);
+			return res.status(500).json({message: 'Internal server error'});
 		}
 	},
 );
