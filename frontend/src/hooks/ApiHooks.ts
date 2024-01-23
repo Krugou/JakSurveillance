@@ -179,6 +179,16 @@ const getUserFeedback = async (token: string) => {
 	});
 	return response;
 };
+const deleteUserFeedback = async (feedbackId: number, token: string) => {
+	const response = await doFetch(baseUrl + 'admin/feedback/' + feedbackId, {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+	});
+	return response;
+};
 
 const getCourseReservations = async (inputs: getCourseReservations, token) => {
 	const {code} = inputs;
@@ -888,5 +898,6 @@ const apiHooks = {
 	deleteLectureByLectureId,
 	closeLectureByLectureId,
 	getOpenLecturesByCourseid,
+	deleteUserFeedback,
 };
 export default apiHooks;
