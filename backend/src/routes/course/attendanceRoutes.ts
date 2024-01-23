@@ -1,6 +1,6 @@
 // attendanceRoutes.ts
-import express, { Request, Response, Router } from 'express';
-import { body, param } from 'express-validator';
+import express, {Request, Response, Router} from 'express';
+import {body, param} from 'express-validator';
 import attendanceController from '../../controllers/attendancecontroller.js';
 import lectureController from '../../controllers/lecturecontroller.js';
 import attendanceModel from '../../models/attendancemodel.js';
@@ -454,5 +454,17 @@ router.get(
 		}
 	},
 );
+router.post('/lecture/teacheropen/', async (req: Request, res: Response) => {
+	try {
+		const {teacherid} = req.body;
+		const openLectures = await lectureModel.findOpenLecturesByTeacherid(
+			Number(teacherid),
+		);
+		res.status(200).json(openLectures);
+	} catch (error) {
+		console.error(error);
+		res.status(500).send('Server error');
+	}
+});
 
 export default router;
