@@ -208,7 +208,7 @@ router.post('/feedback', async (req: Request, res: Response) => {
 		});
 	}
 	return res.status(200).json({
-		message: 'Thanks for the feedback!',
+		message: 'Success',
 	});
 });
 
