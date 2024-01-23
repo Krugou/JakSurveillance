@@ -231,7 +231,7 @@ const setupSocketHandlers = (io: Server) => {
 					io.to(lectureid).emit('pingEvent', lectureid, Date.now());
 					setInterval(() => {
 						io.to(lectureid).emit('pingEvent', lectureid, Date.now());
-					}, 5000);
+					}, speedOfHashChange);
 					socket.on('pongEvent', (lectureid: string, unixtime: number) => {
 						socket.emit('pongEvent', lectureid, unixtime);
 					});
