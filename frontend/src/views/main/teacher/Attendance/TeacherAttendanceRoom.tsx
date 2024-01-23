@@ -102,7 +102,6 @@ const AttendanceRoom: React.FC = () => {
 				}
 
 				// Set loading to false when the data fetch is done
-				setLoading(false);
 				setDataLoaded(true);
 			})
 			.catch(error => {
@@ -132,11 +131,14 @@ const AttendanceRoom: React.FC = () => {
 				console.log('Socket connected');
 			});
 			// Emit a 'createAttendanceCollection' event with the lectureid
-			newSocket.emit('createAttendanceCollection', lectureid);
+			newSocket.emit('createAttendanceCollection', lectureid, () => {
+				console.log('createAttendanceCollection');
+			});
 			// When the lecture starts, set the countdown
 			newSocket.on('lectureStarted', (checklectureid, timeout) => {
 				if (checklectureid === lectureid) {
 					setCountdown(timeout / 1000); // convert milliseconds to seconds
+					setLoading(false);
 				}
 			});
 
@@ -320,7 +322,11 @@ const AttendanceRoom: React.FC = () => {
 			{loading ? (
 				<CircularProgress />
 			) : (
-				<div className="flex flex-col m-auto w-full xl:w-full 2xl:w-3/4 h-full p-5 bg-gray-100">
+				<div
+					className={`flex flex-col m-auto w-full xl:w-full 2xl:w-3/4 h-full p-5 bg-gray-100 ${
+						lectureSuccess ? 'border-metropoliaTrendGreen border-2' : ''
+					}`}
+				>
 					<div className="flex flex-row justify-between">
 						<h1 className="text-2xl pb-5 font-bold">
 							{courseName} | {courseCode} | {topicname} |
@@ -429,6 +435,7 @@ const AttendanceRoom: React.FC = () => {
 								lectureid={lectureid}
 								isAnimationStopped={isAnimationStopped}
 								setLectureSuccess={setLectureSuccess}
+								loading={loading}
 							/>
 						)}
 						{dialogOpen && (
