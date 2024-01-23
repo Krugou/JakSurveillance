@@ -6,6 +6,7 @@ import TeacherProfile from '../views/main/teacher/TeacherProfile.tsx';
 import TeacherAttendanceRoutes from './teacher/TeacherAttendanceRoutes';
 import TeacherCoursesRoutes from './teacher/TeacherCoursesRoutes';
 import TeacherStudentsRoutes from './teacher/TeacherStudentsRoutes';
+import Feedback from '../views/main/Feedback.tsx';
 /**
  * TeacherRoutes component.
  * This component is responsible for defining the routes for the teacher section of the application.
@@ -24,6 +25,7 @@ const TeacherRoutes = () => {
 			<Route path="students/*" element={<TeacherStudentsRoutes />} />
 			<Route path="attendance/*" element={<TeacherAttendanceRoutes />} />
 			<Route path="profile" element={<TeacherProfile />} />
+			<Route path="feedback" element={<Feedback />} />
 
 			<Route path="*" element={<TeacherMainView />} />
 		</Routes>
