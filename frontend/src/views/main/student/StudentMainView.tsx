@@ -1,6 +1,7 @@
 import React from 'react';
 import Card from '../../../components/main/cards/Card';
 import MainViewTitle from '../../../components/main/titles/MainViewTitle';
+import FeedbackCard from '../../../components/main/cards/FeedbackCard';
 /**
  * MainView component.
  *
@@ -46,11 +47,7 @@ const MainView: React.FC = () => {
 					title="Attendance QR Scanner with Camera Selection"
 					description="Scan QR to mark attendance with camera selection"
 				/>
-				<Card
-					path="/student/feedback/"
-					title="Feedback"
-					description="Give feedback to the system"
-				/>
+				<FeedbackCard role="student" />
 			</div>
 		</div>
 	);
