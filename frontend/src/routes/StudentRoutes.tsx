@@ -29,6 +29,7 @@ const StudentRoutes = () => {
 				path="courses/attendance/:usercourseid"
 				element={<StudentCourseAttendance />}
 			/>
+			<Route path="feedback" element={<Feedback />} />
 			<Route path="*" element={<StudentMainView />} />
 		</Routes>
 	);
