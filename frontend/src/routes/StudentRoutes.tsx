@@ -1,5 +1,6 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
+import Feedback from '../views/main/Feedback.tsx';
 import StudentCourseAttendance from '../views/main/student/StudentCourseAttendance.tsx';
 import StudentCourses from '../views/main/student/StudentCourses.tsx';
 import StudentHelpVideos from '../views/main/student/StudentHelpVideos.tsx';
