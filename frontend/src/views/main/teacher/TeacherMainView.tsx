@@ -102,6 +102,11 @@ const MainView: React.FC = () => {
 									title="Show Attendance stats"
 									description="Open attendance stats page"
 								/>
+								<Card
+									path="/teacher/feedback/"
+									title="Feedback"
+									description="Give feedback to the system"
+								/>
 							</>
 						)}
 					</div>
