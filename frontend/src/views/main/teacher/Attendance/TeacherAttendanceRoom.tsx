@@ -45,6 +45,7 @@ const AttendanceRoom: React.FC = () => {
 	const [isAnimationStopped, setIsAnimationStopped] = useState(false);
 	const [latency, setLatency] = useState(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
+	const [lectureSuccess, setLectureSuccess] = useState(false);
 
 	/**
 	 * useEffect hook for fetching lecture info.
@@ -323,7 +324,9 @@ const AttendanceRoom: React.FC = () => {
 					<div className="flex flex-row justify-between">
 						<h1 className="text-2xl pb-5 font-bold">
 							{courseName} | {courseCode} | {topicname} |
-							{countdown !== null
+							{lectureSuccess
+								? ' All students are here! '
+								: countdown !== null
 								? ` Auto finishing in ${Math.floor(countdown / 60)} minutes ${
 										countdown % 60
 								  } seconds `
@@ -381,7 +384,7 @@ const AttendanceRoom: React.FC = () => {
 						<h2
 							className="text-2xl ml-2"
 							title={`${arrayOfStudents.length} Attended, ${
-								courseStudents.length - arrayOfStudents.length
+								courseStudents.length
 							} Not attended, Total: ${
 								arrayOfStudents.length + courseStudents.length
 							}`}
@@ -425,6 +428,7 @@ const AttendanceRoom: React.FC = () => {
 								socket={socket}
 								lectureid={lectureid}
 								isAnimationStopped={isAnimationStopped}
+								setLectureSuccess={setLectureSuccess}
 							/>
 						)}
 						{dialogOpen && (
