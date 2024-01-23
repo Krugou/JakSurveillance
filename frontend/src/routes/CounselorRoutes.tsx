@@ -23,6 +23,7 @@ const CounselorRoutes = () => {
 			<Route path="helpvideos" element={<CounselorHelpVideos />} />
 			<Route path="courses/stats/:courseid?" element={<CounselorCourseStats />} />
 			<Route path="students/*" element={<CounselorStudentRoutes />} />
+			<Route path="feedback" element={<Feedback />} />
 		</Routes>
 	);
 };
