@@ -5,6 +5,7 @@ import WelcomeModal from '../../../components/main/modals/WelcomeModal';
 import MainViewTitle from '../../../components/main/titles/MainViewTitle';
 import {UserContext} from '../../../contexts/UserContext';
 import apihooks from '../../../hooks/ApiHooks';
+import FeedbackCard from '../../../components/main/cards/FeedbackCard';
 /**
  * MainView component.
  * This component is responsible for rendering the main view for a teacher.
@@ -102,11 +103,7 @@ const MainView: React.FC = () => {
 									title="Show Attendance stats"
 									description="Open attendance stats page"
 								/>
-								<Card
-									path="/teacher/feedback/"
-									title="Feedback"
-									description="Give feedback to the system"
-								/>
+							<FeedbackCard  role='teacher'   />
 							</>
 						)}
 					</div>
