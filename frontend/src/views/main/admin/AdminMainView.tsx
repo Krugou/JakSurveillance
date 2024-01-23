@@ -53,9 +53,9 @@ const AdminMainView: React.FC = () => {
 					description="See statistics"
 				/>
 				<Card
-					path="/admin/suggestions/"
-					title="Suggestions"
-					description="See suggestions" 
+					path="/admin/feedback/"
+					title="Feedback"
+					description="See all feedback"
 				/>
 			</div>
 		</>
