@@ -206,6 +206,20 @@ const getCourseReservations = async (inputs: getCourseReservations, token) => {
 	const url = `${baseUrl}courses/checkreservations/`;
 	return await doFetch(url, options);
 };
+const getOpenLecturesByTeacher = async (teacherId: number, token: string) => {
+	const options = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+		body: JSON.stringify({
+			teacherid: teacherId,
+		}),
+	};
+	const url = `${baseUrl}courses/attendance/lecture/teacheropen/`;
+	return await doFetch(url, options);
+};
 interface Course {
 	code: string;
 }
@@ -899,5 +913,6 @@ const apiHooks = {
 	closeLectureByLectureId,
 	getOpenLecturesByCourseid,
 	deleteUserFeedback,
+	getOpenLecturesByTeacher,
 };
 export default apiHooks;
