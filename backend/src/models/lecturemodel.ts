@@ -122,6 +122,14 @@ export interface LectureModel {
 	 * @returns A promise that resolves to the lecture, if found.
 	 */
 	getLectureByLectureId(lectureid: number): Promise<RowDataPacket[] | null>;
+	/**
+	 * Finds open lectures by teacher ID.
+	 * @param teacherid - The ID of the teacher.
+	 * @returns A promise that resolves to an array of open lectures for the teacher, if found.
+	 */
+	findOpenLecturesByTeacherid(
+		teacherid: number,
+	): Promise<RowDataPacket[] | null>;
 }
 
 /**
@@ -409,6 +417,27 @@ const lectureModel: LectureModel = {
 				.query<RowDataPacket[]>(
 					'SELECT lecture.*, users.email as teacher, courses.code, topics.topicname FROM lecture JOIN users ON lecture.teacherid = users.userid JOIN courses ON lecture.courseid = courses.courseid JOIN topics ON lecture.topicid = topics.topicid WHERE lecture.courseid = ? AND state = "open"',
 					[courseid],
+				);
+
+			return rows ?? null;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
+	/**
+	 * Finds open lectures by teacher ID.
+	 * @param teacherid - The ID of the teacher.
+	 * @returns A promise that resolves to an array of open lectures for the teacher, if found.
+	 * If an error occurs, the promise is rejected.
+	 */
+	async findOpenLecturesByTeacherid(teacherid: number) {
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					'SELECT lecture.*, users.email as teacher, courses.code, topics.topicname FROM lecture JOIN users ON lecture.teacherid = users.userid JOIN courses ON lecture.courseid = courses.courseid JOIN topics ON lecture.topicid = topics.topicid WHERE lecture.teacherid = ? AND state = "open"',
+					[teacherid],
 				);
 
 			return rows ?? null;
