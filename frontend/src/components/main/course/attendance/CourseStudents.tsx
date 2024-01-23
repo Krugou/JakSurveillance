@@ -12,6 +12,7 @@ interface Props {
 	lectureid: string;
 	isAnimationStopped: boolean;
 	setLectureSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+	loading: boolean;
 }
 /**
  * CourseStudents component.
@@ -28,6 +29,7 @@ const CourseStudents: React.FC<Props> = ({
 	lectureid,
 	isAnimationStopped,
 	setLectureSuccess,
+	loading,
 }) => {
 	// Define state and refs const
 	const scrollContainerRef = useRef<HTMLDivElement | null>(null);
@@ -164,10 +166,12 @@ const CourseStudents: React.FC<Props> = ({
 	}, [coursestudents]);
 
 	useEffect(() => {
-		if (coursestudents.length === 0) {
-			setLectureSuccess(true);
-		} else {
-			setLectureSuccess(false);
+		if (!loading) {
+			if (coursestudents.length === 0) {
+				setLectureSuccess(true);
+			} else {
+				setLectureSuccess(false);
+			}
 		}
 	}, [coursestudents]);
 	return (
