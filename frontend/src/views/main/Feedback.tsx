@@ -1,7 +1,7 @@
 import React, {useContext, useState} from 'react';
+import {toast} from 'react-toastify';
 import {UserContext} from '../../contexts/UserContext';
 import apiHooks from '../../hooks/ApiHooks';
-
 const Feedback: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const [feedback, setFeedback] = useState('');
@@ -21,9 +21,12 @@ const Feedback: React.FC = () => {
 					{topic, text: feedback, userId: user.userid},
 					token,
 				);
-
+				toast.success(
+					`Feedback submitted successfully, Thank you ${user?.first_name}!`,
+				);
 				console.log(response);
 			} catch (error) {
+				toast.error('An error occurred while submitting your feedback.');
 				console.error(error);
 			}
 		}
@@ -56,6 +59,7 @@ const Feedback: React.FC = () => {
 					value={topic}
 					onChange={e => setTopic(e.target.value)}
 					className="border rounded p-2 m-2"
+					required
 				>
 					<option value="">Select a topic</option>
 					{feedbackTopics.map((topic, index) => (
@@ -74,6 +78,7 @@ const Feedback: React.FC = () => {
 					className="border rounded p-2 m-2"
 					rows={8}
 					placeholder="Enter your feedback"
+					required
 				/>
 				<button
 					type="submit"
