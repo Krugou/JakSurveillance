@@ -130,6 +130,11 @@ export interface LectureModel {
 	findOpenLecturesByTeacherid(
 		teacherid: number,
 	): Promise<RowDataPacket[] | null>;
+	/**
+	 * Fetches all lectures by teacher ID.
+	 * @returns A promise that resolves to an array of lectures.
+	 */
+	fetchLecturesByTeacherId(teacherId: number): Promise<RowDataPacket[]>;
 }
 
 /**
@@ -461,6 +466,25 @@ const lectureModel: LectureModel = {
 				]);
 
 			return rows ?? null;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
+	async fetchLecturesByTeacherId(teacherId: number) {
+		try {
+			const [rows] = await pool.promise().query<RowDataPacket[]>(
+				`SELECT lecture.*, courses.name AS coursename, courses.code AS coursecode, users.email AS teacheremail, topics.topicname,
+      (SELECT COUNT(*) FROM attendance WHERE lecture.lectureid = attendance.lectureid AND attendance.status = 0) AS notattended,
+      (SELECT COUNT(*) FROM attendance WHERE lecture.lectureid = attendance.lectureid AND attendance.status = 1) AS attended
+      FROM lecture 
+      INNER JOIN courses ON lecture.courseid = courses.courseid 
+      INNER JOIN users ON lecture.teacherid = users.userid 
+      INNER JOIN topics ON lecture.topicid = topics.topicid
+      WHERE lecture.teacherid = ?`,
+				[teacherId],
+			);
+			return rows;
 		} catch (error) {
 			console.error(error);
 			return Promise.reject(error);
