@@ -36,9 +36,9 @@ const CheckOpenLectures: React.FC = () => {
 
 			fetchOpenLectures();
 		}
-	}, [user]);
+	}, []);
 
-	return (
+	return openLectures.length > 0 ? (
 		<div className="flex flex-row items-center justify-center animate-pulse">
 			{openLectures.map((lecture: Lecture) => (
 				<Card
@@ -55,7 +55,7 @@ const CheckOpenLectures: React.FC = () => {
 				/>
 			))}
 		</div>
-	);
+	) : null;
 };
 
 export default CheckOpenLectures;
