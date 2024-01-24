@@ -89,6 +89,9 @@ const Header: React.FC<HeaderProps> = () => {
 					}`}
 				/>
 			</Link>
+			{import.meta.env.MODE === 'development' && (
+				<h1 className="text-lg font-bold">In Development Mode</h1>
+			)}
 			{user && (
 				<div className="flex w-full gap-10 justify-center sm:w-fit items-center m-2 p-2">
 					<NavigationButton
