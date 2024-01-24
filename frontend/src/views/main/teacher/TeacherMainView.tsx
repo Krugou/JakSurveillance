@@ -1,11 +1,12 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import React, {useContext, useEffect, useState} from 'react';
 import Card from '../../../components/main/cards/Card';
+import FeedbackCard from '../../../components/main/cards/FeedbackCard';
+import CheckOpenLectures from '../../../components/main/course/attendance/CheckOpenLectures';
 import WelcomeModal from '../../../components/main/modals/WelcomeModal';
 import MainViewTitle from '../../../components/main/titles/MainViewTitle';
 import {UserContext} from '../../../contexts/UserContext';
 import apihooks from '../../../hooks/ApiHooks';
-import FeedbackCard from '../../../components/main/cards/FeedbackCard';
 /**
  * MainView component.
  * This component is responsible for rendering the main view for a teacher.
@@ -92,7 +93,7 @@ const MainView: React.FC = () => {
 									title="Your Courses"
 									description="View all of your courses"
 								/>
-
+								<CheckOpenLectures />
 								<Card
 									path="/teacher/attendance/createlecture"
 									title="Create new Lecture"
@@ -103,9 +104,10 @@ const MainView: React.FC = () => {
 									title="Show Attendance stats"
 									description="Open attendance stats page"
 								/>
-							<FeedbackCard  role='teacher'   />
 							</>
 						)}
+
+						<FeedbackCard role="teacher" />
 					</div>
 					<WelcomeModal />
 				</>
