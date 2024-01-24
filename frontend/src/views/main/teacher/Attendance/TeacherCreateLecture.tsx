@@ -9,6 +9,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
+import CheckOpenLectures from '../../../../components/main/course/attendance/CheckOpenLectures';
 import DeleteLectureModal from '../../../../components/main/modals/DeleteLectureModal';
 import {UserContext} from '../../../../contexts/UserContext';
 import apihooks from '../../../../hooks/ApiHooks';
@@ -94,14 +95,20 @@ const CreateLecture: React.FC = () => {
 				resource => resource.type === 'room',
 			);
 
-			return ` ${nextLecture.subject}, Room: ${room?.code}`;
+			const message = ` ${nextLecture.subject}, Room: ${
+				room?.code
+			}  started at ${new Date(nextLecture.startDate).toLocaleTimeString()} `;
+			toast.info('Open data result for next lecture: ' + message);
 		} else if (nextLecture) {
 			const room = nextLecture.resources.find(
 				resource => resource.type === 'room',
 			);
-			return `${nextLecture.subject},  Room: ${room?.code} `;
+			const message = `${nextLecture.subject},  Room: ${
+				room?.code
+			} starts at ${new Date(nextLecture.startDate).toLocaleTimeString()} `;
+			toast.info('Open data result for next lecture: ' + message);
 		} else {
-			return '';
+			console.log('No next lecture found');
 		}
 	};
 
@@ -120,6 +127,7 @@ const CreateLecture: React.FC = () => {
 				setHighlightedDates(dates);
 				const newText = findNextLecture(data.reservations);
 				console.log('🚀 ~ apihooks.getCourseReservations ~ newText:', newText);
+
 				// setOpenDataText(newText);
 			});
 		}
@@ -327,6 +335,7 @@ const CreateLecture: React.FC = () => {
 						/>
 					))}
 					<div className="flex m-auto flex-col 2xl:w-3/6  lg:w-4/6 w-full items-center rounded-lg justify-center sm:p-5 p-1 bg-gray-100">
+						<CheckOpenLectures />
 						<h1 className="text-lg sm:text-2xl font-bold p-2 mb-8 mt-5">
 							Create new lecture
 						</h1>
