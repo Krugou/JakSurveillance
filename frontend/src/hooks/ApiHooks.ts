@@ -578,6 +578,20 @@ const updateAttendanceStatus = async (
 
 	return doFetch(url, options);
 };
+const fetchTeacherOwnLectures = async (teacherId: string, token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+
+	return await doFetch(
+		baseUrl + `courses/attendance/lecture/teacher/${teacherId}`,
+		options,
+	);
+};
+
 const updateUser = async (token: string, user: any) => {
 	const options = {
 		method: 'PUT',
@@ -901,6 +915,7 @@ const apiHooks = {
 	updateUserCourseTopics,
 	updateAttendanceStatus,
 	getLecturesAndAttendances,
+	fetchTeacherOwnLectures,
 	getAllCourses,
 	getDetailsByCourseId,
 	getAttendanceThreshold,
