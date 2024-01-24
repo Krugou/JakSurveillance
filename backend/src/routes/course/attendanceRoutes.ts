@@ -454,17 +454,35 @@ router.get(
 		}
 	},
 );
-router.post('/lecture/teacheropen/', async (req: Request, res: Response) => {
-	try {
-		const {teacherid} = req.body;
-		const openLectures = await lectureModel.findOpenLecturesByTeacherid(
-			Number(teacherid),
-		);
-		res.status(200).json(openLectures);
-	} catch (error) {
-		console.error(error);
-		res.status(500).send('Server error');
-	}
-});
+router.post(
+	'/lecture/teacheropen/',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	async (req: Request, res: Response) => {
+		try {
+			const {teacherid} = req.body;
+			const openLectures = await lectureModel.findOpenLecturesByTeacherid(
+				Number(teacherid),
+			);
+			res.status(200).json(openLectures);
+		} catch (error) {
+			console.error(error);
+			res.status(500).send('Server error');
+		}
+	},
+);
+router.get(
+	'/lecture/teacher/:teacherId',
+	checkUserRole(['admin']),
+	async (req: Request, res: Response) => {
+		try {
+			const teacherId = Number(req.params.teacherId);
+			const lectures = await lectureModel.fetchLecturesByTeacherId(teacherId);
+			res.json(lectures);
+		} catch (err) {
+			console.error(err);
+			res.status(500).send('Server error');
+		}
+	},
+);
 
 export default router;
