@@ -185,7 +185,19 @@ const CreateLecture: React.FC = () => {
 		}
 		return '';
 	};
-	useEffect(() => {}, [selectedCourse]);
+	const [selectedIndex, setSelectedIndex] = useState(0);
+
+	useEffect(() => {
+		if (selectedCourse && selectedCourse.topic_names) {
+			const topics = selectedCourse.topic_names.split(',');
+			if (topics[selectedIndex]) {
+				setSelectedTopic(topics[selectedIndex]);
+			} else {
+				setSelectedTopic(topics[0]);
+				setSelectedIndex(0);
+			}
+		}
+	}, [selectedCourse, selectedIndex]);
 	const handleDateChangeCalendar = (
 		value: Date | Date[] | null | [Date | null, Date | null],
 	) => {
@@ -433,6 +445,8 @@ const CreateLecture: React.FC = () => {
 									className="block h-8 cursor-pointer mr-3 sm:ml-5 ml-1 sm:mt-2 mt-none"
 									value={selectedTopic}
 									onChange={e => {
+										const index = e.target.selectedIndex;
+										setSelectedIndex(index);
 										setSelectedTopic(e.target.value);
 									}}
 								>
