@@ -333,7 +333,9 @@ const CreateLecture: React.FC = () => {
 	return (
 		<div className="w-full">
 			{loading ? (
-				<CircularProgress />
+				<div className="flex justify-center items-center">
+					<CircularProgress />
+				</div>
 			) : (
 				<>
 					{openLectures.map(lecture => (
@@ -354,6 +356,13 @@ const CreateLecture: React.FC = () => {
 						<h2 className="mt-2 text-xl p-4">
 							Choose your preferred course, topic, date, and time of day.
 						</h2>
+						<h3 className=" text-md ">
+							Double-check that you have selected the correct course and topic.
+						</h3>
+						<h3 className=" text-md ">
+							This impacts course attendance stats for students.
+						</h3>
+
 						<div className="flex w-full justify-center">
 							<div className="flex w-1/4 flex-col gap-3 sm:gap-5">
 								<label className="sm:text-xl text-md flex justify-end" htmlFor="course">
