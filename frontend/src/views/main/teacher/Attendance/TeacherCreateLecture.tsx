@@ -103,9 +103,17 @@ const CreateLecture: React.FC = () => {
 			const room = nextLecture.resources.find(
 				resource => resource.type === 'room',
 			);
-			const message = `${nextLecture.subject},  Room: ${
-				room?.code
-			} starts at ${new Date(nextLecture.startDate).toLocaleTimeString()} `;
+
+			const startDate = new Date(nextLecture.startDate);
+			const today = new Date();
+			const isToday =
+				startDate.getDate() === today.getDate() &&
+				startDate.getMonth() === today.getMonth() &&
+				startDate.getFullYear() === today.getFullYear();
+
+			const message = `${nextLecture.subject},  Room: ${room?.code} starts ${
+				isToday ? 'today' : 'at ' + startDate.toLocaleDateString()
+			} at ${startDate.toLocaleTimeString()} `;
 			toast.info('Open data result for next lecture: ' + message);
 		} else {
 			console.log('No next lecture found');
