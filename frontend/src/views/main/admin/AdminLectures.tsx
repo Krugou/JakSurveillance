@@ -183,7 +183,11 @@ const AdminAllLectures: React.FC = () => {
 									<TableCell>{lecture.coursename}</TableCell>
 									<TableCell>{lecture.coursecode}</TableCell>
 									<TableCell>{lecture.topicname}</TableCell>
-									<TableCell>
+									<TableCell
+										title={`Total attendance gathered: ${
+											lecture.attended + lecture.notattended
+										}`}
+									>
 										<span className="text-metropoliaTrendGreen">{lecture.attended}</span>/
 										<span className="text-metropoliaSupportRed">
 											{lecture.notattended}
