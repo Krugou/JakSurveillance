@@ -106,7 +106,11 @@ const MainView: React.FC = () => {
 								/>
 							</>
 						)}
-
+						<Card
+							path="/teacher/lectures"
+							title="Your lectures"
+							description="View all of lectures"
+						/>
 						<FeedbackCard role="teacher" />
 					</div>
 					<WelcomeModal />
