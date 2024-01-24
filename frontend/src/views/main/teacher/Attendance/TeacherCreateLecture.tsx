@@ -354,14 +354,8 @@ const CreateLecture: React.FC = () => {
 							Create new lecture
 						</h1>
 						<h2 className="mt-2 text-xl p-4">
-							Choose your preferred course, topic, date, and time of day.
+							Choose your preferred course and topic.
 						</h2>
-						<h3 className=" text-md ">
-							Double-check that you have selected the correct course and topic.
-						</h3>
-						<h3 className=" text-md ">
-							This impacts course attendance stats for students.
-						</h3>
 
 						<div className="flex w-full justify-center">
 							<div className="flex w-1/4 flex-col gap-3 sm:gap-5">
@@ -473,7 +467,7 @@ const CreateLecture: React.FC = () => {
 						</div>
 
 						<div className="w-4/5 mt-10 h-1 bg-metropoliaMainOrange rounded-md"></div>
-						<h2 className="mt-2 text-xl p-4">Select desired date and time of day</h2>
+						<h2 className="mt-2 text-xl p-4">Choose your preferred date and time.</h2>
 						<div className="text-md sm:text-xl mb-5">
 							<div className="relative">
 								<label
@@ -526,6 +520,12 @@ const CreateLecture: React.FC = () => {
 								</select>
 							</div>
 						</div>
+						<h3 className=" text-md ">
+							Double-check that you have selected the correct course and topic.
+						</h3>
+						<h3 className=" text-md ">
+							This impacts course attendance stats for students.
+						</h3>
 						<button
 							aria-label="Open Attendance"
 							title={`Open Attendance gathering for ${selectedCourse?.name} - ${selectedCourse?.code} - ${selectedTopic} `}
