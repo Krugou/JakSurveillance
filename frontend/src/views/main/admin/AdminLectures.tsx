@@ -42,7 +42,7 @@ const AdminAllLectures: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 	const navigate = useNavigate();
-
+	const [isExpanded, setIsExpanded] = useState(false);
 	const getLectures = async () => {
 		const token: string | null = localStorage.getItem('userToken');
 		if (!token) {
@@ -141,8 +141,18 @@ const AdminAllLectures: React.FC = () => {
 				>
 					{sortOrder === 'asc' ? 'Sort by Newest' : 'Sort by Oldest'}
 				</button>
+				<button
+					onClick={() => setIsExpanded(!isExpanded)}
+					className="bg-metropoliaMainOrange h-fit transition hover:hover:bg-metropoliaSecondaryOrange text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
+				>
+					{isExpanded ? 'Shrink Table' : 'Expand to full'}
+				</button>
 			</div>
-			<TableContainer className="relative bg-gray-100 h-[384px] overflow-auto">
+			<TableContainer
+				className={`relative bg-gray-100 overflow-auto ${
+					isExpanded ? 'h-screen' : 'h-[384px]'
+				}`}
+			>
 				<Table className="table-auto">
 					<TableHead className="sticky border-t-2 border-black top-0 bg-white z-10">
 						<TableRow>
