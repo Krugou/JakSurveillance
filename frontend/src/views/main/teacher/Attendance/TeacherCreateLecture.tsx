@@ -351,7 +351,9 @@ const CreateLecture: React.FC = () => {
 						<h1 className="text-lg sm:text-2xl font-bold p-2 mb-8 mt-5">
 							Create new lecture
 						</h1>
-
+						<h2 className="mt-2 text-xl p-4">
+							Choose your preferred course, topic, date, and time of day.
+						</h2>
 						<div className="flex w-full justify-center">
 							<div className="flex w-1/4 flex-col gap-3 sm:gap-5">
 								<label className="sm:text-xl text-md flex justify-end" htmlFor="course">
@@ -465,6 +467,12 @@ const CreateLecture: React.FC = () => {
 						<h2 className="mt-2 text-xl p-4">Select desired date and time of day</h2>
 						<div className="text-md sm:text-xl mb-5">
 							<div className="relative">
+								<label
+									className="sm:text-xl underline text-md flex m-1 p-1 justify-center"
+									htmlFor="calendar"
+								>
+									Calendar
+								</label>
 								<input
 									title="Click to open calendar"
 									ref={inputRef}
@@ -474,9 +482,10 @@ const CreateLecture: React.FC = () => {
 									value={Array.isArray(date) ? 'Multiple Dates' : date.toDateString()}
 									onClick={toggleCalendar}
 									onChange={e => setDate(new Date(e.target.value))}
+									id="calendar"
 								/>
 								{calendarOpen && (
-									<div className="absolute top-12 right-0 sm:text-sm text-lg left-0 z-10">
+									<div className="absolute top-15 right-0 sm:text-sm text-lg left-0 z-10">
 										<Calendar
 											onChange={handleDateChangeCalendar}
 											tileClassName={tileClassName}
@@ -487,6 +496,12 @@ const CreateLecture: React.FC = () => {
 							</div>
 
 							<div className="relative mt-5">
+								<label
+									className="sm:text-xl underline text-md flex m-1 p-1 justify-center"
+									htmlFor="timeofday"
+								>
+									Time of Day
+								</label>
 								<select
 									aria-label="Time of Day"
 									title="Select time of Day"
