@@ -12,12 +12,13 @@ import {
 	TableHead,
 	TableRow,
 } from '@mui/material';
+
+import CircularProgress from '@mui/material/CircularProgress';
 import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/ApiHooks';
-
 interface Lecture {
 	lectureid: number;
 	start_date: string;
@@ -62,18 +63,18 @@ const AdminAllLectures: React.FC = () => {
 		if (user) {
 			setIsLoading(true);
 			getLectures();
-		}
-	}, [user]);
 
-	useEffect(() => {
-		if (user) {
-			setIsLoading(true);
-			getLectures();
+			const intervalId = setInterval(() => {
+				getLectures();
+			}, 120000); // calls getLectures every 120 seconds
+
+			// clear interval on component unmount
+			return () => clearInterval(intervalId);
 		}
 	}, [user, sortOrder]);
 
 	if (isLoading) {
-		return 'Loading...';
+		return <CircularProgress />;
 	}
 
 	const filteredLectures = filterOpen
