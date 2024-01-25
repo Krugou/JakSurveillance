@@ -3,6 +3,7 @@ import usermodel from '../models/usermodel.js';
 import {ResponseData, UserData} from '../types.js';
 import doFetch from '../utils/doFetch.js';
 //import { body, validationResult } from 'express-validator'; FOR VALIDATION
+import {body, validationResult} from 'express-validator';
 import jwt from 'jsonwebtoken';
 import userFeedBackModel from '../models/userfeedbackmodel.js';
 import {User} from '../types.js';
@@ -198,18 +199,34 @@ router.post('/', async (req: Request, res: Response, next) => {
 		res.status(500).json({error: 'Internal server error'});
 	}
 });
-router.post('/feedback', async (req: Request, res: Response) => {
-	const {topic, text, userId} = req.body;
+router.post(
+  '/feedback',
+  [
+    body('topic').notEmpty().withMessage('Topic is required'),
+    body('text').notEmpty().withMessage('Text is required'),
+    body('userId').notEmpty().withMessage('User ID is required')
+  ],
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const { topic, text, userId } = req.body;
 
-	const result = await userFeedBackModel.insertUserFeedback(userId, topic, text);
-	if (result === null) {
-		return res.status(500).json({
-			message: 'Internal server error',
-		});
-	}
-	return res.status(200).json({
-		message: 'Success',
-	});
-});
+    const result = await userFeedBackModel.insertUserFeedback(
+      userId,
+      topic,
+      text,
+    );
+    if (result === null) {
+      return res.status(500).json({
+        message: 'Internal server error',
+      });
+    }
+    return res.status(200).json({
+      message: 'Success',
+    });
+  },
+);
 
 export default router;
