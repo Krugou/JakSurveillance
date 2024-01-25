@@ -78,12 +78,17 @@ const CreateLecture: React.FC = () => {
 		// Get current date
 		const now = new Date();
 		// Find the next upcoming lecture
-		const nextLecture = reservations.find(
-			lecture =>
-				(new Date(lecture.startDate) <= now && now <= new Date(lecture.endDate)) ||
-				new Date(lecture.startDate) > now,
-		);
-		console.log('🚀 ~ findNextLecture ~ nextLecture:', nextLecture);
+		let nextLecture;
+		try {
+			nextLecture = reservations.find(
+				lecture =>
+					(new Date(lecture.startDate) <= now && now <= new Date(lecture.endDate)) ||
+					new Date(lecture.startDate) > now,
+			);
+		} catch (error) {
+			console.log('Failed to find next lecture: ' + (error as Error).message);
+			return;
+		}
 
 		// Check if the current time falls within the start and end time of the lecture
 		if (
@@ -531,9 +536,7 @@ const CreateLecture: React.FC = () => {
 						<h3 className=" text-md ">
 							Double-check that you have selected the correct course and topic.
 						</h3>
-						<h3 className=" text-md ">
-							This impacts course attendance stats for students.
-						</h3>
+
 						<button
 							aria-label="Open Attendance"
 							title={`Open Attendance gathering for ${selectedCourse?.name} - ${selectedCourse?.code} - ${selectedTopic} `}
