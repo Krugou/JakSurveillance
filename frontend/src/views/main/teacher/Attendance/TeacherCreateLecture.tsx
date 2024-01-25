@@ -116,8 +116,10 @@ const CreateLecture: React.FC = () => {
 				startDate.getMonth() === today.getMonth() &&
 				startDate.getFullYear() === today.getFullYear();
 
-			const message = `${nextLecture.subject},  Room: ${room?.code} starts ${
-				isToday ? 'today' : 'at ' + startDate.toLocaleDateString()
+			const message = `${nextLecture.subject},  Room: ${
+				room?.code
+			} scheduled for ${
+				isToday ? 'today' : startDate.toLocaleDateString()
 			} at ${startDate.toLocaleTimeString()} `;
 			toast.info('Open data result for next lecture: ' + message);
 		} else {
