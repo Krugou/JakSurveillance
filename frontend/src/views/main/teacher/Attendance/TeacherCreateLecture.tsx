@@ -320,6 +320,8 @@ const CreateLecture: React.FC = () => {
 		}
 		try {
 			apihooks.deleteLectureByLectureId(lectureid, token);
+			toast.success(`Lecture deleted successfully`);
+			toast.info(`Click open again to start a new lecture`);
 		} catch (error) {
 			toast.error(`Error deleting lecture: ${error}`);
 			console.error(`Error deleting lecture: ${error}`);
@@ -336,6 +338,8 @@ const CreateLecture: React.FC = () => {
 		}
 		try {
 			await apihooks.closeLectureByLectureId(lectureid, token);
+			toast.success(`Lecture closed successfully`);
+			toast.info(`Click open again to start a new lecture`);
 		} catch (error) {
 			toast.error(`Error closing lecture: ${error}`);
 			console.error(`Error closing lecture: ${error}`);
