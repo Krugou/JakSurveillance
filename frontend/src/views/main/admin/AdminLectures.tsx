@@ -47,16 +47,30 @@ const AdminAllLectures: React.FC = () => {
 	const getLectures = async () => {
 		const token: string | null = localStorage.getItem('userToken');
 		if (!token) {
-			throw new Error('No token available');
+			toast.error('No token available');
+			setIsLoading(false);
+			return false;
 		}
-		const result = await apiHooks.fetchAllLectures(token);
-		const sortedLectures = result.sort((a, b) => {
-			return sortOrder === 'asc'
-				? a.lectureid - b.lectureid
-				: b.lectureid - a.lectureid;
-		});
-		setLectures(sortedLectures);
-		setIsLoading(false);
+		try {
+			const result = await apiHooks.fetchAllLectures(token);
+			if (!Array.isArray(result)) {
+				toast.error('Expected an array from fetchAllLectures');
+				setIsLoading(false);
+				return false;
+			}
+			const sortedLectures = result.sort((a, b) => {
+				return sortOrder === 'asc'
+					? a.lectureid - b.lectureid
+					: b.lectureid - a.lectureid;
+			});
+			setLectures(sortedLectures);
+			setIsLoading(false);
+			return true;
+		} catch (error) {
+			toast.error('Error fetching lectures');
+			setIsLoading(false);
+			return false;
+		}
 	};
 
 	useEffect(() => {
@@ -71,6 +85,7 @@ const AdminAllLectures: React.FC = () => {
 			// clear interval on component unmount
 			return () => clearInterval(intervalId);
 		}
+		return () => {};
 	}, [user, sortOrder]);
 
 	if (isLoading) {
@@ -116,7 +131,7 @@ const AdminAllLectures: React.FC = () => {
 				});
 				setLectures(sortedLectures);
 			} catch (error) {
-				toast.error('Failed to perform action');
+				toast.error('Failed to perform action: ' + (error as Error).message);
 			}
 		}
 		handleDialogClose();
