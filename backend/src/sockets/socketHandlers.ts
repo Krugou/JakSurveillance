@@ -242,6 +242,7 @@ const setupSocketHandlers = (io: Server) => {
 						io
 							.to(lectureid)
 							.emit('getallstudentsinlecture', notYetPresentStudents[lectureid]);
+						io.to(lectureid).emit('timerResetSuccess', lectureid);
 						console.log(
 							'Page reload detected for lectureid: ' +
 								lectureid +
