@@ -73,7 +73,11 @@ const TeacherLectures: React.FC = () => {
 
 	return (
 		<div className="relative xl:w-fit w-full bg-white p-5 rounded-lg">
-			<h1>Your lectures</h1>
+			<h1>
+				Your lectures. Check for any mistakes and report them to the development
+				team using the feedback option in the main view. We will add some sort of
+				direct editing option later. Thank you!
+			</h1>
 			<div className="space-x-2 mt-4 mb-4"></div>
 			<TableContainer
 				className={`relative bg-gray-100 overflow-auto h-[384px]
@@ -89,7 +93,7 @@ const TeacherLectures: React.FC = () => {
 							<TableCell>Course name</TableCell>
 							<TableCell>Course code</TableCell>
 							<TableCell>Topic name</TableCell>
-							<TableCell>Attendance ratio</TableCell>
+							<TableCell>Attended/not attended</TableCell>
 							<TableCell>State</TableCell>
 						</TableRow>
 					</TableHead>
