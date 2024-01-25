@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
 import Card from '../../../../components/main/cards/Card';
 import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
