@@ -33,18 +33,23 @@ const Feedback: React.FC = () => {
 		setFeedback('');
 		setTopic('');
 	};
-	const feedbackTopics = [
-		'User Interface',
-		'Performance',
-		'Features',
-		'Usability',
-		'Support',
-		'Bugs',
-		'Improvements',
-		'Content',
-		'Navigation',
-		'Accessibility',
-	];
+	const feedbackTopicsByRole = {
+		student: ['Attendance Scanners', 'Other'],
+		teacher: [
+			'Course Creation',
+			'Lecture Creation',
+			'Attendance gathering',
+			'Other',
+		],
+		counselor: ['User Interface', 'Other'],
+		admin: ['User Interface', 'Other'],
+	};
+
+	const userRole = user?.role;
+	let feedbackTopics = [];
+	if (userRole) {
+		feedbackTopics = feedbackTopicsByRole[userRole];
+	}
 	return (
 		<div className="bg-white rounded-lg shadow-md p-4">
 			<h2 className="text-xl font-bold mb-4">
