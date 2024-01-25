@@ -167,7 +167,7 @@ const CourseStudents: React.FC<Props> = ({
 
 	useEffect(() => {
 		if (!loading) {
-			if (coursestudents.length === 0) {
+			if (coursestudents.length < 1) {
 				setLectureSuccess(true);
 			} else {
 				setLectureSuccess(false);
