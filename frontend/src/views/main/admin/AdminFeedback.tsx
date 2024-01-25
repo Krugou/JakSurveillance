@@ -82,13 +82,16 @@ const AdminFeedback = () => {
 	};
 
 	return (
-		<div className="w-2/3 flex  flex-col justify-center">
+		<div className="w-full">
+			<h1 className="text-3xl font-bold p-3 bg-white w-fit m-auto rounded-lg mb-10 text-center">
+				Feedback
+			</h1>
+		<div className="flex bg-white 2xl:w-1/3 md:w-2/3 w-fit m-auto rounded-lg p-4 flex-col justify-center">
 			<div className="flex flex-col justify-center items-center m-2">
-				<h1 className="text-3xl font-bold text-center my-4">Feedback</h1>
-				<p className="text-lg text-center mb-4">Choose by to filter topic or All</p>
+				<p className="text-xl text-center mb-4">Choose by to filter topic or All</p>
 				<select
 					title="Select topic"
-					className="w-1/2 my-2 text-xl bg-metropoliaTrendGreen text-white font-bold p-2 rounded focus:outline-none focus:shadow-outline"
+					className="w-2/3 my-2 cursor-pointer text-xl bg-metropoliaTrendGreen text-white font-bold p-2 rounded focus:outline-none focus:shadow-outline"
 					onChange={e => handleTopicChange(e.target.value)}
 				>
 					<option value="">All</option>
@@ -100,6 +103,7 @@ const AdminFeedback = () => {
 						))}
 				</select>
 			</div>
+			<div className="max-h-[25em] pl-5 pr-5 pb-5 overflow-y-scroll">
 			{loading ? (
 				<CircularProgress />
 			) : (
@@ -109,18 +113,19 @@ const AdminFeedback = () => {
 					.map((item: FeedbackItem) => (
 						<Accordion
 							key={item.feedbackId}
-							style={{width: '100%', backgroundColor: '#53565a', color: '#F5F5F5'}}
+							style={{backgroundColor: '#ff5000', color: '#F5F5F5'}}
+							className="w-full mb-5"
 						>
 							<AccordionSummary
 								expandIcon={<ExpandMoreIcon />}
 								aria-controls="panel1a-content"
 								id="panel1a-header"
-								className="border border-black"
+								className="border border-white"
 							>
-								<Typography className="">{item.topic}</Typography>
+								<Typography>{item.topic}</Typography>
 							</AccordionSummary>
-							<AccordionDetails>
-								<Typography>{item.text}</Typography>
+							<AccordionDetails className="bg-white text-black">
+								<Typography className="break-all">{item.text}</Typography>
 								<div className="flex justify-end">
 									<button
 										className="bg-metropoliaSupportRed  hover:hover:bg-metropoliaSupportSecondaryRed transition text-white font-bold p-2  m-2 rounded focus:outline-none focus:shadow-outline"
@@ -161,6 +166,8 @@ const AdminFeedback = () => {
 					</button>
 				</DialogActions>
 			</Dialog>
+			</div>
+		</div>
 		</div>
 	);
 };
