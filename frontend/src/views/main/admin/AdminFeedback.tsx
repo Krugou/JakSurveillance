@@ -20,6 +20,7 @@ interface FeedbackItem {
 	timestamp: string;
 	topic: string;
 	userid: number;
+	email: string;
 }
 
 const AdminFeedback = () => {
@@ -86,88 +87,92 @@ const AdminFeedback = () => {
 			<h1 className="text-3xl font-bold p-3 bg-white w-fit m-auto rounded-lg mb-10 text-center">
 				Feedback
 			</h1>
-		<div className="flex bg-white 2xl:w-1/3 md:w-2/3 w-fit m-auto rounded-lg p-4 flex-col justify-center">
-			<div className="flex flex-col justify-center items-center m-2">
-				<p className="text-xl text-center mb-4">Choose by to filter topic or All</p>
-				<select
-					title="Select topic"
-					className="w-2/3 my-2 cursor-pointer text-xl bg-metropoliaTrendGreen text-white font-bold p-2 rounded focus:outline-none focus:shadow-outline"
-					onChange={e => handleTopicChange(e.target.value)}
-				>
-					<option value="">All</option>
-					{feedback &&
-						[...new Set(feedback.map(item => item.topic))].map(topic => (
-							<option key={topic} value={topic}>
-								{topic}
-							</option>
-						))}
-				</select>
-			</div>
-			<div className="max-h-[25em] pl-5 pr-5 pb-5 overflow-y-scroll">
-			{loading ? (
-				<CircularProgress />
-			) : (
-				feedback &&
-				feedback
-					.filter(item => selectedTopic === null || item.topic === selectedTopic)
-					.map((item: FeedbackItem) => (
-						<Accordion
-							key={item.feedbackId}
-							style={{backgroundColor: '#ff5000', color: '#F5F5F5'}}
-							className="w-full mb-5"
-						>
-							<AccordionSummary
-								expandIcon={<ExpandMoreIcon />}
-								aria-controls="panel1a-content"
-								id="panel1a-header"
-								className="border border-white"
-							>
-								<Typography>{item.topic}</Typography>
-							</AccordionSummary>
-							<AccordionDetails className="bg-white text-black">
-								<Typography className="break-all">{item.text}</Typography>
-								<div className="flex justify-end">
-									<button
-										className="bg-metropoliaSupportRed  hover:hover:bg-metropoliaSupportSecondaryRed transition text-white font-bold p-2  m-2 rounded focus:outline-none focus:shadow-outline"
-										onClick={() => handleClickOpen(item.feedbackId)}
+			<div className="flex bg-white 2xl:w-1/3 md:w-2/3 w-fit m-auto rounded-lg p-4 flex-col justify-center">
+				<div className="flex flex-col justify-center items-center m-2">
+					<p className="text-xl text-center mb-4">
+						Choose by to filter topic or All
+					</p>
+					<select
+						title="Select topic"
+						className="w-2/3 my-2 cursor-pointer text-xl bg-metropoliaTrendGreen text-white font-bold p-2 rounded focus:outline-none focus:shadow-outline"
+						onChange={e => handleTopicChange(e.target.value)}
+					>
+						<option value="">All</option>
+						{feedback &&
+							[...new Set(feedback.map(item => item.topic))].map(topic => (
+								<option key={topic} value={topic}>
+									{topic}
+								</option>
+							))}
+					</select>
+				</div>
+				<div className="max-h-[25em] pl-5 pr-5 pb-5 overflow-y-scroll">
+					{loading ? (
+						<CircularProgress />
+					) : (
+						feedback &&
+						feedback
+							.filter(item => selectedTopic === null || item.topic === selectedTopic)
+							.map((item: FeedbackItem) => (
+								<Accordion
+									key={item.feedbackId}
+									style={{backgroundColor: '#ff5000', color: '#F5F5F5'}}
+									className="w-full mb-5"
+								>
+									<AccordionSummary
+										expandIcon={<ExpandMoreIcon />}
+										aria-controls="panel1a-content"
+										id="panel1a-header"
+										className="border border-white"
 									>
-										Delete
-									</button>
-								</div>
-							</AccordionDetails>
-						</Accordion>
-					))
-			)}
-			<Dialog
-				open={open}
-				onClose={handleClose}
-				aria-labelledby="alert-dialog-title"
-				aria-describedby="alert-dialog-description"
-			>
-				<DialogTitle id="alert-dialog-title">{'Confirm Delete'}</DialogTitle>
-				<DialogContent>
-					<DialogContentText id="alert-dialog-description">
-						Are you sure you want to delete this feedback?
-					</DialogContentText>
-				</DialogContent>
-				<DialogActions>
-					<button
-						className="bg-metropoliaMainOrange  hover:hover:bg-metropoliaSecondaryOrange transition text-white font-bold p-2  m-2 rounded focus:outline-none focus:shadow-outline"
-						onClick={handleClose}
+										<Typography>
+											{item.topic} - {item.email}
+										</Typography>
+									</AccordionSummary>
+									<AccordionDetails className="bg-white text-black">
+										<Typography className="break-all">{item.text}</Typography>
+										<div className="flex justify-end">
+											<button
+												className="bg-metropoliaSupportRed  hover:hover:bg-metropoliaSupportSecondaryRed transition text-white font-bold p-2  m-2 rounded focus:outline-none focus:shadow-outline"
+												onClick={() => handleClickOpen(item.feedbackId)}
+											>
+												Delete
+											</button>
+										</div>
+									</AccordionDetails>
+								</Accordion>
+							))
+					)}
+					<Dialog
+						open={open}
+						onClose={handleClose}
+						aria-labelledby="alert-dialog-title"
+						aria-describedby="alert-dialog-description"
 					>
-						Cancel
-					</button>
-					<button
-						className="bg-metropoliaSupportRed  hover:hover:bg-metropoliaSupportSecondaryRed transition text-white font-bold p-2  m-2 rounded focus:outline-none focus:shadow-outline"
-						onClick={handleConfirmDelete}
-						autoFocus
-					>
-						Delete
-					</button>
-				</DialogActions>
-			</Dialog>
+						<DialogTitle id="alert-dialog-title">{'Confirm Delete'}</DialogTitle>
+						<DialogContent>
+							<DialogContentText id="alert-dialog-description">
+								Are you sure you want to delete this feedback?
+							</DialogContentText>
+						</DialogContent>
+						<DialogActions>
+							<button
+								className="bg-metropoliaMainOrange  hover:hover:bg-metropoliaSecondaryOrange transition text-white font-bold p-2  m-2 rounded focus:outline-none focus:shadow-outline"
+								onClick={handleClose}
+							>
+								Cancel
+							</button>
+							<button
+								className="bg-metropoliaSupportRed  hover:hover:bg-metropoliaSupportSecondaryRed transition text-white font-bold p-2  m-2 rounded focus:outline-none focus:shadow-outline"
+								onClick={handleConfirmDelete}
+								autoFocus
+							>
+								Delete
+							</button>
+						</DialogActions>
+					</Dialog>
+				</div>
 			</div>
-		</div>
 		</div>
 	);
 };
