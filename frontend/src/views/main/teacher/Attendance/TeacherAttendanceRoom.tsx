@@ -326,8 +326,8 @@ const AttendanceRoom: React.FC = () => {
 						lectureSuccess ? 'border-metropoliaTrendGreen border-2' : ''
 					}`}
 				>
-					<div className="flex flex-row justify-between">
-						<h1 className="text-2xl pb-5 font-bold">
+					<div className="flex sm:flex-row flex-col items-center justify-between">
+						<h1 className="text-2xl font-bold">
 							{courseName} | {courseCode} | {topicname} |
 							{lectureSuccess
 								? ' All students are here! '
@@ -339,7 +339,7 @@ const AttendanceRoom: React.FC = () => {
 						</h1>
 						<div className="flex flex-row justify-end">
 							<button
-								className="bg-metropoliaSupportRed sm:w-fit transition h-fit p-2 m-2 text-sm w-full hover:bg-metropoliaSupportRed text-white font-bold rounded"
+								className="bg-metropoliaMainOrange sm:w-fit h-[4em] transition p-2 m-2 text-md w-full hover:bg-metropoliaSecondaryOrange text-white rounded"
 								onClick={() => setIsAnimationStopped(!isAnimationStopped)}
 								title={`${
 									isAnimationStopped ? 'Start' : 'Stop'
@@ -350,7 +350,7 @@ const AttendanceRoom: React.FC = () => {
 							{latency !== null && latency !== undefined && (
 								<div className="flex justify-center items-center">
 									<button
-										className="bg-metropoliaMainOrange text-white p-2 m-2 rounded-md"
+										className="bg-metropoliaTrendGreen h-[4em] hover:bg-green-500 transition text-white p-2 m-2 rounded-md"
 										title={
 											latency !== null && latency !== undefined
 												? `Click to open instructions. current latency ${latency} ms`
@@ -363,7 +363,7 @@ const AttendanceRoom: React.FC = () => {
 								</div>
 							)}
 							<button
-								className="bg-metropoliaSupportRed sm:w-fit transition h-fit p-2 m-2 text-sm w-full hover:bg-metropoliaSupportRed text-white font-bold rounded"
+								className="bg-metropoliaSupportRed sm:w-fit h-[4em] transition h-fit p-2 m-2 text-md w-full hover:bg-red-500 text-white rounded"
 								onClick={() => {
 									navigate(`/teacher/attendance/reload/${lectureid}`);
 								}}
@@ -414,7 +414,7 @@ const AttendanceRoom: React.FC = () => {
 					</div>
 					<div className="flex sm:flex-row-reverse flex-col gap-5 items-center justify-end">
 						<button
-							className="bg-metropoliaSupportRed sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSupportRed text-white font-bold rounded"
+							className="bg-metropoliaSupportRed sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-red-500 text-white font-bold rounded"
 							onClick={() => setConfirmOpen(true)}
 							title="Delete this lecture"
 						>

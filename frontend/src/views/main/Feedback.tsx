@@ -34,14 +34,16 @@ const Feedback: React.FC = () => {
 		setTopic('');
 	};
 	const feedbackTopicsByRole = {
-		student: ['Attendance Scanners', 'Other'],
+		student: ['Attendance Scanners', 'User Interface', 'Other'],
 		teacher: [
+			'User Interface',
 			'Course Creation',
 			'Lecture Creation',
 			'Attendance gathering',
+			'Course/Student details',
 			'Other',
 		],
-		counselor: ['User Interface', 'Other'],
+		counselor: ['User Interface', 'Course/Student details', 'Other'],
 		admin: ['User Interface', 'Other'],
 	};
 
