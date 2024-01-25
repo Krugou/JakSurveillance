@@ -1,8 +1,9 @@
 import React from 'react';
-import {Route, Routes} from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import TeacherAttendanceRoom from '../../views/main/teacher/Attendance/TeacherAttendanceRoom.tsx';
 import TeacherCreateLecture from '../../views/main/teacher/Attendance/TeacherCreateLecture.tsx';
 import TeacherMainView from '../../views/main/teacher/TeacherMainView.tsx';
+import TeacherAttendanceRoomReload from '../../views/main/teacher/Attendance/TeacherAttendanceRoomReload.tsx';
 /**
  * TeacherAttendanceRoutes component.
  * This component is responsible for defining the routes for the teacher's attendance section of the application.
@@ -18,6 +19,7 @@ const TeacherAttendanceRoutes: React.FC = () => {
 			<Route path="createlecture" element={<TeacherCreateLecture />} />
 			<Route path=":lectureid" element={<TeacherAttendanceRoom />} />
 			<Route path="*" element={<TeacherMainView />} />
+			<Route path="/reload/:lectureid" element={<TeacherAttendanceRoomReload />} />
 		</Routes>
 	);
 };
