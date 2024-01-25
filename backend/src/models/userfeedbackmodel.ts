@@ -13,9 +13,14 @@ const userFeedBackModel = {
 	 * @returns An array of RowDataPacket objects containing the feedback.
 	 */
 	async getUserFeedback() {
-		const [rows] = await pool
-			.promise()
-			.query<RowDataPacket[]>('SELECT * FROM user_feedback ', []);
+		const [rows] = await pool.promise().query<RowDataPacket[]>(
+			`
+      SELECT uf.*, u.email
+      FROM user_feedback uf
+      INNER JOIN users u ON uf.userid = u.userid
+    `,
+			[],
+		);
 		return rows;
 	},
 
