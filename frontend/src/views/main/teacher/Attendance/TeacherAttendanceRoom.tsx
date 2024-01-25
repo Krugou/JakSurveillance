@@ -46,7 +46,6 @@ const AttendanceRoom: React.FC = () => {
 	const [latency, setLatency] = useState(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [lectureSuccess, setLectureSuccess] = useState(false);
-
 	/**
 	 * useEffect hook for fetching lecture info.
 	 * This hook is run when the component mounts and whenever the lectureid changes.
@@ -218,7 +217,7 @@ const AttendanceRoom: React.FC = () => {
 				}
 			});
 		}
-	}, [lectureid, user]); // This effect depends on the lectureid variable
+	}, [lectureid, user]);
 
 	/**
 	 * useEffect hook for disconnecting the socket when the component unmounts.
@@ -351,7 +350,7 @@ const AttendanceRoom: React.FC = () => {
 							{latency !== null && latency !== undefined && (
 								<div className="flex justify-center items-center">
 									<button
-										className="bg-metropoliaMainOrange text-white p-2 rounded-md"
+										className="bg-metropoliaMainOrange text-white p-2 m-2 rounded-md"
 										title={
 											latency !== null && latency !== undefined
 												? `Click to open instructions. current latency ${latency} ms`
@@ -363,6 +362,15 @@ const AttendanceRoom: React.FC = () => {
 									</button>
 								</div>
 							)}
+							<button
+								className="bg-metropoliaSupportRed sm:w-fit transition h-fit p-2 m-2 text-sm w-full hover:bg-metropoliaSupportRed text-white font-bold rounded"
+								onClick={() => {
+									navigate(`/teacher/attendance/reload/${lectureid}`);
+								}}
+								title={'Reset timer'}
+							>
+								Reset timer
+							</button>
 						</div>
 					</div>
 					<div className="flex flex-col-reverse sm:flex-row justify-between items-start">
