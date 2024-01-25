@@ -22,12 +22,10 @@ const AttendanceInstructions: React.FC<AttendanceInstructionsProps> = ({
 				</p>
 				<ol className="list-decimal list-inside space-y-4">
 					<li>
-						If you want to extend the timer beyond the currently set time via server
-						settings, refresh the timer by pressing the Back button on your browser.
-						Subsequently, press the Forward button to reset the timer and refresh the
-						server connection used by the QR code changer. This process involves going
-						back to the previous page and returning; it's the sole method to extend
-						the timer, configured through server settings by the admin role.
+						To extend the overall auto-finish timer, refresh the timer by pressing the
+						"Reset Timer" button, considering the auto-finish time set in the server
+						settings. This will reload the page and internally update the timer
+						through the server background service.
 					</li>
 					<li>
 						To reposition the bottom list of students, click and hold on the names of
