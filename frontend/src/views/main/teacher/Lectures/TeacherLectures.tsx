@@ -9,11 +9,9 @@ import {
 
 import CircularProgress from '@mui/material/CircularProgress';
 import React, {useContext, useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {UserContext} from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
-
 interface Lecture {
 	lectureid: number;
 	start_date: string;
@@ -31,24 +29,34 @@ interface Lecture {
 const TeacherLectures: React.FC = () => {
 	const [lectures, setLectures] = useState<Lecture[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
-	const [filterOpen, setFilterOpen] = useState(false);
 	const {user} = useContext(UserContext);
-	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+	const [sortOrder] = useState<'asc' | 'desc'>('desc');
 
 	const getLectures = async () => {
 		const token: string | null = localStorage.getItem('userToken');
 		if (!token) {
-			throw new Error('No token available');
+			toast.error('No token available');
+			setIsLoading(false);
+			return;
 		}
 		if (user) {
-			const result = await apiHooks.fetchTeacherOwnLectures(user.userid, token);
-			const sortedLectures = result.sort((a, b) => {
-				return sortOrder === 'asc'
-					? a.lectureid - b.lectureid
-					: b.lectureid - a.lectureid;
-			});
-			setLectures(sortedLectures);
-			setIsLoading(false);
+			try {
+				const result = await apiHooks.fetchTeacherOwnLectures(
+					user.userid.toString(),
+					token,
+				);
+				const sortedLectures = result.sort((a, b) => {
+					return sortOrder === 'asc'
+						? a.lectureid - b.lectureid
+						: b.lectureid - a.lectureid;
+				});
+				setLectures(sortedLectures);
+				setIsLoading(false);
+			} catch (error) {
+				const message = (error as Error).message;
+				toast.error('Failed to fetch lectures: ' + message);
+				setIsLoading(false);
+			}
 		}
 	};
 
@@ -99,7 +107,9 @@ const TeacherLectures: React.FC = () => {
 									<TableCell>{lecture.coursecode}</TableCell>
 									<TableCell>{lecture.topicname}</TableCell>
 									<TableCell
-										title={`Total attendance gathered: ${lecture.attended + lecture.notattended}`}
+										title={`Total attendance gathered: ${
+											lecture.attended + lecture.notattended
+										}`}
 									>
 										<span className="text-metropoliaTrendGreen">{lecture.attended}</span>/
 										<span className="text-metropoliaSupportRed">
