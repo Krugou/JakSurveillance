@@ -109,7 +109,7 @@ const MainView: React.FC = () => {
 						<Card
 							path="/teacher/lectures"
 							title="Your lectures"
-							description="View all of lectures"
+							description="View all of your lectures"
 						/>
 						<FeedbackCard role="teacher" />
 					</div>
