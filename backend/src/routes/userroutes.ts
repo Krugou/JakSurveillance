@@ -160,7 +160,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 					// If the staff user doesn't exist, add them to the database
 					const addStaffUserResponse = await usermodel.addStaffUser(userData);
 					if (!addStaffUserResponse) {
-						console.error('Failed to add staff user');
+						console.error('Failed to add staff user to the database.');
 					}
 					// Create a token for the user
 					const token = jwt.sign(
@@ -177,7 +177,9 @@ router.post('/', async (req: Request, res: Response, next) => {
 					res.json({user: addStaffUserResponse, token});
 				} else {
 					if (username !== 'admin') {
-						console.log('staff metropolia api login success for ' + username);
+						console.log(
+							`Staff Metropolia API login was successful for user: ${username}`,
+						);
 					}
 					// If the staff user exists, authenticate their login
 					authenticate(req, res, next, username);
@@ -191,42 +193,48 @@ router.post('/', async (req: Request, res: Response, next) => {
 		// If the logged-in user is not Metropolia staff, authenticate them
 		if (metropoliaData.staff === false) {
 			// Call the authenticate function to handle passport authentication
-			console.log('non-staff metropolia api login success for ' + username);
+			console.log(
+				`Non-staff Metropolia API login was successful for user: ${username}`,
+			);
 			authenticate(req, res, next, username);
 		}
 	} catch (error) {
+		console.log('Error in user login: ');
 		console.error(error);
 		res.status(500).json({error: 'Internal server error'});
 	}
 });
 router.post(
-  '/feedback',
-  [
-    body('topic').notEmpty().withMessage('Topic is required'),
-    body('text').notEmpty().withMessage('Text is required'),
-    body('userId').notEmpty().withMessage('User ID is required')
-  ],
-  async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    const { topic, text, userId } = req.body;
+	'/feedback',
+	[
+		body('topic').notEmpty().withMessage('Topic is required'),
+		body('text').notEmpty().withMessage('Text is required'),
+		body('userId').notEmpty().withMessage('User ID is required'),
+	],
+	async (req: Request, res: Response) => {
+		console.log(`Received feedback from user with ID: ${req.body.userId}`);
+		console.log(`Feedback topic: ${req.body.topic}`);
+		console.log(`Feedback text: ${req.body.text}`);
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(400).json({errors: errors.array()});
+		}
+		const {topic, text, userId} = req.body;
 
-    const result = await userFeedBackModel.insertUserFeedback(
-      userId,
-      topic,
-      text,
-    );
-    if (result === null) {
-      return res.status(500).json({
-        message: 'Internal server error',
-      });
-    }
-    return res.status(200).json({
-      message: 'Success',
-    });
-  },
+		const result = await userFeedBackModel.insertUserFeedback(
+			userId,
+			topic,
+			text,
+		);
+		if (result === null) {
+			return res.status(500).json({
+				message: 'Internal server error',
+			});
+		}
+		return res.status(200).json({
+			message: 'Success',
+		});
+	},
 );
 
 export default router;
