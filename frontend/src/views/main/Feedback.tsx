@@ -107,7 +107,7 @@ const Feedback: React.FC = () => {
 			</form>
 			<p className="text-sm text-gray-500 mt-2">
 				Verify you have the latest version by checking the version checkmark on the
-				login or start view before submitting.
+				login or start view(with moving eye) before submitting.
 			</p>
 		</div>
 	);
