@@ -34,7 +34,12 @@ const Feedback: React.FC = () => {
 		setTopic('');
 	};
 	const feedbackTopicsByRole = {
-		student: ['Attendance Scanners', 'User Interface', 'Attendance info', 'Other'],
+		student: [
+			'Attendance Scanners',
+			'User Interface',
+			'Attendance info',
+			'Other',
+		],
 		teacher: [
 			'User Interface',
 			'Course Creation',
@@ -44,7 +49,12 @@ const Feedback: React.FC = () => {
 			'Attendance info',
 			'Other',
 		],
-		counselor: ['User Interface', 'Course/Student info', 'Attendance info', 'Other'],
+		counselor: [
+			'User Interface',
+			'Course/Student info',
+			'Attendance info',
+			'Other',
+		],
 		admin: ['User Interface', 'Other'],
 	};
 
@@ -95,6 +105,10 @@ const Feedback: React.FC = () => {
 					Submit
 				</button>
 			</form>
+			<p className="text-sm text-gray-500 mt-2">
+				Verify you have the latest version by checking the version checkmark on the
+				login or start view before submitting.
+			</p>
 		</div>
 	);
 };
