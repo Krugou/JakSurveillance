@@ -100,7 +100,12 @@ const TeacherLectures: React.FC = () => {
 					<TableBody>
 						{lectures.length > 0 ? (
 							lectures.map(lecture => (
-								<TableRow key={lecture.lectureid} className=" hover:bg-gray-200">
+								<TableRow
+									key={lecture.lectureid}
+									className={`hover:bg-gray-200 ${
+										lecture.attended === 0 ? 'bg-red-200' : ''
+									}`}
+								>
 									<TableCell>{lecture.lectureid}</TableCell>
 									<TableCell>
 										{new Date(lecture.start_date).toLocaleDateString()}
