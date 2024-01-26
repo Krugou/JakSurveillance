@@ -506,33 +506,32 @@ const setupSocketHandlers = (io: Server) => {
 				})
 					.then(response => {
 						if (response) {
+							console.log(`Manual insertion of student was successful. Response: `);
+
+							const studentIndex = notYetPresentStudents[lectureid].findIndex(
+								(student: Student) =>
+									Number(student.studentnumber) === Number(studentId),
+							);
+
+							if (studentIndex !== -1) {
+								const student = notYetPresentStudents[lectureid][studentIndex];
+								presentStudents[lectureid].push(student);
+								notYetPresentStudents[lectureid].splice(studentIndex, 1); // Remove the student from notYetPresentStudents
+							} else {
+								console.error('Student not found');
+							}
+							io
+								.to(lectureid.toString())
+								.emit('updateCourseStudents', notYetPresentStudents[lectureid]);
+							io
+								.to(lectureid.toString())
+								.emit('updateAttendees', presentStudents[lectureid]);
+							// Emit the 'manualstudentinsertSuccess' event only to the client who sent the event
+							io.to(socket.id).emit('manualStudentInsertSuccess', lectureid);
 							console.log(
-								`Manual insertion of student was successful. Response: ${response}`,
+								`Manual insertion of student was successful for lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
 							);
 						}
-						const studentIndex = notYetPresentStudents[lectureid].findIndex(
-							(student: Student) =>
-								Number(student.studentnumber) === Number(studentId),
-						);
-
-						if (studentIndex !== -1) {
-							const student = notYetPresentStudents[lectureid][studentIndex];
-							presentStudents[lectureid].push(student);
-							notYetPresentStudents[lectureid].splice(studentIndex, 1); // Remove the student from notYetPresentStudents
-						} else {
-							console.error('Student not found');
-						}
-						io
-							.to(lectureid.toString())
-							.emit('updateCourseStudents', notYetPresentStudents[lectureid]);
-						io
-							.to(lectureid.toString())
-							.emit('updateAttendees', presentStudents[lectureid]);
-						// Emit the 'manualstudentinsertSuccess' event only to the client who sent the event
-						io.to(socket.id).emit('manualStudentInsertSuccess', lectureid);
-						console.log(
-							`Manual insertion of student was successful for lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
-						);
 					})
 					.catch(error => {
 						console.error(
@@ -629,6 +628,7 @@ const setupSocketHandlers = (io: Server) => {
 				delete presentStudents[lectureid];
 				delete lectureData[lectureid];
 				clearTimeout(lectureTimeoutIds.get(lectureid));
+				
 			} catch (error) {
 				// Handle the error here
 				console.error(error);
