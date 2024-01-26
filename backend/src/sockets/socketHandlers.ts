@@ -11,7 +11,7 @@ import doFetch from '../utils/doFetch.js';
  * @module setupSocketHandlers
  */
 config();
-
+console.log('SocketHandlers.ts is loading');
 /**
  * The speed at which the hash changes, in milliseconds.
  * @type {number}
@@ -75,7 +75,7 @@ const getToken = async () => {
 				password: process.env.devpass,
 			}),
 		});
-
+		console.log('getToken request success' + ' ' + new Date().toISOString());
 		return response.token;
 	} catch (error) {
 		// Handle the error here
@@ -97,7 +97,7 @@ const fetchDataAndUpdate = async () => {
 				Authorization: 'Bearer ' + token,
 			},
 		});
-
+		console.log('Settings update Success' + ' ' + new Date().toISOString());
 		speedOfHashChange = response.speedofhash;
 		leewaytimes = response.leewayspeed;
 		timeout = response.timeouttime;
@@ -134,6 +134,7 @@ const updateHash = (lectureid: string) => {
 	if (lectureData[lectureid].timestamps.length > timestampslength) {
 		lectureData[lectureid].timestamps.shift();
 	}
+	// console.log('updateHash success' + ' ' + new Date().toISOString());
 };
 /**
  * Sends a POST request to the '/lecturefinished/' route and emits 'lecturefinished' event to connected sockets.
@@ -201,16 +202,23 @@ const lectureTimeoutIds = new Map();
  */
 const setupSocketHandlers = (io: Server) => {
 	io.on('connection', (socket: Socket) => {
-		// console.log('user joined: ' + socket.id);
+		console.log(
+			`User with socket ID: ${
+				socket.id
+			} has connected at ${new Date().toISOString()}`,
+		);
 
 		// handle disconnect
 		socket.on('disconnect', () => {
-			// console.log('user disconnected');
+			console.log(
+				`User with socket ID: ${
+					socket.id
+				} has disconnected at ${new Date().toISOString()}`,
+			);
 		});
 		socket.on('createAttendanceCollection', async lectureid => {
 			console.log(
-				'createAttendanceCollection ',
-				lectureid + ' ' + new Date().toISOString(),
+				`Attendance collection created for Lecture ID: ${lectureid} at ${new Date().toISOString()}`,
 			);
 			// logger.info('createAttendanceCollection ' + lectureid);
 			// Initialize the lecture data if it doesn't exist
@@ -226,7 +234,7 @@ const setupSocketHandlers = (io: Server) => {
 					// Emit the 'lecturestarted' event to the room with the lectureid
 					io.to(lectureid).emit('lectureStarted', lectureid, timeout);
 					console.log(
-						'lecture started ' + lectureid + ' ' + new Date().toISOString(),
+						`Lecture with ID: ${lectureid} started at ${new Date().toISOString()}`,
 					);
 					io.to(lectureid).emit('pingEvent', lectureid, Date.now());
 					setInterval(() => {
@@ -244,10 +252,7 @@ const setupSocketHandlers = (io: Server) => {
 							.emit('getallstudentsinlecture', notYetPresentStudents[lectureid]);
 						io.to(lectureid).emit('timerResetSuccess', lectureid);
 						console.log(
-							'Page reload detected for lectureid: ' +
-								lectureid +
-								' ' +
-								new Date().toISOString(),
+							`Timer reset for lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
 						);
 					} else {
 						// If the lists do not exist, fetch them from the server and emit them to the room with the lectureid
@@ -273,10 +278,7 @@ const setupSocketHandlers = (io: Server) => {
 									.to(lectureid)
 									.emit('getallstudentsinlecture', notYetPresentStudents[lectureid]);
 								console.log(
-									'getallstudentsinlecture ' +
-										lectureid +
-										' ' +
-										new Date().toISOString(),
+									`Fetching all students in lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
 								);
 								// logger.info('getallstudentsinlecture ' + lectureid);
 							})
@@ -286,7 +288,20 @@ const setupSocketHandlers = (io: Server) => {
 					}
 					// Update the hash for this lecture
 					updateHash(lectureid);
-					setInterval(() => updateHash(lectureid), speedOfHashChange);
+					// Create an object to store interval IDs
+					const lectureUpdateHashIntervals: {[lectureid: string]: NodeJS.Timeout} =
+						{};
+
+					// If an interval already exists for the lectureid, clear it
+					if (lectureUpdateHashIntervals[lectureid]) {
+						clearInterval(lectureUpdateHashIntervals[lectureid]);
+					}
+
+					// Set a new interval and store its ID in the intervals object
+					lectureUpdateHashIntervals[lectureid] = setInterval(() => {
+						updateHash(lectureid);
+					}, speedOfHashChange);
+
 					setTimeout(() => {
 						io
 							.to(lectureid)
@@ -299,15 +314,16 @@ const setupSocketHandlers = (io: Server) => {
 							);
 					}, 1000);
 					// Create an object to store interval IDs
-					const intervals: {[lectureid: string]: NodeJS.Timeout} = {};
+					const lectureUpdateDataIntervals: {[lectureid: string]: NodeJS.Timeout} =
+						{};
 
 					// If an interval already exists for the lectureid, clear it
-					if (intervals[lectureid]) {
-						clearInterval(intervals[lectureid]);
+					if (lectureUpdateDataIntervals[lectureid]) {
+						clearInterval(lectureUpdateDataIntervals[lectureid]);
 					}
 
 					// Set a new interval and store its ID in the intervals object
-					intervals[lectureid] = setInterval(() => {
+					lectureUpdateDataIntervals[lectureid] = setInterval(() => {
 						io
 							.to(lectureid)
 							.emit(
@@ -325,34 +341,28 @@ const setupSocketHandlers = (io: Server) => {
 					// Set a timeout to emit 'classfinished' event after 'timeout' milliseconds
 					const timeoutId = setTimeout(() => {
 						console.log(
-							'Lecture finished with timeout ' +
-								lectureid +
-								' ' +
-								new Date().toISOString(),
+							`Lecture with ID: ${lectureid} finished with timeout at ${new Date().toISOString()}`,
 						);
 						// logger.info('Lecture finished with timeout ' + lectureid);
 						finishLecture(lectureid, io);
 					}, timeout);
 					console.log(
-						'setting timeout to timeoutids ' + lectureid,
-						timeoutId + ' ' + new Date().toISOString(),
+						`Setting timeout with ID: ${timeoutId} for lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
 					);
 					// logger.info('setting timeout to timeoutids ' + lectureid);
 					lectureTimeoutIds.set(lectureid, timeoutId);
 					// Handle the 'lecturefinishedwithbutton' event
 					socket.on('lectureFinishedWithButton', async (lectureid: string) => {
 						console.log(
-							'lectureFinishedWithButton ' +
-								lectureid +
-								' ' +
-								new Date().toISOString(),
+							`Lecture with ID: ${lectureid} finished at ${new Date().toISOString()}`,
 						);
 						// logger.info('lectureFinishedWithButton ' + lectureid);
 						finishLecture(lectureid, io);
 					});
 					// Clear the interval when the socket disconnects
 					socket.on('disconnect', () => {
-						clearInterval(intervals[lectureid]);
+						clearInterval(lectureUpdateDataIntervals[lectureid]);
+						clearInterval(lectureUpdateHashIntervals[lectureid]);
 						// logger.info('disconnect ' + lectureid);
 					});
 				})
@@ -381,14 +391,17 @@ const setupSocketHandlers = (io: Server) => {
 				);
 
 				if (timestamp) {
-					console.log('timestamp found for ' + studentId + ' !');
+					console.log(`Timestamp found for Student ID: ${studentId}!`);
+
 					// logger.info('timestamp found for ' + studentId + ' !');
 				} else {
-					console.log('lectureid: ' + lectureid);
-					console.log(secureHash + ' ' + unixtime + ' ' + new Date().toISOString());
-					console.log('Current timestamps: ');
-					console.log(lectureData[lectureid].timestamps);
-					console.log('timestamp not found for ' + studentId + ' !');
+					console.log(`Lecture ID: ${lectureid}`);
+					console.log(
+						`Secure Hash: ${secureHash}, Unix Time: ${unixtime}, ISO Time: ${new Date().toISOString()}`,
+					);
+					console.log('Current Timestamps:');
+					console.log(JSON.stringify(lectureData[lectureid].timestamps, null, 2));
+					console.log(`Timestamp not found for Student ID: ${studentId}!`);
 					// logger.info('lectureid: ' + lectureid);
 					// logger.info(secureHash + ' ' + unixtime + ' ' + new Date().toISOString());
 					// logger.info('Current timestamps: ');
@@ -417,10 +430,9 @@ const setupSocketHandlers = (io: Server) => {
 					})
 						.then(response => {
 							console.log(
-								' inputThatStudentHasArrivedToLecture Success:' +
-									new Date().toISOString(),
+								`Input that student has arrived to lecture was successful at ${new Date().toISOString()}`,
 							);
-							console.log(response);
+							console.log(`Response: ${JSON.stringify(response)}`);
 
 							const studentIndex = notYetPresentStudents[lectureid].findIndex(
 								(student: Student) =>
@@ -444,16 +456,14 @@ const setupSocketHandlers = (io: Server) => {
 
 							io.to(socket.id).emit('youHaveBeenSavedIntoLecture', lectureid);
 							console.log(
-								'youHaveBeenSavedIntoLecture ' +
-									lectureid +
-									' ' +
-									studentId +
-									' ' +
-									new Date().toISOString(),
+								`Student with ID: ${studentId} has been saved into lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
 							);
 						})
 						.catch(error => {
 							// Handle the error here
+							console.log(
+								'Attendance record already exists. No further action needed.',
+							);
 							console.error(error);
 						});
 				} else {
@@ -461,12 +471,7 @@ const setupSocketHandlers = (io: Server) => {
 						.to(socket.id)
 						.emit('inputThatStudentHasArrivedToLectureTooSlow', lectureid);
 					console.log(
-						'inputThatStudentHasArrivedToLectureTooSlow ' +
-							lectureid +
-							' ' +
-							studentId +
-							' ' +
-							new Date().toISOString(),
+						`Input for student with ID: ${studentId} arriving to lecture with ID: ${lectureid} was too slow at ${new Date().toISOString()}`,
 					);
 				}
 			},
@@ -477,8 +482,7 @@ const setupSocketHandlers = (io: Server) => {
 			'manualStudentInsert',
 			async (studentId: string, lectureid: number) => {
 				console.log(
-					'manualStudentInsert ',
-					studentId + ' ' + lectureid + ' ' + new Date().toISOString(),
+					`Manual insertion initiated for student with ID: ${studentId} into lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
 				);
 				// Emit the 'manualstudentinsertFailed' event only to the client who sent the event
 				if (studentId === '') {
@@ -502,7 +506,9 @@ const setupSocketHandlers = (io: Server) => {
 				})
 					.then(response => {
 						if (response) {
-							console.log('manualStudentInsert Success:', response);
+							console.log(
+								`Manual insertion of student was successful. Response: ${response}`,
+							);
 						}
 						const studentIndex = notYetPresentStudents[lectureid].findIndex(
 							(student: Student) =>
@@ -525,16 +531,12 @@ const setupSocketHandlers = (io: Server) => {
 						// Emit the 'manualstudentinsertSuccess' event only to the client who sent the event
 						io.to(socket.id).emit('manualStudentInsertSuccess', lectureid);
 						console.log(
-							'manualStudentInsertSuccess ',
-							lectureid + ' ' + new Date().toISOString(),
+							`Manual insertion of student was successful for lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
 						);
 					})
 					.catch(error => {
 						console.error(
-							'manualStudentInsertError error: ' +
-								error +
-								' ' +
-								new Date().toISOString(),
+							`Error occurred during manual insertion of student: ${error} at ${new Date().toISOString()}`,
 						);
 						// Emit the 'manualstudentinsertError' event only to the client who sent the event
 						io.to(socket.id).emit('manualStudentInsertError', lectureid);
@@ -546,13 +548,7 @@ const setupSocketHandlers = (io: Server) => {
 			'manualStudentRemove',
 			async (studentId: string, lectureid: number) => {
 				console.log(
-					'manualStudentRemove ' +
-						' ' +
-						studentId +
-						' ' +
-						lectureid +
-						' ' +
-						new Date().toISOString(),
+					`Manual removal initiated for student with ID: ${studentId} from lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
 				);
 				// Emit the 'manualStudentRemoveFailed' event only to the client who sent the event
 				if (studentId === '') {
@@ -595,17 +591,13 @@ const setupSocketHandlers = (io: Server) => {
 							// Emit the 'manualStudentRemoveSuccess' event only to the client who sent the event
 							io.to(socket.id).emit('manualStudentRemoveSuccess', lectureid);
 							console.log(
-								'manualStudentRemoveSuccess ',
-								lectureid + ' ' + new Date().toISOString(),
+								`Manual removal of student was successful for lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
 							);
 						}
 					})
 					.catch(error => {
 						console.error(
-							'manualStudentRemoveError error: ' +
-								error +
-								' ' +
-								new Date().toISOString(),
+							`Error occurred during manual removal of student: ${error} at ${new Date().toISOString()}`,
 						);
 						// Emit the 'manualStudentRemoveError' event only to the client who sent the event
 						io.to(socket.id).emit('manualStudentRemoveError', lectureid);
@@ -630,7 +622,7 @@ const setupSocketHandlers = (io: Server) => {
 
 				io.to(lectureid).emit('lectureCanceledSuccess', lectureid);
 				console.log(
-					'lectureCanceledSuccess ' + lectureid + ' ' + new Date().toISOString(),
+					`Lecture with ID: ${lectureid} was successfully canceled at ${new Date().toISOString()}`,
 				);
 				// Purge lectureid from notYetPresentStudents and presentStudents
 				delete notYetPresentStudents[lectureid];
