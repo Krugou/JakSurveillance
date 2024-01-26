@@ -109,8 +109,7 @@ const AdminFeedback = () => {
 				<div className="max-h-[25em] pl-5 pr-5 pb-5 overflow-y-scroll">
 					{loading ? (
 						<CircularProgress />
-					) : (
-						feedback &&
+					) : feedback.length > 0 ? (
 						feedback
 							.filter(item => selectedTopic === null || item.topic === selectedTopic)
 							.map((item: FeedbackItem) => (
@@ -142,6 +141,10 @@ const AdminFeedback = () => {
 									</AccordionDetails>
 								</Accordion>
 							))
+					) : (
+						<p className="text-center">
+							No feedback has been provided yet. Stay tuned!
+						</p>
 					)}
 					<Dialog
 						open={open}
