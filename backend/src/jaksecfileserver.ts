@@ -49,12 +49,7 @@ http.listen(port, () => {
 	// 		'/ start time:' +
 	// 		startTime.toLocaleString(),
 	// );
-	console.log(
-		'Metropolia Attendance app FILE SERVER started at: http://localhost:' +
-			port +
-			'/ start time:' +
-			startTime.toLocaleString(),
-	);
+	console.log(`JakSec FILE SERVER started at: http://localhost:${port}/. Start time: ${startTime.toLocaleString()}`);
 });
 
 export default app;
