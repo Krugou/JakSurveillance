@@ -180,7 +180,7 @@ const AdminAllLectures: React.FC = () => {
 							<TableCell>Course name</TableCell>
 							<TableCell>Course code</TableCell>
 							<TableCell>Topic name</TableCell>
-							<TableCell>Attendance ratio</TableCell>
+							<TableCell>Attended/not attended</TableCell>
 							<TableCell>State</TableCell>
 							<TableCell>Actions</TableCell>
 						</TableRow>
@@ -188,7 +188,12 @@ const AdminAllLectures: React.FC = () => {
 					<TableBody>
 						{filteredLectures.length > 0 ? (
 							filteredLectures.map(lecture => (
-								<TableRow key={lecture.lectureid} className=" hover:bg-gray-200">
+								<TableRow
+									key={lecture.lectureid}
+									className={`hover:bg-gray-200 ${
+										lecture.attended === 0 ? 'bg-red-200' : ''
+									}`}
+								>
 									<TableCell>{lecture.lectureid}</TableCell>
 									<TableCell>
 										{new Date(lecture.start_date).toLocaleDateString()}
