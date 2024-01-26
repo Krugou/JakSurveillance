@@ -129,10 +129,6 @@ http.listen(port, () => {
 	// 		startTime.toLocaleString(),
 	// );
 	console.log(
-		'Metropolia Attendance App REST + DATABASE SERVER Started at: http://localhost:' +
-			port +
-			'/ ' +
-			'start time: ' +
-			startTime.toLocaleString(),
+		`JakSec REST + DATABASE SERVER started at: http://localhost:${port}/. Start time: ${startTime.toLocaleString()}`,
 	);
 });
