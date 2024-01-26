@@ -51,6 +51,7 @@ const MainView: React.FC = () => {
 				</div>
 			) : (
 				<>
+					<CheckOpenLectures />
 					<div
 						className={`${
 							courses.length === 0
@@ -93,7 +94,6 @@ const MainView: React.FC = () => {
 									title="Your Courses"
 									description="View all of your courses"
 								/>
-								<CheckOpenLectures />
 								<Card
 									path="/teacher/attendance/createlecture"
 									title="Create new Lecture"

@@ -1,6 +1,6 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Card from '../../../../components/main/cards/Card';
-import {UserContext} from '../../../../contexts/UserContext';
+import { UserContext } from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
 
 interface Lecture {
@@ -11,7 +11,7 @@ interface Lecture {
 }
 
 const CheckOpenLectures: React.FC = () => {
-	const {user} = useContext(UserContext);
+	const { user } = useContext(UserContext);
 	const [openLectures, setOpenLectures] = useState<Lecture[]>([]);
 
 	useEffect(() => {
@@ -22,10 +22,7 @@ const CheckOpenLectures: React.FC = () => {
 		if (user) {
 			const fetchOpenLectures = async () => {
 				try {
-					const lectures = await apiHooks.getOpenLecturesByTeacher(
-						user.userid,
-						token,
-					);
+					const lectures = await apiHooks.getOpenLecturesByTeacher(user.userid, token);
 					console.log('🚀 ~ fetchOpenLectures ~ lectures:', lectures);
 					setOpenLectures(lectures);
 				} catch (error) {
@@ -38,18 +35,12 @@ const CheckOpenLectures: React.FC = () => {
 	}, []);
 
 	return openLectures.length > 0 ? (
-		<div className="flex flex-row items-center justify-center animate-pulse">
+		<div className="animate-pulse grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 			{openLectures.map((lecture: Lecture) => (
 				<Card
 					key={lecture.lectureid}
 					path={`/teacher/attendance/${lecture.lectureid}`}
-					title={
-						'Lecture open code: ' +
-						lecture.code +
-						' topic: ' +
-						lecture.topicname +
-						' !'
-					}
+					title={`Lecture open code: ${lecture.code} topic: ${lecture.topicname} !`}
 					description="Click to continue"
 				/>
 			))}
