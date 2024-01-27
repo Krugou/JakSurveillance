@@ -66,7 +66,7 @@ const Feedback: React.FC = () => {
 	return (
 		<div className="bg-white rounded-lg shadow-md p-4">
 			<h2 className="text-xl font-bold mb-4">
-				Help us improve, {user?.username}. Share your feedback.
+				Help us improve, {user?.username} by sharing your feedback.
 			</h2>
 			<form onSubmit={handleSubmit} className="mb-4 flex flex-col">
 				<label htmlFor="feedback-topic" className="sr-only">
