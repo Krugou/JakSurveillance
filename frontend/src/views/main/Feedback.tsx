@@ -22,7 +22,7 @@ const Feedback: React.FC = () => {
 					token,
 				);
 				toast.success(
-					`Feedback submitted successfully, Thank you ${user?.first_name}!`,
+					`Thank you for your feedback! It has been submitted successfully.`,
 				);
 				console.log(response);
 			} catch (error) {
