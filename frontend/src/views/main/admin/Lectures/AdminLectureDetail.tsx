@@ -55,7 +55,6 @@ const AdminLectureDetail = () => {
 				if (!response || response.length === 0) {
 					toast.info('No data found for this lecture, wait until students attend');
 				} else {
-					toast.success('Attendances of lecture fetched successfully');
 					setData(response);
 				}
 				setLoading(false);
