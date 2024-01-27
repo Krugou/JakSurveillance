@@ -1,8 +1,8 @@
 import CircularProgress from '@mui/material/CircularProgress';
-
 import {
 	BarElement,
 	CategoryScale,
+	ChartDataset,
 	Chart as ChartJS,
 	Legend,
 	LinearScale,
@@ -12,6 +12,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import {Bar} from 'react-chartjs-2';
 import apiHooks from '../../../hooks/ApiHooks';
+
 ChartJS.register(
 	CategoryScale,
 	LinearScale,
@@ -29,18 +30,26 @@ const options = {
 		},
 	},
 };
-/**
- * AdminStats component.
- * This component is responsible for rendering a chart of user counts by role for an admin.
- * It fetches the user data from the API, and allows the admin to toggle the display of the chart.
- * If the data is loading, it renders a loading spinner.
- *
- * @returns {JSX.Element} The rendered AdminStats component.
- */
+
+interface RoleCount {
+	role_name: string;
+	user_count: number;
+}
+
+interface LectureAttendanceCount {
+	[key: string]: number;
+}
 
 const AdminStats = () => {
-	const [userData, setUserData] = useState(null);
-	const [lectureData, setLectureData] = useState(null);
+	const [userData, setUserData] = useState<{
+		labels: string[];
+		datasets: ChartDataset<'bar', number[]>[];
+	} | null>(null);
+
+	const [lectureData, setLectureData] = useState<{
+		labels: string[];
+		datasets: ChartDataset<'bar', number[]>[];
+	} | null>(null);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -49,7 +58,7 @@ const AdminStats = () => {
 				throw new Error('No token available');
 			}
 
-			const rows = await apiHooks.getRoleCounts(token);
+			const rows: RoleCount[] = await apiHooks.getRoleCounts(token);
 			const roleNames = rows.map(row => row.role_name);
 			const userCounts = rows.map(row => row.user_count);
 			setUserData({
@@ -64,9 +73,8 @@ const AdminStats = () => {
 				],
 			});
 
-			const lectureAttendanceCounts = await apiHooks.getLectureAndAttendanceCount(
-				token,
-			);
+			const lectureAttendanceCounts: LectureAttendanceCount =
+				await apiHooks.getLectureAndAttendanceCount(token);
 			const labels = Object.keys(lectureAttendanceCounts).map(label => {
 				if (label === 'notattended') {
 					return 'Not Attended';
