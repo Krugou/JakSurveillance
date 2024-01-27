@@ -42,7 +42,7 @@ const CheckOpenLectures: React.FC = () => {
 				<Card
 					key={lecture.lectureid}
 					path={`/teacher/attendance/${lecture.lectureid}`}
-					title={`Lecture open code: ${lecture.code} topic: ${lecture.topicname} !`}
+					title={`Open lecture, code: ${lecture.code} topic: ${lecture.topicname} !`}
 					description="Click to continue"
 					className="animate-pulse"
 				/>
