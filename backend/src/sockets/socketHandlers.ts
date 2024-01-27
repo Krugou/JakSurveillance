@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import {config} from 'dotenv';
 import {Server, Socket} from 'socket.io';
 import doFetch from '../utils/doFetch.js';
+import getToken from '../utils/getToken.js';
 // import logger from '../utils/logger.js';
 /**
  * Socket event handlers for managing attendance in lectures.
@@ -57,31 +58,7 @@ interface Student {
 	last_name: string;
 	// add other properties as needed
 }
-/**
- * Retrieves a token by making a POST request with the dev account credentials.
- *
- * @returns {Promise<string>} A promise that resolves to the token string.
- */
-const getToken = async () => {
-	try {
-		// admin login to get token use dev account from .env file
-		const response = await doFetch('http://localhost:3002/users/', {
-			method: 'post', // or 'GET'
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				username: process.env.devaccount,
-				password: process.env.devpass,
-			}),
-		});
-		console.log('getToken request success' + ' ' + new Date().toISOString());
-		return response.token;
-	} catch (error) {
-		// Handle the error here
-		console.error(error);
-	}
-};
+
 /**
  * Fetches data and updates the `speedOfHashChange`, `leewaytimes`, and `timeout` variables.
  *
@@ -628,7 +605,6 @@ const setupSocketHandlers = (io: Server) => {
 				delete presentStudents[lectureid];
 				delete lectureData[lectureid];
 				clearTimeout(lectureTimeoutIds.get(lectureid));
-				
 			} catch (error) {
 				// Handle the error here
 				console.error(error);
