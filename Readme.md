@@ -6,6 +6,8 @@
 
 [TSdocs link](https://krugou.github.io/JakSurveillance/)
 
+[![Commit Activity](https://img.shields.io/github/commit-activity/m/Krugou/JakSurveillance)](https://github.com/Krugou/JakSurveillance)
+
 ## How to Start the project
 
 [How to Start](HowToStart.md)
