@@ -35,13 +35,13 @@ const Feedback: React.FC = () => {
 	};
 	const feedbackTopicsByRole = {
 		student: [
-			'Attendance Scanners',
-			'User Interface',
+			'Qr Code Scanning',
+			'User Interface / Accessibility',
 			'Attendance info',
 			'Other',
 		],
 		teacher: [
-			'User Interface',
+			'User Interface / Accessibility',
 			'Course Creation',
 			'Lecture Creation',
 			'Attendance gathering',
@@ -50,12 +50,12 @@ const Feedback: React.FC = () => {
 			'Other',
 		],
 		counselor: [
-			'User Interface',
+			'User Interface / Accessibility',
 			'Course/Student info',
 			'Attendance info',
 			'Other',
 		],
-		admin: ['User Interface', 'Other'],
+		admin: ['User Interface / Accessibility', 'Other'],
 	};
 
 	const userRole = user?.role;
