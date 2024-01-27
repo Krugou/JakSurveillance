@@ -78,7 +78,7 @@ const AdminStats = () => {
 				labels: labels,
 				datasets: [
 					{
-						label: 'Counts',
+						label: 'Attendance Counts',
 						data: data,
 						backgroundColor: 'rgba(255, 25, 2, 0.6)',
 						hidden: false,
