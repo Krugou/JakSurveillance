@@ -55,7 +55,7 @@ const Feedback: React.FC = () => {
 			'Attendance info',
 			'Other',
 		],
-		admin: ['User Interface', 'Other'],
+		admin: ['User Interface / Accessibility', 'Other'],
 	};
 
 	const userRole = user?.role;
