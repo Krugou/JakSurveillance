@@ -89,9 +89,7 @@ const AdminFeedback = () => {
 			</h1>
 			<div className="flex bg-white 2xl:w-1/3 md:w-2/3 w-fit m-auto rounded-lg p-4 flex-col justify-center">
 				<div className="flex flex-col justify-center items-center m-2">
-					<p className="text-xl text-center mb-4">
-						Choose by to filter topic or All
-					</p>
+					<p className="text-xl text-center mb-2">Filter feedback by topic below:</p>
 					<select
 						title="Select topic"
 						className="w-2/3 my-2 cursor-pointer text-xl bg-metropoliaTrendGreen text-white font-bold p-2 rounded focus:outline-none focus:shadow-outline"
