@@ -179,19 +179,19 @@ const lectureTimeoutIds = new Map();
  */
 const setupSocketHandlers = (io: Server) => {
 	io.on('connection', (socket: Socket) => {
-		console.log(
-			`User with socket ID: ${
-				socket.id
-			} has connected at ${new Date().toISOString()}`,
-		);
+		// console.log(
+		// 	`User with socket ID: ${
+		// 		socket.id
+		// 	} has connected at ${new Date().toISOString()}`,
+		// );
 
 		// handle disconnect
 		socket.on('disconnect', () => {
-			console.log(
-				`User with socket ID: ${
-					socket.id
-				} has disconnected at ${new Date().toISOString()}`,
-			);
+			// console.log(
+			// 	`User with socket ID: ${
+			// 		socket.id
+			// 	} has disconnected at ${new Date().toISOString()}`,
+			// );
 		});
 		socket.on('createAttendanceCollection', async lectureid => {
 			console.log(
