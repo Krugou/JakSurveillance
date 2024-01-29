@@ -5,6 +5,7 @@ import CounselorCourseStats from '../views/main/counselor/CounselorCourseStats.t
 import CounselorHelpVideos from '../views/main/counselor/CounselorHelpVideos.tsx';
 import CounselorMainView from '../views/main/counselor/CounselorMainView.tsx';
 import CounselorProfile from '../views/main/counselor/CounselorProfile.tsx';
+import CounselorLateEnrollment from '../views/main/counselor/students/CounselorLateEnrollment.tsx';
 import CounselorStudentRoutes from './counselor/CounselorStudentRoutes.tsx';
 /**
  * CounselorRoutes component.
@@ -25,6 +26,7 @@ const CounselorRoutes = () => {
 			<Route path="courses/stats/:courseid?" element={<CounselorCourseStats />} />
 			<Route path="students/*" element={<CounselorStudentRoutes />} />
 			<Route path="feedback" element={<Feedback />} />
+			<Route path="lateenrollment" element={<CounselorLateEnrollment />} />
 		</Routes>
 	);
 };
