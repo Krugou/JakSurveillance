@@ -105,6 +105,11 @@ const MainView: React.FC = () => {
 									title="Show Attendance stats"
 									description="Open attendance stats page"
 								/>
+								<Card
+									path="/teacher/lateenrollment"
+									title="Late Enrollment"
+									description="Enroll students in courses"
+								/>
 							</>
 						)}
 						<Card
