@@ -1,3 +1,5 @@
+import React from 'react';
+
 const SubmitButton: React.FC = () => (
 	<div className="w-full flex justify-center">
 		<button

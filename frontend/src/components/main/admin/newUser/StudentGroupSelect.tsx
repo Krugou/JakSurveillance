@@ -1,3 +1,9 @@
+import React from 'react';
+interface StudentGroup {
+	studentgroupid: number;
+	group_name: string;
+	// include other properties if they exist
+}
 interface StudentGroupSelectProps {
 	studentGroups: StudentGroup[];
 	selectedGroup: number | null;
