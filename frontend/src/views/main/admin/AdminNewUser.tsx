@@ -1,6 +1,9 @@
 import {Container} from '@mui/material';
 import React, {useContext, useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
+import FormInput from '../../../components/main/admin/newUser/FormInput';
+import StudentGroupSelect from '../../../components/main/admin/newUser/StudentGroupSelect';
+import SubmitButton from '../../../components/main/admin/newUser/SubmitButton';
 import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/ApiHooks';
 
@@ -107,78 +110,39 @@ const AdminNewUser: React.FC = () => {
 					<form onSubmit={handleSubmit} className="mt-4 mb-4 ">
 						<div className="flex flex-col">
 							<h2 className="font-bold text-center text-xl">Student Details</h2>
-							<label className="block mt-4">
-								<span className="text-gray-700 font-bold">Email</span>
-								<input
-									placeholder="Matti.Meikäläinen@metropolia.fi"
-									name="Email"
-									value={email}
-									required
-									onChange={e => setEmail(e.target.value)}
-									className="shadow mt-1 appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-								/>
-							</label>
-
-							<label className="block mt-4">
-								<span className="text-gray-700 font-bold">First Name</span>
-								<input
-									placeholder="Matti"
-									name="firstname"
-									value={firstName}
-									onChange={e => setFirstName(e.target.value)}
-									className="shadow mt-1 appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-								/>
-							</label>
-							<label className="block mt-4">
-								<span className="text-gray-700 font-bold">Last Name</span>
-								<input
-									placeholder="Meikäläinen"
-									name="lastname"
-									value={lastName}
-									onChange={e => setLastName(e.target.value)}
-									className="shadow mt-1 appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-								/>
-							</label>
-							<label className="block mt-4">
-								<span className="text-gray-700 font-bold">Student Number</span>
-								<input
-									placeholder="123456"
-									name="studentnumber"
-									value={studentNumber}
-									onChange={e => setStudentNumber(e.target.value)}
-									className="shadow mt-1 appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-								/>
-								{isStudentNumberTaken && (
-									<h2 className="text-red-500">Student number taken</h2>
-								)}
-							</label>
-						</div>
-						<label className="block mt-4">
-							<span className="text-gray-700 font-bold">Student Group</span>
-							<select
-								required
-								value={studentGroupId || ''}
-								onChange={e => setStudentGroupId(Number(e.target.value))}
-								className="shadow appearance-none border rounded-3xl cursor-pointer w-full py-2 px-3 text-gray-700 mb-3 mt-1 leading-tight focus:outline-none focus:shadow-outline"
-							>
-								<option value="null">Not in system yet</option>
-								{studentGroups.map(studentGroup => (
-									<option
-										key={studentGroup.studentgroupid}
-										value={studentGroup.studentgroupid}
-									>
-										{studentGroup.group_name}
-									</option>
-								))}
-							</select>
-						</label>
-						<div className="w-full flex justify-center">
-							<button
-								type="submit"
-								className="mt-5 mb-2 p-2 w-fit bg-metropoliaTrendGreen hover:bg-green-600 transition text-white rounded-md"
-							>
-								Add New Student User
-							</button>
+							<FormInput
+								label="Email"
+								placeholder="Matti.Meikäläinen@metropolia.fi"
+								value={email}
+								onChange={setEmail}
+							/>
+							<FormInput
+								label="First Name"
+								placeholder="Matti"
+								value={firstName}
+								onChange={setFirstName}
+							/>
+							<FormInput
+								label="Last Name"
+								placeholder="Meikäläinen"
+								value={lastName}
+								onChange={setLastName}
+							/>
+							<FormInput
+								label="Student Number"
+								placeholder="123456"
+								value={studentNumber}
+								onChange={setStudentNumber}
+							/>
+							{isStudentNumberTaken && (
+								<h2 className="text-red-500">Student number taken</h2>
+							)}
+							<StudentGroupSelect
+								studentGroups={studentGroups}
+								selectedGroup={studentGroupId}
+								onChange={setStudentGroupId}
+							/>
+							<SubmitButton />
 						</div>
 					</form>
 				</Container>
