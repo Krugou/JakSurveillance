@@ -31,6 +31,11 @@ const CounselorMainView: React.FC = () => {
 					title="Attendance statistics"
 					description="See attendance statistics for all courses"
 				/>
+				<Card
+					path="/counselor/lateenrollment"
+					title="Late Enrollment"
+					description="Enroll students in courses"
+				/>
 				<FeedbackCard role="counselor" />
 			</div>
 		</>
