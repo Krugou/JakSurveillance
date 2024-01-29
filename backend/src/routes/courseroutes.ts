@@ -5,6 +5,7 @@ import multer from 'multer';
 import XLSX from 'xlsx';
 import courseController from '../controllers/coursecontroller.js';
 import course from '../models/coursemodel.js';
+
 import usermodel from '../models/usermodel.js';
 import {CourseDetails, CourseUser, IData, Item} from '../types.js';
 import checkUserRole from '../utils/checkRole.js';
@@ -21,6 +22,7 @@ const router: Router = express.Router();
 
 router.use('/attendance', attendanceRoutes);
 router.use('/topics', topicRoutes);
+
 /**
  * Route that checks if a course exists in the database.
  *
@@ -720,4 +722,5 @@ router.get(
 		}
 	},
 );
+
 export default router;
