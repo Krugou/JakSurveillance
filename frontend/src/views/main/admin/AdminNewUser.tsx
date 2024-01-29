@@ -1,9 +1,9 @@
 import {Container} from '@mui/material';
 import React, {useContext, useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
-import FormInput from '../../../components/main/admin/newUser/FormInput';
-import StudentGroupSelect from '../../../components/main/admin/newUser/StudentGroupSelect';
-import SubmitButton from '../../../components/main/admin/newUser/SubmitButton';
+import FormInput from '../../../components/main/newUser/FormInput';
+import StudentGroupSelect from '../../../components/main/newUser/StudentGroupSelect';
+import SubmitButton from '../../../components/main/newUser/SubmitButton';
 import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/ApiHooks';
 
