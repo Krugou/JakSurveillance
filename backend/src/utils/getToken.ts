@@ -16,7 +16,7 @@ const getToken = async () => {
 			}),
 		});
 
-		console.log('getToken request success' + ' ' + new Date().toISOString());
+		// console.log('getToken request success' + ' ' + new Date().toISOString());
 		return response.token;
 	} catch (error) {
 		// Handle the error here
