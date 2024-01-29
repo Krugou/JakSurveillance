@@ -624,7 +624,7 @@ const fetchStudentGroups = async (token: string) => {
 			Authorization: 'Bearer ' + token,
 		},
 	};
-	return await doFetch(baseUrl + 'admin/studentgroups', options);
+	return await doFetch(baseUrl + 'secure/studentgroups', options);
 };
 const checkStudentNumberExists = async (
 	studentnumber: string,
@@ -839,6 +839,33 @@ const addNewStudentUser = async (
 	const url = `${baseUrl}admin/insert-student-user/`;
 	return doFetch(url, options);
 };
+const addNewStudentUserCourse = async (
+	token: string,
+	email: string,
+	studentnumber: string,
+	firstname: string,
+	lastname: string,
+	studentGroupId: number | undefined | null,
+	courseId: number | undefined | null,
+) => {
+	const options = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+		body: JSON.stringify({
+			email,
+			first_name: firstname,
+			last_name: lastname,
+			studentnumber,
+			studentGroupId,
+			courseId,
+		}),
+	};
+	const url = `${baseUrl}secure/insert-student-user-course/`;
+	return doFetch(url, options);
+};
 const closeLectureByLectureId = async (lectureid: string, token: string) => {
 	const options = {
 		method: 'PUT',
@@ -870,6 +897,7 @@ const getOpenLecturesByCourseid = async (
 };
 
 const apiHooks = {
+	addNewStudentUserCourse,
 	postUserFeedback,
 	getUserFeedback,
 	fetchAttendances,
