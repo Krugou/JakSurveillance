@@ -6,7 +6,6 @@ import adminController from '../controllers/admincontroller.js';
 import course from '../models/coursemodel.js';
 import lectureModel from '../models/lecturemodel.js';
 import rolemodel from '../models/rolemodel.js';
-import studentgroupmodel from '../models/studentgroupmodel.js';
 import userFeedBackModel from '../models/userfeedbackmodel.js';
 import usermodel from '../models/usermodel.js';
 import checkUserRole from '../utils/checkRole.js';
@@ -200,9 +199,9 @@ router.post(
 	async (req: Request, res: Response) => {
 		const {email, first_name, last_name, studentnumber, studentGroupId} =
 			req.body;
-		console.log(
-			'manual student user insert start ' + email + ' ' + studentnumber,
-		);
+		// console.log(
+		// 	'manual student user insert start ' + email + ' ' + studentnumber,
+		// );
 		try {
 			const existingUserByNumber =
 				await usermodel.checkIfUserExistsByStudentNumber(studentnumber);
@@ -227,7 +226,9 @@ router.post(
 			res
 				.status(200)
 				.send({message: 'Student user inserted successfully', userResult});
-			console.log('manual student user insert end ' + email + ' ' + studentnumber);
+			console.log(
+				'manual student user insert success ' + email + ' ' + studentnumber,
+			);
 		} catch (error) {
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
@@ -375,24 +376,7 @@ router.put(
 		}
 	},
 );
-/**
- * Route that fetches all student groups.
- *
- * @returns {Promise<StudentGroup[]>} A promise that resolves with all student groups.
- */
-router.get(
-	'/studentgroups',
-	checkUserRole(['admin']),
-	async (_req: Request, res: Response) => {
-		try {
-			const groups = await studentgroupmodel.fetchAllStudentGroups();
-			res.send(groups);
-		} catch (error) {
-			console.error(error);
-			res.status(500).json({message: 'Internal server error'});
-		}
-	},
-);
+
 /**
  * Route that checks if a student number exists.
  *
