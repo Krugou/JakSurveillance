@@ -162,6 +162,12 @@ const TeacherStudentDetail: React.FC = () => {
 							text={`Edit ${student.first_name} ${student.last_name} details`}
 						/>
 					)}
+					{user?.role === 'counselor' && (
+						<GeneralLinkButton
+							path={`/counselor/students/${id}/modify`}
+							text={`Edit ${student.first_name} ${student.last_name} details`}
+						/>
+					)}
 				</div>
 				<h2 className="text-2xl font-bold mt-5 mb-5">
 					{student.first_name + ' ' + student.last_name}'s Info

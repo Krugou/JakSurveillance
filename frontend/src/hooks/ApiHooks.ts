@@ -488,6 +488,15 @@ const fetchUserById = async (userid: number, token: string) => {
 	};
 	return await doFetch(baseUrl + 'admin/getuser/' + userid, options);
 };
+const fetchUserByIdEdit = async (userid: number, token: string) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+	return await doFetch(baseUrl + 'secure/getuser/' + userid, options);
+};
 const getCourses = async (token: string) => {
 	const options = {
 		method: 'GET',
@@ -602,6 +611,18 @@ const updateUser = async (token: string, user: any) => {
 		body: JSON.stringify({user}),
 	};
 	const url = `${baseUrl}admin/updateuser`;
+	return doFetch(url, options);
+};
+const updateUserEdit = async (token: string, user: any) => {
+	const options = {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+		body: JSON.stringify({user}),
+	};
+	const url = `${baseUrl}secure/updateuser`;
 	return doFetch(url, options);
 };
 const getLecturesAndAttendances = async (
@@ -957,5 +978,7 @@ const apiHooks = {
 	getOpenLecturesByCourseid,
 	deleteUserFeedback,
 	getOpenLecturesByTeacher,
+	fetchUserByIdEdit,
+	updateUserEdit,
 };
 export default apiHooks;

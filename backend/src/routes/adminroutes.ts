@@ -97,7 +97,7 @@ router.get(
  */
 router.get(
 	'/roles',
-	checkUserRole(['admin']),
+	checkUserRole(['admin', 'teacher', 'counselor']),
 	async (_req: Request, res: Response) => {
 		try {
 			const roles = await rolemodel.fetchAllRoles();
@@ -292,6 +292,7 @@ router.get(
 );
 router.get(
 	'/allattendancedatabycourse/:courseid/:lectureid',
+	checkUserRole(['admin']),
 	async (req: Request, res: Response) => {
 		try {
 			const courseid = req.params.courseid;
@@ -385,7 +386,7 @@ router.put(
  */
 router.get(
 	'/checkstudentnumber/:studentnumber',
-	checkUserRole(['admin']),
+	checkUserRole(['admin', 'teacher', 'counselor']),
 	[
 		param('studentnumber')
 			.isNumeric()

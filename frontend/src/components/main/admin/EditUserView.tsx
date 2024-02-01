@@ -303,7 +303,12 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 				<div className="text-center">
 					<button
 						onClick={handleSaveClick}
-						className="mt-4 px-4 w-[10em] py-2 bg-metropoliaTrendGreen hover:bg-green-600 transition text-white rounded-md"
+						disabled={isStudentNumberTaken}
+						className={`mt-4 px-4 w-[10em] py-2 ${
+							isStudentNumberTaken
+								? 'bg-gray-500'
+								: 'bg-metropoliaTrendGreen hover:bg-green-600 transition'
+						} text-white rounded-md`}
 					>
 						Save
 					</button>

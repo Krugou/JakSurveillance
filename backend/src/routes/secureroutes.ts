@@ -178,4 +178,40 @@ router.post(
 		}
 	},
 );
+router.put(
+	'/updateuser',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	async (req: Request, res: Response) => {
+		try {
+			const user = req.body;
+			await usermodel.updateUser(user);
+			res.send({message: 'User updated successfully'});
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({message: 'Internal server error'});
+		}
+	},
+);
+/**
+ * Route that fetches a user by their ID.
+ *
+ * @param {number} userid - The ID of the user.
+ * @returns {Promise<User>} A promise that resolves with the user.
+ */
+router.get(
+	'/getuser/:userid',
+	checkUserRole(['admin', 'counselor', 'teacher']),
+	[param('userid').isNumeric().withMessage('User ID must be a number')],
+	validate,
+	async (req: Request, res: Response) => {
+		try {
+			const {userid} = req.params;
+			const user = await usermodel.fetchUserById(Number(userid));
+			res.send(user);
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({message: 'Internal server error'});
+		}
+	},
+);
 export default router;

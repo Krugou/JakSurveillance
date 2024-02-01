@@ -1,9 +1,10 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
-import CounselorStudentsView from '../../views/main/counselor/students/CounselorStudentsView';
-import CounselorStudentDetail from '../../views/main/counselor/students/CounselorStudentDetail';
 import CounselorMainView from '../../views/main/counselor/CounselorMainView';
 import CounselorStudentAttendances from '../../views/main/counselor/students/CounselorStudentAttendances';
+import CounselorStudentDetail from '../../views/main/counselor/students/CounselorStudentDetail';
+import CounselorStudentModify from '../../views/main/counselor/students/CounselorStudentModify';
+import CounselorStudentsView from '../../views/main/counselor/students/CounselorStudentsView';
 /**
  * CounselorStudentRoutes component.
  * This component is responsible for defining the routes for the counselor's students section of the application.
@@ -19,6 +20,7 @@ const CounselorStudentRoutes: React.FC = () => {
 			<Route path="/" element={<CounselorStudentsView />} />
 			<Route path=":id" element={<CounselorStudentDetail />} />
 			<Route path="*" element={<CounselorMainView />} />
+			<Route path="/:userid/modify" element={<CounselorStudentModify />} />
 			<Route
 				path="attendance/:usercourseid"
 				element={<CounselorStudentAttendances />}
