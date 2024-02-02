@@ -548,6 +548,22 @@ const UserModel = {
 
 		return existingStudentNumber;
 	},
+
+	/**
+	 * Checks if a student number exists.
+	 * @param email - The student email to check.
+	 * @returns A promise that resolves to the existing student email, if found.
+	 */
+	checkIfStudentEmailExists: async (email: string) => {
+		const [existingStudentEmail] = await pool
+			.promise()
+			.query<RowDataPacket[]>('SELECT * FROM users WHERE email = ?', [
+				email,
+			]);
+
+		return existingStudentEmail;
+	},
+
 	/**
 	 * Gets the counts of each role.
 	 * @returns A promise that resolves to an array of role counts.

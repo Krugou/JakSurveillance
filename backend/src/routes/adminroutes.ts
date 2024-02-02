@@ -410,6 +410,29 @@ router.get(
 		}
 	},
 );
+
+
+router.get(
+	'/checkstudentemail/:email',
+	checkUserRole(['admin', 'teacher', 'counselor']),
+	async (req: Request, res: Response) => {
+		try {
+			const {email} = req.params;
+			const existingStudentEmail = await usermodel.checkIfStudentEmailExists(
+				email,
+			);
+			if (existingStudentEmail.length > 0) {
+				res.send({exists: true});
+			} else {
+				res.send({exists: false});
+			}
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({message: 'Internal server error'});
+		}
+	},
+);
+
 /**
  * Route that fetches the counts of users for each role.
  *

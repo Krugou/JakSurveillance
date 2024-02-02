@@ -50,9 +50,12 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 	const [roles, setRoles] = useState<Role[]>([]);
 	const [studentGroups, setStudentGroups] = useState<StudentGroup[]>([]);
 	const [isStudentNumberTaken, setIsStudentNumberTaken] = useState(false);
+	const [isStudentEmailTaken, setIsStudentEmailTaken] = useState(false);
 	// State for the original student number and timeout ID
+	const [originalStudentEmail] = useState(user.email);
 	const [originalStudentNumber] = useState(user.studentnumber);
 	const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+	const [isSaveButtonDisabled, setSaveButtonDisabled] = useState(false);
 
 	/**
 	 * Handles changes to the input fields.
@@ -93,8 +96,14 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 		getRoles();
 	}, []);
 
+	useEffect(() => {
+		setSaveButtonDisabled(isStudentNumberTaken || isStudentEmailTaken);
+	}, [isStudentNumberTaken, isStudentEmailTaken]);
+
 	// Check if the student number exists when it changes
 	useEffect(() => {
+
+
 		const checkStudentNumber = async () => {
 			// Get token from local storage
 			const token: string | null = localStorage.getItem('userToken');
@@ -139,7 +148,53 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 			// Save the timeout ID so it can be cleared if the student number changes
 			setTimeoutId(newTimeoutId);
 		}
-	}, [editedUser.studentnumber, originalStudentNumber]);
+
+		const checkStudentEmail = async () => {
+			// Get token from local storage
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
+			// Only check if the student number has changed from the original
+			if (editedUser.email !== originalStudentEmail) {
+				const response = await apihooks.checkStudentEmailExists(
+					editedUser.email,
+					token,
+				);
+
+				if (response.exists) {
+					setIsStudentEmailTaken(true);
+				} else {
+					setIsStudentEmailTaken(false);
+				}
+			}
+			console.log(
+				'checkStudentEmail ' +
+				editedUser.email +
+				' ' +
+				originalStudentEmail,
+			);
+			if (editedUser.email === originalStudentEmail) {
+				setIsStudentEmailTaken(false);
+			}
+		};
+
+		if (editedUser.email) {
+			// If there is a previous timeout, clear it
+			if (timeoutId) {
+				clearTimeout(timeoutId);
+			}
+
+			// Start a new timeout
+			const newTimeoutId = setTimeout(() => {
+				checkStudentEmail();
+			}, 500); // 500ms delay
+
+			// Save the timeout ID so it can be cleared if the student number changes
+			setTimeoutId(newTimeoutId);
+		}
+
+	}, [editedUser.studentnumber, editedUser.email, originalStudentNumber, originalStudentEmail]);
 
 	// Fetch all student groups when the component mounts
 	useEffect(() => {
@@ -200,7 +255,8 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 					</label>
 				)}
 
-				{editedUser.email && (
+				{editedUser.email !== undefined &&
+					editedUser.email !== null && (
 					<label className="block mt-4">
 						<span className="text-gray-700 font-bold">Email</span>
 						<input
@@ -211,6 +267,9 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 							onChange={handleInputChange}
 							className="shadow appearance-none border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
 						/>
+						{isStudentEmailTaken && (
+							<span className="text-red-500">Student email taken</span>
+						)}
 					</label>
 				)}
 				{editedUser.username && (
@@ -303,9 +362,9 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 				<div className="text-center">
 					<button
 						onClick={handleSaveClick}
-						disabled={isStudentNumberTaken}
+						disabled={isSaveButtonDisabled}
 						className={`mt-4 px-4 w-[10em] py-2 ${
-							isStudentNumberTaken
+							isSaveButtonDisabled
 								? 'bg-gray-500'
 								: 'bg-metropoliaTrendGreen hover:bg-green-600 transition'
 						} text-white rounded-md`}
