@@ -4,7 +4,7 @@ import NewStudentUser from '../../../../components/main/NewStudentUser';
 const CounselorLateEnrollment: React.FC = () => {
 	return (
 		<div>
-			<NewStudentUser mode="counselor" />
+			<NewStudentUser />
 		</div>
 	);
 };
