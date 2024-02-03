@@ -56,6 +56,7 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 	const [originalStudentNumber] = useState(user.studentnumber);
 	const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 	const [isSaveButtonDisabled, setSaveButtonDisabled] = useState(false);
+	const [timeoutId2, setTimeoutId2] = useState<NodeJS.Timeout | null>(null);
 
 	/**
 	 * Handles changes to the input fields.
@@ -102,99 +103,66 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 
 	// Check if the student number exists when it changes
 	useEffect(() => {
-
-
 		const checkStudentNumber = async () => {
-			// Get token from local storage
 			const token: string | null = localStorage.getItem('userToken');
 			if (!token) {
 				throw new Error('No token available');
 			}
-			// Only check if the student number has changed from the original
 			if (editedUser.studentnumber !== originalStudentNumber) {
 				const response = await apihooks.checkStudentNumberExists(
 					editedUser.studentnumber.toString(),
 					token,
 				);
 
-				if (response.exists) {
-					setIsStudentNumberTaken(true);
-				} else {
-					setIsStudentNumberTaken(false);
-				}
-			}
-			console.log(
-				'checkStudentNumber ' +
-					editedUser.studentnumber +
-					' ' +
-					originalStudentNumber,
-			);
-			if (Number(editedUser.studentnumber) === Number(originalStudentNumber)) {
+				setIsStudentNumberTaken(response.exists);
+			} else {
 				setIsStudentNumberTaken(false);
 			}
 		};
 
 		if (editedUser.studentnumber) {
-			// If there is a previous timeout, clear it
 			if (timeoutId) {
 				clearTimeout(timeoutId);
 			}
 
-			// Start a new timeout
 			const newTimeoutId = setTimeout(() => {
 				checkStudentNumber();
-			}, 500); // 500ms delay
+			}, 500);
 
-			// Save the timeout ID so it can be cleared if the student number changes
 			setTimeoutId(newTimeoutId);
 		}
+	}, [editedUser.studentnumber, originalStudentNumber]);
 
+	useEffect(() => {
 		const checkStudentEmail = async () => {
-			// Get token from local storage
 			const token: string | null = localStorage.getItem('userToken');
 			if (!token) {
 				throw new Error('No token available');
 			}
-			// Only check if the student number has changed from the original
 			if (editedUser.email !== originalStudentEmail) {
 				const response = await apihooks.checkStudentEmailExists(
 					editedUser.email,
 					token,
 				);
 
-				if (response.exists) {
-					setIsStudentEmailTaken(true);
-				} else {
-					setIsStudentEmailTaken(false);
-				}
-			}
-			console.log(
-				'checkStudentEmail ' +
-				editedUser.email +
-				' ' +
-				originalStudentEmail,
-			);
-			if (editedUser.email === originalStudentEmail) {
+				setIsStudentEmailTaken(response.exists);
+			} else {
 				setIsStudentEmailTaken(false);
 			}
 		};
 
 		if (editedUser.email) {
-			// If there is a previous timeout, clear it
-			if (timeoutId) {
-				clearTimeout(timeoutId);
+			if (timeoutId2) {
+				clearTimeout(timeoutId2);
 			}
 
-			// Start a new timeout
-			const newTimeoutId = setTimeout(() => {
+			const newTimeoutId2 = setTimeout(() => {
 				checkStudentEmail();
-			}, 500); // 500ms delay
+			}, 500);
 
-			// Save the timeout ID so it can be cleared if the student number changes
-			setTimeoutId(newTimeoutId);
+			setTimeoutId2(newTimeoutId2);
 		}
-
-	}, [editedUser.studentnumber, editedUser.email, originalStudentNumber, originalStudentEmail]);
+	}, [editedUser.email, originalStudentEmail]);
 
 	// Fetch all student groups when the component mounts
 	useEffect(() => {
@@ -255,8 +223,7 @@ const EditUserView: React.FC<EditUserViewProps> = ({user, onSave}) => {
 					</label>
 				)}
 
-				{editedUser.email !== undefined &&
-					editedUser.email !== null && (
+				{editedUser.email !== undefined && editedUser.email !== null && (
 					<label className="block mt-4">
 						<span className="text-gray-700 font-bold">Email</span>
 						<input

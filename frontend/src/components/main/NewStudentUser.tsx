@@ -1,7 +1,7 @@
-import { Container } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import { UserContext } from '../../contexts/UserContext';
+import {Container} from '@mui/material';
+import React, {useContext, useEffect, useState} from 'react';
+import {toast} from 'react-toastify';
+import {UserContext} from '../../contexts/UserContext';
 import apiHooks from '../../hooks/ApiHooks';
 import CourseSelect from './newUser/CourseSelect';
 import FormInput from './newUser/FormInput';
@@ -35,6 +35,13 @@ const NewStudentUser: React.FC = () => {
 	const {user} = useContext(UserContext);
 	const [courses, setCourses] = useState<Course[]>([]); // Specify the type for courses
 	// Check if the student number exists when it changes
+	const [timeoutIdNumber, setTimeoutIdNumber] = useState<NodeJS.Timeout | null>(
+		null,
+	);
+	const [timeoutIdEmail, setTimeoutIdEmail] = useState<NodeJS.Timeout | null>(
+		null,
+	);
+	const [isEmailTaken, setIsEmailTaken] = useState(false);
 	useEffect(() => {
 		const checkStudentNumber = async () => {
 			const token: string | null = localStorage.getItem('userToken');
@@ -58,10 +65,44 @@ const NewStudentUser: React.FC = () => {
 		};
 
 		if (studentNumber) {
-			checkStudentNumber();
+			if (timeoutIdNumber) {
+				clearTimeout(timeoutIdNumber);
+			}
+
+			const newTimeoutIdNumber = setTimeout(() => {
+				checkStudentNumber();
+			}, 500);
+
+			setTimeoutIdNumber(newTimeoutIdNumber);
 		}
 	}, [studentNumber]);
+	useEffect(() => {
+		const checkEmail = async () => {
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
+			if (email !== '') {
+				const response = await apiHooks.checkStudentEmailExists(email, token);
 
+				setIsEmailTaken(response.exists);
+			} else {
+				setIsEmailTaken(false);
+			}
+		};
+
+		if (email) {
+			if (timeoutIdEmail) {
+				clearTimeout(timeoutIdEmail);
+			}
+
+			const newTimeoutIdEmail = setTimeout(() => {
+				checkEmail();
+			}, 500);
+
+			setTimeoutIdEmail(newTimeoutIdEmail);
+		}
+	}, [email]);
 	// Fetch all student groups when the component mounts
 	useEffect(() => {
 		const getStudentGroups = async () => {
@@ -84,7 +125,7 @@ const NewStudentUser: React.FC = () => {
 					throw new Error('No token available');
 				}
 				// Fetch courses by instructor email
-				const courses = await apiHooks.getAllCourses( token);
+				const courses = await apiHooks.getAllCourses(token);
 				console.log('🚀 ~ fetchCourses ~ courses:', courses);
 
 				setCourses(courses);
@@ -102,7 +143,7 @@ const NewStudentUser: React.FC = () => {
 			return;
 		}
 
-		if (user && !isStudentNumberTaken) {
+		if (user && !isStudentNumberTaken && !isEmailTaken) {
 			const token: string | null = localStorage.getItem('userToken');
 			if (!token) {
 				toast.error('No token available');
@@ -117,7 +158,7 @@ const NewStudentUser: React.FC = () => {
 					firstName,
 					lastName,
 					studentGroupId,
-					selectedCourseId
+					selectedCourseId,
 				);
 				toast.success('New student user added successfully');
 			} catch (error) {
@@ -145,6 +186,7 @@ const NewStudentUser: React.FC = () => {
 								value={email}
 								onChange={setEmail}
 							/>
+							{isEmailTaken && <h2 className="text-red-500">Email taken</h2>}
 							<FormInput
 								label="First Name"
 								placeholder="Matti"
@@ -177,7 +219,7 @@ const NewStudentUser: React.FC = () => {
 								onChange={setSelectedCourseId}
 							/>
 							<p>please check that details are correct before pressing add new</p>
-							<SubmitButton />
+							<SubmitButton disabled={isEmailTaken || isStudentNumberTaken} />
 						</div>
 					</form>
 				</Container>

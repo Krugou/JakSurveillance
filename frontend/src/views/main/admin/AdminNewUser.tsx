@@ -14,6 +14,14 @@ const AdminNewUser: React.FC = () => {
 	const [studentNumber, setStudentNumber] = useState('');
 	const [studentGroupId, setStudentGroupId] = useState<number | null>(null);
 	const [isStudentNumberTaken, setIsStudentNumberTaken] = useState(false);
+	// Check if the student number exists when it changes
+	const [timeoutIdNumber, setTimeoutIdNumber] = useState<NodeJS.Timeout | null>(
+		null,
+	);
+	const [timeoutIdEmail, setTimeoutIdEmail] = useState<NodeJS.Timeout | null>(
+		null,
+	);
+	const [isEmailTaken, setIsEmailTaken] = useState(false);
 	interface StudentGroup {
 		studentgroupid: number;
 		group_name: string;
@@ -47,9 +55,44 @@ const AdminNewUser: React.FC = () => {
 		};
 
 		if (studentNumber) {
-			checkStudentNumber();
+			if (timeoutIdNumber) {
+				clearTimeout(timeoutIdNumber);
+			}
+
+			const newTimeoutIdNumber = setTimeout(() => {
+				checkStudentNumber();
+			}, 500);
+
+			setTimeoutIdNumber(newTimeoutIdNumber);
 		}
 	}, [studentNumber]);
+	useEffect(() => {
+		const checkEmail = async () => {
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
+			if (email !== '') {
+				const response = await apiHooks.checkStudentEmailExists(email, token);
+
+				setIsEmailTaken(response.exists);
+			} else {
+				setIsEmailTaken(false);
+			}
+		};
+
+		if (email) {
+			if (timeoutIdEmail) {
+				clearTimeout(timeoutIdEmail);
+			}
+
+			const newTimeoutIdEmail = setTimeout(() => {
+				checkEmail();
+			}, 500);
+
+			setTimeoutIdEmail(newTimeoutIdEmail);
+		}
+	}, [email]);
 
 	// Fetch all student groups when the component mounts
 	useEffect(() => {
@@ -74,7 +117,7 @@ const AdminNewUser: React.FC = () => {
 			return;
 		}
 
-		if (user && !isStudentNumberTaken) {
+		if (user && !isStudentNumberTaken && !isEmailTaken) {
 			const token: string | null = localStorage.getItem('userToken');
 			if (!token) {
 				toast.error('No token available');
@@ -116,6 +159,7 @@ const AdminNewUser: React.FC = () => {
 								value={email}
 								onChange={setEmail}
 							/>
+							{isEmailTaken && <h2 className="text-red-500">Email taken</h2>}
 							<FormInput
 								label="First Name"
 								placeholder="Matti"
@@ -142,7 +186,7 @@ const AdminNewUser: React.FC = () => {
 								selectedGroup={studentGroupId}
 								onChange={setStudentGroupId}
 							/>
-							<SubmitButton />
+							<SubmitButton disabled={isEmailTaken || isStudentNumberTaken} />
 						</div>
 					</form>
 				</Container>
