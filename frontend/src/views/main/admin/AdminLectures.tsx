@@ -159,6 +159,30 @@ const AdminAllLectures: React.FC = () => {
 			? (totalAttended / (totalAttended + totalNotAttended)) * 100
 			: 0;
 
+	// Find lecture with highest attendance
+	const highestAttendedLecture = lectures.reduce(
+		(max, lecture) => (lecture.attended > max.attended ? lecture : max),
+		lectures[0],
+	);
+	// Find lecture with highest not attended
+	const highestNotAttendedLecture = lectures.reduce(
+		(max, lecture) => (lecture.notattended > max.notattended ? lecture : max),
+		lectures[0],
+	);
+
+	// Find lecture with lowest attendance
+	const lowestAttendedLecture = lectures.reduce(
+		(min, lecture) => (lecture.attended < min.attended ? lecture : min),
+		lectures[0],
+	);
+
+	// Find lecture with lowest not attended
+
+	const lowestNotAttendedLecture = lectures.reduce(
+		(min, lecture) => (lecture.notattended < min.notattended ? lecture : min),
+		lectures[0],
+	);
+
 	return (
 		<div className="relative xl:w-fit w-full bg-white p-5 rounded-lg">
 			<div className="space-x-2 mt-4 mb-4">
@@ -181,10 +205,32 @@ const AdminAllLectures: React.FC = () => {
 					{isExpanded ? 'Shrink Table' : 'Expand to full'}
 				</button>
 			</div>
-			<h2 className="text-xl mb-2">Total Lectures: {totalLectures}</h2>
-			<h2 className="text-xl mb-2">
-				Attendance Ratio: {attendanceRatio.toFixed(2)}%
-			</h2>
+			{!filterOpen && (
+				<>
+					<h2 className="text-lg mb-2">
+						Total Lectures: {totalLectures} | Attendance Ratio:{' '}
+						{attendanceRatio.toFixed(2)}%
+					</h2>
+
+					{highestAttendedLecture && (
+						<h2 className="text-md mb-2">
+							Highest Attended: {highestAttendedLecture.attended} (Lecture ID:{' '}
+							{highestAttendedLecture.lectureid}) | Lowest Attended:{' '}
+							{lowestAttendedLecture.attended} (Lecture ID:{' '}
+							{lowestAttendedLecture.lectureid})
+						</h2>
+					)}
+					{highestNotAttendedLecture && (
+						<h2 className="text-md mb-2">
+							Highest Not Attended: {highestNotAttendedLecture.notattended} (Lecture
+							ID: {highestNotAttendedLecture.lectureid}) | Lowest Not Attended:{' '}
+							{lowestNotAttendedLecture.notattended} (Lecture ID:{' '}
+							{lowestNotAttendedLecture.lectureid})
+						</h2>
+					)}
+				</>
+			)}
+
 			<TableContainer
 				className={`relative bg-gray-100 overflow-auto ${
 					isExpanded ? 'h-screen' : 'h-[384px]'
