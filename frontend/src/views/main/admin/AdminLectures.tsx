@@ -142,6 +142,23 @@ const AdminAllLectures: React.FC = () => {
 	const handleRowClick = (courseId: string, lectureId: string) => {
 		navigate(`./${courseId}/${lectureId}`);
 	};
+	// Calculate total lectures count
+	const totalLectures = lectures.length;
+
+	// Calculate ratio of lectures attendance
+	const totalAttended = lectures.reduce(
+		(sum, lecture) => sum + lecture.attended,
+		0,
+	);
+	const totalNotAttended = lectures.reduce(
+		(sum, lecture) => sum + lecture.notattended,
+		0,
+	);
+	const attendanceRatio =
+		totalLectures > 0
+			? (totalAttended / (totalAttended + totalNotAttended)) * 100
+			: 0;
+
 	return (
 		<div className="relative xl:w-fit w-full bg-white p-5 rounded-lg">
 			<div className="space-x-2 mt-4 mb-4">
@@ -164,6 +181,10 @@ const AdminAllLectures: React.FC = () => {
 					{isExpanded ? 'Shrink Table' : 'Expand to full'}
 				</button>
 			</div>
+			<h2 className="text-xl mb-2">Total Lectures: {totalLectures}</h2>
+			<h2 className="text-xl mb-2">
+				Attendance Ratio: {attendanceRatio.toFixed(2)}%
+			</h2>
 			<TableContainer
 				className={`relative bg-gray-100 overflow-auto ${
 					isExpanded ? 'h-screen' : 'h-[384px]'
@@ -173,14 +194,16 @@ const AdminAllLectures: React.FC = () => {
 					<TableHead className="sticky border-t-2 border-black top-0 bg-white z-10">
 						<TableRow>
 							<TableCell>Lecture ID</TableCell>
-							<TableCell>Date</TableCell>
 
 							<TableCell>Teacher Email</TableCell>
-							<TableCell>Time of Day</TableCell>
 							<TableCell>Course name</TableCell>
 							<TableCell>Course code</TableCell>
 							<TableCell>Topic name</TableCell>
-							<TableCell>Attended/not attended</TableCell>
+							<TableCell>Date</TableCell>
+							<TableCell>am/pm</TableCell>
+							<TableCell>Attendance</TableCell>
+							<TableCell>Total</TableCell>
+							<TableCell>Ratio(%)</TableCell>
 							<TableCell>State</TableCell>
 							<TableCell>Actions</TableCell>
 						</TableRow>
@@ -195,14 +218,16 @@ const AdminAllLectures: React.FC = () => {
 									}`}
 								>
 									<TableCell>{lecture.lectureid}</TableCell>
-									<TableCell>
-										{new Date(lecture.start_date).toLocaleDateString()}
-									</TableCell>
+
 									<TableCell>{lecture.teacheremail}</TableCell>
-									<TableCell>{lecture.timeofday}</TableCell>
 									<TableCell>{lecture.coursename}</TableCell>
 									<TableCell>{lecture.coursecode}</TableCell>
 									<TableCell>{lecture.topicname}</TableCell>
+									<TableCell>
+										{new Date(lecture.start_date).toLocaleDateString()}
+									</TableCell>
+									<TableCell>{lecture.timeofday}</TableCell>
+
 									<TableCell
 										title={`Total attendance gathered: ${
 											lecture.attended + lecture.notattended
@@ -212,6 +237,13 @@ const AdminAllLectures: React.FC = () => {
 										<span className="text-metropoliaSupportRed">
 											{lecture.notattended}
 										</span>
+									</TableCell>
+									<TableCell>{lecture.attended + lecture.notattended}</TableCell>
+									<TableCell>
+										{Math.round(
+											(lecture.attended / (lecture.attended + lecture.notattended)) * 100,
+										)}{' '}
+										%
 									</TableCell>
 									<TableCell>
 										<span
