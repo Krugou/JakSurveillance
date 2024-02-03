@@ -411,7 +411,6 @@ router.get(
 	},
 );
 
-
 router.get(
 	'/checkstudentemail/:email',
 	checkUserRole(['admin', 'teacher', 'counselor']),
@@ -454,7 +453,10 @@ router.get(
 router.get(
 	'/feedback',
 	checkUserRole(['admin']),
-	async (_req: Request, res: Response) => {
+	async (req: Request, res: Response) => {
+		if (req.user) {
+			console.log('/feedback ', req.user?.email);
+		}
 		try {
 			const feedback = await userFeedBackModel.getUserFeedback();
 			res.send(feedback);

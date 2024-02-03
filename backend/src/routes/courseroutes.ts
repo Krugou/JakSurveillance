@@ -164,6 +164,9 @@ router.post(
 	body('instructors').isArray().withMessage('Instructors must be an array'),
 	validate,
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			console.log('create course ', req.user?.email);
+		}
 		const {
 			courseName,
 			courseCode,

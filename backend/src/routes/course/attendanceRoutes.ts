@@ -265,6 +265,9 @@ router.post(
 		body('state').notEmpty(),
 	],
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			console.log('lecture created ', req.user?.email);
+		}
 		try {
 			const {topicname, coursecode, start_date, end_date, timeofday, state} =
 				req.body;
@@ -336,17 +339,16 @@ router.put(
 	'/update',
 	checkUserRole(['admin', 'teacher', 'counselor']),
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			console.log('attendance update ', req.user?.email);
+		}
 		const {attendanceid, status} = req.body;
 
 		try {
 			// console.log('Received attendanceid:', attendanceid);
 			// console.log('Received status:', status);
 
-			const result = await attendanceController.updateAttendanceStatus(
-				attendanceid,
-				status,
-			);
-			console.log('Update result:', result);
+			await attendanceController.updateAttendanceStatus(attendanceid, status);
 
 			res.status(200).json({message: 'Attendance status updated successfully'});
 		} catch (error) {

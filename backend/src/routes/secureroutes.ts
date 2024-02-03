@@ -122,7 +122,9 @@ router.post(
 	],
 	validate,
 	async (req: Request, res: Response) => {
-		console.log('🚀 ~ req:', req);
+		if (req.user) {
+			console.log('insert-student-user-course ', req.user?.email);
+		}
 		const {
 			email,
 			first_name,
