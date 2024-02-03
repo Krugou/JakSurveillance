@@ -94,10 +94,11 @@ const TeacherLectures: React.FC = () => {
 				If you find any errors, kindly report them to our development team using the
 				feedback option in the main view. Thank you!
 			</h1>
-			<h2 className="text-xl mb-2">Total Lectures: {totalLectures}</h2>
 			<h2 className="text-xl mb-2">
-				Attendance Ratio: {attendanceRatio.toFixed(2)}%
+				Total Lectures: {totalLectures} | Attendance Ratio:{' '}
+				{attendanceRatio.toFixed(2)}%
 			</h2>
+
 			<div className="space-x-2 mt-4 mb-4"></div>
 			<TableContainer
 				className={`relative bg-gray-100 overflow-auto h-[384px]

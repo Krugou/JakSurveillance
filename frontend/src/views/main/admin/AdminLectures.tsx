@@ -44,6 +44,7 @@ const AdminAllLectures: React.FC = () => {
 	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 	const navigate = useNavigate();
 	const [isExpanded, setIsExpanded] = useState(false);
+	const [extraStats, setExtraStats] = useState(false);
 	const getLectures = async () => {
 		const token: string | null = localStorage.getItem('userToken');
 		if (!token) {
@@ -204,8 +205,16 @@ const AdminAllLectures: React.FC = () => {
 				>
 					{isExpanded ? 'Shrink Table' : 'Expand to full'}
 				</button>
+				{!filterOpen && (
+					<button
+						onClick={() => setExtraStats(!extraStats)}
+						className="bg-metropoliaMainOrange h-fit transition hover:hover:bg-metropoliaSecondaryOrange text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
+					>
+						{extraStats ? 'Hide Stats' : 'Show Stats'}
+					</button>
+				)}
 			</div>
-			{!filterOpen && (
+			{extraStats && (
 				<>
 					<h2 className="text-lg mb-2">
 						Total Lectures: {totalLectures} | Attendance Ratio:{' '}
