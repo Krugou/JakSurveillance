@@ -369,30 +369,40 @@ const UserModel = {
 		}
 	},
 	insertUser: async (
-    username: string,
-    email: string,
-    staff: number,
-    first_name: string,
-    last_name: string,
-    studentnumber: number,
-    studentgroupid: number,
-    roleid: number,
-    GDPR: number
-) => {
-    try {
-        const [userResult] = await pool
-            .promise()
-            .query<ResultSetHeader>(
-                'INSERT INTO users (username, email, staff, first_name, last_name, studentnumber, studentgroupid, roleid, GDPR) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                [username, email, staff, first_name, last_name, studentnumber, studentgroupid, roleid, GDPR],
-            );
+		username: string,
+		email: string,
+		staff: number,
+		first_name: string,
+		last_name: string,
+		studentnumber: number,
+		studentgroupid: number,
+		roleid: number,
+		GDPR: number,
+	) => {
+		try {
+			const [userResult] = await pool
+				.promise()
+				.query<ResultSetHeader>(
+					'INSERT INTO users (username, email, staff, first_name, last_name, studentnumber, studentgroupid, roleid, GDPR) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+					[
+						username,
+						email,
+						staff,
+						first_name,
+						last_name,
+						studentnumber,
+						studentgroupid,
+						roleid,
+						GDPR,
+					],
+				);
 
-        return userResult;
-    } catch (error) {
-        console.error(error);
-        return Promise.reject(error);
-    }
-},
+			return userResult;
+		} catch (error) {
+			console.error(error);
+			return Promise.reject(error);
+		}
+	},
 	/**
 	 * Fetches all users.
 	 * @returns A promise that resolves to an array of users.
@@ -557,9 +567,7 @@ const UserModel = {
 	checkIfStudentEmailExists: async (email: string) => {
 		const [existingStudentEmail] = await pool
 			.promise()
-			.query<RowDataPacket[]>('SELECT * FROM users WHERE email = ?', [
-				email,
-			]);
+			.query<RowDataPacket[]>('SELECT * FROM users WHERE email = ?', [email]);
 
 		return existingStudentEmail;
 	},
@@ -577,6 +585,19 @@ const UserModel = {
 		);
 
 		return rows;
+	},
+	/**
+	 * Gets the count of logged in users.
+	 * @returns A promise that resolves to the count of logged in users.
+	 */
+	getUserLoggedCount: async () => {
+		const [rows] = await pool.promise().query<RowDataPacket[]>(
+			`SELECT COUNT(*) AS user_logged
+     FROM users
+     WHERE username IS NOT NULL AND username != ''`,
+		);
+
+		return rows[0]?.user_logged || 0;
 	},
 };
 

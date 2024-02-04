@@ -59,8 +59,10 @@ const AdminStats = () => {
 			}
 
 			const rows: RoleCount[] = await apiHooks.getRoleCounts(token);
+			console.log('🚀 ~ fetchData ~ rows:', rows);
 			const roleNames = rows.map(row => row.role_name);
 			const userCounts = rows.map(row => row.user_count);
+			console.log('🚀 ~ fetchData ~ userCounts:', userCounts);
 			setUserData({
 				labels: roleNames,
 				datasets: [

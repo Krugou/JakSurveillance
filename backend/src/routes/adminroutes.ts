@@ -443,7 +443,17 @@ router.get(
 	async (_req: Request, res: Response) => {
 		try {
 			const roleCounts = await usermodel.getRoleCounts();
-			res.send(roleCounts);
+			const userLoggedCount = await usermodel.getUserLoggedCount();
+			const otherRoleCounts = roleCounts
+				.filter(role => ['admin', 'counselor', 'teacher'].includes(role.role_name))
+				.reduce((sum, role) => sum + role.user_count, 0);
+			const studentLoggedCount = userLoggedCount - otherRoleCounts;
+			const result = [
+				...roleCounts,
+				{role_name: 'AllLoggedCount', user_count: userLoggedCount},
+				{role_name: 'StudentsLoggedCount', user_count: studentLoggedCount},
+			];
+			res.send(result);
 		} catch (error) {
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
