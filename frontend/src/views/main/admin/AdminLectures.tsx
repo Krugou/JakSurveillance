@@ -214,7 +214,7 @@ const AdminAllLectures: React.FC = () => {
 					</button>
 				)}
 			</div>
-			{extraStats && (
+			{extraStats && filterOpen && (
 				<>
 					<h2 className="text-lg mb-2">
 						Total Lectures: {totalLectures} | Attendance Ratio:{' '}

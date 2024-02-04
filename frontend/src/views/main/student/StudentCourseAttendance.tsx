@@ -193,10 +193,10 @@ const StudentCourseAttendance: React.FC = () => {
 						variant="contained"
 						color="primary"
 						startIcon={<ShowChartIcon />}
-						className="w-fit"
+						className="w-fit "
 						onClick={() => setShowTable(!showTable)}
 					>
-						Attendance statistics
+						{showTable ? 'Show Attendance Stats' : 'Show Attendance Table'}
 					</Button>
 				</div>
 				{showTable && (
@@ -212,7 +212,11 @@ const StudentCourseAttendance: React.FC = () => {
 			</div>
 		);
 	} else {
-		return <div className="text-center bg-white rounded-lg p-3 font-bold text-3xl m-10">No Data available</div>;
+		return (
+			<div className="text-center bg-white rounded-lg p-3 font-bold text-3xl m-10">
+				No Data available
+			</div>
+		);
 	}
 };
 
