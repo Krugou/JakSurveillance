@@ -323,9 +323,9 @@ const setupSocketHandlers = (io: Server) => {
 						// logger.info('Lecture finished with timeout ' + lectureid);
 						finishLecture(lectureid, io);
 					}, timeout);
-					console.log(
-						`Setting timeout with ID: ${timeoutId} for lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
-					);
+					// console.log(
+					// 	`Setting timeout with ID: ${timeoutId} for lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
+					// );
 					// logger.info('setting timeout to timeoutids ' + lectureid);
 					lectureTimeoutIds.set(lectureid, timeoutId);
 					// Handle the 'lecturefinishedwithbutton' event
@@ -406,9 +406,9 @@ const setupSocketHandlers = (io: Server) => {
 						}),
 					})
 						.then(response => {
-							console.log(
-								`Input that student has arrived to lecture was successful at ${new Date().toISOString()}`,
-							);
+							// console.log(
+							// 	`Input that student has arrived to lecture was successful at ${new Date().toISOString()}`,
+							// );
 							console.log(`Response: ${JSON.stringify(response)}`);
 
 							const studentIndex = notYetPresentStudents[lectureid].findIndex(
@@ -483,8 +483,6 @@ const setupSocketHandlers = (io: Server) => {
 				})
 					.then(response => {
 						if (response) {
-							console.log(`Manual insertion of student was successful. Response: `);
-
 							const studentIndex = notYetPresentStudents[lectureid].findIndex(
 								(student: Student) =>
 									Number(student.studentnumber) === Number(studentId),
