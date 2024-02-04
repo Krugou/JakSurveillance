@@ -76,9 +76,17 @@ const ServerStatus: React.FC = () => {
 				{/* {connectionStatus
 					? ''
 					: 'You are not connected to Metropolia internal network'} */}
-				{isServerOnline
-					? ''
-					: 'You are not connected to Metropolia internal network'}
+				{isServerOnline ? (
+					''
+				) : (
+					<a
+						href="https://wiki.metropolia.fi/pages/viewpage.action?pageId=149652071"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						You are not connected to Metropolia internal network
+					</a>
+				)}
 			</p>
 
 			<div className="m-2 p-2 rounded-xl">
