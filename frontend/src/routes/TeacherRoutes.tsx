@@ -1,14 +1,16 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
 import Feedback from '../views/main/Feedback.tsx';
+import Team from '../views/main/Team.tsx';
 import TeacherLectures from '../views/main/teacher/Lectures/TeacherLectures.tsx';
+import TeacherLateEnrollment from '../views/main/teacher/Students/TeacherLateEnrollment.tsx';
 import TeacherHelpVideos from '../views/main/teacher/TeacherHelpVideos';
 import TeacherMainView from '../views/main/teacher/TeacherMainView.tsx';
 import TeacherProfile from '../views/main/teacher/TeacherProfile.tsx';
 import TeacherAttendanceRoutes from './teacher/TeacherAttendanceRoutes';
 import TeacherCoursesRoutes from './teacher/TeacherCoursesRoutes';
 import TeacherStudentsRoutes from './teacher/TeacherStudentsRoutes';
-import TeacherLateEnrollment from '../views/main/teacher/Students/TeacherLateEnrollment.tsx';
+
 /**
  * TeacherRoutes component.
  * This component is responsible for defining the routes for the teacher section of the application.
@@ -29,7 +31,9 @@ const TeacherRoutes = () => {
 			<Route path="lectures" element={<TeacherLectures />} />
 			<Route path="profile" element={<TeacherProfile />} />
 			<Route path="feedback" element={<Feedback />} />
-		<Route path='lateenrollment' element={<TeacherLateEnrollment />} /> 
+			<Route path="team" element={<Team />} />
+
+			<Route path="lateenrollment" element={<TeacherLateEnrollment />} />
 
 			<Route path="*" element={<TeacherMainView />} />
 		</Routes>

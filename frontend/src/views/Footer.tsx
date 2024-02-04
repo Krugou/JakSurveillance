@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import {UserContext} from '../contexts/UserContext';
 /**
  * `buildDate` is the date when the application was built.
  */
@@ -32,6 +33,8 @@ const diffHours: number = Math.floor((diffTime / (1000 * 60 * 60)) % 24);
  * It displays the copyright year, the developer's name, and the build date and time since build date in the title of the developer's name.
  */
 const Footer: React.FC = () => {
+	const {user} = React.useContext(UserContext);
+
 	const buildInfo = `Build date: ${buildDate.toLocaleDateString()}${
 		diffDays > 0 ? ` Time since build date: ${diffDays} days` : ''
 	}${diffHours > 0 ? ` and ${diffHours} hours` : ''}`;
@@ -41,7 +44,7 @@ const Footer: React.FC = () => {
 				© {new Date().getFullYear()} Metropolia Attendance App
 			</p>
 			<p title={buildInfo}>
-				Developed by <Link to="/team">JAK</Link>
+				Developed by {user ? <Link to={`/${user?.role}/team`}>JAK</Link> : 'JAK'}
 			</p>
 			<a
 				href="https://oma.metropolia.fi"

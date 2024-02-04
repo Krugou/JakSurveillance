@@ -7,6 +7,8 @@ import CounselorMainView from '../views/main/counselor/CounselorMainView.tsx';
 import CounselorProfile from '../views/main/counselor/CounselorProfile.tsx';
 import CounselorLateEnrollment from '../views/main/counselor/students/CounselorLateEnrollment.tsx';
 import CounselorStudentRoutes from './counselor/CounselorStudentRoutes.tsx';
+import Team from '../views/main/Team.tsx';
+
 /**
  * CounselorRoutes component.
  * This component is responsible for defining the routes for the counselor section of the application.
@@ -27,6 +29,7 @@ const CounselorRoutes = () => {
 			<Route path="students/*" element={<CounselorStudentRoutes />} />
 			<Route path="feedback" element={<Feedback />} />
 			<Route path="lateenrollment" element={<CounselorLateEnrollment />} />
+			<Route path="team" element={<Team />} />
 		</Routes>
 	);
 };

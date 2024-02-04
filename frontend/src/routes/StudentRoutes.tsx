@@ -8,6 +8,8 @@ import StudentMainView from '../views/main/student/StudentMainView.tsx';
 import StudentProfile from '../views/main/student/StudentProfile.tsx';
 import StudentQrScanner from '../views/main/student/StudentQrScanner.tsx';
 import StudentQrSelectScanner from '../views/main/student/StudentQrSelectScanner.tsx';
+import Team from '../views/main/Team.tsx';
+
 /**
  * StudentRoutes component.
  * This component is responsible for defining the routes for the student section of the application.
@@ -30,6 +32,8 @@ const StudentRoutes = () => {
 				path="courses/attendance/:usercourseid"
 				element={<StudentCourseAttendance />}
 			/>
+			<Route path="team" element={<Team />} />
+
 			<Route path="feedback" element={<Feedback />} />
 			<Route path="*" element={<StudentMainView />} />
 		</Routes>
