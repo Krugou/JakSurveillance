@@ -159,29 +159,32 @@ const AdminAllLectures: React.FC = () => {
 		totalLectures > 0
 			? (totalAttended / (totalAttended + totalNotAttended)) * 100
 			: 0;
-
-	// Find lecture with highest attendance
-	const highestAttendedLecture = lectures.reduce(
-		(max, lecture) => (lecture.attended > max.attended ? lecture : max),
-		lectures[0],
-	);
-	// Find lecture with highest not attended
-	const highestNotAttendedLecture = lectures.reduce(
-		(max, lecture) => (lecture.notattended > max.notattended ? lecture : max),
-		lectures[0],
+	// Find lectures with highest attendance
+	const maxAttended = Math.max(...lectures.map(lecture => lecture.attended));
+	const highestAttendedLectures = lectures.filter(
+		lecture => lecture.attended === maxAttended,
 	);
 
-	// Find lecture with lowest attendance
-	const lowestAttendedLecture = lectures.reduce(
-		(min, lecture) => (lecture.attended < min.attended ? lecture : min),
-		lectures[0],
+	// Find lectures with highest not attended
+	const maxNotAttended = Math.max(
+		...lectures.map(lecture => lecture.notattended),
+	);
+	const highestNotAttendedLectures = lectures.filter(
+		lecture => lecture.notattended === maxNotAttended,
 	);
 
-	// Find lecture with lowest not attended
+	// Find lectures with lowest attendance
+	const minAttended = Math.min(...lectures.map(lecture => lecture.attended));
+	const lowestAttendedLectures = lectures.filter(
+		lecture => lecture.attended === minAttended,
+	);
 
-	const lowestNotAttendedLecture = lectures.reduce(
-		(min, lecture) => (lecture.notattended < min.notattended ? lecture : min),
-		lectures[0],
+	// Find lectures with lowest not attended
+	const minNotAttended = Math.min(
+		...lectures.map(lecture => lecture.notattended),
+	);
+	const lowestNotAttendedLectures = lectures.filter(
+		lecture => lecture.notattended === minNotAttended,
 	);
 
 	return (
@@ -214,30 +217,45 @@ const AdminAllLectures: React.FC = () => {
 					</button>
 				)}
 			</div>
-			{extraStats && filterOpen && (
+			{extraStats && !filterOpen && (
 				<>
 					<h2 className="text-lg mb-2">
 						Total Lectures: {totalLectures} | Attendance Ratio:{' '}
 						{attendanceRatio.toFixed(2)}%
 					</h2>
+					<h2 className="text-lg mb-2">
+						{highestAttendedLectures.map(lecture => (
+							<>
+								Highest Attended: {lecture.attended} (ID: {lecture.lectureid})
+							</>
+						))}
 
-					{highestAttendedLecture && (
-						<h2 className="text-md mb-2">
-							Highest Attended: {highestAttendedLecture.attended} (Lecture ID:{' '}
-							{highestAttendedLecture.lectureid}) | Lowest Attended:{' '}
-							{lowestAttendedLecture.attended} (Lecture ID:{' '}
-							{lowestAttendedLecture.lectureid})
-						</h2>
-					)}
-					{highestNotAttendedLecture && (
-						<h2 className="text-md mb-2">
-							Highest Not Attended: {highestNotAttendedLecture.notattended} (Lecture
-							ID: {highestNotAttendedLecture.lectureid}) | Lowest Not Attended:{' '}
-							{lowestNotAttendedLecture.notattended} (Lecture ID:{' '}
-							{lowestNotAttendedLecture.lectureid})
-						</h2>
-					)}
+						{lowestAttendedLectures.map(lecture => (
+							<>
+								{' '}
+								Lowest Attended: {lecture.attended} (ID: {lecture.lectureid})
+							</>
+						))}
+					</h2>
+					<h2 className="text-lg mb-2">
+						{highestNotAttendedLectures.map(lecture => (
+							<>
+								{' '}
+								Highest Not Attended: {lecture.notattended} (ID: {lecture.lectureid})
+							</>
+						))}
+
+						{lowestNotAttendedLectures.map(lecture => (
+							<>
+								{' '}
+								Lowest Not Attended: {lecture.notattended} (ID: {lecture.lectureid})
+							</>
+						))}
+					</h2>
 				</>
+			)}
+			{filterOpen && filteredLectures.length > 0 && (
+				<h2 className="text-lg mb-2">{`Open lectures: ${filteredLectures.length}`}</h2>
 			)}
 
 			<TableContainer

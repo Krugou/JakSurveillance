@@ -6,6 +6,7 @@ import Logout from '../views/Logout';
 import Gdpr from '../views/main/Gdpr';
 import Login from '../views/main/Login';
 import StartView from '../views/main/StartView';
+import Team from '../views/main/Team';
 import AdminRoutes from './AdminRoutes';
 import CounselorRoutes from './CounselorRoutes';
 import StudentRoutes from './StudentRoutes';
@@ -29,6 +30,7 @@ const AllRoutes = () => {
 				<Route path="admin/*" element={<AdminRoutes />} />
 				<Route path="counselor/*" element={<CounselorRoutes />} />
 				<Route path="teacher/*" element={<TeacherRoutes />} />
+				<Route path="team" element={<Team />} />
 				<Route path="logout" element={<Logout />} />
 				<Route path="login" element={<Login />} />
 				<Route path="gdpr" element={<Gdpr />} />
