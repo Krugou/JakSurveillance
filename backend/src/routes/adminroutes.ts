@@ -450,8 +450,8 @@ router.get(
 			const studentLoggedCount = userLoggedCount - otherRoleCounts;
 			const result = [
 				...roleCounts,
-				{role_name: 'AllLoggedCount', user_count: userLoggedCount},
-				{role_name: 'StudentsLoggedCount', user_count: studentLoggedCount},
+				{role_name: 'AllLogged', user_count: userLoggedCount},
+				{role_name: 'StudentsLogged', user_count: studentLoggedCount},
 			];
 			res.send(result);
 		} catch (error) {
