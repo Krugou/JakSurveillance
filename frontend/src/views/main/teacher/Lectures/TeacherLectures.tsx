@@ -24,6 +24,7 @@ interface Lecture {
 	topicname: string;
 	coursecode: string;
 	courseid: string;
+	studentcount: number;
 }
 
 const TeacherLectures: React.FC = () => {
@@ -114,7 +115,7 @@ const TeacherLectures: React.FC = () => {
 							<TableCell>Date</TableCell>
 							<TableCell>am/pm</TableCell>
 							<TableCell>Attendance</TableCell>
-							<TableCell>Total</TableCell>
+							<TableCell>Student Count</TableCell>
 							<TableCell>Ratio(%)</TableCell>
 							<TableCell>State</TableCell>
 						</TableRow>
@@ -147,7 +148,7 @@ const TeacherLectures: React.FC = () => {
 											{lecture.notattended}
 										</span>
 									</TableCell>
-									<TableCell>{lecture.attended + lecture.notattended}</TableCell>
+									<TableCell>{lecture.studentcount}</TableCell>
 									<TableCell>
 										{Math.round(
 											(lecture.attended / (lecture.attended + lecture.notattended)) * 100,

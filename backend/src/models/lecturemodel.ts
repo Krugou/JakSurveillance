@@ -149,12 +149,16 @@ const lectureModel: LectureModel = {
 		try {
 			const [rows] = await pool.promise().query<RowDataPacket[]>(
 				`SELECT lecture.*, courses.name AS coursename, courses.code AS coursecode, users.email AS teacheremail, topics.topicname,
-        (SELECT COUNT(*) FROM attendance WHERE lecture.lectureid = attendance.lectureid AND attendance.status = 0) AS notattended,
-        (SELECT COUNT(*) FROM attendance WHERE lecture.lectureid = attendance.lectureid AND attendance.status = 1) AS attended
-        FROM lecture 
-        INNER JOIN courses ON lecture.courseid = courses.courseid 
-        INNER JOIN users ON lecture.teacherid = users.userid 
-        INNER JOIN topics ON lecture.topicid = topics.topicid`,
+      (SELECT COUNT(*) FROM attendance WHERE lecture.lectureid = attendance.lectureid AND attendance.status = 0) AS notattended,
+      (SELECT COUNT(*) FROM attendance WHERE lecture.lectureid = attendance.lectureid AND attendance.status = 1) AS attended,
+      (SELECT COUNT(*) FROM users u 
+        JOIN usercourses uc ON u.userid = uc.userid 
+        JOIN lecture c ON uc.courseid = c.courseid 
+        WHERE c.lectureid = lecture.lectureid AND u.roleid = 1) AS studentcount
+      FROM lecture 
+      INNER JOIN courses ON lecture.courseid = courses.courseid 
+      INNER JOIN users ON lecture.teacherid = users.userid 
+      INNER JOIN topics ON lecture.topicid = topics.topicid`,
 			);
 			return rows;
 		} catch (error) {
@@ -476,7 +480,11 @@ const lectureModel: LectureModel = {
 			const [rows] = await pool.promise().query<RowDataPacket[]>(
 				`SELECT lecture.*, courses.name AS coursename, courses.code AS coursecode, users.email AS teacheremail, topics.topicname,
       (SELECT COUNT(*) FROM attendance WHERE lecture.lectureid = attendance.lectureid AND attendance.status = 0) AS notattended,
-      (SELECT COUNT(*) FROM attendance WHERE lecture.lectureid = attendance.lectureid AND attendance.status = 1) AS attended
+      (SELECT COUNT(*) FROM attendance WHERE lecture.lectureid = attendance.lectureid AND attendance.status = 1) AS attended,
+      (SELECT COUNT(*) FROM users u 
+        JOIN usercourses uc ON u.userid = uc.userid 
+        JOIN lecture c ON uc.courseid = c.courseid 
+        WHERE c.lectureid = lecture.lectureid AND u.roleid = 1) AS studentcount
       FROM lecture 
       INNER JOIN courses ON lecture.courseid = courses.courseid 
       INNER JOIN users ON lecture.teacherid = users.userid 
