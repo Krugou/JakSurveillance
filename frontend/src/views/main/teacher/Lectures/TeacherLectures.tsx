@@ -115,6 +115,7 @@ const TeacherLectures: React.FC = () => {
 							<TableCell>Date</TableCell>
 							<TableCell>am/pm</TableCell>
 							<TableCell>Attendance</TableCell>
+							<TableCell>Total Attendance</TableCell>
 							<TableCell>Current Topic Student Count</TableCell>
 							<TableCell>Ratio(%)</TableCell>
 							<TableCell>State</TableCell>
@@ -148,6 +149,7 @@ const TeacherLectures: React.FC = () => {
 											{lecture.notattended}
 										</span>
 									</TableCell>
+									<TableCell>{lecture.attended + lecture.notattended}</TableCell>
 									<TableCell>{lecture.actualStudentCount}</TableCell>
 									<TableCell>
 										{Math.round(
