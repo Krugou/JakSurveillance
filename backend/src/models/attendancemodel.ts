@@ -67,13 +67,11 @@ interface AttendanceModel {
 	 * Gets the attendance by user course ID, date, and lecture ID.
 	 *
 	 * @param {number} usercourseid - The ID of the user course.
-	 * @param {string} date - The date of the attendance.
 	 * @param {string} lectureid - The ID of the lecture.
 	 * @returns {Promise<any>} The attendance details.
 	 */
 	getAttendanceByUserCourseIdDateLectureId: (
 		usercourseid: number,
-		date: string,
 		lectureid: string,
 	) => Promise<any>;
 
@@ -204,15 +202,14 @@ const attendanceModel: AttendanceModel = {
 
 	async getAttendanceByUserCourseIdDateLectureId(
 		usercourseid: number,
-		date: string,
 		lectureid: string,
 	) {
 		const [attendanceResult] = await pool
 			.promise()
-			.query(
-				'SELECT * FROM attendance WHERE usercourseid = ? AND date = ? AND lectureid = ?',
-				[usercourseid, date, lectureid],
-			);
+			.query('SELECT * FROM attendance WHERE usercourseid = ? AND lectureid = ?', [
+				usercourseid,
+				lectureid,
+			]);
 		return attendanceResult;
 	},
 

@@ -199,7 +199,6 @@ const attendanceController: AttendanceController = {
 				const attendanceResult =
 					await attendanceModel.getAttendanceByUserCourseIdDateLectureId(
 						usercourseid,
-						date,
 						lectureid,
 					);
 
