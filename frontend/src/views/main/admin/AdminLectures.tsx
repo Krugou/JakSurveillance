@@ -31,7 +31,7 @@ interface Lecture {
 	topicname: string;
 	coursecode: string;
 	courseid: string;
-	studentcount: number;
+	actualStudentCount: number;
 }
 
 const AdminAllLectures: React.FC = () => {
@@ -276,7 +276,8 @@ const AdminAllLectures: React.FC = () => {
 							<TableCell>Date</TableCell>
 							<TableCell>am/pm</TableCell>
 							<TableCell>Attendance</TableCell>
-							<TableCell>Student Count</TableCell>
+							<TableCell>Total Attendance</TableCell>
+							<TableCell>Current Topic Student Count</TableCell>
 							<TableCell>Ratio(%)</TableCell>
 							<TableCell>State</TableCell>
 							<TableCell>Actions</TableCell>
@@ -312,7 +313,19 @@ const AdminAllLectures: React.FC = () => {
 											{lecture.notattended}
 										</span>
 									</TableCell>
-									<TableCell>{lecture.studentcount}</TableCell>
+									<TableCell>{lecture.attended + lecture.notattended}</TableCell>
+									<TableCell>
+										<span
+											className={
+												lecture.attended + lecture.notattended !==
+												lecture.actualStudentCount
+													? 'text-red-500'
+													: ''
+											}
+										>
+											{lecture.actualStudentCount}
+										</span>
+									</TableCell>
 									<TableCell>
 										{Math.round(
 											(lecture.attended / (lecture.attended + lecture.notattended)) * 100,

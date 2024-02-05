@@ -479,6 +479,13 @@ router.get(
 		try {
 			const teacherId = Number(req.params.teacherId);
 			const lectures = await lectureModel.fetchLecturesByTeacherId(teacherId);
+
+			for (const lecture of lectures) {
+				const students = await lectureController.getStudentsInLecture(
+					lecture.lectureid,
+				);
+				if (students) lecture.actualStudentCount = students.length;
+			}
 			res.json(lectures);
 		} catch (err) {
 			console.error(err);

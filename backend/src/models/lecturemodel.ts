@@ -103,6 +103,7 @@ export interface LectureModel {
 	 * Fetches all lectures.
 	 * @returns A promise that resolves to an array of lectures.
 	 */
+
 	fetchAllLectures(): Promise<
 		RowDataPacket[] | [RowDataPacket[], FieldPacket[]]
 	>;

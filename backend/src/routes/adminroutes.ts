@@ -3,6 +3,7 @@ import {body, param} from 'express-validator';
 import {RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
 import adminController from '../controllers/admincontroller.js';
+import lectureController from '../controllers/lecturecontroller.js';
 import course from '../models/coursemodel.js';
 import lectureModel from '../models/lecturemodel.js';
 import rolemodel from '../models/rolemodel.js';
@@ -12,6 +13,7 @@ import checkUserRole from '../utils/checkRole.js';
 import validate from '../utils/validate.js';
 const pool = createPool('ADMIN');
 const router: Router = express.Router();
+
 /**
  * Route that fetches the server settings.
  *
@@ -235,13 +237,28 @@ router.post(
 		}
 	},
 );
+
 /** route that get all lectures */
+interface Lecture extends RowDataPacket {
+	lectureid: number;
+	actualStudentCount?: number;
+}
+
 router.get(
 	'/alllectures/',
 	checkUserRole(['admin']),
 	async (_req: Request, res: Response) => {
 		try {
-			const lectures = await lectureModel.fetchAllLectures();
+			const lectures = (await lectureModel.fetchAllLectures()) as Lecture[];
+			for (const lecture of lectures) {
+				const students = await lectureController.getStudentsInLecture(
+					lecture.lectureid,
+				);
+
+				if (students) {
+					lecture.actualStudentCount = students.length;
+				}
+			}
 			res.json(lectures);
 		} catch (err) {
 			console.error(err);
