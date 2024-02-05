@@ -112,6 +112,7 @@ interface AttendanceModel {
 		usercourseid: string,
 		lectureid: string,
 	) => Promise<any>;
+	deleteAttendanceByAttendanceId: (attendanceId: number) => Promise<any>;
 }
 
 /**
@@ -320,6 +321,13 @@ const attendanceModel: AttendanceModel = {
 				usercourseid,
 				lectureid,
 			]);
+
+		return result;
+	},
+	async deleteAttendanceByAttendanceId(attendanceId: number) {
+		const [result] = await pool
+			.promise()
+			.query('DELETE FROM attendance WHERE attendanceid = ?', [attendanceId]);
 
 		return result;
 	},

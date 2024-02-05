@@ -1,5 +1,11 @@
 import {
+	Button,
 	CircularProgress,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
 	Paper,
 	Table,
 	TableBody,
@@ -34,39 +40,69 @@ const AdminLectureDetail = () => {
 	const [loading, setLoading] = useState(true);
 	const {user} = useContext(UserContext);
 	const {courseId, lectureId} = useParams();
-
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const token: string | null = localStorage.getItem('userToken');
-				if (!token) {
-					throw new Error('No token available');
-				}
-				if (!courseId || !lectureId) {
-					toast.error('Course ID or Lecture ID is not available');
-					throw new Error('Course ID or Lecture ID is not available');
-				}
-				const response = await apiHooks.fetchAttendances(
-					token,
-					courseId,
-					lectureId,
-				);
-				console.log('🚀 ~ fetchData ~ response:', response);
-				if (!response || response.length === 0) {
-					toast.info('No data found for this lecture, wait until students attend');
-				} else {
-					setData(response);
-				}
-				setLoading(false);
-			} catch (error) {
-				toast.error('Error fetching attendances');
-				setLoading(false);
+	const fetchData = async () => {
+		try {
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
 			}
-		};
-
+			if (!courseId || !lectureId) {
+				toast.error('Course ID or Lecture ID is not available');
+				throw new Error('Course ID or Lecture ID is not available');
+			}
+			const response = await apiHooks.fetchAttendances(token, courseId, lectureId);
+			console.log('🚀 ~ fetchData ~ response:', response);
+			if (!response || response.length === 0) {
+				toast.info('No data found for this lecture, wait until students attend');
+			} else {
+				setData(response);
+			}
+			setLoading(false);
+		} catch (error) {
+			toast.error('Error fetching attendances');
+			setLoading(false);
+		}
+	};
+	const handleDelete = async (attendanceId: number) => {
+		try {
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
+			await apiHooks.deleteAttendanceByAttendanceId(token, attendanceId);
+			toast.success('Attendance deleted successfully');
+			// Refresh the data after deleting an attendance
+			fetchData();
+		} catch (error) {
+			toast.error('Error deleting attendance');
+		}
+	};
+	const isDuplicate = (usercourseid: number) => {
+		if (!data) return false;
+		const count = data.filter(item => item.usercourseid === usercourseid).length;
+		return count > 1;
+	};
+	useEffect(() => {
 		fetchData();
 	}, [courseId, lectureId, user]);
+	const [open, setOpen] = useState(false);
+	const [deleteId, setDeleteId] = useState<number | null>(null);
 
+	const handleOpenDialog = (id: number) => {
+		setDeleteId(id);
+		setOpen(true);
+	};
+
+	const handleCloseDialog = () => {
+		setOpen(false);
+	};
+
+	const handleConfirmDelete = () => {
+		if (deleteId !== null) {
+			handleDelete(deleteId);
+		}
+		setOpen(false);
+	};
 	if (loading) {
 		return <CircularProgress />;
 	}
@@ -104,16 +140,55 @@ const AdminLectureDetail = () => {
 									}
 								>
 									<TableCell style={{color: 'white'}}>{item.attendanceid}</TableCell>
-									<TableCell style={{color: 'white'}}>{item.usercourseid}</TableCell>
+									<TableCell style={{color: 'white'}}>
+										{item.usercourseid}{' '}
+										{isDuplicate(item.usercourseid) && '(this is duplicate)'}
+									</TableCell>
 									<TableCell style={{color: 'white'}}>
 										{item.first_name} {item.last_name}
 									</TableCell>
 									<TableCell style={{color: 'white'}}>
 										{item.status === 1 ? 'Present' : 'Not Present'}
 									</TableCell>
+									<TableCell style={{color: 'white'}}>
+										<button
+											className="bg-metropoliaSupportRed h-fit transition hover:hover:bg-red-600 text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
+											onClick={() => handleOpenDialog(item.attendanceid)}
+										>
+											Delete
+										</button>
+									</TableCell>
 								</TableRow>
 							))}
 					</TableBody>
+					<Dialog
+						open={open}
+						onClose={handleCloseDialog}
+						aria-labelledby="alert-dialog-title"
+						aria-describedby="alert-dialog-description"
+					>
+						<DialogTitle id="alert-dialog-title">{'Confirm Delete'}</DialogTitle>
+						<DialogContent>
+							<DialogContentText id="alert-dialog-description">
+								Are you sure you want to delete this attendance?
+							</DialogContentText>
+						</DialogContent>
+						<DialogActions>
+							<button
+								className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+								onClick={handleCloseDialog}
+							>
+								Cancel
+							</button>
+							<button
+								className="bg-metropoliaSupportRed hover:bg-red-600 text-white font-bold py-2 px-4 rounded ml-2"
+								onClick={handleConfirmDelete}
+								autoFocus
+							>
+								Confirm
+							</button>
+						</DialogActions>
+					</Dialog>
 				</Table>
 			</TableContainer>
 		</div>

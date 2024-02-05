@@ -661,10 +661,7 @@ const checkStudentNumberExists = async (
 	return doFetch(url, options);
 };
 
-const checkStudentEmailExists = async (
-	email: string,
-	token: string,
-) => {
+const checkStudentEmailExists = async (email: string, token: string) => {
 	const options = {
 		method: 'GET',
 		headers: {
@@ -931,8 +928,25 @@ const getOpenLecturesByCourseid = async (
 		options,
 	);
 };
+const deleteAttendanceByAttendanceId = async (
+	token: string,
+	attendanceid: number,
+) => {
+	const options = {
+		method: 'DELETE',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+
+	return await doFetch(
+		baseUrl + `admin/attendance/delete/${attendanceid}`,
+		options,
+	);
+};
 
 const apiHooks = {
+	deleteAttendanceByAttendanceId,
 	addNewStudentUserCourse,
 	postUserFeedback,
 	getUserFeedback,

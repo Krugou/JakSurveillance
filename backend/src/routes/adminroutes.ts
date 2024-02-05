@@ -4,6 +4,7 @@ import {RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
 import adminController from '../controllers/admincontroller.js';
 import lectureController from '../controllers/lecturecontroller.js';
+import AttendanceModel from '../models/attendancemodel.js';
 import course from '../models/coursemodel.js';
 import lectureModel from '../models/lecturemodel.js';
 import rolemodel from '../models/rolemodel.js';
@@ -510,6 +511,29 @@ router.delete(
 			}
 			return res.status(200).json({
 				message: 'Feedback deleted successfully',
+			});
+		} catch (error) {
+			console.error(error);
+			return res.status(500).json({message: 'Internal server error'});
+		}
+	},
+);
+
+router.delete(
+	'/attendance/delete/:attendanceid',
+	async (req: Request, res: Response) => {
+		const {attendanceid} = req.params;
+		try {
+			const result = await AttendanceModel.deleteAttendanceByAttendanceId(
+				Number(attendanceid),
+			);
+			if (result.affectedRows === 0) {
+				return res.status(500).json({
+					message: 'Internal server error',
+				});
+			}
+			return res.status(200).json({
+				message: 'Attendance deleted successfully',
 			});
 		} catch (error) {
 			console.error(error);
