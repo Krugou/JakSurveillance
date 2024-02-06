@@ -200,6 +200,9 @@ router.post(
 	],
 	validate,
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			console.log('admin / insert - student - user / ', req.user?.email);
+		}
 		const {email, first_name, last_name, studentnumber, studentGroupId} =
 			req.body;
 		// console.log(
@@ -385,6 +388,9 @@ router.put(
 	'/updateuser',
 	checkUserRole(['admin']),
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			console.log('/update user  ', req.user?.email);
+		}
 		try {
 			const user = req.body;
 			await usermodel.updateUser(user);
@@ -483,7 +489,7 @@ router.get(
 	checkUserRole(['admin']),
 	async (req: Request, res: Response) => {
 		if (req.user) {
-			console.log('/feedback ', req.user?.email);
+			console.log('admin/feedback view ', req.user?.email);
 		}
 		try {
 			const feedback = await userFeedBackModel.getUserFeedback();
@@ -499,7 +505,9 @@ router.delete(
 	checkUserRole(['admin']),
 	async (req: Request, res: Response) => {
 		const {feedbackId} = req.params;
-		console.log('🚀 ~ feedbackId:', feedbackId);
+		if (req.user) {
+			console.log('admin/feedback delete ', req.user?.email);
+		}
 		try {
 			const result = await userFeedBackModel.deleteUserFeedback(
 				Number(feedbackId),
