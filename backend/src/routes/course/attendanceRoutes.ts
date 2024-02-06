@@ -474,7 +474,7 @@ router.post(
 );
 router.get(
 	'/lecture/teacher/:teacherId',
-	checkUserRole(['admin']),
+	checkUserRole(['admin', 'teacher', 'counselor']),
 	async (req: Request, res: Response) => {
 		try {
 			const teacherId = Number(req.params.teacherId);
