@@ -357,16 +357,29 @@ const setupSocketHandlers = (io: Server) => {
 				unixtime: number,
 				lectureid: number,
 			) => {
-				if (studentId === '') {
+				if (
+					studentId === '' ||
+					!studentId ||
+					!lectureid ||
+					!secureHash ||
+					!unixtime ||
+					!lectureData[lectureid]
+				) {
 					io
 						.to(socket.id)
-						.emit('inputThatStudentHasArrivedToLectureTooSlow', lectureid);
+						.emit('NoCorrectInputDetails', lectureid);
 				}
-				// find the timestamp that matches the secureHash and unixtime
-				const timestamp = lectureData[lectureid].timestamps.find(
-					t => t.hash === secureHash && unixtime >= t.start && unixtime <= t.end,
-				);
-
+				let timestamp;
+				if (
+					lectureData &&
+					lectureData[lectureid] &&
+					lectureData[lectureid].timestamps
+				) {
+					// find the timestamp that matches the secureHash and unixtime
+					timestamp = lectureData[lectureid].timestamps.find(
+						t => t.hash === secureHash && unixtime >= t.start && unixtime <= t.end,
+					);
+				}
 				if (timestamp) {
 					console.log(`Timestamp found for Student ID: ${studentId}!`);
 
@@ -377,7 +390,13 @@ const setupSocketHandlers = (io: Server) => {
 						`Secure Hash: ${secureHash}, Unix Time: ${unixtime}, ISO Time: ${new Date().toISOString()}`,
 					);
 					console.log('Current Timestamps:');
-					console.log(JSON.stringify(lectureData[lectureid].timestamps, null, 2));
+					if (
+						lectureData &&
+						lectureData[lectureid] &&
+						lectureData[lectureid].timestamps
+					) {
+						console.log(JSON.stringify(lectureData[lectureid].timestamps, null, 2));
+					}
 					console.log(`Timestamp not found for Student ID: ${studentId}!`);
 					// logger.info('lectureid: ' + lectureid);
 					// logger.info(secureHash + ' ' + unixtime + ' ' + new Date().toISOString());

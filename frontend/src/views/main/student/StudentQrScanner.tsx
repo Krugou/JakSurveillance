@@ -94,6 +94,10 @@ const StudentQrScanner: React.FC = () => {
 					toast.error('You were too slow, try again ' + studentId2);
 					setScanned(false);
 				});
+				newSocket.on('NoCorrectInputDetails', () => {
+					toast.error('No correct input details');
+					setScanned(false);
+				});
 			}
 			setLoading(false);
 		},

@@ -1,6 +1,7 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
 import Feedback from '../views/main/Feedback.tsx';
+import Team from '../views/main/Team.tsx';
 import StudentCourseAttendance from '../views/main/student/StudentCourseAttendance.tsx';
 import StudentCourses from '../views/main/student/StudentCourses.tsx';
 import StudentHelpVideos from '../views/main/student/StudentHelpVideos.tsx';
@@ -8,7 +9,7 @@ import StudentMainView from '../views/main/student/StudentMainView.tsx';
 import StudentProfile from '../views/main/student/StudentProfile.tsx';
 import StudentQrScanner from '../views/main/student/StudentQrScanner.tsx';
 import StudentQrSelectScanner from '../views/main/student/StudentQrSelectScanner.tsx';
-import Team from '../views/main/Team.tsx';
+import TestScanner from '../views/main/student/TestScanner.tsx';
 
 /**
  * StudentRoutes component.
@@ -28,6 +29,7 @@ const StudentRoutes = () => {
 			<Route path="helpvideos" element={<StudentHelpVideos />} />
 			<Route path="qr" element={<StudentQrScanner />} />
 			<Route path="aqr" element={<StudentQrSelectScanner />} />
+			<Route path="test" element={<TestScanner />} />
 			<Route
 				path="courses/attendance/:usercourseid"
 				element={<StudentCourseAttendance />}
