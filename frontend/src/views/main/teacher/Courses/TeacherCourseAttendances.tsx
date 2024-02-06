@@ -22,6 +22,10 @@ const TeacherCourseAttendances: React.FC = () => {
 	>([]); // [lecture, [attendances]
 	const {id: courseId} = useParams();
 	const {update, setUpdate} = useContext(UserContext);
+	const {user} = useContext(UserContext);
+	const userEmail = user?.email;
+	const [showOwnAttendances, setShowOwnAttendances] = useState(true);
+
 	const navigate = useNavigate();
 	// Fetch the lectures and their attendances
 	useEffect(() => {
@@ -57,8 +61,10 @@ const TeacherCourseAttendances: React.FC = () => {
 		? lecturesAndTheirAttendances
 				.filter(
 					lecture =>
-						new Date(lecture.start_date).toDateString() ===
-						selectedDate.toDateString(),
+						(new Date(lecture.start_date).toDateString() ===
+							selectedDate.toDateString() &&
+							!showOwnAttendances) ||
+						lecture.teacher === userEmail,
 				)
 				.map(lecture => ({
 					...lecture,
@@ -71,8 +77,10 @@ const TeacherCourseAttendances: React.FC = () => {
 					last_name: lecture.last_name,
 					studentnumber: lecture.studentnumber,
 				}))
-		: [];
-
+		: [showOwnAttendances];
+	const handleToggleOwnAttendances = () => {
+		setShowOwnAttendances(!showOwnAttendances);
+	};
 	// Function to handle printing to pdf
 	const handlePrintToPdf = () => {
 		exportToPDF(filteredAttendances);
@@ -133,22 +141,37 @@ const TeacherCourseAttendances: React.FC = () => {
 									<button
 										onClick={handlePrintToPdf}
 										className="bg-metropoliaMainOrange text-white p-2 rounded"
+										title="Print to pdf"
 									>
 										<PrintIcon fontSize="large" />
 									</button>
 								</Tooltip>
-								<h2 className="text-center text-2xl">
-									Attendances for {selectedDate.toLocaleDateString()}
-								</h2>
+								<div className="flex flex-col">
+									<h2 className="text-center text-2xl">
+										Attendances for {selectedDate.toLocaleDateString()}
+									</h2>
+									{user?.role !== 'student' && (
+										<button
+											className="bg-metropoliaMainOrange m-2 text-white p-2 rounded"
+											onClick={handleToggleOwnAttendances}
+										>
+											{showOwnAttendances
+												? 'Show all lecture attendances for this course today'
+												: 'Show own lecture attendances for this course today'}
+										</button>
+									)}
+								</div>
 								<Tooltip title="Export to Excel">
 									<button
 										onClick={handleExportToExcel}
 										className="bg-metropoliaMainOrange text-white p-2 rounded"
+										title="Export to Excel"
 									>
 										<GetAppIcon fontSize="large" />
 									</button>
 								</Tooltip>
 							</div>
+
 							<AttendanceTable
 								filteredAttendanceData={filteredAttendances}
 								allAttendances={true}
