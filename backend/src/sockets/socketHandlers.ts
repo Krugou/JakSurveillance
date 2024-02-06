@@ -436,12 +436,13 @@ const setupSocketHandlers = (io: Server) => {
 								`Student with ID: ${studentId} has been saved into lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
 							);
 						})
-						.catch(error => {
+						.catch(() => {
 							// Handle the error here
 							console.log(
 								'Attendance record already exists. No further action needed.',
 							);
-							console.error(error);
+							io.to(socket.id).emit('youHaveBeenSavedIntoLectureAlready', lectureid);
+							// console.error(error);
 						});
 				} else {
 					io
