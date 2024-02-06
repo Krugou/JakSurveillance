@@ -210,6 +210,9 @@ router.post(
 	checkUserRole(['admin', 'teacher', 'counselor']),
 	[body('studentnumber').isNumeric(), body('lectureid').isNumeric()],
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			console.log('admin/attendance delete ', req.user?.email);
+		}
 		try {
 			const {studentnumber} = req.body;
 			const lectureid = req.body.lectureid;
@@ -394,6 +397,9 @@ router.delete(
 	[param('lectureid').isNumeric().withMessage('Lecture ID must be a number')],
 	validate,
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			console.log('delete lecture ', req.user?.email);
+		}
 		try {
 			const lectureid = req.params.lectureid;
 

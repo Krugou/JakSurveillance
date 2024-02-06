@@ -59,6 +59,9 @@ router.post(
 	],
 	validate,
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			console.log('changed server settings ', req.user?.email);
+		}
 		const {speedofhash, leewayspeed, timeouttime, attendancethreshold} = req.body;
 		try {
 			await adminController.updateServerSettings(
