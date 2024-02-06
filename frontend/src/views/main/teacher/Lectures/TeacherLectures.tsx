@@ -8,9 +8,9 @@ import {
 } from '@mui/material';
 
 import CircularProgress from '@mui/material/CircularProgress';
-import React, {useContext, useEffect, useState} from 'react';
-import {toast} from 'react-toastify';
-import {UserContext} from '../../../../contexts/UserContext';
+import React, { useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { UserContext } from '../../../../contexts/UserContext';
 import apiHooks from '../../../../hooks/ApiHooks';
 interface Lecture {
 	lectureid: number;
@@ -116,7 +116,7 @@ const TeacherLectures: React.FC = () => {
 							<TableCell>am/pm</TableCell>
 							<TableCell>Attendance</TableCell>
 							<TableCell>Total Attendance</TableCell>
-							<TableCell>Current Topic Student Count</TableCell>
+							<TableCell>Students with this topic</TableCell>
 							<TableCell>Ratio(%)</TableCell>
 							<TableCell>State</TableCell>
 						</TableRow>
