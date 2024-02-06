@@ -91,9 +91,9 @@ const TeacherLectures: React.FC = () => {
 	return (
 		<div className="relative xl:w-fit w-full bg-white p-5 rounded-lg">
 			<h1 className="text-2xl font-bold mb-4">
-				These are your lectures. Please review them carefully for any inaccuracies.
-				If you find any errors, kindly report them to our development team using the
-				feedback option in the main view. Thank you!
+				These are your lecture stats. Please review them carefully for any
+				inaccuracies. If you find any errors, kindly report them to our development
+				team using the feedback option in the main view. Thank you!
 			</h1>
 			<h2 className="text-xl mb-2">
 				Total Lectures: {totalLectures} | Attendance Ratio:{' '}
