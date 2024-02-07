@@ -1,4 +1,3 @@
-import {Slider} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import apiHooks from '../../../hooks/ApiHooks';
