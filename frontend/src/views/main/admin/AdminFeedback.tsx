@@ -127,7 +127,7 @@ const AdminFeedback = () => {
 										</Typography>
 									</AccordionSummary>
 									<AccordionDetails className="bg-white text-black">
-										<Typography className="break-all">{item.text}</Typography>
+										<Typography className="break-words">{item.text}</Typography>
 										<div className="flex justify-end">
 											<button
 												className="bg-metropoliaSupportRed  hover:hover:bg-metropoliaSupportSecondaryRed transition text-white font-bold p-2  m-2 rounded focus:outline-none focus:shadow-outline"
