@@ -61,11 +61,10 @@ const TeacherCourseAttendances: React.FC = () => {
 		? lecturesAndTheirAttendances
 				.filter(
 					lecture =>
-						(new Date(lecture.start_date).toDateString() ===
-							selectedDate.toDateString() &&
-							!showOwnAttendances) ||
-						lecture.teacher === userEmail,
+						new Date(lecture.start_date).toDateString() ===
+						selectedDate.toDateString(),
 				)
+				.filter(lecture => !showOwnAttendances || lecture.teacher === userEmail)
 				.map(lecture => ({
 					...lecture,
 					timeofday: lecture.timeofday,
@@ -179,9 +178,21 @@ const TeacherCourseAttendances: React.FC = () => {
 							/>
 						</>
 					) : (
-						<div className="flex justify-center mt-4">
-							<p className="text-xl">
-								No attendances found for {selectedDate.toDateString()}
+						<div className="flex justify-center items-center flex-col">
+							{user?.role !== 'student' && (
+								<button
+									className="bg-metropoliaMainOrange m-2 w-1/2 text-white p-2 rounded"
+									onClick={handleToggleOwnAttendances}
+								>
+									{showOwnAttendances
+										? 'Show all lecture attendances for this course today'
+										: 'Show own lecture attendances for this course today'}
+								</button>
+							)}
+							<p className="text-xl ">
+								{showOwnAttendances
+									? 'No own attendances found for ' + selectedDate.toDateString()
+									: 'No attendances found for ' + selectedDate.toDateString()}
 							</p>
 						</div>
 					)}
