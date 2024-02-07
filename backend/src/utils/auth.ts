@@ -19,21 +19,30 @@ export const authenticate = (
 ) => {
 	passport.authenticate('local', {session: false}, (err: Error, user: User) => {
 		if (err || !user) {
-			console.error(err);
+			console.log('User is not assigned to any courses ');
+			console.error('User not found in database, error:', err);
 			return res.status(403).json({
-				message: 'User is not assigned to any courses, contact your teacher',
+				message:
+					'You are currently not assigned to any courses. Please contact your teacher to be assigned to a course.',
 			});
 		}
 		req.login(user, {session: false}, async err => {
 			if (err) {
-				console.error(err);
+				console.log('User is not assigned to any courses ', user.email);
+				console.error('User found in database, error:', err);
 				return res.status(403).json({
-					message: 'User is not assigned to any courses, contact your teacher',
+					message:
+						'You are registered in the system but not assigned to any courses. Please contact your teacher to be assigned to a course.',
 				});
 			}
 			if (user && !user.username) {
 				try {
-					// console.log('USERNAME WAS UPDATED');
+					console.log(
+						'New login detected for user without username, updating ',
+						newUsername,
+						' ',
+						user.email,
+					);
 					await usermodel.updateUsernameByEmail(user.email, newUsername);
 				} catch (error) {
 					console.error(error);
