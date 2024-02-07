@@ -11,6 +11,7 @@ import rolemodel from '../models/rolemodel.js';
 import userFeedBackModel from '../models/userfeedbackmodel.js';
 import usermodel from '../models/usermodel.js';
 import checkUserRole from '../utils/checkRole.js';
+import readLogFile from '../utils/readLogFile.js';
 import validate from '../utils/validate.js';
 const pool = createPool('ADMIN');
 const router: Router = express.Router();
@@ -532,6 +533,7 @@ router.delete(
 
 router.delete(
 	'/attendance/delete/:attendanceid',
+	checkUserRole(['admin']),
 	async (req: Request, res: Response) => {
 		const {attendanceid} = req.params;
 		try {
@@ -549,6 +551,60 @@ router.delete(
 		} catch (error) {
 			console.error(error);
 			return res.status(500).json({message: 'Internal server error'});
+		}
+	},
+);
+router.get(
+	'/errorlogs/:lineLimit',
+	checkUserRole(['admin']),
+	param('lineLimit').isNumeric().withMessage('Line limit must be a number'),
+	validate,
+	async (req: Request, res: Response) => {
+		if (req.user) {
+			console.log('admin/errorlogs view ', req.user?.email);
+		}
+		const errorLogFilePath = '../../.pm2/logs/WSDBServer-error.log';
+		const lineLimit = parseInt(req.params.lineLimit);
+
+		// Validate lineLimit
+		if (isNaN(lineLimit) || lineLimit <= 0) {
+			return res.status(400).json({message: 'Invalid line limit'});
+		}
+
+		try {
+			const errorLog = await readLogFile(errorLogFilePath, lineLimit);
+			res.status(200).send(errorLog);
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({message: 'Internal server error'});
+		}
+	},
+);
+
+router.get(
+	'/logs/:lineLimit',
+	checkUserRole(['admin']),
+	param('lineLimit').isNumeric().withMessage('Line limit must be a number'),
+	validate,
+	async (req: Request, res: Response) => {
+		if (req.user) {
+			console.log('admin/logs view ', req.user?.email);
+		}
+		const outLogFilePath = '../../.pm2/logs/WSDBServer-out.log';
+		const lineLimit = parseInt(req.params.lineLimit);
+
+		// Validate lineLimit
+		if (isNaN(lineLimit) || lineLimit <= 0) {
+			return res.status(400).json({message: 'Invalid line limit'});
+		}
+
+		try {
+			console.log('reading log file');
+			const logData = await readLogFile(outLogFilePath, lineLimit);
+			res.status(200).send(logData);
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({message: 'Internal server error'});
 		}
 	},
 );

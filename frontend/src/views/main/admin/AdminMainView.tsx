@@ -61,6 +61,11 @@ const AdminMainView: React.FC = () => {
 					title="User Feedback"
 					description="View and manage user feedback"
 				/>
+				<Card
+					path="/admin/logs/"
+					title="Server Logs"
+					description="View server logs"
+				/>
 			</div>
 		</>
 	);

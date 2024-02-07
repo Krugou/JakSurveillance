@@ -944,8 +944,34 @@ const deleteAttendanceByAttendanceId = async (
 		options,
 	);
 };
+const fetchLogs = async (token: string, lineLimit: number) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+
+	return await doFetch(`${baseUrl}admin/logs/${lineLimit}`, options);
+};
+
+const fetchErrorLogs = async (token: string, lineLimit: number) => {
+	const options = {
+		method: 'GET',
+		headers: {
+			Authorization: 'Bearer ' + token,
+		},
+	};
+
+	return await doFetch(
+		`${baseUrl}admin/errorlogs/${lineLimit}`,
+		options,
+	);
+};
 
 const apiHooks = {
+	fetchErrorLogs,
+	fetchLogs,
 	deleteAttendanceByAttendanceId,
 	addNewStudentUserCourse,
 	postUserFeedback,

@@ -10,6 +10,7 @@ import AdminLecturesRoutes from './admin/AdminLectureRoutes.tsx';
 import AdminSettingsRoutes from './admin/AdminSettingsRoutes.tsx';
 import AdminUserRoutes from './admin/AdminUserRoutes';
 import Team from '../views/main/Team.tsx';
+import AdminLogs from '../views/main/admin/AdminLogs.tsx';
 /**
  * AdminRoutes component.
  * This component is responsible for defining the routes for the admin section of the application.
@@ -30,6 +31,7 @@ const AdminRoutes = () => {
 			<Route path="*" element={<AdminMainView />} />
 			<Route path="stats" element={<AdminStats />} />
 			<Route path="team" element={<Team />} />
+			<Route path="logs" element={<AdminLogs />} />
 
 			<Route path="lectures/*" element={<AdminLecturesRoutes />} />
 			<Route path="newuser" element={<AdminNewUser />} />
