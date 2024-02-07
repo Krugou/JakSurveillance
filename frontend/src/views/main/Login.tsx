@@ -121,6 +121,9 @@ const Login: React.FC = () => {
 						Sign In
 					</button>
 				</div>
+				<div className="text-center mt-10">
+				<a href="https://wiki.metropolia.fi/display/tietohallinto/Unohtunut+salasana" className="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline">Forgot Your password?</a>
+				</div>
 			</form>
 			<div className="flex flex-col items-center justify-center">
 				<ServerStatus />
