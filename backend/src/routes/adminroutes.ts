@@ -560,9 +560,9 @@ router.get(
 	param('lineLimit').isNumeric().withMessage('Line limit must be a number'),
 	validate,
 	async (req: Request, res: Response) => {
-		if (req.user) {
-			console.log('admin/errorlogs view ', req.user?.email);
-		}
+		// if (req.user) {
+		// 	console.log('admin/errorlogs view ', req.user?.email);
+		// }
 		const errorLogFilePath = '../../.pm2/logs/WSDBServer-error.log';
 		const lineLimit = parseInt(req.params.lineLimit);
 
@@ -587,9 +587,9 @@ router.get(
 	param('lineLimit').isNumeric().withMessage('Line limit must be a number'),
 	validate,
 	async (req: Request, res: Response) => {
-		if (req.user) {
-			console.log('admin/logs view ', req.user?.email);
-		}
+		// if (req.user) {
+		// 	console.log('admin/logs view ', req.user?.email);
+		// }
 		const outLogFilePath = '../../.pm2/logs/WSDBServer-out.log';
 		const lineLimit = parseInt(req.params.lineLimit);
 
@@ -599,7 +599,6 @@ router.get(
 		}
 
 		try {
-			console.log('reading log file');
 			const logData = await readLogFile(outLogFilePath, lineLimit);
 			res.status(200).send(logData);
 		} catch (error) {
