@@ -9,10 +9,11 @@ const AdminLogs = () => {
 		{lineNumber: number; line: string}[]
 	>([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [trigger, setTrigger] = useState(0);
 
 	useEffect(() => {
+		setIsLoading(true);
 		const getLogs = async () => {
-			setIsLoading(true);
 			const token = localStorage.getItem('userToken');
 			if (!token) {
 				toast.error('No token available');
@@ -30,8 +31,8 @@ const AdminLogs = () => {
 					return;
 				}
 
-				setLogs(logsResult);
-				setErrorLogs(errorLogsResult);
+				setLogs(logsResult.reverse());
+				setErrorLogs(errorLogsResult.reverse());
 			} catch (error) {
 				toast.error('Error fetching logs');
 			}
@@ -48,7 +49,7 @@ const AdminLogs = () => {
 			clearTimeout(timeoutId);
 			clearInterval(intervalId);
 		};
-	}, [lineLimit]);
+	}, [lineLimit, trigger]);
 	const handleShowMore = () => {
 		if (lineLimit < 500) {
 			setIsLoading(true);
@@ -57,8 +58,8 @@ const AdminLogs = () => {
 	};
 
 	const handleReset = () => {
-		setIsLoading(true);
 		setLineLimit(100);
+		setTrigger(prevTrigger => prevTrigger + 1);
 	};
 	return (
 		<div className="p-4 m-6 bg-white">
@@ -80,13 +81,13 @@ const AdminLogs = () => {
 								}`}
 								disabled={lineLimit >= 500}
 							>
-								Show More
+								Show older logs
 							</button>
 							<button
 								onClick={handleReset}
 								className="m-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
 							>
-								Reset
+								Reset/Reload
 							</button>
 						</div>
 						<h2 className=" p-4 text-white border rounded bg-slate-500 m-6">Logs:</h2>
