@@ -154,7 +154,7 @@ const finishLecture = async (lectureid: string, io: Server) => {
 			delete lectureData[lectureid];
 			clearTimeout(lectureTimeoutIds.get(lectureid));
 			console.log('lectureFinished ' + lectureid + ' ' + new Date().toISOString());
-			logger.info('lecture finished success' + lectureid);
+			logger.info('lecture finished success ' + lectureid);
 		}
 	} catch (error) {
 		console.error('Error:', error);
@@ -384,7 +384,7 @@ const setupSocketHandlers = (io: Server) => {
 				if (timestamp) {
 					console.log(`Timestamp found for Student ID: ${studentId}!`);
 
-					// logger.info('timestamp found for ' + studentId + ' !');
+					logger.info('timestamp found for ' + studentId + ' !');
 				} else {
 					console.log(`Lecture ID: ${lectureid}`);
 					console.log(
@@ -399,11 +399,7 @@ const setupSocketHandlers = (io: Server) => {
 						console.log(JSON.stringify(lectureData[lectureid].timestamps, null, 2));
 					}
 					console.log(`Timestamp not found for Student ID: ${studentId}!`);
-					// logger.info('lectureid: ' + lectureid);
-					// logger.info(secureHash + ' ' + unixtime + ' ' + new Date().toISOString());
-					// logger.info('Current timestamps: ');
-					// logger.info(lectureData[lectureid].timestamps);
-					// logger.info('timestamp not found for ' + studentId + ' !');
+					logger.info(' timestamp not found for ' + studentId + ' !');
 				}
 
 				// console.log(
@@ -455,6 +451,9 @@ const setupSocketHandlers = (io: Server) => {
 							console.log(
 								`Student with ID: ${studentId} has been saved into lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
 							);
+							logger.info(
+								`Student with ID: ${studentId} has been saved into lecture with ID: ${lectureid}`,
+							);
 						})
 						.catch(() => {
 							// Handle the error here
@@ -462,6 +461,9 @@ const setupSocketHandlers = (io: Server) => {
 								'Attendance record already exists. No further action needed.',
 							);
 							io.to(socket.id).emit('youHaveBeenSavedIntoLectureAlready', lectureid);
+							logger.info(
+								`Student with ID: ${studentId} has been saved into lecture with ID: ${lectureid} already`,
+							);
 							// console.error(error);
 						});
 				} else {
@@ -470,6 +472,9 @@ const setupSocketHandlers = (io: Server) => {
 						.emit('inputThatStudentHasArrivedToLectureTooSlow', lectureid);
 					console.log(
 						`Input for student with ID: ${studentId} arriving to lecture with ID: ${lectureid} was too slow at ${new Date().toISOString()}`,
+					);
+					logger.info(
+						`Input for student with ID: ${studentId} arriving to lecture with ID: ${lectureid} was too slow`,
 					);
 				}
 			},
@@ -526,6 +531,9 @@ const setupSocketHandlers = (io: Server) => {
 							io.to(socket.id).emit('manualStudentInsertSuccess', lectureid);
 							console.log(
 								`Manual insertion of student was successful for lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
+							);
+							logger.info(
+								`Manual insertion of student was successful for lecture with ID: ${lectureid} for student with ID: ${studentId}`,
 							);
 						}
 					})
@@ -588,6 +596,9 @@ const setupSocketHandlers = (io: Server) => {
 							console.log(
 								`Manual removal of student was successful for lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
 							);
+							logger.info(
+								`Manual removal of student was successful for lecture with ID: ${lectureid} for student with ID: ${studentId}`,
+							);
 						}
 					})
 					.catch(error => {
@@ -619,6 +630,7 @@ const setupSocketHandlers = (io: Server) => {
 				console.log(
 					`Lecture with ID: ${lectureid} was successfully canceled at ${new Date().toISOString()}`,
 				);
+				logger.info(`Lecture with ID: ${lectureid} was successfully destroyed `);
 				// Purge lectureid from notYetPresentStudents and presentStudents
 				delete notYetPresentStudents[lectureid];
 				delete presentStudents[lectureid];
