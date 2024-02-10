@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import usermodel from '../models/usermodel.js';
 import {User} from '../types.js';
+import logger from './logger.js';
 /**
  * Authenticates a user and generates a JWT token for them.
  *
@@ -21,6 +22,7 @@ export const authenticate = (
 		if (err || !user) {
 			console.log('User is not assigned to any courses ');
 			console.error('User not found in database, error:', err);
+			logger.error(err);
 			return res.status(403).json({
 				message:
 					'You are currently not assigned to any courses. Please contact your teacher to be assigned to a course.',
@@ -30,6 +32,7 @@ export const authenticate = (
 			if (err) {
 				console.log('User is not assigned to any courses ', user.email);
 				console.error('User found in database, error:', err);
+				logger.error(err);
 				return res.status(403).json({
 					message:
 						'You are registered in the system but not assigned to any courses. Please contact your teacher to be assigned to a course.',
@@ -43,8 +46,13 @@ export const authenticate = (
 						' ',
 						user.email,
 					);
+					logger.info(
+						{email: user.email},
+						'New login detected for user without username, updating ',
+					);
 					await usermodel.updateUsernameByEmail(user.email, newUsername);
 				} catch (error) {
+					logger.error(error);
 					console.error(error);
 				}
 				user.username = newUsername;

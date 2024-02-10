@@ -1,13 +1,12 @@
 import express, {Request, Response, Router} from 'express';
-import usermodel from '../models/usermodel.js';
-import {ResponseData, UserData} from '../types.js';
-import doFetch from '../utils/doFetch.js';
-//import { body, validationResult } from 'express-validator'; FOR VALIDATION
 import {body, validationResult} from 'express-validator';
 import jwt from 'jsonwebtoken';
 import userFeedBackModel from '../models/userfeedbackmodel.js';
-import {User} from '../types.js';
+import usermodel from '../models/usermodel.js';
+import {ResponseData, User, UserData} from '../types.js';
 import {authenticate} from '../utils/auth.js';
+import doFetch from '../utils/doFetch.js';
+import logger from '../utils/logger.js';
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
 /**
  * Router for user routes.
@@ -154,12 +153,11 @@ router.post('/', async (req: Request, res: Response, next) => {
 					roleid: roleid,
 				};
 
-				//console.log(userFromDB);
-
 				if (userFromDB === null) {
 					// If the staff user doesn't exist, add them to the database
 					const addStaffUserResponse = await usermodel.addStaffUser(userData);
 					if (!addStaffUserResponse) {
+						logger.error('Failed to add staff user to the database.');
 						console.error('Failed to add staff user to the database.');
 					}
 					// Create a token for the user
@@ -177,6 +175,9 @@ router.post('/', async (req: Request, res: Response, next) => {
 					res.json({user: addStaffUserResponse, token});
 				} else {
 					if (username !== 'admin') {
+						logger.info(
+							`Staff Metropolia API login was successful for user: ${username}`,
+						);
 						console.log(
 							`Staff Metropolia API login was successful for user: ${username}`,
 						);
@@ -193,6 +194,9 @@ router.post('/', async (req: Request, res: Response, next) => {
 		// If the logged-in user is not Metropolia staff, authenticate them
 		if (metropoliaData.staff === false) {
 			// Call the authenticate function to handle passport authentication
+			logger.info(
+				`Non-staff Metropolia API login was successful for user: ${username}`,
+			);
 			console.log(
 				`Non-staff Metropolia API login was successful for user: ${username}`,
 			);
@@ -200,6 +204,7 @@ router.post('/', async (req: Request, res: Response, next) => {
 		}
 	} catch (error) {
 		console.log('Error in user login: ');
+		logger.error(error);
 		console.error(error);
 		res.status(500).json({error: 'Internal server error'});
 	}
@@ -212,30 +217,34 @@ router.post(
 		body('userId').notEmpty().withMessage('User ID is required'),
 	],
 	async (req: Request, res: Response) => {
-		console.log(`Received feedback from user with ID: ${req.body.userId}`);
-		console.log(`Feedback topic: ${req.body.topic}`);
-		console.log(`Feedback text: ${req.body.text}`);
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(400).json({errors: errors.array()});
-		}
-		const {topic, text, userId} = req.body;
+		try {
+			const errors = validationResult(req);
+			if (!errors.isEmpty()) {
+				return res.status(400).json({errors: errors.array()});
+			}
+			const {topic, text, userId} = req.body;
 
-		const result = await userFeedBackModel.insertUserFeedback(
-			userId,
-			topic,
-			text,
-		);
-		if (result === null) {
+			const result = await userFeedBackModel.insertUserFeedback(
+				userId,
+				topic,
+				text,
+			);
+			if (result === null) {
+				return res.status(500).json({
+					message: 'Internal server error',
+				});
+			}
+			return res.status(200).json({
+				message: 'Success',
+			});
+		} catch (error) {
+			logger.error(error);
+			console.error(error);
 			return res.status(500).json({
-				message: 'Internal server error',
+				message: 'An unexpected error occurred',
 			});
 		}
-		return res.status(200).json({
-			message: 'Success',
-		});
 	},
 );
-
 
 export default router;

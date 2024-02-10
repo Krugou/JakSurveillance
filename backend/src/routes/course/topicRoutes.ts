@@ -4,6 +4,7 @@ import {body, param} from 'express-validator';
 import TopicGroupController from '../../controllers/topicgroupcontroller.js';
 import TopicGroup from '../../models/topicgroupmodel.js';
 import checkUserRole from '../../utils/checkRole.js';
+import logger from '../../utils/logger.js';
 import validate from '../../utils/validate.js';
 
 const router: Router = express.Router();
@@ -21,6 +22,7 @@ router.get(
 
 			res.send(topicData);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error');
 		}
@@ -44,6 +46,7 @@ router.post(
 				await TopicGroupController.getAllUserTopicGroupsAndTopics(email);
 			res.send(topicGroupData);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error: ' + err);
 		}
@@ -67,6 +70,9 @@ router.post(
 	],
 	validate,
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info({useremail: req.user.email}, 'User is updating topic group');
+		}
 		try {
 			const {topicGroup, topics, email} = req.body;
 
@@ -87,6 +93,7 @@ router.post(
 			);
 			res.status(200).send(topicGroupData);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error: ' + err);
 		}
@@ -112,6 +119,12 @@ router.post(
 	],
 	validate,
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info(
+				{useremail: req.user.email},
+				'User is updating topics for course',
+			);
+		}
 		try {
 			const usercourseid = parseInt(req.params.usercourseid);
 			const {modifiedTopics} = req.body;
@@ -125,6 +138,7 @@ router.post(
 			);
 			res.status(200).send(topicResponse);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error: ' + err);
 		}
@@ -146,6 +160,9 @@ router.post(
 	],
 	validate,
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info({useremail: req.user.email}, 'User is checking topic group');
+		}
 		try {
 			const {topicGroup, email} = req.body;
 
@@ -160,6 +177,7 @@ router.post(
 
 			res.status(200).send(topicGroupResult);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error: ' + err);
 		}
@@ -181,6 +199,9 @@ router.delete(
 	],
 	validate,
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info({useremail: req.user.email}, 'User is deleting topic group');
+		}
 		try {
 			const topicgroupname = req.params.topicgroupname;
 			if (!topicgroupname) {
@@ -196,6 +217,7 @@ router.delete(
 
 			res.status(200).send(topicGroupResult);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send({message: 'Server error: ' + err});
 		}

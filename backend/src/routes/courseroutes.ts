@@ -9,10 +9,12 @@ import course from '../models/coursemodel.js';
 import usermodel from '../models/usermodel.js';
 import {CourseDetails, CourseUser, IData, Item} from '../types.js';
 import checkUserRole from '../utils/checkRole.js';
+import logger from '../utils/logger.js';
 import openData from '../utils/opendata.js';
 import validate from '../utils/validate.js';
 import attendanceRoutes from './course/attendanceRoutes.js';
 import topicRoutes from './course/topicRoutes.js';
+
 config();
 const upload = multer();
 /**
@@ -51,6 +53,7 @@ router.post(
 				exists: true,
 			}); // send the data as the response
 		} catch (error) {
+			logger.error(error);
 			console.error('Error:', error);
 			res.status(500).send('Internal server error');
 		}
@@ -79,6 +82,7 @@ router.post(
 			const exists = await course.findByCode(code);
 			res.status(200).json({exists});
 		} catch (error) {
+			logger.error(error);
 			console.error('Error:', error);
 			res.status(500).send('Internal server error');
 		}
@@ -104,6 +108,7 @@ router.post(
 			);
 			res.json(reservations);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error');
 		}
@@ -166,6 +171,7 @@ router.post(
 	async (req: Request, res: Response) => {
 		if (req.user) {
 			console.log('create course ', req.user?.email);
+			logger.info({email: req.user?.email}, 'create course');
 		}
 		const {
 			courseName,
@@ -197,6 +203,7 @@ router.post(
 				courseId: response,
 			});
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			if (error instanceof Error) {
 				res.status(500).json({
@@ -223,8 +230,10 @@ router.post(
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	upload.single('file'),
 	async (req, res) => {
+		logger.info({email: req.user?.email}, 'Excel input');
 		try {
 			if (!req.file) {
+				logger.error('No file uploaded');
 				console.error('No file uploaded');
 				res.status(400).send('No file uploaded');
 				return;
@@ -329,6 +338,7 @@ router.get(
 
 			res.send(courses);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error');
 		}
@@ -356,6 +366,7 @@ router.get(
 			// console.log('🚀 ~ file: courseroutes.ts:292 ~ courses:', courses);
 			res.json(courses);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error');
 		}
@@ -391,6 +402,7 @@ router.get('/user/all', async (req: Request, res: Response) => {
 		const courses = await course.getStudentsCourses(email);
 		res.json(courses);
 	} catch (err) {
+		logger.error(err);
 		console.error(err);
 		res.status(500).send('Server error');
 	}
@@ -405,6 +417,9 @@ router.delete(
 	'/delete/:id',
 	checkUserRole(['admin', 'counselor', 'teacher']),
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info({email: req.user?.email}, ' delete course');
+		}
 		// Get the course ID from the request
 		try {
 			const courseId = Number(req.params.id);
@@ -415,6 +430,7 @@ router.delete(
 			const result = await course.deleteCourse(courseId);
 			res.json(result);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error');
 		}
@@ -489,6 +505,9 @@ router.put(
 	],
 	validate,
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info({email: req.user?.email}, ' update course');
+		}
 		// Validate that the user is logged in
 		try {
 			// Check if the user's role is either 'teacher' or 'admin'
@@ -497,6 +516,7 @@ router.put(
 				return res.status(403).json({error: 'Unauthorized'});
 			}
 		} catch (error) {
+			logger.error(error);
 			console.log('error', error);
 		}
 
@@ -534,6 +554,7 @@ router.put(
 			res.json(result);
 		} catch (err) {
 			if (err instanceof Error) {
+				logger.error(err);
 				console.error(err);
 				res.status(500).send({message: err.message});
 			}
@@ -560,6 +581,7 @@ router.get(
 				res.status(403).json({error: 'Unauthorized'});
 			}
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			let errorMessage = 'Internal server error';
 			if (error instanceof Error) {
@@ -586,6 +608,7 @@ router.get(
 			const details = await courseController.getDetailsByCourseId(courseId);
 			res.json(details);
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -605,6 +628,9 @@ router.post(
 	param('userid').isNumeric().withMessage('User ID must be a number'),
 	validate,
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info({email: req.user?.email}, ' update user courses');
+		}
 		const {userid, courseid} = req.params;
 
 		try {
@@ -614,6 +640,7 @@ router.post(
 
 			res.status(200).json({message: 'Successfully updated student courses'});
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			let errorMessage = 'Internal server error';
 			if (error instanceof Error) {
@@ -637,11 +664,15 @@ router.delete(
 		.withMessage('User Course ID must be a number'),
 	validate,
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info({email: req.user?.email}, ' delete user course');
+		}
 		const usercourseid = Number(req.params.usercourseid);
 		try {
 			await courseController.removeStudentCourses(usercourseid);
 			res.status(200).json({message: 'Successfully deleted student courses'});
 		} catch (error: unknown) {
+			logger.error(error);
 			console.error(error);
 			if (error instanceof Error) {
 				res.status(500).json({message: error.message});
@@ -672,6 +703,7 @@ router.get(
 				);
 			res.json(courses);
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).send('Server error');
 		}
@@ -694,6 +726,7 @@ router.get(
 			const students = await course.getAllStudentsOnCourse(courseid.toString());
 			res.json(students);
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).send('Server error');
 		}
@@ -720,6 +753,7 @@ router.get(
 
 			res.send({user: users[0], courses: courses});
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}

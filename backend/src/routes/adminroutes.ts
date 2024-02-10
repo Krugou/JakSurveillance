@@ -11,6 +11,7 @@ import rolemodel from '../models/rolemodel.js';
 import userFeedBackModel from '../models/userfeedbackmodel.js';
 import usermodel from '../models/usermodel.js';
 import checkUserRole from '../utils/checkRole.js';
+import logger from '../utils/logger.js';
 import readLogFile from '../utils/readLogFile.js';
 import validate from '../utils/validate.js';
 const pool = createPool('ADMIN');
@@ -34,6 +35,7 @@ router.get(
 			res.status(200).send(serverSettings[0][0]);
 		} catch (error) {
 			console.error(error);
+			logger.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
 	},
@@ -61,7 +63,7 @@ router.post(
 	validate,
 	async (req: Request, res: Response) => {
 		if (req.user) {
-			console.log('changed server settings ', req.user?.email);
+			logger.info({useremail: req.user.email}, ' admin / update / ');
 		}
 		const {speedofhash, leewayspeed, timeouttime, attendancethreshold} = req.body;
 		try {
@@ -73,6 +75,7 @@ router.post(
 			);
 			res.status(200).send({message: 'Server settings updated successfully'});
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -92,6 +95,7 @@ router.get(
 			const roles = await rolemodel.fetchTeacherAndCounselorRoles();
 			res.send(roles);
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -110,6 +114,7 @@ router.get(
 			const roles = await rolemodel.fetchAllRoles();
 			res.send(roles);
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -131,11 +136,15 @@ router.post(
 	],
 	validate,
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info({useremail: req.user.email}, ' admin / change-role / ');
+		}
 		const {email, roleId} = req.body;
 		try {
 			await usermodel.changeRoleId(email, roleId);
 			res.send({message: 'Role changed successfully'});
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -154,6 +163,7 @@ router.get(
 			const users = await usermodel.fetchUsers();
 			res.send(users);
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -176,6 +186,7 @@ router.get(
 			const user = await usermodel.fetchUserById(Number(userid));
 			res.send(user);
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -205,7 +216,7 @@ router.post(
 	validate,
 	async (req: Request, res: Response) => {
 		if (req.user) {
-			console.log('admin / insert - student - user / ', req.user?.email);
+			logger.info({useremail: req.user.email}, ' admin / insert-student-user / ');
 		}
 		const {email, first_name, last_name, studentnumber, studentGroupId} =
 			req.body;
@@ -241,6 +252,7 @@ router.post(
 			);
 		} catch (error) {
 			console.error(error);
+			logger.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
 	},
@@ -255,7 +267,10 @@ interface Lecture extends RowDataPacket {
 router.get(
 	'/alllectures/',
 	checkUserRole(['admin']),
-	async (_req: Request, res: Response) => {
+	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info({useremail: req.user.email}, ' admin / alllectures / ');
+		}
 		try {
 			const lectures = (await lectureModel.fetchAllLectures()) as Lecture[];
 			for (const lecture of lectures) {
@@ -270,6 +285,7 @@ router.get(
 			res.json(lectures);
 		} catch (err) {
 			console.error(err);
+			logger.error(err);
 			res.status(500).send('Server error');
 		}
 	},
@@ -277,7 +293,13 @@ router.get(
 router.get(
 	'/lectureandattendancecount/',
 	checkUserRole(['admin']),
-	async (_req: Request, res: Response) => {
+	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info(
+				{useremail: req.user.email},
+				' admin / lectureandattendancecount / ',
+			);
+		}
 		try {
 			const [lectures] = await pool
 				.promise()
@@ -310,6 +332,7 @@ router.get(
 
 			res.json(counts);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error');
 		}
@@ -319,6 +342,12 @@ router.get(
 	'/allattendancedatabycourse/:courseid/:lectureid',
 	checkUserRole(['admin']),
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info(
+				{useremail: req.user.email},
+				' admin / allattendancedatabycourse / ',
+			);
+		}
 		try {
 			const courseid = req.params.courseid;
 			const lectureid = req.params.lectureid;
@@ -359,6 +388,7 @@ router.get(
 
 			res.json(attendanceResult);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error');
 		}
@@ -372,7 +402,10 @@ router.get(
 router.get(
 	'/getcourses',
 	checkUserRole(['admin']),
-	async (_req: Request, res: Response) => {
+	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info({useremail: req.user.email}, ' admin / getcourses / ');
+		}
 		try {
 			const courses = await course.getCoursesWithDetails();
 			res.send(courses);
@@ -393,13 +426,14 @@ router.put(
 	checkUserRole(['admin']),
 	async (req: Request, res: Response) => {
 		if (req.user) {
-			console.log('/update user  ', req.user?.email);
+			logger.info({useremail: req.user.email}, ' admin / updateuser / ');
 		}
 		try {
 			const user = req.body;
 			await usermodel.updateUser(user);
 			res.send({message: 'User updated successfully'});
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -433,6 +467,7 @@ router.get(
 				res.send({exists: false});
 			}
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -454,6 +489,7 @@ router.get(
 				res.send({exists: false});
 			}
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -468,7 +504,10 @@ router.get(
 router.get(
 	'/getrolecounts',
 	checkUserRole(['admin']),
-	async (_req: Request, res: Response) => {
+	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info({useremail: req.user.email}, 'admin / getrolecounts / ');
+		}
 		try {
 			const roleCounts = await usermodel.getRoleCounts();
 			const userLoggedCount = await usermodel.getUserLoggedCount();
@@ -483,6 +522,7 @@ router.get(
 			];
 			res.send(result);
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -493,12 +533,13 @@ router.get(
 	checkUserRole(['admin']),
 	async (req: Request, res: Response) => {
 		if (req.user) {
-			console.log('admin/feedback view ', req.user?.email);
+			logger.info(' admin / feedback / ', req.user?.email);
 		}
 		try {
 			const feedback = await userFeedBackModel.getUserFeedback();
 			res.send(feedback);
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -510,7 +551,7 @@ router.delete(
 	async (req: Request, res: Response) => {
 		const {feedbackId} = req.params;
 		if (req.user) {
-			console.log('admin/feedback delete ', req.user?.email);
+			logger.info(' admin / feedback / delete ', req.user?.email);
 		}
 		try {
 			const result = await userFeedBackModel.deleteUserFeedback(
@@ -525,6 +566,7 @@ router.delete(
 				message: 'Feedback deleted successfully',
 			});
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			return res.status(500).json({message: 'Internal server error'});
 		}
@@ -535,6 +577,9 @@ router.delete(
 	'/attendance/delete/:attendanceid',
 	checkUserRole(['admin']),
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info(' admin / attendance / delete ', req.user?.email);
+		}
 		const {attendanceid} = req.params;
 		try {
 			const result = await AttendanceModel.deleteAttendanceByAttendanceId(
@@ -549,6 +594,7 @@ router.delete(
 				message: 'Attendance deleted successfully',
 			});
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			return res.status(500).json({message: 'Internal server error'});
 		}
@@ -563,7 +609,7 @@ router.get(
 		// if (req.user) {
 		// 	console.log('admin/errorlogs view ', req.user?.email);
 		// }
-		const errorLogFilePath = '../../.pm2/logs/WSDBServer-error.log';
+		const errorLogFilePath = './logs/error-logfile.log';
 		const lineLimit = parseInt(req.params.lineLimit);
 
 		// Validate lineLimit
@@ -575,6 +621,7 @@ router.get(
 			const errorLog = await readLogFile(errorLogFilePath, lineLimit);
 			res.status(200).send(errorLog);
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -590,7 +637,7 @@ router.get(
 		// if (req.user) {
 		// 	console.log('admin/logs view ', req.user?.email);
 		// }
-		const outLogFilePath = '../../.pm2/logs/WSDBServer-out.log';
+		const outLogFilePath = './logs/logfile.log';
 		const lineLimit = parseInt(req.params.lineLimit);
 
 		// Validate lineLimit
@@ -602,6 +649,7 @@ router.get(
 			const logData = await readLogFile(outLogFilePath, lineLimit);
 			res.status(200).send(logData);
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}

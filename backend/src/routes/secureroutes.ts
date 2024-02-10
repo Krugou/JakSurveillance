@@ -1,14 +1,13 @@
 import express, {Request, Response, Router} from 'express';
-import {param} from 'express-validator';
+import {body, param} from 'express-validator';
 import createPool from '../config/createPool.js';
 import serverSettingsModel from '../models/serversettingsmodel.js';
 import studentgroupmodel from '../models/studentgroupmodel.js';
 import usercoursesModel from '../models/usercoursemodel.js';
 import usermodel from '../models/usermodel.js';
 import checkUserRole from '../utils/checkRole.js';
+import logger from '../utils/logger.js';
 import validate from '../utils/validate.js';
-
-import {body} from 'express-validator';
 const pool = createPool('ADMIN');
 /**
  * Router for secure routes.
@@ -32,6 +31,7 @@ router.get(
 			// console.log(users, 'users');
 			res.send(users);
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -46,6 +46,7 @@ router.get('/getattendancethreshold', async (_req: Request, res: Response) => {
 		const threshold = result[0][0].attendancethreshold;
 		res.send({attendancethreshold: threshold});
 	} catch (error) {
+		logger.error(error);
 		console.error(error);
 		res.status(500).json({message: 'Internal server error'});
 	}
@@ -63,6 +64,7 @@ router.put(
 			await usermodel.updateUserGDPRStatus(userId);
 			res.json({success: true});
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).send('Internal Server Error');
 		}
@@ -86,6 +88,7 @@ router.get(
 				res.json({exists: false});
 			}
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -104,6 +107,7 @@ router.get(
 			const groups = await studentgroupmodel.fetchAllStudentGroups();
 			res.send(groups);
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -124,6 +128,7 @@ router.post(
 	async (req: Request, res: Response) => {
 		if (req.user) {
 			console.log('insert-student-user-course ', req.user?.email);
+			logger.info({email: req.user?.email}, 'Inserting student user');
 		}
 		const {
 			email,
@@ -175,6 +180,7 @@ router.post(
 				`Student user successfully inserted. Email: ${email}, Student Number: ${studentnumber}`,
 			);
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -189,6 +195,7 @@ router.put(
 			await usermodel.updateUser(user);
 			res.send({message: 'User updated successfully'});
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}
@@ -211,6 +218,7 @@ router.get(
 			const user = await usermodel.fetchUserById(Number(userid));
 			res.send(user);
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).json({message: 'Internal server error'});
 		}

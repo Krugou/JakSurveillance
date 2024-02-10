@@ -119,3 +119,4 @@ extra/links.json
 extra/backend/
 extra/frontend/
 backend/src/database/cleardatabase.ts
+backend/logs/

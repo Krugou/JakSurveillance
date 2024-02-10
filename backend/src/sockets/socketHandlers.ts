@@ -3,7 +3,7 @@ import {config} from 'dotenv';
 import {Server, Socket} from 'socket.io';
 import doFetch from '../utils/doFetch.js';
 import getToken from '../utils/getToken.js';
-// import logger from '../utils/logger.js';
+import logger from '../utils/logger.js';
 /**
  * Socket event handlers for managing attendance in lectures.
  * This module sets up Socket.IO server event handlers for various actions related to lecture attendance,
@@ -154,6 +154,7 @@ const finishLecture = async (lectureid: string, io: Server) => {
 			delete lectureData[lectureid];
 			clearTimeout(lectureTimeoutIds.get(lectureid));
 			console.log('lectureFinished ' + lectureid + ' ' + new Date().toISOString());
+			logger.info('lecture finished success' + lectureid);
 		}
 	} catch (error) {
 		console.error('Error:', error);
@@ -197,7 +198,7 @@ const setupSocketHandlers = (io: Server) => {
 			console.log(
 				`Attendance collection created for Lecture ID: ${lectureid} at ${new Date().toISOString()}`,
 			);
-			// logger.info('createAttendanceCollection ' + lectureid);
+			logger.info('createAttendanceCollection ' + lectureid);
 			// Initialize the lecture data if it doesn't exist
 			if (!lectureData[lectureid]) {
 				lectureData[lectureid] = {timestamps: [], hash: null};
@@ -213,6 +214,7 @@ const setupSocketHandlers = (io: Server) => {
 					console.log(
 						`Lecture with ID: ${lectureid} started at ${new Date().toISOString()}`,
 					);
+					logger.info('lecture started ' + lectureid);
 					io.to(lectureid).emit('pingEvent', lectureid, Date.now());
 					setInterval(() => {
 						io.to(lectureid).emit('pingEvent', lectureid, Date.now());
@@ -231,6 +233,7 @@ const setupSocketHandlers = (io: Server) => {
 						console.log(
 							`Timer reset for lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
 						);
+						logger.info('timerResetSuccess ' + lectureid);
 					} else {
 						// If the lists do not exist, fetch them from the server and emit them to the room with the lectureid
 						doFetch(
@@ -257,7 +260,7 @@ const setupSocketHandlers = (io: Server) => {
 								console.log(
 									`Fetching all students in lecture with ID: ${lectureid} at ${new Date().toISOString()}`,
 								);
-								// logger.info('getallstudentsinlecture ' + lectureid);
+								logger.info('getallstudentsinlecture ' + lectureid);
 							})
 							.catch(error => {
 								console.error('Error:', error + ' ' + new Date().toISOString());
@@ -320,7 +323,7 @@ const setupSocketHandlers = (io: Server) => {
 						console.log(
 							`Lecture with ID: ${lectureid} finished with timeout at ${new Date().toISOString()}`,
 						);
-						// logger.info('Lecture finished with timeout ' + lectureid);
+						logger.info('Lecture finished with timeout ' + lectureid);
 						finishLecture(lectureid, io);
 					}, timeout);
 					// console.log(
@@ -333,7 +336,7 @@ const setupSocketHandlers = (io: Server) => {
 						console.log(
 							`Lecture with ID: ${lectureid} finished at ${new Date().toISOString()}`,
 						);
-						// logger.info('lectureFinishedWithButton ' + lectureid);
+						logger.info('lectureFinishedWithButton ' + lectureid);
 						finishLecture(lectureid, io);
 					});
 					// Clear the interval when the socket disconnects
@@ -365,9 +368,7 @@ const setupSocketHandlers = (io: Server) => {
 					!unixtime ||
 					!lectureData[lectureid]
 				) {
-					io
-						.to(socket.id)
-						.emit('NoCorrectInputDetails', lectureid);
+					io.to(socket.id).emit('NoCorrectInputDetails', lectureid);
 				}
 				let timestamp;
 				if (

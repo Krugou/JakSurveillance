@@ -22,15 +22,16 @@ const AdminLogs = () => {
 			}
 
 			try {
-				const logsResult = await apiHooks.fetchLogs(token, lineLimit);
-				const errorLogsResult = await apiHooks.fetchErrorLogs(token, lineLimit);
+				let logsResult = await apiHooks.fetchLogs(token, lineLimit);
+				let errorLogsResult = await apiHooks.fetchErrorLogs(token, lineLimit);
 
 				if (!Array.isArray(logsResult) || !Array.isArray(errorLogsResult)) {
 					toast.error('Expected an array from fetchLogs and fetchErrorLogs');
 					setIsLoading(false);
 					return;
 				}
-
+				logsResult = logsResult.filter(log => log.line.trim() !== '');
+				errorLogsResult = errorLogsResult.filter(log => log.line.trim() !== '');
 				setLogs(logsResult.reverse());
 				setErrorLogs(errorLogsResult.reverse());
 			} catch (error) {
@@ -90,28 +91,107 @@ const AdminLogs = () => {
 								Reset/Reload
 							</button>
 						</div>
-						<h2 className=" p-4 text-white border rounded bg-slate-500 m-6">Logs:</h2>
 						{logs.length === 0 ? (
 							<p>No logs found</p>
 						) : (
-							<div className="p-4 m-6 flex flex-col justify-center items-center">
-								<pre className="p-4 border rounded text-white bg-black">
-									{logs.map(log => `${log.lineNumber}: ${log.line}`).join('\n')}
-								</pre>
-							</div>
+							<>
+								<h2 className=" p-4 text-white border rounded bg-slate-500 m-6">
+									Logs:
+								</h2>
+
+								<div className="p-4 m-6 flex flex-col justify-center items-center">
+									<pre className="p-4 border rounded text-white bg-black">
+										<table className="min-w-full divide-y divide-gray-200">
+											<thead className="bg-gray-50">
+												<tr>
+													<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+														User Email
+													</th>
+
+													<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+														Message
+													</th>
+													<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+														Time
+													</th>
+												</tr>
+											</thead>
+											<tbody className="bg-white text-black divide-y divide-gray-200">
+												{logs.map((log, index) => {
+													try {
+														const parsedLog = JSON.parse(log.line);
+														return (
+															<tr key={index}>
+																<td className="px-6 py-4 whitespace-nowrap">
+																	{parsedLog.useremail}
+																</td>
+																<td className="px-6 py-4 whitespace-nowrap">{parsedLog.msg}</td>
+																<td className="px-6 py-4 whitespace-nowrap">
+																	{new Date(parsedLog.time).toLocaleString()}
+																</td>
+															</tr>
+														);
+													} catch (error) {
+														console.error(`Error parsing log line: ${log.line}`, error);
+														return null;
+													}
+												})}
+											</tbody>
+										</table>
+									</pre>
+								</div>
+							</>
 						)}
 
-						<h2 className=" bg-slate-500 border rounded text-white p-4 m-6">
-							Error Logs:
-						</h2>
 						{errorLogs.length === 0 ? (
 							<p>No error logs found</p>
 						) : (
-							<div className="p-4 m-6 flex flex-col justify-center items-center">
-								<pre className="p-4 border rounded text-white bg-black">
-									{errorLogs.map(log => `${log.lineNumber}: ${log.line}`).join('\n')}
-								</pre>
-							</div>
+							<>
+								<h2 className=" bg-slate-500 border rounded text-white p-4 m-6">
+									Error Logs:
+								</h2>
+								<div className="p-4 m-6 flex flex-col justify-center items-center">
+									<pre className="p-4 border rounded text-white bg-black">
+										<table className="min-w-full divide-y divide-gray-200">
+											<thead className="bg-gray-50">
+												<tr>
+													<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+														User Email
+													</th>
+
+													<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+														Message
+													</th>
+													<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+														Time
+													</th>
+												</tr>
+											</thead>
+											<tbody className="bg-white text-black divide-y divide-gray-200">
+												{errorLogs.map((log, index) => {
+													try {
+														const parsedLog = JSON.parse(log.line);
+														return (
+															<tr key={index}>
+																<td className="px-6 py-4 whitespace-nowrap">
+																	{parsedLog.useremail}
+																</td>
+																<td className="px-6 py-4 whitespace-nowrap">{parsedLog.msg}</td>
+																<td className="px-6 py-4 whitespace-nowrap">
+																	{new Date(parsedLog.time).toLocaleString()}
+																</td>
+															</tr>
+														);
+													} catch (error) {
+														console.error(`Error parsing log line: ${log.line}`, error);
+														return null;
+													}
+												})}
+											</tbody>
+										</table>
+									</pre>
+								</div>
+							</>
 						)}
 					</div>
 				</>

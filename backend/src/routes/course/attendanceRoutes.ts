@@ -6,8 +6,8 @@ import lectureController from '../../controllers/lecturecontroller.js';
 import attendanceModel from '../../models/attendancemodel.js';
 import lectureModel from '../../models/lecturemodel.js';
 import checkUserRole from '../../utils/checkRole.js';
+import logger from '../../utils/logger.js';
 import validate from '../../utils/validate.js';
-
 const router: Router = express.Router();
 /**
  * Route that fetches all attendance records.
@@ -22,6 +22,7 @@ router.get(
 			const attendanceData = await attendanceModel.fetchAllAttendances();
 			res.json(attendanceData);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error');
 		}
@@ -48,6 +49,7 @@ router.get(
 				res.status(404).send('Attendance not found');
 			}
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error');
 		}
@@ -83,6 +85,7 @@ router.get(
 				: null;
 			res.json(attendanceData);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			if (err instanceof Error) {
 				res.status(500).send(`Server error: ${err.message}`);
@@ -125,6 +128,7 @@ router.post(
 			);
 			res.status(200).send(insertedData);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			if (err instanceof Error) {
 				res.status(500).send(`Server error: ${err.message}`);
@@ -170,6 +174,7 @@ router.post(
 				.status(201)
 				.send('Attendance put as not present for rest of students not present');
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error');
 		}
@@ -193,6 +198,7 @@ router.post(
 			);
 			res.status(201).json(allStudentsInLecture);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error');
 		}
@@ -212,6 +218,7 @@ router.post(
 	async (req: Request, res: Response) => {
 		if (req.user) {
 			console.log('admin/attendance delete ', req.user?.email);
+			logger.info({useremail: req.user.email}, ' courses/attendance/delete ');
 		}
 		try {
 			const {studentnumber} = req.body;
@@ -219,6 +226,7 @@ router.post(
 			await attendanceController.deleteAttendance(studentnumber, lectureid);
 			res.status(201).send(true);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send(false);
 		}
@@ -235,11 +243,18 @@ router.post(
 	checkUserRole(['admin', 'teacher', 'counselor']),
 	[body('lectureid').isNumeric()],
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info(
+				{useremail: req.user.email},
+				' courses/attendance/lecture delete ',
+			);
+		}
 		try {
 			const {lectureid} = req.body;
 			await lectureModel.deleteByLectureId(lectureid);
 			res.status(201).send({message: 'Lecture deleted'});
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error');
 		}
@@ -270,6 +285,10 @@ router.post(
 	async (req: Request, res: Response) => {
 		if (req.user) {
 			console.log('lecture created ', req.user?.email);
+			logger.info(
+				{useremail: req.user?.email},
+				' courses/attendance/lecture created ',
+			);
 		}
 		try {
 			const {topicname, coursecode, start_date, end_date, timeofday, state} =
@@ -287,6 +306,7 @@ router.post(
 			);
 			res.status(201).json({message: 'lecture created', lectureInfo: lectureid});
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error');
 		}
@@ -313,6 +333,7 @@ router.get(
 
 			res.status(200).json(lectureInfo);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error');
 		}
@@ -343,6 +364,7 @@ router.put(
 	checkUserRole(['admin', 'teacher', 'counselor']),
 	async (req: Request, res: Response) => {
 		if (req.user) {
+			logger.info({useremail: req.user.email}, ' courses/attendance/update ');
 			console.log('attendance update ', req.user?.email);
 		}
 		const {attendanceid, status} = req.body;
@@ -355,6 +377,7 @@ router.put(
 
 			res.status(200).json({message: 'Attendance status updated successfully'});
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).send('Server error');
 		}
@@ -380,6 +403,7 @@ router.get(
 
 			res.json(lecturesAndAttendancesData);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error');
 		}
@@ -398,6 +422,10 @@ router.delete(
 	validate,
 	async (req: Request, res: Response) => {
 		if (req.user) {
+			logger.info(
+				{useremail: req.user.email},
+				' courses/attendance/lecture delete ',
+			);
 			console.log('delete lecture ', req.user?.email);
 		}
 		try {
@@ -407,6 +435,7 @@ router.delete(
 			// console.log('Lecture deleted successfully');
 			res.status(200).json({message: 'Lecture deleted successfully'});
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).send('Server error');
 		}
@@ -424,6 +453,12 @@ router.put(
 	[param('lectureid').isNumeric().withMessage('Lecture ID must be a number')],
 	validate,
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info(
+				{useremail: req.user.email},
+				' courses/attendance/lecture close ',
+			);
+		}
 		try {
 			const lectureid = req.params.lectureid;
 
@@ -431,6 +466,7 @@ router.put(
 			// console.log('Lecture closed successfully');
 			res.status(200).json({message: 'Lecture closed successfully'});
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).send('Server error');
 		}
@@ -457,6 +493,7 @@ router.get(
 
 			res.status(200).json(openLectures);
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).send('Server error');
 		}
@@ -473,6 +510,7 @@ router.post(
 			);
 			res.status(200).json(openLectures);
 		} catch (error) {
+			logger.error(error);
 			console.error(error);
 			res.status(500).send('Server error');
 		}
@@ -482,6 +520,12 @@ router.get(
 	'/lecture/teacher/:teacherId',
 	checkUserRole(['admin', 'teacher', 'counselor']),
 	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info(
+				{useremail: req.user.email},
+				' courses/attendance/ own lectures view ',
+			);
+		}
 		try {
 			const teacherId = Number(req.params.teacherId);
 			const lectures = await lectureModel.fetchLecturesByTeacherId(teacherId);
@@ -494,6 +538,7 @@ router.get(
 			}
 			res.json(lectures);
 		} catch (err) {
+			logger.error(err);
 			console.error(err);
 			res.status(500).send('Server error');
 		}

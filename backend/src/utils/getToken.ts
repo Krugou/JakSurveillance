@@ -1,5 +1,6 @@
 import {config} from 'dotenv';
 import doFetch from './doFetch.js';
+import logger from './logger.js';
 config();
 const getToken = async () => {
 	try {
@@ -19,6 +20,7 @@ const getToken = async () => {
 		// console.log('getToken request success' + ' ' + new Date().toISOString());
 		return response.token;
 	} catch (error) {
+		logger.error(error);
 		// Handle the error here
 		console.error(error);
 	}
