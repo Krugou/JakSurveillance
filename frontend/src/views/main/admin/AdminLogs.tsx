@@ -100,7 +100,7 @@ const AdminLogs = () => {
 								</h2>
 
 								<div className="p-4 m-6 flex flex-col justify-center items-center">
-									<pre className="p-4 border rounded text-white bg-black">
+									<div className="overflow-x-auto">
 										<table className="min-w-full divide-y divide-gray-200">
 											<thead className="bg-gray-50">
 												<tr>
@@ -116,17 +116,19 @@ const AdminLogs = () => {
 													</th>
 												</tr>
 											</thead>
-											<tbody className="bg-white text-black divide-y divide-gray-200">
+											<tbody className="bg-white text-black  divide-y divide-gray-200">
 												{logs.map((log, index) => {
 													try {
 														const parsedLog = JSON.parse(log.line);
 														return (
 															<tr key={index}>
-																<td className="px-6 py-4 whitespace-nowrap">
+																<td className="px-6 py-4 text-xs text-left whitespace-nowrap">
 																	{parsedLog.useremail}
 																</td>
-																<td className="px-6 py-4 whitespace-nowrap">{parsedLog.msg}</td>
-																<td className="px-6 py-4 whitespace-nowrap">
+																<td className="px-6 py-4 text-xs text-left whitespace-nowrap ">
+																	{parsedLog.msg}
+																</td>
+																<td className="px-6 py-4 text-xs text-left whitespace-nowrap">
 																	{new Date(parsedLog.time).toLocaleString()}
 																</td>
 															</tr>
@@ -138,7 +140,7 @@ const AdminLogs = () => {
 												})}
 											</tbody>
 										</table>
-									</pre>
+									</div>
 								</div>
 							</>
 						)}
@@ -151,7 +153,7 @@ const AdminLogs = () => {
 									Error Logs:
 								</h2>
 								<div className="p-4 m-6 flex flex-col justify-center items-center">
-									<pre className="p-4 border rounded text-white bg-black">
+									<pre className="p-4 border rounded text-white bg-black overflow-x-auto">
 										<table className="min-w-full divide-y divide-gray-200">
 											<thead className="bg-gray-50">
 												<tr>
@@ -173,11 +175,13 @@ const AdminLogs = () => {
 														const parsedLog = JSON.parse(log.line);
 														return (
 															<tr key={index}>
-																<td className="px-6 py-4 whitespace-nowrap">
+																<td className="px-6 py-4 text-xs text-left whitespace-nowrap">
 																	{parsedLog.useremail}
 																</td>
-																<td className="px-6 py-4 whitespace-nowrap">{parsedLog.msg}</td>
-																<td className="px-6 py-4 whitespace-nowrap">
+																<td className="px-6 py-4 text-xs text-left whitespace-nowrap ">
+																	{parsedLog.msg}
+																</td>
+																<td className="px-6 py-4 text-xs text-left whitespace-nowrap">
 																	{new Date(parsedLog.time).toLocaleString()}
 																</td>
 															</tr>
