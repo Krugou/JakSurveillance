@@ -258,7 +258,6 @@ router.post(
 	},
 );
 
-
 router.post(
 	'/insert-staff-user/',
 	checkUserRole(['admin']),
@@ -272,8 +271,7 @@ router.post(
 		if (req.user) {
 			logger.info({useremail: req.user.email}, ' admin / insert-staff-user / ');
 		}
-		const {email, first_name, last_name, staff, roleid} =
-			req.body;
+		const {email, first_name, last_name, staff, roleid} = req.body;
 		// console.log(
 		// 	'manual student user insert start ' + email + ' ' + studentnumber,
 		// );
@@ -293,9 +291,7 @@ router.post(
 			res
 				.status(200)
 				.send({message: 'Staff user inserted successfully', userResult});
-			console.log(
-				'manual satff user insert success ' + email,
-			);
+			console.log('manual staff user insert success ' + email);
 		} catch (error) {
 			console.error(error);
 			logger.error(error);
@@ -303,8 +299,6 @@ router.post(
 		}
 	},
 );
-
-
 
 /** route that get all lectures */
 interface Lecture extends RowDataPacket {
