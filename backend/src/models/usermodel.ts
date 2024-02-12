@@ -323,6 +323,23 @@ const UserModel = {
 
 		return userResult;
 	},
+
+	async insertStaffUser(
+		email: string,
+		first_name: string,
+		last_name: string,
+		roleid: number,
+		staff: number,
+	) {
+		const [userResult] = await this.pool
+			.promise()
+			.query<ResultSetHeader>(
+				'INSERT INTO users (email, first_name, last_name, staff, roleid) VALUES (?, ?, ?, ?, ?)',
+				[email, first_name, last_name, staff, roleid],
+			);
+
+		return userResult;
+	},
 	/**
 	 * Gets students by their instructor's ID.
 	 * @param userid - The ID of the instructor.

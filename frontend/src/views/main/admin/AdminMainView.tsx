@@ -37,8 +37,8 @@ const AdminMainView: React.FC = () => {
 				/>
 				<Card
 					path="/admin/newuser/"
-					title="Student Registration"
-					description="Register a new student user"
+					title="User Registration"
+					description="Register a new user"
 				/>
 				<Card
 					path="/admin/lectures/"

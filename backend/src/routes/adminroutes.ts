@@ -258,6 +258,54 @@ router.post(
 	},
 );
 
+
+router.post(
+	'/insert-staff-user/',
+	checkUserRole(['admin']),
+	[
+		body('email').isEmail().withMessage('Email must be valid'),
+		body('first_name').isString().withMessage('First name must be a string'),
+		body('last_name').isString().withMessage('Last name must be a string'),
+	],
+	validate,
+	async (req: Request, res: Response) => {
+		if (req.user) {
+			logger.info({useremail: req.user.email}, ' admin / insert-staff-user / ');
+		}
+		const {email, first_name, last_name, staff, roleid} =
+			req.body;
+		// console.log(
+		// 	'manual student user insert start ' + email + ' ' + studentnumber,
+		// );
+		try {
+			const existingUserByEmail = await usermodel.checkIfUserExistsByEmail(email);
+			if (existingUserByEmail.length > 0) {
+				res.status(400).json({message: 'User with this email already exists'});
+				return;
+			}
+			const userResult = await usermodel.insertStaffUser(
+				email,
+				first_name,
+				last_name,
+				staff,
+				roleid,
+			);
+			res
+				.status(200)
+				.send({message: 'Staff user inserted successfully', userResult});
+			console.log(
+				'manual satff user insert success ' + email,
+			);
+		} catch (error) {
+			console.error(error);
+			logger.error(error);
+			res.status(500).json({message: 'Internal server error'});
+		}
+	},
+);
+
+
+
 /** route that get all lectures */
 interface Lecture extends RowDataPacket {
 	lectureid: number;

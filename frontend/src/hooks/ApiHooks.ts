@@ -872,6 +872,34 @@ const addNewStudentUser = async (
 	const url = `${baseUrl}admin/insert-student-user/`;
 	return doFetch(url, options);
 };
+
+const addNewStaffUser = async (
+	token: string,
+	email: string,
+	firstname: string,
+	lastname: string,
+	staff: number,
+	roleid: number,
+) => {
+	const options = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + token,
+		},
+		body: JSON.stringify({
+			email,
+			first_name: firstname,
+			last_name: lastname,
+			staff,
+			roleid,
+		}),
+	};
+	const url = `${baseUrl}admin/insert-staff-user/`;
+	return doFetch(url, options);
+};
+
+
 const addNewStudentUserCourse = async (
 	token: string,
 	email: string,
@@ -1036,5 +1064,6 @@ const apiHooks = {
 	fetchUserByIdEdit,
 	updateUserEdit,
 	checkStudentEmailExists,
+	addNewStaffUser,
 };
 export default apiHooks;

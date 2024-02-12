@@ -13,7 +13,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({disabled}) => (
 				disabled ? 'opacity-50 cursor-not-allowed' : ''
 			}`}
 		>
-			Add New Student User
+			Add New User
 		</button>
 	</div>
 );
