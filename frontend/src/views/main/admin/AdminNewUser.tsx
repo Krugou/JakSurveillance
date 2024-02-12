@@ -1,25 +1,43 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Container } from '@mui/material';
-import { toast } from 'react-toastify';
+import {Container} from '@mui/material';
+import React, {useContext, useEffect, useState} from 'react';
+import {toast} from 'react-toastify';
 import FormInput from '../../../components/main/newUser/FormInput';
 import StudentGroupSelect from '../../../components/main/newUser/StudentGroupSelect';
 import SubmitButton from '../../../components/main/newUser/SubmitButton';
-import { UserContext } from '../../../contexts/UserContext';
+import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/ApiHooks';
-
+/**
+ * AdminNewUser component.
+ * This component is used to create a new user in the system.
+ * It provides fields to input user details and submit the form.
+ * It also checks if the entered student number and email already exist in the system.
+ *
+ * @component
+ */
 const AdminNewUser: React.FC = () => {
 	const [email, setEmail] = useState('');
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
-	const [roleid, setRoleId] = useState(); // Initialize with empty string
-	const [staff, setStaff] = useState<number>(1); // Initialize with "1"
+	const [roleid, setRoleId] = useState<number>(3);
+	const [staff, setStaff] = useState<number>(1);
 	const [studentNumber, setStudentNumber] = useState('');
 	const [studentGroupId, setStudentGroupId] = useState<number | null>(null);
 	const [isStudentNumberTaken, setIsStudentNumberTaken] = useState(false);
-	const [timeoutIdNumber, setTimeoutIdNumber] = useState<NodeJS.Timeout | null>(null);
-	const [timeoutIdEmail, setTimeoutIdEmail] = useState<NodeJS.Timeout | null>(null);
+	const [timeoutIdNumber, setTimeoutIdNumber] = useState<NodeJS.Timeout | null>(
+		null,
+	);
+	const [timeoutIdEmail, setTimeoutIdEmail] = useState<NodeJS.Timeout | null>(
+		null,
+	);
 	const [isEmailTaken, setIsEmailTaken] = useState(false);
 	const [userType, setUserType] = useState<'staff' | 'student'>('student');
+	const [roles, setRoles] = useState<
+		{
+			name: string;
+			roleid: number;
+			role: string;
+		}[]
+	>([]);
 
 	interface StudentGroup {
 		studentgroupid: number;
@@ -27,7 +45,7 @@ const AdminNewUser: React.FC = () => {
 	}
 
 	const [studentGroups, setStudentGroups] = useState<StudentGroup[]>([]);
-	const { user } = useContext(UserContext);
+	const {user} = useContext(UserContext);
 
 	useEffect(() => {
 		const checkStudentNumber = async () => {
@@ -104,7 +122,21 @@ const AdminNewUser: React.FC = () => {
 		};
 		getStudentGroups();
 	}, []);
+	useEffect(() => {
+		const getRoles = async () => {
+			// Get token from local storage
+			const token: string | null = localStorage.getItem('userToken');
+			if (!token) {
+				throw new Error('No token available');
+			}
+			const fetchedRoles = await apiHooks.fetchAllRoles(token);
+			console.log('🚀 ~ getRoles ~ fetchedRoles:', fetchedRoles);
 
+			setRoles(fetchedRoles);
+		};
+
+		getRoles();
+	}, []);
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 
@@ -121,14 +153,14 @@ const AdminNewUser: React.FC = () => {
 			}
 
 			try {
-				if (userType === "staff") {
+				if (userType === 'staff') {
 					await apiHooks.addNewStaffUser(
 						token,
 						email,
 						firstName,
 						lastName,
 						roleid,
-						staff
+						staff,
 					);
 					toast.success('New staff user added successfully');
 				} else {
@@ -138,18 +170,14 @@ const AdminNewUser: React.FC = () => {
 						studentNumber,
 						firstName,
 						lastName,
-						studentGroupId
+						studentGroupId,
 					);
 					toast.success('New student user added successfully');
 				}
 			} catch (error) {
-				if (userType === "staff") {
-					console.error('Failed to add new staff user', error);
-					toast.error('Failed to add new staff user ' + error);
-				} else {
-					console.error('Failed to add new student user', error);
-					toast.error('Failed to add new student user ' + error);
-				}
+				const userTypeText = userType === 'staff' ? 'staff' : 'student';
+				console.error(`Failed to add new ${userTypeText} user`, error);
+				toast.error(`Failed to add new ${userTypeText} user ${error}`);
 			}
 		} else if (isStudentNumberTaken) {
 			toast.error('The student number is already taken');
@@ -166,34 +194,48 @@ const AdminNewUser: React.FC = () => {
 					<form onSubmit={handleSubmit} className="mt-4 mb-4">
 						<div className="flex flex-col">
 							<h2 className="font-bold mb-5 text-center text-xl">User Details</h2>
+
 							<div className="flex flex-col items-start justify-center mt-4">
-								<label htmlFor="userType" className="mr-2 text-gray-700 mb-1 font-bold">User Type</label>
+								<label htmlFor="userType" className="mr-2 text-gray-700 mb-1 font-bold">
+									User Type
+								</label>
 								<select
 									id="userType"
 									value={userType}
-									onChange={(e) => setUserType(e.target.value as 'staff' | 'student')}
+									onChange={e => setUserType(e.target.value as 'staff' | 'student')}
 									className="shadow appearance-none cursor-pointer border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
 								>
 									<option value="student">Student</option>
 									<option value="staff">Staff</option>
 								</select>
 							</div>
-							{userType === 'staff' && ( // Render if user type is staff
+							{userType === 'staff' && (
 								<div className="flex flex-col items-start justify-center mt-4">
-									<label htmlFor="staffRole" className="mr-2 text-gray-700 mb-1 font-bold">Staff Role</label>
+									<label
+										htmlFor="staffRole"
+										className="mr-2 text-gray-700 mb-1 font-bold"
+									>
+										Staff Role
+									</label>
 									<select
+										title="Select staff role"
 										className="shadow appearance-none cursor-pointer border rounded-3xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
 										id="role"
 										value={roleid}
-										onChange={(e) => {
-											setRoleId(e.target.value);
-											// Set staff value based on selected role
+										onChange={e => {
+											setRoleId(parseInt(e.target.value));
+
 											setStaff(1);
 										}}
 									>
-										<option value="4">Admin</option>
-										<option value="2">Counselor</option>
-										<option value="3">Teacher</option>
+										<option value="" disabled>
+											Select staff role
+										</option>
+										{roles.map(role => (
+											<option key={role.roleid} value={role.roleid}>
+												{role.name}
+											</option>
+										))}
 									</select>
 								</div>
 							)}
@@ -216,7 +258,7 @@ const AdminNewUser: React.FC = () => {
 								value={lastName}
 								onChange={setLastName}
 							/>
-							{userType === 'student' && ( // Render if user type is student
+							{userType === 'student' && (
 								<>
 									<FormInput
 										label="Student Number"
