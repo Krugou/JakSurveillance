@@ -76,7 +76,7 @@ const AdminUsers: React.FC = () => {
 				</div>
 			) : (
 				<>
-					<GeneralLinkButton path="/admin/newuser/" text="Create new student user" />
+					<GeneralLinkButton path="/admin/newuser/" text="Create new user" />
 					<div className="lg:w-1/4 sm:w-[20em] w-1/2 mt-4 mb-4">
 						<InputField
 							type="text"
