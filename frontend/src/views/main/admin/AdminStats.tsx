@@ -53,11 +53,20 @@ const AdminStats = () => {
 		datasets: ChartDataset<'bar', number[]>[];
 	} | null>(null);
 	const [error, setError] = useState<string | null>(null);
+	const [userStatisticsPercentage, setUserStatisticsPercentage] =
+		useState<number>(0);
 
 	const fetchUserStatistics = async (token: string) => {
 		const roleCounts: RoleCount[] = await apiHooks.getRoleCounts(token);
+		console.log('🚀 ~ fetchUserStatistics ~ roleCounts:', roleCounts);
 		const roleNames = roleCounts.map(row => row.role_name);
 		const userCounts = roleCounts.map(row => row.user_count);
+		const studentCount =
+			roleCounts.find(row => row.role_name === 'student')?.user_count || 0;
+		const studentsLoggedCount =
+			roleCounts.find(row => row.role_name === 'StudentsLogged')?.user_count || 0;
+		const studentsLoggedPercentage = (studentsLoggedCount / studentCount) * 100;
+		setUserStatisticsPercentage(studentsLoggedPercentage);
 		setUserStatistics({
 			labels: roleNames,
 			datasets: [
@@ -126,6 +135,9 @@ const AdminStats = () => {
 		<div className="flex flex-col items-center justify-center bg-white p-5 md:w-1/2 w-full">
 			<h2 className="mb-4 text-2xl">Administrator Statistics</h2>
 			<h2 className="mb-4 text-xl">User Statistics</h2>
+			<p>{`Percentage of students who have logged in at least once: ${userStatisticsPercentage.toFixed(
+				2,
+			)}%`}</p>
 			<div className="w-full">
 				<Bar options={options} data={userStatistics} />
 			</div>
