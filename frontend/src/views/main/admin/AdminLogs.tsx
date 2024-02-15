@@ -5,9 +5,7 @@ import apiHooks from '../../../hooks/ApiHooks';
 const AdminLogs = () => {
 	const [lineLimit, setLineLimit] = useState(100);
 	const [logs, setLogs] = useState<{lineNumber: number; line: string}[]>([]);
-	const [errorLogs, setErrorLogs] = useState<
-		{lineNumber: number; line: string}[]
-	>([]);
+
 	const [isLoading, setIsLoading] = useState(true);
 	const [trigger, setTrigger] = useState(0);
 
@@ -23,17 +21,15 @@ const AdminLogs = () => {
 
 			try {
 				let logsResult = await apiHooks.fetchLogs(token, lineLimit);
-				let errorLogsResult = await apiHooks.fetchErrorLogs(token, lineLimit);
 
-				if (!Array.isArray(logsResult) || !Array.isArray(errorLogsResult)) {
+				if (!Array.isArray(logsResult)) {
 					toast.error('Expected an array from fetchLogs and fetchErrorLogs');
 					setIsLoading(false);
 					return;
 				}
 				logsResult = logsResult.filter(log => log.line.trim() !== '');
-				errorLogsResult = errorLogsResult.filter(log => log.line.trim() !== '');
+
 				setLogs(logsResult.reverse());
-				setErrorLogs(errorLogsResult.reverse());
 			} catch (error) {
 				toast.error('Error fetching logs');
 			}
