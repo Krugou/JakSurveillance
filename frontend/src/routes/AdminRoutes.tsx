@@ -1,16 +1,15 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
-import AdminFeedback from '../views/main/admin/AdminFeedback.tsx';
+import Feedback from '../views/main/Feedback.tsx';
+import Team from '../views/main/Team.tsx';
+import AdminDashboard from '../views/main/admin/AdminDashboard.tsx';
 import AdminMainView from '../views/main/admin/AdminMainView.tsx';
 import AdminNewUser from '../views/main/admin/AdminNewUser.tsx';
 import AdminProfile from '../views/main/admin/AdminProfile.tsx';
-import AdminStats from '../views/main/admin/AdminStats.tsx';
 import AdminCoursesRoutes from './admin/AdminCourseRoutes';
 import AdminLecturesRoutes from './admin/AdminLectureRoutes.tsx';
 import AdminSettingsRoutes from './admin/AdminSettingsRoutes.tsx';
 import AdminUserRoutes from './admin/AdminUserRoutes';
-import Team from '../views/main/Team.tsx';
-import AdminLogs from '../views/main/admin/AdminLogs.tsx';
 /**
  * AdminRoutes component.
  * This component is responsible for defining the routes for the admin section of the application.
@@ -29,13 +28,11 @@ const AdminRoutes = () => {
 			<Route path="profile" element={<AdminProfile />} />
 			<Route path="settings/*" element={<AdminSettingsRoutes />} />
 			<Route path="*" element={<AdminMainView />} />
-			<Route path="stats" element={<AdminStats />} />
+			<Route path="dashboard/*" element={<AdminDashboard />} />
 			<Route path="team" element={<Team />} />
-			<Route path="logs" element={<AdminLogs />} />
-
 			<Route path="lectures/*" element={<AdminLecturesRoutes />} />
 			<Route path="newuser" element={<AdminNewUser />} />
-			<Route path="feedback" element={<AdminFeedback />} />
+			<Route path="feedback" element={<Feedback />} />
 		</Routes>
 	);
 };

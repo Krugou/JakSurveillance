@@ -132,27 +132,33 @@ const AdminStats = () => {
 	}
 
 	return (
-		<div className="flex flex-col items-center justify-center bg-white p-5 md:w-1/2 w-full">
-			<h2 className="mb-4 text-2xl">Administrator Statistics</h2>
-			<h2 className="mb-4 text-xl">User Statistics</h2>
-			<p>{`Percentage of students who have logged in at least once: ${userStatisticsPercentage.toFixed(
-				2,
-			)}%`}</p>
-			<div className="w-full">
-				<Bar options={options} data={userStatistics} />
-			</div>
-			<h2 className="mb-4 text-xl">Attendance Statistics</h2>
-			{attendanceStatistics && (
-				<p>
-					{`Total lectures: ${attendanceStatistics[0]}. Attendance ratio: ${(
-						(attendanceStatistics[2] /
-							(attendanceStatistics[2] + attendanceStatistics[1])) *
-						100
-					).toFixed(2)}%`}
-				</p>
-			)}
-			<div className="w-full">
-				<Bar options={options} data={lectureStatistics} />
+		<div className="flex flex-col items-center justify-center bg-white p-5 w-full">
+			<h2 className="mb-4 text-2xl md:text-3xl">Administrator Statistics</h2>
+			<div className="flex flex-col xl:flex-row w-full">
+				<div className="w-full justify-start mx-4">
+					<h2 className="mb-4 text-xl md:text-2xl">User Statistics</h2>
+					<p className="text-sm md:text-base">{`Percentage of students who have logged in at least once: ${userStatisticsPercentage.toFixed(
+						2,
+					)}%`}</p>
+					<div className="w-full">
+						<Bar options={options} data={userStatistics} />
+					</div>
+				</div>
+				<div className="w-full justify-start mx-4">
+					<h2 className="mb-4 text-xl md:text-2xl">Attendance Statistics</h2>
+					{attendanceStatistics && (
+						<p className="text-sm md:text-base">
+							{`Total lectures: ${attendanceStatistics[0]}. Attendance ratio: ${(
+								(attendanceStatistics[2] /
+									(attendanceStatistics[2] + attendanceStatistics[1])) *
+								100
+							).toFixed(2)}%`}
+						</p>
+					)}
+					<div className="w-full">
+						<Bar options={options} data={lectureStatistics} />
+					</div>
+				</div>
 			</div>
 		</div>
 	);

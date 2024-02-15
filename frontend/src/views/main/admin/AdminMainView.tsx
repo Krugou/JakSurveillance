@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from '../../../components/main/cards/Card';
+import FeedbackCard from '../../../components/main/cards/FeedbackCard';
 import MainViewTitle from '../../../components/main/titles/MainViewTitle';
 /**
  * AdminMainView component.
@@ -50,22 +51,12 @@ const AdminMainView: React.FC = () => {
 					title="Server Configuration"
 					description="Manage server settings and configurations"
 				/>
-
 				<Card
-					path="/admin/stats/"
-					title="Statistics"
-					description="View detailed statistics"
+					path="/admin/dashboard/"
+					title="Server Dashboard"
+					description="View server statistics and usage"
 				/>
-				<Card
-					path="/admin/feedback/"
-					title="User Feedback"
-					description="View and manage user feedback"
-				/>
-				<Card
-					path="/admin/logs/"
-					title="Server Logs"
-					description="View server logs"
-				/>
+				<FeedbackCard role="admin" />
 			</div>
 		</>
 	);

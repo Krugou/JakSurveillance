@@ -1,5 +1,6 @@
 import React, {useContext, useState} from 'react';
 import {toast} from 'react-toastify';
+import ServerStatus from '../../components/main/ServerStatus';
 import {UserContext} from '../../contexts/UserContext';
 import apiHooks from '../../hooks/ApiHooks';
 const Feedback: React.FC = () => {
@@ -64,52 +65,51 @@ const Feedback: React.FC = () => {
 		feedbackTopics = feedbackTopicsByRole[userRole];
 	}
 	return (
-		<div className="bg-white rounded-lg shadow-md p-4">
-			<h2 className="text-xl font-bold mb-4">
-				Help us improve, {user?.username} by sharing your feedback.
-			</h2>
-			<form onSubmit={handleSubmit} className="mb-4 flex flex-col">
-				<label htmlFor="feedback-topic" className="sr-only">
-					Feedback Topic
-				</label>
-				<select
-					id="feedback-topic"
-					value={topic}
-					onChange={e => setTopic(e.target.value)}
-					className="border rounded p-2 m-2"
-					required
-				>
-					<option value="">Select a topic</option>
-					{feedbackTopics.map((topic, index) => (
-						<option key={index} value={topic}>
-							{topic}
-						</option>
-					))}
-				</select>
-				<label htmlFor="feedback-text" className="sr-only">
-					Feedback Text
-				</label>
-				<textarea
-					id="feedback-text"
-					value={feedback}
-					onChange={e => setFeedback(e.target.value)}
-					className="border rounded p-2 m-2"
-					rows={8}
-					placeholder="Enter your feedback"
-					required
-				/>
-				<button
-					type="submit"
-					className="bg-metropoliaMainOrange  hover:hover:bg-metropoliaSecondaryOrange transition text-white font-bold py-2 px-4 m-4 rounded focus:outline-none focus:shadow-outline"
-				>
-					Submit
-				</button>
-			</form>
-			<p className="text-sm text-gray-500 mt-2">
-				Verify you have the latest version by checking the version checkmark on the
-				login or start view(with moving eye) before submitting.
-			</p>
-		</div>
+		<>
+			<div className="bg-white rounded-lg shadow-md p-4">
+				<h2 className="text-xl font-bold mb-4">
+					Help us improve, {user?.username} by sharing your feedback.
+				</h2>
+				<form onSubmit={handleSubmit} className="mb-4 flex flex-col">
+					<label htmlFor="feedback-topic" className="sr-only">
+						Feedback Topic
+					</label>
+					<select
+						id="feedback-topic"
+						value={topic}
+						onChange={e => setTopic(e.target.value)}
+						className="border rounded p-2 m-2"
+						required
+					>
+						<option value="">Select a topic</option>
+						{feedbackTopics.map((topic, index) => (
+							<option key={index} value={topic}>
+								{topic}
+							</option>
+						))}
+					</select>
+					<label htmlFor="feedback-text" className="sr-only">
+						Feedback Text
+					</label>
+					<textarea
+						id="feedback-text"
+						value={feedback}
+						onChange={e => setFeedback(e.target.value)}
+						className="border rounded p-2 m-2"
+						rows={8}
+						placeholder="Enter your feedback"
+						required
+					/>
+					<button
+						type="submit"
+						className="bg-metropoliaMainOrange  hover:hover:bg-metropoliaSecondaryOrange transition text-white font-bold py-2 px-4 m-4 rounded focus:outline-none focus:shadow-outline"
+					>
+						Submit
+					</button>
+				</form>
+			</div>
+			<ServerStatus />
+		</>
 	);
 };
 
