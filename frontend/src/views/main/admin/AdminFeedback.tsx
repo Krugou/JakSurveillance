@@ -83,8 +83,8 @@ const AdminFeedback = () => {
 	};
 
 	return (
-		<div className="w-full">
-			<h1 className="text-3xl font-bold p-3 bg-white w-fit m-auto rounded-lg mb-10 text-center">
+		<div className="w-full bg-white">
+			<h1 className="text-3xl font-bold p-3  w-fit m-auto rounded-lg mb-10 text-center">
 				Feedback
 			</h1>
 			<div className="flex bg-white 2xl:w-1/3 md:w-2/3 w-fit m-auto rounded-lg p-4 flex-col justify-center">
