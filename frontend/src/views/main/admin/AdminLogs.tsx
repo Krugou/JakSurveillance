@@ -123,7 +123,7 @@ const AdminLogs = () => {
 																<td className="px-6 py-4 text-xs sm:text-sm md:text-base text-left whitespace-nowrap">
 																	{parsedLog.useremail}
 																</td>
-																<td className="px-6 py-4 text-xs sm:text-sm md:text-base text-left whitespace-nowrap overflow-hidden text-overflow-ellipsis max-w-xs">
+																<td className="px-6 py-4 text-xs sm:text-sm md:text-base text-left whitespace-nowrap overflow-hidden text-overflow-ellipsis ">
 																	{parsedLog.msg}
 																</td>
 																<td className="px-6 py-4 text-xs sm:text-sm md:text-base text-left whitespace-nowrap">
