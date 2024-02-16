@@ -80,7 +80,7 @@ const AdminDashboard = () => {
 						</li>
 					</ul>
 				</div>
-				<div className="flex-grow border border-metropoliaMainGrey p-2 rounded-lg shadow-md">
+				<div className="flex-grow  p-2  shadow-md">
 					<Routes>
 						<Route path="/" element={<AdminGuide />} />
 

@@ -33,12 +33,12 @@ const AdminLogsTable = ({
 					</button>
 				</div>
 			</div>
-			<div className="flex-grow border border-metropoliaMainGrey p-6 rounded-lg shadow-md">
+			<div className="flex-grow    p-2 ">
 				{logs.length === 0 ? (
 					<p>no {logType === 'error' ? 'Error Logs' : 'Logs:'} found.</p>
 				) : (
 					<>
-						<h2 className=" p-4 text-white border rounded bg-slate-500 m-6">
+						<h2 className=" p-4 text-white border rounded bg-slate-500 m-2">
 							{logType === 'error' ? 'Error Logs:' : 'Logs:'}
 						</h2>
 
@@ -51,7 +51,7 @@ const AdminLogsTable = ({
 											return (
 												<div
 													key={index}
-													className="bg-white text-black p-4 flex flex-col justify-between"
+													className="bg-white border rounded-lg hover:bg-black hover:text-white text-black p-2 flex flex-col justify-between"
 												>
 													<div
 														className={`flex ${
@@ -59,7 +59,7 @@ const AdminLogsTable = ({
 														}`}
 													>
 														{parsedLog.useremail && (
-															<div className="font-medium mx-2 text-gray-500 uppercase tracking-wider mb-2 text-sm">
+															<div className=" p-2 text-sm">
 																User Email: {parsedLog.useremail}
 															</div>
 														)}
@@ -67,7 +67,7 @@ const AdminLogsTable = ({
 															Time: {new Date(parsedLog.time).toLocaleString()}
 														</div>
 													</div>
-													<div className="border rounded-lg p-1 md:p-2 lg:p-4 text-xs sm:text-sm md:text-base text-left overflow-hidden text-overflow-ellipsis max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
+													<div className=" p-1 md:p-2 lg:p-4 text-xs sm:text-sm md:text-base text-left overflow-hidden text-overflow-ellipsis max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
 														Message: {parsedLog.msg}
 													</div>
 												</div>
