@@ -71,7 +71,20 @@ const AdminStats = () => {
 	const [error, setError] = useState<string | null>(null);
 	const [userStatisticsPercentage, setUserStatisticsPercentage] =
 		useState<number>(0);
+	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
+	useEffect(() => {
+		const handleResize = () => {
+			setWindowWidth(window.innerWidth);
+		};
+
+		window.addEventListener('resize', handleResize);
+
+		// Cleanup function to remove the event listener
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
+	}, []);
 	const fetchUserStatistics = async (token: string) => {
 		const roleCounts: RoleCount[] = await apiHooks.getRoleCounts(token);
 		console.log('🚀 ~ fetchUserStatistics ~ roleCounts:', roleCounts);
@@ -174,7 +187,10 @@ const AdminStats = () => {
 	}
 
 	return (
-		<div className="grid grid-cols-1 xl:grid-cols-2 gap-4 bg-white p-5 w-full">
+		<div
+			className="grid grid-cols-1 xl:grid-cols-2 gap-4 bg-white p-5 w-full"
+			key={windowWidth}
+		>
 			<h2 className="mb-4 text-2xl md:text-3xl col-span-full">
 				Administrator Statistics
 			</h2>

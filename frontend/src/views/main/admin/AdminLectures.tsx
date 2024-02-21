@@ -189,7 +189,7 @@ const AdminAllLectures: React.FC = () => {
 	);
 
 	return (
-		<div className="relative xl:w-fit w-full bg-white p-5 rounded-lg">
+		<div className="relative  w-full bg-white p-5 rounded-lg">
 			<div className="space-x-2 mt-4 mb-4">
 				<button
 					onClick={() => setFilterOpen(!filterOpen)}
@@ -219,41 +219,55 @@ const AdminAllLectures: React.FC = () => {
 				)}
 			</div>
 			{extraStats && !filterOpen && (
-				<>
-					<h2 className="text-lg mb-2">
-						Total Lectures: {totalLectures} | Attendance Ratio:{' '}
-						{attendanceRatio.toFixed(2)}%
-					</h2>
-					<h2 className="text-lg mb-2">
-						{highestAttendedLectures.map(lecture => (
-							<>
-								Highest Attended: {lecture.attended} (ID: {lecture.lectureid})
-							</>
-						))}
-
-						{lowestAttendedLectures.map(lecture => (
-							<>
-								{' '}
-								Lowest Attended: {lecture.attended} (ID: {lecture.lectureid})
-							</>
-						))}
-					</h2>
-					<h2 className="text-lg mb-2">
-						{highestNotAttendedLectures.map(lecture => (
-							<>
-								{' '}
-								Highest Not Attended: {lecture.notattended} (ID: {lecture.lectureid})
-							</>
-						))}
-
-						{lowestNotAttendedLectures.map(lecture => (
-							<>
-								{' '}
-								Lowest Not Attended: {lecture.notattended} (ID: {lecture.lectureid})
-							</>
-						))}
-					</h2>
-				</>
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+					<div className="col-span-full bg-blue-100 p-2 rounded">
+						<h2 className="text-lg mb-2">
+							Total Lectures: {totalLectures} | Attendance Ratio:{' '}
+							{attendanceRatio.toFixed(2)}%
+						</h2>
+					</div>
+					<div className="bg-green-100 p-2 rounded">
+						<h2 className="text-lg mb-2">
+							Highest Attended:
+							{highestAttendedLectures.map(lecture => (
+								<p key={lecture.lectureid} className="m-1">
+									{lecture.attended} (ID: {lecture.lectureid})
+								</p>
+							))}
+						</h2>
+					</div>
+					<div className="bg-red-100 p-2 rounded">
+						<h2 className="text-lg mb-2">
+							Lowest Attended:
+							{lowestAttendedLectures.map(lecture => (
+								<p key={lecture.lectureid} className="m-1">
+									{lecture.attended} (ID: {lecture.lectureid})
+								</p>
+							))}
+						</h2>
+					</div>
+					<div className="bg-yellow-100 p-2 rounded">
+						<h2 className="text-lg mb-2">
+							{' '}
+							Highest Not Attended:
+							{highestNotAttendedLectures.map(lecture => (
+								<p key={lecture.lectureid} className="m-1">
+									{lecture.notattended} (ID: {lecture.lectureid})
+								</p>
+							))}
+						</h2>
+					</div>
+					<div className="bg-purple-100 p-2 rounded">
+						<h2 className="text-lg mb-2">
+							Lowest Not Attended:
+							{lowestNotAttendedLectures.map(lecture => (
+								<p key={lecture.lectureid} className="m-1">
+									{lecture.notattended} (ID: {lecture.lectureid})
+								</p>
+							))}
+						</h2>
+					</div>
+				</div>
 			)}
 			{filterOpen && filteredLectures.length > 0 && (
 				<h2 className="text-lg mb-2">{`Open lectures: ${filteredLectures.length}`}</h2>
