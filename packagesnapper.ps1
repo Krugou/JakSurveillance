@@ -1,3 +1,19 @@
+<#
+.SYNOPSIS
+Updates packages in package.json files.
+
+.DESCRIPTION
+This script updates packages in package.json files found in the current directory and its subdirectories, excluding node_modules directories. It retrieves the package names from the dependencies and devDependencies sections of each package.json file and updates them to the latest version using npm install.
+
+.PARAMETER None
+
+.EXAMPLE
+.\packagesnapper.ps1
+Updates packages in all package.json files found in the current directory and its subdirectories.
+
+
+#>
+
 # Get all package.json files in the current directory and its subdirectories, excluding node_modules directories
 $packageFiles = Get-ChildItem -Path . -Filter package.json -Recurse -File | Where-Object { $_.DirectoryName -notmatch 'node_modules' }
 
