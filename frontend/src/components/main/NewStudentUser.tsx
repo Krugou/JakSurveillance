@@ -1,12 +1,17 @@
-import {Container} from '@mui/material';
-import React, {useContext, useEffect, useState} from 'react';
-import {toast} from 'react-toastify';
-import {UserContext} from '../../contexts/UserContext';
+import { Container } from '@mui/material';
+import React, { useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { UserContext } from '../../contexts/UserContext';
 import apiHooks from '../../hooks/ApiHooks';
 import CourseSelect from './newUser/CourseSelect';
 import FormInput from './newUser/FormInput';
 import StudentGroupSelect from './newUser/StudentGroupSelect';
 import SubmitButton from './newUser/SubmitButton';
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+
 const NewStudentUser: React.FC = () => {
 	const [email, setEmail] = useState('');
 	const [firstName, setFirstName] = useState('');
@@ -15,11 +20,16 @@ const NewStudentUser: React.FC = () => {
 	const [studentGroupId, setStudentGroupId] = useState<number | null>(null);
 	const [isStudentNumberTaken, setIsStudentNumberTaken] = useState(false);
 	const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
+	const [showEndedCourses, setShowEndedCourses] = useState(false);
+	const [allCourses, setAllCourses] = useState<Course[]>([]);
+	const [courses, setCourses] = useState<Course[]>([]);
+
 	interface StudentGroup {
 		studentgroupid: number;
 		group_name: string;
 		// include other properties if they exist
 	}
+
 	interface Course {
 		courseid: number;
 		name: string;
@@ -31,17 +41,15 @@ const NewStudentUser: React.FC = () => {
 		topic_names: string;
 		// Include other properties of course here
 	}
+
 	const [studentGroups, setStudentGroups] = useState<StudentGroup[]>([]);
-	const {user} = useContext(UserContext);
-	const [courses, setCourses] = useState<Course[]>([]); // Specify the type for courses
+	const { user } = useContext(UserContext);
+
 	// Check if the student number exists when it changes
-	const [timeoutIdNumber, setTimeoutIdNumber] = useState<NodeJS.Timeout | null>(
-		null,
-	);
-	const [timeoutIdEmail, setTimeoutIdEmail] = useState<NodeJS.Timeout | null>(
-		null,
-	);
+	const [timeoutIdNumber, setTimeoutIdNumber] = useState<NodeJS.Timeout | null>(null);
+	const [timeoutIdEmail, setTimeoutIdEmail] = useState<NodeJS.Timeout | null>(null);
 	const [isEmailTaken, setIsEmailTaken] = useState(false);
+
 	useEffect(() => {
 		const checkStudentNumber = async () => {
 			const token: string | null = localStorage.getItem('userToken');
@@ -76,6 +84,7 @@ const NewStudentUser: React.FC = () => {
 			setTimeoutIdNumber(newTimeoutIdNumber);
 		}
 	}, [studentNumber]);
+
 	useEffect(() => {
 		const checkEmail = async () => {
 			const token: string | null = localStorage.getItem('userToken');
@@ -103,6 +112,7 @@ const NewStudentUser: React.FC = () => {
 			setTimeoutIdEmail(newTimeoutIdEmail);
 		}
 	}, [email]);
+
 	// Fetch all student groups when the component mounts
 	useEffect(() => {
 		const getStudentGroups = async () => {
@@ -116,24 +126,24 @@ const NewStudentUser: React.FC = () => {
 		};
 		getStudentGroups();
 	}, []);
+
 	useEffect(() => {
 		const fetchCourses = async () => {
 			if (user) {
-				// Get token from local storage
 				const token: string | null = localStorage.getItem('userToken');
 				if (!token) {
-					throw new Error('No token available');
+					toast.error('No token available');
+					return;
 				}
-				// Fetch courses by instructor email
-				const courses = await apiHooks.getAllCourses(token);
-				console.log('🚀 ~ fetchCourses ~ courses:', courses);
-
-				setCourses(courses);
+				const fetchedCourses = await apiHooks.getAllCourses(token);
+				setAllCourses(fetchedCourses);
+				setCourses(fetchedCourses.filter(course => new Date(course.end_date) > new Date()));
 			}
 		};
 
 		fetchCourses();
 	}, [user]);
+
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
 
@@ -206,20 +216,34 @@ const NewStudentUser: React.FC = () => {
 								onChange={setStudentNumber}
 							/>
 							{isStudentNumberTaken && (
-								<h2 className="text-red-500">Student number taken</h2>
+								<h2 className="text-red-500">Student Number taken</h2>
 							)}
 							<StudentGroupSelect
 								studentGroups={studentGroups}
-								selectedGroup={studentGroupId}
-								onChange={setStudentGroupId}
+								onSelect={setStudentGroupId}
 							/>
-							<CourseSelect
-								courses={courses}
-								selectedCourse={selectedCourseId}
-								onChange={setSelectedCourseId}
-							/>
-							<p>please check that details are correct before pressing add new</p>
-							<SubmitButton disabled={isEmailTaken || isStudentNumberTaken} />
+							<div className="flex justify-center">
+								<div className="md:w-[25em] w-full">
+								<CourseSelect
+									courses={showEndedCourses ? allCourses : courses}
+									selectedCourse={selectedCourseId}
+									onChange={setSelectedCourseId}
+								/>
+								</div>
+								<div className="flex items-end mb-3 ml-2">
+								<Tooltip
+									title={showEndedCourses ? 'Hide ended courses' : 'Show ended courses'}
+									placement="top"
+								>
+									<IconButton className="h-fit" onClick={() => setShowEndedCourses(!showEndedCourses)}>
+										{showEndedCourses ? <VisibilityOffIcon /> : <VisibilityIcon />}
+									</IconButton>
+								</Tooltip>
+								</div>
+							</div>
+						</div>
+						<div className="flex justify-center pb-3">
+							<SubmitButton text="Add Student User" />
 						</div>
 					</form>
 				</Container>
@@ -229,3 +253,5 @@ const NewStudentUser: React.FC = () => {
 };
 
 export default NewStudentUser;
+
+
