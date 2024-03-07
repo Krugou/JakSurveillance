@@ -185,7 +185,7 @@ const NewStudentUser: React.FC = () => {
 			<h1 className="text-2xl font-bold w-fit p-3 bg-white ml-auto mr-auto rounded-lg mb-5 text-center">
 				Late enrollment
 			</h1>
-			<div className="relative w-fit bg-white rounded-lg">
+			<div className="relative sm:w-3/4 w-11/12 m-auto bg-white rounded-lg">
 				<Container>
 					<form onSubmit={handleSubmit} className="mt-4 mb-4 ">
 						<div className="flex flex-col">
@@ -223,7 +223,7 @@ const NewStudentUser: React.FC = () => {
 								onSelect={setStudentGroupId}
 							/>
 							<div className="flex justify-center">
-								<div className="md:w-[25em] w-full">
+								<div className="w-full">
 								<CourseSelect
 									courses={showEndedCourses ? allCourses : courses}
 									selectedCourse={selectedCourseId}
@@ -241,6 +241,11 @@ const NewStudentUser: React.FC = () => {
 								</Tooltip>
 								</div>
 							</div>
+						</div>
+						<div className="w-fit mt-4">
+							<h2 className="font-bold text-lg">Note!</h2>
+							<p className="mt-2">Please make sure the details are right before adding the student.</p>
+							<p className="mt-4">If you have added a student with incorrect details, contact your administrator.</p>
 						</div>
 						<div className="flex justify-center pb-3">
 							<SubmitButton text="Add Student User" />
