@@ -1,16 +1,16 @@
-import { Container } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import { UserContext } from '../../contexts/UserContext';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import {Container} from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import React, {useContext, useEffect, useState} from 'react';
+import {toast} from 'react-toastify';
+import {UserContext} from '../../contexts/UserContext';
 import apiHooks from '../../hooks/ApiHooks';
 import CourseSelect from './newUser/CourseSelect';
 import FormInput from './newUser/FormInput';
 import StudentGroupSelect from './newUser/StudentGroupSelect';
 import SubmitButton from './newUser/SubmitButton';
-import Tooltip from "@mui/material/Tooltip";
-import IconButton from "@mui/material/IconButton";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const NewStudentUser: React.FC = () => {
 	const [email, setEmail] = useState('');
@@ -43,11 +43,15 @@ const NewStudentUser: React.FC = () => {
 	}
 
 	const [studentGroups, setStudentGroups] = useState<StudentGroup[]>([]);
-	const { user } = useContext(UserContext);
+	const {user} = useContext(UserContext);
 
 	// Check if the student number exists when it changes
-	const [timeoutIdNumber, setTimeoutIdNumber] = useState<NodeJS.Timeout | null>(null);
-	const [timeoutIdEmail, setTimeoutIdEmail] = useState<NodeJS.Timeout | null>(null);
+	const [timeoutIdNumber, setTimeoutIdNumber] = useState<NodeJS.Timeout | null>(
+		null,
+	);
+	const [timeoutIdEmail, setTimeoutIdEmail] = useState<NodeJS.Timeout | null>(
+		null,
+	);
 	const [isEmailTaken, setIsEmailTaken] = useState(false);
 
 	useEffect(() => {
@@ -137,7 +141,9 @@ const NewStudentUser: React.FC = () => {
 				}
 				const fetchedCourses = await apiHooks.getAllCourses(token);
 				setAllCourses(fetchedCourses);
-				setCourses(fetchedCourses.filter(course => new Date(course.end_date) > new Date()));
+				setCourses(
+					fetchedCourses.filter(course => new Date(course.end_date) > new Date()),
+				);
 			}
 		};
 
@@ -220,35 +226,44 @@ const NewStudentUser: React.FC = () => {
 							)}
 							<StudentGroupSelect
 								studentGroups={studentGroups}
-								onSelect={setStudentGroupId}
+								selectedGroup={studentGroupId}
+								onChange={setStudentGroupId}
 							/>
 							<div className="flex justify-center">
 								<div className="w-full">
-								<CourseSelect
-									courses={showEndedCourses ? allCourses : courses}
-									selectedCourse={selectedCourseId}
-									onChange={setSelectedCourseId}
-								/>
+									<CourseSelect
+										courses={showEndedCourses ? allCourses : courses}
+										selectedCourse={selectedCourseId}
+										onChange={setSelectedCourseId}
+									/>
 								</div>
 								<div className="flex items-end mb-3 ml-2">
-								<Tooltip
-									title={showEndedCourses ? 'Hide ended courses' : 'Show ended courses'}
-									placement="top"
-								>
-									<IconButton className="h-fit" onClick={() => setShowEndedCourses(!showEndedCourses)}>
-										{showEndedCourses ? <VisibilityOffIcon /> : <VisibilityIcon />}
-									</IconButton>
-								</Tooltip>
+									<Tooltip
+										title={showEndedCourses ? 'Hide ended courses' : 'Show ended courses'}
+										placement="top"
+									>
+										<IconButton
+											className="h-fit"
+											onClick={() => setShowEndedCourses(!showEndedCourses)}
+										>
+											{showEndedCourses ? <VisibilityOffIcon /> : <VisibilityIcon />}
+										</IconButton>
+									</Tooltip>
 								</div>
 							</div>
 						</div>
 						<div className="w-fit mt-4">
 							<h2 className="font-bold text-lg">Note!</h2>
-							<p className="mt-2">Please make sure the details are right before adding the student.</p>
-							<p className="mt-4">If you have added a student with incorrect details, contact your administrator.</p>
+							<p className="mt-2">
+								Please make sure the details are right before adding the student.
+							</p>
+							<p className="mt-4">
+								If you have added a student with incorrect details, contact your
+								administrator.
+							</p>
 						</div>
 						<div className="flex justify-center pb-3">
-							<SubmitButton text="Add Student User" />
+							<SubmitButton disabled={isEmailTaken || isStudentNumberTaken} />
 						</div>
 					</form>
 				</Container>
@@ -258,5 +273,3 @@ const NewStudentUser: React.FC = () => {
 };
 
 export default NewStudentUser;
-
-
