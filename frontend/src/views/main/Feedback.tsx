@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
-import { toast } from 'react-toastify';
+import React, {useContext, useState} from 'react';
+import {toast} from 'react-toastify';
 import ServerStatus from '../../components/main/ServerStatus';
-import { UserContext } from '../../contexts/UserContext';
+import {UserContext} from '../../contexts/UserContext';
 import apiHooks from '../../hooks/ApiHooks';
 const Feedback: React.FC = () => {
 	const {user} = useContext(UserContext);
@@ -97,7 +97,7 @@ const Feedback: React.FC = () => {
 						onChange={e => setFeedback(e.target.value)}
 						className="p-2 m-2 border rounded"
 						rows={8}
-						placeholder="Enter your feedback"
+						placeholder="Enter your feedback here..."
 						required
 					/>
 					<button
