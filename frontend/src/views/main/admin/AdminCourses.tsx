@@ -95,13 +95,13 @@ const AdminCourses: React.FC = () => {
 	}, [user]);
 
 	return (
-		<div className="relative lg:w-fit w-full bg-white p-5 rounded-lg">
+		<div className="relative w-full p-5 bg-white rounded-lg lg:w-fit">
 			{isLoading ? (
-				<div className="flex justify-center items-center h-full">
+				<div className="flex items-center justify-center h-full">
 					<CircularProgress />
 				</div>
 			) : courses.length === 0 ? (
-				<div className="flex justify-center items-center h-full">
+				<div className="flex items-center justify-center h-full">
 					<p>No courses available</p>
 				</div>
 			) : (
@@ -121,9 +121,9 @@ const AdminCourses: React.FC = () => {
 						/>
 					</div>
 					<div className="relative bg-gray-100">
-						<div className="relative max-h-96 h-96 overflow-y-scroll">
+						<div className="relative overflow-y-scroll max-h-96 h-96">
 							<table className="table-auto">
-								<thead className="sticky top-0 border-t-2 border-black bg-white z-10">
+								<thead className="sticky top-0 z-10 bg-white border-t-2 border-black">
 									<tr>
 										{[
 											'name',
@@ -138,7 +138,7 @@ const AdminCourses: React.FC = () => {
 												{key}
 												<button
 													aria-label={`Sort by ${key}`} // Add this line
-													className="ml-2 bg-metropoliaMainOrange text-sm text-white font-bold rounded hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark p-1"
+													className="p-1 ml-2 text-sm font-bold text-white rounded bg-metropoliaMainOrange hover:bg-metropoliaMainOrangeDark focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrangeDark"
 													onClick={() => sortCourses(key)}
 												>
 													<SortIcon />
@@ -163,8 +163,12 @@ const AdminCourses: React.FC = () => {
 												'topics',
 												'instructors',
 											].map((key, innerIndex) => (
-												<td key={innerIndex} className="border px-2 py-2">
-													{Array.isArray(course[key]) ? course[key].join(', ') : course[key]}
+												<td key={innerIndex} className="px-2 py-2 border">
+													{Array.isArray(course[key])
+														? course[key].join(', ')
+														: key === 'start_date' || key === 'end_date'
+														? new Date(course[key]).toLocaleDateString()
+														: course[key]}
 												</td>
 											))}
 										</tr>
