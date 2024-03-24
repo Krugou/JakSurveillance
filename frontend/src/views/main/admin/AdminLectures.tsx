@@ -17,6 +17,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
+import InputField from '../../../components/main/course/createcourse/coursedetails/InputField';
 import {UserContext} from '../../../contexts/UserContext';
 import apiHooks from '../../../hooks/ApiHooks';
 interface Lecture {
@@ -46,6 +47,7 @@ const AdminAllLectures: React.FC = () => {
 	const navigate = useNavigate();
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [extraStats, setExtraStats] = useState(false);
+	const [searchTerm, setSearchTerm] = useState('');
 	const getLectures = async () => {
 		const token: string | null = localStorage.getItem('userToken');
 		if (!token) {
@@ -94,9 +96,14 @@ const AdminAllLectures: React.FC = () => {
 		return <CircularProgress />;
 	}
 
-	const filteredLectures = filterOpen
-		? lectures.filter(lecture => lecture.state === 'open')
-		: lectures;
+const filteredLectures = lectures.filter(lecture =>
+    (filterOpen ? lecture.state === 'open' : true) &&
+    Object.values(lecture).some(
+        value =>
+            typeof value === 'string' &&
+            value.toLowerCase().includes(searchTerm.toLowerCase()),
+    ),
+);
 
 	const handleDialogOpen = (lectureid: string, action: 'close' | 'delete') => {
 		setSelectedLecture(lectureid);
@@ -189,45 +196,45 @@ const AdminAllLectures: React.FC = () => {
 	);
 
 	return (
-		<div className="relative  w-full bg-white p-5 rounded-lg">
-			<div className="space-x-2 mt-4 mb-4">
+		<div className="relative w-full p-5 bg-white rounded-lg">
+			<div className="mt-4 mb-4 space-x-2">
 				<button
 					onClick={() => setFilterOpen(!filterOpen)}
-					className="bg-metropoliaMainOrange h-fit transition hover:hover:bg-metropoliaSecondaryOrange text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
+					className="px-2 py-1 font-bold text-white transition rounded bg-metropoliaMainOrange h-fit hover:hover:bg-metropoliaSecondaryOrange sm:py-2 sm:px-4 focus:outline-none focus:shadow-outline"
 				>
 					{filterOpen ? 'Show All Lectures' : 'Show Open Lectures Only'}
 				</button>
 				<button
 					onClick={toggleSortOrder}
-					className="bg-metropoliaMainOrange h-fit transition hover:hover:bg-metropoliaSecondaryOrange text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
+					className="px-2 py-1 font-bold text-white transition rounded bg-metropoliaMainOrange h-fit hover:hover:bg-metropoliaSecondaryOrange sm:py-2 sm:px-4 focus:outline-none focus:shadow-outline"
 				>
 					{sortOrder === 'asc' ? 'Sort by Newest' : 'Sort by Oldest'}
 				</button>
 				<button
 					onClick={() => setIsExpanded(!isExpanded)}
-					className="bg-metropoliaMainOrange h-fit transition hover:hover:bg-metropoliaSecondaryOrange text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
+					className="px-2 py-1 font-bold text-white transition rounded bg-metropoliaMainOrange h-fit hover:hover:bg-metropoliaSecondaryOrange sm:py-2 sm:px-4 focus:outline-none focus:shadow-outline"
 				>
 					{isExpanded ? 'Shrink Table' : 'Expand to full'}
 				</button>
 				{!filterOpen && (
 					<button
 						onClick={() => setExtraStats(!extraStats)}
-						className="bg-metropoliaMainOrange h-fit transition hover:hover:bg-metropoliaSecondaryOrange text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
+						className="px-2 py-1 font-bold text-white transition rounded bg-metropoliaMainOrange h-fit hover:hover:bg-metropoliaSecondaryOrange sm:py-2 sm:px-4 focus:outline-none focus:shadow-outline"
 					>
 						{extraStats ? 'Hide Stats' : 'Show Stats'}
 					</button>
 				)}
 			</div>
 			{extraStats && !filterOpen && (
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-					<div className="col-span-full bg-blue-100 p-2 rounded">
-						<h2 className="text-lg mb-2">
+				<div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2">
+					<div className="p-2 bg-blue-100 rounded col-span-full">
+						<h2 className="mb-2 text-lg">
 							Total Lectures: {totalLectures} | Attendance Ratio:{' '}
 							{attendanceRatio.toFixed(2)}%
 						</h2>
 					</div>
-					<div className="bg-green-100 p-2 rounded">
-						<h2 className="text-lg mb-2">
+					<div className="p-2 bg-green-100 rounded">
+						<h2 className="mb-2 text-lg">
 							Highest Attended:
 							{highestAttendedLectures.map(lecture => (
 								<p key={lecture.lectureid} className="m-1">
@@ -236,8 +243,8 @@ const AdminAllLectures: React.FC = () => {
 							))}
 						</h2>
 					</div>
-					<div className="bg-red-100 p-2 rounded">
-						<h2 className="text-lg mb-2">
+					<div className="p-2 bg-red-100 rounded">
+						<h2 className="mb-2 text-lg">
 							Lowest Attended:
 							{lowestAttendedLectures.map(lecture => (
 								<p key={lecture.lectureid} className="m-1">
@@ -246,8 +253,8 @@ const AdminAllLectures: React.FC = () => {
 							))}
 						</h2>
 					</div>
-					<div className="bg-yellow-100 p-2 rounded">
-						<h2 className="text-lg mb-2">
+					<div className="p-2 bg-yellow-100 rounded">
+						<h2 className="mb-2 text-lg">
 							{' '}
 							Highest Not Attended:
 							{highestNotAttendedLectures.map(lecture => (
@@ -257,8 +264,8 @@ const AdminAllLectures: React.FC = () => {
 							))}
 						</h2>
 					</div>
-					<div className="bg-purple-100 p-2 rounded">
-						<h2 className="text-lg mb-2">
+					<div className="p-2 bg-purple-100 rounded">
+						<h2 className="mb-2 text-lg">
 							Lowest Not Attended:
 							{lowestNotAttendedLectures.map(lecture => (
 								<p key={lecture.lectureid} className="m-1">
@@ -269,8 +276,18 @@ const AdminAllLectures: React.FC = () => {
 					</div>
 				</div>
 			)}
+			<div className="lg:w-1/4 sm:w-[20em] w-1/2 mt-4 mb-4">
+				<InputField
+					type="text"
+					name="search"
+					value={searchTerm}
+					onChange={e => setSearchTerm(e.target.value)}
+					placeholder="Search by any field.."
+					label="Search"
+				/>
+			</div>
 			{filterOpen && filteredLectures.length > 0 && (
-				<h2 className="text-lg mb-2">{`Open lectures: ${filteredLectures.length}`}</h2>
+				<h2 className="mb-2 text-lg">{`Open lectures: ${filteredLectures.length}`}</h2>
 			)}
 
 			<TableContainer
@@ -279,7 +296,7 @@ const AdminAllLectures: React.FC = () => {
 				}`}
 			>
 				<Table className="table-auto">
-					<TableHead className="sticky border-t-2 border-black top-0 bg-white z-10">
+					<TableHead className="sticky top-0 z-10 bg-white border-t-2 border-black">
 						<TableRow>
 							<TableCell>Lecture ID</TableCell>
 
@@ -366,7 +383,7 @@ const AdminAllLectures: React.FC = () => {
 												onClick={() =>
 													handleRowClick(lecture.courseid, lecture.lectureid.toString())
 												}
-												className="bg-metropoliaMainOrange h-fit transition hover:hover:bg-metropoliaSecondaryOrange text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
+												className="px-2 py-1 font-bold text-white transition rounded bg-metropoliaMainOrange h-fit hover:hover:bg-metropoliaSecondaryOrange sm:py-2 sm:px-4 focus:outline-none focus:shadow-outline"
 											>
 												Details
 											</button>
@@ -376,7 +393,7 @@ const AdminAllLectures: React.FC = () => {
 													onClick={() =>
 														handleDialogOpen(lecture.lectureid.toString(), 'close')
 													}
-													className="bg-metropoliaTrendGreen h-fit transition hover:hover:bg-green-600 text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
+													className="px-2 py-1 font-bold text-white transition rounded bg-metropoliaTrendGreen h-fit hover:hover:bg-green-600 sm:py-2 sm:px-4 focus:outline-none focus:shadow-outline"
 												>
 													Close
 												</button>
@@ -387,7 +404,7 @@ const AdminAllLectures: React.FC = () => {
 													onClick={() =>
 														handleDialogOpen(lecture.lectureid.toString(), 'delete')
 													}
-													className="bg-metropoliaSupportRed h-fit transition hover:hover:bg-red-600 text-white font-bold sm:py-2 py-1 px-2 sm:px-4 rounded focus:outline-none focus:shadow-outline"
+													className="px-2 py-1 font-bold text-white transition rounded bg-metropoliaSupportRed h-fit hover:hover:bg-red-600 sm:py-2 sm:px-4 focus:outline-none focus:shadow-outline"
 												>
 													Delete
 												</button>
