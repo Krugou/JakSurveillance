@@ -1,7 +1,7 @@
-import React, {useContext, useState} from 'react';
-import {toast} from 'react-toastify';
+import React, { useContext, useState } from 'react';
+import { toast } from 'react-toastify';
 import ServerStatus from '../../components/main/ServerStatus';
-import {UserContext} from '../../contexts/UserContext';
+import { UserContext } from '../../contexts/UserContext';
 import apiHooks from '../../hooks/ApiHooks';
 const Feedback: React.FC = () => {
 	const {user} = useContext(UserContext);
@@ -66,11 +66,11 @@ const Feedback: React.FC = () => {
 	}
 	return (
 		<>
-			<div className="bg-white rounded-lg shadow-md p-4">
-				<h2 className="text-xl font-bold mb-4">
+			<div className="p-4 bg-white rounded-lg shadow-md">
+				<h2 className="mb-4 text-xl font-bold">
 					Help us improve, {user?.username} by sharing your feedback.
 				</h2>
-				<form onSubmit={handleSubmit} className="mb-4 flex flex-col">
+				<form onSubmit={handleSubmit} className="flex flex-col mb-4">
 					<label htmlFor="feedback-topic" className="sr-only">
 						Feedback Topic
 					</label>
@@ -78,7 +78,7 @@ const Feedback: React.FC = () => {
 						id="feedback-topic"
 						value={topic}
 						onChange={e => setTopic(e.target.value)}
-						className="border rounded p-2 m-2"
+						className="p-2 m-2 border rounded"
 						required
 					>
 						<option value="">Select a topic</option>
@@ -95,14 +95,14 @@ const Feedback: React.FC = () => {
 						id="feedback-text"
 						value={feedback}
 						onChange={e => setFeedback(e.target.value)}
-						className="border rounded p-2 m-2"
+						className="p-2 m-2 border rounded"
 						rows={8}
 						placeholder="Enter your feedback"
 						required
 					/>
 					<button
 						type="submit"
-						className="bg-metropoliaMainOrange  hover:hover:bg-metropoliaSecondaryOrange transition text-white font-bold py-2 px-4 m-4 rounded focus:outline-none focus:shadow-outline"
+						className="px-4 py-2 m-4 font-bold text-white transition rounded bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange focus:outline-none focus:shadow-outline"
 					>
 						Submit
 					</button>
