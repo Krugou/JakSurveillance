@@ -89,24 +89,23 @@ const TeacherLectures: React.FC = () => {
 			: 0;
 
 	return (
-		<div className="relative xl:w-fit w-full bg-white p-5 rounded-lg">
-			<h1 className="text-2xl font-bold mb-4">
-				These are your lecture stats. Please review them carefully for any
-				inaccuracies. If you find any errors, kindly report them to our development
-				team using the feedback option in the main view. Thank you!
+		<div className="relative w-full p-5 bg-white rounded-lg xl:w-fit">
+			<h1 className="mb-4 text-2xl font-bold">
+				These are your saved lecture stats. Please review them carefully for any
+				inaccuracies. If you find any errors, kindly report them to admins using the feedback option in the main view. Thank you!
 			</h1>
-			<h2 className="text-xl mb-2">
+			<h2 className="mb-2 text-xl">
 				Total Lectures: {totalLectures} | Attendance Ratio:{' '}
 				{attendanceRatio.toFixed(2)}%
 			</h2>
 
-			<div className="space-x-2 mt-4 mb-4"></div>
+			<div className="mt-4 mb-4 space-x-2"></div>
 			<TableContainer
 				className={`relative bg-gray-100 overflow-auto h-[384px]
 				}`}
 			>
 				<Table className="table-auto">
-					<TableHead className="sticky border-t-2 border-black top-0 bg-white z-10">
+					<TableHead className="sticky top-0 z-10 bg-white border-t-2 border-black">
 						<TableRow>
 							<TableCell>Lecture ID</TableCell>
 							<TableCell>Course name</TableCell>
