@@ -80,7 +80,7 @@ const ServerStatus: React.FC = () => {
 					''
 				) : (
 					<a
-						href="https://wiki.metropolia.fi/pages/viewpage.action?pageId=149652071"
+						href="https://tietohallinto.metropolia.fi/display/tietohallinto/VPN-yhteys+GlobalProtect-palvelun+kautta"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
