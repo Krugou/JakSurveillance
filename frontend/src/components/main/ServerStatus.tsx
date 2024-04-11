@@ -84,7 +84,7 @@ const ServerStatus: React.FC = () => {
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-						You are not connected to Metropolia internal network
+						You are presently not linked to the internal network of Metropolia. Click here to access the VPN instructions
 					</a>
 				)}
 			</p>
