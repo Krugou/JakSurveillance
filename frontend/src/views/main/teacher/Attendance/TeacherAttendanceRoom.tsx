@@ -324,7 +324,7 @@ const AttendanceRoom: React.FC = () => {
 						lectureSuccess ? 'border-metropoliaTrendGreen border-2' : ''
 					}`}
 				>
-					<div className="flex sm:flex-row flex-col items-center justify-between">
+					<div className="flex flex-col items-center justify-between sm:flex-row">
 						<h1 className="text-2xl font-bold">
 							{courseName} | {courseCode} | {topicname} |
 							{lectureSuccess
@@ -346,7 +346,7 @@ const AttendanceRoom: React.FC = () => {
 								{isAnimationStopped ? 'Start Animation' : 'Stop Animation'}
 							</button>
 							{latency !== null && latency !== undefined && (
-								<div className="flex justify-center items-center">
+								<div className="flex items-center justify-center">
 									<button
 										className="bg-metropoliaTrendGreen h-[4em] hover:bg-green-500 transition text-white p-2 m-2 rounded-md"
 										title={
@@ -371,8 +371,8 @@ const AttendanceRoom: React.FC = () => {
 							</button>
 						</div>
 					</div>
-					<div className="flex flex-col-reverse sm:flex-row justify-between items-start">
-						<div className="flex sm:flex-row items-center flex-col-reverse w-full ">
+					<div className="flex flex-col-reverse items-start justify-between sm:flex-row">
+						<div className="flex flex-col-reverse items-center w-full sm:flex-row ">
 							{!hashDataReceived ? (
 								<div className="flex items-center justify-center w-full h-full">
 									<CircularProgress />
@@ -382,7 +382,7 @@ const AttendanceRoom: React.FC = () => {
 									size={256}
 									value={hashValue}
 									viewBox={`0 0 256 256`}
-									className="w-full 2xl:w-[50em] sm:w-[20em] lg:w-full h-full"
+									className="w-full 2xl:w-[50em] sm:w-[20em] lg:w-full border-8 border-white h-full"
 									level="L"
 								/>
 							)}
@@ -394,7 +394,7 @@ const AttendanceRoom: React.FC = () => {
 							/>
 						</div>
 						<h2
-							className="text-2xl ml-2"
+							className="ml-2 text-2xl"
 							title={`${arrayOfStudents.length} Attended, ${
 								courseStudents.length
 							} Not attended, Total: ${
@@ -410,9 +410,9 @@ const AttendanceRoom: React.FC = () => {
 							</label>{' '}
 						</h2>
 					</div>
-					<div className="flex sm:flex-row-reverse flex-col gap-5 items-center justify-end">
+					<div className="flex flex-col items-center justify-end gap-5 sm:flex-row-reverse">
 						<button
-							className="bg-metropoliaSupportRed sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-red-500 text-white font-bold rounded"
+							className="w-full p-2 mt-4 text-sm font-bold text-white transition rounded bg-metropoliaSupportRed sm:w-fit h-fit hover:bg-red-500"
 							onClick={() => setConfirmOpen(true)}
 							title="Delete this lecture"
 						>
@@ -420,7 +420,7 @@ const AttendanceRoom: React.FC = () => {
 						</button>
 						<button
 							onClick={handleLectureFinished}
-							className="bg-metropoliaMainOrange sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSecondaryOrange text-white font-bold rounded"
+							className="w-full p-2 mt-4 text-sm font-bold text-white transition rounded bg-metropoliaMainOrange sm:w-fit h-fit hover:bg-metropoliaSecondaryOrange"
 							title="Finish Lecture and set rest of bottom list of students to not attended"
 						>
 							Finish Lecture
