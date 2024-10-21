@@ -263,13 +263,13 @@ router.post(
 						const first_name = item.__EMPTY;
 						const name = item.__EMPTY_1;
 						const email = item.__EMPTY_2;
-						const studentnumber = item.__EMPTY_3;
-						const arrivalgroup = item.__EMPTY_4;
-						const admingroups = item.__EMPTY_5;
-						const program = item.__EMPTY_6;
-						const educationform = item.__EMPTY_7;
-						const registration = item.__EMPTY_8;
-						const evaluation = item.__EMPTY_9;
+						const studentnumber = item.__EMPTY_4;
+						const arrivalgroup = item.__EMPTY_5;
+						const admingroups = item.__EMPTY_6;
+						const program = item.__EMPTY_7;
+						const educationform = item.__EMPTY_8;
+						const registration = item.__EMPTY_9;
+						const evaluation = item.__EMPTY_10;
 
 						return {
 							last_name,
