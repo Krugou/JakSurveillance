@@ -8,11 +8,11 @@
  * @property {string} last_name - The last name of the user
  */
 export interface User {
-	username: string;
-	email: string;
-	staff: number;
-	first_name: string;
-	last_name: string;
+  username: string;
+  email: string;
+  staff: number;
+  first_name: string;
+  last_name: string;
 }
 /**
  * Interface for the response data object.
@@ -26,12 +26,12 @@ export interface User {
  * @export
  */
 export interface ResponseData {
-	message?: string;
-	staff: boolean;
-	user: string;
-	firstname: string;
-	lastname: string;
-	email: string;
+  message?: string;
+  staff: boolean;
+  user: string;
+  firstname: string;
+  lastname: string;
+  email: string;
 }
 
 /**
@@ -46,12 +46,12 @@ export interface ResponseData {
  * @export
  */
 export interface UserData {
-	username: string;
-	staff: number;
-	first_name: string;
-	last_name: string;
-	email: string;
-	roleid: number;
+  username: string;
+  staff: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  roleid: number;
 }
 
 /**
@@ -71,17 +71,17 @@ export interface UserData {
  * @export
  */
 export interface Item {
-	__EMPTY: string;
-	__EMPTY_1: string;
-	__EMPTY_2: string;
-	__EMPTY_3: string;
-	__EMPTY_4: string;
-	__EMPTY_5: string;
-	__EMPTY_6: string;
-	__EMPTY_7: string;
-	__EMPTY_8: string;
-	__EMPTY_9: string;
-	[key: string]: string;
+  __EMPTY: string;
+  __EMPTY_1: string;
+  __EMPTY_2: string;
+  __EMPTY_3: string;
+  __EMPTY_4: string;
+  __EMPTY_5: string;
+  __EMPTY_6: string;
+  __EMPTY_7: string;
+  __EMPTY_8: string;
+  __EMPTY_9: string;
+  [key: string]: string;
 }
 /**
  * Interface for the student object.
@@ -100,17 +100,17 @@ export interface Item {
  * @export
  */
 export interface Student {
-	first_name: string;
-	last_name: string;
-	name: string;
-	email: string;
-	studentnumber: string;
-	arrivalgroup: string;
-	admingroups: string;
-	program: string;
-	educationform: string;
-	registration: string;
-	evaluation: string;
+  first_name: string;
+  last_name: string;
+  name: string;
+  email: string;
+  studentnumber: string;
+  arrivalgroup: string;
+  admingroups: string;
+  program: string;
+  educationform: string;
+  registration: string;
+  evaluation: string;
 }
 
 /**
@@ -126,13 +126,13 @@ export interface Student {
  * @export
  */
 export interface CourseDetails {
-	instructorEmail: string;
-	startDate: Date;
-	endDate: Date;
-	studentGroup: string;
-	courseName: string;
-	courseCode: string;
-	studentList: Student[];
+  instructorEmail: string;
+  startDate: Date;
+  endDate: Date;
+  studentGroup: string;
+  courseName: string;
+  courseCode: string;
+  studentList: Student[];
 }
 /**
  * Interface for the data object.
@@ -145,13 +145,13 @@ export interface CourseDetails {
  * @export
  */
 export interface IData {
-	realizations: {
-		startDate: string;
-		endDate: string;
-		studentGroups: {
-			code: string;
-		}[];
-	}[];
+  realizations: {
+    startDate: string;
+    endDate: string;
+    studentGroups: {
+      code: string;
+    }[];
+  }[];
 }
 
 /**
@@ -163,10 +163,10 @@ export interface IData {
  * @export
  */
 export interface CourseUser {
-	role: string;
-	email: string;
-	userrole: number;
-	userid: number;
+  role: string;
+  email: string;
+  userrole: number;
+  userid: number;
 }
 
 /**
@@ -180,11 +180,11 @@ export interface CourseUser {
  * @export
  */
 export interface DoneFunction {
-	(
-		error: null | Error,
-		user?: false | User | undefined,
-		options?: {message: string},
-	): void;
+  (
+    error: null | Error,
+    user?: false | User | undefined,
+    options?: {message: string},
+  ): void;
 }
 
 /**
@@ -194,7 +194,7 @@ export interface DoneFunction {
  * @export
  */
 export interface JwtPayload {
-	[key: string]: unknown;
+  [key: string]: unknown;
 }
 
 /**
@@ -206,5 +206,5 @@ export interface JwtPayload {
  * @export
  */
 export interface DoneJwtFunction {
-	(error: unknown, user?: JwtPayload): void;
+  (error: unknown, user?: JwtPayload): void;
 }

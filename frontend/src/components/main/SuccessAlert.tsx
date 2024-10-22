@@ -4,8 +4,8 @@ import React from 'react';
  * It includes properties for the success alert message and a function to close the alert.
  */
 interface SuccessAlertProps {
-	successAlert: string;
-	onClose: () => void;
+  successAlert: string;
+  onClose: () => void;
 }
 /**
  * SuccessAlert component.
@@ -20,28 +20,26 @@ interface SuccessAlertProps {
  * @returns {JSX.Element} The rendered SuccessAlert component.
  */
 const SuccessAlert: React.FC<SuccessAlertProps> = ({successAlert, onClose}) => {
-	return (
-		<div
-			className={`fixed inset-0 flex items-center justify-center ${
-				successAlert ? 'block' : 'hidden'
-			}`}
-		>
-			<div className="modal-container mx-auto p-4 mt-10 rounded-lg bg-green-100 shadow-lg w-96">
-				<h2 className="text-xl text-green-600 font-bold mb-4">Success</h2>
-				<div className="mb-4">
-					{successAlert && <p className="text-green-700">{successAlert}</p>}
-				</div>
-				<div className="flex justify-end">
-					<button
-						onClick={onClose}
-						className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
-					>
-						Close
-					</button>
-				</div>
-			</div>
-		</div>
-	);
+  return (
+    <div
+      className={`fixed inset-0 flex items-center justify-center ${
+        successAlert ? 'block' : 'hidden'
+      }`}>
+      <div className='p-4 mx-auto mt-10 bg-green-100 rounded-lg shadow-lg modal-container w-96'>
+        <h2 className='mb-4 text-xl font-bold text-green-600'>Success</h2>
+        <div className='mb-4'>
+          {successAlert && <p className='text-green-700'>{successAlert}</p>}
+        </div>
+        <div className='flex justify-end'>
+          <button
+            onClick={onClose}
+            className='px-4 py-2 font-semibold text-white bg-green-500 rounded hover:bg-green-600'>
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default SuccessAlert;

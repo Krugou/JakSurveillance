@@ -17,17 +17,17 @@ jobs:
       key: ${{ secrets.JAKSEC }}
       script: |
        set -e
-       echo "       _       _                  
-             | |     | |                 
-             | | __ _| | _____  ___  ___ 
+       echo "       _       _
+             | |     | |
+             | | __ _| | _____  ___  ___
          _   | |/ _\` | |/ / __|/ _ \/ __|
-        | |__| | (_| |   <\__ \  __/ (__ 
+        | |__| | (_| |   <\__ \  __/ (__
          \____/ \__,_|_|\_\___/\___|\___|
-                                         
+
                                          "
        cd JakSurveillance
        git pull || exit 1
-       npm i 
+       npm i
        cd frontend
        npm i
        npm run build

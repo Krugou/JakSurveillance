@@ -13,13 +13,13 @@ import AdminUserModify from '../../views/main/admin/Users/AdminUserModify';
  * @returns {JSX.Element} The rendered AdminUserRoutes component.
  */
 const AdminUserRoutes: React.FC = () => {
-	return (
-		<Routes>
-			<Route path="/" element={<AdminUsers />} />
-			<Route path="/:userid/modify" element={<AdminUserModify />} />
-			<Route path="*" element={<AdminMainView />} />
-		</Routes>
-	);
+  return (
+    <Routes>
+      <Route path='/' element={<AdminUsers />} />
+      <Route path='/:userid/modify' element={<AdminUserModify />} />
+      <Route path='*' element={<AdminMainView />} />
+    </Routes>
+  );
 };
 
 export default AdminUserRoutes;

@@ -20,24 +20,24 @@ import StudentQrSelectScanner from '../views/main/student/StudentQrSelectScanner
  * @returns {JSX.Element} The rendered StudentRoutes component.
  */
 const StudentRoutes = () => {
-	return (
-		<Routes>
-			<Route path="mainview" element={<StudentMainView />} />
-			<Route path="courses" element={<StudentCourses />} />
-			<Route path="profile" element={<StudentProfile />} />
-			<Route path="helpvideos" element={<StudentHelpVideos />} />
-			<Route path="qr" element={<StudentQrScanner />} />
-			<Route path="aqr" element={<StudentQrSelectScanner />} />
-			<Route
-				path="courses/attendance/:usercourseid"
-				element={<StudentCourseAttendance />}
-			/>
-			<Route path="team" element={<Team />} />
+  return (
+    <Routes>
+      <Route path='mainview' element={<StudentMainView />} />
+      <Route path='courses' element={<StudentCourses />} />
+      <Route path='profile' element={<StudentProfile />} />
+      <Route path='helpvideos' element={<StudentHelpVideos />} />
+      <Route path='qr' element={<StudentQrScanner />} />
+      <Route path='aqr' element={<StudentQrSelectScanner />} />
+      <Route
+        path='courses/attendance/:usercourseid'
+        element={<StudentCourseAttendance />}
+      />
+      <Route path='team' element={<Team />} />
 
-			<Route path="feedback" element={<Feedback />} />
-			<Route path="*" element={<StudentMainView />} />
-		</Routes>
-	);
+      <Route path='feedback' element={<Feedback />} />
+      <Route path='*' element={<StudentMainView />} />
+    </Routes>
+  );
 };
 
 export default StudentRoutes;

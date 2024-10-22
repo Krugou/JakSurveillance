@@ -12,15 +12,15 @@ import StartViewButton from '../../components/main/buttons/StartViewButton';
  * @returns {JSX.Element} The rendered StartView component.
  */
 const StartView = () => {
-	return (
-		<div className="flex flex-col items-center justify-center logo-container pt-10">
-			<Logo />
-			<div className="flex flex-col md:flex-row items-center m-4 p-4">
-				<StartViewButton />
-			</div>
-			<ServerStatus />
-		</div>
-	);
+  return (
+    <div className='flex flex-col items-center justify-center pt-10 logo-container'>
+      <Logo />
+      <div className='flex flex-col items-center p-4 m-4 md:flex-row'>
+        <StartViewButton />
+      </div>
+      <ServerStatus />
+    </div>
+  );
 };
 
 export default StartView;

@@ -8,49 +8,49 @@ import fetch, {RequestInit, Response} from 'node-fetch';
  * @throws {Error} If the URL is not provided, the fetch fails, or the response status is not ok.
  */
 const doFetch = async (
-	url: string,
-	options: RequestInit = {},
+  url: string,
+  options: RequestInit = {},
 ): Promise<any> => {
-	// Check if the URL is provided
-	if (!url) {
-		throw new Error('URL is required');
-	}
-	// console.log('Fetching', url);
+  // Check if the URL is provided
+  if (!url) {
+    throw new Error('URL is required');
+  }
+  // console.log('Fetching', url);
 
-	let response: Response;
-	try {
-		// Perform the fetch request
-		response = await fetch(url, options);
-	} catch (error: unknown) {
-		// Log and rethrow any errors
-		if (error instanceof Error) {
-			console.error(`Fetch failed: ${error.message}`);
-		}
-		throw error;
-	}
+  let response: Response;
+  try {
+    // Perform the fetch request
+    response = await fetch(url, options);
+  } catch (error: unknown) {
+    // Log and rethrow any errors
+    if (error instanceof Error) {
+      console.error(`Fetch failed: ${error.message}`);
+    }
+    throw error;
+  }
 
-	// Check if the response status is ok
-	if (!response.ok) {
-		const errorText = `HTTP error! status: ${response.status}`;
-		console.error(errorText);
-		throw new Error(errorText);
-	}
+  // Check if the response status is ok
+  if (!response.ok) {
+    const errorText = `HTTP error! status: ${response.status}`;
+    console.error(errorText);
+    throw new Error(errorText);
+  }
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	let data: any;
-	try {
-		// Parse the response data as JSON
-		data = await response.json();
-	} catch (error: unknown) {
-		// Log and rethrow any errors
-		if (error instanceof Error) {
-			console.error(`Failed to parse response as JSON: ${error.message}`);
-		}
-		throw error;
-	}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let data: any;
+  try {
+    // Parse the response data as JSON
+    data = await response.json();
+  } catch (error: unknown) {
+    // Log and rethrow any errors
+    if (error instanceof Error) {
+      console.error(`Failed to parse response as JSON: ${error.message}`);
+    }
+    throw error;
+  }
 
-	// Return the response data
-	return data;
+  // Return the response data
+  return data;
 };
 
 export default doFetch;

@@ -4,9 +4,9 @@ import {useNavigate} from 'react-router-dom';
  * Props for the NavigationButton component.
  */
 interface NavigationButtonProps {
-	user: any;
-	path: string;
-	label: string;
+  user: any;
+  path: string;
+  label: string;
 }
 
 /**
@@ -14,19 +14,18 @@ interface NavigationButtonProps {
  * The button is only rendered if a user is provided.
  */
 const NavigationButton: FC<NavigationButtonProps> = ({user, path, label}) => {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
 
-	return (
-		user && (
-			<button
-				type="button"
-				className="mx-2 px-4 py-2 sm:w-full transition w-fit bg-metropoliaMainOrange text-white font-bold rounded hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange border border-white"
-				onClick={() => navigate(path)}
-			>
-				{label}
-			</button>
-		)
-	);
+  return (
+    user && (
+      <button
+        type='button'
+        className='px-4 py-2 mx-2 font-bold text-white transition border border-white rounded sm:w-full w-fit bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange focus:outline-none focus:ring-2 focus:ring-metropoliaMainOrange'
+        onClick={() => navigate(path)}>
+        {label}
+      </button>
+    )
+  );
 };
 
 export default NavigationButton;

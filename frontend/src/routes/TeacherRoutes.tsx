@@ -21,23 +21,23 @@ import TeacherStudentsRoutes from './teacher/TeacherStudentsRoutes';
  * @returns {JSX.Element} The rendered TeacherRoutes component.
  */
 const TeacherRoutes = () => {
-	return (
-		<Routes>
-			<Route path="mainview" element={<TeacherMainView />} />
-			<Route path="helpvideos" element={<TeacherHelpVideos />} />
-			<Route path="courses/*" element={<TeacherCoursesRoutes />} />
-			<Route path="students/*" element={<TeacherStudentsRoutes />} />
-			<Route path="attendance/*" element={<TeacherAttendanceRoutes />} />
-			<Route path="lectures" element={<TeacherLectures />} />
-			<Route path="profile" element={<TeacherProfile />} />
-			<Route path="feedback" element={<Feedback />} />
-			<Route path="team" element={<Team />} />
+  return (
+    <Routes>
+      <Route path='mainview' element={<TeacherMainView />} />
+      <Route path='helpvideos' element={<TeacherHelpVideos />} />
+      <Route path='courses/*' element={<TeacherCoursesRoutes />} />
+      <Route path='students/*' element={<TeacherStudentsRoutes />} />
+      <Route path='attendance/*' element={<TeacherAttendanceRoutes />} />
+      <Route path='lectures' element={<TeacherLectures />} />
+      <Route path='profile' element={<TeacherProfile />} />
+      <Route path='feedback' element={<Feedback />} />
+      <Route path='team' element={<Team />} />
 
-			<Route path="lateenrollment" element={<TeacherLateEnrollment />} />
+      <Route path='lateenrollment' element={<TeacherLateEnrollment />} />
 
-			<Route path="*" element={<TeacherMainView />} />
-		</Routes>
-	);
+      <Route path='*' element={<TeacherMainView />} />
+    </Routes>
+  );
 };
 
 export default TeacherRoutes;

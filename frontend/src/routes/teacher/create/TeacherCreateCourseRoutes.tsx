@@ -14,14 +14,14 @@ import TeacherMainView from '../../../views/main/teacher/TeacherMainView.tsx';
  * @returns {JSX.Element} The rendered TeacherCreateCourseRoutes component.
  */
 const TeacherCreateCourseRoutes: React.FC = () => {
-	return (
-		<Routes>
-			<Route path="/" element={<TeacherCreateCourse />} />
-			<Route path="easy" element={<CreateCourseEasy />} />
-			<Route path="custom" element={<CreateCourseCustom />} />
-			<Route path="*" element={<TeacherMainView />} />
-		</Routes>
-	);
+  return (
+    <Routes>
+      <Route path='/' element={<TeacherCreateCourse />} />
+      <Route path='easy' element={<CreateCourseEasy />} />
+      <Route path='custom' element={<CreateCourseCustom />} />
+      <Route path='*' element={<TeacherMainView />} />
+    </Routes>
+  );
 };
 
 export default TeacherCreateCourseRoutes;

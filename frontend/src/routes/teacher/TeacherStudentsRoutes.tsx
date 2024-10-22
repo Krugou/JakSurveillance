@@ -16,18 +16,18 @@ import TeacherMainView from '../../views/main/teacher/TeacherMainView.tsx';
  * @returns {JSX.Element} The rendered TeacherStudentsRoutes component.
  */
 const TeacherStudentsRoutes: React.FC = () => {
-	return (
-		<Routes>
-			<Route path="/" element={<TeacherStudentsView />} />
-			<Route path=":id" element={<TeacherStudentDetail />} />
-			<Route path=":id/modify" element={<TeacherStudentModify />} />
-			<Route
-				path="attendance/:usercourseid"
-				element={<TeacherStudentAttendances />}
-			/>
-			<Route path="*" element={<TeacherMainView />} />
-		</Routes>
-	);
+  return (
+    <Routes>
+      <Route path='/' element={<TeacherStudentsView />} />
+      <Route path=':id' element={<TeacherStudentDetail />} />
+      <Route path=':id/modify' element={<TeacherStudentModify />} />
+      <Route
+        path='attendance/:usercourseid'
+        element={<TeacherStudentAttendances />}
+      />
+      <Route path='*' element={<TeacherMainView />} />
+    </Routes>
+  );
 };
 
 export default TeacherStudentsRoutes;

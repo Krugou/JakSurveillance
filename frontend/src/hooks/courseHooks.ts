@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import apiHooks from './ApiHooks';
 /**
  * useCourses hook.
@@ -10,44 +10,44 @@ import apiHooks from './ApiHooks';
  * @returns {Object} The courses and threshold.
  */
 export const useCourses = () => {
-	const [courses, setCourses] = useState([]);
-	const [threshold, setThreshold] = useState<number | null>(null); // Add this line
+  const [courses, setCourses] = useState([]);
+  const [threshold, setThreshold] = useState<number | null>(null); // Add this line
 
-	useEffect(() => {
-		/**
-		 * Fetches all courses from the API and updates the courses state variable.
-		 */
-		const fetchCourses = async () => {
-			try {
-				const token: string | null = localStorage.getItem('userToken');
-				if (!token) {
-					throw new Error('No token available');
-				}
-				const response = await apiHooks.getAllCourses(token);
-				setCourses(response);
-			} catch (error) {
-				console.error('Error fetching courses');
-			}
-		};
-		/**
-		 * Fetches the attendance threshold from the API and updates the threshold state variable.
-		 */
-		const getThreshold = async () => {
-			try {
-				const token: string | null = localStorage.getItem('userToken');
-				if (!token) {
-					throw new Error('No token available');
-				}
-				const response = await apiHooks.getAttendanceThreshold(token);
-				console.log(response, 'thresholdresponse');
-				setThreshold(response.attendancethreshold);
-			} catch (error) {
-				console.log(error);
-			}
-		};
-		getThreshold();
-		fetchCourses();
-	}, []);
+  useEffect(() => {
+    /**
+     * Fetches all courses from the API and updates the courses state variable.
+     */
+    const fetchCourses = async () => {
+      try {
+        const token: string | null = localStorage.getItem('userToken');
+        if (!token) {
+          throw new Error('No token available');
+        }
+        const response = await apiHooks.getAllCourses(token);
+        setCourses(response);
+      } catch (error) {
+        console.error('Error fetching courses');
+      }
+    };
+    /**
+     * Fetches the attendance threshold from the API and updates the threshold state variable.
+     */
+    const getThreshold = async () => {
+      try {
+        const token: string | null = localStorage.getItem('userToken');
+        if (!token) {
+          throw new Error('No token available');
+        }
+        const response = await apiHooks.getAttendanceThreshold(token);
+        console.log(response, 'thresholdresponse');
+        setThreshold(response.attendancethreshold);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getThreshold();
+    fetchCourses();
+  }, []);
 
-	return {courses, threshold}; // Return threshold along with courses
+  return {courses, threshold}; // Return threshold along with courses
 };

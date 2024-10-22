@@ -12,38 +12,37 @@ import React, {useEffect, useState} from 'react';
  * @returns {JSX.Element} The rendered WelcomeModal component.
  */
 const WelcomeModal = () => {
-	const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-	useEffect(() => {
-		const firstVisit = localStorage.getItem('firstVisit');
-		if (!firstVisit) {
-			setShowModal(true);
-			localStorage.setItem('firstVisit', 'no');
-		}
-	}, []);
+  useEffect(() => {
+    const firstVisit = localStorage.getItem('firstVisit');
+    if (!firstVisit) {
+      setShowModal(true);
+      localStorage.setItem('firstVisit', 'no');
+    }
+  }, []);
 
-	return (
-		showModal && (
-			<div className="fixed bottom-0 right-0 m-6 z-50 bg-white rounded-lg p-6 shadow-lg max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl">
-				<div>
-					<h2 className="text-2xl font-bold mb-2">
-						Welcome to JakSec! its your first time here
-					</h2>
-					<p className="mb-4">
-						If you ever find yourself unsure of what to do, head over to our
-						Instruction Videos section. There, you'll find comprehensive guides to
-						help you make the most of JakSec.
-					</p>
-					<button
-						className="bg-blue-500 text-white rounded px-4 py-2"
-						onClick={() => setShowModal(false)}
-					>
-						Close
-					</button>
-				</div>
-			</div>
-		)
-	);
+  return (
+    showModal && (
+      <div className='fixed bottom-0 right-0 z-50 max-w-xs p-6 m-6 bg-white rounded-lg shadow-lg sm:max-w-md md:max-w-lg lg:max-w-xl'>
+        <div>
+          <h2 className='mb-2 text-2xl font-bold'>
+            Welcome to JakSec! its your first time here
+          </h2>
+          <p className='mb-4'>
+            If you ever find yourself unsure of what to do, head over to our
+            Instruction Videos section. There, you'll find comprehensive guides
+            to help you make the most of JakSec.
+          </p>
+          <button
+            className='px-4 py-2 text-white bg-blue-500 rounded'
+            onClick={() => setShowModal(false)}>
+            Close
+          </button>
+        </div>
+      </div>
+    )
+  );
 };
 
 export default WelcomeModal;

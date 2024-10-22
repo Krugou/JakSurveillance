@@ -5,7 +5,7 @@ import React from 'react';
  * It includes a property for the user's role.
  */
 interface MainViewTitleProps {
-	role: string;
+  role: string;
 }
 
 /**
@@ -18,11 +18,11 @@ interface MainViewTitleProps {
  * @returns {JSX.Element} The rendered MainViewTitle component.
  */
 const MainViewTitle: React.FC<MainViewTitleProps> = ({role}) => {
-	return (
-		<h1 className="text-2xl md:text-4xl bg-white p-3 rounded-xl w-fit mr-auto ml-auto text-center font-bold text-metropoliaSupportBlack mb-5 mt-5">
-			{role} Dashboard
-		</h1>
-	);
+  return (
+    <h1 className='p-3 mt-5 mb-5 ml-auto mr-auto text-2xl font-bold text-center bg-white md:text-4xl rounded-xl w-fit text-metropoliaSupportBlack'>
+      {role} Dashboard
+    </h1>
+  );
 };
 
 export default MainViewTitle;

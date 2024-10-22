@@ -9,19 +9,19 @@ import fs from 'fs';
  * @returns {Promise<string>} A promise that resolves to a string containing the last 'lineCount' lines of the file.
  */
 const readFile = (filePath: string, lineCount: number): Promise<string> => {
-	return new Promise((resolve, reject) => {
-		fs.readFile(filePath, 'utf8', (err, data) => {
-			if (err) {
-				reject(err);
-			} else {
-				const lines = data.split('\n');
-				const lastLines = lines
-					.slice(Math.max(lines.length - lineCount, 0))
-					.join('\n');
-				resolve(lastLines);
-			}
-		});
-	});
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        const lines = data.split('\n');
+        const lastLines = lines
+          .slice(Math.max(lines.length - lineCount, 0))
+          .join('\n');
+        resolve(lastLines);
+      }
+    });
+  });
 };
 /**
  * readLogFile function
@@ -34,20 +34,20 @@ const readFile = (filePath: string, lineCount: number): Promise<string> => {
  * @returns {Promise<string | undefined>} A promise that resolves to a string containing the last 'lineCount' lines of the log file, or undefined if an error occurs.
  */
 const readLogFile = async (
-	logFilePath: string,
-	lineCount: number,
+  logFilePath: string,
+  lineCount: number,
 ): Promise<Array<{line: string}> | undefined> => {
-	try {
-		const logData = await readFile(logFilePath, lineCount);
-		const lines = logData.split('\n');
-		const jsonOutput = lines.map((line, index) => ({
-			line: line,
-			lineNumber: index + 1,
-		}));
-		return jsonOutput;
-	} catch (error) {
-		console.error('Error reading log file:', error);
-	}
+  try {
+    const logData = await readFile(logFilePath, lineCount);
+    const lines = logData.split('\n');
+    const jsonOutput = lines.map((line, index) => ({
+      line: line,
+      lineNumber: index + 1,
+    }));
+    return jsonOutput;
+  } catch (error) {
+    console.error('Error reading log file:', error);
+  }
 };
 
 export default readLogFile;

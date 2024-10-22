@@ -36,20 +36,22 @@ app.use(express.static('jaksec'));
  * @param {express.Response} res - The response object
  */
 app.get('*', (_req: Request, res: Response) => {
-	res.sendFile('index.html', {root: 'jaksec'});
+  res.sendFile('index.html', {root: 'jaksec'});
 });
 
 /**
  * Start the server
  */
 http.listen(port, () => {
-	// logger.info(
-	// 	'Metropolia Attendance app FILE SERVER started at: http://localhost:' +
-	// 		port +
-	// 		'/ start time:' +
-	// 		startTime.toLocaleString(),
-	// );
-	console.log(`JakSec FILE SERVER started at: http://localhost:${port}/. Start time: ${startTime.toLocaleString()}`);
+  // logger.info(
+  // 	'Metropolia Attendance app FILE SERVER started at: http://localhost:' +
+  // 		port +
+  // 		'/ start time:' +
+  // 		startTime.toLocaleString(),
+  // );
+  console.log(
+    `JakSec FILE SERVER started at: http://localhost:${port}/. Start time: ${startTime.toLocaleString()}`,
+  );
 });
 
 export default app;

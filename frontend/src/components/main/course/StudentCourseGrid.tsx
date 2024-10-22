@@ -18,42 +18,42 @@ import EditTopicsModal from '../modals/EditTopicsModal';
  * It includes properties for the course's name, code, start date, end date, student group name, topic names, selected topics, creation date, instructor's name, and user course id.
  */
 interface Course {
-	courseid: number;
-	course_name: string;
-	startDate: string;
-	endDate: string;
-	code: string;
-	student_group: number | null;
-	topic_names: string;
-	selected_topics: string;
-	instructor_name: string;
-	usercourseid: number;
+  courseid: number;
+  course_name: string;
+  startDate: string;
+  endDate: string;
+  code: string;
+  student_group: number | null;
+  topic_names: string;
+  selected_topics: string;
+  instructor_name: string;
+  usercourseid: number;
 }
 /**
  * SelectedCourse interface represents the structure of a selected course.
  * It includes properties for the course's name, code, id, start date, end date, student group name, topic names, selected topics, and creation date.
  */
 interface SelectedCourse {
-	name: string;
-	code: string;
-	courseid: number;
-	start_date: string;
-	end_date: string;
-	studentgroup_name: string;
-	topic_names: string;
-	selected_topics: string;
-	created_at: string;
+  name: string;
+  code: string;
+  courseid: number;
+  start_date: string;
+  end_date: string;
+  studentgroup_name: string;
+  topic_names: string;
+  selected_topics: string;
+  created_at: string;
 }
 /**
  * StudentCourseGridProps interface represents the structure of the StudentCourseGrid props.
  * It includes properties for the courses, show ended courses state, update view function, add student to course function, and remove student from course function.
  */
 interface StudentCourseGridProps {
-	courses: Course[];
-	showEndedCourses: boolean;
-	updateView?: () => void;
-	handleAddStudentToCourse?: (courseid: number | undefined) => void;
-	handleRemoveStudentFromCourse?: (usercourseid: number) => void;
+  courses: Course[];
+  showEndedCourses: boolean;
+  updateView?: () => void;
+  handleAddStudentToCourse?: (courseid: number | undefined) => void;
+  handleRemoveStudentFromCourse?: (usercourseid: number) => void;
 }
 /**
  * StudentCourseGrid component.
@@ -66,378 +66,384 @@ interface StudentCourseGridProps {
  * @returns {JSX.Element} The rendered StudentCourseGrid component.
  */
 const StudentCourseGrid: React.FC<StudentCourseGridProps> = ({
-	courses,
-	showEndedCourses,
-	updateView,
-	handleAddStudentToCourse,
-	handleRemoveStudentFromCourse,
+  courses,
+  showEndedCourses,
+  updateView,
+  handleAddStudentToCourse,
+  handleRemoveStudentFromCourse,
 }) => {
-	const {user} = useContext(UserContext);
-	const navigate = useNavigate();
-	const [courseName, setCourseName] = useState('');
-	const [courseTopics, setCourseTopics] = useState<string[]>([]);
-	const [modifiedTopics, setModifiedTopics] = useState<string[]>([]);
-	const [initialCourseTopics, setInitialCourseTopics] = useState<string[]>([]);
-	const [usercourseid, setUsercourseid] = useState<number>(0);
-	const [open, setOpen] = useState(false);
-	const [newTopic, setNewTopic] = useState('');
-	const [selectedCourse, setSelectedCourse] = useState<SelectedCourse | null>(
-		null,
-	);
+  const {user} = useContext(UserContext);
+  const navigate = useNavigate();
+  const [courseName, setCourseName] = useState('');
+  const [courseTopics, setCourseTopics] = useState<string[]>([]);
+  const [modifiedTopics, setModifiedTopics] = useState<string[]>([]);
+  const [initialCourseTopics, setInitialCourseTopics] = useState<string[]>([]);
+  const [usercourseid, setUsercourseid] = useState<number>(0);
+  const [open, setOpen] = useState(false);
+  const [newTopic, setNewTopic] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState<SelectedCourse | null>(
+    null,
+  );
 
-	const [courseToDelete, setCourseToDelete] = useState<number | null>(null);
+  const [courseToDelete, setCourseToDelete] = useState<number | null>(null);
 
-	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-	const [editCourseOpen, setEditCourseOpen] = useState(false);
-	const {courses: editCourses} = useCourses();
-	const handleOpenEditCourse = () => {
-		setEditCourseOpen(true);
-	};
+  const [editCourseOpen, setEditCourseOpen] = useState(false);
+  const {courses: editCourses} = useCourses();
+  const handleOpenEditCourse = () => {
+    setEditCourseOpen(true);
+  };
 
-	const handleCloseEditCourse = () => {
-		setEditCourseOpen(false);
-	};
+  const handleCloseEditCourse = () => {
+    setEditCourseOpen(false);
+  };
 
-	// Open and close the modal
-	const handleOpen = (
-		thisCourseName,
-		thisCourseTopics,
-		thisusercourseid,
-		allTopicsArray,
-	) => {
-		setOpen(true);
-		// Set the course name and topics
-		setCourseName(thisCourseName);
-		// Set the initial topics to be used in the reset function (student's topics)
-		setInitialCourseTopics(thisCourseTopics);
-		// Set the course topics to be used in the modal (all topics in the course)
-		setCourseTopics(allTopicsArray);
-		// Set the modified topics
-		setModifiedTopics(thisCourseTopics);
-		// Set the usercourseid to be used in the save function
-		setUsercourseid(thisusercourseid);
-	};
+  // Open and close the modal
+  const handleOpen = (
+    thisCourseName,
+    thisCourseTopics,
+    thisusercourseid,
+    allTopicsArray,
+  ) => {
+    setOpen(true);
+    // Set the course name and topics
+    setCourseName(thisCourseName);
+    // Set the initial topics to be used in the reset function (student's topics)
+    setInitialCourseTopics(thisCourseTopics);
+    // Set the course topics to be used in the modal (all topics in the course)
+    setCourseTopics(allTopicsArray);
+    // Set the modified topics
+    setModifiedTopics(thisCourseTopics);
+    // Set the usercourseid to be used in the save function
+    setUsercourseid(thisusercourseid);
+  };
 
-	// Handle the topic change
-	const handleTopicChange = topic => {
-		toast.info('Topics changed');
-		// If the topic is already in the modified topics array, remove it
-		setModifiedTopics(prevTopics =>
-			prevTopics.includes(topic)
-				? prevTopics.filter(t => t !== topic)
-				: [...prevTopics, topic],
-		);
-	};
-	const handleDeleteTopic = topic => {
-		// If the topic is already in the modified topics array, remove it
-		setCourseTopics(prevTopics => prevTopics.filter(t => t !== topic));
-		setModifiedTopics(prevTopics => prevTopics.filter(t => t !== topic));
-	};
+  // Handle the topic change
+  const handleTopicChange = (topic) => {
+    toast.info('Topics changed');
+    // If the topic is already in the modified topics array, remove it
+    setModifiedTopics((prevTopics) =>
+      prevTopics.includes(topic)
+        ? prevTopics.filter((t) => t !== topic)
+        : [...prevTopics, topic],
+    );
+  };
+  const handleDeleteTopic = (topic) => {
+    // If the topic is already in the modified topics array, remove it
+    setCourseTopics((prevTopics) => prevTopics.filter((t) => t !== topic));
+    setModifiedTopics((prevTopics) => prevTopics.filter((t) => t !== topic));
+  };
 
-	// Reset the data
-	const resetData = () => {
-		// Reset the topics to the initial topics
-		setCourseTopics(initialCourseTopics);
-		setModifiedTopics(initialCourseTopics);
-	};
+  // Reset the data
+  const resetData = () => {
+    // Reset the topics to the initial topics
+    setCourseTopics(initialCourseTopics);
+    setModifiedTopics(initialCourseTopics);
+  };
 
-	const handleSave = async usercourseid => {
-		console.log(usercourseid, 'USERCOURSEID');
-		console.log(modifiedTopics, 'MODIFIED TOPICS');
-		const token = localStorage.getItem('userToken');
-		if (!token) {
-			throw new Error('No token available');
-		}
-		try {
-			const response = await apiHooks.updateUserCourseTopics(
-				token,
-				usercourseid,
-				modifiedTopics,
-			);
-			console.log(response);
-			toast.success('Topics saved');
+  const handleSave = async (usercourseid) => {
+    console.log(usercourseid, 'USERCOURSEID');
+    console.log(modifiedTopics, 'MODIFIED TOPICS');
+    const token = localStorage.getItem('userToken');
+    if (!token) {
+      throw new Error('No token available');
+    }
+    try {
+      const response = await apiHooks.updateUserCourseTopics(
+        token,
+        usercourseid,
+        modifiedTopics,
+      );
+      console.log(response);
+      toast.success('Topics saved');
 
-			// Rerender the view after saving the topics
-			updateView && updateView();
-		} catch (error) {
-			toast.error('Error saving topics');
-		}
+      // Rerender the view after saving the topics
+      updateView && updateView();
+    } catch (error) {
+      toast.error('Error saving topics');
+    }
 
-		setOpen(false);
-	};
+    setOpen(false);
+  };
 
-	let additionalClasses = '';
+  let additionalClasses = '';
 
-	if (courses.length === 2) {
-		additionalClasses = 'grid-cols-1 md:grid-cols-2';
-	} else if (courses.length >= 3) {
-		additionalClasses =
-			'grid-cols-1 md:grid-cols-2 xl:grid-cols-3 h-fit sm:max-h-[30em] overflow-hidden sm:overflow-y-scroll';
-	} else if (courses.length === 1) {
-		additionalClasses = 'grid-cols-1';
-	}
-	const handleCourseSelect = (value: string) => {
-		const selected: SelectedCourse | undefined = editCourses.find(
-			(course: SelectedCourse) => `${course.name} ${course.code}` === value,
-		);
-		setSelectedCourse(selected || null);
-	};
+  if (courses.length === 2) {
+    additionalClasses = 'grid-cols-1 md:grid-cols-2';
+  } else if (courses.length >= 3) {
+    additionalClasses =
+      'grid-cols-1 md:grid-cols-2 xl:grid-cols-3 h-fit sm:max-h-[30em] overflow-hidden sm:overflow-y-scroll';
+  } else if (courses.length === 1) {
+    additionalClasses = 'grid-cols-1';
+  }
+  const handleCourseSelect = (value: string) => {
+    const selected: SelectedCourse | undefined = editCourses.find(
+      (course: SelectedCourse) => `${course.name} ${course.code}` === value,
+    );
+    setSelectedCourse(selected || null);
+  };
 
-	console.log(selectedCourse, 'SELECTED COURSE');
-	return (
-		<div className={`grid ${additionalClasses} gap-4 mt-4`}>
-			{courses
-				.filter(course => {
-					const endDate = new Date(course.endDate);
-					const isCourseEnded =
-						endDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
-					return !isCourseEnded || showEndedCourses;
-				})
-				.map((course, index) => {
-					// Format the dates
-					const startDate = new Date(course.startDate).toLocaleDateString();
-					const endDate = new Date(course.endDate);
-					const endDateString = endDate.toLocaleDateString();
-					const studentsTopicsArray = course.selected_topics
-						? course.selected_topics.split(',')
-						: course.topic_names
-						? course.topic_names.split(',')
-						: [];
-					// Format the topics
-					const topics = course.selected_topics
-						? // If the course has selected topics by the student, use those
-						  course.selected_topics.replace(/,/g, ', ') // Replace commas with commas and spaces
-						: // Otherwise use the default topics
-						course.topic_names
-						? course.topic_names.replace(/,/g, ', ')
-						: 'You have no assigned topics on this course';
+  console.log(selectedCourse, 'SELECTED COURSE');
+  return (
+    <div className={`grid ${additionalClasses} gap-4 mt-4`}>
+      {courses
+        .filter((course) => {
+          const endDate = new Date(course.endDate);
+          const isCourseEnded =
+            endDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
+          return !isCourseEnded || showEndedCourses;
+        })
+        .map((course, index) => {
+          // Format the dates
+          const startDate = new Date(course.startDate).toLocaleDateString();
+          const endDate = new Date(course.endDate);
+          const endDateString = endDate.toLocaleDateString();
+          const studentsTopicsArray = course.selected_topics
+            ? course.selected_topics.split(',')
+            : course.topic_names
+            ? course.topic_names.split(',')
+            : [];
+          // Format the topics
+          const topics = course.selected_topics
+            ? // If the course has selected topics by the student, use those
+              course.selected_topics.replace(/,/g, ', ') // Replace commas with commas and spaces
+            : // Otherwise use the default topics
+            course.topic_names
+            ? course.topic_names.replace(/,/g, ', ')
+            : 'You have no assigned topics on this course';
 
-					const allTopicsArray = course?.topic_names.split(',');
-					// Check if the course has ended
-					const isCourseEnded =
-						endDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
+          const allTopicsArray = course?.topic_names.split(',');
+          // Check if the course has ended
+          const isCourseEnded =
+            endDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
 
-					return (
-						<Tooltip
-							placement="top"
-							title={isCourseEnded ? 'Course has ended' : ''}
-							key={index}
-						>
-							<div
-								className={`p-5 bg-white shadow-md rounded-lg relative ${
-									isCourseEnded ? 'opacity-50' : ''
-								}`}
-							>
-								{isCourseEnded && (
-									<div className="absolute top-2 right-2">
-										<ReportIcon style={{color: 'red'}} />
-									</div>
-								)}
-								<h2 className="sm:text-2xl text-lg underline underline-offset-8 decoration-metropoliaMainOrange font-bold mb-2 text-black">
-									{course.course_name + ' ' + course.code}
-								</h2>
-								<p className="mb-1">
-									<strong>Assigned Topics:</strong> {topics}
-								</p>
-								{user?.role !== 'student' && (
-									<p className="mb-1">
-										<strong>All Topics on course:</strong>{' '}
-										{course?.topic_names.replace(/,/g, ', ')}
-									</p>
-								)}
-								<p className="mb-1">
-									<strong>Start Date:</strong> {startDate}
-								</p>
-								<p className="mb-1">
-									<strong>End Date:</strong> {endDateString}
-								</p>
-								<h2 className="text-gray-700 mt-2 text-lg font-bold">Instructors</h2>
-								<ul>
-									{course.instructor_name.split(',').map((instructor, index) => (
-										<li key={index}>{instructor.trim()}</li>
-									))}
-								</ul>
-								<div className="flex justify-between items-center flex-wrap">
-									<button
-										className={`mt-4 mr-4 transition font-bold md:text-base text-sm py-2 px-4 rounded ${
-											isCourseEnded
-												? 'bg-metropoliaSupportRed hover:bg-red-900'
-												: 'bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange'
-										} text-white`}
-										onClick={() =>
-											user?.role === 'student'
-												? navigate(`/student/courses/attendance/${course.usercourseid}`)
-												: navigate(
-														user?.role === 'admin'
-															? `/counselor/students/attendance/${course.usercourseid}`
-															: `/${user?.role}/students/attendance/${course.usercourseid}`,
-												  )
-										}
-									>
-										Attendance
-									</button>
-									{user?.role !== 'student' && (
-										<>
-											<button
-												className={`mt-4 mr-2 transition md:text-base text-sm md:mr-4 font-bold py-2 px-4 rounded ${
-													isCourseEnded
-														? 'bg-metropoliaSupportRed hover:bg-red-900'
-														: 'bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange'
-												} text-white`}
-												onClick={() =>
-													handleOpen(
-														course.course_name,
-														studentsTopicsArray,
-														course.usercourseid,
-														allTopicsArray,
-													)
-												}
-											>
-												Edit Topics for Student
-											</button>
-											<Tooltip title="Remove student from course">
-												<div className="w-[2.5em] mt-5  right-5 bg-gray-100 rounded-lg">
-													<IconButton
-														onClick={() => {
-															setIsDeleteModalOpen(true);
-															setCourseToDelete(course.usercourseid); // Set the course to delete
-														}}
-														aria-label="remove student"
-													>
-														<Delete style={{color: 'red'}} />
-													</IconButton>
-												</div>
-											</Tooltip>
-											<DeleteModal
-												isOpen={isDeleteModalOpen}
-												onDelete={() => {
-													if (courseToDelete !== null) {
-														handleRemoveStudentFromCourse &&
-															handleRemoveStudentFromCourse(courseToDelete);
-														setIsDeleteModalOpen(false); // Close the modal
-													}
-												}}
-												student={true}
-												onClose={() => setIsDeleteModalOpen(false)}
-											/>
-											<EditTopicsModal
-												open={open}
-												setOpen={setOpen}
-												courseName={courseName} // replace 'courseName' with the actual course name
-												newTopic={newTopic}
-												setNewTopic={setNewTopic}
-												courseTopics={courseTopics}
-												setCourseTopics={setCourseTopics}
-												modifiedTopics={modifiedTopics}
-												handleTopicChange={handleTopicChange}
-												handleDeleteTopic={handleDeleteTopic}
-												resetData={resetData}
-												counselor={true}
-												usercourseid={usercourseid}
-												handleSave={handleSave}
-											/>
-										</>
-									)}
-								</div>
-							</div>
-						</Tooltip>
-					);
-				})}
-			{user?.role !== 'student' && (
-				<>
-					<div
-						className="flex items-center justify-center text-center bg-gray-200 rounded-lg p-4 cursor-pointer transition-colors duration-200 ease-in-out hover:bg-gray-300"
-						onClick={() => {
-							handleOpenEditCourse();
-						}}
-					>
-						<button className="flex flex-col items-center">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-								className="h-8 w-8 mb-2"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									strokeWidth={2}
-									d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-								/>
-							</svg>
-							Add student to another course
-						</button>
-					</div>
-					<Modal open={editCourseOpen} onClose={handleCloseEditCourse}>
-						<div className="flex items-center justify-center">
-							<div className="bg-white rounded-lg p-8 m-4 max-w-xl mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-								<div>
-									<Autocomplete
-										className="sm:w-[20em] w-1/2"
-										freeSolo
-										options={editCourses.map(
-											(course: SelectedCourse) => `${course.name} ${course.code}`,
-										)}
-										onChange={(_, value) => handleCourseSelect(value as string)}
-										value={
-											selectedCourse
-												? `${selectedCourse.name} ${selectedCourse.code}`
-												: null
-										}
-										renderInput={params => (
-											<TextField
-												{...params}
-												label="Search courses"
-												margin="normal"
-												variant="outlined"
-											/>
-										)}
-									/>
-									{selectedCourse && (
-										<div>
-											<p className="mt-2">
-												{selectedCourse?.name} {selectedCourse?.code}
-											</p>
-											<p className="mt-2">
-												Topics: {selectedCourse?.topic_names.split(',').join(', ')}
-											</p>
-											<p className="mt-2">
-												Course Started:{' '}
-												{new Date(selectedCourse?.start_date).toLocaleDateString()}
-											</p>
-											<p className="mt-2">
-												Course ends:{' '}
-												{new Date(selectedCourse?.end_date).toLocaleDateString()}
-											</p>
-											<p className="mt-2">
-												Student group: {selectedCourse?.studentgroup_name}
-											</p>
-											<p className="mt-2">
-												Course created:{' '}
-												{new Date(selectedCourse?.created_at).toLocaleDateString()}
-											</p>
-										</div>
-									)}
-									<button
-										className="mt-4 bg-metropoliaMainOrange transition hover:bg-metropoliaSecondaryOrange text-white font-bold py-2 px-4 rounded"
-										onClick={() => {
-											handleAddStudentToCourse &&
-												handleAddStudentToCourse(selectedCourse?.courseid);
-											handleCloseEditCourse();
-										}}
-									>
-										Add Student to course
-									</button>
-								</div>
-							</div>
-						</div>
-					</Modal>
-				</>
-			)}
-		</div>
-	);
+          return (
+            <Tooltip
+              placement='top'
+              title={isCourseEnded ? 'Course has ended' : ''}
+              key={index}>
+              <div
+                className={`p-5 bg-white shadow-md rounded-lg relative ${
+                  isCourseEnded ? 'opacity-50' : ''
+                }`}>
+                {isCourseEnded && (
+                  <div className='absolute top-2 right-2'>
+                    <ReportIcon style={{color: 'red'}} />
+                  </div>
+                )}
+                <h2 className='mb-2 text-lg font-bold text-black underline sm:text-2xl underline-offset-8 decoration-metropoliaMainOrange'>
+                  {course.course_name + ' ' + course.code}
+                </h2>
+                <p className='mb-1'>
+                  <strong>Assigned Topics:</strong> {topics}
+                </p>
+                {user?.role !== 'student' && (
+                  <p className='mb-1'>
+                    <strong>All Topics on course:</strong>{' '}
+                    {course?.topic_names.replace(/,/g, ', ')}
+                  </p>
+                )}
+                <p className='mb-1'>
+                  <strong>Start Date:</strong> {startDate}
+                </p>
+                <p className='mb-1'>
+                  <strong>End Date:</strong> {endDateString}
+                </p>
+                <h2 className='mt-2 text-lg font-bold text-gray-700'>
+                  Instructors
+                </h2>
+                <ul>
+                  {course.instructor_name
+                    .split(',')
+                    .map((instructor, index) => (
+                      <li key={index}>{instructor.trim()}</li>
+                    ))}
+                </ul>
+                <div className='flex flex-wrap items-center justify-between'>
+                  <button
+                    className={`mt-4 mr-4 transition font-bold md:text-base text-sm py-2 px-4 rounded ${
+                      isCourseEnded
+                        ? 'bg-metropoliaSupportRed hover:bg-red-900'
+                        : 'bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange'
+                    } text-white`}
+                    onClick={() =>
+                      user?.role === 'student'
+                        ? navigate(
+                            `/student/courses/attendance/${course.usercourseid}`,
+                          )
+                        : navigate(
+                            user?.role === 'admin'
+                              ? `/counselor/students/attendance/${course.usercourseid}`
+                              : `/${user?.role}/students/attendance/${course.usercourseid}`,
+                          )
+                    }>
+                    Attendance
+                  </button>
+                  {user?.role !== 'student' && (
+                    <>
+                      <button
+                        className={`mt-4 mr-2 transition md:text-base text-sm md:mr-4 font-bold py-2 px-4 rounded ${
+                          isCourseEnded
+                            ? 'bg-metropoliaSupportRed hover:bg-red-900'
+                            : 'bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange'
+                        } text-white`}
+                        onClick={() =>
+                          handleOpen(
+                            course.course_name,
+                            studentsTopicsArray,
+                            course.usercourseid,
+                            allTopicsArray,
+                          )
+                        }>
+                        Edit Topics for Student
+                      </button>
+                      <Tooltip title='Remove student from course'>
+                        <div className='w-[2.5em] mt-5  right-5 bg-gray-100 rounded-lg'>
+                          <IconButton
+                            onClick={() => {
+                              setIsDeleteModalOpen(true);
+                              setCourseToDelete(course.usercourseid); // Set the course to delete
+                            }}
+                            aria-label='remove student'>
+                            <Delete style={{color: 'red'}} />
+                          </IconButton>
+                        </div>
+                      </Tooltip>
+                      <DeleteModal
+                        isOpen={isDeleteModalOpen}
+                        onDelete={() => {
+                          if (courseToDelete !== null) {
+                            handleRemoveStudentFromCourse &&
+                              handleRemoveStudentFromCourse(courseToDelete);
+                            setIsDeleteModalOpen(false); // Close the modal
+                          }
+                        }}
+                        student={true}
+                        onClose={() => setIsDeleteModalOpen(false)}
+                      />
+                      <EditTopicsModal
+                        open={open}
+                        setOpen={setOpen}
+                        courseName={courseName} // replace 'courseName' with the actual course name
+                        newTopic={newTopic}
+                        setNewTopic={setNewTopic}
+                        courseTopics={courseTopics}
+                        setCourseTopics={setCourseTopics}
+                        modifiedTopics={modifiedTopics}
+                        handleTopicChange={handleTopicChange}
+                        handleDeleteTopic={handleDeleteTopic}
+                        resetData={resetData}
+                        counselor={true}
+                        usercourseid={usercourseid}
+                        handleSave={handleSave}
+                      />
+                    </>
+                  )}
+                </div>
+              </div>
+            </Tooltip>
+          );
+        })}
+      {user?.role !== 'student' && (
+        <>
+          <div
+            className='flex items-center justify-center p-4 text-center transition-colors duration-200 ease-in-out bg-gray-200 rounded-lg cursor-pointer hover:bg-gray-300'
+            onClick={() => {
+              handleOpenEditCourse();
+            }}>
+            <button className='flex flex-col items-center'>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+                className='w-8 h-8 mb-2'>
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M12 6v6m0 0v6m0-6h6m-6 0H6'
+                />
+              </svg>
+              Add student to another course
+            </button>
+          </div>
+          <Modal open={editCourseOpen} onClose={handleCloseEditCourse}>
+            <div className='flex items-center justify-center'>
+              <div className='absolute max-w-xl p-8 m-4 mx-auto transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg top-1/2 left-1/2'>
+                <div>
+                  <Autocomplete
+                    className='sm:w-[20em] w-1/2'
+                    freeSolo
+                    options={editCourses.map(
+                      (course: SelectedCourse) =>
+                        `${course.name} ${course.code}`,
+                    )}
+                    onChange={(_, value) => handleCourseSelect(value as string)}
+                    value={
+                      selectedCourse
+                        ? `${selectedCourse.name} ${selectedCourse.code}`
+                        : null
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label='Search courses'
+                        margin='normal'
+                        variant='outlined'
+                      />
+                    )}
+                  />
+                  {selectedCourse && (
+                    <div>
+                      <p className='mt-2'>
+                        {selectedCourse?.name} {selectedCourse?.code}
+                      </p>
+                      <p className='mt-2'>
+                        Topics:{' '}
+                        {selectedCourse?.topic_names.split(',').join(', ')}
+                      </p>
+                      <p className='mt-2'>
+                        Course Started:{' '}
+                        {new Date(
+                          selectedCourse?.start_date,
+                        ).toLocaleDateString()}
+                      </p>
+                      <p className='mt-2'>
+                        Course ends:{' '}
+                        {new Date(
+                          selectedCourse?.end_date,
+                        ).toLocaleDateString()}
+                      </p>
+                      <p className='mt-2'>
+                        Student group: {selectedCourse?.studentgroup_name}
+                      </p>
+                      <p className='mt-2'>
+                        Course created:{' '}
+                        {new Date(
+                          selectedCourse?.created_at,
+                        ).toLocaleDateString()}
+                      </p>
+                    </div>
+                  )}
+                  <button
+                    className='px-4 py-2 mt-4 font-bold text-white transition rounded bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange'
+                    onClick={() => {
+                      handleAddStudentToCourse &&
+                        handleAddStudentToCourse(selectedCourse?.courseid);
+                      handleCloseEditCourse();
+                    }}>
+                    Add Student to course
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Modal>
+        </>
+      )}
+    </div>
+  );
 };
 
 export default StudentCourseGrid;

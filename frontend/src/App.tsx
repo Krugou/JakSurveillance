@@ -13,30 +13,30 @@ const intervalMS = 60 * 60 * 1000;
  * Main application component.
  */
 const App = () => {
-	// Register service worker
-	useRegisterSW({
-		onRegistered(r) {
-			if (r) {
-				console.log('Service worker registered successfully');
-				// Update service worker every hour
-				setInterval(() => {
-					console.log('Updating service worker registration');
-					r.update();
-				}, intervalMS);
-			} else {
-				console.log('Service worker registration failed');
-			}
-		},
-	});
+  // Register service worker
+  useRegisterSW({
+    onRegistered(r) {
+      if (r) {
+        console.log('Service worker registered successfully');
+        // Update service worker every hour
+        setInterval(() => {
+          console.log('Updating service worker registration');
+          r.update();
+        }, intervalMS);
+      } else {
+        console.log('Service worker registration failed');
+      }
+    },
+  });
 
-	return (
-		<UserProvider>
-			<ToastContainer hideProgressBar={true} />
-			<Router basename={import.meta.env.BASE_URL}>
-				<AllRoutes />
-			</Router>
-		</UserProvider>
-	);
+  return (
+    <UserProvider>
+      <ToastContainer hideProgressBar={true} />
+      <Router basename={import.meta.env.BASE_URL}>
+        <AllRoutes />
+      </Router>
+    </UserProvider>
+  );
 };
 
 export default App;

@@ -19,21 +19,21 @@ const ExtractJWT = passportJWT.ExtractJwt;
  * @returns {void}
  */
 passport.use(
-	new Strategy(async (email: string, _password: string, done: DoneFunction) => {
-		try {
-			// Find a user in the database with the provided email
-			const user: User | null = await UserModel.getAllUserInfo(email);
-			// Check if the user exists
-			// console.log(email, 'IAWJDUOIAWDIOJAWD ');
-			if (user === null || user === undefined) {
-				return done(null, false, {message: 'Incorrect username.'});
-			}
+  new Strategy(async (email: string, _password: string, done: DoneFunction) => {
+    try {
+      // Find a user in the database with the provided email
+      const user: User | null = await UserModel.getAllUserInfo(email);
+      // Check if the user exists
+      // console.log(email, 'IAWJDUOIAWDIOJAWD ');
+      if (user === null || user === undefined) {
+        return done(null, false, {message: 'Incorrect username.'});
+      }
 
-			return done(null, user, {message: 'Logged In Successfully'});
-		} catch (err) {
-			return done(err instanceof Error ? err : new Error(String(err)));
-		}
-	}),
+      return done(null, user, {message: 'Logged In Successfully'});
+    } catch (err) {
+      return done(err instanceof Error ? err : new Error(String(err)));
+    }
+  }),
 );
 
 /**
@@ -43,16 +43,16 @@ passport.use(
  * @returns {void}
  */
 passport.use(
-	new JWTStrategy(
-		{
-			jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-			secretOrKey: process.env.JWT_SECRET as string, // Assert process.env.JWT_SECRET as a string
-		},
-		(jwtPayload: JwtPayload, done: DoneJwtFunction) => {
-			//console.log('JWTStrategy', jwtPayload); // Log the JWT payload
-			done(null, jwtPayload); // Pass the JWT payload as the authenticated user
-		},
-	),
+  new JWTStrategy(
+    {
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+      secretOrKey: process.env.JWT_SECRET as string, // Assert process.env.JWT_SECRET as a string
+    },
+    (jwtPayload: JwtPayload, done: DoneJwtFunction) => {
+      //console.log('JWTStrategy', jwtPayload); // Log the JWT payload
+      done(null, jwtPayload); // Pass the JWT payload as the authenticated user
+    },
+  ),
 );
 
 export default passport; // Export passport as the default export

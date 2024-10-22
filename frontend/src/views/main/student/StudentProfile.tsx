@@ -18,32 +18,34 @@ import {useNavigate} from 'react-router-dom'; // Import useNavigate
  * @returns A JSX element representing the student profile component.
  */
 const StudentProfile: React.FC = () => {
-	const {user} = useContext(UserContext);
-	const navigate = useNavigate(); // Initialize useNavigate
+  const {user} = useContext(UserContext);
+  const navigate = useNavigate(); // Initialize useNavigate
 
-	// Error handling
-	if (!user) {
-		return <div>No user data available.</div>;
-	}
+  // Error handling
+  if (!user) {
+    return <div>No user data available.</div>;
+  }
 
-	return (
-		<div className="flex flex-col items-center justify-center h-fit p-10 bg-white rounded-lg font-sans">
-			<h1 className="text-xl sm:text-4xl font-bold mb-8 mt-5">Student Profile</h1>
-			<div className="text-md sm:text-xl mb-4">
-				<ProfileInfo user={user} />
-				<p className="mb-5 mt-5">
-					<strong>Student Group:</strong>{' '}
-					<span className="profileStat">{user.group_name}</span>
-				</p>
-			</div>
-			<button
-				className="px-4 py-2 mt-4 bg-metropoliaMainOrange transition text-white rounded hover:bg-metropoliaSecondaryOrange"
-				onClick={() => navigate('/student/courses')} // Navigate to /student/courses when the button is clicked
-			>
-				My Courses
-			</button>
-		</div>
-	);
+  return (
+    <div className='flex flex-col items-center justify-center p-10 font-sans bg-white rounded-lg h-fit'>
+      <h1 className='mt-5 mb-8 text-xl font-bold sm:text-4xl'>
+        Student Profile
+      </h1>
+      <div className='mb-4 text-md sm:text-xl'>
+        <ProfileInfo user={user} />
+        <p className='mt-5 mb-5'>
+          <strong>Student Group:</strong>{' '}
+          <span className='profileStat'>{user.group_name}</span>
+        </p>
+      </div>
+      <button
+        className='px-4 py-2 mt-4 text-white transition rounded bg-metropoliaMainOrange hover:bg-metropoliaSecondaryOrange'
+        onClick={() => navigate('/student/courses')} // Navigate to /student/courses when the button is clicked
+      >
+        My Courses
+      </button>
+    </div>
+  );
 };
 
 export default StudentProfile;

@@ -18,40 +18,40 @@ import MainViewTitle from '../../../components/main/titles/MainViewTitle';
  * @returns A JSX element representing the main view component.
  */
 const MainView: React.FC = () => {
-	return (
-		<div className="w-full">
-			<MainViewTitle role={'Student'} />
-			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-fit m-auto p-5 justify-center items-center gap-4">
-				<Card
-					path="/student/qr"
-					title="Attendance QR Scanner"
-					description="Scan QR to mark attendance"
-				/>
-				<Card
-					path="/student/profile"
-					title="Your Profile"
-					description="View your own profile"
-				/>
-				<Card
-					path="/student/courses"
-					title="Your Courses"
-					description="View your own courses"
-				/>
-				<Card
-					path="/student/helpvideos"
-					title="Instructions"
-					description="See instructions for all available tasks"
-				/>
-				<Card
-					path="/student/aqr"
-					title="Attendance QR Scanner with Camera Selection"
-					description="Scan QR to mark attendance with camera selection"
-				/>
+  return (
+    <div className='w-full'>
+      <MainViewTitle role={'Student'} />
+      <div className='grid items-center justify-center grid-cols-1 gap-4 p-5 m-auto sm:grid-cols-2 lg:grid-cols-3 w-fit'>
+        <Card
+          path='/student/qr'
+          title='Attendance QR Scanner'
+          description='Scan QR to mark attendance'
+        />
+        <Card
+          path='/student/profile'
+          title='Your Profile'
+          description='View your own profile'
+        />
+        <Card
+          path='/student/courses'
+          title='Your Courses'
+          description='View your own courses'
+        />
+        <Card
+          path='/student/helpvideos'
+          title='Instructions'
+          description='See instructions for all available tasks'
+        />
+        <Card
+          path='/student/aqr'
+          title='Attendance QR Scanner with Camera Selection'
+          description='Scan QR to mark attendance with camera selection'
+        />
 
-				<FeedbackCard role="student" />
-			</div>
-		</div>
-	);
+        <FeedbackCard role='student' />
+      </div>
+    </div>
+  );
 };
 
 export default MainView;

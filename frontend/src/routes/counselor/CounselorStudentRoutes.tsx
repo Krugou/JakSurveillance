@@ -15,18 +15,18 @@ import CounselorStudentsView from '../../views/main/counselor/students/Counselor
  * @returns {JSX.Element} The rendered CounselorStudentRoutes component.
  */
 const CounselorStudentRoutes: React.FC = () => {
-	return (
-		<Routes>
-			<Route path="/" element={<CounselorStudentsView />} />
-			<Route path=":id" element={<CounselorStudentDetail />} />
-			<Route path="*" element={<CounselorMainView />} />
-			<Route path="/:userid/modify" element={<CounselorStudentModify />} />
-			<Route
-				path="attendance/:usercourseid"
-				element={<CounselorStudentAttendances />}
-			/>
-		</Routes>
-	);
+  return (
+    <Routes>
+      <Route path='/' element={<CounselorStudentsView />} />
+      <Route path=':id' element={<CounselorStudentDetail />} />
+      <Route path='*' element={<CounselorMainView />} />
+      <Route path='/:userid/modify' element={<CounselorStudentModify />} />
+      <Route
+        path='attendance/:usercourseid'
+        element={<CounselorStudentAttendances />}
+      />
+    </Routes>
+  );
 };
 
 export default CounselorStudentRoutes;

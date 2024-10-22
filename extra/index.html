@@ -33,20 +33,20 @@
             style="display: inline-block; background-color: #ff5000; color: #ffffff; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; margin-left: 0.5rem;">Toggle
             links</button>
     </div>
-    <div id="scorescontainer" class=" hidden container mx-auto bg-white bg-opacity-50 px-4 py-8">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            <div class="text-black font-bold">Contributor</div>
-            <div class="text-black font-bold">Commits</div>
-            <div class="text-black font-bold">Score (%)</div>
-            <div class="text-black font-bold">Last Commit Time</div>
+    <div id="scorescontainer" class="container hidden px-4 py-8 mx-auto bg-white bg-opacity-50 ">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            <div class="font-bold text-black">Contributor</div>
+            <div class="font-bold text-black">Commits</div>
+            <div class="font-bold text-black">Score (%)</div>
+            <div class="font-bold text-black">Last Commit Time</div>
         </div>
         <div id="dataContainer">
             <!-- Data will be inserted here -->
         </div>
         <canvas id="myChart"></canvas>
     </div>
-    <div id="linkscontainer" class=" hidden container mx-auto bg-white bg-opacity-50 px-4 py-8">
-        <div id="dataContainer2" class="container mx-auto px-4 py-8"> </div>
+    <div id="linkscontainer" class="container hidden px-4 py-8 mx-auto bg-white bg-opacity-50 ">
+        <div id="dataContainer2" class="container px-4 py-8 mx-auto"> </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

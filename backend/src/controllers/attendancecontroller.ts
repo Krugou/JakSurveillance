@@ -14,64 +14,64 @@ import usercoursesModel from '../models/usercoursemodel.js';
  * @method deleteAttendance - Deletes an attendance record.
  */
 export interface AttendanceController {
-	/**
-	 * Inserts a new attendance record.
-	 *
-	 * @param {string} status - The attendance status.
-	 * @param {string} date - The date of the lecture.
-	 * @param {string} studentnumber - The student number.
-	 * @param {string} lectureid - The lecture ID.
-	 * @returns {Promise<unknown>} A promise that resolves when the attendance record has been inserted.
-	 */
-	insertIntoAttendance: (
-		status: string,
-		date: string,
-		studentnumber: string,
-		lectureid: string,
-	) => Promise<unknown>;
-	/**
-	 * Checks and inserts attendance records for students not present.
-	 *
-	 * @param {string} date - The date of the lecture.
-	 * @param {string[]} studentnumbers - The student numbers.
-	 * @param {string} lectureid - The lecture ID.
-	 * @returns {Promise<unknown>} A promise that resolves when the attendance records have been inserted.
-	 */
-	checkAndInsertStatusNotPresentAttendance: (
-		date: string,
-		studentnumbers: string[],
-		lectureid: string,
-	) => Promise<unknown>;
+  /**
+   * Inserts a new attendance record.
+   *
+   * @param {string} status - The attendance status.
+   * @param {string} date - The date of the lecture.
+   * @param {string} studentnumber - The student number.
+   * @param {string} lectureid - The lecture ID.
+   * @returns {Promise<unknown>} A promise that resolves when the attendance record has been inserted.
+   */
+  insertIntoAttendance: (
+    status: string,
+    date: string,
+    studentnumber: string,
+    lectureid: string,
+  ) => Promise<unknown>;
+  /**
+   * Checks and inserts attendance records for students not present.
+   *
+   * @param {string} date - The date of the lecture.
+   * @param {string[]} studentnumbers - The student numbers.
+   * @param {string} lectureid - The lecture ID.
+   * @returns {Promise<unknown>} A promise that resolves when the attendance records have been inserted.
+   */
+  checkAndInsertStatusNotPresentAttendance: (
+    date: string,
+    studentnumbers: string[],
+    lectureid: string,
+  ) => Promise<unknown>;
 
-	/**
-	 * Gets lectures and attendances by course ID.
-	 *
-	 * @param {string} courseid - The course ID.
-	 * @returns {Promise<unknown>} A promise that resolves to the lectures and attendances.
-	 */
-	getLecturesAndAttendancesByCourseId: (courseid: string) => Promise<unknown>;
-	/**
-	 * Updates the attendance status.
-	 *
-	 * @param {number} attendanceid - The attendance ID.
-	 * @param {number} status - The new attendance status.
-	 * @returns {Promise<unknown>} A promise that resolves when the attendance status has been updated.
-	 */
-	updateAttendanceStatus: (
-		attendanceid: number,
-		status: number,
-	) => Promise<unknown>;
-	/**
-	 * Deletes an attendance record.
-	 *
-	 * @param {string} studentnumber - The student number.
-	 * @param {string} lectureid - The lecture ID.
-	 * @returns {Promise<unknown>} A promise that resolves when the attendance record has been deleted.
-	 */
-	deleteAttendance: (
-		studentnumber: string,
-		lectureid: string,
-	) => Promise<unknown>;
+  /**
+   * Gets lectures and attendances by course ID.
+   *
+   * @param {string} courseid - The course ID.
+   * @returns {Promise<unknown>} A promise that resolves to the lectures and attendances.
+   */
+  getLecturesAndAttendancesByCourseId: (courseid: string) => Promise<unknown>;
+  /**
+   * Updates the attendance status.
+   *
+   * @param {number} attendanceid - The attendance ID.
+   * @param {number} status - The new attendance status.
+   * @returns {Promise<unknown>} A promise that resolves when the attendance status has been updated.
+   */
+  updateAttendanceStatus: (
+    attendanceid: number,
+    status: number,
+  ) => Promise<unknown>;
+  /**
+   * Deletes an attendance record.
+   *
+   * @param {string} studentnumber - The student number.
+   * @param {string} lectureid - The lecture ID.
+   * @returns {Promise<unknown>} A promise that resolves when the attendance record has been deleted.
+   */
+  deleteAttendance: (
+    studentnumber: string,
+    lectureid: string,
+  ) => Promise<unknown>;
 }
 
 /**
@@ -81,221 +81,221 @@ export interface AttendanceController {
  * @type {AttendanceController}
  */
 const attendanceController: AttendanceController = {
-	/**
-	 * Inserts a new attendance record.
-	 *
-	 * @param {string} status - The attendance status.
-	 * @param {string} date - The date of the lecture.
-	 * @param {string} studentnumber - The student number.
-	 * @param {string} lectureid - The lecture ID.
-	 * @returns {Promise<unknown>} A promise that resolves when the attendance record has been inserted.
-	 */
-	async insertIntoAttendance(
-		status: string,
-		date: string,
-		studentnumber: string,
-		lectureid: string,
-	): Promise<unknown> {
-		try {
-			if (!status || !date || !studentnumber || !lectureid) {
-				throw new Error('Invalid parameters');
-			}
-			const courseId = await lectureModel.getCourseIDByLectureID(lectureid);
-			if (courseId === null) {
-				throw new Error('Course ID is null');
-			}
-			const usercourseResult = await usercoursesModel.getUserCourseId(
-				studentnumber,
-				courseId,
-			);
+  /**
+   * Inserts a new attendance record.
+   *
+   * @param {string} status - The attendance status.
+   * @param {string} date - The date of the lecture.
+   * @param {string} studentnumber - The student number.
+   * @param {string} lectureid - The lecture ID.
+   * @returns {Promise<unknown>} A promise that resolves when the attendance record has been inserted.
+   */
+  async insertIntoAttendance(
+    status: string,
+    date: string,
+    studentnumber: string,
+    lectureid: string,
+  ): Promise<unknown> {
+    try {
+      if (!status || !date || !studentnumber || !lectureid) {
+        throw new Error('Invalid parameters');
+      }
+      const courseId = await lectureModel.getCourseIDByLectureID(lectureid);
+      if (courseId === null) {
+        throw new Error('Course ID is null');
+      }
+      const usercourseResult = await usercoursesModel.getUserCourseId(
+        studentnumber,
+        courseId,
+      );
 
-			if (!Array.isArray(usercourseResult) || usercourseResult.length === 0) {
-				throw new Error(
-					`Usercourse not found for the studentnumber: ${studentnumber}`,
-				);
-			}
+      if (!Array.isArray(usercourseResult) || usercourseResult.length === 0) {
+        throw new Error(
+          `Usercourse not found for the studentnumber: ${studentnumber}`,
+        );
+      }
 
-			if ('usercourseid' in usercourseResult[0]) {
-				const usercourseid = usercourseResult[0].usercourseid;
-				const attendanceResultCheck = await attendanceModel.checkAttendance(
-					usercourseid,
-					Number(lectureid),
-				);
+      if ('usercourseid' in usercourseResult[0]) {
+        const usercourseid = usercourseResult[0].usercourseid;
+        const attendanceResultCheck = await attendanceModel.checkAttendance(
+          usercourseid,
+          Number(lectureid),
+        );
 
-				if (!attendanceResultCheck || attendanceResultCheck.length > 0) {
-					throw new Error(
-						`Attendance already exists for the usercourseid: ${usercourseid}`,
-					);
-				}
+        if (!attendanceResultCheck || attendanceResultCheck.length > 0) {
+          throw new Error(
+            `Attendance already exists for the usercourseid: ${usercourseid}`,
+          );
+        }
 
-				const insertResult = await attendanceModel.insertAttendance(
-					Number(status),
-					date,
-					usercourseid,
-					lectureid,
-				);
+        const insertResult = await attendanceModel.insertAttendance(
+          Number(status),
+          date,
+          usercourseid,
+          lectureid,
+        );
 
-				if (!insertResult || !insertResult[0] || !insertResult[0].insertId) {
-					throw new Error('Failed to insert attendance');
-				}
+        if (!insertResult || !insertResult[0] || !insertResult[0].insertId) {
+          throw new Error('Failed to insert attendance');
+        }
 
-				const attendanceResult = await attendanceModel.getAttendanceById(
-					insertResult[0].insertId,
-				);
+        const attendanceResult = await attendanceModel.getAttendanceById(
+          insertResult[0].insertId,
+        );
 
-				if (!attendanceResult || attendanceResult.length === 0) {
-					throw new Error(
-						`Failed to get attendance by id: ${insertResult.insertId}`,
-					);
-				}
+        if (!attendanceResult || attendanceResult.length === 0) {
+          throw new Error(
+            `Failed to get attendance by id: ${insertResult.insertId}`,
+          );
+        }
 
-				// console.log('insertIntoAttendance ~ attendanceResult:', attendanceResult);
+        // console.log('insertIntoAttendance ~ attendanceResult:', attendanceResult);
 
-				return attendanceResult[0];
-			} else {
-				throw new Error('Invalid result: usercourseid property not found');
-			}
-		} catch (error) {
-			console.error(error);
-			throw error;
-		}
-	},
-	/**
-	 * Checks and inserts attendance records for students not present.
-	 *
-	 * @param {string} date - The date of the lecture.
-	 * @param {string[]} studentnumbers - The student numbers.
-	 * @param {string} lectureid - The lecture ID.
-	 * @returns {Promise<unknown>} A promise that resolves when the attendance records have been inserted.
-	 */
-	async checkAndInsertStatusNotPresentAttendance(
-		date: string,
-		studentnumbers: string[],
-		lectureid: string,
-	): Promise<void> {
-		try {
-			for (const studentnumber of studentnumbers) {
-				const courseId = await lectureModel.getCourseIDByLectureID(lectureid);
-				if (courseId === null) {
-					console.error('Course ID is null');
-					continue;
-				}
+        return attendanceResult[0];
+      } else {
+        throw new Error('Invalid result: usercourseid property not found');
+      }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+  /**
+   * Checks and inserts attendance records for students not present.
+   *
+   * @param {string} date - The date of the lecture.
+   * @param {string[]} studentnumbers - The student numbers.
+   * @param {string} lectureid - The lecture ID.
+   * @returns {Promise<unknown>} A promise that resolves when the attendance records have been inserted.
+   */
+  async checkAndInsertStatusNotPresentAttendance(
+    date: string,
+    studentnumbers: string[],
+    lectureid: string,
+  ): Promise<void> {
+    try {
+      for (const studentnumber of studentnumbers) {
+        const courseId = await lectureModel.getCourseIDByLectureID(lectureid);
+        if (courseId === null) {
+          console.error('Course ID is null');
+          continue;
+        }
 
-				const usercourseResult = (await usercoursesModel.getUserCourseId(
-					studentnumber,
-					courseId,
-				)) as RowDataPacket[];
+        const usercourseResult = (await usercoursesModel.getUserCourseId(
+          studentnumber,
+          courseId,
+        )) as RowDataPacket[];
 
-				if (usercourseResult.length === 0) {
-					console.error(
-						'Usercourse not found for the studentnumber:',
-						studentnumber,
-					);
-					continue;
-				}
+        if (usercourseResult.length === 0) {
+          console.error(
+            'Usercourse not found for the studentnumber:',
+            studentnumber,
+          );
+          continue;
+        }
 
-				const usercourseid = usercourseResult[0].usercourseid;
+        const usercourseid = usercourseResult[0].usercourseid;
 
-				const attendanceResult =
-					await attendanceModel.getAttendanceByUserCourseIdDateLectureId(
-						usercourseid,
-						lectureid,
-					);
+        const attendanceResult =
+          await attendanceModel.getAttendanceByUserCourseIdDateLectureId(
+            usercourseid,
+            lectureid,
+          );
 
-				if (attendanceResult.length === 0) {
-					const status = 0;
-					await attendanceModel.insertAttendance(
-						status,
-						date,
-						usercourseid,
-						lectureid,
-					);
-				}
-			}
-			return Promise.resolve();
-		} catch (error) {
-			console.error(error);
-			return Promise.reject(error);
-		}
-	},
-	/**
-	 * Updates the attendance status.
-	 *
-	 * @param {number} attendanceid - The attendance ID.
-	 * @param {number} status - The new attendance status.
-	 * @returns {Promise<unknown>} A promise that resolves when the attendance status has been updated.
-	 */
-	async updateAttendanceStatus(attendanceid: number, status: number) {
-		try {
-			await attendanceModel.updateAttendanceStatus(attendanceid, status);
-			return true;
-		} catch (error) {
-			console.error(error);
-			return false;
-		}
-	},
-	/**
-	 * Gets lectures and attendances by course ID.
-	 *
-	 * @param {string} courseid - The course ID.
-	 * @returns {Promise<unknown>} A promise that resolves to the lectures and attendances.
-	 */
-	async getLecturesAndAttendancesByCourseId(courseid: string) {
-		try {
-			const lectures = await attendanceModel.getAttendaceByCourseId(courseid);
-			return lectures;
-		} catch (error) {
-			console.error(error);
-			return Promise.reject(error);
-		}
-	},
-	/**
-	 * Deletes an attendance record.
-	 *
-	 * @param {string} studentnumber - The student number.
-	 * @param {string} lectureid - The lecture ID.
-	 * @returns {Promise<unknown>} A promise that resolves when the attendance record has been deleted.
-	 */
-	async deleteAttendance(
-		studentnumber: string,
-		lectureid: string,
-	): Promise<boolean> {
-		try {
-			const courseId = await lectureModel.getCourseIDByLectureID(lectureid);
-			if (courseId === null) {
-				throw new Error('Course ID is null');
-			}
-			const usercourseResult = await usercoursesModel.getUserCourseId(
-				studentnumber,
-				courseId,
-			);
+        if (attendanceResult.length === 0) {
+          const status = 0;
+          await attendanceModel.insertAttendance(
+            status,
+            date,
+            usercourseid,
+            lectureid,
+          );
+        }
+      }
+      return Promise.resolve();
+    } catch (error) {
+      console.error(error);
+      return Promise.reject(error);
+    }
+  },
+  /**
+   * Updates the attendance status.
+   *
+   * @param {number} attendanceid - The attendance ID.
+   * @param {number} status - The new attendance status.
+   * @returns {Promise<unknown>} A promise that resolves when the attendance status has been updated.
+   */
+  async updateAttendanceStatus(attendanceid: number, status: number) {
+    try {
+      await attendanceModel.updateAttendanceStatus(attendanceid, status);
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+  /**
+   * Gets lectures and attendances by course ID.
+   *
+   * @param {string} courseid - The course ID.
+   * @returns {Promise<unknown>} A promise that resolves to the lectures and attendances.
+   */
+  async getLecturesAndAttendancesByCourseId(courseid: string) {
+    try {
+      const lectures = await attendanceModel.getAttendaceByCourseId(courseid);
+      return lectures;
+    } catch (error) {
+      console.error(error);
+      return Promise.reject(error);
+    }
+  },
+  /**
+   * Deletes an attendance record.
+   *
+   * @param {string} studentnumber - The student number.
+   * @param {string} lectureid - The lecture ID.
+   * @returns {Promise<unknown>} A promise that resolves when the attendance record has been deleted.
+   */
+  async deleteAttendance(
+    studentnumber: string,
+    lectureid: string,
+  ): Promise<boolean> {
+    try {
+      const courseId = await lectureModel.getCourseIDByLectureID(lectureid);
+      if (courseId === null) {
+        throw new Error('Course ID is null');
+      }
+      const usercourseResult = await usercoursesModel.getUserCourseId(
+        studentnumber,
+        courseId,
+      );
 
-			if (!Array.isArray(usercourseResult) || usercourseResult.length === 0) {
-				throw new Error(
-					`Usercourse not found for the studentnumber: ${studentnumber}`,
-				);
-			}
-			if ('usercourseid' in usercourseResult[0]) {
-				const usercourseid = usercourseResult[0].usercourseid;
+      if (!Array.isArray(usercourseResult) || usercourseResult.length === 0) {
+        throw new Error(
+          `Usercourse not found for the studentnumber: ${studentnumber}`,
+        );
+      }
+      if ('usercourseid' in usercourseResult[0]) {
+        const usercourseid = usercourseResult[0].usercourseid;
 
-				const deleteResult = await attendanceModel.deleteAttendance(
-					usercourseid,
-					Number(lectureid),
-				);
+        const deleteResult = await attendanceModel.deleteAttendance(
+          usercourseid,
+          Number(lectureid),
+        );
 
-				if (!deleteResult || deleteResult.affectedRows === 0) {
-					throw new Error('Failed to delete attendance');
-				}
+        if (!deleteResult || deleteResult.affectedRows === 0) {
+          throw new Error('Failed to delete attendance');
+        }
 
-				return true;
-			} else {
-				throw new Error('Invalid result: usercourseid property not found');
-			}
-		} catch (error) {
-			console.error(error);
-			return Promise.reject(error);
-		}
-	},
+        return true;
+      } else {
+        throw new Error('Invalid result: usercourseid property not found');
+      }
+    } catch (error) {
+      console.error(error);
+      return Promise.reject(error);
+    }
+  },
 };
 
 export default attendanceController;

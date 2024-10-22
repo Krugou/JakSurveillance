@@ -1,66 +1,63 @@
 import {
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogContentText,
-	DialogTitle,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from '@mui/material';
 import React from 'react';
 
 interface ConfirmDialogProps {
-	title: string;
-	children: React.ReactNode;
-	open: boolean;
-	setOpen: (value: boolean) => void;
-	onConfirm: () => void;
+  title: string;
+  children: React.ReactNode;
+  open: boolean;
+  setOpen: (value: boolean) => void;
+  onConfirm: () => void;
 }
 
 const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
-	title,
-	children,
-	open,
-	setOpen,
-	onConfirm,
+  title,
+  children,
+  open,
+  setOpen,
+  onConfirm,
 }) => {
-	const handleClose = () => {
-		setOpen(false);
-	};
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-	const handleConfirm = () => {
-		onConfirm();
-		setOpen(false);
-	};
+  const handleConfirm = () => {
+    onConfirm();
+    setOpen(false);
+  };
 
-	return (
-		<Dialog open={open} onClose={handleClose} aria-labelledby="confirm-dialog">
-			<DialogTitle
-				className="bg-metropoliaMainOrange text-white p-4"
-				id="confirm-dialog"
-			>
-				{title}
-			</DialogTitle>
-			<DialogContent>
-				<DialogContentText className=" pt-2" id="confirm-dialog-description">
-					{children}
-				</DialogContentText>
-			</DialogContent>
-			<DialogActions>
-				<button
-					className="bg-metropoliaMainOrange sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSecondaryOrange text-white font-bold rounded"
-					onClick={handleClose}
-				>
-					No
-				</button>
-				<button
-					className="bg-metropoliaSupportRed sm:w-fit transition h-fit p-2 mt-4 text-sm w-full hover:bg-metropoliaSupportRed text-white font-bold rounded"
-					onClick={handleConfirm}
-					autoFocus
-				>
-					Yes
-				</button>
-			</DialogActions>
-		</Dialog>
-	);
+  return (
+    <Dialog open={open} onClose={handleClose} aria-labelledby='confirm-dialog'>
+      <DialogTitle
+        className='p-4 text-white bg-metropoliaMainOrange'
+        id='confirm-dialog'>
+        {title}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText className='pt-2 ' id='confirm-dialog-description'>
+          {children}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <button
+          className='w-full p-2 mt-4 text-sm font-bold text-white transition rounded bg-metropoliaMainOrange sm:w-fit h-fit hover:bg-metropoliaSecondaryOrange'
+          onClick={handleClose}>
+          No
+        </button>
+        <button
+          className='w-full p-2 mt-4 text-sm font-bold text-white transition rounded bg-metropoliaSupportRed sm:w-fit h-fit hover:bg-metropoliaSupportRed'
+          onClick={handleConfirm}
+          autoFocus>
+          Yes
+        </button>
+      </DialogActions>
+    </Dialog>
+  );
 };
 
 export default ConfirmDialog;

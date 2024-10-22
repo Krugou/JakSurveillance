@@ -20,21 +20,21 @@ import AdminUserRoutes from './admin/AdminUserRoutes';
  * @returns {JSX.Element} The rendered AdminRoutes component.
  */
 const AdminRoutes = () => {
-	return (
-		<Routes>
-			<Route path="mainview" element={<AdminMainView />} />
-			<Route path="courses/*" element={<AdminCoursesRoutes />} />
-			<Route path="users/*" element={<AdminUserRoutes />} />
-			<Route path="profile" element={<AdminProfile />} />
-			<Route path="settings/*" element={<AdminSettingsRoutes />} />
-			<Route path="*" element={<AdminMainView />} />
-			<Route path="dashboard/*" element={<AdminDashboard />} />
-			<Route path="team" element={<Team />} />
-			<Route path="lectures/*" element={<AdminLecturesRoutes />} />
-			<Route path="newuser" element={<AdminNewUser />} />
-			<Route path="feedback" element={<Feedback />} />
-		</Routes>
-	);
+  return (
+    <Routes>
+      <Route path='mainview' element={<AdminMainView />} />
+      <Route path='courses/*' element={<AdminCoursesRoutes />} />
+      <Route path='users/*' element={<AdminUserRoutes />} />
+      <Route path='profile' element={<AdminProfile />} />
+      <Route path='settings/*' element={<AdminSettingsRoutes />} />
+      <Route path='*' element={<AdminMainView />} />
+      <Route path='dashboard/*' element={<AdminDashboard />} />
+      <Route path='team' element={<Team />} />
+      <Route path='lectures/*' element={<AdminLecturesRoutes />} />
+      <Route path='newuser' element={<AdminNewUser />} />
+      <Route path='feedback' element={<Feedback />} />
+    </Routes>
+  );
 };
 
 export default AdminRoutes;

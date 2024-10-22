@@ -15,18 +15,18 @@ const router: Router = express.Router();
  * @returns {Promise<Attendance[]>} A promise that resolves with all attendance records.
  */
 router.get(
-	'/',
-	checkUserRole(['admin', 'teacher', 'counselor']),
-	async (res: Response) => {
-		try {
-			const attendanceData = await attendanceModel.fetchAllAttendances();
-			res.json(attendanceData);
-		} catch (err) {
-			logger.error(err);
-			console.error(err);
-			res.status(500).send('Server error');
-		}
-	},
+  '/',
+  checkUserRole(['admin', 'teacher', 'counselor']),
+  async (res: Response) => {
+    try {
+      const attendanceData = await attendanceModel.fetchAllAttendances();
+      res.json(attendanceData);
+    } catch (err) {
+      logger.error(err);
+      console.error(err);
+      res.status(500).send('Server error');
+    }
+  },
 );
 /**
  * Route that fetches an attendance record by its ID.
@@ -35,25 +35,25 @@ router.get(
  * @returns {Promise<Attendance>} A promise that resolves with the attendance record, or a 404 status if not found.
  */
 router.get(
-	'/:id',
-	checkUserRole(['admin', 'teacher', 'counselor']),
-	[param('id').isNumeric().withMessage('ID must be a number')],
-	validate,
-	async (req: Request, res: Response) => {
-		try {
-			const id = Number(req.params.id);
-			const attendanceData = await attendanceModel.findByAttendanceId(id);
-			if (attendanceData) {
-				res.json(attendanceData);
-			} else {
-				res.status(404).send('Attendance not found');
-			}
-		} catch (err) {
-			logger.error(err);
-			console.error(err);
-			res.status(500).send('Server error');
-		}
-	},
+  '/:id',
+  checkUserRole(['admin', 'teacher', 'counselor']),
+  [param('id').isNumeric().withMessage('ID must be a number')],
+  validate,
+  async (req: Request, res: Response) => {
+    try {
+      const id = Number(req.params.id);
+      const attendanceData = await attendanceModel.findByAttendanceId(id);
+      if (attendanceData) {
+        res.json(attendanceData);
+      } else {
+        res.status(404).send('Attendance not found');
+      }
+    } catch (err) {
+      logger.error(err);
+      console.error(err);
+      res.status(500).send('Server error');
+    }
+  },
 );
 /**
  * Route that fetches all attendance records for a user's course.
@@ -62,38 +62,38 @@ router.get(
  * @returns {Promise<Attendance[]>} A promise that resolves with all attendance records for the user's course.
  */
 router.get(
-	'/usercourse/:id',
-	[param('id').isNumeric().withMessage('ID must be a number')],
-	validate,
-	async (req: Request, res: Response) => {
-		try {
-			const id = Number(req.params.id);
-			let userid = Number(req.user?.userid);
-			let userinfo;
-			if (
-				req.user?.role === 'teacher' ||
-				req.user?.role === 'admin' ||
-				req.user?.role === 'counselor'
-			) {
-				userinfo = await attendanceModel.getUserInfoByUserCourseId(id);
-				userid = userinfo?.userid;
-			}
-			const attendanceData =
-				await attendanceModel.findAllAttendancesByUserCourseId(id, userid);
-			attendanceData[0] && userinfo
-				? (attendanceData[0].userinfo = userinfo)
-				: null;
-			res.json(attendanceData);
-		} catch (err) {
-			logger.error(err);
-			console.error(err);
-			if (err instanceof Error) {
-				res.status(500).send(`Server error: ${err.message}`);
-			} else {
-				res.status(500).send('Server error');
-			}
-		}
-	},
+  '/usercourse/:id',
+  [param('id').isNumeric().withMessage('ID must be a number')],
+  validate,
+  async (req: Request, res: Response) => {
+    try {
+      const id = Number(req.params.id);
+      let userid = Number(req.user?.userid);
+      let userinfo;
+      if (
+        req.user?.role === 'teacher' ||
+        req.user?.role === 'admin' ||
+        req.user?.role === 'counselor'
+      ) {
+        userinfo = await attendanceModel.getUserInfoByUserCourseId(id);
+        userid = userinfo?.userid;
+      }
+      const attendanceData =
+        await attendanceModel.findAllAttendancesByUserCourseId(id, userid);
+      attendanceData[0] && userinfo
+        ? (attendanceData[0].userinfo = userinfo)
+        : null;
+      res.json(attendanceData);
+    } catch (err) {
+      logger.error(err);
+      console.error(err);
+      if (err instanceof Error) {
+        res.status(500).send(`Server error: ${err.message}`);
+      } else {
+        res.status(500).send('Server error');
+      }
+    }
+  },
 );
 /**
  * Route that creates a new attendance record.
@@ -106,37 +106,37 @@ router.get(
  */
 
 router.post(
-	'/',
-	checkUserRole(['admin', 'teacher', 'counselor']),
-	[
-		body('status').notEmpty().withMessage('Status is required'),
-		body('date').isISO8601().withMessage('Date must be in ISO 8601 format'),
-		body('studentnumber')
-			.isNumeric()
-			.withMessage('Student number must be a number'),
-		body('lectureid').isNumeric().withMessage('Lecture ID must be a number'),
-	],
-	validate,
-	async (req: Request, res: Response) => {
-		const {status, date, studentnumber, lectureid} = req.body;
-		try {
-			const insertedData = await attendanceController.insertIntoAttendance(
-				status,
-				date,
-				studentnumber,
-				lectureid,
-			);
-			res.status(200).send(insertedData);
-		} catch (err) {
-			logger.error(err);
-			console.error(err);
-			if (err instanceof Error) {
-				res.status(500).send(`Server error: ${err.message}`);
-			} else {
-				res.status(500).send('Server error');
-			}
-		}
-	},
+  '/',
+  checkUserRole(['admin', 'teacher', 'counselor']),
+  [
+    body('status').notEmpty().withMessage('Status is required'),
+    body('date').isISO8601().withMessage('Date must be in ISO 8601 format'),
+    body('studentnumber')
+      .isNumeric()
+      .withMessage('Student number must be a number'),
+    body('lectureid').isNumeric().withMessage('Lecture ID must be a number'),
+  ],
+  validate,
+  async (req: Request, res: Response) => {
+    const {status, date, studentnumber, lectureid} = req.body;
+    try {
+      const insertedData = await attendanceController.insertIntoAttendance(
+        status,
+        date,
+        studentnumber,
+        lectureid,
+      );
+      res.status(200).send(insertedData);
+    } catch (err) {
+      logger.error(err);
+      console.error(err);
+      if (err instanceof Error) {
+        res.status(500).send(`Server error: ${err.message}`);
+      } else {
+        res.status(500).send('Server error');
+      }
+    }
+  },
 );
 /**
  * Route that marks all students not present in a lecture as not present.
@@ -147,38 +147,38 @@ router.post(
  * @returns {Promise<void>} A promise that resolves when the operation is complete.
  */
 router.post(
-	'/lecturefinished/',
-	checkUserRole(['admin', 'teacher', 'counselor']),
-	[
-		body('date').isISO8601().withMessage('Date must be in ISO 8601 format'),
-		body('studentnumbers.*')
-			.isNumeric()
-			.withMessage('All student numbers must be numbers'),
-		body('lectureid').isNumeric().withMessage('Lecture ID must be a number'),
-	],
-	validate,
-	async (req: Request, res: Response) => {
-		try {
-			const {date, studentnumbers, lectureid} = req.body;
-			// console.log(
-			// 	'🚀 ~ file: attendanceRoutes.ts:75 ~ router.post ~ req.body:',
-			// 	req.body,
-			// );
-			await attendanceController.checkAndInsertStatusNotPresentAttendance(
-				date,
-				studentnumbers,
-				lectureid,
-			);
-			await lectureModel.updateLectureState(lectureid, 'closed');
-			res
-				.status(201)
-				.send('Attendance put as not present for rest of students not present');
-		} catch (err) {
-			logger.error(err);
-			console.error(err);
-			res.status(500).send('Server error');
-		}
-	},
+  '/lecturefinished/',
+  checkUserRole(['admin', 'teacher', 'counselor']),
+  [
+    body('date').isISO8601().withMessage('Date must be in ISO 8601 format'),
+    body('studentnumbers.*')
+      .isNumeric()
+      .withMessage('All student numbers must be numbers'),
+    body('lectureid').isNumeric().withMessage('Lecture ID must be a number'),
+  ],
+  validate,
+  async (req: Request, res: Response) => {
+    try {
+      const {date, studentnumbers, lectureid} = req.body;
+      // console.log(
+      // 	'🚀 ~ file: attendanceRoutes.ts:75 ~ router.post ~ req.body:',
+      // 	req.body,
+      // );
+      await attendanceController.checkAndInsertStatusNotPresentAttendance(
+        date,
+        studentnumbers,
+        lectureid,
+      );
+      await lectureModel.updateLectureState(lectureid, 'closed');
+      res
+        .status(201)
+        .send('Attendance put as not present for rest of students not present');
+    } catch (err) {
+      logger.error(err);
+      console.error(err);
+      res.status(500).send('Server error');
+    }
+  },
 );
 /**
  * Route that fetches all students in a lecture.
@@ -187,22 +187,22 @@ router.post(
  * @returns {Promise<Student[]>} A promise that resolves with all students in the lecture.
  */
 router.post(
-	'/getallstudentsinlecture/',
-	checkUserRole(['admin', 'teacher', 'counselor']),
-	[body('lectureid').isNumeric()],
-	async (req: Request, res: Response) => {
-		try {
-			const {lectureid} = req.body;
-			const allStudentsInLecture = await lectureController.getStudentsInLecture(
-				lectureid,
-			);
-			res.status(201).json(allStudentsInLecture);
-		} catch (err) {
-			logger.error(err);
-			console.error(err);
-			res.status(500).send('Server error');
-		}
-	},
+  '/getallstudentsinlecture/',
+  checkUserRole(['admin', 'teacher', 'counselor']),
+  [body('lectureid').isNumeric()],
+  async (req: Request, res: Response) => {
+    try {
+      const {lectureid} = req.body;
+      const allStudentsInLecture = await lectureController.getStudentsInLecture(
+        lectureid,
+      );
+      res.status(201).json(allStudentsInLecture);
+    } catch (err) {
+      logger.error(err);
+      console.error(err);
+      res.status(500).send('Server error');
+    }
+  },
 );
 /**
  * Route that deletes an attendance record.
@@ -212,25 +212,25 @@ router.post(
  * @returns {Promise<boolean>} A promise that resolves with true if the deletion was successful, or false otherwise.
  */
 router.post(
-	'/delete/',
-	checkUserRole(['admin', 'teacher', 'counselor']),
-	[body('studentnumber').isNumeric(), body('lectureid').isNumeric()],
-	async (req: Request, res: Response) => {
-		if (req.user) {
-			console.log('admin/attendance delete ', req.user?.email);
-			logger.info({useremail: req.user.email}, ' courses/attendance/delete ');
-		}
-		try {
-			const {studentnumber} = req.body;
-			const lectureid = req.body.lectureid;
-			await attendanceController.deleteAttendance(studentnumber, lectureid);
-			res.status(201).send(true);
-		} catch (err) {
-			logger.error(err);
-			console.error(err);
-			res.status(500).send(false);
-		}
-	},
+  '/delete/',
+  checkUserRole(['admin', 'teacher', 'counselor']),
+  [body('studentnumber').isNumeric(), body('lectureid').isNumeric()],
+  async (req: Request, res: Response) => {
+    if (req.user) {
+      console.log('admin/attendance delete ', req.user?.email);
+      logger.info({useremail: req.user.email}, ' courses/attendance/delete ');
+    }
+    try {
+      const {studentnumber} = req.body;
+      const lectureid = req.body.lectureid;
+      await attendanceController.deleteAttendance(studentnumber, lectureid);
+      res.status(201).send(true);
+    } catch (err) {
+      logger.error(err);
+      console.error(err);
+      res.status(500).send(false);
+    }
+  },
 );
 /**
  * Route that deletes a lecture by its ID.
@@ -239,26 +239,26 @@ router.post(
  * @returns {Promise<void>} A promise that resolves when the deletion is complete.
  */
 router.post(
-	'/deletelecture/',
-	checkUserRole(['admin', 'teacher', 'counselor']),
-	[body('lectureid').isNumeric()],
-	async (req: Request, res: Response) => {
-		if (req.user) {
-			logger.info(
-				{useremail: req.user.email},
-				' courses/attendance/lecture delete ',
-			);
-		}
-		try {
-			const {lectureid} = req.body;
-			await lectureModel.deleteByLectureId(lectureid);
-			res.status(201).send({message: 'Lecture deleted'});
-		} catch (err) {
-			logger.error(err);
-			console.error(err);
-			res.status(500).send('Server error');
-		}
-	},
+  '/deletelecture/',
+  checkUserRole(['admin', 'teacher', 'counselor']),
+  [body('lectureid').isNumeric()],
+  async (req: Request, res: Response) => {
+    if (req.user) {
+      logger.info(
+        {useremail: req.user.email},
+        ' courses/attendance/lecture delete ',
+      );
+    }
+    try {
+      const {lectureid} = req.body;
+      await lectureModel.deleteByLectureId(lectureid);
+      res.status(201).send({message: 'Lecture deleted'});
+    } catch (err) {
+      logger.error(err);
+      console.error(err);
+      res.status(500).send('Server error');
+    }
+  },
 );
 /**
  * Route that creates a new lecture.
@@ -272,45 +272,47 @@ router.post(
  * @returns {Promise<{message: string, lectureInfo: number}>} A promise that resolves with a message and the ID of the created lecture.
  */
 router.post(
-	'/lecture/',
-	checkUserRole(['admin', 'teacher', 'counselor']),
-	[
-		body('topicname').notEmpty(),
-		body('coursecode').notEmpty(),
-		body('start_date').isISO8601(),
-		body('end_date').isISO8601(),
-		body('timeofday').notEmpty(),
-		body('state').notEmpty(),
-	],
-	async (req: Request, res: Response) => {
-		if (req.user) {
-			console.log('lecture created ', req.user?.email);
-			logger.info(
-				{useremail: req.user?.email},
-				' courses/attendance/lecture created ',
-			);
-		}
-		try {
-			const {topicname, coursecode, start_date, end_date, timeofday, state} =
-				req.body;
-			// console.log(req.body);
-			const teacherid = req.user?.userid;
-			const lectureid = await lectureController.insertIntoLecture(
-				topicname,
-				coursecode,
-				start_date,
-				end_date,
-				timeofday,
-				state,
-				teacherid,
-			);
-			res.status(201).json({message: 'lecture created', lectureInfo: lectureid});
-		} catch (err) {
-			logger.error(err);
-			console.error(err);
-			res.status(500).send('Server error');
-		}
-	},
+  '/lecture/',
+  checkUserRole(['admin', 'teacher', 'counselor']),
+  [
+    body('topicname').notEmpty(),
+    body('coursecode').notEmpty(),
+    body('start_date').isISO8601(),
+    body('end_date').isISO8601(),
+    body('timeofday').notEmpty(),
+    body('state').notEmpty(),
+  ],
+  async (req: Request, res: Response) => {
+    if (req.user) {
+      console.log('lecture created ', req.user?.email);
+      logger.info(
+        {useremail: req.user?.email},
+        ' courses/attendance/lecture created ',
+      );
+    }
+    try {
+      const {topicname, coursecode, start_date, end_date, timeofday, state} =
+        req.body;
+      // console.log(req.body);
+      const teacherid = req.user?.userid;
+      const lectureid = await lectureController.insertIntoLecture(
+        topicname,
+        coursecode,
+        start_date,
+        end_date,
+        timeofday,
+        state,
+        teacherid,
+      );
+      res
+        .status(201)
+        .json({message: 'lecture created', lectureInfo: lectureid});
+    } catch (err) {
+      logger.error(err);
+      console.error(err);
+      res.status(500).send('Server error');
+    }
+  },
 );
 /**
  * Route that fetches a lecture by its ID with its course and topic.
@@ -319,25 +321,25 @@ router.post(
  * @returns {Promise<Lecture>} A promise that resolves with the lecture, or a 404 status if not found.
  */
 router.get(
-	'/lectureinfo/:lectureid',
-	checkUserRole(['admin', 'teacher', 'counselor']),
-	[param('lectureid').isNumeric().withMessage('Lecture ID must be a number')],
-	validate,
-	async (req: Request, res: Response) => {
-		try {
-			const {lectureid} = req.params;
+  '/lectureinfo/:lectureid',
+  checkUserRole(['admin', 'teacher', 'counselor']),
+  [param('lectureid').isNumeric().withMessage('Lecture ID must be a number')],
+  validate,
+  async (req: Request, res: Response) => {
+    try {
+      const {lectureid} = req.params;
 
-			const lectureInfo = await lectureModel.getLectureWithCourseAndTopic(
-				lectureid,
-			);
+      const lectureInfo = await lectureModel.getLectureWithCourseAndTopic(
+        lectureid,
+      );
 
-			res.status(200).json(lectureInfo);
-		} catch (err) {
-			logger.error(err);
-			console.error(err);
-			res.status(500).send('Server error');
-		}
-	},
+      res.status(200).json(lectureInfo);
+    } catch (err) {
+      logger.error(err);
+      console.error(err);
+      res.status(500).send('Server error');
+    }
+  },
 );
 
 // router.get('/studentsattendance', async (req: Request, res: Response) => {
@@ -360,28 +362,28 @@ router.get(
  * @returns {Promise<{message: string}>} A promise that resolves with a message indicating the update was successful.
  */
 router.put(
-	'/update',
-	checkUserRole(['admin', 'teacher', 'counselor']),
-	async (req: Request, res: Response) => {
-		if (req.user) {
-			logger.info({useremail: req.user.email}, ' courses/attendance/update ');
-			console.log('attendance update ', req.user?.email);
-		}
-		const {attendanceid, status} = req.body;
+  '/update',
+  checkUserRole(['admin', 'teacher', 'counselor']),
+  async (req: Request, res: Response) => {
+    if (req.user) {
+      logger.info({useremail: req.user.email}, ' courses/attendance/update ');
+      console.log('attendance update ', req.user?.email);
+    }
+    const {attendanceid, status} = req.body;
 
-		try {
-			// console.log('Received attendanceid:', attendanceid);
-			// console.log('Received status:', status);
+    try {
+      // console.log('Received attendanceid:', attendanceid);
+      // console.log('Received status:', status);
 
-			await attendanceController.updateAttendanceStatus(attendanceid, status);
+      await attendanceController.updateAttendanceStatus(attendanceid, status);
 
-			res.status(200).json({message: 'Attendance status updated successfully'});
-		} catch (error) {
-			logger.error(error);
-			console.error(error);
-			res.status(500).send('Server error');
-		}
-	},
+      res.status(200).json({message: 'Attendance status updated successfully'});
+    } catch (error) {
+      logger.error(error);
+      console.error(error);
+      res.status(500).send('Server error');
+    }
+  },
 );
 /**
  * Route that fetches all lectures and attendance records for a course.
@@ -390,24 +392,26 @@ router.put(
  * @returns {Promise<Lecture[]>} A promise that resolves with all lectures and attendance records for the course.
  */
 router.get(
-	'/course/:courseid',
-	checkUserRole(['admin', 'counselor', 'teacher']),
-	[param('courseid').isNumeric().withMessage('Course ID must be a number')],
-	validate,
-	async (req: Request, res: Response) => {
-		try {
-			const courseid = req.params.courseid;
+  '/course/:courseid',
+  checkUserRole(['admin', 'counselor', 'teacher']),
+  [param('courseid').isNumeric().withMessage('Course ID must be a number')],
+  validate,
+  async (req: Request, res: Response) => {
+    try {
+      const courseid = req.params.courseid;
 
-			const lecturesAndAttendancesData =
-				await attendanceController.getLecturesAndAttendancesByCourseId(courseid);
+      const lecturesAndAttendancesData =
+        await attendanceController.getLecturesAndAttendancesByCourseId(
+          courseid,
+        );
 
-			res.json(lecturesAndAttendancesData);
-		} catch (err) {
-			logger.error(err);
-			console.error(err);
-			res.status(500).send('Server error');
-		}
-	},
+      res.json(lecturesAndAttendancesData);
+    } catch (err) {
+      logger.error(err);
+      console.error(err);
+      res.status(500).send('Server error');
+    }
+  },
 );
 /**
  * Route that deletes a lecture by its ID.
@@ -416,30 +420,30 @@ router.get(
  * @returns {Promise<{message: string}>} A promise that resolves with a message indicating the deletion was successful.
  */
 router.delete(
-	'/lecture/:lectureid',
-	checkUserRole(['admin', 'counselor', 'teacher']),
-	[param('lectureid').isNumeric().withMessage('Lecture ID must be a number')],
-	validate,
-	async (req: Request, res: Response) => {
-		if (req.user) {
-			logger.info(
-				{useremail: req.user.email},
-				' courses/attendance/lecture delete ',
-			);
-			console.log('delete lecture ', req.user?.email);
-		}
-		try {
-			const lectureid = req.params.lectureid;
+  '/lecture/:lectureid',
+  checkUserRole(['admin', 'counselor', 'teacher']),
+  [param('lectureid').isNumeric().withMessage('Lecture ID must be a number')],
+  validate,
+  async (req: Request, res: Response) => {
+    if (req.user) {
+      logger.info(
+        {useremail: req.user.email},
+        ' courses/attendance/lecture delete ',
+      );
+      console.log('delete lecture ', req.user?.email);
+    }
+    try {
+      const lectureid = req.params.lectureid;
 
-			await lectureModel.deleteByLectureId(lectureid);
-			// console.log('Lecture deleted successfully');
-			res.status(200).json({message: 'Lecture deleted successfully'});
-		} catch (error) {
-			logger.error(error);
-			console.error(error);
-			res.status(500).send('Server error');
-		}
-	},
+      await lectureModel.deleteByLectureId(lectureid);
+      // console.log('Lecture deleted successfully');
+      res.status(200).json({message: 'Lecture deleted successfully'});
+    } catch (error) {
+      logger.error(error);
+      console.error(error);
+      res.status(500).send('Server error');
+    }
+  },
 );
 /**
  * Route that closes a lecture by its ID.
@@ -448,29 +452,29 @@ router.delete(
  * @returns {Promise<{message: string}>} A promise that resolves with a message indicating the lecture was closed successfully.
  */
 router.put(
-	'/lecture/close/:lectureid',
-	checkUserRole(['admin', 'counselor', 'teacher']),
-	[param('lectureid').isNumeric().withMessage('Lecture ID must be a number')],
-	validate,
-	async (req: Request, res: Response) => {
-		if (req.user) {
-			logger.info(
-				{useremail: req.user.email},
-				' courses/attendance/lecture close ',
-			);
-		}
-		try {
-			const lectureid = req.params.lectureid;
+  '/lecture/close/:lectureid',
+  checkUserRole(['admin', 'counselor', 'teacher']),
+  [param('lectureid').isNumeric().withMessage('Lecture ID must be a number')],
+  validate,
+  async (req: Request, res: Response) => {
+    if (req.user) {
+      logger.info(
+        {useremail: req.user.email},
+        ' courses/attendance/lecture close ',
+      );
+    }
+    try {
+      const lectureid = req.params.lectureid;
 
-			await lectureController.closeLecture(lectureid);
-			// console.log('Lecture closed successfully');
-			res.status(200).json({message: 'Lecture closed successfully'});
-		} catch (error) {
-			logger.error(error);
-			console.error(error);
-			res.status(500).send('Server error');
-		}
-	},
+      await lectureController.closeLecture(lectureid);
+      // console.log('Lecture closed successfully');
+      res.status(200).json({message: 'Lecture closed successfully'});
+    } catch (error) {
+      logger.error(error);
+      console.error(error);
+      res.status(500).send('Server error');
+    }
+  },
 );
 /**
  * Route that fetches all open lectures for a course.
@@ -479,70 +483,70 @@ router.put(
  * @returns {Promise<Lecture[]>} A promise that resolves with all open lectures for the course.
  */
 router.get(
-	'/lecture/open/:courseid',
-	checkUserRole(['admin', 'counselor', 'teacher']),
-	[param('courseid').isNumeric().withMessage('course ID must be a number')],
-	validate,
-	async (req: Request, res: Response) => {
-		try {
-			const courseid = req.params.courseid;
+  '/lecture/open/:courseid',
+  checkUserRole(['admin', 'counselor', 'teacher']),
+  [param('courseid').isNumeric().withMessage('course ID must be a number')],
+  validate,
+  async (req: Request, res: Response) => {
+    try {
+      const courseid = req.params.courseid;
 
-			const openLectures = await lectureModel.findOpenLecturesBycourseid(
-				Number(courseid),
-			);
+      const openLectures = await lectureModel.findOpenLecturesBycourseid(
+        Number(courseid),
+      );
 
-			res.status(200).json(openLectures);
-		} catch (error) {
-			logger.error(error);
-			console.error(error);
-			res.status(500).send('Server error');
-		}
-	},
+      res.status(200).json(openLectures);
+    } catch (error) {
+      logger.error(error);
+      console.error(error);
+      res.status(500).send('Server error');
+    }
+  },
 );
 router.post(
-	'/lecture/teacheropen/',
-	checkUserRole(['admin', 'counselor', 'teacher']),
-	async (req: Request, res: Response) => {
-		try {
-			const {teacherid} = req.body;
-			const openLectures = await lectureModel.findOpenLecturesByTeacherid(
-				Number(teacherid),
-			);
-			res.status(200).json(openLectures);
-		} catch (error) {
-			logger.error(error);
-			console.error(error);
-			res.status(500).send('Server error');
-		}
-	},
+  '/lecture/teacheropen/',
+  checkUserRole(['admin', 'counselor', 'teacher']),
+  async (req: Request, res: Response) => {
+    try {
+      const {teacherid} = req.body;
+      const openLectures = await lectureModel.findOpenLecturesByTeacherid(
+        Number(teacherid),
+      );
+      res.status(200).json(openLectures);
+    } catch (error) {
+      logger.error(error);
+      console.error(error);
+      res.status(500).send('Server error');
+    }
+  },
 );
 router.get(
-	'/lecture/teacher/:teacherId',
-	checkUserRole(['admin', 'teacher', 'counselor']),
-	async (req: Request, res: Response) => {
-		if (req.user) {
-			logger.info(
-				{useremail: req.user.email},
-				' courses/attendance/ own lectures view ',
-			);
-		}
-		try {
-			const teacherId = Number(req.params.teacherId);
-			const lectures = await lectureModel.fetchLecturesByTeacherId(teacherId);
+  '/lecture/teacher/:teacherId',
+  checkUserRole(['admin', 'teacher', 'counselor']),
+  async (req: Request, res: Response) => {
+    if (req.user) {
+      logger.info(
+        {useremail: req.user.email},
+        ' courses/attendance/ own lectures view ',
+      );
+    }
+    try {
+      const teacherId = Number(req.params.teacherId);
+      const lectures = await lectureModel.fetchLecturesByTeacherId(teacherId);
 
-			for (const lecture of lectures) {
-				const students = await lectureController.getStudentsInLecture(
-					lecture.lectureid,
-				);
-				if (students) lecture.actualStudentCount = students.length;
-			}
-			res.json(lectures);
-		} catch (err) {
-			logger.error(err);
-			console.error(err);
-			res.status(500).send('Server error');
-		}
-	},
+      for (const lecture of lectures) {
+        const students = await lectureController.getStudentsInLecture(
+          lecture.lectureid,
+        );
+        if (students) lecture.actualStudentCount = students.length;
+      }
+      res.json(lectures);
+    } catch (err) {
+      logger.error(err);
+      console.error(err);
+      res.status(500).send('Server error');
+    }
+  },
 );
 
 export default router;

@@ -14,14 +14,14 @@ import AdminCourseModify from '../../views/main/admin/Courses/AdminCourseModify'
  * @returns {JSX.Element} The rendered AdminCoursesRoutes component.
  */
 const AdminCoursesRoutes: React.FC = () => {
-	return (
-		<Routes>
-			<Route path="/" element={<AdminCourses />} />
-			<Route path=":id" element={<AdminCourseDetail />} />
-			<Route path=":id/modify" element={<AdminCourseModify />} />
-			<Route path="*" element={<AdminMainView />} />
-		</Routes>
-	);
+  return (
+    <Routes>
+      <Route path='/' element={<AdminCourses />} />
+      <Route path=':id' element={<AdminCourseDetail />} />
+      <Route path=':id/modify' element={<AdminCourseModify />} />
+      <Route path='*' element={<AdminMainView />} />
+    </Routes>
+  );
 };
 
 export default AdminCoursesRoutes;

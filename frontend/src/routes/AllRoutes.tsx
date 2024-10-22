@@ -13,30 +13,30 @@ import StudentRoutes from './StudentRoutes';
 import TeacherRoutes from './TeacherRoutes';
 
 const AllRoutes = () => {
-	const location = useLocation();
-	const {user} = useContext(UserContext);
+  const location = useLocation();
+  const {user} = useContext(UserContext);
 
-	// Update document title based on current path
-	useEffect(() => {
-		const title = user ? `JakSec - ${user.role} ` : `JakSec`;
-		document.title = title;
-	}, [user, location]);
+  // Update document title based on current path
+  useEffect(() => {
+    const title = user ? `JakSec - ${user.role} ` : `JakSec`;
+    document.title = title;
+  }, [user, location]);
 
-	return (
-		<BackgroundContainer>
-			<Routes>
-				<Route path="/" element={<StartView />} />
-				<Route path="student/*" element={<StudentRoutes />} />
-				<Route path="admin/*" element={<AdminRoutes />} />
-				<Route path="counselor/*" element={<CounselorRoutes />} />
-				<Route path="teacher/*" element={<TeacherRoutes />} />
-				<Route path="logout" element={<Logout />} />
-				<Route path="login" element={<Login />} />
-				<Route path="gdpr" element={<Gdpr />} />
-				<Route path="*" element={<StartView />} />
-			</Routes>
-		</BackgroundContainer>
-	);
+  return (
+    <BackgroundContainer>
+      <Routes>
+        <Route path='/' element={<StartView />} />
+        <Route path='student/*' element={<StudentRoutes />} />
+        <Route path='admin/*' element={<AdminRoutes />} />
+        <Route path='counselor/*' element={<CounselorRoutes />} />
+        <Route path='teacher/*' element={<TeacherRoutes />} />
+        <Route path='logout' element={<Logout />} />
+        <Route path='login' element={<Login />} />
+        <Route path='gdpr' element={<Gdpr />} />
+        <Route path='*' element={<StartView />} />
+      </Routes>
+    </BackgroundContainer>
+  );
 };
 
 export default AllRoutes;

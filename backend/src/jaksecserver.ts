@@ -36,9 +36,9 @@ const http = createServer(app);
  * @type {socket.io.Server}
  */
 const io = new Server(http, {
-	cors: {
-		origin: '*',
-	},
+  cors: {
+    origin: '*',
+  },
 });
 
 /**
@@ -85,19 +85,19 @@ app.use('/users', userRoutes);
  */
 
 app.get('/metrostation/', (_req: Request, res: Response) => {
-	res.json({
-		message: 'API is working',
-		builddate: process.env.VITE_REACT_APP_BUILD_DATE,
-	});
+  res.json({
+    message: 'API is working',
+    builddate: process.env.VITE_REACT_APP_BUILD_DATE,
+  });
 });
 /**
  * Use secure routes for /secure path with JWT authentication
  * This sets up secure routes that require JWT authentication under the /secure path.
  */
 app.use(
-	'/secure',
-	passport.authenticate('jwt', {session: false}),
-	secureRoutes,
+  '/secure',
+  passport.authenticate('jwt', {session: false}),
+  secureRoutes,
 );
 
 /**
@@ -105,9 +105,9 @@ app.use(
  * This sets up routes related to courses that require JWT authentication under the /courses path.
  */
 app.use(
-	'/courses',
-	passport.authenticate('jwt', {session: false}),
-	courseRoutes,
+  '/courses',
+  passport.authenticate('jwt', {session: false}),
+  courseRoutes,
 );
 
 /**
@@ -121,14 +121,14 @@ app.use('/admin', passport.authenticate('jwt', {session: false}), adminRoutes);
  * This section starts the HTTP server and listens on the specified port.
  */
 http.listen(port, () => {
-	// logger.info(
-	// 	'Metropolia Attendance App REST + DATABASE SERVER Started at: http://localhost:' +
-	// 		port +
-	// 		'/ ' +
-	// 		'start time: ' +
-	// 		startTime.toLocaleString(),
-	// );
-	console.log(
-		`JakSec REST + DATABASE SERVER started at: http://localhost:${port}/. Start time: ${startTime.toLocaleString()}`,
-	);
+  // logger.info(
+  // 	'Metropolia Attendance App REST + DATABASE SERVER Started at: http://localhost:' +
+  // 		port +
+  // 		'/ ' +
+  // 		'start time: ' +
+  // 		startTime.toLocaleString(),
+  // );
+  console.log(
+    `JakSec REST + DATABASE SERVER started at: http://localhost:${port}/. Start time: ${startTime.toLocaleString()}`,
+  );
 });

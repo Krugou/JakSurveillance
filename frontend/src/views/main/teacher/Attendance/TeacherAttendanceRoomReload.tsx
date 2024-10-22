@@ -8,25 +8,25 @@ import {useNavigate, useParams} from 'react-router-dom';
  * @returns {null} This component does not render anything.
  */
 const TeacherAttendanceRoomReload: React.FC = () => {
-	/**
-	 * `lectureid` is a parameter from the current URL.
-	 */
-	const {lectureid} = useParams<{lectureid: string}>();
+  /**
+   * `lectureid` is a parameter from the current URL.
+   */
+  const {lectureid} = useParams<{lectureid: string}>();
 
-	/**
-	 * `navigate` is a function from `react-router-dom` that allows navigation to different routes.
-	 */
-	const navigate = useNavigate();
+  /**
+   * `navigate` is a function from `react-router-dom` that allows navigation to different routes.
+   */
+  const navigate = useNavigate();
 
-	/**
-	 * `useEffect` hook is used to perform side effects in function components.
-	 * In this case, it's used to navigate to a new route when the component is loaded.
-	 */
-	useEffect(() => {
-		navigate(`/teacher/attendance/${lectureid}`);
-	}, [lectureid, navigate]);
+  /**
+   * `useEffect` hook is used to perform side effects in function components.
+   * In this case, it's used to navigate to a new route when the component is loaded.
+   */
+  useEffect(() => {
+    navigate(`/teacher/attendance/${lectureid}`);
+  }, [lectureid, navigate]);
 
-	return null; // or return some JSX if needed
+  return null; // or return some JSX if needed
 };
 
 export default TeacherAttendanceRoomReload;

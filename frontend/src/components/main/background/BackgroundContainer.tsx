@@ -10,7 +10,7 @@ import Header from '../../../views/Header';
  * Props for the BackgroundContainer component.
  */
 interface BackgroundContainerProps {
-	children: ReactNode;
+  children: ReactNode;
 }
 
 const backgrounds = [tausta1, tausta2, tausta3, tausta4, tausta5];
@@ -18,34 +18,33 @@ const backgrounds = [tausta1, tausta2, tausta3, tausta4, tausta5];
  * Returns a random background URL from the available backgrounds.
  */
 const getRandomBackgroundUrl = (): string => {
-	const randomNumber = Math.floor(Math.random() * backgrounds.length);
-	return backgrounds[randomNumber];
+  const randomNumber = Math.floor(Math.random() * backgrounds.length);
+  return backgrounds[randomNumber];
 };
 /**
  * A container component that displays a random background image and includes a header and footer.
  */
 const BackgroundContainer: React.FC<BackgroundContainerProps> = ({
-	children,
+  children,
 }) => {
-	const [backgroundUrl, setBackgroundUrl] = useState<string>('');
+  const [backgroundUrl, setBackgroundUrl] = useState<string>('');
 
-	useEffect(() => {
-		const url = getRandomBackgroundUrl();
-		setBackgroundUrl(url);
-	}, []); // The empty dependency array ensures this effect runs only once on mount
+  useEffect(() => {
+    const url = getRandomBackgroundUrl();
+    setBackgroundUrl(url);
+  }, []); // The empty dependency array ensures this effect runs only once on mount
 
-	return (
-		<div className="flex flex-col h-screen">
-			<Header title="Attendance App" />
-			<main
-				className="flex-grow flex flex-col items-center p-2 sm:p-10 bg-cover bg-center"
-				style={{backgroundImage: `url(${backgroundUrl})`}}
-			>
-				{children}
-			</main>
-			<Footer />
-		</div>
-	);
+  return (
+    <div className='flex flex-col h-screen'>
+      <Header title='Attendance App' />
+      <main
+        className='flex flex-col items-center flex-grow p-2 bg-center bg-cover sm:p-10'
+        style={{backgroundImage: `url(${backgroundUrl})`}}>
+        {children}
+      </main>
+      <Footer />
+    </div>
+  );
 };
 
 export default BackgroundContainer;

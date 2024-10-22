@@ -13,14 +13,14 @@ import pino from 'pino';
 
 // Stream for regular logs
 const stream = rfs.createStream('logfile.log', {
-	interval: '14d',
-	path: './logs',
+  interval: '14d',
+  path: './logs',
 });
 
 // Stream for error logs
 const errorStream = rfs.createStream('error-logfile.log', {
-	interval: '14d',
-	path: './logs',
+  interval: '14d',
+  path: './logs',
 });
 
 // Create a new pino logger that writes logs to our rotating file stream.
