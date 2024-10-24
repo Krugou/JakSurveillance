@@ -13,6 +13,7 @@ import topicModel from '../models/topicmodel.js';
 import usercourse_topicsModel from '../models/usercourse_topicsmodel.js';
 import userCourseModel from '../models/usercoursemodel.js';
 import userModel from '../models/usermodel.js';
+import logger from '../utils/logger.js';
 /**
  * Interface for Student
  */
@@ -246,6 +247,7 @@ const courseController: CourseController = {
             }
           } catch (error) {
             console.error(error);
+            logger.error(error);
           }
         }
 
@@ -317,14 +319,17 @@ const courseController: CourseController = {
 						*/
           } catch (error) {
             console.error(error);
+            logger.error(error);
           }
         }
       } catch (error) {
         console.error(error);
+        logger.error(error);
         return Promise.reject(error);
       }
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
     return courseId;
@@ -382,6 +387,7 @@ const courseController: CourseController = {
       };
     } catch (error) {
       console.error(error);
+      logger.error(error);
       throw error;
     }
   },
@@ -406,6 +412,7 @@ const courseController: CourseController = {
       }
     } catch (error) {
       console.error(error);
+      logger.error(error);
       throw error;
     }
   },
@@ -430,6 +437,7 @@ const courseController: CourseController = {
       }
     } catch (error) {
       console.error(error);
+      logger.error(error);
       throw error;
     }
   },
@@ -471,6 +479,7 @@ const courseController: CourseController = {
       return studentAndSelectedParts;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       throw error;
     }
   },
@@ -487,6 +496,7 @@ const courseController: CourseController = {
       return attendanceDetails;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       throw error;
     }
   },
@@ -502,6 +512,7 @@ const courseController: CourseController = {
       return monthlyAttendance;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       throw error;
     }
   },

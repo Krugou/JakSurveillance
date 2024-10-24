@@ -1,5 +1,6 @@
 import {FieldPacket, RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
+import logger from '../utils/logger.js';
 
 const pool = createPool('ADMIN');
 /**
@@ -147,6 +148,7 @@ const attendanceModel: AttendanceModel = {
       return true;
     } catch (error) {
       console.error('Error updating attendance status:', error);
+      logger.error(error);
       return false;
     }
   },
@@ -158,6 +160,7 @@ const attendanceModel: AttendanceModel = {
         .query<RowDataPacket[]>('SELECT * FROM attendance');
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -173,6 +176,7 @@ const attendanceModel: AttendanceModel = {
       return (rows[0] as Attendance) || null;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -208,6 +212,7 @@ const attendanceModel: AttendanceModel = {
       return rows;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -216,13 +221,19 @@ const attendanceModel: AttendanceModel = {
     usercourseid: number,
     lectureid: string,
   ) {
-    const [attendanceResult] = await pool
-      .promise()
-      .query(
-        'SELECT * FROM attendance WHERE usercourseid = ? AND lectureid = ?',
-        [usercourseid, lectureid],
-      );
-    return attendanceResult;
+    try {
+      const [attendanceResult] = await pool
+        .promise()
+        .query(
+          'SELECT * FROM attendance WHERE usercourseid = ? AND lectureid = ?',
+          [usercourseid, lectureid],
+        );
+      return attendanceResult;
+    } catch (error) {
+      console.error(error);
+      logger.error(error);
+      return Promise.reject(error);
+    }
   },
 
   async insertAttendance(
@@ -244,40 +255,60 @@ const attendanceModel: AttendanceModel = {
         );
     } catch (error) {
       console.error(error);
+      logger.error(error);
       throw new Error('Failed to insert attendance');
     }
   },
 
   async checkAttendance(usercourseid: number, lectureid: number) {
-    const [attendanceResultCheck] = await pool
-      .promise()
-      .query(
-        'SELECT * FROM attendance WHERE usercourseid = ? AND lectureid = ?',
-        [usercourseid, lectureid],
-      );
-    return attendanceResultCheck;
+    try {
+      const [attendanceResultCheck] = await pool
+        .promise()
+        .query(
+          'SELECT * FROM attendance WHERE usercourseid = ? AND lectureid = ?',
+          [usercourseid, lectureid],
+        );
+      return attendanceResultCheck;
+    } catch (error) {
+      console.error(error);
+      logger.error(error);
+      return Promise.reject(error);
+    }
   },
 
   async getAttendanceById(insertid: number) {
-    const [attendanceResult] = await pool
-      .promise()
-      .query('SELECT * FROM attendance WHERE attendanceid = ?', [insertid]);
-    return attendanceResult;
+    try {
+      const [attendanceResult] = await pool
+        .promise()
+        .query('SELECT * FROM attendance WHERE attendanceid = ?', [insertid]);
+      return attendanceResult;
+    } catch (error) {
+      console.error(error);
+      logger.error(error);
+      return Promise.reject(error);
+    }
   },
 
   async getUserInfoByUserCourseId(usercourseid: number) {
-    const [userResult] = (await pool
-      .promise()
-      .query(
-        'SELECT * FROM users WHERE userid IN (SELECT userid FROM usercourses WHERE usercourseid = ?)',
-        [usercourseid],
-      )) as RowDataPacket[];
-    return userResult[0];
+    try {
+      const [userResult] = (await pool
+        .promise()
+        .query(
+          'SELECT * FROM users WHERE userid IN (SELECT userid FROM usercourses WHERE usercourseid = ?)',
+          [usercourseid],
+        )) as RowDataPacket[];
+      return userResult[0];
+    } catch (error) {
+      console.error(error);
+      logger.error(error);
+      return Promise.reject(error);
+    }
   },
 
   async getAttendaceByCourseId(courseid: string) {
-    const [attendanceResult] = await pool.promise().query(
-      `SELECT
+    try {
+      const [attendanceResult] = await pool.promise().query(
+        `SELECT
 			attendance.status,
 			attendance.attendanceid,
 			usercourses.usercourseid,
@@ -307,40 +338,65 @@ const attendanceModel: AttendanceModel = {
 			users AS attendingUsers ON usercourses.userid = attendingUsers.userid
 		WHERE
 			lecture.courseid = ?;`,
-      [courseid],
-    );
-    return attendanceResult;
+        [courseid],
+      );
+      return attendanceResult;
+    } catch (error) {
+      console.error(error);
+      logger.error(error);
+      return Promise.reject(error);
+    }
   },
 
   async getLectureCountByTopic(courseid: string) {
-    const [result] = await pool.promise().query(
-      `SELECT topics.topicname, COUNT(lecture.lectureid) AS lecture_count
+    try {
+      const [result] = await pool.promise().query(
+        `SELECT topics.topicname, COUNT(lecture.lectureid) AS lecture_count
 			FROM coursetopics
 			JOIN topics ON coursetopics.topicid = topics.topicid
 			LEFT JOIN lecture ON lecture.topicid = topics.topicid AND lecture.courseid = coursetopics.courseid
 			WHERE coursetopics.courseid = ?
 			GROUP BY topics.topicname;`,
-      [courseid],
-    );
-    return result;
+        [courseid],
+      );
+      return result;
+    } catch (error) {
+      console.error(error);
+      logger.error(error);
+      return Promise.reject(error);
+    }
   },
 
   async deleteAttendance(usercourseid: number, lectureid: number) {
-    const [result] = await pool
-      .promise()
-      .query(
-        'DELETE FROM attendance WHERE usercourseid = ? AND lectureid = ?',
-        [usercourseid, lectureid],
-      );
+    try {
+      const [result] = await pool
+        .promise()
+        .query(
+          'DELETE FROM attendance WHERE usercourseid = ? AND lectureid = ?',
+          [usercourseid, lectureid],
+        );
 
-    return result;
+      return result;
+    } catch (error) {
+      console.error(error);
+      logger.error(error);
+      return Promise.reject(error);
+    }
   },
   async deleteAttendanceByAttendanceId(attendanceId: number) {
-    const [result] = await pool
-      .promise()
-      .query('DELETE FROM attendance WHERE attendanceid = ?', [attendanceId]);
+    try {
+      const [result] = await pool
+        .promise()
+        .query('DELETE FROM attendance WHERE attendanceid = ?', [
+          attendanceId,
+        ]);
 
-    return result;
+      return result;
+    } catch (error) {
+      console.error(error);
+      logger.error(error);
+      return Promise.reject(error);
+    }
   },
 
   async getMonthlyAttendance() {
@@ -359,6 +415,7 @@ const attendanceModel: AttendanceModel = {
       return rows;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },

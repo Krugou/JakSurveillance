@@ -1,5 +1,6 @@
 import createPool from '../config/createPool.js';
 import ServerSettingsModel from '../models/serversettingsmodel.js';
+import logger from '../utils/logger.js';
 
 const pool = createPool('ADMIN');
 /**
@@ -55,6 +56,7 @@ const adminController: AdminController = {
       return serverSettings; // use the serverSettings variable
     } catch (error) {
       console.error(error);
+      logger.error(error);
       throw error;
     }
   },
@@ -83,6 +85,7 @@ const adminController: AdminController = {
       );
     } catch (error) {
       console.error(error);
+      logger.error(error);
       throw error;
     }
   },
