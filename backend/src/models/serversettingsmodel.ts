@@ -1,5 +1,6 @@
-import {Pool, RowDataPacket} from 'mysql2';
+import { Pool, RowDataPacket } from 'mysql2';
 import logger from '../utils/logger.js';
+import { body, validationResult } from 'express-validator';
 
 // server settings model
 const serverSettingsModel = {
@@ -36,6 +37,17 @@ const serverSettingsModel = {
     attendancethreshold: number,
   ) {
     try {
+      // Validate input parameters
+      await body('speedofhash').isNumeric().run();
+      await body('leewayspeed').isNumeric().run();
+      await body('timeouttime').isNumeric().run();
+      await body('attendancethreshold').isNumeric().run();
+
+      const errors = validationResult();
+      if (!errors.isEmpty()) {
+        throw new Error('Validation failed');
+      }
+
       return await pool
         .promise()
         .query(

@@ -14,6 +14,8 @@ import usercourse_topicsModel from '../models/usercourse_topicsmodel.js';
 import userCourseModel from '../models/usercoursemodel.js';
 import userModel from '../models/usermodel.js';
 import logger from '../utils/logger.js';
+import { body, validationResult } from 'express-validator';
+
 /**
  * Interface for Student
  */
@@ -112,6 +114,22 @@ const courseController: CourseController = {
     logger.info('Starting insertIntoCourse operation');
     let courseId = 0;
     try {
+      // Validate input parameters
+      await body('name').isString().run();
+      await body('start_date').isISO8601().toDate().run();
+      await body('end_date').isISO8601().toDate().run();
+      await body('code').isString().run();
+      await body('group_name').isString().run();
+      await body('students').isArray().run();
+      await body('instructors').isArray().run();
+      await body('topics').optional().isString().run();
+      await body('topicgroup').optional().isString().run();
+
+      const errors = validationResult();
+      if (!errors.isEmpty()) {
+        throw new Error('Validation failed');
+      }
+
       const instructorUserIds: number[] = [];
       for (const instructor of instructors) {
         const existingInstructor = await userModel.checkIfEmailMatchesStaff(

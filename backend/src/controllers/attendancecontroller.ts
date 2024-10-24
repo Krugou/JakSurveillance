@@ -3,6 +3,8 @@ import attendanceModel from '../models/attendancemodel.js';
 import lectureModel from '../models/lecturemodel.js';
 import usercoursesModel from '../models/usercoursemodel.js';
 import logger from '../utils/logger.js';
+import { body, validationResult } from 'express-validator';
+
 /**
  * AttendanceController interface represents the structure of the attendance controller.
  *
@@ -102,6 +104,18 @@ const attendanceController: AttendanceController = {
       if (!status || !date || !studentnumber || !lectureid) {
         throw new Error('Invalid parameters');
       }
+
+      // Validate input parameters
+      await body('status').isNumeric().run();
+      await body('date').isISO8601().run();
+      await body('studentnumber').isNumeric().run();
+      await body('lectureid').isNumeric().run();
+
+      const errors = validationResult();
+      if (!errors.isEmpty()) {
+        throw new Error('Validation failed');
+      }
+
       const courseId = await lectureModel.getCourseIDByLectureID(lectureid);
       if (courseId === null) {
         throw new Error('Course ID is null');

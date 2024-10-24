@@ -4,6 +4,7 @@ import topicModel from '../models/topicmodel.js';
 import usercourse_topicsModel from '../models/usercourse_topicsmodel.js';
 import attendanceController from './attendancecontroller.js';
 import logger from '../utils/logger.js';
+import { body, validationResult } from 'express-validator';
 
 const lectureController = {
   /**
@@ -28,6 +29,20 @@ const lectureController = {
     teacherid: number | undefined,
   ) {
     try {
+      // Validate input parameters
+      await body('topicname').isString().run();
+      await body('coursecode').isString().run();
+      await body('start_date').isISO8601().run();
+      await body('end_date').isISO8601().run();
+      await body('timeofday').isIn(['am', 'pm']).run();
+      await body('state').isIn(['open', 'closed']).run();
+      await body('teacherid').optional().isNumeric().run();
+
+      const errors = validationResult();
+      if (!errors.isEmpty()) {
+        throw new Error('Validation failed');
+      }
+
       const topicId = await topicModel.findTopicIdUsingTopicName(topicname);
       // console.log('🚀 ~ file: lecturemodel.ts:63 ~ topicRows:', topicId);
 

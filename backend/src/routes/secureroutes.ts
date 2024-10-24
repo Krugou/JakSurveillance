@@ -134,6 +134,8 @@ router.post(
     body('studentnumber')
       .isString()
       .withMessage('Student number must be a string'),
+    body('studentGroupId').isNumeric().withMessage('Student Group ID must be a number'),
+    body('courseId').isNumeric().withMessage('Course ID must be a number')
   ],
   validate,
   async (req: Request, res: Response, _next: NextFunction) => {

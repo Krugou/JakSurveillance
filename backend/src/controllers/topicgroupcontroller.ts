@@ -6,6 +6,7 @@ import TopicModel from '../models/topicmodel.js';
 import usercourse_topicsModel from '../models/usercourse_topicsmodel.js';
 import UserModel from '../models/usermodel.js';
 import logger from '../utils/logger.js';
+import { body, validationResult } from 'express-validator';
 
 const pool = createPool('ADMIN');
 const TopicGroupController = {
@@ -44,6 +45,16 @@ const TopicGroupController = {
    */
   async updateTopicGroup(topicGroup: string, topics: string[], email: string) {
     try {
+      // Validate input parameters
+      await body('topicGroup').isString().run();
+      await body('topics').isArray().run();
+      await body('email').isEmail().run();
+
+      const errors = validationResult();
+      if (!errors.isEmpty()) {
+        throw new Error('Validation failed');
+      }
+
       let instructorUserId;
       if (email) {
         const user = await UserModel.getAllUserInfo(email);
@@ -177,6 +188,15 @@ const TopicGroupController = {
    */
   async checkIfTopicGroupExistsWithEmail(topicGroup: string, email: string) {
     try {
+      // Validate input parameters
+      await body('topicGroup').isString().run();
+      await body('email').isEmail().run();
+
+      const errors = validationResult();
+      if (!errors.isEmpty()) {
+        throw new Error('Validation failed');
+      }
+
       let instructorUserId;
       if (email) {
         const user = await UserModel.getAllUserInfo(email);
@@ -211,6 +231,14 @@ const TopicGroupController = {
    */
   async deleteTopicGroupByName(topicGroup: string, userid: number | undefined) {
     try {
+      // Validate input parameters
+      await body('topicGroup').isString().run();
+
+      const errors = validationResult();
+      if (!errors.isEmpty()) {
+        throw new Error('Validation failed');
+      }
+
       const topicGroupData = await TopicGroupModel.deleteTopicGroupByName(
         topicGroup,
         userid,

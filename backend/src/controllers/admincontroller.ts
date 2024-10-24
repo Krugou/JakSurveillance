@@ -1,6 +1,7 @@
 import createPool from '../config/createPool.js';
 import ServerSettingsModel from '../models/serversettingsmodel.js';
 import logger from '../utils/logger.js';
+import { body, validationResult } from 'express-validator';
 
 const pool = createPool('ADMIN');
 /**
@@ -76,6 +77,17 @@ const adminController: AdminController = {
     attendancethreshold,
   ) {
     try {
+      // Validate input parameters
+      await body('speedofhash').isNumeric().run();
+      await body('leewayspeed').isNumeric().run();
+      await body('timeouttime').isNumeric().run();
+      await body('attendancethreshold').isNumeric().run();
+
+      const errors = validationResult();
+      if (!errors.isEmpty()) {
+        throw new Error('Validation failed');
+      }
+
       await ServerSettingsModel.updateServerSettings(
         pool,
         speedofhash,

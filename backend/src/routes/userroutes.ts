@@ -26,192 +26,199 @@ const router: Router = express.Router();
  * @param {Function} next - The next middleware function.
  * @returns {Promise<void>} A promise that resolves when the operation is finished.
  */
-router.post('/', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    // Check if the environment variables are not undefined
-    if (!process.env.JWT_SECRET) {
-      throw new Error('JWT_SECRET environment variable is not set');
-    }
-
-    if (
-      !process.env.devaccount ||
-      !process.env.devpass ||
-      !process.env.devteacheraccount ||
-      !process.env.devteacherpass ||
-      !process.env.devstudentaccount ||
-      !process.env.devstudentpass ||
-      !process.env.devstudent2account ||
-      !process.env.devstudent2pass ||
-      !process.env.devcounseloraccount ||
-      !process.env.devcounselorpass
-    ) {
-      throw new Error('One or more environment variables are not set');
-    }
-
-    let metropoliaData: ResponseData;
-    // Get username and password from the request body
-    const {username, password} = req.body;
-
-    // create tokens for dev accounts and return them
-    if (
-      username === process.env.devaccount &&
-      password === process.env.devpass
-    ) {
-      metropoliaData = {
-        staff: true,
-        user: process.env.devaccount,
-        firstname: 'Gustav',
-        lastname: 'Admin',
-        email: 'admin@metropolia.fi',
-      };
-    } else if (
-      username === process.env.devteacheraccount &&
-      password === process.env.devteacherpass
-    ) {
-      metropoliaData = {
-        staff: true,
-        user: process.env.devteacheraccount,
-        firstname: 'Willie',
-        lastname: 'Teacher',
-        email: 'teacher@metropolia.fi',
-      };
-    } else if (
-      username === process.env.devstudentaccount &&
-      password === process.env.devstudentpass
-    ) {
-      metropoliaData = {
-        staff: false,
-        user: process.env.devstudentaccount,
-        firstname: 'Sam',
-        lastname: 'Student',
-        email: 'student@metropolia.fi',
-      };
-    } else if (
-      username === process.env.devstudent2account &&
-      password === process.env.devstudent2pass
-    ) {
-      metropoliaData = {
-        staff: false,
-        user: process.env.devstudent2account,
-        firstname: 'Laurel',
-        lastname: 'Student2',
-        email: 'student2@metropolia.fi',
-      };
-    } else if (
-      username === process.env.devcounseloraccount &&
-      password === process.env.devcounselorpass
-    ) {
-      metropoliaData = {
-        staff: true,
-        user: process.env.devcounseloraccount,
-        firstname: 'Cass',
-        lastname: 'Counselor',
-        email: 'counselor@metropolia.fi',
-      };
-    } else {
-      // Try to find user in Metropolia database
-      const options = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({username, password}),
-      };
-      metropoliaData = await doFetch(loginUrl, options);
-
-      if (metropoliaData.message === 'invalid username or password') {
-        res.status(403).json({
-          message: 'Invalid username or password',
-        });
-        return;
+router.post(
+  '/',
+  [
+    body('username').notEmpty().withMessage('Username is required'),
+    body('password').notEmpty().withMessage('Password is required'),
+  ],
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      // Check if the environment variables are not undefined
+      if (!process.env.JWT_SECRET) {
+        throw new Error('JWT_SECRET environment variable is not set');
       }
-    }
 
-    req.body.username = metropoliaData.email;
-    // If the logged-in user is Metropolia staff and they don't exist in the DB yet, add them to the DB
-    if (metropoliaData.staff === true) {
-      try {
-        // Check if the user exists in the database
-        const userFromDB: unknown = await usermodel.getAllUserInfo(
-          metropoliaData.email,
-        );
-        // dev purposes only change back to teacher only default when in production
-        let roleid;
-        switch (metropoliaData.user) {
-          case 'admin':
-            roleid = 4;
-            break;
-          case 'counselor':
-            roleid = 2;
-            break;
-          default:
-            roleid = 3; // default to teacher
-        }
-        const userData: UserData = {
-          username: metropoliaData.user,
-          staff: 1,
-          first_name: metropoliaData.firstname,
-          last_name: metropoliaData.lastname,
-          email: metropoliaData.email,
-          roleid: roleid,
+      if (
+        !process.env.devaccount ||
+        !process.env.devpass ||
+        !process.env.devteacheraccount ||
+        !process.env.devteacherpass ||
+        !process.env.devstudentaccount ||
+        !process.env.devstudentpass ||
+        !process.env.devstudent2account ||
+        !process.env.devstudent2pass ||
+        !process.env.devcounseloraccount ||
+        !process.env.devcounselorpass
+      ) {
+        throw new Error('One or more environment variables are not set');
+      }
+
+      let metropoliaData: ResponseData;
+      // Get username and password from the request body
+      const {username, password} = req.body;
+
+      // create tokens for dev accounts and return them
+      if (
+        username === process.env.devaccount &&
+        password === process.env.devpass
+      ) {
+        metropoliaData = {
+          staff: true,
+          user: process.env.devaccount,
+          firstname: 'Gustav',
+          lastname: 'Admin',
+          email: 'admin@metropolia.fi',
         };
+      } else if (
+        username === process.env.devteacheraccount &&
+        password === process.env.devteacherpass
+      ) {
+        metropoliaData = {
+          staff: true,
+          user: process.env.devteacheraccount,
+          firstname: 'Willie',
+          lastname: 'Teacher',
+          email: 'teacher@metropolia.fi',
+        };
+      } else if (
+        username === process.env.devstudentaccount &&
+        password === process.env.devstudentpass
+      ) {
+        metropoliaData = {
+          staff: false,
+          user: process.env.devstudentaccount,
+          firstname: 'Sam',
+          lastname: 'Student',
+          email: 'student@metropolia.fi',
+        };
+      } else if (
+        username === process.env.devstudent2account &&
+        password === process.env.devstudent2pass
+      ) {
+        metropoliaData = {
+          staff: false,
+          user: process.env.devstudent2account,
+          firstname: 'Laurel',
+          lastname: 'Student2',
+          email: 'student2@metropolia.fi',
+        };
+      } else if (
+        username === process.env.devcounseloraccount &&
+        password === process.env.devcounselorpass
+      ) {
+        metropoliaData = {
+          staff: true,
+          user: process.env.devcounseloraccount,
+          firstname: 'Cass',
+          lastname: 'Counselor',
+          email: 'counselor@metropolia.fi',
+        };
+      } else {
+        // Try to find user in Metropolia database
+        const options = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({username, password}),
+        };
+        metropoliaData = await doFetch(loginUrl, options);
 
-        if (userFromDB === null) {
-          // If the staff user doesn't exist, add them to the database
-          const addStaffUserResponse = await usermodel.addStaffUser(userData);
-          if (!addStaffUserResponse) {
-            logger.error('Failed to add staff user to the database.');
-            console.error('Failed to add staff user to the database.');
-          }
-          // Create a token for the user
-          const token = jwt.sign(
-            addStaffUserResponse as User,
-            process.env.JWT_SECRET as string,
-            {
-              expiresIn: '2h',
-            },
-          );
-          // Send the user and the token in the response
-          if (addStaffUserResponse === null) {
-            throw new Error('Failed to add staff user');
-          }
-          res.json({user: addStaffUserResponse, token});
-        } else {
-          if (username !== 'admin') {
-            logger.info(
-              `Staff Metropolia API login was successful for user: ${username}`,
-            );
-            console.log(
-              `Staff Metropolia API login was successful for user: ${username}`,
-            );
-          }
-          // If the staff user exists, authenticate their login
-          authenticate(req, res, next, username);
+        if (metropoliaData.message === 'invalid username or password') {
+          res.status(403).json({
+            message: 'Invalid username or password',
+          });
+          return;
         }
-      } catch (error) {
-        console.error(error);
-        res.status(500).json({error: 'Internal server error'});
       }
-    }
 
-    // If the logged-in user is not Metropolia staff, authenticate them
-    if (metropoliaData.staff === false) {
-      // Call the authenticate function to handle passport authentication
-      logger.info(
-        `Non-staff Metropolia API login was successful for user: ${username}`,
-      );
-      console.log(
-        `Non-staff Metropolia API login was successful for user: ${username}`,
-      );
-      authenticate(req, res, next, username);
+      req.body.username = metropoliaData.email;
+      // If the logged-in user is Metropolia staff and they don't exist in the DB yet, add them to the DB
+      if (metropoliaData.staff === true) {
+        try {
+          // Check if the user exists in the database
+          const userFromDB: unknown = await usermodel.getAllUserInfo(
+            metropoliaData.email,
+          );
+          // dev purposes only change back to teacher only default when in production
+          let roleid;
+          switch (metropoliaData.user) {
+            case 'admin':
+              roleid = 4;
+              break;
+            case 'counselor':
+              roleid = 2;
+              break;
+            default:
+              roleid = 3; // default to teacher
+          }
+          const userData: UserData = {
+            username: metropoliaData.user,
+            staff: 1,
+            first_name: metropoliaData.firstname,
+            last_name: metropoliaData.lastname,
+            email: metropoliaData.email,
+            roleid: roleid,
+          };
+
+          if (userFromDB === null) {
+            // If the staff user doesn't exist, add them to the database
+            const addStaffUserResponse = await usermodel.addStaffUser(userData);
+            if (!addStaffUserResponse) {
+              logger.error('Failed to add staff user to the database.');
+              console.error('Failed to add staff user to the database.');
+            }
+            // Create a token for the user
+            const token = jwt.sign(
+              addStaffUserResponse as User,
+              process.env.JWT_SECRET as string,
+              {
+                expiresIn: '2h',
+              },
+            );
+            // Send the user and the token in the response
+            if (addStaffUserResponse === null) {
+              throw new Error('Failed to add staff user');
+            }
+            res.json({user: addStaffUserResponse, token});
+          } else {
+            if (username !== 'admin') {
+              logger.info(
+                `Staff Metropolia API login was successful for user: ${username}`,
+              );
+              console.log(
+                `Staff Metropolia API login was successful for user: ${username}`,
+              );
+            }
+            // If the staff user exists, authenticate their login
+            authenticate(req, res, next, username);
+          }
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({error: 'Internal server error'});
+        }
+      }
+
+      // If the logged-in user is not Metropolia staff, authenticate them
+      if (metropoliaData.staff === false) {
+        // Call the authenticate function to handle passport authentication
+        logger.info(
+          `Non-staff Metropolia API login was successful for user: ${username}`,
+        );
+        console.log(
+          `Non-staff Metropolia API login was successful for user: ${username}`,
+        );
+        authenticate(req, res, next, username);
+      }
+    } catch (error) {
+      console.log('Error in user login: ');
+      logger.error(error);
+      console.error(error);
+      res.status(500).json({error: 'Internal server error'});
     }
-  } catch (error) {
-    console.log('Error in user login: ');
-    logger.error(error);
-    console.error(error);
-    res.status(500).json({error: 'Internal server error'});
-  }
-});
+  },
+);
 
 router.post(
   '/feedback',

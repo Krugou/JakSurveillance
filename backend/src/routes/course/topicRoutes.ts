@@ -37,7 +37,11 @@ router.get(
 router.post(
   '/',
   checkUserRole(['admin', 'counselor', 'teacher']),
-  [body('email').isEmail().withMessage('Email must be a valid email address')],
+  [
+    body('email').isEmail().withMessage('Email must be a valid email address'),
+    body('topicGroup').isString().withMessage('Topic group must be a string'),
+    body('topics').isArray().withMessage('Topics must be an array')
+  ],
   validate,
   async (req: Request, res: Response) => {
     try {

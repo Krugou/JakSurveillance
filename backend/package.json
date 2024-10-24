@@ -11,7 +11,9 @@
     "tsc": "tsc",
     "tscW": "tsc --watch",
     "docs": "typedoc src",
-    "docs:watch": "nodemon --watch 'src/**/*.ts' --exec npm run docs"
+    "docs:watch": "nodemon --watch 'src/**/*.ts' --exec npm run docs",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx frontend/src backend/src",
+    "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx frontend/src backend/src"
   },
   "dependencies": {
     "body-parser": "^1.20.3",
