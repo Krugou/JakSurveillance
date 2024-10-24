@@ -6,10 +6,19 @@ const Team: React.FC = () => {
       <h1 className='mb-4 text-4xl font-bold text-metropoliaMainOrange'>
         Development Team
       </h1>
-      <h1 className='mb-4 text-3xl font-semibold text-gray-700'>
-        Joonas Lamminmäki. Aleksi Nokelainen. Kaarle Häyhä.
-      </h1>
-      <h2 className='mb-4 text-2xl text-gray-500'>JAKSEC</h2>
+      <div className='flex flex-col gap-2 mb-4 text-3xl text-gray-700 md:flex-row font-regular'>
+        <div className='p-4 border-2 rounded-md'>
+          <strong>J</strong>oonas Lamminmäki.
+        </div>
+        <div className='p-4 border-2 rounded-md'>
+          <strong>A</strong>leksi Nokelainen.
+        </div>
+        <div className='p-4 border-2 rounded-md'>
+          <strong>K</strong>aarle Häyhä.
+        </div>
+      </div>
+
+      <p className='text-gray-500'>The initials form the acronym "JAK".</p>
     </div>
   );
 };
