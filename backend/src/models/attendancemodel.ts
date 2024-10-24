@@ -116,6 +116,13 @@ interface AttendanceModel {
     lectureid: string,
   ) => Promise<any>;
   deleteAttendanceByAttendanceId: (attendanceId: number) => Promise<any>;
+
+  /**
+   * Gets the monthly attendance trends.
+   *
+   * @returns {Promise<any>} The monthly attendance trends.
+   */
+  getMonthlyAttendance: () => Promise<any>;
 }
 
 /**
@@ -334,6 +341,26 @@ const attendanceModel: AttendanceModel = {
       .query('DELETE FROM attendance WHERE attendanceid = ?', [attendanceId]);
 
     return result;
+  },
+
+  async getMonthlyAttendance() {
+    try {
+      const [rows] = await pool.promise().query<RowDataPacket[]>(
+        `SELECT
+          DATE_FORMAT(date, '%Y-%m') AS month,
+          COUNT(*) AS attendance_count
+        FROM
+          attendance
+        GROUP BY
+          month
+        ORDER BY
+          month;`
+      );
+      return rows;
+    } catch (error) {
+      console.error(error);
+      return Promise.reject(error);
+    }
   },
 };
 
