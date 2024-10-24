@@ -75,30 +75,6 @@ const LecturesByDayChart = ({lectures}: {lectures: Lecture[] | null}) => {
           legend: {
             position: 'top',
           },
-          tooltip: {
-            callbacks: {
-              label: function (context) {
-                const day = context.label;
-                const lectureCount = context.raw;
-                return `${day}: ${lectureCount} lectures`;
-              },
-            },
-          },
-        },
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'Days of the Week',
-            },
-          },
-          y: {
-            title: {
-              display: true,
-              text: 'Number of Lectures',
-            },
-            beginAtZero: true,
-          },
         },
       }}
     />

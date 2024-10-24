@@ -39,39 +39,7 @@ const AdminDashboard = () => {
                 Statistics
               </Link>
             </li>
-            <li className='transition-colors duration-200 hover:bg-metropoliaMainGrey hover:text-metropoliaSupportWhite'>
-              <Link
-                to='./role-distribution'
-                className={`block py-2 px-4 ${
-                  location.pathname === '/admin/dashboard/role-distribution'
-                    ? 'bg-metropoliaMainGrey text-metropoliaSupportWhite'
-                    : 'text-metropoliaMainGrey'
-                }`}>
-                Role Distribution
-              </Link>
-            </li>
-            <li className='transition-colors duration-200 hover:bg-metropoliaMainGrey hover:text-metropoliaSupportWhite'>
-              <Link
-                to='./monthly-attendance'
-                className={`block py-2 px-4 ${
-                  location.pathname === '/admin/dashboard/monthly-attendance'
-                    ? 'bg-metropoliaMainGrey text-metropoliaSupportWhite'
-                    : 'text-metropoliaMainGrey'
-                }`}>
-                Monthly Attendance
-              </Link>
-            </li>
-            <li className='transition-colors duration-200 hover:bg-metropoliaMainGrey hover:text-metropoliaSupportWhite'>
-              <Link
-                to='./course-attendance'
-                className={`block py-2 px-4 ${
-                  location.pathname === '/admin/dashboard/course-attendance'
-                    ? 'bg-metropoliaMainGrey text-metropoliaSupportWhite'
-                    : 'text-metropoliaMainGrey'
-                }`}>
-                Course Attendance
-              </Link>
-            </li>
+
             <li className='transition-colors duration-200 hover:bg-metropoliaMainGrey hover:text-metropoliaSupportWhite'>
               <Link
                 to='./logs'
@@ -110,10 +78,8 @@ const AdminDashboard = () => {
         <div className='flex-grow p-2 shadow-md'>
           <Routes>
             <Route path='/' element={<AdminGuide />} />
+
             <Route path='stats' element={<AdminStats />} />
-            <Route path='role-distribution' element={<AdminStats />} />
-            <Route path='monthly-attendance' element={<AdminStats />} />
-            <Route path='course-attendance' element={<AdminStats />} />
             <Route path='logs' element={<AdminLogs />} />
             <Route path='user-feedback' element={<AdminFeedback />} />
             <Route path='errorlogs' element={<AdminErrorLogs />} />
