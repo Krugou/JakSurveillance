@@ -1,5 +1,6 @@
 import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
+import logger from '../utils/logger.js';
 
 const pool = createPool('ADMIN');
 interface Course {
@@ -198,6 +199,7 @@ const course: CourseModel = {
       return rows;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -217,6 +219,7 @@ const course: CourseModel = {
       return (rows[0] as Course) || null;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -245,6 +248,7 @@ const course: CourseModel = {
       return rows as Course[];
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -261,6 +265,7 @@ const course: CourseModel = {
         .query('DELETE FROM courses WHERE courseid = ?', [id]);
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -292,6 +297,7 @@ const course: CourseModel = {
         );
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -308,6 +314,7 @@ const course: CourseModel = {
       return rows[0].count;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -325,6 +332,7 @@ const course: CourseModel = {
       return rows[0] ? (rows[0] as Course) : null;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       throw new Error('Database query failed');
     }
   },
@@ -335,12 +343,18 @@ const course: CourseModel = {
    * @returns {Promise<RowDataPacket[]>} A promise that resolves with the course ID.
    */
   async findCourseIdUsingCourseCode(coursecode) {
-    const [courseResult] = await pool
-      .promise()
-      .query<RowDataPacket[]>('SELECT courseid FROM courses WHERE code = ?', [
-        coursecode,
-      ]);
-    return courseResult;
+    try {
+      const [courseResult] = await pool
+        .promise()
+        .query<RowDataPacket[]>('SELECT courseid FROM courses WHERE code = ?', [
+          coursecode,
+        ]);
+      return courseResult;
+    } catch (error) {
+      console.error(error);
+      logger.error(error);
+      return Promise.reject(error);
+    }
   },
   /**
    * Fetches the courses by course ID.
@@ -369,6 +383,7 @@ const course: CourseModel = {
       return rows as Course[];
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -389,14 +404,20 @@ const course: CourseModel = {
     code: string,
     studentGroupId: number,
   ) {
-    const [courseResult] = await pool
-      .promise()
-      .query<ResultSetHeader>(
-        'INSERT INTO courses (name, start_date, end_date, code, studentgroupid) VALUES (?, ?, ?, ?, ?)',
-        [name, startDateString, endDateString, code, studentGroupId],
-      );
+    try {
+      const [courseResult] = await pool
+        .promise()
+        .query<ResultSetHeader>(
+          'INSERT INTO courses (name, start_date, end_date, code, studentgroupid) VALUES (?, ?, ?, ?, ?)',
+          [name, startDateString, endDateString, code, studentGroupId],
+        );
 
-    return courseResult;
+      return courseResult;
+    } catch (error) {
+      console.error(error);
+      logger.error(error);
+      return Promise.reject(error);
+    }
   },
   /**
    * Fetches the courses of a student.
@@ -448,6 +469,7 @@ const course: CourseModel = {
       return rows as Course[];
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -471,6 +493,7 @@ const course: CourseModel = {
       }
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -591,6 +614,7 @@ const course: CourseModel = {
     } catch (error) {
       await connection.rollback();
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     } finally {
       connection.release();
@@ -658,6 +682,7 @@ const course: CourseModel = {
       return courses;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -692,6 +717,7 @@ const course: CourseModel = {
       return rows as RowDataPacket[];
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -713,6 +739,7 @@ const course: CourseModel = {
       return rows as Course[];
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },

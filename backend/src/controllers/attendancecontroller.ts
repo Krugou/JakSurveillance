@@ -2,6 +2,7 @@ import {RowDataPacket} from 'mysql2';
 import attendanceModel from '../models/attendancemodel.js';
 import lectureModel from '../models/lecturemodel.js';
 import usercoursesModel from '../models/usercoursemodel.js';
+import logger from '../utils/logger.js';
 /**
  * AttendanceController interface represents the structure of the attendance controller.
  *
@@ -157,6 +158,7 @@ const attendanceController: AttendanceController = {
       }
     } catch (error) {
       console.error(error);
+      logger.error(error);
       throw error;
     }
   },
@@ -215,6 +217,7 @@ const attendanceController: AttendanceController = {
       return Promise.resolve();
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -231,6 +234,7 @@ const attendanceController: AttendanceController = {
       return true;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return false;
     }
   },
@@ -246,6 +250,7 @@ const attendanceController: AttendanceController = {
       return lectures;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -293,6 +298,7 @@ const attendanceController: AttendanceController = {
       }
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },

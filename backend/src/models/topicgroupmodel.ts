@@ -1,5 +1,6 @@
 import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
+import logger from '../utils/logger.js';
 
 const pool = createPool('ADMIN');
 /**
@@ -94,6 +95,7 @@ const topicGroupModel: TopicGroupModel = {
         .query<RowDataPacket[]>('SELECT * FROM topicgroups');
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -113,6 +115,7 @@ const topicGroupModel: TopicGroupModel = {
       return rows;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -128,6 +131,7 @@ const topicGroupModel: TopicGroupModel = {
       return rows;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -148,6 +152,7 @@ const topicGroupModel: TopicGroupModel = {
       return (rows[0] as TopicGroup) || null;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },

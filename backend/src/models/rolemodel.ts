@@ -1,5 +1,6 @@
 import {RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
+import logger from '../utils/logger.js';
 
 const pool = createPool('ADMIN');
 /**
@@ -56,6 +57,7 @@ const roleModel: RoleModel = {
       return results;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -73,6 +75,7 @@ const roleModel: RoleModel = {
       return rows;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -89,6 +92,7 @@ const roleModel: RoleModel = {
       return (rows[0] as Role) || null;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -104,6 +108,7 @@ const roleModel: RoleModel = {
         .query('INSERT INTO roles (rolename) VALUES (?)', [rolename]);
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },

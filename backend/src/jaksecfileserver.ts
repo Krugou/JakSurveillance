@@ -1,6 +1,7 @@
 import express, {Request, Response} from 'express';
 import {Server, createServer} from 'http';
-// import logger from './utils/logger.js';
+import logger from './utils/logger.js';
+
 /**
  * Express application instance
  * @type {express.Express}
@@ -43,12 +44,9 @@ app.get('*', (_req: Request, res: Response) => {
  * Start the server
  */
 http.listen(port, () => {
-  // logger.info(
-  // 	'Metropolia Attendance app FILE SERVER started at: http://localhost:' +
-  // 		port +
-  // 		'/ start time:' +
-  // 		startTime.toLocaleString(),
-  // );
+  logger.info(
+    `JakSec FILE SERVER started at: http://localhost:${port}/. Start time: ${startTime.toLocaleString()}`,
+  );
   console.log(
     `JakSec FILE SERVER started at: http://localhost:${port}/. Start time: ${startTime.toLocaleString()}`,
   );

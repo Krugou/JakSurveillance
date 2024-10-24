@@ -3,6 +3,7 @@ import lectureModel from '../models/lecturemodel.js';
 import topicModel from '../models/topicmodel.js';
 import usercourse_topicsModel from '../models/usercourse_topicsmodel.js';
 import attendanceController from './attendancecontroller.js';
+import logger from '../utils/logger.js';
 
 const lectureController = {
   /**
@@ -67,6 +68,7 @@ const lectureController = {
       return {lectureid: lectureid};
     } catch (error) {
       console.error(error);
+      logger.error(error);
     }
   },
   /**
@@ -116,6 +118,7 @@ const lectureController = {
       return finalStudents;
     } catch (error) {
       console.error(error);
+      logger.error(error);
     }
   },
 
@@ -155,6 +158,7 @@ const lectureController = {
       return result;
     } catch (error) {
       console.error(error);
+      logger.error(error);
       return Promise.reject(error);
     }
   },
