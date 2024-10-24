@@ -77,14 +77,16 @@ router.post(
       const {topicGroup, topics, email} = req.body;
 
       if (!topicGroup) {
-        return res.status(400).send({message: 'Topic group is required'});
+        res.status(400).send({message: 'Topic group is required'});
+        return;
       }
       if (
         !topics ||
         topics.length === 0 ||
         topics.every((topic: string) => topic.trim() === '')
       ) {
-        return res.status(400).send({message: 'Topics are required'});
+        res.status(400).send({message: 'Topics are required'});
+        return;
       }
       const topicGroupData = await TopicGroupController.updateTopicGroup(
         topicGroup,
@@ -129,7 +131,8 @@ router.post(
       const usercourseid = parseInt(req.params.usercourseid);
       const {modifiedTopics} = req.body;
       if (!modifiedTopics) {
-        return res.status(400).send({message: 'Topics are required'});
+        res.status(400).send({message: 'Topics are required'});
+        return;
       }
 
       const topicResponse = await TopicGroupController.updateUserCourseTopics(
@@ -167,7 +170,8 @@ router.post(
       const {topicGroup, email} = req.body;
 
       if (!topicGroup) {
-        return res.status(400).send({message: 'Topic group is required'});
+        res.status(400).send({message: 'Topic group is required'});
+        return;
       }
       const topicGroupResult =
         await TopicGroupController.checkIfTopicGroupExistsWithEmail(
@@ -205,7 +209,8 @@ router.delete(
     try {
       const topicgroupname = req.params.topicgroupname;
       if (!topicgroupname) {
-        return res.status(400).send({message: 'Topic group is required'});
+        res.status(400).send({message: 'Topic group is required'});
+        return;
       }
       const userid = req.user?.userid;
       console.log('🚀 ~ file: topicRoutes.ts:150 ~ userid:', userid);

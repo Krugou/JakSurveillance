@@ -1,4 +1,4 @@
-import express, {Request, Response, Router} from 'express';
+import express, {NextFunction, Request, Response, Router} from 'express';
 import {body, param} from 'express-validator';
 import createPool from '../config/createPool.js';
 import serverSettingsModel from '../models/serversettingsmodel.js';
@@ -8,27 +8,30 @@ import usermodel from '../models/usermodel.js';
 import checkUserRole from '../utils/checkRole.js';
 import logger from '../utils/logger.js';
 import validate from '../utils/validate.js';
+
 const pool = createPool('ADMIN');
+
 /**
  * Router for secure routes.
  */
 const router: Router = express.Router();
+
 /**
  * Route that returns the user object from the request.
  */
 router.get('/', (req: Request, res: Response) => {
   res.json(req.user);
 });
+
 /**
  * Route that fetches all students.
  */
 router.get(
   '/students',
   checkUserRole(['admin', 'counselor', 'teacher']),
-  async (_req: Request, res: Response) => {
+  async (_req: Request, res: Response, _next: NextFunction) => {
     try {
       const users = await usermodel.fetchAllStudents();
-      // console.log(users, 'users');
       res.send(users);
     } catch (error) {
       logger.error(error);
@@ -37,20 +40,25 @@ router.get(
     }
   },
 );
+
 /**
  * Route that gets the attendance threshold.
  */
-router.get('/getattendancethreshold', async (_req: Request, res: Response) => {
-  try {
-    const result = await serverSettingsModel.getAttentanceThreshold(pool); // replace with your actual function to get the threshold
-    const threshold = result[0][0].attendancethreshold;
-    res.send({attendancethreshold: threshold});
-  } catch (error) {
-    logger.error(error);
-    console.error(error);
-    res.status(500).json({message: 'Internal server error'});
-  }
-});
+router.get(
+  '/getattendancethreshold',
+  async (_req: Request, res: Response, _next: NextFunction) => {
+    try {
+      const result = await serverSettingsModel.getAttentanceThreshold(pool); // replace with your actual function to get the threshold
+      const threshold = result[0][0].attendancethreshold;
+      res.send({attendancethreshold: threshold});
+    } catch (error) {
+      logger.error(error);
+      console.error(error);
+      res.status(500).json({message: 'Internal server error'});
+    }
+  },
+);
+
 /**
  * Route that updates the GDPR status of a user.
  */
@@ -58,7 +66,7 @@ router.put(
   '/accept-gdpr/:userid',
   param('userid').isNumeric().withMessage('User ID must be a number'),
   validate,
-  async (req, res) => {
+  async (req: Request, res: Response, _next: NextFunction) => {
     try {
       const userId: number | undefined = req.user?.userid;
       await usermodel.updateUserGDPRStatus(userId);
@@ -70,6 +78,7 @@ router.put(
     }
   },
 );
+
 /**
  * Route that checks if a user exists by email and is a staff member.
  */
@@ -78,7 +87,7 @@ router.get(
   checkUserRole(['admin', 'counselor', 'teacher']),
   param('email').isEmail().withMessage('Email must be a valid email address'),
   validate,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, _next: NextFunction) => {
     const email = req.params.email;
     try {
       const user = await usermodel.checkIfUserExistsByEmailAndisStaff(email);
@@ -94,6 +103,7 @@ router.get(
     }
   },
 );
+
 /**
  * Route that fetches all student groups.
  *
@@ -102,7 +112,7 @@ router.get(
 router.get(
   '/studentgroups',
   checkUserRole(['admin', 'teacher', 'counselor']),
-  async (_req: Request, res: Response) => {
+  async (_req: Request, res: Response, _next: NextFunction) => {
     try {
       const groups = await studentgroupmodel.fetchAllStudentGroups();
       res.send(groups);
@@ -113,6 +123,7 @@ router.get(
     }
   },
 );
+
 router.post(
   '/insert-student-user-course/',
   checkUserRole(['admin', 'counselor', 'teacher']),
@@ -125,7 +136,7 @@ router.post(
       .withMessage('Student number must be a string'),
   ],
   validate,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, _next: NextFunction) => {
     if (req.user) {
       console.log('insert-student-user-course ', req.user?.email);
       logger.info({email: req.user?.email}, 'Inserting student user');
@@ -188,10 +199,11 @@ router.post(
     }
   },
 );
+
 router.put(
   '/updateuser',
   checkUserRole(['admin', 'counselor', 'teacher']),
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, _next: NextFunction) => {
     try {
       const user = req.body;
       await usermodel.updateUser(user);
@@ -203,6 +215,7 @@ router.put(
     }
   },
 );
+
 /**
  * Route that fetches a user by their ID.
  *
@@ -214,7 +227,7 @@ router.get(
   checkUserRole(['admin', 'counselor', 'teacher']),
   [param('userid').isNumeric().withMessage('User ID must be a number')],
   validate,
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, _next: NextFunction) => {
     try {
       const {userid} = req.params;
       const user = await usermodel.fetchUserById(Number(userid));
@@ -226,4 +239,5 @@ router.get(
     }
   },
 );
+
 export default router;

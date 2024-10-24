@@ -1,4 +1,4 @@
-import express, {Request, Response, Router} from 'express';
+import express, {NextFunction, Request, Response, Router} from 'express';
 import {body, validationResult} from 'express-validator';
 import jwt from 'jsonwebtoken';
 import userFeedBackModel from '../models/userfeedbackmodel.js';
@@ -7,11 +7,14 @@ import {ResponseData, User, UserData} from '../types.js';
 import {authenticate} from '../utils/auth.js';
 import doFetch from '../utils/doFetch.js';
 import logger from '../utils/logger.js';
+
 const loginUrl = 'https://streams.metropolia.fi/2.0/api/';
+
 /**
  * Router for user routes.
  */
 const router: Router = express.Router();
+
 /**
  * Route that handles user login.
  * If the user is a staff member and doesn't exist in the database, they are added.
@@ -23,107 +26,107 @@ const router: Router = express.Router();
  * @param {Function} next - The next middleware function.
  * @returns {Promise<void>} A promise that resolves when the operation is finished.
  */
-router.post('/', async (req: Request, res: Response, next) => {
-  // Check if the environment variables are not undefined
-  if (!process.env.JWT_SECRET) {
-    throw new Error('JWT_SECRET environment variable is not set');
-  }
-
-  if (
-    !process.env.devaccount ||
-    !process.env.devpass ||
-    !process.env.devteacheraccount ||
-    !process.env.devteacherpass ||
-    !process.env.devstudentaccount ||
-    !process.env.devstudentpass ||
-    !process.env.devstudent2account ||
-    !process.env.devstudent2pass ||
-    !process.env.devcounseloraccount ||
-    !process.env.devcounselorpass
-  ) {
-    throw new Error('One or more environment variables are not set');
-  }
-  let metropoliaData: ResponseData;
-  // Get username and password from the request body
-  const {username, password} = req.body;
-
-  // if the user is admin, return the admin account
-
-  // create tokens for dev accounts and return them
-  if (
-    username === process.env.devaccount! &&
-    password === process.env.devpass!
-  ) {
-    metropoliaData = {
-      staff: true,
-      user: process.env.devaccount,
-      firstname: 'Gustav',
-      lastname: 'Admin',
-      email: 'admin@metropolia.fi',
-    };
-  } else if (
-    username === process.env.devteacheraccount! &&
-    password === process.env.devteacherpass!
-  ) {
-    metropoliaData = {
-      staff: true,
-      user: process.env.devteacheraccount,
-      firstname: 'Willie',
-      lastname: 'Teacher',
-      email: 'teacher@metropolia.fi',
-    };
-  } else if (
-    username === process.env.devstudentaccount! &&
-    password === process.env.devstudentpass!
-  ) {
-    metropoliaData = {
-      staff: false,
-      user: process.env.devstudentaccount,
-      firstname: 'Sam',
-      lastname: 'Student',
-      email: 'student@metropolia.fi',
-    };
-  } else if (
-    username === process.env.devstudent2account! &&
-    password === process.env.devstudent2pass!
-  ) {
-    metropoliaData = {
-      staff: false,
-      user: process.env.devstudent2account,
-      firstname: 'Laurel',
-      lastname: 'Student2',
-      email: 'student2@metropolia.fi',
-    };
-  } else if (
-    username === process.env.devcounseloraccount! &&
-    password === process.env.devcounselorpass!
-  ) {
-    metropoliaData = {
-      staff: true,
-      user: process.env.devcounseloraccount,
-      firstname: 'Cass',
-      lastname: 'Counselor',
-      email: 'counselor@metropolia.fi',
-    };
-  } else {
-    //TRY TO FIND USER IN METROPOLIA DATABASE
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({username, password}),
-    };
-    metropoliaData = await doFetch(loginUrl, options);
-
-    if (metropoliaData.message === 'invalid username or password') {
-      return res.status(403).json({
-        message: 'Invalid username or password',
-      });
-    }
-  }
-
+router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
+    // Check if the environment variables are not undefined
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET environment variable is not set');
+    }
+
+    if (
+      !process.env.devaccount ||
+      !process.env.devpass ||
+      !process.env.devteacheraccount ||
+      !process.env.devteacherpass ||
+      !process.env.devstudentaccount ||
+      !process.env.devstudentpass ||
+      !process.env.devstudent2account ||
+      !process.env.devstudent2pass ||
+      !process.env.devcounseloraccount ||
+      !process.env.devcounselorpass
+    ) {
+      throw new Error('One or more environment variables are not set');
+    }
+
+    let metropoliaData: ResponseData;
+    // Get username and password from the request body
+    const {username, password} = req.body;
+
+    // create tokens for dev accounts and return them
+    if (
+      username === process.env.devaccount &&
+      password === process.env.devpass
+    ) {
+      metropoliaData = {
+        staff: true,
+        user: process.env.devaccount,
+        firstname: 'Gustav',
+        lastname: 'Admin',
+        email: 'admin@metropolia.fi',
+      };
+    } else if (
+      username === process.env.devteacheraccount &&
+      password === process.env.devteacherpass
+    ) {
+      metropoliaData = {
+        staff: true,
+        user: process.env.devteacheraccount,
+        firstname: 'Willie',
+        lastname: 'Teacher',
+        email: 'teacher@metropolia.fi',
+      };
+    } else if (
+      username === process.env.devstudentaccount &&
+      password === process.env.devstudentpass
+    ) {
+      metropoliaData = {
+        staff: false,
+        user: process.env.devstudentaccount,
+        firstname: 'Sam',
+        lastname: 'Student',
+        email: 'student@metropolia.fi',
+      };
+    } else if (
+      username === process.env.devstudent2account &&
+      password === process.env.devstudent2pass
+    ) {
+      metropoliaData = {
+        staff: false,
+        user: process.env.devstudent2account,
+        firstname: 'Laurel',
+        lastname: 'Student2',
+        email: 'student2@metropolia.fi',
+      };
+    } else if (
+      username === process.env.devcounseloraccount &&
+      password === process.env.devcounselorpass
+    ) {
+      metropoliaData = {
+        staff: true,
+        user: process.env.devcounseloraccount,
+        firstname: 'Cass',
+        lastname: 'Counselor',
+        email: 'counselor@metropolia.fi',
+      };
+    } else {
+      // Try to find user in Metropolia database
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({username, password}),
+      };
+      metropoliaData = await doFetch(loginUrl, options);
+
+      if (metropoliaData.message === 'invalid username or password') {
+        res.status(403).json({
+          message: 'Invalid username or password',
+        });
+        return;
+      }
+    }
+
     req.body.username = metropoliaData.email;
     // If the logged-in user is Metropolia staff and they don't exist in the DB yet, add them to the DB
     if (metropoliaData.staff === true) {
@@ -187,7 +190,7 @@ router.post('/', async (req: Request, res: Response, next) => {
         }
       } catch (error) {
         console.error(error);
-        return res.status(500).json({error: 'Internal server error'});
+        res.status(500).json({error: 'Internal server error'});
       }
     }
 
@@ -209,6 +212,7 @@ router.post('/', async (req: Request, res: Response, next) => {
     res.status(500).json({error: 'Internal server error'});
   }
 });
+
 router.post(
   '/feedback',
   [
@@ -216,11 +220,12 @@ router.post(
     body('text').notEmpty().withMessage('Text is required'),
     body('userId').notEmpty().withMessage('User ID is required'),
   ],
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, _next: NextFunction) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
+        res.status(400).json({errors: errors.array()});
+        return;
       }
       const {topic, text, userId} = req.body;
 
@@ -230,17 +235,18 @@ router.post(
         text,
       );
       if (result === null) {
-        return res.status(500).json({
+        res.status(500).json({
           message: 'Internal server error',
         });
+        return;
       }
-      return res.status(200).json({
+      res.status(200).json({
         message: 'Success',
       });
     } catch (error) {
       logger.error(error);
       console.error(error);
-      return res.status(500).json({
+      res.status(500).json({
         message: 'An unexpected error occurred',
       });
     }
