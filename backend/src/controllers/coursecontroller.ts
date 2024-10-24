@@ -75,6 +75,8 @@ export interface CourseController {
   getStudentAndSelectedTopicsByUsercourseId: (
     usercourseid: number,
   ) => Promise<any>;
+  getCourseAttendance: (courseId: string) => Promise<any>;
+  getMonthlyAttendance: () => Promise<any>;
 }
 /**
  * `courseController` is an object that implements the CourseController interface.
@@ -467,6 +469,37 @@ const courseController: CourseController = {
         ...{topics: topicNames},
       };
       return studentAndSelectedParts;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+  /**
+   * Gets the attendance for a course by its ID.
+   *
+   * @param {string} courseId - The ID of the course.
+   * @returns {Promise<any>} The attendance details for the course.
+   * @throws {Error} If there is an error fetching the attendance details.
+   */
+  getCourseAttendance: async (courseId: string) => {
+    try {
+      const attendanceDetails = await attendanceModel.getAttendaceByCourseId(courseId);
+      return attendanceDetails;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+  /**
+   * Gets the monthly attendance trends.
+   *
+   * @returns {Promise<any>} The monthly attendance trends.
+   * @throws {Error} If there is an error fetching the monthly attendance trends.
+   */
+  getMonthlyAttendance: async () => {
+    try {
+      const monthlyAttendance = await attendanceModel.getMonthlyAttendance();
+      return monthlyAttendance;
     } catch (error) {
       console.error(error);
       throw error;
