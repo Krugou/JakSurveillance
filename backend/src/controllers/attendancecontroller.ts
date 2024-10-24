@@ -98,6 +98,7 @@ const attendanceController: AttendanceController = {
     lectureid: string,
   ): Promise<unknown> {
     try {
+      logger.info('Starting insertIntoAttendance operation');
       if (!status || !date || !studentnumber || !lectureid) {
         throw new Error('Invalid parameters');
       }
@@ -150,8 +151,7 @@ const attendanceController: AttendanceController = {
           );
         }
 
-        // console.log('insertIntoAttendance ~ attendanceResult:', attendanceResult);
-
+        logger.info('Completed insertIntoAttendance operation');
         return attendanceResult[0];
       } else {
         throw new Error('Invalid result: usercourseid property not found');
@@ -176,6 +176,7 @@ const attendanceController: AttendanceController = {
     lectureid: string,
   ): Promise<void> {
     try {
+      logger.info('Starting checkAndInsertStatusNotPresentAttendance operation');
       for (const studentnumber of studentnumbers) {
         const courseId = await lectureModel.getCourseIDByLectureID(lectureid);
         if (courseId === null) {
@@ -214,6 +215,7 @@ const attendanceController: AttendanceController = {
           );
         }
       }
+      logger.info('Completed checkAndInsertStatusNotPresentAttendance operation');
       return Promise.resolve();
     } catch (error) {
       console.error(error);
@@ -230,7 +232,9 @@ const attendanceController: AttendanceController = {
    */
   async updateAttendanceStatus(attendanceid: number, status: number) {
     try {
+      logger.info('Starting updateAttendanceStatus operation');
       await attendanceModel.updateAttendanceStatus(attendanceid, status);
+      logger.info('Completed updateAttendanceStatus operation');
       return true;
     } catch (error) {
       console.error(error);
@@ -246,7 +250,9 @@ const attendanceController: AttendanceController = {
    */
   async getLecturesAndAttendancesByCourseId(courseid: string) {
     try {
+      logger.info('Starting getLecturesAndAttendancesByCourseId operation');
       const lectures = await attendanceModel.getAttendaceByCourseId(courseid);
+      logger.info('Completed getLecturesAndAttendancesByCourseId operation');
       return lectures;
     } catch (error) {
       console.error(error);
@@ -266,6 +272,7 @@ const attendanceController: AttendanceController = {
     lectureid: string,
   ): Promise<boolean> {
     try {
+      logger.info('Starting deleteAttendance operation');
       const courseId = await lectureModel.getCourseIDByLectureID(lectureid);
       if (courseId === null) {
         throw new Error('Course ID is null');
@@ -292,6 +299,7 @@ const attendanceController: AttendanceController = {
           throw new Error('Failed to delete attendance');
         }
 
+        logger.info('Completed deleteAttendance operation');
         return true;
       } else {
         throw new Error('Invalid result: usercourseid property not found');
