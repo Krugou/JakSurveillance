@@ -70,13 +70,35 @@ const AdminErrorLogs = () => {
           <div className='w-32 h-32 border-t-2 border-b-2 border-purple-500 rounded-full animate-spin'></div>
         </div>
       ) : (
-        <AdminLogsTable
-          logs={errorLogs}
-          handleShowMore={handleShowMore}
-          handleReset={handleReset}
-          lineLimit={lineLimit}
-          logType='error'
-        />
+        <div className='flex flex-col justify-center px-4 md:px-0'>
+          <h1 className='mb-4 text-2xl font-bold text-center'>
+            Admin Error Logs
+          </h1>
+          <div className='flex flex-col items-center justify-center w-full p-2 mb-4 bg-metropoliaSupportWhite md:mb-0'>
+            <div className='flex flex-col items-center justify-center md:flex-row'>
+              <button
+                onClick={handleShowMore}
+                className={`m-4 font-bold py-2 px-4 rounded ${
+                  lineLimit >= 500
+                    ? 'bg-gray-500 cursor-not-allowed'
+                    : 'bg-blue-500 hover:bg-blue-700 text-white'
+                }`}
+                disabled={lineLimit >= 5000}>
+                Show older error Logs:
+              </button>
+              <button
+                onClick={handleReset}
+                className='px-4 py-2 m-2 font-bold text-white bg-red-500 rounded hover:bg-red-700'>
+                Reset/Reload
+              </button>
+            </div>
+          </div>
+          {errorLogs.length === 0 ? (
+        <p className='text-center text-gray-500'>No error logs available.</p>
+      ) : (
+        <AdminLogsTable logs={errorLogs} />
+      )}
+        </div>
       )}
     </div>
   );
