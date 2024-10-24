@@ -109,7 +109,8 @@ const courseController: CourseController = {
     topics?: string,
     topicgroup?: string,
   ) {
-    logger.info('Starting insertIntoCourse operation');
+    // console.log('🚀 ~ file: coursecontroller.ts:37 ~ topics:', topics);
+    // console.log('🚀 ~ file: coursecontroller.ts:37 ~ topicgroup:', topicgroup);
     let courseId = 0;
     try {
       const instructorUserIds: number[] = [];
@@ -258,22 +259,30 @@ const courseController: CourseController = {
               );
 
             let userId: number = 0;
+            // let usercourseid: number = 0;
             if (existingUserByNumber.length > 0) {
               console.error('User with this student number already exists');
+              // If the user already exists, insert them into the course
               userId = existingUserByNumber[0].userid;
               await userCourseModel.insertUserCourse(userId, courseId);
+
+              // usercourseid = result.insertId;
             } else {
               const existingUserByEmail =
                 await userModel.checkIfUserExistsByEmail(student.email);
 
               if (existingUserByEmail.length > 0) {
+                // If the user exists with a different student number, update their student number and insert them into the course
                 await userModel.updateUserStudentNumber(
                   student.studentnumber,
                   student.email,
                 );
                 userId = existingUserByEmail[0].userid;
                 await userCourseModel.insertUserCourse(userId, courseId);
+
+                // usercourseid = (result as ResultSetHeader).insertId;
               } else {
+                // Insert the user if they don't exist
                 const userResult = await userModel.insertStudentUser(
                   student.email,
                   student.first_name,
@@ -285,15 +294,29 @@ const courseController: CourseController = {
                 userId = userResult.insertId;
               }
             }
+            // Insert the user into the course
 
             const existingUserCourse =
               await userCourseModel.checkIfUserCourseExists(userId, courseId);
 
             if (existingUserCourse.length === 0) {
+              // Insert the user into the course
               await userCourseModel.insertUserCourse(userId, courseId);
             } else {
               console.error('User is already enrolled in this course');
             }
+            /*
+						try {
+							await usercourse_topicsModel.insertUserCourseTopic(
+								usercourseid,
+								topicId,
+							);
+
+							console.log('Data inserted successfully', userId);
+						} catch (error) {
+							console.error(error);
+						}
+						*/
           } catch (error) {
             console.error(error);
             logger.error(error);
@@ -309,7 +332,6 @@ const courseController: CourseController = {
       logger.error(error);
       return Promise.reject(error);
     }
-    logger.info('Completed insertIntoCourse operation');
     return courseId;
   },
   /**
@@ -320,7 +342,6 @@ const courseController: CourseController = {
    * @throws {Error} If there is an error fetching the course details.
    */
   getDetailsByCourseId: async (courseId: string) => {
-    logger.info('Starting getDetailsByCourseId operation');
     try {
       let allUsersOnCourse = await course.getAllStudentsOnCourse(courseId);
 
@@ -328,6 +349,7 @@ const courseController: CourseController = {
         courseId,
       );
 
+      // Assuming usersAttendance is an array of objects
       const distinctUserCourseIds = [
         ...new Set(allUsersOnCourse.map((user) => user.usercourseid)),
       ];
@@ -338,6 +360,7 @@ const courseController: CourseController = {
             usercourseid,
           );
 
+        // Add userCourseTopic to each usersAttendance object with the same usercourseid
         allUsersOnCourse = allUsersOnCourse.map((user) => {
           if (user.usercourseid === usercourseid) {
             return {...user, selectedParts};
@@ -357,7 +380,6 @@ const courseController: CourseController = {
       const lectureCount = await attendanceModel.getLectureCountByTopic(
         courseId,
       );
-      logger.info('Completed getDetailsByCourseId operation');
       return {
         users: [...usersAttendance],
         lectures: [...lectureCount],
@@ -377,18 +399,17 @@ const courseController: CourseController = {
    * @throws {Error} If the user is already enrolled in the course.
    */
   updateStudentCourses: async (userid: number, courseid: number) => {
-    logger.info('Starting updateStudentCourses operation');
     try {
       const existingUserCourse = await userCourseModel.checkIfUserCourseExists(
         userid,
         courseid,
       );
       if (existingUserCourse.length === 0) {
+        // Insert the user into the course
         await userCourseModel.insertUserCourse(userid, courseid);
       } else {
         throw new Error('User is already enrolled on this course');
       }
-      logger.info('Completed updateStudentCourses operation');
     } catch (error) {
       console.error(error);
       logger.error(error);
@@ -402,7 +423,6 @@ const courseController: CourseController = {
    * @throws {Error} If the user is not enrolled in the course.
    */
   removeStudentCourses: async (usercourseid: number) => {
-    logger.info('Starting removeStudentCourses operation');
     try {
       const existingUserCourse =
         (await userCourseModel.getUserCourseByUsercourseid(
@@ -410,11 +430,11 @@ const courseController: CourseController = {
         )) as RowDataPacket[];
 
       if (existingUserCourse.length > 0) {
+        // Insert the user into the course
         await userCourseModel.deleteUserCourseByUsercourseid(usercourseid);
       } else {
         throw new Error('User is not enrolled on this course');
       }
-      logger.info('Completed removeStudentCourses operation');
     } catch (error) {
       console.error(error);
       logger.error(error);
@@ -427,7 +447,6 @@ const courseController: CourseController = {
    * @param {number} usercourseid - The ID of the user course.
    */
   getStudentAndSelectedTopicsByUsercourseId: async (usercourseid: number) => {
-    logger.info('Starting getStudentAndSelectedTopicsByUsercourseId operation');
     try {
       let topicNames;
       const selectedParts =
@@ -457,7 +476,6 @@ const courseController: CourseController = {
         ...studentInfoObject,
         ...{topics: topicNames},
       };
-      logger.info('Completed getStudentAndSelectedTopicsByUsercourseId operation');
       return studentAndSelectedParts;
     } catch (error) {
       console.error(error);
@@ -473,10 +491,8 @@ const courseController: CourseController = {
    * @throws {Error} If there is an error fetching the attendance details.
    */
   getCourseAttendance: async (courseId: string) => {
-    logger.info('Starting getCourseAttendance operation');
     try {
       const attendanceDetails = await attendanceModel.getAttendaceByCourseId(courseId);
-      logger.info('Completed getCourseAttendance operation');
       return attendanceDetails;
     } catch (error) {
       console.error(error);
@@ -491,10 +507,8 @@ const courseController: CourseController = {
    * @throws {Error} If there is an error fetching the monthly attendance trends.
    */
   getMonthlyAttendance: async () => {
-    logger.info('Starting getMonthlyAttendance operation');
     try {
       const monthlyAttendance = await attendanceModel.getMonthlyAttendance();
-      logger.info('Completed getMonthlyAttendance operation');
       return monthlyAttendance;
     } catch (error) {
       console.error(error);
