@@ -12,7 +12,7 @@ const AdminLogsTable: React.FC<AdminLogsTableProps> = ({logs}) => {
   return (
     <div className='flex flex-col items-center justify-center p-2 m-4'>
       <div className='overflow-x-auto'>
-        <div className='overflow-auto divide-y divide-gray-200 h-1/2'>
+        <div className='overflow-auto flex flex-col gap-4 divide-y divide-gray-200 h-1/2'>
           {logs.map((log, index) => {
             try {
               const parsedLog = JSON.parse(log.line);
