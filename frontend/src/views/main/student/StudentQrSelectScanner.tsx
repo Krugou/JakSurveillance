@@ -1,4 +1,4 @@
-import {QrScanner} from '@yudiel/react-qr-scanner';
+import {IDetectedBarcode, Scanner} from '@yudiel/react-qr-scanner';
 import React, {
   useCallback,
   useContext,
@@ -10,8 +10,9 @@ import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import io, {Socket} from 'socket.io-client';
 import {UserContext} from '../../../contexts/UserContext.tsx';
+
 /**
- * StudentQrScanner component.
+ * StudentQrSelectScanner component.
  *
  * This component is responsible for scanning QR codes for students. It performs the following operations:
  *
@@ -32,15 +33,18 @@ const StudentQrSelectScanner: React.FC = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [loading, setLoading] = useState(false);
   const [successState, setSuccessState] = useState(false);
+
   useEffect(() => {
     if (!user) {
       navigate('/login');
     }
   }, [user, navigate]);
+
   type Device = {
     deviceId: string;
     label: string;
   };
+
   const [devices, setDevices] = useState<Device[]>([]);
   const [selectedDevice, setSelectedDevice] = useState<string | null>(null);
 
@@ -59,84 +63,98 @@ const StudentQrSelectScanner: React.FC = () => {
   const handleDeviceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedDevice(event.target.value);
   };
+
   const decodedTextCheck = useRef('');
 
-  const onNewScanResult = useCallback((decodedText: string) => {
-    setLoading(true);
-    if (decodedText === decodedTextCheck.current) {
-      setLoading(false);
-      return;
-    }
-    const [baseUrl, secureHash, lectureid] = decodedText.split('#');
-    if (!secureHash || !lectureid || !baseUrl) {
-      toast.error('Invalid QR code');
-      setLoading(false);
-      return;
-    }
-    if (!socket) {
-      const socketURL =
-        import.meta.env.MODE === 'development' ? 'http://localhost:3002' : '/';
-      const socketPath =
-        import.meta.env.MODE === 'development' ? '' : '/api/socket.io';
-
-      const newSocket = io(socketURL, {
-        path: socketPath,
-        transports: ['websocket'],
-      });
-      setSocket(newSocket);
-      newSocket.on('connect', () => {
-        console.log('Socket connected');
-      });
-
-      if (!scanned) {
-        console.log('scanned');
-        console.log('secureHash', secureHash);
-        console.log('lectureid', lectureid);
-        let studentId;
-        if (user && user.studentnumber) {
-          studentId = user.studentnumber;
-        } else {
-          toast.error('No Student details available, please login again');
-          navigate('/login');
-          setLoading(false);
-          return;
-        }
-
-        const unixtime = Date.now();
-        newSocket.emit(
-          'inputThatStudentHasArrivedToLecture',
-          secureHash,
-          studentId,
-          unixtime,
-          lectureid,
-        );
-
-        setScanned(true);
+  const onNewScanResult = useCallback(
+    (detectedCodes: IDetectedBarcode[]) => {
+      setLoading(true);
+      if (detectedCodes.length === 0) {
+        setLoading(false);
+        return;
       }
-      newSocket.on('youHaveBeenSavedIntoLecture', (lectureid) => {
-        toast.success(`You have been saved into lecture`);
-        setSuccessState(true);
-        console.log('youHaveBeenSavedIntoLecture ', lectureid);
-        navigate('/student/mainview');
-      });
-      newSocket.on('youHaveBeenSavedIntoLectureAlready', (lectureid) => {
-        toast.error(`You have been saved into lecture already`);
-        setSuccessState(true);
-        console.log('youHaveBeenSavedIntoLectureAlready ', lectureid);
-        navigate('/student/mainview');
-      });
-      newSocket.on(
-        'inputThatStudentHasArrivedToLectureTooSlow',
-        (studentId2) => {
-          toast.error('You were too slow, try again ' + studentId2);
-          setScanned(false);
-        },
-      );
-    }
-    decodedTextCheck.current = decodedText;
 
-    setLoading(false);
-  }, []);
+      const decodedText = detectedCodes[0].rawValue;
+      if (decodedText === decodedTextCheck.current) {
+        setLoading(false);
+        return;
+      }
+
+      const [baseUrl, secureHash, lectureid] = decodedText.split('#');
+      if (!secureHash || !lectureid || !baseUrl) {
+        toast.error('Invalid QR code');
+        setLoading(false);
+        return;
+      }
+
+      if (!socket) {
+        const socketURL =
+          import.meta.env.MODE === 'development'
+            ? 'http://localhost:3002'
+            : '/';
+        const socketPath =
+          import.meta.env.MODE === 'development' ? '' : '/api/socket.io';
+
+        const newSocket = io(socketURL, {
+          path: socketPath,
+          transports: ['websocket'],
+        });
+        setSocket(newSocket);
+        newSocket.on('connect', () => {
+          console.log('Socket connected');
+        });
+
+        if (!scanned) {
+          console.log('scanned');
+          console.log('secureHash', secureHash);
+          console.log('lectureid', lectureid);
+          let studentId;
+          if (user && user.studentnumber) {
+            studentId = user.studentnumber;
+          } else {
+            toast.error('No Student details available, please login again');
+            navigate('/login');
+            setLoading(false);
+            return;
+          }
+
+          const unixtime = Date.now();
+          newSocket.emit(
+            'inputThatStudentHasArrivedToLecture',
+            secureHash,
+            studentId,
+            unixtime,
+            lectureid,
+          );
+
+          setScanned(true);
+        }
+        newSocket.on('youHaveBeenSavedIntoLecture', (lectureid) => {
+          toast.success(`You have been saved into lecture`);
+          setSuccessState(true);
+          console.log('youHaveBeenSavedIntoLecture ', lectureid);
+          navigate('/student/mainview');
+        });
+        newSocket.on('youHaveBeenSavedIntoLectureAlready', (lectureid) => {
+          toast.error(`You have been saved into lecture already`);
+          setSuccessState(true);
+          console.log('youHaveBeenSavedIntoLectureAlready ', lectureid);
+          navigate('/student/mainview');
+        });
+        newSocket.on(
+          'inputThatStudentHasArrivedToLectureTooSlow',
+          (studentId2) => {
+            toast.error('You were too slow, try again ' + studentId2);
+            setScanned(false);
+          },
+        );
+      }
+      decodedTextCheck.current = decodedText;
+
+      setLoading(false);
+    },
+    [scanned, socket, user, navigate],
+  );
 
   useEffect(() => {
     return () => {
@@ -147,12 +165,13 @@ const StudentQrSelectScanner: React.FC = () => {
     };
   }, [socket]);
 
-  const handleError = (error: Error) => {
+  const handleError = (error: unknown) => {
     console.log('error', error);
     if (!successState) {
       toast.error('Error scanning QR code');
     }
   };
+
   return (
     <>
       {loading ? (
@@ -178,12 +197,12 @@ const StudentQrSelectScanner: React.FC = () => {
               </select>
             </div>
             {selectedDevice && (
-              <QrScanner
-                onDecode={onNewScanResult}
+              <Scanner
+                onScan={onNewScanResult}
                 onError={handleError}
                 scanDelay={200}
-                hideCount={false}
                 constraints={{deviceId: selectedDevice}}
+                components={{zoom: true}}
               />
             )}
           </>
