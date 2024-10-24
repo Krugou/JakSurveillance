@@ -8,9 +8,12 @@ import {
   LinearScale,
   Title,
   Tooltip,
+  ArcElement,
+  LineElement,
+  PointElement,
 } from 'chart.js';
 import React, {useEffect, useState} from 'react';
-import {Bar} from 'react-chartjs-2';
+import {Bar, Pie, Line} from 'react-chartjs-2';
 import {toast} from 'react-toastify';
 import LecturesByDayChart from '../../../components/main/admin/LecturesByDayChart';
 import apiHooks from '../../../hooks/ApiHooks';
@@ -22,6 +25,9 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
+  ArcElement,
+  LineElement,
+  PointElement,
 );
 
 const options = {
@@ -56,6 +62,17 @@ interface Lecture {
   courseid: string;
   actualStudentCount: number;
 }
+
+interface MonthlyAttendance {
+  month: string;
+  attendance: number;
+}
+
+interface CourseAttendance {
+  courseName: string;
+  attendance: number;
+}
+
 const AdminStats = () => {
   const [userStatistics, setUserStatistics] = useState<{
     labels: string[];
@@ -72,6 +89,18 @@ const AdminStats = () => {
   const [userStatisticsPercentage, setUserStatisticsPercentage] =
     useState<number>(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [roleDistribution, setRoleDistribution] = useState<{
+    labels: string[];
+    datasets: ChartDataset<'pie', number[]>[];
+  } | null>(null);
+  const [monthlyAttendance, setMonthlyAttendance] = useState<{
+    labels: string[];
+    datasets: ChartDataset<'line', number[]>[];
+  } | null>(null);
+  const [courseAttendance, setCourseAttendance] = useState<{
+    labels: string[];
+    datasets: ChartDataset<'bar', number[]>[];
+  } | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -104,6 +133,24 @@ const AdminStats = () => {
           label: 'User Counts',
           data: userCounts,
           backgroundColor: 'rgba(75, 192, 192, 0.6)',
+          hidden: false,
+        },
+      ],
+    });
+    setRoleDistribution({
+      labels: roleNames,
+      datasets: [
+        {
+          label: 'User Role Distribution',
+          data: userCounts,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.6)',
+            'rgba(54, 162, 235, 0.6)',
+            'rgba(255, 206, 86, 0.6)',
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(153, 102, 255, 0.6)',
+            'rgba(255, 159, 64, 0.6)',
+          ],
           hidden: false,
         },
       ],
@@ -160,6 +207,43 @@ const AdminStats = () => {
     });
   };
 
+  const fetchMonthlyAttendance = async (token: string) => {
+    const monthlyAttendanceData: MonthlyAttendance[] =
+      await apiHooks.getMonthlyAttendance(token);
+    const labels = monthlyAttendanceData.map((row) => row.month);
+    const data = monthlyAttendanceData.map((row) => row.attendance);
+    setMonthlyAttendance({
+      labels: labels,
+      datasets: [
+        {
+          label: 'Monthly Attendance Trends',
+          data: data,
+          borderColor: 'rgba(75, 192, 192, 0.6)',
+          fill: false,
+          hidden: false,
+        },
+      ],
+    });
+  };
+
+  const fetchCourseAttendance = async (token: string) => {
+    const courseAttendanceData: CourseAttendance[] =
+      await apiHooks.getCourseAttendance(token);
+    const labels = courseAttendanceData.map((row) => row.courseName);
+    const data = courseAttendanceData.map((row) => row.attendance);
+    setCourseAttendance({
+      labels: labels,
+      datasets: [
+        {
+          label: 'Course-wise Attendance Comparison',
+          data: data,
+          backgroundColor: 'rgba(153, 102, 255, 0.6)',
+          hidden: false,
+        },
+      ],
+    });
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const token: string | null = localStorage.getItem('userToken');
@@ -171,6 +255,8 @@ const AdminStats = () => {
       try {
         await fetchUserStatistics(token);
         await fetchLectureStatistics(token);
+        await fetchMonthlyAttendance(token);
+        await fetchCourseAttendance(token);
       } catch (error) {
         setError('Failed to fetch data');
       }
@@ -183,7 +269,7 @@ const AdminStats = () => {
     return <p>{error}</p>;
   }
 
-  if (!userStatistics || !lectureStatistics) {
+  if (!userStatistics || !lectureStatistics || !roleDistribution || !monthlyAttendance || !courseAttendance) {
     return <CircularProgress />;
   }
 
@@ -224,6 +310,26 @@ const AdminStats = () => {
         </h2>
         <div className='w-full'>
           <LecturesByDayChart lectures={lectures} />
+        </div>
+      </div>
+      <div className='justify-start w-full mx-4'>
+        <h2 className='mb-4 text-xl md:text-2xl'>User Role Distribution</h2>
+        <div className='w-full'>
+          <Pie data={roleDistribution} />
+        </div>
+      </div>
+      <div className='justify-start w-full mx-4'>
+        <h2 className='mb-4 text-xl md:text-2xl'>Monthly Attendance Trends</h2>
+        <div className='w-full'>
+          <Line data={monthlyAttendance} />
+        </div>
+      </div>
+      <div className='justify-start w-full mx-4'>
+        <h2 className='mb-4 text-xl md:text-2xl'>
+          Course-wise Attendance Comparison
+        </h2>
+        <div className='w-full'>
+          <Bar options={options} data={courseAttendance} />
         </div>
       </div>
     </div>
