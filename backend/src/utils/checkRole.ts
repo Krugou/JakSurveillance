@@ -1,5 +1,4 @@
 import {NextFunction, Request, Response} from 'express';
-
 /**
  * Middleware to check if the user's role is authorized.
  *
@@ -7,10 +6,9 @@ import {NextFunction, Request, Response} from 'express';
  * @returns {Function} Middleware function that checks the user's role.
  */
 const checkUserRole = (roles: string[]) => {
-  return (req: Request, res: Response, next: NextFunction): void => {
+  return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user || !roles.includes(req.user.role)) {
-      res.status(403).json({error: 'Unauthorized'});
-      return;
+      return res.status(403).json({error: 'Unauthorized'});
     }
     next();
   };

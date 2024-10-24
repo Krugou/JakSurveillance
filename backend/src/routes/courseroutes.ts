@@ -1,5 +1,5 @@
 import {config} from 'dotenv';
-import express, {NextFunction, Request, Response, Router} from 'express';
+import express, {Request, Response, Router} from 'express';
 import {body, param, validationResult} from 'express-validator';
 import multer from 'multer';
 import XLSX from 'xlsx';
@@ -72,11 +72,10 @@ router.post(
     .isString()
     .notEmpty()
     .withMessage('Code must be a non-empty string'),
-  async (req: Request, res: Response, _next: NextFunction) => {
+  async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(400).json({errors: errors.array()});
-      return;
+      return res.status(400).json({errors: errors.array()});
     }
     try {
       const {code} = req.params;
@@ -386,35 +385,30 @@ declare module 'express-serve-static-core' {
  *
  * @returns {Promise<Course[]>} A promise that resolves with all courses for the user.
  */
-router.get(
-  '/user/all',
-  async (req: Request, res: Response, _next: NextFunction) => {
-    try {
-      // Validate that the user is logged in
-      if (!req.user) {
-        res.status(403).send('User Info Unavailable');
-        return;
-      }
-
-      // Get the email from the request
-      const email = req.user.email;
-
-      // Check if the user is an admin or the user is requesting their own info
-      if (req.user.userrole !== 0 && req.user.email !== email) {
-        res.status(403).json({error: 'Access denied'});
-        return;
-      }
-
-      // Get the courses for the user
-      const courses = await course.getStudentsCourses(email);
-      res.json(courses);
-    } catch (err) {
-      logger.error(err);
-      console.error(err);
-      res.status(500).send('Server error');
+router.get('/user/all', async (req: Request, res: Response) => {
+  try {
+    // Validate that the user is logged in
+    if (!req.user) {
+      res.status(403).send('User Info Unavailable');
+      return;
     }
-  },
-);
+
+    // Get the email from the request
+    const email = req.user.email;
+
+    // Check if the user is an admin or the user is requesting their own info
+    if (req.user.userrole !== 0 && req.user.email !== email) {
+      return res.status(403).json({error: 'Access denied'});
+    }
+    // Get the courses for the user
+    const courses = await course.getStudentsCourses(email);
+    res.json(courses);
+  } catch (err) {
+    logger.error(err);
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
 /**
  * Route that deletes a course by its ID.
  *
@@ -480,7 +474,7 @@ router.get(
  * @returns {Promise<Course>} A promise that resolves with the updated course.
  */
 router.put(
-  '/updatecourse/:courseid',
+  '/update/:courseid',
   [
     body('modifiedData.courseName')
       .trim()
@@ -512,7 +506,7 @@ router.put(
       .withMessage('Each topic must be a string'),
   ],
   validate,
-  async (req: Request, res: Response, _next: NextFunction) => {
+  async (req: Request, res: Response) => {
     if (req.user) {
       logger.info({email: req.user?.email}, ' update course');
     }
@@ -525,14 +519,11 @@ router.put(
         req.user.role !== 'admin'
       ) {
         // If not, return an error
-        res.status(403).json({error: 'Unauthorized'});
-        return;
+        return res.status(403).json({error: 'Unauthorized'});
       }
     } catch (error) {
       logger.error(error);
       console.log('error', error);
-      res.status(500).json({error: 'Internal server error'});
-      return;
     }
 
     // Get the course ID from the request
@@ -543,9 +534,37 @@ router.put(
       return;
     }
 
-    // Your logic to update the course goes here
+    // Get the course data from the request body
+    const {
+      courseName,
+      courseCode,
+      studentGroup,
+      start_date,
+      end_date,
+      instructors,
+      topic_names,
+    } = req.body.modifiedData;
 
-    res.status(200).json({message: 'Course updated successfully'});
+    try {
+      // Update the course
+      const result = await course.updateCourseInfo(
+        courseId,
+        courseName,
+        start_date,
+        end_date,
+        courseCode,
+        studentGroup,
+        instructors,
+        topic_names,
+      );
+      res.json(result);
+    } catch (err) {
+      if (err instanceof Error) {
+        logger.error(err);
+        console.error(err);
+        res.status(500).send({message: err.message});
+      }
+    }
   },
 );
 /**

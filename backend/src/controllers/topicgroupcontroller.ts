@@ -5,7 +5,6 @@ import TopicInGroupModel from '../models/topicingroupmodel.js';
 import TopicModel from '../models/topicmodel.js';
 import usercourse_topicsModel from '../models/usercourse_topicsmodel.js';
 import UserModel from '../models/usermodel.js';
-import logger from '../utils/logger.js';
 
 const pool = createPool('ADMIN');
 const TopicGroupController = {
@@ -30,7 +29,6 @@ const TopicGroupController = {
       return topicGroups;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -108,7 +106,6 @@ const TopicGroupController = {
       };
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -162,7 +159,6 @@ const TopicGroupController = {
       // Rollback the transaction if there is an error
       await connection.rollback();
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     } finally {
       connection.release();
@@ -198,7 +194,6 @@ const TopicGroupController = {
       return false;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -227,7 +222,6 @@ const TopicGroupController = {
       return topicGroupData;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },

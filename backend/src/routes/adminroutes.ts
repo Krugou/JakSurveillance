@@ -616,18 +616,17 @@ router.delete(
         Number(feedbackId),
       );
       if (result === null) {
-        res.status(500).json({
+        return res.status(500).json({
           message: 'Internal server error',
         });
-        return;
       }
-      res.status(200).json({
+      return res.status(200).json({
         message: 'Feedback deleted successfully',
       });
     } catch (error) {
       logger.error(error);
       console.error(error);
-      res.status(500).json({message: 'Internal server error'});
+      return res.status(500).json({message: 'Internal server error'});
     }
   },
 );
@@ -645,18 +644,17 @@ router.delete(
         Number(attendanceid),
       );
       if (result.affectedRows === 0) {
-        res.status(500).json({
+        return res.status(500).json({
           message: 'Internal server error',
         });
-        return;
       }
-      res.status(200).json({
+      return res.status(200).json({
         message: 'Attendance deleted successfully',
       });
     } catch (error) {
       logger.error(error);
       console.error(error);
-      res.status(500).json({message: 'Internal server error'});
+      return res.status(500).json({message: 'Internal server error'});
     }
   },
 );
@@ -666,13 +664,15 @@ router.get(
   param('lineLimit').isNumeric().withMessage('Line limit must be a number'),
   validate,
   async (req: Request, res: Response) => {
+    // if (req.user) {
+    // 	console.log('admin/errorlogs view ', req.user?.email);
+    // }
     const errorLogFilePath = './logs/error-logfile.log';
     const lineLimit = parseInt(req.params.lineLimit);
 
     // Validate lineLimit
     if (isNaN(lineLimit) || lineLimit <= 0) {
-      res.status(400).json({message: 'Invalid line limit'});
-      return;
+      return res.status(400).json({message: 'Invalid line limit'});
     }
 
     try {
@@ -692,13 +692,15 @@ router.get(
   param('lineLimit').isNumeric().withMessage('Line limit must be a number'),
   validate,
   async (req: Request, res: Response) => {
+    // if (req.user) {
+    // 	console.log('admin/logs view ', req.user?.email);
+    // }
     const outLogFilePath = './logs/logfile.log';
     const lineLimit = parseInt(req.params.lineLimit);
 
     // Validate lineLimit
     if (isNaN(lineLimit) || lineLimit <= 0) {
-      res.status(400).json({message: 'Invalid line limit'});
-      return;
+      return res.status(400).json({message: 'Invalid line limit'});
     }
 
     try {

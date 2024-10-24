@@ -1,7 +1,5 @@
 import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
-import logger from '../utils/logger.js';
-
 const pool = createPool('ADMIN');
 /**
  * @interface Topic
@@ -48,7 +46,6 @@ const topicModel: TopicModel = {
         .query<RowDataPacket[]>('SELECT * FROM topics');
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -66,7 +63,6 @@ const topicModel: TopicModel = {
       return (rows[0] as Topic) || null;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -83,7 +79,6 @@ const topicModel: TopicModel = {
         .query('INSERT INTO topics (topicname) VALUES (?)', [topicname]);
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -105,7 +100,6 @@ const topicModel: TopicModel = {
         ]);
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -120,7 +114,6 @@ const topicModel: TopicModel = {
       await pool.promise().query('DELETE FROM topics WHERE topicid = ?', [id]);
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -137,7 +130,6 @@ const topicModel: TopicModel = {
       return rows[0].count;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },

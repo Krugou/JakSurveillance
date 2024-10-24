@@ -1,6 +1,5 @@
 import {FieldPacket, RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
-import logger from '../utils/logger.js';
 
 const pool = createPool('ADMIN');
 /**
@@ -117,13 +116,6 @@ interface AttendanceModel {
     lectureid: string,
   ) => Promise<any>;
   deleteAttendanceByAttendanceId: (attendanceId: number) => Promise<any>;
-
-  /**
-   * Gets the monthly attendance trends.
-   *
-   * @returns {Promise<any>} The monthly attendance trends.
-   */
-  getMonthlyAttendance: () => Promise<any>;
 }
 
 /**
@@ -148,7 +140,6 @@ const attendanceModel: AttendanceModel = {
       return true;
     } catch (error) {
       console.error('Error updating attendance status:', error);
-      logger.error(error);
       return false;
     }
   },
@@ -160,7 +151,6 @@ const attendanceModel: AttendanceModel = {
         .query<RowDataPacket[]>('SELECT * FROM attendance');
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -176,7 +166,6 @@ const attendanceModel: AttendanceModel = {
       return (rows[0] as Attendance) || null;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -212,7 +201,6 @@ const attendanceModel: AttendanceModel = {
       return rows;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -221,19 +209,13 @@ const attendanceModel: AttendanceModel = {
     usercourseid: number,
     lectureid: string,
   ) {
-    try {
-      const [attendanceResult] = await pool
-        .promise()
-        .query(
-          'SELECT * FROM attendance WHERE usercourseid = ? AND lectureid = ?',
-          [usercourseid, lectureid],
-        );
-      return attendanceResult;
-    } catch (error) {
-      console.error(error);
-      logger.error(error);
-      return Promise.reject(error);
-    }
+    const [attendanceResult] = await pool
+      .promise()
+      .query(
+        'SELECT * FROM attendance WHERE usercourseid = ? AND lectureid = ?',
+        [usercourseid, lectureid],
+      );
+    return attendanceResult;
   },
 
   async insertAttendance(
@@ -255,60 +237,40 @@ const attendanceModel: AttendanceModel = {
         );
     } catch (error) {
       console.error(error);
-      logger.error(error);
       throw new Error('Failed to insert attendance');
     }
   },
 
   async checkAttendance(usercourseid: number, lectureid: number) {
-    try {
-      const [attendanceResultCheck] = await pool
-        .promise()
-        .query(
-          'SELECT * FROM attendance WHERE usercourseid = ? AND lectureid = ?',
-          [usercourseid, lectureid],
-        );
-      return attendanceResultCheck;
-    } catch (error) {
-      console.error(error);
-      logger.error(error);
-      return Promise.reject(error);
-    }
+    const [attendanceResultCheck] = await pool
+      .promise()
+      .query(
+        'SELECT * FROM attendance WHERE usercourseid = ? AND lectureid = ?',
+        [usercourseid, lectureid],
+      );
+    return attendanceResultCheck;
   },
 
   async getAttendanceById(insertid: number) {
-    try {
-      const [attendanceResult] = await pool
-        .promise()
-        .query('SELECT * FROM attendance WHERE attendanceid = ?', [insertid]);
-      return attendanceResult;
-    } catch (error) {
-      console.error(error);
-      logger.error(error);
-      return Promise.reject(error);
-    }
+    const [attendanceResult] = await pool
+      .promise()
+      .query('SELECT * FROM attendance WHERE attendanceid = ?', [insertid]);
+    return attendanceResult;
   },
 
   async getUserInfoByUserCourseId(usercourseid: number) {
-    try {
-      const [userResult] = (await pool
-        .promise()
-        .query(
-          'SELECT * FROM users WHERE userid IN (SELECT userid FROM usercourses WHERE usercourseid = ?)',
-          [usercourseid],
-        )) as RowDataPacket[];
-      return userResult[0];
-    } catch (error) {
-      console.error(error);
-      logger.error(error);
-      return Promise.reject(error);
-    }
+    const [userResult] = (await pool
+      .promise()
+      .query(
+        'SELECT * FROM users WHERE userid IN (SELECT userid FROM usercourses WHERE usercourseid = ?)',
+        [usercourseid],
+      )) as RowDataPacket[];
+    return userResult[0];
   },
 
   async getAttendaceByCourseId(courseid: string) {
-    try {
-      const [attendanceResult] = await pool.promise().query(
-        `SELECT
+    const [attendanceResult] = await pool.promise().query(
+      `SELECT
 			attendance.status,
 			attendance.attendanceid,
 			usercourses.usercourseid,
@@ -338,86 +300,40 @@ const attendanceModel: AttendanceModel = {
 			users AS attendingUsers ON usercourses.userid = attendingUsers.userid
 		WHERE
 			lecture.courseid = ?;`,
-        [courseid],
-      );
-      return attendanceResult;
-    } catch (error) {
-      console.error(error);
-      logger.error(error);
-      return Promise.reject(error);
-    }
+      [courseid],
+    );
+    return attendanceResult;
   },
 
   async getLectureCountByTopic(courseid: string) {
-    try {
-      const [result] = await pool.promise().query(
-        `SELECT topics.topicname, COUNT(lecture.lectureid) AS lecture_count
+    const [result] = await pool.promise().query(
+      `SELECT topics.topicname, COUNT(lecture.lectureid) AS lecture_count
 			FROM coursetopics
 			JOIN topics ON coursetopics.topicid = topics.topicid
 			LEFT JOIN lecture ON lecture.topicid = topics.topicid AND lecture.courseid = coursetopics.courseid
 			WHERE coursetopics.courseid = ?
 			GROUP BY topics.topicname;`,
-        [courseid],
-      );
-      return result;
-    } catch (error) {
-      console.error(error);
-      logger.error(error);
-      return Promise.reject(error);
-    }
+      [courseid],
+    );
+    return result;
   },
 
   async deleteAttendance(usercourseid: number, lectureid: number) {
-    try {
-      const [result] = await pool
-        .promise()
-        .query(
-          'DELETE FROM attendance WHERE usercourseid = ? AND lectureid = ?',
-          [usercourseid, lectureid],
-        );
+    const [result] = await pool
+      .promise()
+      .query(
+        'DELETE FROM attendance WHERE usercourseid = ? AND lectureid = ?',
+        [usercourseid, lectureid],
+      );
 
-      return result;
-    } catch (error) {
-      console.error(error);
-      logger.error(error);
-      return Promise.reject(error);
-    }
+    return result;
   },
   async deleteAttendanceByAttendanceId(attendanceId: number) {
-    try {
-      const [result] = await pool
-        .promise()
-        .query('DELETE FROM attendance WHERE attendanceid = ?', [
-          attendanceId,
-        ]);
+    const [result] = await pool
+      .promise()
+      .query('DELETE FROM attendance WHERE attendanceid = ?', [attendanceId]);
 
-      return result;
-    } catch (error) {
-      console.error(error);
-      logger.error(error);
-      return Promise.reject(error);
-    }
-  },
-
-  async getMonthlyAttendance() {
-    try {
-      const [rows] = await pool.promise().query<RowDataPacket[]>(
-        `SELECT
-          DATE_FORMAT(date, '%Y-%m') AS month,
-          COUNT(*) AS attendance_count
-        FROM
-          attendance
-        GROUP BY
-          month
-        ORDER BY
-          month;`
-      );
-      return rows;
-    } catch (error) {
-      console.error(error);
-      logger.error(error);
-      return Promise.reject(error);
-    }
+    return result;
   },
 };
 

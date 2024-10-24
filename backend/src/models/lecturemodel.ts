@@ -1,6 +1,5 @@
 import {FieldPacket, ResultSetHeader, RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
-import logger from '../utils/logger.js';
 
 const pool = createPool('ADMIN');
 /**
@@ -167,7 +166,6 @@ const lectureModel: LectureModel = {
       return rows;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -209,7 +207,6 @@ const lectureModel: LectureModel = {
       return userRows as RowDataPacket[];
     } catch (error) {
       console.error(error);
-      logger.error(error);
       throw error;
     }
   },
@@ -237,7 +234,6 @@ const lectureModel: LectureModel = {
       return uniqueUserRows ?? [];
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return [];
     }
   },
@@ -253,7 +249,6 @@ const lectureModel: LectureModel = {
         .query('DELETE FROM lecture WHERE lectureid = ?', [id]);
     } catch (error) {
       console.error(error);
-      logger.error(error);
     }
   },
   /**
@@ -268,7 +263,6 @@ const lectureModel: LectureModel = {
       return rows[0].count;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return 0;
     }
   },
@@ -287,7 +281,6 @@ const lectureModel: LectureModel = {
       return rows as Lecture[];
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -308,7 +301,6 @@ const lectureModel: LectureModel = {
       return rows[0].courseid;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -332,19 +324,13 @@ const lectureModel: LectureModel = {
     state: string,
     teacherid: number | undefined,
   ): Promise<ResultSetHeader> {
-    try {
-      const [result] = await pool
-        .promise()
-        .query<ResultSetHeader>(
-          'INSERT INTO lecture (start_date, end_date, timeofday, topicid, courseid, state, teacherid) VALUES (?, ?, ?, ?, ?, ?, ?)',
-          [start_date, end_date, timeofday, topicid, courseid, state, teacherid],
-        );
-      return result;
-    } catch (error) {
-      console.error(error);
-      logger.error(error);
-      return Promise.reject(error);
-    }
+    const [result] = await pool
+      .promise()
+      .query<ResultSetHeader>(
+        'INSERT INTO lecture (start_date, end_date, timeofday, topicid, courseid, state, teacherid) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [start_date, end_date, timeofday, topicid, courseid, state, teacherid],
+      );
+    return result;
   },
   /**
    * Gets a lecture with its course and topic.
@@ -367,7 +353,6 @@ const lectureModel: LectureModel = {
       return rows[0] ?? null;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -390,7 +375,6 @@ const lectureModel: LectureModel = {
       return result;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -414,7 +398,6 @@ const lectureModel: LectureModel = {
       return rows ?? null;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -436,7 +419,6 @@ const lectureModel: LectureModel = {
       return rows[0].courseid ?? null;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -458,7 +440,6 @@ const lectureModel: LectureModel = {
       return rows ?? null;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -480,7 +461,6 @@ const lectureModel: LectureModel = {
       return rows ?? null;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -501,7 +481,6 @@ const lectureModel: LectureModel = {
       return rows ?? null;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -525,7 +504,6 @@ const lectureModel: LectureModel = {
       return rows;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },

@@ -1,7 +1,5 @@
 import {RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
-import logger from '../utils/logger.js';
-
 /**
  * Interface for student and topics data.
  */
@@ -22,19 +20,14 @@ const usercoursesModel = {
    * @returns A promise that resolves to the existing user course, if any.
    */
   async checkIfUserCourseExists(userId: number, courseId: number) {
-    try {
-      const [existingUserCourse] = await pool
-        .promise()
-        .query<RowDataPacket[]>(
-          'SELECT * FROM usercourses WHERE userid = ? AND courseid = ?',
-          [userId, courseId],
-        );
+    const [existingUserCourse] = await pool
+      .promise()
+      .query<RowDataPacket[]>(
+        'SELECT * FROM usercourses WHERE userid = ? AND courseid = ?',
+        [userId, courseId],
+      );
 
-      return existingUserCourse;
-    } catch (error) {
-      logger.error('Error:', error);
-      throw error;
-    }
+    return existingUserCourse;
   },
   /**
    * Gets the ID of a user course.
@@ -43,18 +36,13 @@ const usercoursesModel = {
    * @returns A promise that resolves to the ID of the user course.
    */
   async getUserCourseId(studentnumber: string, courseid: number) {
-    try {
-      const [usercourseResult] = await pool
-        .promise()
-        .query(
-          'SELECT usercourseid FROM usercourses WHERE userid IN (SELECT userid FROM users WHERE studentnumber = ?) AND courseid = ?',
-          [studentnumber, courseid],
-        );
-      return usercourseResult;
-    } catch (error) {
-      logger.error('Error:', error);
-      throw error;
-    }
+    const [usercourseResult] = await pool
+      .promise()
+      .query(
+        'SELECT usercourseid FROM usercourses WHERE userid IN (SELECT userid FROM users WHERE studentnumber = ?) AND courseid = ?',
+        [studentnumber, courseid],
+      );
+    return usercourseResult;
   },
   /**
    * Inserts a user course.
@@ -63,19 +51,14 @@ const usercoursesModel = {
    * @returns A promise that resolves when the insertion is complete.
    */
   async insertUserCourse(userId: number, courseId: number) {
-    try {
-      const result = await pool
-        .promise()
-        .query('INSERT INTO usercourses (userid, courseid) VALUES (?, ?)', [
-          userId,
-          courseId,
-        ]);
+    const result = await pool
+      .promise()
+      .query('INSERT INTO usercourses (userid, courseid) VALUES (?, ?)', [
+        userId,
+        courseId,
+      ]);
 
-      return result;
-    } catch (error) {
-      logger.error('Error:', error);
-      throw error;
-    }
+    return result;
   },
   /**
    * Deletes a user course.
@@ -84,19 +67,14 @@ const usercoursesModel = {
    * @returns A promise that resolves when the deletion is complete.
    */
   async deleteUserCourse(userId: number, courseId: number) {
-    try {
-      const result = await pool
-        .promise()
-        .query('DELETE FROM usercourses WHERE userid = ? AND courseid = ?', [
-          userId,
-          courseId,
-        ]);
+    const result = await pool
+      .promise()
+      .query('DELETE FROM usercourses WHERE userid = ? AND courseid = ?', [
+        userId,
+        courseId,
+      ]);
 
-      return result;
-    } catch (error) {
-      logger.error('Error:', error);
-      throw error;
-    }
+    return result;
   },
   /**
    * Gets a user course by its ID.
@@ -104,15 +82,10 @@ const usercoursesModel = {
    * @returns A promise that resolves to the user course.
    */
   async getUserCourseByUsercourseid(usercourseid: number) {
-    try {
-      const [usercourseResult] = await pool
-        .promise()
-        .query('SELECT * FROM usercourses WHERE usercourseid = ?', usercourseid);
-      return usercourseResult;
-    } catch (error) {
-      logger.error('Error:', error);
-      throw error;
-    }
+    const [usercourseResult] = await pool
+      .promise()
+      .query('SELECT * FROM usercourses WHERE usercourseid = ?', usercourseid);
+    return usercourseResult;
   },
   /**
    * Deletes a user course by its ID.
@@ -120,15 +93,10 @@ const usercoursesModel = {
    * @returns A promise that resolves when the deletion is complete.
    */
   async deleteUserCourseByUsercourseid(usercourseid: number) {
-    try {
-      const result = await pool
-        .promise()
-        .query('DELETE FROM usercourses WHERE usercourseid = ?', usercourseid);
-      return result;
-    } catch (error) {
-      logger.error('Error:', error);
-      throw error;
-    }
+    const result = await pool
+      .promise()
+      .query('DELETE FROM usercourses WHERE usercourseid = ?', usercourseid);
+    return result;
   },
   /**
    * Gets student information by user course ID.
@@ -152,7 +120,6 @@ const usercoursesModel = {
       const data: StudentAndTopics[] = JSON.parse(JSON.stringify(rows));
       return data;
     } catch (error) {
-      logger.error('Error:', error);
       console.error('Error:', error);
       throw error;
     }

@@ -1,6 +1,5 @@
 import {ResultSetHeader, RowDataPacket} from 'mysql2';
 import createPool from '../config/createPool.js';
-import logger from '../utils/logger.js';
 
 const pool = createPool('ADMIN');
 interface StudentGroup {
@@ -56,7 +55,6 @@ const studentGroupModel: StudentGroupModel = {
       return results;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -66,19 +64,14 @@ const studentGroupModel: StudentGroupModel = {
    * @returns A promise that resolves to the existing group, if found.
    */
   async checkIfGroupNameExists(group_name: string) {
-    try {
-      const [existingGroup] = await pool
-        .promise()
-        .query<RowDataPacket[]>(
-          'SELECT * FROM studentgroups WHERE group_name = ?',
-          [group_name],
-        );
-      return existingGroup;
-    } catch (error) {
-      console.error(error);
-      logger.error(error);
-      return Promise.reject(error);
-    }
+    const [existingGroup] = await pool
+      .promise()
+      .query<RowDataPacket[]>(
+        'SELECT * FROM studentgroups WHERE group_name = ?',
+        [group_name],
+      );
+
+    return existingGroup;
   },
   /**
    * Finds a student group by its ID.
@@ -96,7 +89,6 @@ const studentGroupModel: StudentGroupModel = {
       return (rows[0] as StudentGroup) || null;
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -117,7 +109,6 @@ const studentGroupModel: StudentGroupModel = {
       return {insertId: (fields as ResultSetHeader).insertId};
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },

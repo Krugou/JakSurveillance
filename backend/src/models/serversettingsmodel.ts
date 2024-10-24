@@ -1,5 +1,4 @@
 import {Pool, RowDataPacket} from 'mysql2';
-import logger from '../utils/logger.js';
 
 // server settings model
 const serverSettingsModel = {
@@ -15,7 +14,6 @@ const serverSettingsModel = {
         .query<RowDataPacket[]>('SELECT * FROM serversettings');
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -44,7 +42,6 @@ const serverSettingsModel = {
         );
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
@@ -62,7 +59,6 @@ const serverSettingsModel = {
         );
     } catch (error) {
       console.error(error);
-      logger.error(error);
       return Promise.reject(error);
     }
   },
